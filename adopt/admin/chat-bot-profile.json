@@ -1,0 +1,21 @@
+{
+    "name": "Pawsify",
+    "photoUrl": "chat-admin-photos\/bot_0d8960c68b7b.jpg",
+    "active": true,
+    "welcomeMessages": {
+        "adoption": "Test Adopt {name}",
+        "shipping": "Test Ship {name}",
+        "health": "Test Health  {name}",
+        "general": "Test Other  {name}"
+    },
+    "welcomeFallback": "Test Fallback  {name}",
+    "firstMessageAck": "Test first message {name}",
+    "reopenMessages": {
+        "adoption": "Test Adopt2 {name}",
+        "shipping": "Test Ship2 {name}",
+        "health": "Test Health 2 {name}",
+        "general": "Test Other 2 {name}"
+    },
+    "reopenFallback": "TestFallback 2 {name}",
+    "reopenFirstMessageAck": "Test first message2 {name}"
+}

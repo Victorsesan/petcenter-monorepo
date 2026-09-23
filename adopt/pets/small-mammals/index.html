@@ -1,0 +1,1865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Adoptable small mammals available at Pet Center. Browse by breed, age, size, and fee.">
+  <title>Small Mammals for Adoption — Pet Center</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+/* ════════════════════════════════════════════════════════════════════════════
+   PET CENTER ADOPTION WEBSITE — Design System v1.0
+   Colors: Navy #10214b | Gold #d7bd88 | Orange #ED7624
+   Typography: Cormorant Garamond (headers) | Sora (body)
+   Rule: NO borders on cards — shadows only | NO emojis — SVG icons only
+   ════════════════════════════════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Sora:wght@300;400;500;600;700&display=swap');
+
+/* ─── CSS Variables ─────────────────────────────────────────────────────────── */
+:root {
+  --navy: #10214b;
+  --navy-light: #1a2f5c;
+  --gold: #d7bd88;
+  --gold-dark: #b89968;
+  --orange: #ED7624;
+  --orange-light: #fef0e6;
+  --warm-gray: #d0c3ba;
+  --chocolate: #3d2817;
+  --bg: #f9f7f4;
+  --surface: #ffffff;
+  --text: #2c2416;
+  --muted: #7a6d5f;
+  --success: #0d7c4a;
+  --success-bg: #e6f7ef;
+  --error: #c0392b;
+  --error-bg: #fdecea;
+  --shadow-sm: 0 2px 8px rgba(16,33,75,0.06);
+  --shadow-md: 0 4px 20px rgba(16,33,75,0.10);
+  --shadow-lg: 0 8px 40px rgba(16,33,75,0.14);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --transition: 0.25s ease;
+}
+
+/* ─── Reset & Base ───────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; overflow-x: hidden; width: 100%; }
+body {
+  font-family: 'Sora', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  padding-top: 68px;
+  overflow-x: hidden;
+  width: 100%;
+  position: relative;
+}
+img { max-width: 100%; height: auto; display: block; }
+a { color: var(--orange); text-decoration: none; transition: color var(--transition); }
+a:hover { color: var(--navy); }
+
+/* ─── Typography ─────────────────────────────────────────────────────────────── */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  color: var(--navy);
+  line-height: 1.25;
+}
+h1 { font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 700; }
+h2 { font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 600; }
+h3 { font-size: clamp(1.2rem, 2.2vw, 1.8rem); font-weight: 600; }
+h4 { font-size: 1.2rem; font-weight: 600; }
+p { color: var(--muted); }
+
+/* ─── Layout Utilities ───────────────────────────────────────────────────────── */
+.pc-container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+.pc-section { padding: 72px 0; }
+.pc-section--sm { padding: 40px 0; }
+.pc-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+.pc-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.pc-grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+.text-center { text-align: center; }
+.text-navy { color: var(--navy); }
+.text-orange { color: var(--orange); }
+.text-muted { color: var(--muted); }
+
+/* ─── Buttons ─────────────────────────────────────────────────────────────────── */
+.pc-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 28px;
+  border-radius: var(--radius-sm);
+  font-family: 'Sora', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  border: none;
+  transition: all var(--transition);
+  text-decoration: none;
+  white-space: nowrap;
+  min-height: 44px;
+}
+.pc-btn--primary {
+  background: linear-gradient(135deg, var(--navy), var(--navy-light));
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(16,33,75,0.25);
+}
+.pc-btn--primary:hover {
+  background: linear-gradient(135deg, var(--navy-light), #243970);
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(16,33,75,0.32);
+}
+.pc-btn--orange {
+  background: linear-gradient(135deg, var(--orange), #d96919);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(237,118,36,0.30);
+}
+.pc-btn--orange:hover {
+  background: linear-gradient(135deg, #d96919, #c45e10);
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(237,118,36,0.38);
+}
+.pc-btn--ghost {
+  background: transparent;
+  color: var(--navy);
+  box-shadow: inset 0 0 0 2px var(--gold);
+}
+.pc-btn--ghost:hover { background: var(--orange-light); color: var(--orange); }
+/* TASK-1 START */
+/* TASK 1b: .pc-btn--signin matches the site's existing .nav-login Signin style (gold border/text) for the retexted "Signin" button (was "List Out A Pet") */
+.pc-btn--signin { background: transparent; color: #d7bd88; box-shadow: inset 0 0 0 1px rgba(215,189,136,0.5); }
+.pc-btn--signin:hover { background: rgba(215,189,136,0.12); color: #d7bd88; }
+/* TASK-1 END */
+.pc-btn--sm { padding: 8px 18px; font-size: 13px; min-height: 36px; }
+.pc-btn--lg { padding: 16px 40px; font-size: 16px; }
+.pc-btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+
+/* ─── Cards ────────────────────────────────────────────────────────────────────── */
+.pc-card {
+  background: var(--surface);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition: box-shadow var(--transition), transform var(--transition);
+}
+.pc-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+.pc-card__body { padding: 20px; }
+.pc-card__footer { padding: 16px 20px; background: var(--bg); }
+
+/* ─── Pet Cards ─────────────────────────────────────────────────────────────────── */
+/* ─── Pet Cards — redesigned ─────────────────────────────────────────────────── */
+.pc-pet-card {
+  background: var(--surface);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  cursor: pointer;
+  transition: box-shadow var(--transition), transform var(--transition);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+}
+.pc-pet-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-4px); }
+.pc-pet-card__img-wrap { position: relative; overflow: hidden; aspect-ratio: 4/3; background: var(--bg); }
+.pc-pet-card__img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
+.pc-pet-card:hover .pc-pet-card__img { transform: scale(1.05); }
+
+/* Adopted badge — "OUT OF TOWN" style (screenshot 8) */
+.pc-pet-card__adopted-badge {
+  position: absolute;
+  top: 12px;
+  left: 0;
+  background: #10214b;
+  color: #fff;
+  font-family: 'Sora', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  border-radius: 0 4px 4px 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+}
+
+/* Card body */
+.pc-pet-card__body {
+  padding: 16px 18px 18px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.pc-pet-card__name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 10px;
+  line-height: 1.2;
+}
+
+/* Detail rows with icons */
+.pc-pet-card__details {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+.pc-pet-card__detail-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Sora', sans-serif;
+  font-size: 13px;
+  color: var(--muted);
+  font-weight: 400;
+}
+.pc-pet-card__detail-row svg {
+  flex-shrink: 0;
+  color: var(--gold-dark);
+  opacity: 0.85;
+}
+.pc-pet-card__detail-val {
+  color: var(--text);
+  font-weight: 500;
+}
+
+/* Fee row */
+.pc-pet-card__fee-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: auto;
+  padding-top: 10px;
+  border-top: 1px solid var(--bg);
+}
+.pc-pet-card__fee-row svg { color: var(--orange); flex-shrink: 0; }
+.pc-pet-card__fee {
+  font-family: 'Sora', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--orange);
+}
+
+/* Diary button */
+.pc-pet-card__diary {
+  display: inline-block;
+  margin-top: 10px;
+  font-family: 'Sora', sans-serif;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--gold-dark);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  text-align: left;
+  transition: color var(--transition);
+}
+.pc-pet-card__diary:hover { color: var(--orange); }
+/* TASK-2 START — Posted-on date caption for pet cards */
+.pc-pet-card__posted {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+/* TASK-2 END */
+
+.pc-pet-card__placeholder { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; color: var(--muted); }
+
+
+
+/* ─── Controls row: Search bar + Filter button ────────────────────────────────
+   Replaces the old dropdown-grid filter bar. See pc-filter-sheet system below
+   for the bottom-sheet that the Filters button opens. ─────────────────────── */
+.pc-controls-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+.pc-search-bar {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1.5px solid var(--warm-gray);
+  border-radius: 999px;
+  padding: 10px 18px;
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  transition: border-color var(--transition);
+}
+.pc-search-bar:focus-within { border-color: var(--gold-dark); }
+.pc-search-bar__icon { flex-shrink: 0; color: var(--muted); display: flex; }
+.pc-search-bar input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-family: 'Sora', sans-serif;
+  font-size: 14px;
+  color: var(--navy);
+  background: transparent;
+  min-width: 0;
+}
+.pc-search-bar input::placeholder { color: #b0a69a; }
+.pc-search-clear {
+  background: none; border: none; font-size: 19px; line-height: 1;
+  cursor: pointer; color: var(--muted); padding: 2px 4px; flex-shrink: 0;
+  display: none;
+}
+.pc-search-clear.show { display: block; }
+.pc-search-clear:hover { color: var(--navy); }
+
+.pc-filter-btn {
+  display: inline-flex; align-items: center; gap: 7px; flex-shrink: 0;
+  background: var(--navy); color: var(--gold); border: 1.5px solid transparent;
+  border-radius: 999px; padding: 12px 20px;
+  font-family: 'Sora', sans-serif; font-size: 13.5px; font-weight: 600;
+  cursor: pointer;
+  transition: border-color .2s ease, transform .15s ease, background .2s ease;
+}
+.pc-filter-btn:hover, .pc-filter-btn:focus-visible, .pc-filter-btn.active {
+  border-color: var(--gold); background: var(--navy-light); transform: translateY(-1px);
+}
+.pc-filter-btn:active { transform: translateY(0); }
+.pc-filter-icon { flex-shrink: 0; }
+
+@media (max-width: 560px) {
+  .pc-controls-row { gap: 8px; }
+  .pc-search-bar { padding: 9px 12px; }
+  .pc-search-bar input { font-size: 13.5px; }
+  .pc-filter-btn { padding: 11px 16px; font-size: 12.5px; gap: 5px; }
+}
+
+@media (max-width: 380px) {
+  .pc-filter-btn { padding: 10px 13px; font-size: 11.5px; }
+}
+
+/* ─── Hidden native selects (state holders for the filter sheet's chips) ──── */
+.hidden-select { display: none !important; }
+
+/* ─── Loading squares (search debounce indicator) ─────────────────────────── */
+.pc-loading-squares { display: flex; gap: 8px; justify-content: center; padding: 60px 0; grid-column: 1 / -1; }
+.pc-loading-squares span {
+  width: 14px; height: 14px; background: var(--gold); border-radius: 3px;
+  animation: pcSquareMorph 1.2s ease-in-out infinite;
+}
+.pc-loading-squares span:nth-child(2) { animation-delay: .15s; }
+.pc-loading-squares span:nth-child(3) { animation-delay: .3s; }
+@keyframes pcSquareMorph {
+  0%, 100% { transform: scale(1) rotate(0deg); border-radius: 3px; }
+  50%      { transform: scale(1.3) rotate(45deg); border-radius: 6px; }
+}
+
+/* ─── Empty state (no pets currently available in this category) ─────────── */
+.pc-empty-state {
+  grid-column: 1 / -1;
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center; padding: 64px 24px;
+}
+.pc-empty-state__icon { color: var(--gold-dark); margin-bottom: 18px; }
+.pc-empty-state__title {
+  font-family: 'Sora', sans-serif; font-size: 17px; font-weight: 700;
+  color: var(--navy); margin-bottom: 8px;
+}
+.pc-empty-state__subtitle {
+  font-family: 'Sora', sans-serif; font-size: 14px; color: var(--muted);
+  max-width: 340px;
+}
+.pc-empty-state h3 { font-family: 'Sora', sans-serif; font-size: 17px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+.pc-empty-state p { font-family: 'Sora', sans-serif; font-size: 14px; color: var(--muted); max-width: 340px; }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   FILTER BOTTOM SHEET ("pull-up panel")
+   ═══════════════════════════════════════════════════════════════════════════ */
+.pc-sheet-backdrop {
+  position: fixed; inset: 0; background: rgba(0,0,0,.55);
+  opacity: 0; visibility: hidden; transition: opacity .3s ease;
+  z-index: 6000;
+}
+.pc-sheet-backdrop.show { opacity: 1; visibility: visible; }
+
+.pc-filter-sheet {
+  position: fixed; left: 0; right: 0; bottom: 0;
+  background: var(--navy); border-radius: 18px 18px 0 0;
+  z-index: 6001;
+  max-height: 82vh; max-height: 82dvh;
+  display: flex; flex-direction: column;
+  transform: translateY(100%);
+  transition: transform .35s cubic-bezier(.32,.72,0,1);
+  box-shadow: 0 -8px 40px rgba(0,0,0,.4);
+}
+.pc-filter-sheet.open { transform: translateY(0); }
+
+.pc-sheet-drag-zone {
+  flex-shrink: 0;
+  cursor: grab;
+  touch-action: none;
+}
+.pc-sheet-drag-zone:active { cursor: grabbing; }
+.pc-sheet-handle {
+  width: 40px; height: 4px; background: rgba(255,255,255,.25);
+  border-radius: 4px; margin: 10px auto 0; flex-shrink: 0;
+}
+.pc-sheet-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 20px 8px; flex-shrink: 0;
+}
+.pc-sheet-header h3 { font-family: 'Sora', sans-serif; font-size: 18px; color: #fff; font-weight: 700; }
+.pc-sheet-close {
+  background: none; border: none; color: #fff; font-size: 22px; line-height: 1;
+  cursor: pointer; padding: 4px 8px; opacity: .8;
+}
+.pc-sheet-close:hover { opacity: 1; }
+
+.pc-sheet-body-outer { position: relative; flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.pc-sheet-body { overflow-y: auto; padding: 8px 20px 20px; flex: 1; min-height: 0; }
+
+.pc-sheet-footer {
+  display: flex; gap: 12px; padding: 16px 20px 22px;
+  border-top: 1px solid rgba(255,255,255,.08); flex-shrink: 0;
+}
+.pc-sheet-clear, .pc-sheet-apply {
+  flex: 1; padding: 13px; border-radius: 999px;
+  font-family: 'Sora', sans-serif; font-size: 14px; font-weight: 700;
+  cursor: pointer; border: 1.5px solid transparent;
+}
+.pc-sheet-clear { background: transparent; border-color: var(--warm-gray); color: var(--gold); }
+.pc-sheet-clear:hover { border-color: var(--gold-dark); }
+.pc-sheet-apply { background: var(--gold); color: var(--navy); }
+.pc-sheet-apply:hover { background: var(--gold-dark); color: #fff; }
+
+/* Filter groups inside the sheet */
+.pc-sheet-filter-group { margin-bottom: 22px; }
+.pc-sheet-filter-group__label {
+  font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+  color: rgba(255,255,255,.55); margin-bottom: 10px;
+}
+.pc-chip-scroll {
+  max-height: 168px; /* ~4 rows */
+  overflow-y: auto;
+  padding-right: 4px;
+}
+.pc-chip-row { display: flex; flex-wrap: wrap; gap: 10px; }
+.pc-chip {
+  background: #1c2c56; border: 1px solid rgba(255,255,255,.15);
+  color: #e5e5e5; border-radius: 999px; padding: 9px 16px;
+  font-family: 'Sora', sans-serif; font-size: 13px; cursor: pointer;
+  display: flex; align-items: center; gap: 6px; transition: all .15s ease;
+  white-space: nowrap;
+}
+.pc-chip:hover { border-color: rgba(215,189,136,.5); }
+.pc-chip.selected { background: var(--gold); color: var(--navy); border-color: var(--gold); font-weight: 600; }
+.pc-chip.selected::before { content: "✓"; font-weight: 700; }
+
+/* Scroll-to-bottom floating hint button */
+.pc-sheet-scroll-hint {
+  position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%);
+  width: 52px; height: 30px; border-radius: 999px;
+  background: rgba(16,33,75,0.35);
+  border: 1.5px solid var(--gold);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; z-index: 5;
+  animation: pcHintGlow 1.6s ease-in-out infinite;
+  transition: opacity .3s ease;
+}
+.pc-sheet-scroll-hint.fade { opacity: 0; pointer-events: none; }
+.pc-sheet-scroll-hint svg { display: block; }
+@keyframes pcHintGlow {
+  0%, 100% { box-shadow: 0 0 2px 0 rgba(215,189,136,.3); border-color: rgba(215,189,136,.4); }
+  50%      { box-shadow: 0 0 10px 2px rgba(215,189,136,.7); border-color: rgba(215,189,136,1); }
+}
+
+/* ─── Pet Grid Section ────────────────────────────────────────────────────────── */
+.pc-pet-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+.pc-loading-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+.pc-skeleton {
+  background: linear-gradient(90deg, #f0ece8 25%, #e8e3de 50%, #f0ece8 75%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.4s infinite;
+  border-radius: var(--radius-md);
+  height: 320px;
+}
+@keyframes skeleton-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ─── Responsive ─────────────────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .pc-pet-grid { grid-template-columns: repeat(3, 1fr); }
+  .pc-pet-detail-hero { grid-template-columns: 1fr; }
+  .pc-pet-detail-gallery { position: static; }
+  
+  
+}
+@media (max-width: 768px) {
+  .pc-pet-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .pc-grid-4, .pc-grid-3 { grid-template-columns: 1fr 1fr; }
+  
+  
+  
+  
+  .pc-filters { flex-direction: column; }
+  .pc-status-box { padding: 28px 20px; }
+  .pc-modal { padding: 28px 20px; }
+  .pc-pet-info-panel { padding: 24px 20px; }
+  
+}
+@media (max-width: 480px) {
+  .pc-pet-grid { grid-template-columns: 1fr; }
+  .pc-grid-4, .pc-grid-3, .pc-grid-2 { grid-template-columns: 1fr; }
+  .pc-btn--lg { padding: 14px 28px; }
+  .pc-status-form { flex-direction: column; }
+  .pc-section { padding: 48px 0; }
+  .pc-pet-prefill.show { flex-direction: column; text-align: center; }
+}
+
+/* ─── Animations ─────────────────────────────────────────────────────────────── */
+.fade-in { animation: fadeIn 0.5s ease both; }
+.slide-up { animation: slideUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) both; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+.stagger-1 { animation-delay: 0.05s; }
+.stagger-2 { animation-delay: 0.10s; }
+.stagger-3 { animation-delay: 0.15s; }
+.stagger-4 { animation-delay: 0.20s; }
+
+/* ─── Spinner ─────────────────────────────────────────────────────────────────── */
+.pc-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  display: inline-block;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.pc-spinner--dark { border-color: rgba(16,33,75,0.15); border-top-color: var(--navy); }
+
+/* ─── Global Header (pc-header) ─────────────────────────────────────────────── */
+.pc-header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  padding: 0 24px;
+  height: 68px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: transparent;
+  transition: background 0.35s ease, box-shadow 0.35s ease;
+  overflow: visible;
+}
+.pc-header.scrolled,
+.pc-header--solid {
+  background: rgba(16,33,75,0.97);
+  box-shadow: 0 2px 20px rgba(0,0,0,0.18);
+}
+.pc-header__logo img { height: 44px; width: auto; display: block; }
+.pc-header__logo--desktop { display: block; }
+.pc-header__logo--mobile  { display: none; }
+@media (max-width: 900px) {
+  .pc-header__logo--desktop { display: none; }
+  .pc-header__logo--mobile  { display: block; }
+}
+.pc-header__nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  list-style: none;
+}
+.pc-header__nav li { position: relative; }
+.pc-header__nav a {
+  display: block;
+  padding: 8px 11px;
+  font-family: 'Sora', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.9);
+  text-decoration: none;
+  border-radius: 6px;
+  transition: color 0.2s, background 0.2s;
+  white-space: nowrap;
+}
+.pc-header__nav a:hover { color: #d7bd88; background: rgba(255,255,255,0.08); }
+.pc-header__nav .nav-donate a { background: #ED7624; color: #fff; font-weight: 600; padding: 8px 16px; }
+.pc-header__nav .nav-donate a:hover { background: #d4621a; color: #fff; }
+.pc-header__nav .nav-signup a,
+.pc-header__nav .nav-login a { border: 1px solid rgba(215,189,136,0.5); color: #d7bd88; }
+.pc-header__nav .nav-signup a:hover,
+.pc-header__nav .nav-login a:hover { background: rgba(215,189,136,0.12); }
+.pc-header__nav .has-drop > ul {
+  display: none;
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  background: #10214b;
+  border-radius: 8px;
+  list-style: none;
+  min-width: 168px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.22);
+  padding: 6px 0;
+  z-index: 100;
+}
+.pc-header__nav .has-drop:hover > ul { display: block; }
+.pc-header__nav .has-drop > ul a { padding: 9px 18px; font-size: 13px; border-radius: 0; }
+.pc-hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  padding: 8px;
+  background: none;
+  border: none;
+  width: 32px;
+  height: auto;
+  justify-content: center;
+}
+.pc-hamburger span { 
+  display: block; 
+  width: 24px; 
+  height: 2px; 
+  background: #fff; 
+  border-radius: 2px; 
+  transition: all 0.3s ease;
+}
+.pc-hamburger.active span:nth-child(1) { 
+  transform: rotate(45deg) translate(8px, 8px); 
+}
+.pc-hamburger.active span:nth-child(2) { 
+  opacity: 0; 
+}
+.pc-hamburger.active span:nth-child(3) { 
+  transform: rotate(-45deg) translate(7px, -7px); 
+}
+.pc-mobile-menu {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: rgba(16,33,75,0.98);
+  z-index: 999;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+}
+.pc-mobile-menu.open {
+  max-height: calc(100vh - 68px);
+  overflow-y: auto;
+  opacity: 1;
+  pointer-events: auto;
+  padding: 16px 0 calc(100vh - 68px - 56px);
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+.pc-mobile-menu a {
+  display: block;
+  padding: 12px 28px;
+  font-family: 'Sora', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.9);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  transition: all 0.2s ease;
+}
+.pc-mobile-menu a:hover { 
+  color: #d7bd88; 
+  background: rgba(255,255,255,0.05); 
+}
+.pc-mobile-menu .mobile-donate {
+  margin: 12px 28px 0;
+  display: inline-block;
+  background: #ED7624;
+  color: #fff;
+  padding: 11px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  border-bottom: none;
+}
+@media (max-width: 900px) {
+  .pc-header__nav { display: none; }
+  .pc-hamburger { display: flex; }
+}
+
+/* ─── Category Page Banner ──────────────────────────────────────────────────── */
+.pc-cat-banner {
+  background: linear-gradient(120deg, #10214b 0%, #1a3070 60%, #2a4080 100%);
+  padding: 100px 0 60px;
+  position: relative;
+  overflow: hidden;
+}
+.pc-cat-banner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url('/assets/images/cats-banner.jpg') center/cover no-repeat;
+  opacity: 0.15;
+}
+.pc-cat-banner__inner { 
+  position: relative; 
+  z-index: 1; 
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+.pc-cat-banner__eyebrow {
+  display: inline-block;
+  font-family: 'Sora', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: #d7bd88;
+  background: rgba(215,189,136,0.12);
+  border: 1px solid rgba(215,189,136,0.3);
+  padding: 5px 16px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+}
+.pc-cat-banner h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(36px, 5vw, 60px);
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 16px;
+  line-height: 1.1;
+}
+.pc-cat-banner p {
+  color: rgba(255,255,255,0.75);
+  font-family: 'Sora', sans-serif;
+  font-size: 16px;
+  max-width: 520px;
+  margin: 0 auto;
+}
+.pc-cat-banner__crumb {
+  font-family: 'Sora', sans-serif;
+  font-size: 12px;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 14px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.pc-cat-banner__crumb a { color: rgba(255,255,255,0.6); text-decoration: none; }
+.pc-cat-banner__crumb a:hover { color: #d7bd88; }
+.pc-cat-banner__crumb span { color: rgba(255,255,255,0.35); margin: 0 8px; }
+
+/* ─── Global Footer ─────────────────────────────────────────────────────────── */
+.pc-footer {
+  background: #0b1834;
+  padding: 60px 24px 28px;
+  color: rgba(255,255,255,0.65);
+  font-family: 'Sora', sans-serif;
+}
+.pc-footer__inner { max-width: 1200px; margin: 0 auto; }
+.pc-footer__top {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1.5fr;
+  gap: 40px;
+  padding-bottom: 40px;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+.pc-footer__brand img { height: 40px; margin-bottom: 16px; display: block; }
+.pc-footer__brand p { font-size: 13.5px; line-height: 1.7; max-width: 280px; }
+.pc-footer__col h5 { font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; font-weight: 700; color: #d7bd88; margin-bottom: 16px; }
+.pc-footer__col ul { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+.pc-footer__col ul a { font-size: 13px; color: rgba(255,255,255,0.6); text-decoration: none; transition: color 0.2s; }
+.pc-footer__col ul a:hover { color: #d7bd88; }
+.pc-footer__bottom { padding-top: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+.pc-footer__copy { font-size: 12.5px; }
+.pc-footer__links { display: flex; gap: 20px; }
+.pc-footer__links a { font-size: 12.5px; color: rgba(255,255,255,0.5); text-decoration: none; }
+.pc-footer__links a:hover { color: #d7bd88; }
+@media (max-width: 900px) { .pc-footer__top { grid-template-columns: 1fr 1fr; gap: 28px; } }
+@media (max-width: 560px) { .pc-footer__top { grid-template-columns: 1fr; gap: 24px; } }
+
+/* ════════════════════════════════════════════════════════════════
+   Pet Center — responsive.css
+   Site-wide responsive / mobile-first breakpoints
+   Colors: Navy #10214b | Gold #d7bd88 | Orange #ED7624
+   ════════════════════════════════════════════════════════════════ */
+
+/* ── 1280px and below: constrain max container ─────────────── */
+@media (max-width: 1280px) {
+  .pc-container { padding: 0 20px; }
+}
+
+/* ── 1024px: tablet landscape ──────────────────────────────── */
+@media (max-width: 1024px) {
+  .pc-grid-4 { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ── 900px: tablet portrait / wide mobile ──────────────────── */
+@media (max-width: 900px) {
+  /* Header */
+  .pc-header__nav { display: none; }
+  .pc-hamburger { display: flex; }
+
+  /* Footer */
+  .pc-footer__top { grid-template-columns: 1fr 1fr; gap: 28px; }
+}
+
+/* ── 768px: tablet ─────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .pc-grid-3 { grid-template-columns: repeat(2, 1fr); }
+  .pc-grid-2 { grid-template-columns: 1fr; }
+}
+
+/* ── 640px: large mobile ───────────────────────────────────── */
+@media (max-width: 640px) {
+  .pc-section { padding: 48px 0; }
+}
+
+/* ── 560px: mobile ─────────────────────────────────────────── */
+@media (max-width: 560px) {
+  /* Footer */
+  .pc-footer__top { grid-template-columns: 1fr; gap: 24px; }
+}
+
+/* ── 480px: small mobile ───────────────────────────────────── */
+@media (max-width: 480px) {
+  .pc-grid-4 { grid-template-columns: 1fr; }
+
+  /* Footer */
+  .pc-footer__bottom { flex-direction: column; text-align: center; }
+  .pc-footer__links { justify-content: center; }
+}
+
+/* ── Print styles ──────────────────────────────────────────── */
+@media print {
+  .pc-header,
+  .pc-hamburger,
+  .pc-mobile-menu,
+  .pc-footer,
+  .pc-filter-bar,
+  .no-print { display: none !important; }
+  body { padding-top: 0 !important; }
+}
+
+
+
+  </style>
+  </head>
+<body>
+
+<header class="pc-header pc-header--solid" id="pcHeader">
+  <a href="/" class="pc-header__logo pc-header__logo--desktop">
+    <img src="/assets/images/logo-petcenter.png" alt="Pet Center">
+  </a>
+  <a href="/" class="pc-header__logo pc-header__logo--mobile">
+    <img src="/assets/images/logo-petcenter-icon.png" alt="Pet Center">
+  </a>
+  <ul class="pc-header__nav">
+    <li><a href="/">Home</a></li>
+    <li class="has-drop"><a href="#">Our Pets</a>
+      <ul>
+        <li><a href="/pets/dogs/">Dogs</a></li>
+        <li><a href="/pets/cats/">Cats</a></li>
+        <li><a href="/pets/birds/">Birds</a></li>
+        <li><a href="/pets/reptiles/">Reptiles</a></li>
+        <li><a href="/pets/small-mammals/">Small Mammals</a></li>
+        <!-- TASK-2 START — Livestocks & Aquariums added to Our Pets dropdown -->
+        <li><a href="/pets/livestocks/">Livestocks</a></li>
+        <li><a href="/pets/aquariums/">Aquariums</a></li>
+        <!-- TASK-2 END -->
+      </ul>
+    </li>
+    <li><a href="/blog/">Blog</a></li>
+    <li><a href="/testimonials/">Testimonials</a></li>
+    <li class="nav-donate"><a href="https://donate.petcenterco.com" target="_blank" rel="noopener">Donate</a></li>
+    <li><a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact</a></li>
+    <!-- TASK-1 START -->
+    <!-- Path changed from /rehome/ to /signin/ per CEO's request to retire the "rehome" URL sitewide (propagated for sitewide consistency during merge) -->
+    <li class="nav-signup"><a href="/signin/">Sign Up</a></li>
+    <!-- TASK-1 END -->
+  </ul>
+  <button class="pc-hamburger" id="pcHamburger" aria-label="Open menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+  <nav class="pc-mobile-menu" id="pcMobileMenu" aria-label="Mobile navigation">
+    <a href="/">Home</a>
+    <a href="/pets/dogs/">Dogs</a>
+    <a href="/pets/cats/">Cats</a>
+    <a href="/pets/birds/">Birds</a>
+    <a href="/pets/reptiles/">Reptiles</a>
+    <a href="/pets/small-mammals/">Small Mammals</a>
+    <!-- TASK-2 START — Livestocks & Aquariums added to mobile menu -->
+    <a href="/pets/livestocks/">Livestocks</a>
+    <a href="/pets/aquariums/">Aquariums</a>
+    <!-- TASK-2 END -->
+    <a href="/blog/">Blog</a>
+    <a href="/testimonials/">Testimonials</a>
+    <a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact</a>
+    <!-- TASK-1 START -->
+    <!-- Path changed from /rehome/ to /signin/ per CEO's request to retire the "rehome" URL sitewide (propagated for sitewide consistency during merge) -->
+    <a href="/signin/">Sign Up</a>
+    <!-- TASK-1 END -->
+    <a href="https://donate.petcenterco.com" class="mobile-donate" target="_blank" rel="noopener">Donate</a>
+  </nav>
+</header>
+
+<section class="pc-cat-banner">
+  <div class="pc-container">
+    <div class="pc-cat-banner__inner">
+      <div class="pc-cat-banner__eyebrow">Find Your Perfect Match</div>
+      <h1>Small Mammals for Adoption</h1>
+      <p>Meet our adorable small mammals looking for loving homes. Browse our available furry little friends and start your adoption journey today.</p>
+    </div>
+  </div>
+</section>
+
+<section class="pc-section" id="petCatalog" data-category="small-mammals">
+  <div class="pc-container">
+    <div class="pc-controls-row">
+      <div class="pc-search-bar">
+        <span class="pc-search-bar__icon">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+        </span>
+        <input type="text" id="pcSearchInput" placeholder="Search Breed/Pet ID" autocomplete="off">
+        <button class="pc-search-clear" id="pcSearchClear" aria-label="Clear search" type="button">&times;</button>
+      </div>
+      <button class="pc-filter-btn" id="pcFilterBtn" type="button" aria-haspopup="true" aria-expanded="false">
+        <svg class="pc-filter-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="4" y1="6" x2="20" y2="6"/><circle cx="9" cy="6" r="2" fill="currentColor" stroke="none"/>
+          <line x1="4" y1="12" x2="20" y2="12"/><circle cx="15" cy="12" r="2" fill="currentColor" stroke="none"/>
+          <line x1="4" y1="18" x2="20" y2="18"/><circle cx="11" cy="18" r="2" fill="currentColor" stroke="none"/>
+        </svg>
+        <span class="pc-filter-btn__label">Filters</span>
+      </button>
+    </div>
+
+    <!-- Hidden native selects retained so existing applyAndRender() logic (which reads these
+         via getElementById(...).value) keeps working unchanged. The sheet's chips below write
+         into these on Apply. -->
+    <select class="hidden-select" id="filterBreed" name="breed" style="display:none;">
+      <option value="">All Breeds</option>
+    </select>
+    <select class="hidden-select" id="filterSize" name="size" style="display:none;">
+      <option value="">Any Size</option>
+      <option value="Small">Small</option>
+      <option value="Medium">Medium</option>
+      <option value="Large">Large</option>
+    </select>
+    <select class="hidden-select" id="filterAge" name="age" style="display:none;">
+      <option value="">Any Age</option>
+      <option value="0-1">Under 1 year</option>
+      <option value="1-3">1–3 years</option>
+      <option value="3-6">3–6 years</option>
+      <option value="6+">6+ years</option>
+    </select>
+    <select class="hidden-select" id="filterFee" name="fee" style="display:none;">
+      <option value="">Any Fee</option>
+      <option value="0-100">$0–$100</option>
+      <option value="100-500">$100–$500</option>
+      <option value="500-1000">$500–$1,000</option>
+      <option value="1000+">$1,000+</option>
+    </select>
+    <select class="hidden-select" id="sortBy" name="sort" style="display:none;">
+      <option value="name">Name A–Z</option>
+      <option value="age">Youngest First</option>
+      <option value="fee_asc">Lowest Fee</option>
+      <option value="fee_desc">Highest Fee</option>
+    </select>
+    <select class="hidden-select" id="filterCompatible" name="compatible" style="display:none;">
+      <option value="">Any</option>
+      <option value="kids">Kids</option>
+      <option value="dogs">Dogs</option>
+      <option value="cats">Cats</option>
+      <option value="other_pets">Other Pets</option>
+      <option value="untamed">Untamed</option>
+    </select>
+
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;">
+      <div>
+        <h2 style="margin:0;font-size:1.6rem;" id="categoryTitle">Loading…</h2>
+        <p style="margin:4px 0 0;font-size:13px;"><span id="petCount">—</span> <span id="categoryCount"></span> available</p>
+      </div>
+      <!-- TASK-1 START -->
+      <!-- TASK 1b: "List Out A Pet" renamed to "Signin" per Dev Manager Task 1 assignment, restyled to match the site's existing Signin button look (.pc-btn--signin, gold border/text); link target updated from /rehome/ to /signin/ per CEO's request to retire the "rehome" URL sitewide -->
+      <a href="/signin/" class="pc-btn pc-btn--signin">Signin</a>
+      <!-- TASK-1 END -->
+    </div>
+
+    <div class="pc-pet-grid" id="petGrid">
+      <div class="pc-skeleton"></div><div class="pc-skeleton"></div>
+      <div class="pc-skeleton"></div><div class="pc-skeleton"></div>
+    </div>
+  </div>
+</section>
+
+<footer class="pc-footer">
+  <div class="pc-footer__inner">
+    <div class="pc-footer__top">
+      <div class="pc-footer__brand">
+        <img src="/assets/images/logo-petcenter.png" alt="Pet Center">
+        <p>Every pet deserves a loving home. Browse our available pets and start your adoption journey today.</p>
+      </div>
+      <div class="pc-footer__col">
+        <h5>Our Pets</h5>
+        <ul>
+          <li><a href="/pets/dogs/">Dogs</a></li>
+          <li><a href="/pets/cats/">Cats</a></li>
+          <li><a href="/pets/birds/">Birds</a></li>
+          <li><a href="/pets/reptiles/">Reptiles</a></li>
+          <li><a href="/pets/small-mammals/">Small Mammals</a></li>
+          <!-- TASK-2 START — Livestocks & Aquariums added to footer Our Pets column -->
+          <li><a href="/pets/livestocks/">Livestocks</a></li>
+          <li><a href="/pets/aquariums/">Aquariums</a></li>
+          <!-- TASK-2 END -->
+        </ul>
+      </div>
+      <div class="pc-footer__col">
+        <h5>Information</h5>
+        <ul>
+          <li><a href="/">About Us</a></li>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/testimonials/">Testimonials</a></li>
+          <li><a href="https://donate.petcenterco.com" target="_blank" rel="noopener">Donate</a></li>
+          <li><a href="https://docs.petcenterco.com/health-guarantee/" target="_blank" rel="noopener">Health Guarantee</a></li>
+          <li><a href="https://docs.petcenterco.com/shipping-cancellation/" target="_blank" rel="noopener">Shipping & Cancellation</a></li>
+          <li><a href="https://docs.petcenterco.com/shipping-insurance-claims/" target="_blank" rel="noopener">Shipping Insurance</a></li>
+          <li><a href="https://docs.petcenterco.com/data-retention-security/" target="_blank" rel="noopener">Data & Security</a></li>
+        </ul>
+      </div>
+      <div class="pc-footer__col">
+        <h5>Support</h5>
+        <ul>
+          <li><a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact Us</a></li>
+          <!-- TASK-1 START -->
+          <!-- Path changed from /rehome/ to /signin/ per CEO's request to retire the "rehome" URL sitewide (propagated for sitewide consistency during merge) -->
+          <li><a href="/signin/">Sign Up</a></li>
+          <!-- TASK-1 END -->
+          <li><a href="https://docs.petcenterco.com/returns-refunds/" target="_blank" rel="noopener">Returns & Refunds</a></li>
+          <li><a href="https://docs.petcenterco.com/faq/" target="_blank" rel="noopener">FAQ</a></li>
+        </ul>
+      </div>
+      <div class="pc-footer__col">
+        <h5>Visit Us</h5>
+        <p style="color:rgba(255,255,255,.7);font-size:13px;line-height:1.8;margin-bottom:0;">235-269 N Beverly Dr<br>Beverly Hills, CA</p>
+        <p style="color:rgba(255,255,255,.6);font-size:12px;line-height:1.6;margin-top:4px;">Golden Triangle Shopping Center, Section #257</p>
+        <p style="color:rgba(255,255,255,.7);font-size:13px;line-height:1.8;margin-top:10px;"><strong style="color:#d7bd88;">Hours:</strong><br>Mon – Fri: 7am – 9pm<br>Sat – Sun: 10am – 6pm</p>
+      </div>
+    </div>
+    <div class="pc-footer__bottom">
+      <span class="pc-footer__copy">&copy; 2026 Pet Center. All rights reserved.</span>
+      <div class="pc-footer__links">
+        <a href="https://docs.petcenterco.com/privacy-policy/" target="_blank" rel="noopener">Privacy Policy</a>
+        <a href="https://docs.petcenterco.com/terms-of-service/" target="_blank" rel="noopener">Terms of Service</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+<script>
+'use strict';
+
+// Header scroll effect
+(function() {
+  var header = document.getElementById('pcHeader');
+  if (!header) return;
+  
+  function updateHeaderOnScroll() {
+    if (window.scrollY > 0) {
+      header.classList.add('scrolled');
+    } else {
+      header.classList.remove('scrolled');
+    }
+  }
+  
+  window.addEventListener('scroll', updateHeaderOnScroll, { passive: true });
+  updateHeaderOnScroll();
+})();
+
+// Mobile Menu Toggle — canonical implementation (Section 2.4)
+(function () {
+  var hamburger = document.getElementById('pcHamburger');
+  var mobileMenu = document.getElementById('pcMobileMenu');
+  if (!hamburger || !mobileMenu) return;
+
+  function openMenu() {
+    hamburger.classList.add('active');
+    mobileMenu.classList.add('open');
+    hamburger.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeMenu() {
+    hamburger.classList.remove('active');
+    mobileMenu.classList.remove('open');
+    hamburger.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  hamburger.addEventListener('click', function (e) {
+    e.stopPropagation();
+    mobileMenu.classList.contains('open') ? closeMenu() : openMenu();
+  });
+
+  mobileMenu.querySelectorAll('a').forEach(function (link) {
+    link.addEventListener('click', closeMenu);
+  });
+
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest('header') && !e.target.closest('.pc-mobile-menu')) {
+      closeMenu();
+    }
+  });
+})();
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Scroll lock (shared body-scroll-lock helpers for the filter sheet)
+// ═══════════════════════════════════════════════════════════════════════════
+var _pcScrollLockY = 0;
+var _pcScrollLockCount = 0;
+function pcLockBodyScroll() {
+  _pcScrollLockCount++;
+  if (_pcScrollLockCount > 1) return;
+  _pcScrollLockY = window.scrollY || window.pageYOffset || 0;
+  document.body.style.position = 'fixed';
+  document.body.style.top = (-_pcScrollLockY) + 'px';
+  document.body.style.left = '0';
+  document.body.style.right = '0';
+  document.body.style.width = '100%';
+}
+function pcUnlockBodyScroll() {
+  _pcScrollLockCount = Math.max(0, _pcScrollLockCount - 1);
+  if (_pcScrollLockCount > 0) return;
+  document.body.style.position = '';
+  document.body.style.top = '';
+  document.body.style.left = '';
+  document.body.style.right = '';
+  document.body.style.width = '';
+  window.scrollTo(0, _pcScrollLockY);
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Drag-to-close for the filter sheet
+// ═══════════════════════════════════════════════════════════════════════════
+function pcEnableDragToClose(sheetEl, handleEl, onClose) {
+  var startY = 0, currentY = 0, dragging = false, sheetHeight = 0;
+  function pointerDown(e) {
+    // Don't start a drag if the gesture began on an interactive control
+    // inside the drag zone (e.g. the close button) — let it act as a tap.
+    if (e.target.closest && e.target.closest('button, a, input, select')) return;
+    dragging = true;
+    startY = (e.touches ? e.touches[0].clientY : e.clientY);
+    currentY = startY;
+    sheetHeight = sheetEl.offsetHeight || 1;
+    sheetEl.style.transition = 'none';
+  }
+  function pointerMove(e) {
+    if (!dragging) return;
+    currentY = (e.touches ? e.touches[0].clientY : e.clientY);
+    var delta = Math.max(0, currentY - startY);
+    sheetEl.style.transform = 'translateY(' + delta + 'px)';
+  }
+  function pointerUp() {
+    if (!dragging) return;
+    dragging = false;
+    sheetEl.style.transition = '';
+    var delta = Math.max(0, currentY - startY);
+    if (delta > sheetHeight * 0.25) {
+      sheetEl.style.transform = '';
+      onClose();
+    } else {
+      sheetEl.style.transform = '';
+    }
+  }
+  // Drag-to-close is only ever initiated from the handle/header — never from
+  // the scrollable body. This is intentional: starting the drag from inside
+  // the body would hijack normal scroll gestures (any downward scroll flick
+  // would be read as "pull down to close").
+  if (handleEl) {
+    handleEl.addEventListener('touchstart', pointerDown, { passive: true });
+    handleEl.addEventListener('mousedown', pointerDown);
+  }
+  document.addEventListener('touchmove', pointerMove, { passive: true });
+  document.addEventListener('mousemove', pointerMove);
+  document.addEventListener('touchend', pointerUp);
+  document.addEventListener('mouseup', pointerUp);
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Filter Bottom Sheet: wiring, chip selection (draft state), Clear/Apply,
+// smart chip-row wrapping, and the scroll-hint button.
+// ═══════════════════════════════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', function() {
+  var triggerBtn = document.getElementById('pcFilterBtn');
+  var sheet = document.getElementById('pcFilterSheet');
+  var backdrop = document.getElementById('pcFilterBackdrop');
+  var closeBtn = document.getElementById('pcFilterSheetClose');
+  var sheetBody = document.getElementById('pcSheetBody');
+  var clearBtn = document.getElementById('pcSheetClear');
+  var applyBtn = document.getElementById('pcSheetApply');
+  var scrollHint = document.getElementById('pcSheetScrollHint');
+  if (!triggerBtn || !sheet) return;
+
+  // Draft state: target hidden-select id -> selected value
+  var draft = {};
+
+  function seedDraftFromChips() {
+    draft = {};
+    sheet.querySelectorAll('.pc-chip-row').forEach(function(row) {
+      var target = row.getAttribute('data-target');
+      var selected = row.querySelector('.pc-chip.selected');
+      draft[target] = selected ? selected.getAttribute('data-value') : '';
+    });
+  }
+
+  function renderChipSelection() {
+    sheet.querySelectorAll('.pc-chip-row').forEach(function(row) {
+      var target = row.getAttribute('data-target');
+      var val = draft[target] || '';
+      row.querySelectorAll('.pc-chip').forEach(function(chip) {
+        chip.classList.toggle('selected', chip.getAttribute('data-value') === val);
+      });
+    });
+  }
+
+  // Click handling for all chip rows (event delegation, works for dynamically
+  // added breed chips too)
+  sheetBody.addEventListener('click', function(e) {
+    var chip = e.target.closest('.pc-chip');
+    if (!chip) return;
+    var row = chip.closest('.pc-chip-row');
+    if (!row) return;
+    var target = row.getAttribute('data-target');
+    draft[target] = chip.getAttribute('data-value');
+    renderChipSelection();
+  });
+
+  function openSheet() {
+    seedDraftFromChips();
+    // Sync draft with whatever the hidden selects currently hold (in case
+    // Apply was hit before, or search/other logic changed them)
+    Object.keys(draft).forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) draft[id] = el.value;
+    });
+    renderChipSelection();
+    sheet.classList.add('open');
+    backdrop.classList.add('show');
+    triggerBtn.classList.add('active');
+    triggerBtn.setAttribute('aria-expanded', 'true');
+    pcLockBodyScroll();
+    if (window.pcLayoutAllChipRows) window.pcLayoutAllChipRows();
+    setTimeout(updateScrollHint, 350);
+  }
+  function closeSheet() {
+    sheet.classList.remove('open');
+    backdrop.classList.remove('show');
+    triggerBtn.classList.remove('active');
+    triggerBtn.setAttribute('aria-expanded', 'false');
+    pcUnlockBodyScroll();
+  }
+
+  triggerBtn.addEventListener('click', openSheet);
+  closeBtn.addEventListener('click', closeSheet);
+  backdrop.addEventListener('click', function(e){ if (e.target === backdrop) closeSheet(); });
+  pcEnableDragToClose(sheet, document.getElementById('pcSheetDragZone'), closeSheet);
+
+  clearBtn.addEventListener('click', function() {
+    // Reset draft to defaults (first chip in each row is always the "any/all" default)
+    sheet.querySelectorAll('.pc-chip-row').forEach(function(row) {
+      var target = row.getAttribute('data-target');
+      var firstChip = row.querySelector('.pc-chip');
+      draft[target] = firstChip ? firstChip.getAttribute('data-value') : '';
+    });
+    renderChipSelection();
+    // Sheet stays open (spec requirement)
+  });
+
+  applyBtn.addEventListener('click', function() {
+    Object.keys(draft).forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.value = draft[id];
+    });
+    if (window.pcApplyAndRender) window.pcApplyAndRender();
+    closeSheet();
+  });
+
+  // ─── Scroll-hint button: fixed-center, glows, fades while scrolling,
+  //     disappears entirely once scrolled to the bottom ───────────────────
+  var hintHideTimer = null;
+  function updateScrollHint() {
+    if (!scrollHint) return;
+    var atBottom = sheetBody.scrollHeight - sheetBody.scrollTop - sheetBody.clientHeight < 4;
+    var scrollable = sheetBody.scrollHeight > sheetBody.clientHeight + 4;
+    scrollHint.style.display = (scrollable && !atBottom) ? 'flex' : 'none';
+  }
+  sheetBody.addEventListener('scroll', function() {
+    updateScrollHint();
+    scrollHint.classList.add('fade');
+    clearTimeout(hintHideTimer);
+    hintHideTimer = setTimeout(function() {
+      scrollHint.classList.remove('fade');
+      updateScrollHint();
+    }, 220);
+  });
+  if (scrollHint) {
+    scrollHint.addEventListener('click', function() {
+      sheetBody.scrollTo({ top: sheetBody.scrollHeight, behavior: 'smooth' });
+    });
+  }
+  window.pcUpdateScrollHint = updateScrollHint;
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Smart chip-row wrapping: caps rows at 3-per-line by default, but drops to
+// 2-per-line automatically when the combined text length of 3 chips would
+// overflow the available width. Runs on load and on resize.
+// ═══════════════════════════════════════════════════════════════════════════
+(function() {
+  function layoutChipRow(row) {
+    var chips = Array.prototype.slice.call(row.querySelectorAll('.pc-chip'));
+    if (!chips.length) return;
+    // Reset any previous forced basis so we can re-measure from natural width
+    chips.forEach(function(c) { c.style.flexBasis = ''; c.style.maxWidth = ''; });
+
+    var rowWidth = row.clientWidth;
+    if (!rowWidth) return;
+    var gap = 10;
+
+    // Group chips into lines: try to fit as many as possible per line,
+    // capped at 3, based on each chip's natural (measured) width.
+    var i = 0;
+    while (i < chips.length) {
+      var lineChips = [chips[i]];
+      var lineWidth = chips[i].offsetWidth;
+      var j = i + 1;
+      while (j < chips.length && lineChips.length < 3) {
+        var candidateWidth = lineWidth + gap + chips[j].offsetWidth;
+        if (candidateWidth <= rowWidth) {
+          lineChips.push(chips[j]);
+          lineWidth = candidateWidth;
+          j++;
+        } else {
+          break;
+        }
+      }
+      // Force a line break after the last chip in this group by giving it
+      // a flex-basis of 100% minus nothing needed — instead we insert a
+      // zero-width break using CSS 'flex-basis: 100%' on the NEXT chip's
+      // predecessor via a break marker.
+      if (j < chips.length) {
+        chips[j - 1].dataset.pcBreakAfter = '1';
+      }
+      i = j;
+    }
+
+    // Apply line breaks using an inserted flex line-break technique:
+    // a chip marked breakAfter gets a following zero-size break element.
+    row.querySelectorAll('.pc-row-break').forEach(function(b) { b.remove(); });
+    chips.forEach(function(chip) {
+      if (chip.dataset.pcBreakAfter) {
+        var brk = document.createElement('span');
+        brk.className = 'pc-row-break';
+        brk.style.cssText = 'flex-basis:100%; width:0; height:0; margin:0; padding:0;';
+        chip.after(brk);
+        delete chip.dataset.pcBreakAfter;
+      }
+    });
+  }
+
+  function layoutAllChipRows() {
+    document.querySelectorAll('.pc-chip-row').forEach(layoutChipRow);
+  }
+
+  window.pcLayoutAllChipRows = layoutAllChipRows;
+  window.addEventListener('resize', function() {
+    clearTimeout(window._pcChipResizeTimer);
+    window._pcChipResizeTimer = setTimeout(layoutAllChipRows, 150);
+  });
+  document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(layoutAllChipRows, 50);
+  });
+})();
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Search bar: live, debounced, case-insensitive, sign-insensitive (pet ID
+// dashes optional), searches breed or pet ID only.
+// ═══════════════════════════════════════════════════════════════════════════
+(function() {
+  var input = document.getElementById('pcSearchInput');
+  var clearBtn = document.getElementById('pcSearchClear');
+  if (!input) return;
+  var debounceTimer = null;
+  var DEBOUNCE_MS = 450;
+
+  function normalize(str) {
+    return (str || '').toLowerCase().replace(/-/g, '').trim();
+  }
+
+  input.addEventListener('input', function() {
+    clearBtn.classList.toggle('show', input.value.length > 0);
+    clearTimeout(debounceTimer);
+    var value = input.value.trim();
+    if (window.pcShowSearchLoading) window.pcShowSearchLoading();
+    debounceTimer = setTimeout(function() {
+      if (window.pcApplySearch) window.pcApplySearch(value);
+    }, DEBOUNCE_MS);
+  });
+
+  clearBtn.addEventListener('click', function() {
+    input.value = '';
+    clearBtn.classList.remove('show');
+    clearTimeout(debounceTimer);
+    if (window.pcApplySearch) window.pcApplySearch('');
+    input.focus();
+  });
+
+  window.pcNormalizeSearch = normalize;
+})();
+
+// Pet Loading and Filtering
+(function() {
+  var catalog = document.querySelector('[data-category]');
+  var category = (catalog && catalog.getAttribute('data-category')) || 'small-mammals';
+  var petGrid = document.querySelector('.pc-pet-grid');
+  if(!petGrid) return;
+  
+  var allPets = [];
+  
+  var PC_NO_PETS_HTML =
+    '<div class="pc-empty-state">' +
+      // TASK-1 START
+      // TASK 1c (correction): this empty-state paw icon was missed in the first pass -- a hand-drawn circle+path
+      // construction, not caught by a text search for the word "paw" since its class is "pc-empty-state__icon"
+      // with no "paw" substring anywhere nearby. Replaced with the same verified, sourced Font Awesome "paw" solid
+      // icon used elsewhere in this fix (fill instead of stroke-outline, matching the icon's native solid design).
+      '<svg class="pc-empty-state__icon" viewBox="0 0 640 512" width="52" height="52" fill="currentColor">' +
+        // Verified Font Awesome solid "otter" icon, sourced to match this category (replaces the
+        // generic paw icon previously used identically across all 7 category pages' empty states).
+        '<path d="m181.5 197.1 12.9 6.4c5.9 3 12.4 4.5 19.1 4.5 23.5 0 42.6-19.1 42.6-42.6V144c0-35.3-28.7-64-64-64H128c-35.3 0-64 28.7-64 64v21.4c0 23.5 19.1 42.6 42.6 42.6 6.6 0 13.1-1.5 19.1-4.5l12.9-6.4 8.4-4.2-11.9-7.9c-4.5-3-7.1-8-7.1-13.3V168c0-13.3 10.7-24 24-24h16c13.3 0 24 10.7 24 24v3.7c0 5.3-2.7 10.3-7.1 13.3l-11.8 7.9 8.4 4.2zm-8.6 49.4L160 240l-12.9 6.4c-12.6 6.3-26.5 9.6-40.5 9.6-3.6 0-7.1-.2-10.6-.6v.6c0 35.3 28.7 64 64 64h64c17.7 0 32 14.3 32 32s-14.3 32-32 32h160v-64c0-23.7 12.9-44.4 32-55.4 9.4-5.4 20.3-8.6 32-8.6v-16c0-26.5 21.5-48 48-48 8.8 0 16 7.2 16 16v96c0 8.8 7.2 16 16 16s16-7.2 16-16v-99.7c0-48.2-30.8-91-76.6-106.3l-8.5-2.8c-8-2.7-12.6-11.1-10.4-19.3s10.3-13.2 18.6-11.6l19.9 4c89 17.8 153 95.9 153 186.6v1.1c0 123.7-100.3 224-224 224H255.4C132 480 32 380 32 256.6v-39.8c-10.1-14.6-16-32.3-16-51.4v-22.8C6.7 139.3 0 130.5 0 120c0-13.3 10.7-24 24-24h2.8c18-37.8 56.5-64 101.2-64h64c44.7 0 83.2 26.2 101.2 64h2.8c13.3 0 24 10.7 24 24 0 10.5-6.7 19.3-16 22.6v22.8c0 1.4 0 2.8-.1 4.3 12-6.2 25.7-9.6 40.1-9.6h8c17.7 0 32 14.3 32 32s-14.3 32-32 32h-8c-13.3 0-24 10.7-24 24v8h56.4c-15.2 17-24.4 39.4-24.4 64h-32c-42.3 0-78.2-27.4-91-65.3-5.1.9-10.3 1.3-15.6 1.3-14.1 0-27.9-3.3-40.5-9.6zM96 160c-8.8 0-16-7.2-16-16s7.2-16 16-16 16 7.2 16 16-7.2 16-16 16zm144-16c0 8.8-7.2 16-16 16s-16-7.2-16-16 7.2-16 16-16 16 7.2 16 16z"/>' +
+      '</svg>' +
+      // TASK-1 END
+      '<div class="pc-empty-state__title">All our pets here have found their homes</div>' +
+      '<div class="pc-empty-state__subtitle">Please check back soon — new arrivals are added often.</div>' +
+    '</div>';
+
+  function loadPets() {
+    return fetch('/adoptions/pets/' + category + '/index.json')
+      .then(function(r) {
+        if (!r.ok) {
+          throw new Error('index.json HTTP ' + r.status);
+        }
+        return r.json();
+      })
+      .then(function(data) {
+        if(!data || !data.pets || !data.pets.length) {
+          petGrid.innerHTML = PC_NO_PETS_HTML;
+          return [];
+        }
+        
+        return Promise.all(data.pets.map(function(petId) {
+          return fetch('/adoptions/pets/' + category + '/' + petId + '/pet.json')
+            .then(function(r) {
+              if (!r.ok) throw new Error('Failed to fetch pet: ' + petId);
+              return r.json();
+            })
+            .catch(function(err) {
+              console.warn('Error loading pet ' + petId + ':', err);
+              return null;
+            });
+        }));
+      })
+      .then(function(pets) {
+        allPets = pets.filter(function(p) { return p; });
+        if (allPets.length === 0) {
+          petGrid.innerHTML = PC_NO_PETS_HTML;
+          return [];
+        }
+        populateFilters();
+        applyAndRender();
+        updatePetCount();
+        return allPets;
+      })
+      .catch(function(err) {
+        // Full detail stays server-side (console) only — the visible message
+        // must never expose the internal folder path or raw HTTP status,
+        // both of which reveal server structure to anyone who hits this state.
+        console.error('Error loading pets for category "' + category + '":', err);
+        petGrid.innerHTML = PC_NO_PETS_HTML;
+      });
+  }
+  
+  function populateFilters() {
+    var breedSelect = document.getElementById('filterBreed');
+    if (allPets.length === 0) {
+      if (breedSelect) breedSelect.disabled = true;
+      return;
+    }
+
+    // Dynamically extract breeds from all loaded pets
+    var breeds = allPets
+      .map(function(p) { return p.breed; })
+      .filter(function(b) { return b && b.trim(); });
+
+    // Deduplicate and sort
+    breeds = [...new Set(breeds)].sort(function(a, b) {
+      return a.localeCompare(b);
+    });
+
+    // Keep the hidden <select> in sync (applyAndRender reads its .value)
+    if (breedSelect) {
+      var existingOpts = breedSelect.querySelectorAll('option:not([value=""])');
+      existingOpts.forEach(function(opt) { opt.remove(); });
+      breeds.forEach(function(breed) {
+        var option = document.createElement('option');
+        option.value = breed;
+        option.textContent = breed;
+        breedSelect.appendChild(option);
+      });
+    }
+
+    // Build breed chips inside the filter sheet
+    var breedChipRow = document.getElementById('pcBreedChipRow');
+    if (breedChipRow) {
+      // Keep the "All Breeds" default chip, remove any previously added breed chips
+      breedChipRow.querySelectorAll('.pc-chip:not([data-value=""])').forEach(function(c) { c.remove(); });
+      breeds.forEach(function(breed) {
+        var chip = document.createElement('button');
+        chip.type = 'button';
+        chip.className = 'pc-chip';
+        chip.setAttribute('data-value', breed);
+        chip.textContent = breed;
+        breedChipRow.appendChild(chip);
+      });
+      if (window.pcLayoutAllChipRows) window.pcLayoutAllChipRows();
+    }
+  }
+  
+  var searchTerm = '';
+
+  function applyAndRender() {
+    var breed      = document.getElementById('filterBreed')?.value || '';
+    var size       = document.getElementById('filterSize')?.value || '';
+    var fee        = document.getElementById('filterFee')?.value || '';
+    var age        = document.getElementById('filterAge')?.value || '';
+    var sort       = document.getElementById('sortBy')?.value || 'name';
+    var compatible = document.getElementById('filterCompatible')?.value || '';
+    var normSearch = window.pcNormalizeSearch ? window.pcNormalizeSearch(searchTerm) : searchTerm.toLowerCase();
+
+    var filtered = allPets.filter(function(p) {
+      if (breed && p.breed !== breed) return false;
+      if (size && p.size !== size) return false;
+      if (normSearch) {
+        var breedNorm = (p.breed || '').toLowerCase();
+        var idNorm = (p.pet_id || '').toLowerCase().replace(/-/g, '');
+        var matchesBreed = breedNorm.indexOf(normSearch) !== -1;
+        var matchesId = idNorm.indexOf(normSearch) !== -1;
+        if (!matchesBreed && !matchesId) return false;
+      }
+      if (age) {
+        var petAge = p.age_years || 0;
+        if (age === '0-1' && petAge >= 1) return false;
+        if (age === '1-3' && (petAge < 1 || petAge > 3)) return false;
+        if (age === '3-6' && (petAge < 3 || petAge > 6)) return false;
+        if (age === '6+' && petAge < 6) return false;
+      }
+      if (fee) {
+        var petFee = p.adoption_fee || 0;
+        if (fee === '0-100' && petFee > 100) return false;
+        if (fee === '100-500' && (petFee < 100 || petFee > 500)) return false;
+        if (fee === '500-1000' && (petFee < 500 || petFee > 1000)) return false;
+        if (fee === '1000+' && petFee < 1000) return false;
+      }
+      if (compatible) {
+        // Untamed: no to ALL compatibility fields
+        if (compatible === 'untamed') {
+          if (p.compatible_kids === 'yes' || p.compatible_dogs === 'yes' ||
+              p.compatible_cats === 'yes' || p.compatible_other_pets === 'yes') return false;
+        } else if (compatible === 'kids')       { if (p.compatible_kids !== 'yes')       return false; }
+        else if (compatible === 'dogs')         { if (p.compatible_dogs !== 'yes')       return false; }
+        else if (compatible === 'cats')         { if (p.compatible_cats !== 'yes')       return false; }
+        else if (compatible === 'other_pets')   { if (p.compatible_other_pets !== 'yes') return false; }
+      }
+      return true;
+    });
+    
+    if (sort === 'name') {
+      filtered.sort(function(a, b) { return (a.name || '').localeCompare(b.name || ''); });
+    } else if (sort === 'age') {
+      filtered.sort(function(a, b) { return (a.age_years || 0) - (b.age_years || 0); });
+    } else if (sort === 'fee_asc') {
+      filtered.sort(function(a, b) { return (a.adoption_fee || 0) - (b.adoption_fee || 0); });
+    } else if (sort === 'fee_desc') {
+      filtered.sort(function(a, b) { return (b.adoption_fee || 0) - (a.adoption_fee || 0); });
+    }
+    
+    renderPets(filtered);
+  }
+  window.pcApplyAndRender = applyAndRender;
+  
+  function renderPets(pets) {
+    if(!pets.length) {
+      petGrid.innerHTML = '<div class="pc-empty-state"><svg class="pc-empty-state__icon" viewBox="0 0 24 24" width="52" height="52" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="8" x2="14" y2="14"/><line x1="14" y1="8" x2="8" y2="14"/></svg><h3>No pets match your filters</h3><p>Try adjusting your search criteria.</p></div>';
+      petGrid.style.gridColumn = '1 / -1';
+      return;
+    }
+    
+    // SVG icons for card details
+    // TASK-2 START — Posted-on date icon + formatter
+    var iconPosted = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>';
+    function formatPostedDate(dateStr) {
+      if (!dateStr) return null;
+      var d = new Date(String(dateStr).replace(' ', 'T'));
+      if (isNaN(d.getTime())) return null;
+      var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      return months[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
+    }
+    // TASK-2 END
+    var iconBreed  = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>';
+    var iconAge    = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>';
+    var iconSize   = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>';
+    var iconFee    = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>';
+    
+    var html = pets.map(function(p) {
+      var img = p.single_image_url || '/assets/images/pet-placeholder.jpg';
+      var fee = (p.adoption_fee || 0).toLocaleString('en-US');
+      var url = '/pets/detail/?pet_id=' + encodeURIComponent(p.pet_id) + '&category=' + encodeURIComponent(p.category || category);
+      var petName = p.name || 'Unknown';
+      var breed = p.breed || 'Mixed';
+      var age = p.age_years ? p.age_years + (p.age_years === 1 ? ' year' : ' years') : '—';
+      var size = p.size || '—';
+      // TASK-2 START — Posted-on date, rendered only when the pet record has one
+      var postedText = formatPostedDate(p.published_date);
+      var postedHTML = postedText ? '<div class="pc-pet-card__posted">' + iconPosted + '<span>Posted ' + postedText + '</span></div>' : '';
+      // TASK-2 END
+      
+      // Adopted badge — "ADOPTED" strip style
+      var adoptedBadge = p.status === 'Adopted'
+        ? '<div class="pc-pet-card__adopted-badge">ADOPTED</div>'
+        : '';
+      
+      return '<a href="' + url + '" class="pc-pet-card">' +
+        '<div class="pc-pet-card__img-wrap">' +
+          '<img src="' + img + '" alt="' + petName + '" class="pc-pet-card__img" loading="lazy">' +
+          adoptedBadge +
+        '</div>' +
+        '<div class="pc-pet-card__body">' +
+          '<h3 class="pc-pet-card__name">' + petName + '</h3>' +
+          '<div class="pc-pet-card__details">' +
+            '<div class="pc-pet-card__detail-row">' + iconBreed + '<span class="pc-pet-card__detail-val">' + breed + '</span></div>' +
+            '<div class="pc-pet-card__detail-row">' + iconAge   + '<span class="pc-pet-card__detail-val">' + age   + '</span></div>' +
+            '<div class="pc-pet-card__detail-row">' + iconSize  + '<span class="pc-pet-card__detail-val">' + size  + '</span></div>' +
+          '</div>' +
+          '<div class="pc-pet-card__fee-row">' +
+            iconFee +
+            '<span class="pc-pet-card__fee">' + fee + '</span>' +
+          '</div>' +
+          // TASK-2 START — Posted-on date, rendered only when the pet record has one
+          postedHTML +
+          // TASK-2 END
+          '<span class="pc-pet-card__diary">Read ' + petName + '\'s diary!</span>' +
+        '</div>' +
+      '</a>';
+    }).join('');
+    
+    petGrid.innerHTML = html;
+  }
+  
+  function updatePetCount() {
+    var countEl = document.getElementById('petCount');
+    if (countEl) {
+      countEl.textContent = allPets.length;
+    }
+    
+    // Update category title and count text based on loaded category
+    var categoryTitle = document.getElementById('categoryTitle');
+    var categoryCountText = document.getElementById('categoryCount');
+    if (categoryTitle && categoryCountText) {
+      var titleText = category.charAt(0).toUpperCase() + category.slice(1);
+      if (category === 'small-mammals') {
+        titleText = 'Small Mammals';
+      }
+      categoryTitle.textContent = 'Adoptable ' + titleText;
+      categoryCountText.textContent = category === 'small-mammals' ? 'small mammals' : category;
+    }
+  }
+  
+  // Event listeners for filters
+  // (The hidden <select> elements are pure state holders written to by the
+  // filter sheet's Apply button, which calls applyAndRender() directly —
+  // see window.pcApplyAndRender below. No 'change' events are dispatched on
+  // these selects, so no listener is needed here.)
+
+  // Hooked by the search bar IIFE: shows a debounce-loading state, then
+  // re-runs the filter/search/sort pipeline once the debounce fires.
+  window.pcShowSearchLoading = function() {
+    if (!allPets.length) return;
+    petGrid.innerHTML = '<div class="pc-loading-squares"><span></span><span></span><span></span></div>';
+  };
+  window.pcApplySearch = function(term) {
+    searchTerm = term || '';
+    applyAndRender();
+  };
+
+  // Load pets on page load
+  loadPets();
+})();
+</script>
+
+<!-- ═══ Filter Bottom Sheet — start ═══ -->
+<div class="pc-sheet-backdrop" id="pcFilterBackdrop"></div>
+<div class="pc-filter-sheet" id="pcFilterSheet" role="dialog" aria-modal="true" aria-label="Filter pets">
+  <div class="pc-sheet-drag-zone" id="pcSheetDragZone">
+    <div class="pc-sheet-handle"></div>
+    <div class="pc-sheet-header">
+      <h3>Filters</h3>
+      <button class="pc-sheet-close" id="pcFilterSheetClose" aria-label="Close" type="button">&times;</button>
+    </div>
+  </div>
+
+  <div class="pc-sheet-body-outer">
+    <div class="pc-sheet-body" id="pcSheetBody">
+
+      <div class="pc-sheet-filter-group" data-filter="sortBy">
+        <div class="pc-sheet-filter-group__label">Sort By</div>
+        <div class="pc-chip-scroll">
+          <div class="pc-chip-row" data-target="sortBy">
+            <button type="button" class="pc-chip selected" data-value="name">Name A–Z</button>
+            <button type="button" class="pc-chip" data-value="age">Youngest First</button>
+            <button type="button" class="pc-chip" data-value="fee_asc">Lowest Fee</button>
+            <button type="button" class="pc-chip" data-value="fee_desc">Highest Fee</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="pc-sheet-filter-group" data-filter="filterBreed">
+        <div class="pc-sheet-filter-group__label">Breed</div>
+        <div class="pc-chip-scroll">
+          <div class="pc-chip-row" data-target="filterBreed" id="pcBreedChipRow">
+            <button type="button" class="pc-chip selected" data-value="">All Breeds</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="pc-sheet-filter-group" data-filter="filterFee">
+        <div class="pc-sheet-filter-group__label">Adoption Fee</div>
+        <div class="pc-chip-scroll">
+          <div class="pc-chip-row" data-target="filterFee">
+            <button type="button" class="pc-chip selected" data-value="">Any Fee</button>
+            <button type="button" class="pc-chip" data-value="0-100">$0–$100</button>
+            <button type="button" class="pc-chip" data-value="100-500">$100–$500</button>
+            <button type="button" class="pc-chip" data-value="500-1000">$500–$1,000</button>
+            <button type="button" class="pc-chip" data-value="1000+">$1,000+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="pc-sheet-filter-group" data-filter="filterAge">
+        <div class="pc-sheet-filter-group__label">Age</div>
+        <div class="pc-chip-scroll">
+          <div class="pc-chip-row" data-target="filterAge">
+            <button type="button" class="pc-chip selected" data-value="">Any Age</button>
+            <button type="button" class="pc-chip" data-value="0-1">Under 1 year</button>
+            <button type="button" class="pc-chip" data-value="1-3">1–3 years</button>
+            <button type="button" class="pc-chip" data-value="3-6">3–6 years</button>
+            <button type="button" class="pc-chip" data-value="6+">6+ years</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="pc-sheet-filter-group" data-filter="filterSize">
+        <div class="pc-sheet-filter-group__label">Size</div>
+        <div class="pc-chip-scroll">
+          <div class="pc-chip-row" data-target="filterSize">
+            <button type="button" class="pc-chip selected" data-value="">Any Size</button>
+            <button type="button" class="pc-chip" data-value="Small">Small</button>
+            <button type="button" class="pc-chip" data-value="Medium">Medium</button>
+            <button type="button" class="pc-chip" data-value="Large">Large</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="pc-sheet-filter-group" data-filter="filterCompatible">
+        <div class="pc-sheet-filter-group__label">Compatible With</div>
+        <div class="pc-chip-scroll">
+          <div class="pc-chip-row" data-target="filterCompatible">
+            <button type="button" class="pc-chip selected" data-value="">Any</button>
+            <button type="button" class="pc-chip" data-value="kids">Kids</button>
+            <button type="button" class="pc-chip" data-value="dogs">Dogs</button>
+            <button type="button" class="pc-chip" data-value="cats">Cats</button>
+            <button type="button" class="pc-chip" data-value="other_pets">Other Pets</button>
+            <button type="button" class="pc-chip" data-value="untamed">Untamed</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <button class="pc-sheet-scroll-hint" id="pcSheetScrollHint" type="button" aria-label="Scroll to bottom">
+      <svg width="22" height="12" viewBox="0 0 22 12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M2 2 L11 9 L20 2"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="pc-sheet-footer">
+    <button class="pc-sheet-clear" id="pcSheetClear" type="button">Clear</button>
+    <button class="pc-sheet-apply" id="pcSheetApply" type="button">Apply</button>
+  </div>
+</div>
+<!-- ═══ Filter Bottom Sheet — end ═══ -->
+<script src="/admin/chat-widget.js"></script>
+</body>
+</html>

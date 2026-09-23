@@ -1,0 +1,214 @@
+/* ════════════════════════════════════════════════════════════════
+   Pet Center — blog.css
+   Page-specific styles for the blog listing page (blog-home.html)
+   Shared styles live in styles.css | Responsive in responsive.css
+   ════════════════════════════════════════════════════════════════ */
+
+/* Blog hero */
+.pc-blog-hero {
+  background: linear-gradient(120deg, #10214b 0%, #1a3070 60%, #2a4080 100%);
+  padding: 100px 0 60px;
+  position: relative;
+  overflow: hidden;
+}
+.pc-blog-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url('/img/header-bg.jpg') center/cover no-repeat;
+  opacity: 0.15;
+}
+.pc-blog-hero__inner { position: relative; z-index: 1; text-align: center; }
+.pc-blog-hero__eyebrow {
+  display: inline-block;
+  font-family: 'Sora', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: #d7bd88;
+  background: rgba(215,189,136,0.12);
+  border: 1px solid rgba(215,189,136,0.3);
+  padding: 5px 16px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+}
+.pc-blog-hero h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(36px, 5vw, 60px);
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 16px;
+  line-height: 1.1;
+}
+.pc-blog-hero p {
+  color: rgba(255,255,255,0.75);
+  font-family: 'Sora', sans-serif;
+  font-size: 16px;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+/* Category pills */
+.pc-blog-cats {
+  display: flex; gap: 10px; flex-wrap: wrap;
+  justify-content: center; margin-top: 36px;
+}
+.pc-blog-cat-pill {
+  font-family: 'Sora', sans-serif;
+  font-size: 12px; font-weight: 600;
+  letter-spacing: .06em; text-transform: uppercase;
+  padding: 6px 18px;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.25);
+  color: rgba(255,255,255,0.8);
+  background: rgba(255,255,255,0.08);
+  text-decoration: none;
+  transition: all .2s;
+}
+.pc-blog-cat-pill:hover, .pc-blog-cat-pill.active {
+  background: #ED7624; border-color: #ED7624; color: #fff; text-decoration: none;
+}
+
+/* Featured post */
+.pc-blog-featured {
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 24px rgba(16,33,75,0.10);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-bottom: 48px;
+}
+@media (max-width: 767px) { .pc-blog-featured { grid-template-columns: 1fr; } }
+.pc-blog-featured__img {
+  background: linear-gradient(135deg,#10214b,#2a4080);
+  min-height: 320px;
+  display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+}
+.pc-blog-featured__img img {
+  width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0;
+}
+.pc-blog-featured__body { padding: 48px 40px; display: flex; flex-direction: column; justify-content: center; }
+.pc-blog-tag {
+  display: inline-block;
+  font-family: 'Sora', sans-serif;
+  font-size: 11px; font-weight: 700;
+  letter-spacing: .1em; text-transform: uppercase;
+  color: #ED7624; margin-bottom: 14px;
+}
+.pc-blog-featured__body h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(24px, 2.5vw, 34px);
+  font-weight: 700; color: #10214b;
+  line-height: 1.2; margin-bottom: 14px;
+}
+.pc-blog-featured__body p {
+  font-family: 'Sora', sans-serif;
+  color: #5a5048; font-size: 15px;
+  line-height: 1.7; margin-bottom: 24px;
+}
+.pc-blog-meta {
+  font-family: 'Sora', sans-serif;
+  font-size: 12px; color: #9a8e82;
+  display: flex; gap: 16px; align-items: center; margin-top: auto;
+}
+
+/* Post grid */
+.pc-blog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 28px; margin-bottom: 48px;
+}
+.pc-blog-card {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 16px rgba(16,33,75,0.08);
+  transition: box-shadow .25s, transform .25s;
+  text-decoration: none;
+  display: flex; flex-direction: column;
+}
+.pc-blog-card:hover {
+  box-shadow: 0 8px 32px rgba(16,33,75,0.15);
+  transform: translateY(-3px);
+  text-decoration: none;
+}
+.pc-blog-card__img {
+  aspect-ratio: 16/9;
+  background: linear-gradient(135deg,#10214b,#2a4080);
+  position: relative; overflow: hidden;
+}
+.pc-blog-card__img img {
+  width: 100%; height: 100%; object-fit: cover;
+}
+.pc-blog-card__img-fallback {
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+}
+.pc-blog-card__body { padding: 24px; flex: 1; display: flex; flex-direction: column; }
+.pc-blog-card__body h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px; font-weight: 700;
+  color: #10214b; margin-bottom: 10px;
+  line-height: 1.25;
+}
+.pc-blog-card__body p {
+  font-family: 'Sora', sans-serif;
+  color: #5a5048; font-size: 13.5px;
+  line-height: 1.65; margin-bottom: 16px; flex: 1;
+}
+.pc-blog-card__footer {
+  font-family: 'Sora', sans-serif;
+  font-size: 12px; color: #9a8e82;
+  border-top: 1px solid #f0ebe4;
+  padding-top: 14px; margin-top: auto;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.pc-blog-card__readmore {
+  color: #ED7624; font-weight: 700;
+  font-size: 12px; letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+/* Sidebar */
+.pc-sidebar-widget {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 16px rgba(16,33,75,0.07);
+  padding: 28px;
+  margin-bottom: 24px;
+}
+.pc-sidebar-widget h5 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px; font-weight: 700;
+  color: #10214b; margin-bottom: 18px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #d7bd88;
+}
+.pc-sidebar-link-list { list-style: none; margin: 0; padding: 0; }
+.pc-sidebar-link-list li {
+  padding: 9px 0;
+  border-bottom: 1px solid #f0ebe4;
+  font-family: 'Sora', sans-serif;
+  font-size: 13.5px;
+}
+.pc-sidebar-link-list li:last-child { border-bottom: none; }
+.pc-sidebar-link-list a { color: #10214b; text-decoration: none; transition: color .2s; }
+.pc-sidebar-link-list a:hover { color: #ED7624; }
+.pc-blog-adopt-cta {
+  background: linear-gradient(135deg, #10214b, #1a3070);
+  border-radius: 12px; padding: 28px;
+  text-align: center; color: #fff;
+}
+.pc-blog-adopt-cta h5 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px; font-weight: 700; color: #d7bd88;
+  margin-bottom: 10px;
+}
+.pc-blog-adopt-cta p {
+  font-family: 'Sora', sans-serif;
+  font-size: 13px; color: rgba(255,255,255,0.75);
+  margin-bottom: 18px;
+}

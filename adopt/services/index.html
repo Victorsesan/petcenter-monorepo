@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Explore Pet Center's adoption services — flexible payment plans, nationwide shipping and local delivery, our foster program, health guarantees, starter kits, and post-adoption support.">
+  <title>Our Services — Pet Center</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+/* ════════════════════════════════════════════════════════════════════════════
+   PET CENTER ADOPTION WEBSITE — Design System v1.0
+   Colors: Navy #10214b | Gold #d7bd88 | Orange #ED7624
+   Typography: Cormorant Garamond (headers) | Sora (body)
+   Rule: NO borders on cards — shadows only | NO emojis — SVG icons only
+   ════════════════════════════════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Sora:wght@300;400;500;600;700&display=swap');
+
+/* ─── CSS Variables ─────────────────────────────────────────────────────────── */
+:root {
+  --navy: #10214b;
+  --navy-light: #1a2f5c;
+  --gold: #d7bd88;
+  --gold-dark: #b89968;
+  --orange: #ED7624;
+  --orange-light: #fef0e6;
+  --warm-gray: #d0c3ba;
+  --chocolate: #3d2817;
+  --bg: #f9f7f4;
+  --surface: #ffffff;
+  --text: #2c2416;
+  --muted: #7a6d5f;
+  --success: #0d7c4a;
+  --success-bg: #e6f7ef;
+  --error: #c0392b;
+  --error-bg: #fdecea;
+  --shadow-sm: 0 2px 8px rgba(16,33,75,0.06);
+  --shadow-md: 0 4px 20px rgba(16,33,75,0.10);
+  --shadow-lg: 0 8px 40px rgba(16,33,75,0.14);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --transition: 0.25s ease;
+}
+
+/* ─── Reset & Base ───────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; overflow-x: hidden; width: 100%; }
+body {
+  font-family: 'Sora', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  padding-top: 68px;
+  overflow-x: hidden;
+  width: 100%;
+  position: relative;
+}
+img { max-width: 100%; height: auto; display: block; }
+a { color: var(--orange); text-decoration: none; transition: color var(--transition); }
+a:hover { color: var(--navy); }
+
+/* ─── Typography ─────────────────────────────────────────────────────────────── */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  color: var(--navy);
+  line-height: 1.25;
+}
+h1 { font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 700; }
+h2 { font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 600; }
+h3 { font-size: clamp(1.2rem, 2.2vw, 1.8rem); font-weight: 600; }
+h4 { font-size: 1.2rem; font-weight: 600; }
+p { color: var(--muted); }
+
+/* ─── Layout Utilities ───────────────────────────────────────────────────────── */
+.pc-container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+.pc-section { padding: 72px 0; }
+.pc-section--sm { padding: 40px 0; }
+.pc-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+.pc-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.pc-grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+.text-center { text-align: center; }
+.text-navy { color: var(--navy); }
+.text-orange { color: var(--orange); }
+.text-muted { color: var(--muted); }
+
+/* ─── Buttons ─────────────────────────────────────────────────────────────────── */
+.pc-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 28px;
+  border-radius: var(--radius-sm);
+  font-family: 'Sora', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  border: none;
+  transition: all var(--transition);
+  text-decoration: none;
+  white-space: nowrap;
+  min-height: 44px;
+}
+.pc-btn--primary {
+  background: linear-gradient(135deg, var(--navy), var(--navy-light));
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(16,33,75,0.25);
+}
+.pc-btn--primary:hover {
+  background: linear-gradient(135deg, var(--navy-light), #243970);
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(16,33,75,0.32);
+}
+.pc-btn--orange {
+  background: linear-gradient(135deg, var(--orange), #d96919);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(237,118,36,0.30);
+}
+.pc-btn--orange:hover {
+  background: linear-gradient(135deg, #d96919, #c45e10);
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(237,118,36,0.38);
+}
+.pc-btn--ghost {
+  background: transparent;
+  color: var(--navy);
+  box-shadow: inset 0 0 0 2px var(--gold);
+}
+.pc-btn--ghost:hover { background: var(--orange-light); color: var(--orange); }
+.pc-btn--sm { padding: 8px 18px; font-size: 13px; min-height: 36px; }
+.pc-btn--lg { padding: 16px 40px; font-size: 16px; }
+.pc-btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+
+/* ─── Cards ────────────────────────────────────────────────────────────────────── */
+.pc-card {
+  background: var(--surface);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition: box-shadow var(--transition), transform var(--transition);
+}
+.pc-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+.pc-card__body { padding: 20px; }
+.pc-card__footer { padding: 16px 20px; background: var(--bg); }
+
+/* TASK-3 START */
+/* ─── Services Page Banner (built from the pc-cat-banner pattern, Section 15) ── */
+.pc-svc-banner {
+  background: linear-gradient(120deg, #10214b 0%, #1a3070 60%, #2a4080 100%);
+  padding: 100px 0 60px;
+  position: relative;
+  overflow: hidden;
+  color: #fff;
+  text-align: center;
+}
+.pc-svc-banner::before {
+  content: '';
+  position: absolute;
+  top: -40%; right: -10%;
+  width: 480px; height: 480px;
+  background: radial-gradient(circle, rgba(215,189,136,0.14) 0%, transparent 70%);
+  pointer-events: none;
+}
+.pc-svc-banner__inner { position: relative; z-index: 1; max-width: 680px; margin: 0 auto; }
+.pc-svc-banner__eyebrow {
+  font-family: 'Sora', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #ED7624;
+  margin-bottom: 14px;
+}
+.pc-svc-banner h1 { color: #fff; font-size: clamp(2rem, 4vw, 2.8rem); margin-bottom: 14px; }
+.pc-svc-banner p { color: rgba(255,255,255,0.78); font-size: 15.5px; line-height: 1.7; }
+
+/* ─── Service quick-nav (jump links to each article below) ────────────────── */
+.pc-svc-nav {
+  position: sticky;
+  top: 68px;
+  z-index: 50;
+  background: rgba(249,247,244,0.96);
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid var(--border-color, rgba(16,33,75,0.10));
+  box-shadow: 0 2px 12px rgba(16,33,75,0.05);
+}
+.pc-svc-nav__inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 14px 24px;
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.pc-svc-nav__inner::-webkit-scrollbar { display: none; }
+.pc-svc-nav a {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: var(--shadow-sm);
+  font-family: 'Sora', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--navy);
+  text-decoration: none;
+  transition: all var(--transition);
+  white-space: nowrap;
+}
+.pc-svc-nav a:hover { color: #fff; background: var(--navy); }
+.pc-svc-nav a svg { flex-shrink: 0; }
+
+/* ─── Service article blocks ───────────────────────────────────────────────── */
+.pc-svc-article {
+  scroll-margin-top: 140px;
+  padding: 64px 0;
+  border-bottom: 1px solid rgba(16,33,75,0.08);
+}
+.pc-svc-article:last-of-type { border-bottom: none; }
+.pc-svc-article__inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: grid;
+  grid-template-columns: 88px 1fr;
+  gap: 32px;
+  align-items: start;
+}
+.pc-svc-article__icon {
+  width: 88px; height: 88px;
+  border-radius: var(--radius-lg);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  box-shadow: var(--shadow-md);
+}
+.pc-svc-article__icon svg { width: 40px; height: 40px; }
+.pc-svc-article__eyebrow {
+  font-family: 'Sora', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--orange);
+  margin-bottom: 8px;
+}
+.pc-svc-article h2 { font-size: 1.9rem; margin-bottom: 14px; }
+.pc-svc-article__lede {
+  font-size: 16px;
+  color: var(--text);
+  line-height: 1.75;
+  margin-bottom: 20px;
+  max-width: 760px;
+}
+.pc-svc-article__body p {
+  margin-bottom: 16px;
+  max-width: 760px;
+  line-height: 1.75;
+}
+.pc-svc-article__list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 20px 0 24px;
+  max-width: 760px;
+}
+.pc-svc-article__list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 14.5px;
+  color: var(--text);
+  line-height: 1.6;
+}
+.pc-svc-article__list svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--orange);
+}
+.pc-svc-article__cta { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px; }
+.pc-svc-article__note {
+  margin-top: 18px;
+  padding: 14px 18px;
+  background: var(--orange-light);
+  border-left: 3px solid var(--orange);
+  border-radius: var(--radius-sm);
+  font-size: 13.5px;
+  color: var(--chocolate);
+  max-width: 760px;
+  line-height: 1.6;
+}
+@media (max-width: 700px) {
+  .pc-svc-article__inner { grid-template-columns: 1fr; }
+  .pc-svc-article__icon { width: 64px; height: 64px; }
+  .pc-svc-article__icon svg { width: 30px; height: 30px; }
+  .pc-svc-article { padding: 44px 0; scroll-margin-top: 116px; }
+}
+
+/* ─── Closing CTA band ─────────────────────────────────────────────────────── */
+.pc-svc-closing {
+  background: linear-gradient(120deg, #10214b 0%, #1a3070 100%);
+  padding: 64px 24px;
+  text-align: center;
+  color: #fff;
+}
+.pc-svc-closing h2 { color: #fff; margin-bottom: 12px; }
+.pc-svc-closing p { color: rgba(255,255,255,0.75); max-width: 520px; margin: 0 auto 28px; }
+.pc-svc-closing__btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+/* TASK-3 END */
+
+/* ─── Global Header (pc-header) ─────────────────────────────────────────────── */
+.pc-header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  padding: 0 24px;
+  height: 68px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: transparent;
+  transition: background 0.35s ease, box-shadow 0.35s ease;
+  overflow: visible;
+}
+.pc-header.scrolled,
+.pc-header--solid {
+  background: rgba(16,33,75,0.97);
+  box-shadow: 0 2px 20px rgba(0,0,0,0.18);
+}
+.pc-header__logo img { height: 44px; width: auto; display: block; }
+.pc-header__logo--desktop { display: block; }
+.pc-header__logo--mobile  { display: none; }
+@media (max-width: 900px) {
+  .pc-header__logo--desktop { display: none; }
+  .pc-header__logo--mobile  { display: block; }
+}
+.pc-header__nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  list-style: none;
+}
+.pc-header__nav li { position: relative; }
+.pc-header__nav a {
+  display: block;
+  padding: 8px 11px;
+  font-family: 'Sora', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.9);
+  text-decoration: none;
+  border-radius: 6px;
+  transition: color 0.2s, background 0.2s;
+  white-space: nowrap;
+}
+.pc-header__nav a:hover { color: #d7bd88; background: rgba(255,255,255,0.08); }
+.pc-header__nav .nav-donate a { background: #ED7624; color: #fff; font-weight: 600; padding: 8px 16px; }
+.pc-header__nav .nav-donate a:hover { background: #d4621a; color: #fff; }
+.pc-header__nav .nav-signup a,
+.pc-header__nav .nav-login a { border: 1px solid rgba(215,189,136,0.5); color: #d7bd88; }
+.pc-header__nav .nav-signup a:hover,
+.pc-header__nav .nav-login a:hover { background: rgba(215,189,136,0.12); }
+.pc-header__nav .has-drop > ul {
+  display: none;
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  background: #10214b;
+  border-radius: 8px;
+  list-style: none;
+  min-width: 168px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.22);
+  padding: 6px 0;
+  z-index: 100;
+}
+.pc-header__nav .has-drop:hover > ul { display: block; }
+.pc-header__nav .has-drop > ul a { padding: 9px 18px; font-size: 13px; border-radius: 0; }
+.pc-hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  padding: 8px;
+  background: none;
+  border: none;
+  width: 32px;
+  height: auto;
+  justify-content: center;
+}
+.pc-hamburger span { 
+  display: block; 
+  width: 24px; 
+  height: 2px; 
+  background: #fff; 
+  border-radius: 2px; 
+  transition: all 0.3s ease;
+}
+.pc-hamburger.active span:nth-child(1) { 
+  transform: rotate(45deg) translate(8px, 8px); 
+}
+.pc-hamburger.active span:nth-child(2) { 
+  opacity: 0; 
+}
+.pc-hamburger.active span:nth-child(3) { 
+  transform: rotate(-45deg) translate(7px, -7px); 
+}
+.pc-mobile-menu {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: rgba(16,33,75,0.98);
+  z-index: 999;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+}
+.pc-mobile-menu.open {
+  max-height: calc(100vh - 68px);
+  overflow-y: auto;
+  opacity: 1;
+  pointer-events: auto;
+  padding: 16px 0 calc(100vh - 68px - 56px);
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+.pc-mobile-menu a {
+  display: block;
+  padding: 12px 28px;
+  font-family: 'Sora', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.9);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  transition: all 0.2s ease;
+}
+.pc-mobile-menu a:hover { 
+  color: #d7bd88; 
+  background: rgba(255,255,255,0.05); 
+}
+.pc-mobile-menu .mobile-donate {
+  margin: 12px 28px 0;
+  display: inline-block;
+  background: #ED7624;
+  color: #fff;
+  padding: 11px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  border-bottom: none;
+}
+@media (max-width: 900px) {
+  .pc-header__nav { display: none; }
+  .pc-hamburger { display: flex; }
+}
+
+/* ─── Global Footer ─────────────────────────────────────────────────────────── */
+.pc-footer {
+  background: #0b1834;
+  padding: 60px 24px 28px;
+  color: rgba(255,255,255,0.65);
+  font-family: 'Sora', sans-serif;
+}
+.pc-footer__inner { max-width: 1200px; margin: 0 auto; }
+.pc-footer__top {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1.5fr;
+  gap: 40px;
+  padding-bottom: 40px;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+.pc-footer__brand img { height: 40px; margin-bottom: 16px; display: block; }
+.pc-footer__brand p { font-size: 13.5px; line-height: 1.7; max-width: 280px; }
+.pc-footer__col h5 { font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; font-weight: 700; color: #d7bd88; margin-bottom: 16px; }
+.pc-footer__col ul { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+.pc-footer__col ul a { font-size: 13px; color: rgba(255,255,255,0.6); text-decoration: none; transition: color 0.2s; }
+.pc-footer__col ul a:hover { color: #d7bd88; }
+.pc-footer__bottom { padding-top: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+.pc-footer__copy { font-size: 12.5px; }
+.pc-footer__links { display: flex; gap: 20px; }
+.pc-footer__links a { font-size: 12.5px; color: rgba(255,255,255,0.5); text-decoration: none; }
+.pc-footer__links a:hover { color: #d7bd88; }
+@media (max-width: 900px) { .pc-footer__top { grid-template-columns: 1fr 1fr; gap: 28px; } }
+@media (max-width: 560px) { .pc-footer__top { grid-template-columns: 1fr; gap: 24px; } }
+
+/* ════════════════════════════════════════════════════════════════
+   Pet Center — responsive.css
+   Site-wide responsive / mobile-first breakpoints
+   Colors: Navy #10214b | Gold #d7bd88 | Orange #ED7624
+   ════════════════════════════════════════════════════════════════ */
+
+/* ── 1280px and below: constrain max container ─────────────── */
+@media (max-width: 1280px) {
+  .pc-container { padding: 0 20px; }
+}
+
+/* ── 1024px: tablet landscape ──────────────────────────────── */
+@media (max-width: 1024px) {
+  .pc-grid-4 { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ── 900px: tablet portrait / wide mobile ──────────────────── */
+@media (max-width: 900px) {
+  /* Header */
+  .pc-header__nav { display: none; }
+  .pc-hamburger { display: flex; }
+
+  /* Footer */
+  .pc-footer__top { grid-template-columns: 1fr 1fr; gap: 28px; }
+}
+
+/* ── 768px: tablet ─────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .pc-grid-3 { grid-template-columns: repeat(2, 1fr); }
+  .pc-grid-2 { grid-template-columns: 1fr; }
+}
+
+/* ── 640px: large mobile ───────────────────────────────────── */
+@media (max-width: 640px) {
+  .pc-section { padding: 48px 0; }
+}
+
+/* ── 560px: mobile ─────────────────────────────────────────── */
+@media (max-width: 560px) {
+  /* Footer */
+  .pc-footer__top { grid-template-columns: 1fr; gap: 24px; }
+}
+
+/* ── 480px: small mobile ───────────────────────────────────── */
+@media (max-width: 480px) {
+  .pc-grid-4 { grid-template-columns: 1fr; }
+
+  /* Footer */
+  .pc-footer__bottom { flex-direction: column; text-align: center; }
+  .pc-footer__links { justify-content: center; }
+}
+
+/* ── Print styles ──────────────────────────────────────────── */
+@media print {
+  .pc-header,
+  .pc-hamburger,
+  .pc-mobile-menu,
+  .pc-footer,
+  .pc-filter-bar,
+  .no-print { display: none !important; }
+  body { padding-top: 0 !important; }
+}
+
+
+
+  </style>
+  </head>
+<body>
+
+<header class="pc-header pc-header--solid" id="pcHeader">
+  <a href="/" class="pc-header__logo pc-header__logo--desktop">
+    <img src="/assets/images/logo-petcenter.png" alt="Pet Center">
+  </a>
+  <a href="/" class="pc-header__logo pc-header__logo--mobile">
+    <img src="/assets/images/logo-petcenter-icon.png" alt="Pet Center">
+  </a>
+  <ul class="pc-header__nav">
+    <li><a href="/">Home</a></li>
+    <li class="has-drop"><a href="#">Our Pets</a>
+      <ul>
+        <li><a href="/pets/dogs/">Dogs</a></li>
+        <li><a href="/pets/cats/">Cats</a></li>
+        <li><a href="/pets/birds/">Birds</a></li>
+        <li><a href="/pets/reptiles/">Reptiles</a></li>
+        <li><a href="/pets/small-mammals/">Small Mammals</a></li>
+      </ul>
+    </li>
+    <li><a href="/blog/">Blog</a></li>
+    <li><a href="/testimonials/">Testimonials</a></li>
+    <li class="nav-donate"><a href="https://donate.petcenterco.com" target="_blank" rel="noopener">Donate</a></li>
+    <li><a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact</a></li>
+    <li class="nav-signup"><a href="/rehome/">Sign Up</a></li>
+  </ul>
+  <button class="pc-hamburger" id="pcHamburger" aria-label="Open menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+  <nav class="pc-mobile-menu" id="pcMobileMenu" aria-label="Mobile navigation">
+    <a href="/">Home</a>
+    <a href="/pets/dogs/">Dogs</a>
+    <a href="/pets/cats/">Cats</a>
+    <a href="/pets/birds/">Birds</a>
+    <a href="/pets/reptiles/">Reptiles</a>
+    <a href="/pets/small-mammals/">Small Mammals</a>
+    <a href="/blog/">Blog</a>
+    <a href="/testimonials/">Testimonials</a>
+    <a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact</a>
+    <a href="/rehome/">Sign Up</a>
+    <a href="https://donate.petcenterco.com" class="mobile-donate" target="_blank" rel="noopener">Donate</a>
+  </nav>
+</header>
+
+<!-- TASK-3 START -->
+<!-- Services page body: hero banner, sticky quick-nav, 6 full service articles
+     (BNPL, Shipping & Delivery, Foster/List a Pet, Health Guarantee, Starter Kit,
+     Post-Adoption Support), and closing CTA band. -->
+<section class="pc-svc-banner">
+  <div class="pc-container">
+    <div class="pc-svc-banner__inner">
+      <div class="pc-svc-banner__eyebrow">How We Help</div>
+      <h1>Our Services</h1>
+      <p>Adoption doesn't stop at "yes." From flexible payment plans to nationwide delivery, fostering, and support long after you bring your new best friend home — here's everything Pet Center offers to make the journey easier.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Sticky quick-nav — jump links to each service article below -->
+<nav class="pc-svc-nav" aria-label="Jump to a service">
+  <div class="pc-svc-nav__inner">
+    <a href="#bnpl">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+      Flexible Payments
+    </a>
+    <a href="#shipping">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+      Shipping &amp; Delivery
+    </a>
+    <a href="#foster">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      Foster Program
+    </a>
+    <a href="#guarantee">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      Health Guarantee
+    </a>
+    <a href="#starter-kit">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12v9H4v-9"/><path d="M2 7h20v5H2z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
+      Starter Kit
+    </a>
+    <a href="#support">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      Post-Adoption Support
+    </a>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     SERVICE 1 — BNPL / Flexible Payment Plans
+     ═══════════════════════════════════════════════════════════════════════ -->
+<section class="pc-svc-article" id="bnpl">
+  <div class="pc-svc-article__inner">
+    <div class="pc-svc-article__icon" style="background:linear-gradient(135deg,#10214b,#1a2f5c);">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#d7bd88" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+    </div>
+    <div class="pc-svc-article__content">
+      <div class="pc-svc-article__eyebrow">Payments</div>
+      <h2>Flexible Payment Plans (BNPL)</h2>
+      <p class="pc-svc-article__lede">An adoption fee shouldn't stand between an animal and a loving home. That's why every listing at Pet Center supports flexible ways to pay — split across a schedule that fits your budget, not the other way around.</p>
+      <div class="pc-svc-article__body">
+        <p>Choose Buy Now, Pay Later at checkout for a short-term installment plan with no long-term interest, or Pay-in-4 to split the adoption fee into four equal, interest-free payments over six weeks. Prefer to pay once your new companion has settled in? Pay on Delivery lets you complete the adoption first and pay upon arrival for local and eligible shipped adoptions.</p>
+      </div>
+      <ul class="pc-svc-article__list">
+        <li>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          Available on every listing — the exact plans offered for a specific pet are shown right on its detail page.
+        </li>
+        <li>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          No hidden fees — the payment schedule you agree to at checkout is the schedule you keep.
+        </li>
+        <li>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          Track every upcoming installment from your Adoption Status Dashboard.
+        </li>
+      </ul>
+      <div class="pc-svc-article__cta">
+        <a href="/pets/" class="pc-btn pc-btn--primary">
+          Browse Available Pets
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+      <div class="pc-svc-article__note">
+        Payment plan availability and exact terms vary by listing and are confirmed during your application — see a pet's detail page for what's offered for that specific adoption.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     SERVICE 2 — Shipping & Local Delivery
+     ═══════════════════════════════════════════════════════════════════════ -->
+<section class="pc-svc-article" id="shipping">
+  <div class="pc-svc-article__inner">
+    <div class="pc-svc-article__icon" style="background:linear-gradient(135deg,#ED7624,#d96919);">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+    </div>
+    <div class="pc-svc-article__content">
+      <div class="pc-svc-article__eyebrow">Getting Them Home</div>
+      <h2>Shipping &amp; Local Delivery</h2>
+      <p class="pc-svc-article__lede">Not every perfect match lives around the corner. We work with pet-safe, climate-controlled ground and air transport partners so distance is never the reason a pet doesn't find its family.</p>
+      <div class="pc-svc-article__body">
+        <p>Local to Beverly Hills? Choose hand delivery right to your door within our local service radius, with a Pet Center team member walking you through everything on arrival. Adopting from farther away? Nationwide shipping is available on eligible listings, fully insured and tracked door-to-door, with your pet's comfort and safety as the top priority the whole way.</p>
+      </div>
+      <ul class="pc-svc-article__list">
+        <li>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          Climate-controlled, pet-safe transport — never cargo hold, never unattended.
+        </li>
+        <li>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          Shipping insurance included on every eligible shipped adoption — see your Status Dashboard for coverage details.
+        </li>
+        <li>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          Delivery windows and costs are shown per listing before you apply — no surprise charges at the door.
+        </li>
+      </ul>
+      <div class="pc-svc-article__cta">
+        <a href="/pets/" class="pc-btn pc-btn--primary">
+          Find a Pet Near You
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+        <a href="https://docs.petcenterco.com/shipping-cancellation/" class="pc-btn pc-btn--ghost" target="_blank" rel="noopener">Shipping Terms</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     SERVICE 3 — Foster Program / List Out A Pet
+     ═══════════════════════════════════════════════════════════════════════ -->
+<section class="pc-svc-article" id="foster">
+  <div class="pc-svc-article__inner">
+    <div class="pc-svc-article__icon" style="background:linear-gradient(135deg,#d7bd88,#b89968);">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#10214b" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+    </div>
+    <div class="pc-svc-article__content">
+      <div class="pc-svc-article__eyebrow">Open Your Home</div>
+      <h2>Foster Program &amp; Listing Your Own Pet</h2>
+      <p class="pc-svc-article__lede">Not ready for a full adoption, or need to rehome a pet of your own? Our growing self-service portal is where both journeys start.</p>
+      <div class="pc-svc-article__body">
+        <p>Foster a pet temporarily while we find its forever family — we cover food, supplies, and vet care during the foster period, and a Foster-to-Adopt option lets you turn a trial stay into a permanent adoption whenever you're ready. If instead you have a pet of your own that needs a new home, our rehoming portal lets you create a listing so Pet Center can help match them with the right family, safely and at no listing fee.</p>
+      </div>
+      <ul class="pc-svc-article__list">
+        <li>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          Supplies and vet care included for the duration of any foster placement.
+        </li>
+        <li>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          Foster-to-Adopt: fall in love during the foster period, finalize the adoption whenever you're ready.
+        </li>
+        <li>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          No listing fee for rehoming a pet through Pet Center — safe, verified matching, our way.
+        </li>
+      </ul>
+      <div class="pc-svc-article__cta">
+        <a href="/rehome/" class="pc-btn pc-btn--primary">
+          Sign Up to Foster or List a Pet
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     SERVICE 4 — 30-Day Health Guarantee & Pet Insurance
+     ═══════════════════════════════════════════════════════════════════════ -->
+<section class="pc-svc-article" id="guarantee">
+  <div class="pc-svc-article__inner">
+    <div class="pc-svc-article__icon" style="background:linear-gradient(135deg,#10214b,#1a2f5c);">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#d7bd88" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+    </div>
+    <div class="pc-svc-article__content">
+      <div class="pc-svc-article__eyebrow">Health &amp; Peace of Mind</div>
+      <h2>30-Day Health Guarantee &amp; Pet Insurance</h2>
+      <p class="pc-svc-article__lede">Every pet leaves Pet Center vaccinated, spayed or neutered where age-appropriate, and vet-checked — and our guarantee keeps you covered for the month that follows.</p>
+      <div class="pc-svc-article__body">
+        <p>If a vet uncovers a pre-existing condition within 30 days of adoption, we'll help cover treatment or work with you on next steps — you're never left figuring it out alone. Want ongoing coverage after that? We've partnered with a leading pet insurance provider so accident and illness coverage can be activated right from your Adoption Status Dashboard, with a limited-time free trial period for newly adopted pets.</p>
+      </div>
+      <ul class="pc-svc-article__list">
+        <li>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          Every adoption includes a full medical history and vet-confirmed Health Record.
+        </li>
+        <li>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          30-day guarantee covers pre-existing conditions found by your own vet after adoption.
+        </li>
+        <li>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          Optional ongoing pet insurance, with a free introductory period for new adopters.
+        </li>
+      </ul>
+      <div class="pc-svc-article__cta">
+        <a href="https://docs.petcenterco.com/health-guarantee/" class="pc-btn pc-btn--primary" target="_blank" rel="noopener">
+          Read the Full Guarantee
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     SERVICE 5 — Adoption Starter Kit
+     ═══════════════════════════════════════════════════════════════════════ -->
+<section class="pc-svc-article" id="starter-kit">
+  <div class="pc-svc-article__inner">
+    <div class="pc-svc-article__icon" style="background:linear-gradient(135deg,#ED7624,#d96919);">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12v9H4v-9"/><path d="M2 7h20v5H2z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
+    </div>
+    <div class="pc-svc-article__content">
+      <div class="pc-svc-article__eyebrow">First Day Home</div>
+      <h2>Adoption Starter Kit</h2>
+      <p class="pc-svc-article__lede">The first 24 hours with a new pet shouldn't be spent making an emergency supply run. A Starter Kit can ride along with your adoption so your new companion walks into a home that's already ready for them.</p>
+      <div class="pc-svc-article__body">
+        <p>Each kit is sized to the animal — a crate or carrier, a leash and collar or harness, a starter bag of food matched to their current diet, bedding, and a few age-appropriate toys. Add a Starter Kit during checkout on any eligible listing, and specify which items you'd like on the application — you tell us what your home still needs, we bring the rest.</p>
+      </div>
+      <ul class="pc-svc-article__list">
+        <li>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          Sized and stocked for the specific pet you're adopting — no generic one-size kit.
+        </li>
+        <li>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          Food matched to whatever your pet was already eating in our care, to avoid a stressful diet switch.
+        </li>
+        <li>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          Pick and choose items on the application — only pay for what you actually need.
+        </li>
+      </ul>
+      <div class="pc-svc-article__cta">
+        <a href="/pets/" class="pc-btn pc-btn--primary">
+          Browse Available Pets
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     SERVICE 6 — Post-Adoption Support & Training Resources
+     ═══════════════════════════════════════════════════════════════════════ -->
+<section class="pc-svc-article" id="support">
+  <div class="pc-svc-article__inner">
+    <div class="pc-svc-article__icon" style="background:linear-gradient(135deg,#d7bd88,#b89968);">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#10214b" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+    </div>
+    <div class="pc-svc-article__content">
+      <div class="pc-svc-article__eyebrow">Beyond Adoption Day</div>
+      <h2>Post-Adoption Support &amp; Training Resources</h2>
+      <p class="pc-svc-article__lede">Adopting is the beginning of the relationship, not the end of ours. Our team stays reachable long after your pet comes home, and we connect adopters with real training and behavior support.</p>
+      <div class="pc-svc-article__body">
+        <p>Have a question about settling in, introducing an existing pet, or a behavior that's new to you? Reach our support team through the floating contact button on any page. We also maintain a growing library of settling-in guides and species-specific care articles on our blog, and can point new adopters toward trusted local trainers and behaviorists in the Beverly Hills area for anything that needs hands-on help.</p>
+      </div>
+      <ul class="pc-svc-article__list">
+        <li>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          Direct support access for as long as you have your pet, not just during the application.
+        </li>
+        <li>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          Settling-in and species-care guides available any time on our Blog.
+        </li>
+        <li>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          Referrals to trusted local trainers and behaviorists whenever you need hands-on help.
+        </li>
+      </ul>
+      <div class="pc-svc-article__cta">
+        <a href="/blog/" class="pc-btn pc-btn--primary">
+          Visit the Blog
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+        <a href="https://docs.petcenterco.com/contact-us" class="pc-btn pc-btn--ghost" target="_blank" rel="noopener">Contact Support</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Closing CTA band ─────────────────────────────────────────────────── -->
+<section class="pc-svc-closing">
+  <h2>Ready to Meet Your New Best Friend?</h2>
+  <p>Every service on this page is already built into every adoption — no extra sign-up, no fine print to hunt for.</p>
+  <div class="pc-svc-closing__btns">
+    <a href="/pets/" class="pc-btn pc-btn--orange pc-btn--lg">
+      View All Available Pets
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </a>
+    <a href="/rehome/" class="pc-btn pc-btn--ghost pc-btn--lg" style="box-shadow:inset 0 0 0 2px #d7bd88;color:#fff;">List Out A Pet</a>
+  </div>
+</section>
+<!-- TASK-3 END -->
+
+<footer class="pc-footer">
+  <div class="pc-footer__inner">
+    <div class="pc-footer__top">
+      <div class="pc-footer__brand">
+        <img src="/assets/images/logo-petcenter.png" alt="Pet Center">
+        <p>Every pet deserves a loving home. Browse our available pets and start your adoption journey today.</p>
+      </div>
+      <div class="pc-footer__col">
+        <h5>Our Pets</h5>
+        <ul>
+          <li><a href="/pets/dogs/">Dogs</a></li>
+          <li><a href="/pets/cats/">Cats</a></li>
+          <li><a href="/pets/birds/">Birds</a></li>
+          <li><a href="/pets/reptiles/">Reptiles</a></li>
+          <li><a href="/pets/small-mammals/">Small Mammals</a></li>
+        </ul>
+      </div>
+      <div class="pc-footer__col">
+        <h5>Information</h5>
+        <ul>
+          <li><a href="/">About Us</a></li>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/testimonials/">Testimonials</a></li>
+          <li><a href="https://donate.petcenterco.com" target="_blank" rel="noopener">Donate</a></li>
+          <li><a href="https://docs.petcenterco.com/health-guarantee/" target="_blank" rel="noopener">Health Guarantee</a></li>
+          <li><a href="https://docs.petcenterco.com/shipping-cancellation/" target="_blank" rel="noopener">Shipping & Cancellation</a></li>
+          <li><a href="https://docs.petcenterco.com/shipping-insurance-claims/" target="_blank" rel="noopener">Shipping Insurance</a></li>
+          <li><a href="https://docs.petcenterco.com/data-retention-security/" target="_blank" rel="noopener">Data & Security</a></li>
+        </ul>
+      </div>
+      <div class="pc-footer__col">
+        <h5>Support</h5>
+        <ul>
+          <li><a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact Us</a></li>
+          <li><a href="/rehome/">Sign Up</a></li>
+          <li><a href="https://docs.petcenterco.com/returns-refunds/" target="_blank" rel="noopener">Returns & Refunds</a></li>
+          <li><a href="https://docs.petcenterco.com/faq/" target="_blank" rel="noopener">FAQ</a></li>
+        </ul>
+      </div>
+      <div class="pc-footer__col">
+        <h5>Visit Us</h5>
+        <p style="color:rgba(255,255,255,.7);font-size:13px;line-height:1.8;margin-bottom:0;">235-269 N Beverly Dr<br>Beverly Hills, CA</p>
+        <p style="color:rgba(255,255,255,.6);font-size:12px;line-height:1.6;margin-top:4px;">Golden Triangle Shopping Center, Section #257</p>
+        <p style="color:rgba(255,255,255,.7);font-size:13px;line-height:1.8;margin-top:10px;"><strong style="color:#d7bd88;">Hours:</strong><br>Mon – Fri: 7am – 9pm<br>Sat – Sun: 10am – 6pm</p>
+      </div>
+    </div>
+    <div class="pc-footer__bottom">
+      <span class="pc-footer__copy">&copy; 2026 Pet Center. All rights reserved.</span>
+      <div class="pc-footer__links">
+        <a href="https://docs.petcenterco.com/privacy-policy/" target="_blank" rel="noopener">Privacy Policy</a>
+        <a href="https://docs.petcenterco.com/terms-of-service/" target="_blank" rel="noopener">Terms of Service</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+<script>
+'use strict';
+
+// Header scroll effect
+(function() {
+  var header = document.getElementById('pcHeader');
+  if (!header) return;
+  
+  function updateHeaderOnScroll() {
+    if (window.scrollY > 0) {
+      header.classList.add('scrolled');
+    } else {
+      header.classList.remove('scrolled');
+    }
+  }
+  
+  window.addEventListener('scroll', updateHeaderOnScroll, { passive: true });
+  updateHeaderOnScroll();
+})();
+
+// Mobile Menu Toggle — canonical implementation (Section 2.4)
+(function () {
+  var hamburger = document.getElementById('pcHamburger');
+  var mobileMenu = document.getElementById('pcMobileMenu');
+  if (!hamburger || !mobileMenu) return;
+
+  function openMenu() {
+    hamburger.classList.add('active');
+    mobileMenu.classList.add('open');
+    hamburger.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeMenu() {
+    hamburger.classList.remove('active');
+    mobileMenu.classList.remove('open');
+    hamburger.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  hamburger.addEventListener('click', function (e) {
+    e.stopPropagation();
+    mobileMenu.classList.contains('open') ? closeMenu() : openMenu();
+  });
+
+  mobileMenu.querySelectorAll('a').forEach(function (link) {
+    link.addEventListener('click', closeMenu);
+  });
+
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest('header') && !e.target.closest('.pc-mobile-menu')) {
+      closeMenu();
+    }
+  });
+})();
+
+// TASK-3 START
+// Smooth-scroll for the service quick-nav anchor links, accounting for the sticky nav's own height
+(function () {
+  var nav = document.querySelector('.pc-svc-nav');
+  var links = document.querySelectorAll('.pc-svc-nav a[href^="#"]');
+  if (!links.length) return;
+
+  links.forEach(function (link) {
+    link.addEventListener('click', function (e) {
+      var targetId = link.getAttribute('href').slice(1);
+      var target = document.getElementById(targetId);
+      if (!target) return;
+      e.preventDefault();
+      var navHeight = nav ? nav.offsetHeight : 0;
+      var headerHeight = 68; // fixed header height, matches .pc-header
+      var top = target.getBoundingClientRect().top + window.pageYOffset - headerHeight - navHeight - 12;
+      window.scrollTo({ top: top, behavior: 'smooth' });
+    });
+  });
+})();
+// TASK-3 END
+</script>
+<script src="/admin/chat-widget.js"></script>
+</body>
+</html>

@@ -1,0 +1,3558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Apply to adopt a pet from Pet Center. Complete the adoption application form and receive your tracking code.">
+  <title>Apply to Adopt — Pet Center</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+  <style>
+    :root {
+      --primary: #10214b;
+      --accent: #d7bd88;
+      --orange: #ED7624;
+      --text: #2c2416;
+      --muted: #7a6d5f;
+      --background: #f9f7f4;
+      --white: #ffffff;
+      --border: rgba(16,33,75,0.12);
+      --success: #0d7c4a;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+    }
+
+    body {
+      font-family: 'Sora', sans-serif;
+      background: var(--background);
+      color: var(--text);
+      line-height: 1.6;
+      padding-top: 68px;
+    }
+
+    /* ─── Global Header (pc-header) ─────────────────────────────────────────────── */
+    .pc-header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      padding: 0 24px;
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: transparent;
+      transition: background 0.35s ease, box-shadow 0.35s ease;
+      overflow: visible;
+    }
+    .pc-header.scrolled,
+    .pc-header--solid {
+      background: rgba(16,33,75,0.97);
+      box-shadow: 0 2px 20px rgba(0,0,0,0.18);
+    }
+    .pc-header__logo img { height: 44px; width: auto; display: block; }
+    .pc-header__logo--desktop { display: block; }
+    .pc-header__logo--mobile  { display: none; }
+    @media (max-width: 900px) {
+      .pc-header__logo--desktop { display: none; }
+      .pc-header__logo--mobile  { display: block; }
+    }
+    .pc-header__nav {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      list-style: none;
+    }
+    .pc-header__nav li { position: relative; }
+    .pc-header__nav a {
+      display: block;
+      padding: 8px 11px;
+      font-family: 'Sora', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.9);
+      text-decoration: none;
+      border-radius: 6px;
+      transition: color 0.2s, background 0.2s;
+      white-space: nowrap;
+    }
+    .pc-header__nav a:hover { color: #d7bd88; background: rgba(255,255,255,0.08); }
+    .pc-header__nav .nav-donate a { background: #ED7624; color: #fff; font-weight: 600; padding: 8px 16px; }
+    .pc-header__nav .nav-donate a:hover { background: #d4621a; color: #fff; }
+    .pc-header__nav .nav-signup a,
+    .pc-header__nav .nav-login a { border: 1px solid rgba(215,189,136,0.5); color: #d7bd88; }
+    .pc-header__nav .nav-signup a:hover,
+    .pc-header__nav .nav-login a:hover { background: rgba(215,189,136,0.12); }
+    .pc-header__nav .has-drop > ul {
+      display: none;
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      background: #10214b;
+      border-radius: 8px;
+      list-style: none;
+      min-width: 168px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.22);
+      padding: 6px 0;
+      z-index: 100;
+    }
+    .pc-header__nav .has-drop:hover > ul { display: block; }
+    .pc-header__nav .has-drop > ul a { padding: 9px 18px; font-size: 13px; border-radius: 0; }
+    .pc-hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 8px;
+      background: none;
+      border: none;
+      width: 32px;
+      height: auto;
+      justify-content: center;
+    }
+    .pc-hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: #fff;
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+    .pc-hamburger.active span:nth-child(1) {
+      transform: rotate(45deg) translate(8px, 8px);
+    }
+    .pc-hamburger.active span:nth-child(2) {
+      opacity: 0;
+    }
+    .pc-hamburger.active span:nth-child(3) {
+      transform: rotate(-45deg) translate(7px, -7px);
+    }
+    .pc-mobile-menu {
+      display: flex;
+      flex-direction: column;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: rgba(16,33,75,0.98);
+      z-index: 999;
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    }
+    .pc-mobile-menu.open {
+      max-height: calc(100vh - 68px);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      -webkit-overflow-scrolling: touch;
+      opacity: 1;
+      pointer-events: auto;
+      padding: 16px 0 calc(100vh - 68px - 56px);
+    }
+    .pc-mobile-menu a {
+      display: block;
+      padding: 12px 28px;
+      font-family: 'Sora', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.9);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      transition: all 0.2s ease;
+    }
+    .pc-mobile-menu a:hover { color: #d7bd88; background: rgba(255,255,255,0.05); }
+    .pc-mobile-menu .mobile-donate {
+      margin: 12px 28px 0;
+      display: inline-block;
+      background: #ED7624;
+      color: #fff;
+      padding: 11px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      border-bottom: none;
+    }
+    @media (max-width: 900px) {
+      .pc-header__nav { display: none; }
+      .pc-hamburger { display: flex; }
+    }
+
+    /* ─── Container ──────────────────────────────────────────────────────────── */
+    .pc-container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 40px 24px;
+    }
+
+    /* ─── Hero ───────────────────────────────────────────────────────────────── */
+    .pc-hero {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(16,33,75,0.1);
+    }
+
+    .pc-hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(32px, 5vw, 54px);
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+
+    .pc-hero p {
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .pc-hero a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    /* ─── Step Indicator ────────────────────────────────────────────────────── */
+    .step-indicator {
+      display: flex;
+      gap: 0;
+      margin-bottom: 36px;
+    }
+
+    .step-indicator__item {
+      flex: 1;
+      text-align: center;
+      padding: 14px 8px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      border-bottom: 3px solid #e8e3de;
+      cursor: default;
+      position: relative;
+    }
+
+    .step-indicator__item.active {
+      color: var(--primary);
+      border-bottom-color: var(--orange);
+    }
+
+    .step-indicator__item.done {
+      color: var(--success);
+      border-bottom-color: var(--success);
+    }
+
+    .step-indicator__num {
+      display: block;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #e8e3de;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+      margin: 0 auto 6px;
+      line-height: 28px;
+    }
+
+    .step-indicator__item.active .step-indicator__num {
+      background: var(--primary);
+      color: var(--white);
+    }
+
+    .step-indicator__item.done .step-indicator__num {
+      background: var(--success);
+      color: var(--white);
+    }
+
+    /* ─── Form ──────────────────────────────────────────────────────────────── */
+    .form-step {
+      display: none;
+    }
+
+    .form-step.active {
+      display: block;
+      animation: fadeIn 0.4s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .form-step h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 24px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .form-row.full {
+      grid-template-columns: 1fr;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 8px;
+    }
+
+    .field-input,
+    input[type="text"],
+    input[type="email"],
+    input[type="phone"],
+    input[type="date"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 9px;
+      font-family: 'Sora', sans-serif;
+      font-size: 14px;
+      background: var(--white);
+      color: var(--text);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .field-input:focus,
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="phone"]:focus,
+    input[type="date"]:focus,
+    textarea:focus,
+    select:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(215,189,136,0.15);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .field-input--large {
+      min-height: 220px;
+    }
+
+    @media (max-width: 600px) {
+      .field-input--large {
+        min-height: 260px;
+      }
+    }
+
+    /* ─── Radio & Checkbox Grid ────────────────────────────────────────────── */
+    .checkbox-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    @media (max-width: 600px) {
+      .checkbox-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .checkbox-grid label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      text-transform: none;
+      letter-spacing: 0;
+      color: var(--text);
+      margin-bottom: 0;
+      cursor: pointer;
+    }
+
+    .checkbox-grid input[type="radio"],
+    .checkbox-grid input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+      accent-color: var(--orange);
+    }
+
+    /* ─── Custom Dropdown System ────────────────────────────────────────── */
+    .custom-select-wrapper {
+      position: relative;
+      display: block;
+      width: 100%;
+    }
+
+    .hidden-select {
+      display: none;
+    }
+
+    .custom-select-trigger {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 9px;
+      background: #fff;
+      color: #10214b;
+      font-family: Sora, sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s ease;
+      min-height: 44px;
+    }
+
+    .custom-select-trigger:hover {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(215,189,136,0.15);
+    }
+
+    .custom-select-trigger.active {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(215,189,136,0.15);
+    }
+
+    .custom-select-trigger::after {
+      content: '';
+      width: 8px;
+      height: 8px;
+      border-right: 2px solid #10214b;
+      border-bottom: 2px solid #10214b;
+      transform: rotate(45deg) translateY(-2px);
+      margin-left: 8px;
+      transition: transform 0.2s ease;
+    }
+
+    .custom-select-wrapper.open .custom-select-trigger::after {
+      transform: rotate(-135deg) translateY(2px);
+    }
+
+    .custom-select-options {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      display: none;
+      list-style: none;
+      margin: 4px 0 0 0;
+      padding: 8px 0;
+      border: 1.5px solid var(--border);
+      border-radius: 9px;
+      background: #fff;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+      z-index: 1000;
+      max-height: 280px;
+      overflow-y: auto;
+      font-family: Sora, sans-serif;
+      font-size: 14px;
+    }
+
+    .custom-select-wrapper.open .custom-select-options {
+      display: block;
+    }
+
+    .custom-select-options li {
+      padding: 10px 16px;
+      color: #10214b;
+      cursor: pointer;
+      transition: background 0.15s ease;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .custom-select-options li:hover {
+      background: #f0ede8;
+    }
+
+    .custom-select-options li[data-selected] {
+      background: #f0ede8;
+      color: #10214b;
+      font-weight: 600;
+    }
+
+    .custom-select-options li[data-selected]::before {
+      content: '✓ ';
+      color: #ED7624;
+      font-weight: 700;
+      margin-right: 4px;
+    }
+
+    /* ─── Pet Prefill Box ───────────────────────────────────────────────── */
+    .pet-prefill-box {
+      background: rgba(237,118,36,0.08);
+      border: 1.5px solid var(--border);
+      border-radius: 9px;
+      padding: 20px;
+      margin-bottom: 32px;
+    }
+
+    .pet-prefill-box h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 16px;
+    }
+
+    .pet-prefill-content {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 20px;
+      align-items: flex-start;
+    }
+
+    .pet-prefill-image {
+      width: 120px;
+      height: 120px;
+      background: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .pet-prefill-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .pet-prefill-details {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .pet-prefill-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .pet-prefill-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .pet-prefill-value {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    @media (max-width: 600px) {
+      .pet-prefill-content {
+        grid-template-columns: 1fr;
+      }
+      .pet-prefill-image {
+        width: 100px;
+        height: 100px;
+      }
+      .pet-prefill-details {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px 16px;
+      }
+      .pet-prefill-label {
+        font-size: 11px;
+      }
+      .pet-prefill-value {
+        font-size: 14px;
+      }
+    }
+
+    /* ─── Carousel wrapper (all pets in a sliding track) ────────────────── */
+    .pet-carousel-outer {
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+    }
+    .pet-carousel-track {
+      display: flex;
+      transition: transform 0.38s cubic-bezier(0.4,0,0.2,1);
+      will-change: transform;
+    }
+    .pet-carousel-slide {
+      flex: 0 0 100%;
+      min-width: 0;
+      position: relative;
+      padding-bottom: 4px;
+    }
+    /* Remove button on each slide */
+    .pet-slide-remove {
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      z-index: 10;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #fff;
+      border: 1.5px solid var(--border);
+      color: #c0392b;
+      font-size: 14px;
+      line-height: 1;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .pet-slide-remove:hover { background: #fdecea; border-color: #c0392b; }
+    /* Carousel nav arrows */
+    .pet-carousel-nav {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 14px;
+    }
+    .pet-carousel-nav.visible { display: flex; }
+    .pet-carousel-arrow {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #fff;
+      border: 1.5px solid var(--border);
+      color: var(--primary);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+    .pet-carousel-arrow:hover { border-color: var(--orange); color: var(--orange); }
+    .pet-carousel-arrow:disabled { opacity: 0.35; cursor: not-allowed; }
+    .pet-carousel-dots {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+    .pet-carousel-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--border);
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .pet-carousel-dot.active { background: var(--orange); transform: scale(1.3); }
+
+    /* ─── Add More Pets panel ────────────────────────────────────────────── */
+    .add-more-pets-panel {
+      margin-top: 20px;
+      padding: 16px 20px;
+      background: rgba(16,33,75,0.03);
+      border-radius: 9px;
+      border: 1.5px dashed var(--border);
+    }
+    .add-more-pets-intro {
+      font-size: 13.5px;
+      color: var(--text-muted);
+      line-height: 1.65;
+      margin-bottom: 14px;
+    }
+    .add-more-pets-intro .pet-id-tip-trigger {
+      color: var(--orange);
+      font-weight: 600;
+      cursor: pointer;
+      position: relative;
+      text-decoration: underline dotted;
+    }
+    .pet-id-tooltip {
+      display: none;
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: #10214b;
+      color: #fff;
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 13px;
+      font-weight: 400;
+      line-height: 1.55;
+      min-width: 240px;
+      max-width: 280px;
+      box-shadow: 0 8px 24px rgba(16,33,75,0.2);
+      z-index: 200;
+      text-decoration: none;
+    }
+    .pet-id-tooltip::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 7px solid transparent;
+      border-top-color: #10214b;
+    }
+    .pet-id-tip-trigger.open .pet-id-tooltip { display: block; }
+    .add-pet-input-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .add-pet-input-row input {
+      flex: 1;
+      height: 44px;
+      border: 1.5px solid var(--border);
+      border-radius: 22px;
+      padding: 0 18px;
+      font-family: 'Sora', sans-serif;
+      font-size: 14px;
+      color: var(--text);
+      background: #fff;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .add-pet-input-row input:focus { border-color: var(--orange); }
+    .add-pet-input-row input::placeholder { color: #b0a89c; }
+    .add-pet-btn {
+      height: 44px;
+      padding: 0 22px;
+      border-radius: 22px;
+      background: var(--orange);
+      color: #fff;
+      border: none;
+      font-family: 'Sora', sans-serif;
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.2s, transform 0.15s;
+      min-width: 80px;
+    }
+    .add-pet-btn:hover:not(:disabled) { background: #d4621a; transform: translateY(-1px); }
+    .add-pet-btn:disabled { opacity: 0.65; cursor: not-allowed; transform: none; }
+    .add-pet-status {
+      font-size: 13px;
+      margin-top: 8px;
+      min-height: 18px;
+    }
+    .add-pet-status.error { color: #c0392b; }
+    .add-pet-status.success { color: #0d7c4a; }
+    .add-pet-counter {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+
+    @media (max-width: 600px) {
+      .add-pet-input-row { flex-wrap: wrap; }
+      .add-pet-input-row input { border-radius: 22px; }
+      .add-pet-btn { width: 100%; }
+    }
+
+    /* ─── Table ─────────────────────────────────────────────────────────────── */
+    .pets-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+    }
+
+    .pets-table th,
+    .pets-table td {
+      border: 1px solid var(--border);
+      padding: 10px;
+      font-size: 13px;
+      text-align: left;
+    }
+
+    .pets-table th {
+      background: #f0ede8;
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .pets-table input {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 13px;
+    }
+
+    /* ─── File Upload (exact from original-adoption-application.html) ──────── */
+    .file-drop {
+      padding: 12px;
+      border-radius: 8px;
+      border: 2px dashed #eee;
+      background: linear-gradient(180deg,#fff,#fffaf6);
+      cursor: pointer;
+      text-align: center;
+      margin-top: 10px;
+      font-size: 14px;
+      color: var(--muted);
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .file-drop.dragover {
+      border-color: var(--orange);
+      background: linear-gradient(180deg,#fff8f0,#fffefb);
+    }
+
+    .uploaded-list {
+      margin-top: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .uploaded-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px;
+      background: #fff;
+      border-radius: 6px;
+      border: 1px solid #f1f5f9;
+    }
+
+    .uploaded-item img {
+      width: 64px;
+      height: 64px;
+      object-fit: cover;
+      border-radius: 6px;
+      border: 1px solid #ddd;
+    }
+
+    .small-btn {
+      background: #f3f4f6;
+      border-radius: 6px;
+      padding: 6px 8px;
+      border: 1px solid #e5e7eb;
+      color: #111;
+      cursor: pointer;
+      font-size: 13px;
+      font-family: 'Sora', sans-serif;
+      transition: background 0.2s;
+    }
+
+    .small-btn:hover {
+      background: #e5e7eb;
+    }
+
+    /* ─── Quality Matters Notice ───────────────────────────────────────────── */
+    .quality-matters-box {
+      margin-top: 12px;
+      padding: 16px;
+      background: #eceef0;
+      border-radius: 10px;
+    }
+
+    .quality-matters-box h4 {
+      font-size: 14.5px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 6px;
+    }
+
+    .quality-matters-box p {
+      font-size: 13.5px;
+      color: var(--muted);
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    /* ─── Signature Pad ─────────────────────────────────────────────────── */
+    .agree-block {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 600px) {
+      .agree-block { flex-direction: column; }
+      .agree-block > div[style*="width:240px"] { width: 100% !important; }
+    }
+
+    .signature-pad {
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      background: var(--white);
+      padding: 12px;
+      margin-top: 10px;
+    }
+
+    .sig-canvas {
+      background: #fff;
+      border-radius: 6px;
+      width: 100%;
+      height: 160px;
+      display: block;
+      touch-action: none;
+      cursor: crosshair;
+      border: 1px solid var(--border);
+    }
+
+    .sig-controls {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+      align-items: center;
+    }
+
+    .sig-btn {
+      padding: 8px 14px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .sig-btn:hover {
+      background: #f0ede8;
+      border-color: var(--accent);
+    }
+
+    /* ─── Agree Section ────────────────────────────────────────────────── */
+    .agree-section {
+      background: rgba(237,118,36,0.08);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 16px;
+      margin: 24px 0;
+    }
+
+    .agree-section h3 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 12px;
+    }
+
+    .agree-section ol {
+      margin-left: 20px;
+      color: var(--text);
+      font-size: 13.5px;
+      line-height: 1.7;
+    }
+
+    .agree-section li {
+      margin-bottom: 8px;
+    }
+
+    .final-agree {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .final-agree input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      margin-top: 4px;
+      cursor: pointer;
+      accent-color: var(--orange);
+    }
+
+    .final-agree label {
+      font-size: 14px;
+      font-weight: 500;
+      text-transform: none;
+      letter-spacing: 0;
+      color: var(--text);
+      margin-bottom: 0;
+      cursor: pointer;
+    }
+
+    /* ─── Review Section ──────────────────────────────────────────────── */
+    .review-summary {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 20px;
+      max-height: 500px;
+      overflow-y: auto;
+    }
+
+    .review-item {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 16px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .review-item:last-child {
+      border-bottom: none;
+    }
+
+    .review-label {
+      font-weight: 600;
+      color: var(--primary);
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .review-value {
+      color: var(--text);
+      font-size: 14px;
+      word-break: break-word;
+    }
+
+    .review-chip {
+      display: inline-block;
+      background: var(--orange);
+      color: #fff;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      margin: 3px 4px 3px 0;
+    }
+
+    /* ─── Action Buttons ───────────────────────────────────────────── */
+    .form-actions {
+      display: flex;
+      gap: 16px;
+      justify-content: space-between;
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+    }
+
+    .btn {
+      padding: 12px 28px;
+      border: none;
+      border-radius: 9px;
+      font-family: 'Sora', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn--primary {
+      background: var(--primary);
+      color: var(--white);
+    }
+
+    .btn--primary:hover {
+      background: var(--primary);
+      opacity: 0.9;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(16,33,75,0.25);
+    }
+
+    .btn--primary:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn--secondary {
+      background: var(--white);
+      color: var(--primary);
+      border: 1.5px solid var(--accent);
+    }
+
+    .btn--secondary:hover {
+      background: rgba(215,189,136,0.12);
+    }
+
+    .btn--back {
+      background: #e8e3de;
+      color: var(--text);
+    }
+
+    .btn--back:hover {
+      background: #ddd5cc;
+    }
+
+    /* ─── Sticky Nav Footer (always visible, all steps) ──────────────── */
+    .sticky-review-buttons {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(to top, var(--white) 80%, rgba(255,255,255,0.95) 100%);
+      border-top: 1px solid var(--border);
+      padding: 16px 24px 24px;
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+      align-items: center;
+      z-index: 100;
+      box-shadow: 0 -4px 16px rgba(0,0,0,0.05);
+    }
+
+    .sticky-review-buttons .btn {
+      min-width: 120px;
+    }
+
+    .preview-btn-mobile {
+      display: none;
+      width: 44px;
+      height: 44px;
+      padding: 0;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .preview-btn-mobile:hover {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(215,189,136,0.15);
+    }
+
+    .preview-btn-desktop {
+      display: inline-flex;
+    }
+
+    @media (max-width: 600px) {
+      .sticky-review-buttons {
+        padding: 12px 16px 16px;
+        justify-content: center;
+      }
+
+      .sticky-review-buttons .btn {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .preview-btn-mobile {
+        display: flex;
+      }
+
+      .preview-btn-desktop {
+        display: none;
+      }
+    }
+
+    /* ─── DEBUG PANEL (temporary — remove when done debugging) ───────────── */
+    #debugToggle {
+      position: fixed;
+      bottom: 92px;
+      right: 14px;
+      z-index: 2000;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: #10214b;
+      color: #fff;
+      border: none;
+      font-size: 20px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #debugPanel {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      max-height: 60vh;
+      background: #0d1117;
+      color: #d1d5da;
+      z-index: 2001;
+      display: none;
+      flex-direction: column;
+      font-family: 'SF Mono', Consolas, Menlo, monospace;
+      box-shadow: 0 -4px 24px rgba(0,0,0,0.4);
+      border-top: 2px solid #ED7624;
+    }
+    #debugPanel.open { display: flex; }
+    #debugPanelHeader {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      background: #161b22;
+      border-bottom: 1px solid #30363d;
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+    }
+    #debugPanelHeader button {
+      background: #21262d;
+      color: #d1d5da;
+      border: 1px solid #30363d;
+      border-radius: 5px;
+      padding: 4px 9px;
+      font-size: 11px;
+      margin-left: 6px;
+      cursor: pointer;
+    }
+    #debugLog {
+      overflow-y: auto;
+      padding: 10px 14px 24px;
+      font-size: 11.5px;
+      line-height: 1.6;
+    }
+    #debugLog .log-line {
+      padding: 4px 0;
+      border-bottom: 1px solid #21262d;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+    #debugLog .log-info  { color: #79c0ff; }
+    #debugLog .log-ok    { color: #56d364; }
+    #debugLog .log-warn  { color: #e3b341; }
+    #debugLog .log-error { color: #f85149; font-weight: 700; }
+    #debugLog .log-time  { color: #6e7681; margin-right: 6px; }
+
+    /* ─── Status Messages ──────────────────────────────────────────── */
+    .status-msg {
+      padding: 14px 16px;
+      border-radius: 9px;
+      font-size: 13.5px;
+      margin-top: 16px;
+      display: none;
+    }
+
+    .status-msg.success {
+      background: rgba(13,124,74,0.12);
+      color: var(--success);
+      border: 1px solid rgba(13,124,74,0.2);
+    }
+
+    .status-msg.error {
+      background: rgba(192,57,43,0.12);
+      color: #c0392b;
+      border: 1px solid rgba(192,57,43,0.2);
+    }
+
+    /* ─── Modal ──────────────────────────────────────────────────── */
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.65);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      padding: 16px;
+    }
+
+    .modal.open {
+      display: flex;
+    }
+
+    .modal-box {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 0;
+      max-width: 600px;
+      width: 100%;
+      max-height: 85vh;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .modal-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+      background: var(--white);
+    }
+
+    .modal-top__actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .modal-scroll {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 20px 24px;
+      overscroll-behavior: contain;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .modal-close {
+      padding: 6px 12px;
+      background: #f0ede8;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+      font-family: 'Sora', sans-serif;
+      font-weight: 500;
+      color: var(--text);
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+
+    .modal-close:hover {
+      background: var(--border);
+      color: var(--primary);
+    }
+
+    .modal-content {
+      margin-top: 0;
+    }
+
+    .modal-content img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      margin-bottom: 12px;
+    }
+
+    .modal-content iframe {
+      width: 100%;
+      height: 600px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+
+    @media (max-width: 600px) {
+      .modal { padding: 12px; }
+      .modal-box { max-height: 82vh; border-radius: 12px; max-width: 100%; }
+    }
+    @media (max-width: 400px) {
+      .modal { padding: 8px; }
+      .modal-box { max-height: 78vh; }
+    }
+
+    /* ─── Success Modal ──────────────────────────────────────────── */
+    .success-modal {
+      text-align: center;
+      padding: 24px;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .success-icon {
+      width: 64px;
+      height: 64px;
+      background: rgba(13,124,74,0.12);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      font-size: 32px;
+    }
+
+    .success-code {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--primary);
+      margin: 16px 0;
+      padding: 14px;
+      background: #f9f7f4;
+      border-radius: 8px;
+      word-break: break-all;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    .success-warning {
+      background: #fff8e7;
+      border: 1.5px solid rgba(237,118,36,0.2);
+      border-radius: 8px;
+      padding: 16px;
+      margin: 20px 0;
+      font-size: 13.5px;
+      line-height: 1.7;
+      color: #6b4d2a;
+      text-align: left;
+    }
+
+    .success-warning strong {
+      display: block;
+      color: #c67c1a;
+      margin-bottom: 8px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .success-modal .btn {
+      margin-top: 20px;
+    }
+
+    /* ─── Global Footer ─────────────────────────────────────────────────────────── */
+    .pc-footer {
+      background: #0b1834;
+      padding: 60px 24px 28px;
+      color: rgba(255,255,255,0.65);
+      font-family: 'Sora', sans-serif;
+      margin-top: 80px;
+    }
+    .pc-footer__inner { max-width: 1200px; margin: 0 auto; }
+    .pc-footer__top {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1.5fr 1fr 1fr;
+      gap: 40px;
+      padding-bottom: 40px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+    .pc-footer__brand img { height: 40px; margin-bottom: 16px; display: block; }
+    .pc-footer__brand p { font-size: 13.5px; line-height: 1.7; max-width: 280px; }
+    .pc-footer__col h5 { font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; font-weight: 700; color: #d7bd88; margin-bottom: 16px; }
+    .pc-footer__col ul { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+    .pc-footer__col ul a { font-size: 13px; color: rgba(255,255,255,0.6); text-decoration: none; transition: color 0.2s; }
+    .pc-footer__col ul a:hover { color: #d7bd88; }
+    .pc-footer__bottom { padding-top: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+    .pc-footer__copy { font-size: 12.5px; }
+    .pc-footer__links { display: flex; gap: 20px; }
+    .pc-footer__links a { font-size: 12.5px; color: rgba(255,255,255,0.5); text-decoration: none; }
+    .pc-footer__links a:hover { color: #d7bd88; }
+    @media (max-width: 900px) { .pc-footer__top { grid-template-columns: 1fr 1fr; gap: 28px; } }
+    @media (max-width: 560px) { .pc-footer__top { grid-template-columns: 1fr; gap: 24px; } }
+    @media (max-width: 480px) {
+      .pc-footer__bottom { flex-direction: column; text-align: center; }
+      .pc-footer__links { justify-content: center; }
+    }
+
+    @media (max-width: 560px) {
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+      .checkbox-grid {
+        grid-template-columns: 1fr;
+      }
+      .review-item {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+      .form-actions {
+        flex-direction: column-reverse;
+      }
+      .btn {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     HEADER
+     ══════════════════════════════════════════════════════════════════════════ -->
+<header class="pc-header pc-header--solid" id="pcHeader">
+  <a href="/" class="pc-header__logo pc-header__logo--desktop">
+    <img src="/assets/images/logo-petcenter.png" alt="Pet Center">
+  </a>
+  <a href="/" class="pc-header__logo pc-header__logo--mobile">
+    <img src="/assets/images/logo-petcenter-icon.png" alt="Pet Center">
+  </a>
+  <ul class="pc-header__nav">
+    <li><a href="/">Home</a></li>
+    <li class="has-drop"><a href="#">Our Pets</a>
+      <ul>
+        <li><a href="/pets/dogs/">Dogs</a></li>
+        <li><a href="/pets/cats/">Cats</a></li>
+        <li><a href="/pets/birds/">Birds</a></li>
+        <li><a href="/pets/reptiles/">Reptiles</a></li>
+        <li><a href="/pets/small-mammals/">Small Mammals</a></li>
+      </ul>
+    </li>
+    <li><a href="/blog/">Blog</a></li>
+    <li><a href="/testimonials/">Testimonials</a></li>
+    <li class="nav-donate"><a href="https://donate.petcenterco.com" target="_blank" rel="noopener">Donate</a></li>
+    <li><a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact</a></li>
+    <li class="nav-signup"><a href="/rehome/">Sign Up</a></li>
+  </ul>
+  <button class="pc-hamburger" id="pcHamburger" aria-label="Open menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+  <nav class="pc-mobile-menu" id="pcMobileMenu" aria-label="Mobile navigation">
+    <a href="/">Home</a>
+    <a href="/pets/dogs/">Dogs</a>
+    <a href="/pets/cats/">Cats</a>
+    <a href="/pets/birds/">Birds</a>
+    <a href="/pets/reptiles/">Reptiles</a>
+    <a href="/pets/small-mammals/">Small Mammals</a>
+    <a href="/blog/">Blog</a>
+    <a href="/testimonials/">Testimonials</a>
+    <a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact</a>
+    <a href="/rehome/">Sign Up</a>
+    <a href="https://donate.petcenterco.com" class="mobile-donate" target="_blank" rel="noopener">Donate</a>
+  </nav>
+</header>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     MAIN CONTENT
+     ══════════════════════════════════════════════════════════════════════════ -->
+<div class="pc-container">
+
+  <!-- Hero Section -->
+  <div class="pc-hero">
+    <h1>Adoption Application</h1>
+    <p><a href="/">Home</a> &gt; Apply to Adopt</p>
+  </div>
+
+  <!-- Step Indicator -->
+  <div class="step-indicator">
+    <div class="step-indicator__item active" id="step-ind-1">
+      <div class="step-indicator__num">1</div>
+      <span>Applicant</span>
+    </div>
+    <div class="step-indicator__item" id="step-ind-2">
+      <div class="step-indicator__num">2</div>
+      <span>Living</span>
+    </div>
+    <div class="step-indicator__item" id="step-ind-3">
+      <div class="step-indicator__num">3</div>
+      <span>Pets & Care</span>
+    </div>
+    <div class="step-indicator__item" id="step-ind-4">
+      <div class="step-indicator__num">4</div>
+      <span>Adoption</span>
+    </div>
+    <div class="step-indicator__item" id="step-ind-5">
+      <div class="step-indicator__num">5</div>
+      <span>Review</span>
+    </div>
+  </div>
+
+  <!-- Pet Prefill Box (shown if pet_id in URL) -->
+  <!-- ─── Pet Carousel (main selected pet + any added pets) ──────────────── -->
+  <div class="pet-prefill-box" id="petPrefillBox" style="display:none;">
+    <h3>Your Selected Pet</h3>
+
+    <!-- Carousel outer -->
+    <div class="pet-carousel-outer" id="petCarouselOuter">
+      <div class="pet-carousel-track" id="petCarouselTrack">
+
+        <!-- Slide 0 — the primary selected pet (populated by JS from URL params) -->
+        <div class="pet-carousel-slide" id="petSlide0">
+          <div class="pet-prefill-content">
+            <div class="pet-prefill-image">
+              <img id="petPrefillImage" src="" alt="Pet photo" onerror="this.src='/assets/images/pet-placeholder.jpg'">
+            </div>
+            <div class="pet-prefill-details">
+              <div class="pet-prefill-item">
+                <div class="pet-prefill-label">Pet Name</div>
+                <div class="pet-prefill-value" id="petPrefillName">—</div>
+              </div>
+              <div class="pet-prefill-item">
+                <div class="pet-prefill-label">Species</div>
+                <div class="pet-prefill-value" id="petPrefillSpecies">—</div>
+              </div>
+              <div class="pet-prefill-item">
+                <div class="pet-prefill-label">Breed</div>
+                <div class="pet-prefill-value" id="petPrefillBreed">—</div>
+              </div>
+              <div class="pet-prefill-item">
+                <div class="pet-prefill-label">Age</div>
+                <div class="pet-prefill-value" id="petPrefillAge">—</div>
+              </div>
+              <div class="pet-prefill-item">
+                <div class="pet-prefill-label">Size</div>
+                <div class="pet-prefill-value" id="petPrefillSize">—</div>
+              </div>
+              <div class="pet-prefill-item">
+                <div class="pet-prefill-label">Adoption Fee</div>
+                <div class="pet-prefill-value" id="petPrefillFee">—</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Additional slides injected by JS when user adds pets -->
+      </div><!-- /.pet-carousel-track -->
+    </div><!-- /.pet-carousel-outer -->
+
+    <!-- Carousel nav (shown only when >1 slide) -->
+    <div class="pet-carousel-nav" id="petCarouselNav">
+      <button class="pet-carousel-arrow" id="petCarouselPrev" aria-label="Previous pet" disabled>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <div class="pet-carousel-dots" id="petCarouselDots"></div>
+      <button class="pet-carousel-arrow" id="petCarouselNext" aria-label="Next pet">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+    </div>
+
+    <!-- Add more pets panel -->
+    <div class="add-more-pets-panel" id="addMorePetsPanel">
+      <p class="add-more-pets-intro">
+        Looking to adopt and bring more than one pet home? You can now add and apply to adopt other listed pets all at once. Simply add the
+        <span class="pet-id-tip-trigger" id="petIdTipTrigger" tabindex="0">Pet ID*
+          <span class="pet-id-tooltip" id="petIdTooltip">
+            <strong>How to find Pet ID:</strong><br>Look immediately above the About section of each selected pet to see their Pet ID.
+          </span>
+        </span>
+        of other listed pets you've found attracted to below and apply to adopt them too.
+      </p>
+      <div class="add-pet-input-row">
+        <input type="text" id="addPetIdInput" placeholder="e.g. DOG-00001" maxlength="20" autocomplete="off" spellcheck="false">
+        <button type="button" class="add-pet-btn" id="addPetBtn">Add</button>
+      </div>
+      <div class="add-pet-status" id="addPetStatus"></div>
+      <div class="add-pet-counter" id="addPetCounter"></div>
+    </div>
+
+  </div><!-- /.pet-prefill-box -->
+
+  <!-- Form -->
+  <form id="adoptionForm" novalidate>
+
+    <!-- ─────────────────────────────────────────────────────────────────────
+         STEP 1: APPLICANT INFORMATION
+         ───────────────────────────────────────────────────────────────────── -->
+    <div class="form-step active" id="step-1">
+      <h2>Applicant Information</h2>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="name">Full Name *</label>
+          <input type="text" id="name" name="name" class="field-input" required>
+        </div>
+        <div class="form-group">
+          <label for="top_date">Reference Date</label>
+          <input type="date" id="top_date" name="top_date" class="field-input">
+        </div>
+      </div>
+
+      <div class="form-row full">
+        <div class="form-group">
+          <label for="address">Address *</label>
+          <input type="text" id="address" name="address" class="field-input" required>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="city">City *</label>
+          <input type="text" id="city" name="city" class="field-input" required>
+        </div>
+        <div class="form-group">
+          <label for="state">State *</label>
+          <input type="text" id="state" name="state" class="field-input" required>
+        </div>
+        <div class="form-group">
+          <label for="zip">Zip *</label>
+          <input type="text" id="zip" name="zip" class="field-input" required>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="phone">Phone Number *</label>
+          <input type="text" id="phone" name="phone" class="field-input" required>
+        </div>
+        <div class="form-group">
+          <label for="user_email">Email *</label>
+          <input type="email" id="user_email" name="user_email" class="field-input" required>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="id_number">Spouse/Partner #</label>
+          <input type="text" id="id_number" name="id_number" class="field-input" placeholder="If any...">
+        </div>
+        <div class="form-group">
+          <label for="spouse">Spouse / Partner Name</label>
+          <input type="text" id="spouse" name="spouse" class="field-input" placeholder="If any...">
+        </div>
+      </div>
+
+      <div class="form-row full">
+        <div class="form-group">
+          <label for="employment_status">Employment Status *</label>
+          <div class="custom-select-wrapper">
+            <select id="employment_status" class="hidden-select" name="employment_status" required>
+              <option value="">— Select Status —</option>
+              <option value="full_time">Employed Full-time</option>
+              <option value="part_time">Employed Part-time</option>
+              <option value="unemployed">Unemployed</option>
+              <option value="student">Student</option>
+              <option value="retired">Retired</option>
+            </select>
+            <div class="custom-select-trigger">
+              <span class="custom-select-value">— Select Status —</span>
+            </div>
+            <ul class="custom-select-options">
+              <li data-value="">— Select Status —</li>
+              <li data-value="full_time">Employed Full-time</li>
+              <li data-value="part_time">Employed Part-time</li>
+              <li data-value="unemployed">Unemployed</li>
+              <li data-value="student">Student</li>
+              <li data-value="retired">Retired</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ─────────────────────────────────────────────────────────────────────
+         STEP 2: LIVING ARRANGEMENT
+         ───────────────────────────────────────────────────────────────────── -->
+    <div class="form-step" id="step-2">
+      <h2>Living Arrangement</h2>
+
+      <div class="form-row full">
+        <div class="form-group">
+          <label for="residence_type">Do you: Rent / Own / Live at parents *</label>
+          <input type="text" id="residence_type" name="residence_type" class="field-input" required>
+        </div>
+      </div>
+
+      <div class="form-row full">
+        <div class="form-group">
+          <label for="landlord_allows">If renting - landlord allows pets?</label>
+          <div class="custom-select-wrapper">
+            <select id="landlord_allows" class="hidden-select" name="landlord_allows">
+              <option value="">— Select Option —</option>
+              <option value="yes">Yes</option>
+              <option value="no">No</option>
+            </select>
+            <div class="custom-select-trigger">
+              <span class="custom-select-value">— Select Option —</span>
+            </div>
+            <ul class="custom-select-options">
+              <li data-value="">— Select Option —</li>
+              <li data-value="yes">Yes</li>
+              <li data-value="no">No</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="landlord_contact">Landlord Name & Phone</label>
+          <input type="text" id="landlord_contact" name="landlord_contact" class="field-input">
+        </div>
+        <div class="form-group">
+          <label for="home_type">Type of Home *</label>
+          <input type="text" id="home_type" name="home_type" class="field-input" required>
+        </div>
+      </div>
+
+      <div class="form-row full">
+        <div class="form-group">
+          <label for="time_at_address">Length of Time at Current Address *</label>
+          <input type="text" id="time_at_address" name="time_at_address" class="field-input" required>
+        </div>
+      </div>
+
+      <div class="form-row full">
+        <div class="form-group">
+          <label for="household_list">Who Lives with You? (Name — Age) *</label>
+          <textarea id="household_list" name="household_list" class="field-input" placeholder="One per line: Name — Age" required></textarea>
+        </div>
+      </div>
+
+      <div class="form-row full">
+        <div class="form-group">
+          <label for="past_animals">If You Owned Animals in Past 10 Years & No Longer Have Them, What Happened? *</label>
+          <textarea id="past_animals" name="past_animals" class="field-input" required></textarea>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ─────────────────────────────────────────────────────────────────────
+         STEP 3: CURRENT PETS & VET CARE
+         ───────────────────────────────────────────────────────────────────── -->
+    <div class="form-step" id="step-3">
+      <h2>Pets & Veterinary Care</h2>
+
+      <div class="form-row full">
+        <div class="form-group">
+          <label for="can_afford">Can You Afford to Care for a Pet? *</label>
+          <div class="custom-select-wrapper">
+            <select id="can_afford" class="hidden-select" name="can_afford" required>
+              <option value="">— Select Option —</option>
+              <option value="yes">Yes</option>
+              <option value="no">No</option>
+            </select>
+            <div class="custom-select-trigger">
+              <span class="custom-select-value">— Select Option —</span>
+            </div>
+            <ul class="custom-select-options">
+              <li data-value="">— Select Option —</li>
+              <li data-value="yes">Yes</li>
+              <li data-value="no">No</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="have_vet">Do You Have a Veterinarian?</label>
+          <div class="custom-select-wrapper">
+            <select id="have_vet" class="hidden-select" name="have_vet">
+              <option value="">— Select Option —</option>
+              <option value="yes">Yes</option>
+              <option value="no">No</option>
+            </select>
+            <div class="custom-select-trigger">
+              <span class="custom-select-value">— Select Option —</span>
+            </div>
+            <ul class="custom-select-options">
+              <li data-value="">— Select Option —</li>
+              <li data-value="yes">Yes</li>
+              <li data-value="no">No</li>
+            </ul>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="vet_name">Veterinarian's Name</label>
+          <input type="text" id="vet_name" name="vet_name" class="field-input">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="vet_address">Veterinarian Address</label>
+          <input type="text" id="vet_address" name="vet_address" class="field-input">
+        </div>
+        <div class="form-group">
+          <label for="vet_phone">Veterinarian Phone</label>
+          <input type="text" id="vet_phone" name="vet_phone" class="field-input">
+        </div>
+      </div>
+
+      <div class="form-row full">
+        <div class="form-group">
+          <label for="allow_contact_vet">If You Have A Veterinarian Would You Allow Us to Speak with Your Vet for Health Info?</label>
+          <div class="custom-select-wrapper">
+            <select id="allow_contact_vet" class="hidden-select" name="allow_contact_vet">
+              <option value="">— Select Option —</option>
+              <option value="yes">Yes</option>
+              <option value="no">No</option>
+            </select>
+            <div class="custom-select-trigger">
+              <span class="custom-select-value">— Select Option —</span>
+            </div>
+            <ul class="custom-select-options">
+              <li data-value="">— Select Option —</li>
+              <li data-value="yes">Yes</li>
+              <li data-value="no">No</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row full">
+        <div class="form-group">
+          <label>Current Pets (Name / Breed / Age / Spayed?)</label>
+          <table class="pets-table">
+            <thead>
+              <tr>
+                <th>Pet Name</th>
+                <th>Breed/Species</th>
+                <th>Age</th>
+                <th>Spayed/Neutered</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><input type="text" name="pet1_name" class="field-input"></td>
+                <td><input type="text" name="pet1_breed" class="field-input"></td>
+                <td><input type="text" name="pet1_age" class="field-input"></td>
+                <td><input type="text" name="pet1_spay" class="field-input"></td>
+              </tr>
+              <tr>
+                <td><input type="text" name="pet2_name" class="field-input"></td>
+                <td><input type="text" name="pet2_breed" class="field-input"></td>
+                <td><input type="text" name="pet2_age" class="field-input"></td>
+                <td><input type="text" name="pet2_spay" class="field-input"></td>
+              </tr>
+              <tr>
+                <td><input type="text" name="pet3_name" class="field-input"></td>
+                <td><input type="text" name="pet3_breed" class="field-input"></td>
+                <td><input type="text" name="pet3_age" class="field-input"></td>
+                <td><input type="text" name="pet3_spay" class="field-input"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="form-row full">
+        <div class="form-group">
+          <label for="where_keep">Where Do You Keep Your Pet When Not at Home? *</label>
+          <input type="text" id="where_keep" name="where_keep" class="field-input" required>
+        </div>
+      </div>
+
+      <div class="form-row full">
+        <div class="form-group">
+          <label for="inside_plan">When Inside, How Will You Keep Your Pet? *</label>
+          <div class="custom-select-wrapper">
+            <select id="inside_plan" class="hidden-select" name="inside_plan" required>
+              <option value="">— Select Option —</option>
+              <option value="free_inside">Free inside the house</option>
+              <option value="confined">Confined to crate</option>
+              <option value="other">Other</option>
+            </select>
+            <div class="custom-select-trigger">
+              <span class="custom-select-value">— Select Option —</span>
+            </div>
+            <ul class="custom-select-options">
+              <li data-value="">— Select Option —</li>
+              <li data-value="free_inside">Free inside the house</li>
+              <li data-value="confined">Confined to crate</li>
+              <li data-value="other">Other</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row full">
+        <div class="form-group">
+          <label for="introduce_existing">How Will You Introduce Your New Pet to Existing Pets? *</label>
+          <textarea id="introduce_existing" name="introduce_existing" class="field-input" required></textarea>
+        </div>
+      </div>
+
+      <div class="form-row full">
+        <div class="form-group">
+          <label for="handle_undesirable">How Will You Handle Undesirable Behaviour? *</label>
+          <textarea id="handle_undesirable" name="handle_undesirable" class="field-input" required></textarea>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ─────────────────────────────────────────────────────────────────────
+         STEP 4: ADOPTION INFORMATION
+         ───────────────────────────────────────────────────────────────────── -->
+    <div class="form-step" id="step-4">
+      <h2>Adoption Information</h2>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="want_adopt">Confirm: I am adopting a (Cat/Dog/Bird/Other...) *</label>
+          <input type="text" id="want_adopt" name="want_adopt" class="field-input" placeholder="Fill details here..." required>
+        </div>
+      </div>
+
+      <div class="form-row full">
+        <div class="form-group">
+          <label for="sex_pref">Confirm: I am adopting (Pet name, Breed/Type, Sex, Adoption ID, Adoption Fee) *</label>
+          <textarea id="sex_pref" name="sex_pref" class="field-input field-input--large" placeholder="Fill details here, add multiple pets information if applicable..." required></textarea>
+        </div>
+      </div>
+
+      <div class="form-row full">
+        <div class="form-group">
+          <label>Why Adopt? (check all that apply)</label>
+          <div class="checkbox-grid">
+            <label><input type="checkbox" name="reason[]" value="companionship"> Companionship</label>
+            <label><input type="checkbox" name="reason[]" value="children"> Children responsibility</label>
+            <label><input type="checkbox" name="reason[]" value="love"> Love animals / help a pet</label>
+            <label><input type="checkbox" name="reason[]" value="breed"> Want to breed</label>
+            <label><input type="checkbox" name="reason[]" value="control"> Mouse control</label>
+            <label><input type="checkbox" name="reason[]" value="gift"> Gift for someone</label>
+            <label><input type="checkbox" name="reason[]" value="companion"> Companion for another pet</label>
+            <label><input type="checkbox" name="reason[]" value="other"> Other</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row full">
+        <div class="form-group">
+          <label for="primary_caregiver">Primary Caregiver *</label>
+          <input type="text" id="primary_caregiver" name="primary_caregiver" class="field-input" required>
+        </div>
+      </div>
+
+      <div class="form-row full">
+        <div class="form-group">
+          <label for="additional_info">Additional Information (anything we should know)</label>
+          <textarea id="additional_info" name="additional_info" class="field-input field-input--large" maxlength="5000" placeholder="Add any other preferences, details, special requests or anything else you want us to know about not mentioned in this form here.
+
+Optional: If you've also worked at a shelter before we will also love to hear your story, your experience, challenges and how you handled yourself ...."></textarea>
+        </div>
+      </div>
+
+      <div class="form-row full">
+        <div class="form-group">
+          <label>How Did You Hear About Us?</label>
+          <div class="checkbox-grid">
+            <label><input type="checkbox" name="hear[]" value="facebook"> Facebook</label>
+            <label><input type="checkbox" name="hear[]" value="website"> Website</label>
+            <label><input type="checkbox" name="hear[]" value="petfinder"> Petfinder</label>
+            <label><input type="checkbox" name="hear[]" value="volunteer"> Volunteer</label>
+            <label><input type="checkbox" name="hear[]" value="friend"> Family / Friend</label>
+            <label><input type="checkbox" name="hear[]" value="other"> Other</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- File Uploads -->
+      <div class="form-row full">
+        <div class="form-group">
+          <label>Government ID (front & back) — required *</label>
+          <div id="drop_id" class="file-drop" tabindex="0">Click or drag files here (max 5)</div>
+          <div id="list_id" class="uploaded-list"></div>
+        </div>
+      </div>
+
+      <div class="form-row full">
+        <div class="form-group">
+          <label>Proof of Address — required *</label>
+          <div id="drop_address" class="file-drop" tabindex="0">Click or drag files here (max 5)</div>
+          <div id="list_address" class="uploaded-list"></div>
+        </div>
+      </div>
+
+      <div class="form-row full">
+        <div class="form-group">
+          <label>Proof of Funding (if required)</label>
+          <div id="drop_vet" class="file-drop" tabindex="0">Click or drag files here (max 5)</div>
+          <div id="list_vet" class="uploaded-list"></div>
+        </div>
+      </div>
+
+      <div class="form-row full">
+        <div class="quality-matters-box">
+          <h4>Quality matters</h4>
+          <p>All documents must be clear, current, and fully readable. Blurry or cropped images will delay your application.</p>
+        </div>
+      </div>
+
+      <!-- Signature -->
+      <div class="form-row full">
+        <div class="form-group">
+          <label>Applicant Signature (draw below) *</label>
+          <div class="agree-block">
+            <div style="flex:1">
+              <div class="signature-pad">
+                <canvas id="sigCanvas" class="sig-canvas" aria-label="Signature pad"></canvas>
+                <div class="sig-controls">
+                  <button type="button" class="sig-btn" id="clearSig">Clear</button>
+                  <button type="button" class="sig-btn" id="saveSig">Save Signature</button>
+                  <div id="sigSavedNote" style="margin-left:8px;font-size:13px;color:var(--muted);align-self:center;"></div>
+                </div>
+              </div>
+            </div>
+            <div style="width:240px">
+              <label style="font-size:13px;font-weight:600;color:var(--primary);text-transform:uppercase;letter-spacing:.04em;display:block;margin-bottom:8px;">Signature preview</label>
+              <div id="sigPreview" style="border:1px solid var(--border);border-radius:6px;padding:8px;background:#fff;min-height:100px;"></div>
+            </div>
+          </div>
+          <input type="hidden" id="signatureData" name="signature">
+        </div>
+      </div>
+
+      <!-- Submission Date -->
+      <div class="form-row full">
+        <div class="form-group">
+          <label for="submission_date">Submission Date *</label>
+          <input type="date" id="submission_date" name="submission_date" class="field-input" required>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ─────────────────────────────────────────────────────────────────────
+         STEP 5: REVIEW & SUBMIT
+         ───────────────────────────────────────────────────────────────────── -->
+    <div class="form-step" id="step-5">
+      <h2>Review Your Application</h2>
+
+      <div class="review-summary" id="reviewSummary"></div>
+
+      <div class="agree-section">
+        <h3>I Understand & Agree</h3>
+        <ol>
+          <li>The above statements are true to the best of my knowledge.</li>
+          <li>I will provide food, water, and shelter at all times.</li>
+          <li>Pet Center cannot guarantee temperament/behavior.</li>
+          <li>Leash/containment rules may apply by local law.</li>
+          <li>I will follow up with my vet within 10 days.</li>
+          <li>Pet Center reserves the right to refuse any adoption application at its sole discretion, for any reason, including but not limited to concerns about the safety or suitability of the home environment for the pet.</li>
+        </ol>
+        <div class="final-agree">
+          <input type="checkbox" id="finalAgree" name="final_agree" required>
+          <label for="finalAgree">I confirm the information above is true and I agree to Pet Center's terms.</label>
+        </div>
+      </div>
+
+      <div id="formStatus" class="status-msg"></div>
+
+    </div>
+
+  </form>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     DEBUG PANEL — temporary, on-screen log for diagnosing submission issues.
+     Remove this entire block (and #debugToggle/#debugPanel CSS + JS) once fixed.
+     ══════════════════════════════════════════════════════════════════════════ -->
+<button type="button" id="debugToggle" aria-label="Toggle debug log">🐞</button>
+<div id="debugPanel">
+  <div id="debugPanelHeader">
+    <span>Debug Log</span>
+    <div>
+      <button type="button" id="debugClear">Clear</button>
+      <button type="button" id="debugCopy">Copy</button>
+      <button type="button" id="debugClose">✕</button>
+    </div>
+  </div>
+  <div id="debugLog"></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     STICKY NAV FOOTER (always visible — Back/Next/Submit controlled by JS)
+     ══════════════════════════════════════════════════════════════════════════ -->
+<div class="sticky-review-buttons" id="stickyReviewButtons">
+  <button type="button" class="btn btn--back" id="stickyBackBtn" onclick="stickyBack()" style="display:none;">Back</button>
+  <button type="button" class="preview-btn-mobile" id="previewBtnMobile" title="Download Application" aria-label="Download Application" style="display:none;">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10214b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+  </button>
+  <button type="button" class="btn btn--secondary preview-btn-desktop" id="previewBtnDesktop" style="display:none;">Download</button>
+  <button type="button" class="btn btn--primary" id="stickyNextBtn" onclick="stickyNext()">Next</button>
+  <button type="submit" class="btn btn--primary" id="submitBtnSticky" form="adoptionForm" style="display:none;"><span id="submitBtnStickyText">Submit Application</span></button>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     SUCCESS MODAL
+     ══════════════════════════════════════════════════════════════════════════ -->
+<div id="successModal" class="modal">
+  <div class="modal-box success-modal">
+    <div class="success-icon">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#0d7c4a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 24px; color: var(--primary); margin-bottom: 8px;">Application Submitted!</h2>
+    <p style="color: var(--muted); margin-bottom: 16px;">Your adoption application has been received.</p>
+    
+    <div class="success-code" id="successCode">AD-00000-0000</div>
+    <button type="button" class="small-btn" id="copyCodeBtn" style="margin-bottom: 4px;">Copy Code</button>
+    
+    <p style="font-size: 13px; color: var(--muted); margin: 16px 0;">Save this code to track your application status</p>
+    
+    <div class="success-warning">
+      <strong><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c67c1a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-right:6px;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Important: Check Your Status in 1–2 Hours</strong>
+      Other adopters may apply for the same pet at the same time. Applying doesn't guarantee ownership. Only being approved and completing your adoption process secures your new pet. Use your code above to regularly check your application status and finalize your adoption in time if approved.
+    </div>
+    
+    <button type="button" class="btn btn--primary" id="checkStatusBtn">Check Status Now</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     FILE PREVIEW MODAL
+     ══════════════════════════════════════════════════════════════════════════ -->
+<div id="previewModal" class="modal">
+  <div class="modal-box">
+    <div class="modal-top" id="modalTop">
+      <div id="modalTopTitle" style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--orange);margin:0;"></div>
+      <div class="modal-top__actions">
+        <button type="button" class="btn btn--primary" id="modalDownloadPdfBtn" style="padding:7px 14px;font-size:13px;display:none;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download PDF
+        </button>
+        <button class="modal-close" id="modalClose">Close</button>
+      </div>
+    </div>
+    <div class="modal-scroll">
+      <div id="modalContent" class="modal-content"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     FOOTER
+     ══════════════════════════════════════════════════════════════════════════ -->
+<footer class="pc-footer">
+  <div class="pc-footer__inner">
+    <div class="pc-footer__top">
+      <div class="pc-footer__brand">
+        <img src="/assets/images/logo-petcenter.png" alt="Pet Center">
+        <p>Every pet deserves a loving home. Browse our available pets and start your adoption journey today.</p>
+      </div>
+      <div class="pc-footer__col">
+        <h5>Our Pets</h5>
+        <ul>
+          <li><a href="/pets/dogs/">Dogs</a></li>
+          <li><a href="/pets/cats/">Cats</a></li>
+          <li><a href="/pets/birds/">Birds</a></li>
+          <li><a href="/pets/reptiles/">Reptiles</a></li>
+          <li><a href="/pets/small-mammals/">Small Mammals</a></li>
+        </ul>
+      </div>
+      <div class="pc-footer__col">
+        <h5>Information</h5>
+        <ul>
+          <li><a href="/">About Us</a></li>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/testimonials/">Testimonials</a></li>
+          <li><a href="https://donate.petcenterco.com" target="_blank" rel="noopener">Donate</a></li>
+          <li><a href="https://docs.petcenterco.com/health-guarantee/" target="_blank" rel="noopener">Health Guarantee</a></li>
+          <li><a href="https://docs.petcenterco.com/shipping-cancellation/" target="_blank" rel="noopener">Shipping &amp; Cancellation</a></li>
+          <li><a href="https://docs.petcenterco.com/shipping-insurance-claims/" target="_blank" rel="noopener">Shipping Insurance</a></li>
+          <li><a href="https://docs.petcenterco.com/data-retention-security/" target="_blank" rel="noopener">Data &amp; Security</a></li>
+        </ul>
+      </div>
+      <div class="pc-footer__col">
+        <h5>Support</h5>
+        <ul>
+          <li><a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact Us</a></li>
+          <li><a href="/rehome/">Sign Up</a></li>
+          <li><a href="https://docs.petcenterco.com/returns-refunds/" target="_blank" rel="noopener">Returns &amp; Refunds</a></li>
+          <li><a href="https://docs.petcenterco.com/faq/" target="_blank" rel="noopener">FAQ</a></li>
+        </ul>
+      </div>
+      <div class="pc-footer__col">
+        <h5>Visit Us</h5>
+        <p style="color:rgba(255,255,255,.7);font-size:13px;line-height:1.8;margin-bottom:0;">235-269 N Beverly Dr<br>Beverly Hills, CA</p>
+        <p style="color:rgba(255,255,255,.7);font-size:13px;line-height:1.8;margin-top:10px;"><strong style="color:#d7bd88;">Hours:</strong><br>Mon &ndash; Fri: 7am &ndash; 9pm<br>Sat &ndash; Sun: 10am &ndash; 6pm</p>
+      </div>
+    </div>
+    <div class="pc-footer__bottom">
+      <span class="pc-footer__copy">&copy; 2026 Pet Center. All rights reserved.</span>
+      <div class="pc-footer__links">
+        <a href="https://docs.petcenterco.com/privacy-policy/" target="_blank" rel="noopener">Privacy Policy</a>
+        <a href="https://docs.petcenterco.com/terms-of-service/" target="_blank" rel="noopener">Terms of Service</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     JAVASCRIPT
+     ══════════════════════════════════════════════════════════════════════════ -->
+<script>
+  // ── Utilities ──────────────────────────────────────────────────────────────
+  function $(id) { return document.getElementById(id); }
+  function escapeHtml(s) { return String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+  // ── Form State ─────────────────────────────────────────────────────────────
+  let currentStep = 1;
+  const maxFiles = 5;
+  const maxBytes = 5 * 1024 * 1024;
+  const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'];
+
+  const fields = {
+    file_id: { drop: null, list: null, arr: [] },
+    file_address: { drop: null, list: null, arr: [] },
+    file_vet: { drop: null, list: null, arr: [] }
+  };
+
+  // ── Step Navigation ───────────────────────────────────────────────────────
+  function updateStickyFooter(step) {
+    const backBtn       = $('stickyBackBtn');
+    const nextBtn       = $('stickyNextBtn');
+    const submitBtn     = $('submitBtnSticky');
+    const previewMobile = $('previewBtnMobile');
+    const previewDesk   = $('previewBtnDesktop');
+
+    // Back: always hide on step 1
+    backBtn.style.display = step > 1 ? '' : 'none';
+
+    // Next vs Submit
+    if (step === 5) {
+      nextBtn.style.display    = 'none';
+      submitBtn.style.display  = '';
+      // Preview buttons only on step 5
+      previewMobile.style.display = '';
+      previewDesk.style.display   = '';
+    } else {
+      nextBtn.style.display    = '';
+      submitBtn.style.display  = 'none';
+      previewMobile.style.display = 'none';
+      previewDesk.style.display   = 'none';
+    }
+
+    // Add padding so content isn't hidden behind sticky footer
+    document.body.style.paddingBottom = '80px';
+  }
+
+  function stickyBack() {
+    const prev = currentStep - 1;
+    if (prev >= 1) goStep(prev);
+  }
+
+  function stickyNext() {
+    if (currentStep === 4) {
+      validateDocsAndNext();
+    } else {
+      goStep(currentStep + 1);
+    }
+  }
+
+  function goStep(step) {
+    if (step > currentStep) {
+      const current = document.getElementById('step-' + currentStep);
+      const inputs = current.querySelectorAll('[required]');
+      let valid = true;
+
+      inputs.forEach(input => {
+        const isHiddenSelect = input.classList.contains('hidden-select');
+        const highlightTarget = isHiddenSelect ? input.closest('.custom-select-wrapper').querySelector('.custom-select-trigger') : input;
+
+        if (!input.value.trim()) {
+          highlightTarget.style.boxShadow = '0 0 0 3px rgba(192,57,43,0.35)';
+          valid = false;
+        } else {
+          highlightTarget.style.boxShadow = '';
+        }
+      });
+
+      if (!valid) {
+        alert('Please fill in all required fields.');
+        return;
+      }
+    }
+
+    document.getElementById('step-' + currentStep).classList.remove('active');
+    document.getElementById('step-ind-' + currentStep).classList.remove('active');
+    if (step > currentStep) {
+      document.getElementById('step-ind-' + currentStep).classList.add('done');
+    }
+
+    currentStep = step;
+    document.getElementById('step-' + step).classList.add('active');
+    document.getElementById('step-ind-' + step).classList.add('active');
+    document.getElementById('step-ind-' + step).classList.remove('done');
+
+    updateStickyFooter(step);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    if (step === 5) buildReview();
+  }
+
+  // Initialise sticky footer for step 1 on page load
+  updateStickyFooter(1);
+
+  // ── Multi-Pet Carousel ────────────────────────────────────────────────────
+  // State: array of { petId, category, pet } — slot 0 is always the primary pet
+  var carouselPets = [];   // filled when primary pet loads
+  var carouselIndex = 0;
+  var MAX_PETS = 5;
+
+  function carouselGoTo(idx) {
+    var track = document.getElementById('petCarouselTrack');
+    if (!track) return;
+    carouselIndex = idx;
+    track.style.transform = 'translateX(-' + (idx * 100) + '%)';
+    updateCarouselNav();
+  }
+
+  function updateCarouselNav() {
+    var nav  = document.getElementById('petCarouselNav');
+    var dots = document.getElementById('petCarouselDots');
+    var prev = document.getElementById('petCarouselPrev');
+    var next = document.getElementById('petCarouselNext');
+    if (!nav) return;
+
+    var total = carouselPets.length;
+    if (total > 1) {
+      nav.classList.add('visible');
+    } else {
+      nav.classList.remove('visible');
+    }
+
+    // Dots
+    if (dots) {
+      dots.innerHTML = '';
+      for (var d = 0; d < total; d++) {
+        var dot = document.createElement('span');
+        dot.className = 'pet-carousel-dot' + (d === carouselIndex ? ' active' : '');
+        dot.setAttribute('data-idx', d);
+        dot.addEventListener('click', (function(i) {
+          return function() { carouselGoTo(i); };
+        })(d));
+        dots.appendChild(dot);
+      }
+    }
+
+    if (prev) prev.disabled = carouselIndex === 0;
+    if (next) next.disabled = carouselIndex === total - 1;
+
+    // Update counter
+    updateAddPetCounter();
+  }
+
+  function updateAddPetCounter() {
+    var counter = document.getElementById('addPetCounter');
+    if (!counter) return;
+    var added = carouselPets.length; // slot 0 = primary (not user-added)
+    var remaining = MAX_PETS - added;
+    if (added <= 1) {
+      counter.textContent = '';
+    } else {
+      counter.textContent = (added - 1) + ' additional pet' + (added - 1 === 1 ? '' : 's') + ' added. You can add ' + remaining + ' more.';
+    }
+  }
+
+  function buildPetSlide(pet, ageText, imageUrl, idx, isPrimary) {
+    var slide = document.createElement('div');
+    slide.className = 'pet-carousel-slide';
+    slide.id = 'petSlide' + idx;
+
+    var removeBtn = '';
+    if (!isPrimary) {
+      removeBtn = '<button type="button" class="pet-slide-remove" data-idx="' + idx + '" aria-label="Remove pet" title="Remove this pet">' +
+        '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>' +
+      '</button>';
+    }
+
+    var rawFee = pet.adoption_fee;
+    var feeNum = parseFloat(rawFee);
+    var feeVal = (!isNaN(feeNum)) ? '$' + feeNum.toLocaleString('en-US') : (rawFee || '—');
+
+    var speciesLabel = (pet.category || pet.species || '—');
+    speciesLabel = speciesLabel.charAt(0).toUpperCase() + speciesLabel.slice(1);
+
+    slide.innerHTML = removeBtn +
+      '<div class="pet-prefill-content">' +
+        '<div class="pet-prefill-image">' +
+          '<img src="' + (imageUrl || '/assets/images/pet-placeholder.jpg') + '" alt="' + (pet.name || 'Pet') + '" onerror="this.src=\'/assets/images/pet-placeholder.jpg\'">' +
+        '</div>' +
+        '<div class="pet-prefill-details">' +
+          '<div class="pet-prefill-item"><div class="pet-prefill-label">Pet Name</div><div class="pet-prefill-value">' + (pet.name || '—') + '</div></div>' +
+          '<div class="pet-prefill-item"><div class="pet-prefill-label">Species</div><div class="pet-prefill-value">' + speciesLabel + '</div></div>' +
+          '<div class="pet-prefill-item"><div class="pet-prefill-label">Breed</div><div class="pet-prefill-value">' + (pet.breed || '—') + '</div></div>' +
+          '<div class="pet-prefill-item"><div class="pet-prefill-label">Age</div><div class="pet-prefill-value">' + (ageText || '—') + '</div></div>' +
+          '<div class="pet-prefill-item"><div class="pet-prefill-label">Size</div><div class="pet-prefill-value">' + (pet.size || '—') + '</div></div>' +
+          '<div class="pet-prefill-item"><div class="pet-prefill-label">Adoption Fee</div><div class="pet-prefill-value">' + feeVal + '</div></div>' +
+        '</div>' +
+      '</div>';
+
+    // Wire remove button
+    var removeEl = slide.querySelector('.pet-slide-remove');
+    if (removeEl) {
+      removeEl.addEventListener('click', function() {
+        removeCarouselPet(idx);
+      });
+    }
+
+    return slide;
+  }
+
+  function removeCarouselPet(idx) {
+    if (idx === 0) return; // can't remove primary
+    var track = document.getElementById('petCarouselTrack');
+    if (!track) return;
+
+    // Remove from array
+    carouselPets.splice(idx, 1);
+
+    // Rebuild track
+    rebuildCarouselTrack();
+
+    // Go to previous slide if we were at the end
+    if (carouselIndex >= carouselPets.length) {
+      carouselIndex = carouselPets.length - 1;
+    }
+    carouselGoTo(carouselIndex);
+    updateCarouselNav();
+
+    // Also remove the hidden additional_pet_ids input for this pet
+    syncAdditionalPetInputs();
+  }
+
+  function rebuildCarouselTrack() {
+    var track = document.getElementById('petCarouselTrack');
+    if (!track) return;
+    // Clear all slides except slot 0 (the static primary slide)
+    var slides = track.querySelectorAll('.pet-carousel-slide');
+    slides.forEach(function(s, i) { if (i > 0) s.remove(); });
+
+    // Re-add slides from carouselPets[1..]
+    for (var i = 1; i < carouselPets.length; i++) {
+      var entry = carouselPets[i];
+      var slide = buildPetSlide(entry.pet, entry.ageText, entry.imageUrl, i, false);
+      track.appendChild(slide);
+    }
+  }
+
+  function syncAdditionalPetInputs() {
+    // Remove existing hidden additional_pet_ids inputs
+    var form = document.getElementById('adoptionForm');
+    if (!form) return;
+    form.querySelectorAll('input[name="additional_pet_ids[]"]').forEach(function(el) { el.remove(); });
+    // Add one for each additional pet (skip index 0 = primary)
+    for (var i = 1; i < carouselPets.length; i++) {
+      var input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = 'additional_pet_ids[]';
+      input.value = carouselPets[i].petId;
+      form.appendChild(input);
+    }
+  }
+
+  // Wire carousel arrow buttons
+  var prevBtn = document.getElementById('petCarouselPrev');
+  var nextBtn = document.getElementById('petCarouselNext');
+  if (prevBtn) prevBtn.addEventListener('click', function() { if (carouselIndex > 0) carouselGoTo(carouselIndex - 1); });
+  if (nextBtn) nextBtn.addEventListener('click', function() { if (carouselIndex < carouselPets.length - 1) carouselGoTo(carouselIndex + 1); });
+
+  // Touch/swipe support on carousel
+  (function() {
+    var outer = document.getElementById('petCarouselOuter');
+    if (!outer) return;
+    var startX = 0;
+    outer.addEventListener('touchstart', function(e) { startX = e.touches[0].clientX; }, { passive: true });
+    outer.addEventListener('touchend', function(e) {
+      var dx = e.changedTouches[0].clientX - startX;
+      if (Math.abs(dx) > 40) {
+        if (dx < 0 && carouselIndex < carouselPets.length - 1) carouselGoTo(carouselIndex + 1);
+        if (dx > 0 && carouselIndex > 0) carouselGoTo(carouselIndex - 1);
+      }
+    }, { passive: true });
+  })();
+
+  // ── Pet ID tooltip (closable chat bubble) ────────────────────────────────
+  (function() {
+    var trigger = document.getElementById('petIdTipTrigger');
+    if (!trigger) return;
+    trigger.addEventListener('click', function(e) {
+      e.stopPropagation();
+      trigger.classList.toggle('open');
+    });
+    trigger.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); trigger.classList.toggle('open'); }
+    });
+    document.addEventListener('click', function(e) {
+      if (!trigger.contains(e.target)) trigger.classList.remove('open');
+    });
+  })();
+
+  // ── Add Pet Button ───────────────────────────────────────────────────────
+  (function() {
+    var btn    = document.getElementById('addPetBtn');
+    var input  = document.getElementById('addPetIdInput');
+    var status = document.getElementById('addPetStatus');
+
+    if (!btn || !input) return;
+
+    function setStatus(msg, type) {
+      if (status) {
+        status.textContent = msg;
+        status.className = 'add-pet-status' + (type ? ' ' + type : '');
+      }
+    }
+
+    function addPet() {
+      var rawId = input.value.trim().toUpperCase();
+      if (!rawId) { setStatus('Please enter a Pet ID.', 'error'); return; }
+
+      // Check max
+      if (carouselPets.length >= MAX_PETS) {
+        setStatus('Maximum of ' + MAX_PETS + ' pets reached.', 'error');
+        return;
+      }
+
+      // Check duplicate
+      var already = carouselPets.some(function(p) { return p.petId === rawId; });
+      if (already) {
+        setStatus('This pet is already added.', 'error');
+        return;
+      }
+
+      // Determine category from pet ID prefix
+      var categoryMap = {
+        'DOG': 'dogs', 'CAT': 'cats', 'BIRD': 'birds',
+        'REP': 'reptiles', 'SM': 'small-mammals'
+      };
+      var prefix = rawId.split('-')[0];
+      var cat = categoryMap[prefix];
+      if (!cat) { setStatus('Unknown Pet ID format. Use e.g. DOG-00001.', 'error'); return; }
+
+      btn.disabled = true;
+      btn.textContent = 'Adding…';
+      setStatus('', '');
+
+      fetch('/adoptions/pets/' + cat + '/' + rawId + '/pet.json', { cache: 'no-store' })
+        .then(function(r) {
+          if (!r.ok) throw new Error('not-found');
+          return r.json();
+        })
+        .then(function(pet) {
+          pet.category = cat;
+          var ageText = pet.age_years ? (pet.age_years + (pet.age_years == 1 ? ' year' : ' years')) : '—';
+          var imageUrl = pet.single_image_url || '/assets/images/pet-placeholder.jpg';
+
+          var idx = carouselPets.length;
+          carouselPets.push({ petId: rawId, category: cat, pet: pet, ageText: ageText, imageUrl: imageUrl });
+
+          // Append new slide
+          var track = document.getElementById('petCarouselTrack');
+          if (track) {
+            var slide = buildPetSlide(pet, ageText, imageUrl, idx, false);
+            track.appendChild(slide);
+          }
+
+          // Update nav
+          updateCarouselNav();
+          // Auto-advance to new slide
+          carouselGoTo(idx);
+
+          // Sync hidden inputs for submission
+          syncAdditionalPetInputs();
+
+          btn.textContent = 'Added';
+          setStatus(pet.name + ' added successfully!', 'success');
+          input.value = '';
+
+          setTimeout(function() {
+            btn.disabled = false;
+            btn.textContent = 'Add';
+            setStatus('', '');
+          }, 1600);
+        })
+        .catch(function() {
+          btn.disabled = false;
+          btn.textContent = 'Add';
+          setStatus('Pet ID not found. Please check and try again.', 'error');
+        });
+    }
+
+    btn.addEventListener('click', addPet);
+    input.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') { e.preventDefault(); addPet(); }
+    });
+  })();
+
+  // ── Review Step ────────────────────────────────────────────────────────────
+  const REVIEW_LABELS = {
+    name: 'Full Name', top_date: 'Reference Date', address: 'Address', apt: 'Apt / Unit #',
+    city: 'City', state: 'State', zip: 'Zip', phone: 'Phone', user_email: 'Email',
+    id_number: 'Spouse/Partner #', spouse: 'Spouse / Partner Name',
+    employment_status: 'Employment Status', residence_type: 'Residence Type',
+    landlord_allows: 'Landlord Allows Pets', landlord_contact: 'Landlord Name & Phone',
+    home_type: 'Type of Home', time_at_address: 'Time at Address',
+    household_list: 'Household Members', past_animals: 'Past Animals',
+    can_afford: 'Can Afford Pet Care', have_vet: 'Has Veterinarian', vet_name: 'Vet Name',
+    vet_address: 'Vet Address', vet_phone: 'Vet Phone', allow_contact_vet: 'Allow Vet Contact',
+    pet1_name: 'Pet 1 Name', pet1_breed: 'Pet 1 Breed', pet1_age: 'Pet 1 Age', pet1_spay: 'Pet 1 Spayed',
+    pet2_name: 'Pet 2 Name', pet2_breed: 'Pet 2 Breed', pet2_age: 'Pet 2 Age', pet2_spay: 'Pet 2 Spayed',
+    pet3_name: 'Pet 3 Name', pet3_breed: 'Pet 3 Breed', pet3_age: 'Pet 3 Age', pet3_spay: 'Pet 3 Spayed',
+    where_keep: 'Pet Storage When Away', inside_plan: 'Inside Arrangement',
+    introduce_existing: 'Introduce to Existing Pets', handle_undesirable: 'Handle Bad Behaviour',
+    want_adopt: 'Confirm: I am adopting a (Cat/Dog/Bird/Other...)', sex_pref: 'Confirm: I am adopting (Pet name, Breed/Type, Sex, Adoption ID, Adoption Fee)',
+    primary_caregiver: 'Primary Caregiver', additional_info: 'Additional Information',
+    submission_date: 'Submission Date'
+  };
+
+  const REVIEW_CHECKBOX_LABELS = {
+    'reason[]': 'Reason for Adopting',
+    'hear[]': 'How Did You Hear About Us'
+  };
+
+  const REVIEW_CHIP_VALUES = {
+    companionship: 'Companionship', children: 'Children Responsibility', love: 'Love Animals',
+    breed: 'Want to Breed', control: 'Mouse Control', gift: 'Gift for Someone',
+    companion: 'Companion for Another Pet', other: 'Other',
+    facebook: 'Facebook', website: 'Website', petfinder: 'Petfinder',
+    volunteer: 'Volunteer', friend: 'Family / Friend'
+  };
+
+  function buildReview() {
+    const form = document.getElementById('adoptionForm');
+    const formData = new FormData(form);
+    const summary = document.getElementById('reviewSummary');
+    let html = '';
+
+    // Collect checkbox arrays separately
+    const arrayMap = {};
+    for (const [k, v] of formData.entries()) {
+      if (k.endsWith('[]')) { (arrayMap[k] = arrayMap[k] || []).push(v); }
+    }
+
+    // Scalar fields (excludes signature, pet_id, category, adoption_code, file fields — none of which are in REVIEW_LABELS)
+    for (const [k, v] of formData.entries()) {
+      if (k.endsWith('[]') || !v || !(v.trim ? v.trim() : v)) continue;
+      if (!REVIEW_LABELS[k]) continue;
+      html += '<div class="review-item"><div class="review-label">' + escapeHtml(REVIEW_LABELS[k]) + '</div><div class="review-value">' + escapeHtml(v).replace(/\n/g, '<br>') + '</div></div>';
+    }
+
+    // Checkbox groups as chips
+    for (const [k, label] of Object.entries(REVIEW_CHECKBOX_LABELS)) {
+      const vals = arrayMap[k];
+      if (!vals || !vals.length) continue;
+      const chips = vals.map(v => '<span class="review-chip">' + escapeHtml(REVIEW_CHIP_VALUES[v] || v) + '</span>').join('');
+      html += '<div class="review-item"><div class="review-label">' + escapeHtml(label) + '</div><div class="review-value">' + chips + '</div></div>';
+    }
+
+    // Signature — render the actual saved image, not raw data
+    const sigValue = $('signatureData').value;
+    if (sigValue) {
+      html += '<div class="review-item"><div class="review-label">Applicant Signature</div><div class="review-value"><img src="' + sigValue + '" alt="Applicant signature" style="max-width:220px;height:auto;border:1px solid var(--border);border-radius:6px;padding:6px;background:#fff;"></div></div>';
+    }
+
+    summary.innerHTML = html;
+    $('submission_date').value = new Date().toISOString().slice(0, 10);
+  }
+
+  // ── Signature Pad (exact from original-adoption-application.html) ─────────
+  const canvas = $('sigCanvas');
+  const ctx = canvas.getContext('2d');
+
+  function fitCanvas() {
+    const rect = canvas.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = Math.round(rect.width * dpr);
+    canvas.height = Math.round(rect.height * dpr);
+    ctx.scale(dpr, dpr);
+    ctx.lineWidth = 2;
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = '#111';
+  }
+  fitCanvas();
+  window.addEventListener('resize', () => { ctx.setTransform(1,0,0,1,0,0); fitCanvas(); });
+
+  let drawing = false;
+  let last = { x: 0, y: 0 };
+
+  function getPos(e) {
+    const rect = canvas.getBoundingClientRect();
+    let clientX, clientY;
+    if (e.touches && e.touches[0]) {
+      clientX = e.touches[0].clientX;
+      clientY = e.touches[0].clientY;
+    } else {
+      clientX = e.clientX;
+      clientY = e.clientY;
+    }
+    return { x: clientX - rect.left, y: clientY - rect.top };
+  }
+
+  canvas.addEventListener('pointerdown', (e) => {
+    e.preventDefault();
+    canvas.setPointerCapture && canvas.setPointerCapture(e.pointerId);
+    drawing = true;
+    last = getPos(e);
+  });
+  canvas.addEventListener('pointermove', (e) => {
+    if (!drawing) return;
+    e.preventDefault();
+    const p = getPos(e);
+    ctx.beginPath();
+    ctx.moveTo(last.x, last.y);
+    ctx.lineTo(p.x, p.y);
+    ctx.stroke();
+    last = p;
+  });
+  canvas.addEventListener('pointerup', (e) => {
+    drawing = false;
+    try { canvas.releasePointerCapture && canvas.releasePointerCapture(e.pointerId); } catch(_) {}
+  });
+  canvas.addEventListener('pointercancel', () => drawing = false);
+
+  $('clearSig').addEventListener('click', () => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    $('sigPreview').innerHTML = '';
+    $('sigSavedNote').textContent = '';
+    $('signatureData').value = '';
+  });
+
+  $('saveSig').addEventListener('click', () => {
+    const dataUrl = canvas.toDataURL('image/png');
+    $('signatureData').value = dataUrl;
+    $('sigPreview').innerHTML = `<img src="${dataUrl}" style="max-width:100%;height:auto;border-radius:4px">`;
+    $('sigSavedNote').textContent = 'Signature saved';
+  });
+
+  // ── File Upload (exact logic from original-adoption-application.html) ─────
+  fields.file_id.drop = $('drop_id');
+  fields.file_id.list = $('list_id');
+  fields.file_address.drop = $('drop_address');
+  fields.file_address.list = $('list_address');
+  fields.file_vet.drop = $('drop_vet');
+  fields.file_vet.list = $('list_vet');
+
+  Object.keys(fields).forEach(k => {
+    const fld = fields[k];
+    const inp = document.createElement('input');
+    inp.type = 'file';
+    inp.accept = '.jpg,.jpeg,.png,.pdf';
+    inp.multiple = true;
+    inp.style.display = 'none';
+    document.body.appendChild(inp);
+    fld.input = inp;
+
+    fld.drop.addEventListener('click', () => inp.click());
+    fld.drop.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); inp.click(); } });
+    ['dragenter', 'dragover'].forEach(ev => fld.drop.addEventListener(ev, e => { e.preventDefault(); fld.drop.classList.add('dragover'); }));
+    ['dragleave', 'drop', 'dragend'].forEach(ev => fld.drop.addEventListener(ev, e => { e.preventDefault(); fld.drop.classList.remove('dragover'); }));
+    fld.drop.addEventListener('drop', e => { const fl = e.dataTransfer && e.dataTransfer.files ? Array.from(e.dataTransfer.files) : []; handleFiles(k, fl); });
+    inp.addEventListener('change', e => { const fl = e.target.files ? Array.from(e.target.files) : []; handleFiles(k, fl); inp.value = ''; });
+  });
+
+  /* ── Pre-upload on file selection ─────────────────────────────────────────
+     Files are uploaded to the server the moment they are selected/dropped,
+     while the user continues filling the form. By the time they hit Submit,
+     files are already on the server — submit is near-instant.
+     Each uploaded file gets a temp token back from upload-temp.php.        */
+  async function preUploadFile(key, item) {
+    item.uploading = true;
+    item.uploaded = false;
+    item.token = null;
+    renderField(key);
+    const uploadUrl = '/apply/upload-temp.php';
+    if (window.dlog) dlog('Pre-uploading "' + item.name + '" (' + key + ') → ' + uploadUrl, 'info');
+    try {
+      const fd = new FormData();
+      fd.append('file', item.file, item.name);
+      fd.append('field', key);
+      const res = await fetch(uploadUrl, { method: 'POST', body: fd });
+      if (window.dlog) dlog('Upload response for "' + item.name + '": HTTP ' + res.status, res.ok ? 'ok' : 'error');
+
+      if (!res.ok) {
+        const errText = await res.text();
+        if (window.dlog) dlog('Upload failed body (first 300 chars): ' + errText.substring(0, 300), 'error');
+        item.uploadError = 'Server error (' + res.status + ')';
+        item.uploading = false;
+        renderField(key);
+        return;
+      }
+
+      const rawText = await res.text();
+      let json;
+      try {
+        json = JSON.parse(rawText);
+      } catch (parseErr) {
+        if (window.dlog) dlog('Upload response not valid JSON for "' + item.name + '": ' + rawText.substring(0, 300), 'error');
+        item.uploadError = 'Invalid server response';
+        item.uploading = false;
+        renderField(key);
+        return;
+      }
+
+      if (json && json.token) {
+        item.token = json.token;
+        item.uploaded = true;
+        if (window.dlog) dlog('Token received for "' + item.name + '": ' + json.token, 'ok');
+      } else {
+        item.uploadError = json.message || 'Upload failed';
+        if (window.dlog) dlog('Upload JSON missing token for "' + item.name + '": ' + JSON.stringify(json), 'error');
+      }
+    } catch (e) {
+      item.uploadError = 'Network error during upload';
+      console.error('Pre-upload error:', e);
+      if (window.dlog) dlog('Upload threw exception for "' + item.name + '": ' + e.message, 'error');
+    }
+    item.uploading = false;
+    renderField(key);
+  }
+
+  async function handleFiles(key, fileList) {
+    const fld = fields[key];
+    for (const f of fileList) {
+      if (fld.arr.length >= maxFiles) { alert('Max ' + maxFiles + ' files allowed.'); break; }
+      if (f.size > maxBytes) { alert('File "' + f.name + '" too large. Max 5MB.'); continue; }
+      if (!allowedTypes.includes(f.type)) { alert('File "' + f.name + '" type not allowed.'); continue; }
+      const url = URL.createObjectURL(f);
+      const item = { file: f, url, name: f.name, size: f.size, type: f.type, uploading: false, uploaded: false, token: null };
+      fld.arr.push(item);
+      renderField(key);
+      // Start background upload immediately — don't await, let it run while user fills form
+      preUploadFile(key, item);
+    }
+  }
+
+  function renderField(key) {
+    const fld = fields[key];
+    fld.list.innerHTML = '';
+    fld.arr.forEach((it, idx) => {
+      const div = document.createElement('div');
+      div.className = 'uploaded-item';
+
+      const thumb = document.createElement('img');
+      if (it.type.startsWith('image/')) {
+        thumb.src = it.url;
+      } else {
+        thumb.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64"><rect width="100%" height="100%" fill="%23f3f4f6"/><text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" fill="%239ca3af" font-size="12">PDF</text></svg>';
+      }
+
+      // Build status indicator
+      let statusHtml = '';
+      if (it.uploaded) {
+        statusHtml = ' <span style="color:#0d7c4a;font-weight:600;display:inline-flex;align-items:center;gap:3px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Uploaded</span>';
+      } else if (it.uploading) {
+        statusHtml = ' <span style="color:#ED7624;display:inline-flex;align-items:center;gap:3px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg> Uploading…</span>';
+      } else if (it.uploadError) {
+        statusHtml = ' <span style="color:#c0392b;display:inline-flex;align-items:center;gap:3px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> ' + escapeHtml(it.uploadError) + '</span>';
+      }
+
+      const meta = document.createElement('div');
+      meta.style.flex = '1';
+      meta.innerHTML = '<strong>' + escapeHtml(it.name) + '</strong>' +
+        '<div style="font-size:12px;color:var(--muted);margin-top:2px;">' + (it.size / 1024).toFixed(0) + ' KB' + statusHtml + '</div>';
+
+      const btns = document.createElement('div');
+      btns.style.display = 'flex';
+      btns.style.flexDirection = 'column';
+      btns.style.gap = '8px';
+
+      const preview = document.createElement('button');
+      preview.type = 'button';
+      preview.className = 'small-btn';
+      preview.textContent = 'Preview';
+      preview.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); openPreview(it); });
+
+      const rem = document.createElement('button');
+      rem.type = 'button';
+      rem.className = 'small-btn';
+      rem.textContent = 'Remove';
+      rem.addEventListener('click', e => {
+        e.preventDefault();
+        e.stopPropagation();
+        URL.revokeObjectURL(it.url);
+        fld.arr.splice(idx, 1);
+        renderField(key);
+      });
+
+      btns.appendChild(preview);
+
+      // Retry button — only shown when upload has failed and is not currently retrying
+      if (it.uploadError && !it.uploading) {
+        const retry = document.createElement('button');
+        retry.type = 'button';
+        retry.className = 'small-btn';
+        retry.style.cssText = 'background:#fff3cd;border-color:#f0c300;color:#5a4200;';
+        retry.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-right:3px;"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4"/></svg>Retry';
+        retry.addEventListener('click', e => {
+          e.preventDefault();
+          e.stopPropagation();
+          it.uploadError = null;
+          preUploadFile(key, it);
+        });
+        btns.appendChild(retry);
+      }
+
+      btns.appendChild(rem);
+      div.appendChild(thumb);
+      div.appendChild(meta);
+      div.appendChild(btns);
+      fld.list.appendChild(div);
+    });
+  }
+
+  // ── File Preview Modal ─────────────────────────────────────────────────────
+  const modal = $('previewModal');
+  const modalContent = $('modalContent');
+  const modalClose = $('modalClose');
+  const modalTopTitle = $('modalTopTitle');
+  const modalDownloadPdfBtn = $('modalDownloadPdfBtn');
+
+  function openPreview(item) {
+    modalContent.innerHTML = '';
+    // File preview — show filename in title, hide Download PDF
+    if (modalTopTitle) modalTopTitle.textContent = item.name || 'File Preview';
+    if (modalDownloadPdfBtn) modalDownloadPdfBtn.style.display = 'none';
+
+    if (item.type.startsWith('image/')) {
+      const img = document.createElement('img');
+      img.src = item.url;
+      img.alt = item.name;
+      img.style.maxWidth = '100%';
+      modalContent.appendChild(img);
+    } else {
+      const fr = document.createElement('iframe');
+      fr.src = item.url;
+      fr.style.width = '100%';
+      fr.style.height = '70vh';
+      modalContent.appendChild(fr);
+    }
+    modal.classList.add('open');
+  }
+
+  modalClose.addEventListener('click', () => {
+    modal.classList.remove('open');
+    modalContent.innerHTML = '';
+    // Reset title and button for next open
+    if (modalTopTitle) modalTopTitle.textContent = '';
+    if (modalDownloadPdfBtn) modalDownloadPdfBtn.style.display = 'none';
+  });
+
+  // ── Validation ─────────────────────────────────────────────────────────────
+  function validateDocsAndNext() {
+    if (fields.file_id.arr.length < 2) {
+      alert('Please upload at least 2 Government ID files.');
+      return;
+    }
+    if (fields.file_address.arr.length < 1) {
+      alert('Please upload at least 1 Proof of Address file.');
+      return;
+    }
+    goStep(5);
+  }
+
+  // ── Header scroll effect ────────────────────────────────────────────────────
+  (function() {
+    var header = document.getElementById('pcHeader');
+    if (!header) return;
+    function updateHeaderOnScroll() {
+      if (window.scrollY > 0) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+    }
+    window.addEventListener('scroll', updateHeaderOnScroll, { passive: true });
+    updateHeaderOnScroll();
+  })();
+
+  // ── Mobile Menu Toggle (exact from cats.html) ──────────────────────────────
+  (function() {
+    var hamburger = document.getElementById('pcHamburger');
+    var mobileMenu = document.getElementById('pcMobileMenu');
+    if (!hamburger || !mobileMenu) return;
+
+    function openMenu() {
+      hamburger.classList.add('active');
+      mobileMenu.classList.add('open');
+      hamburger.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeMenu() {
+      hamburger.classList.remove('active');
+      mobileMenu.classList.remove('open');
+      hamburger.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    }
+
+    hamburger.addEventListener('click', function(e) {
+      e.stopPropagation();
+      mobileMenu.classList.contains('open') ? closeMenu() : openMenu();
+    });
+
+    var links = mobileMenu.querySelectorAll('a');
+    links.forEach(function(link) {
+      link.addEventListener('click', closeMenu);
+    });
+
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('header') && !e.target.closest('.pc-mobile-menu')) {
+        closeMenu();
+      }
+    });
+  })();
+
+  // ── DEBUG LOGGER (temporary — remove this whole block + HTML/CSS when done) ─
+  (function() {
+    var panel   = document.getElementById('debugPanel');
+    var toggle  = document.getElementById('debugToggle');
+    var logEl   = document.getElementById('debugLog');
+    var clearBtn = document.getElementById('debugClear');
+    var copyBtn  = document.getElementById('debugCopy');
+    var closeBtn = document.getElementById('debugClose');
+    if (!panel || !logEl) return;
+
+    window.dlog = function(msg, level) {
+      level = level || 'info';
+      var time = new Date().toLocaleTimeString();
+      var line = document.createElement('div');
+      line.className = 'log-line log-' + level;
+      line.innerHTML = '<span class="log-time">[' + time + ']</span>' +
+        (typeof msg === 'string' ? msg : JSON.stringify(msg));
+      logEl.appendChild(line);
+      logEl.scrollTop = logEl.scrollHeight;
+      // Mirror to real console too
+      (level === 'error' ? console.error : level === 'warn' ? console.warn : console.log)('[DEBUG]', msg);
+    };
+
+    toggle.addEventListener('click', function() {
+      panel.classList.toggle('open');
+    });
+    closeBtn.addEventListener('click', function() {
+      panel.classList.remove('open');
+    });
+    clearBtn.addEventListener('click', function() {
+      logEl.innerHTML = '';
+    });
+    copyBtn.addEventListener('click', function() {
+      var text = Array.from(logEl.querySelectorAll('.log-line')).map(function(l) { return l.textContent; }).join('\n');
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(function() {
+          dlog('Log copied to clipboard', 'ok');
+        }).catch(function() {
+          dlog('Copy failed — select text manually', 'warn');
+        });
+      }
+    });
+
+    // Catch any uncaught JS errors anywhere on the page
+    window.addEventListener('error', function(e) {
+      dlog('Uncaught JS error: ' + e.message + ' (' + e.filename + ':' + e.lineno + ')', 'error');
+    });
+    window.addEventListener('unhandledrejection', function(e) {
+      dlog('Unhandled promise rejection: ' + (e.reason && e.reason.message ? e.reason.message : e.reason), 'error');
+    });
+
+    dlog('Debug panel ready. Page: ' + window.location.href, 'info');
+    dlog('Base origin: ' + window.location.origin, 'info');
+  })();
+
+  // ── Form Submission ────────────────────────────────────────────────────────
+  document.getElementById('adoptionForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    dlog('Submit button clicked — starting submission flow', 'info');
+
+    // Validate final agree
+    if (!$('finalAgree').checked) {
+      dlog('Blocked: "I confirm..." checkbox not checked', 'warn');
+      showMsg('You must agree to continue', 'error');
+      return;
+    }
+
+    showMsg('Submitting application...', 'success');
+    if ($('submitBtnSticky')) $('submitBtnSticky').disabled = true;
+    if ($('submitBtnStickyText')) $('submitBtnStickyText').textContent = 'Submitting…';
+
+    // Generate adoption code
+    const adoptionCode = generateAdoptionCode();
+    dlog('Generated adoption code: ' + adoptionCode, 'info');
+    
+    // Add adoption code to form
+    const codeField = document.createElement('input');
+    codeField.type = 'hidden';
+    codeField.name = 'adoption_code';
+    codeField.value = adoptionCode;
+    document.getElementById('adoptionForm').appendChild(codeField);
+
+    // Add uploaded file tokens (files were pre-uploaded to /apply/upload-temp.php on selection)
+    let tokenCount = 0;
+    Object.keys(fields).forEach(key => {
+      fields[key].arr.forEach(item => {
+        if (item.token) {
+          tokenCount++;
+          const tokenField = document.createElement('input');
+          tokenField.type = 'hidden';
+          tokenField.name = key + '_token[]';
+          tokenField.value = item.token;
+          document.getElementById('adoptionForm').appendChild(tokenField);
+        } else {
+          dlog('File field "' + key + '" item "' + (item.name || '?') + '" has NO token (upload may have failed earlier)', 'warn');
+        }
+      });
+    });
+    dlog('Attached ' + tokenCount + ' file token(s) to form', tokenCount > 0 ? 'ok' : 'info');
+
+    const targetUrl = '/apply/adoption-application.php';
+    dlog('Target submit URL: ' + targetUrl + '  (resolves to ' + window.location.origin + targetUrl + ')', 'info');
+
+    try {
+      const formData = new FormData(document.getElementById('adoptionForm'));
+      dlog('FormData built. Sending POST request…', 'info');
+
+      const startTime = performance.now();
+      const res = await fetch(targetUrl, { method: 'POST', body: formData });
+      const elapsed = Math.round(performance.now() - startTime);
+
+      dlog('Response received in ' + elapsed + 'ms — HTTP status: ' + res.status + ' ' + res.statusText, res.ok ? 'ok' : 'error');
+      dlog('Response URL (after redirects, if any): ' + res.url, 'info');
+      dlog('Response Content-Type: ' + (res.headers.get('content-type') || 'none'), 'info');
+
+      if (!res.ok) {
+        const errText = await res.text();
+        dlog('Server returned non-OK status. Body (first 500 chars): ' + errText.substring(0, 500), 'error');
+        console.error('Server error:', res.status, errText.substring(0, 400));
+
+        if (res.status === 404) {
+          dlog('404 means the URL path itself was not found on the server. Verify the PHP file actually exists at: ' + window.location.origin + targetUrl, 'error');
+        } else if (res.status >= 500) {
+          dlog('5xx means the PHP file was found but crashed/errored while running. Check server-side PHP error logs.', 'error');
+        } else if (res.status === 403) {
+          dlog('403 means permission denied — check file permissions or server auth rules.', 'error');
+        }
+
+        showMsg('Server error (' + res.status + '). Please contact support.', 'error');
+        if ($('submitBtnSticky')) $('submitBtnSticky').disabled = false;
+        if ($('submitBtnStickyText')) $('submitBtnStickyText').textContent = 'Submit Application';
+        return;
+      }
+
+      const rawText = await res.text();
+      dlog('Raw response body (first 500 chars): ' + rawText.substring(0, 500), 'info');
+
+      let result;
+      try {
+        result = JSON.parse(rawText);
+        dlog('Response parsed as JSON successfully', 'ok');
+      } catch (parseErr) {
+        dlog('Response was NOT valid JSON: ' + parseErr.message, 'error');
+        dlog('This usually means the PHP file output HTML (an error/warning) before or instead of JSON.', 'error');
+        showMsg('Server returned an unexpected response. Please contact support.', 'error');
+        if ($('submitBtnSticky')) $('submitBtnSticky').disabled = false;
+        if ($('submitBtnStickyText')) $('submitBtnStickyText').textContent = 'Submit Application';
+        return;
+      }
+
+      if (result.success) {
+        dlog('Submission successful! Server response: ' + JSON.stringify(result), 'ok');
+        // Show success modal
+        $('successCode').textContent = adoptionCode;
+        $('successModal').classList.add('open');
+        if ($('submitBtnSticky')) { $('submitBtnSticky').disabled = false; }
+        if ($('submitBtnStickyText')) $('submitBtnStickyText').textContent = 'Submitted ✓';
+      } else {
+        dlog('Server responded with success:false. Message: ' + (result.message || 'none given'), 'error');
+        showMsg('Submission error: ' + (result.message || 'Unknown error'), 'error');
+        if ($('submitBtnSticky')) $('submitBtnSticky').disabled = false;
+        if ($('submitBtnStickyText')) $('submitBtnStickyText').textContent = 'Submit Application';
+      }
+    } catch (err) {
+      dlog('Network/fetch threw an exception: ' + err.message, 'error');
+      dlog('This typically means: no internet, CORS block, mixed-content (http vs https), or DNS failure — NOT a 404.', 'error');
+      showMsg('Network error: ' + err.message, 'error');
+      if ($('submitBtnSticky')) $('submitBtnSticky').disabled = false;
+      if ($('submitBtnStickyText')) $('submitBtnStickyText').textContent = 'Submit Application';
+    }
+  });
+
+  const copyCodeBtn = $('copyCodeBtn');
+  if (copyCodeBtn) {
+    copyCodeBtn.addEventListener('click', () => {
+      const code = $('successCode').textContent;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(code).then(() => {
+          copyCodeBtn.textContent = 'Copied!';
+          setTimeout(() => { copyCodeBtn.textContent = 'Copy Code'; }, 1800);
+        });
+      }
+    });
+  }
+
+  const checkStatusBtn = $('checkStatusBtn');
+  if (checkStatusBtn) {
+    checkStatusBtn.addEventListener('click', () => {
+      const code = $('successCode').textContent;
+      window.location.href = '/adoptions/status/?code=' + encodeURIComponent(code);
+    });
+  }
+
+  function showMsg(msg, type = 'error') {
+    const el = $('formStatus');
+    el.style.display = 'block';
+    el.textContent = msg;
+    el.className = 'status-msg ' + (type === 'success' ? 'success' : 'error');
+  }
+
+  // ── Set Default Date ───────────────────────────────────────────────────────
+  $('submission_date').value = new Date().toISOString().slice(0, 10);
+  // Ensure content isn't hidden behind always-visible sticky footer
+  document.body.style.paddingBottom = '80px';
+
+  // ── Pet Prefill from URL Parameter ─────────────────────────────────────────
+  (function() {
+    const params = new URLSearchParams(window.location.search);
+    const petId = params.get('pet_id');
+    const category = params.get('category');
+    
+    if (petId && category) {
+      const petJsonUrl = `/adoptions/pets/${category}/${petId}/pet.json`;
+      
+      fetch(petJsonUrl)
+        .then(r => {
+          if (!r.ok) throw new Error('Failed to fetch pet data');
+          return r.json();
+        })
+        .then(pet => {
+          // Store in hidden fields for submission
+          const petIdField = document.createElement('input');
+          petIdField.type = 'hidden';
+          petIdField.name = 'pet_id';
+          petIdField.value = petId;
+          document.getElementById('adoptionForm').appendChild(petIdField);
+
+          const categoryField = document.createElement('input');
+          categoryField.type = 'hidden';
+          categoryField.name = 'pet_category';
+          categoryField.value = category;
+          document.getElementById('adoptionForm').appendChild(categoryField);
+
+          const imageUrl = pet.single_image_url || '/assets/images/pet-placeholder.jpg';
+          const ageText = pet.age_years ? (pet.age_years + (pet.age_years === 1 ? ' year' : ' years')) : '';
+
+          const hiddenPetFields = {
+            pet_name: pet.name || '',
+            pet_breed: pet.breed || '',
+            pet_age: ageText,
+            pet_size: pet.size || '',
+            adoption_fee: (pet.adoption_fee !== undefined && pet.adoption_fee !== null) ? pet.adoption_fee : '',
+            pet_image_url: imageUrl
+          };
+          Object.keys(hiddenPetFields).forEach(name => {
+            const f = document.createElement('input');
+            f.type = 'hidden';
+            f.name = name;
+            f.value = hiddenPetFields[name];
+            document.getElementById('adoptionForm').appendChild(f);
+          });
+          
+          // Display pet info box
+          const box = $('petPrefillBox');
+          if (box) {
+            const speciesLabel = category.charAt(0).toUpperCase() + category.slice(1);
+
+            $('petPrefillName').textContent = pet.name || '—';
+            $('petPrefillSpecies').textContent = speciesLabel || '—';
+            $('petPrefillBreed').textContent = pet.breed || '—';
+            $('petPrefillAge').textContent = ageText || '—';
+            $('petPrefillSize').textContent = pet.size || '—';
+            var feeNum = parseFloat(hiddenPetFields.adoption_fee);
+            $('petPrefillFee').textContent = (!isNaN(feeNum)) ? '$' + feeNum.toLocaleString('en-US') : (hiddenPetFields.adoption_fee || '—');
+            $('petPrefillImage').src = imageUrl;
+            $('petPrefillImage').alt = pet.name || 'Pet photo';
+
+            box.style.display = 'block';
+
+            // Register as slot 0 in the carousel
+            carouselPets[0] = { petId: petId, category: category, pet: pet, ageText: ageText, imageUrl: imageUrl };
+            updateCarouselNav();
+          }
+        })
+        .catch(err => {
+          console.warn('Could not load pet data:', err);
+        });
+    }
+  })();
+
+  // ── Adoption Code Generation ───────────────────────────────────────────────
+  function generateAdoptionCode() {
+    let code = 'AD-';
+    for (let i = 0; i < 5; i++) code += Math.floor(Math.random() * 10);
+    code += '-';
+    for (let i = 0; i < 4; i++) code += Math.floor(Math.random() * 10);
+    return code;
+  }
+
+  // ── PDF Generation for Adoption Application (comprehensive, all fields) ────
+  function buildAdoptionPdfNode(label) {
+    const form = document.getElementById('adoptionForm');
+    const g = name => { const el = form.querySelector('[name="' + name + '"]'); return el ? el.value.trim() : ''; };
+    const checks = name => Array.from(form.querySelectorAll('[name="' + name + '"]')).filter(el => el.checked).map(el => REVIEW_CHIP_VALUES[el.value] || el.value).join(', ');
+    const row = (lbl, val) => val ? '<tr><td style="padding:5px 0;color:#7a6d5f;width:180px;font-size:13px;vertical-align:top;">' + escapeHtml(lbl) + '</td><td style="padding:5px 0;font-size:13px;">' + escapeHtml(val).replace(/\n/g, '<br>') + '</td></tr>' : '';
+
+    const sigDataUrl = $('signatureData').value;
+    const hasSig = !!sigDataUrl;
+
+    const node = document.createElement('div');
+    node.style.cssText = 'padding:22px;font-family:Sora,Arial,sans-serif;color:#2c2416;max-width:680px;background:#fff';
+
+    let html = '<div style="display:flex;align-items:center;gap:14px;margin-bottom:18px">' +
+      '<img src="/assets/images/logo-petcenter.png" alt="Pet Center" style="height:48px" onerror="this.style.display=\'none\'">' +
+      '<div><h2 style="margin:0;color:#ED7624;font-size:20px;font-family:Cormorant Garamond,serif">Pet Center — Adoption Application</h2>' +
+      '<p style="margin:3px 0 0;color:#7a6d5f;font-size:13px">' + escapeHtml(label) + ' · ' + new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) + '</p></div></div>' +
+      '<hr style="margin:0 0 16px;border:none;border-top:1px solid #eee">';
+
+    html += '<h3 style="color:#ED7624;margin:0 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:.04em">Personal Information</h3>' +
+      '<table style="width:100%;border-collapse:collapse;margin-bottom:14px">' +
+      row('Full Name', g('name')) +
+      row('Address', g('address') + ', ' + g('city') + ', ' + g('state') + ' ' + g('zip')) +
+      row('Phone', g('phone')) + row('Email', g('user_email')) +
+      row('Spouse/Partner #', g('id_number')) + row('Spouse / Partner Name', g('spouse')) +
+      '</table>';
+
+    html += '<h3 style="color:#ED7624;margin:0 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:.04em">Household &amp; Living</h3>' +
+      '<table style="width:100%;border-collapse:collapse;margin-bottom:14px">' +
+      row('Employment', g('employment_status')) + row('Residence Type', g('residence_type')) + row('Landlord Allows Pets', g('landlord_allows')) +
+      row('Landlord Contact', g('landlord_contact')) + row('Home Type', g('home_type')) + row('Time at Address', g('time_at_address')) +
+      row('Household Members', g('household_list')) + row('Past Animals', g('past_animals')) +
+      '</table>';
+
+    html += '<h3 style="color:#ED7624;margin:0 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:.04em">Veterinary &amp; Pet History</h3>' +
+      '<table style="width:100%;border-collapse:collapse;margin-bottom:14px">' +
+      row('Can Afford Pet Care', g('can_afford')) + row('Has Veterinarian', g('have_vet')) + row('Vet Name', g('vet_name')) +
+      row('Vet Address', g('vet_address')) + row('Vet Phone', g('vet_phone')) + row('Allow Vet Contact', g('allow_contact_vet')) +
+      '</table>';
+
+    html += '<h3 style="color:#ED7624;margin:0 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:.04em">Current Pets</h3>' +
+      '<table style="width:100%;border-collapse:collapse;margin-bottom:14px">' +
+      (g('pet1_name') ? row('Pet 1', g('pet1_name') + ' | ' + g('pet1_breed') + ' | ' + g('pet1_age') + ' | Spayed: ' + g('pet1_spay')) : '') +
+      (g('pet2_name') ? row('Pet 2', g('pet2_name') + ' | ' + g('pet2_breed') + ' | ' + g('pet2_age') + ' | Spayed: ' + g('pet2_spay')) : '') +
+      (g('pet3_name') ? row('Pet 3', g('pet3_name') + ' | ' + g('pet3_breed') + ' | ' + g('pet3_age') + ' | Spayed: ' + g('pet3_spay')) : '') +
+      '</table>';
+
+    html += '<h3 style="color:#ED7624;margin:0 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:.04em">Pet Care Plans</h3>' +
+      '<table style="width:100%;border-collapse:collapse;margin-bottom:14px">' +
+      row('Where kept when away', g('where_keep')) + row('Inside arrangement', g('inside_plan')) +
+      row('Introduce to existing pets', g('introduce_existing')) + row('Handle bad behaviour', g('handle_undesirable')) +
+      '</table>';
+
+    html += '<h3 style="color:#ED7624;margin:0 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:.04em">Adoption Preferences</h3>' +
+      '<table style="width:100%;border-collapse:collapse;margin-bottom:14px">' +
+      row('Confirm: I am adopting a (Cat/Dog/Bird/Other...)', g('want_adopt')) +
+      row('Confirm: I am adopting (Pet name, Breed/Type, Sex, Adoption ID, Adoption Fee)', g('sex_pref')) +
+      row('Reason(s)', checks('reason[]')) +
+      row('Primary Caregiver', g('primary_caregiver')) +
+      row('Additional Information', g('additional_info')) +
+      row('How Heard About Us', checks('hear[]')) +
+      '</table>';
+
+    html += '<h3 style="color:#ED7624;margin:0 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:.04em">Submission</h3>' +
+      '<table style="width:100%;border-collapse:collapse;margin-bottom:14px">' +
+      row('Submission Date', g('submission_date')) +
+      '</table>';
+
+    if (hasSig) {
+      html += '<h3 style="color:#ED7624;margin:0 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:.04em">Applicant Signature</h3>' +
+        '<img src="' + sigDataUrl + '" style="max-width:260px;height:auto;border:1px solid #eee;border-radius:6px;padding:6px;display:block;margin-bottom:16px">';
+    }
+
+    html += '<hr style="margin:0 0 10px;border:none;border-top:1px solid #eee">' +
+      '<p style="font-size:12px;color:#9ca3af;margin:0">Submitted: ' + new Date().toLocaleString() + ' · Pet Center · adopt@petcenterco.com</p>';
+
+    node.innerHTML = html;
+    return node;
+  }
+
+  function downloadAdoptionPdf() {
+    html2pdf()
+      .set({
+        margin: 0.4,
+        filename: 'adoption-application-preview.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 1.8, useCORS: true, logging: false },
+        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+      })
+      .from(buildAdoptionPdfNode('Preview Copy'))
+      .save();
+  }
+
+  // ── Preview Pop-up: shows all filled info (same as Review section) ─────────
+  function showPreviewModal() {
+    modalContent.innerHTML = '';
+
+    // Set sticky top bar for form preview
+    if (modalTopTitle) modalTopTitle.textContent = 'Application Preview';
+    if (modalDownloadPdfBtn) {
+      modalDownloadPdfBtn.style.display = '';
+      // Wire download button (only once)
+      if (!modalDownloadPdfBtn.dataset.wired) {
+        modalDownloadPdfBtn.addEventListener('click', downloadAdoptionPdf);
+        modalDownloadPdfBtn.dataset.wired = '1';
+      }
+    }
+
+    const wrap = document.createElement('div');
+    wrap.innerHTML = '<p style="color:#7a6d5f;font-size:13px;margin:0 0 18px;">Review your filled-in information below.</p>';
+
+    // Reuse the same comprehensive field list as the Review step
+    const summaryBody = document.createElement('div');
+    summaryBody.innerHTML = $('reviewSummary').innerHTML;
+    wrap.appendChild(summaryBody);
+
+    modalContent.appendChild(wrap);
+    modal.classList.add('open');
+  }
+
+  // ── Preview/Download Button Event Listeners ─────────────────────────────────
+  const previewBtnMobile = $('previewBtnMobile');
+  const previewBtnDesktop = $('previewBtnDesktop');
+  if (previewBtnMobile) previewBtnMobile.addEventListener('click', () => { buildReview(); showPreviewModal(); });
+  if (previewBtnDesktop) previewBtnDesktop.addEventListener('click', () => { buildReview(); showPreviewModal(); });
+
+  // ── Custom Dropdown Initialization ─────────────────────────────────────────
+  function initCustomSelects() {
+    document.querySelectorAll('.custom-select-wrapper').forEach(function(wrapper) {
+      if (wrapper.dataset.csInit) return;
+      wrapper.dataset.csInit = '1';
+      
+      var trigger = wrapper.querySelector('.custom-select-trigger');
+      var options = wrapper.querySelector('.custom-select-options');
+      var select = wrapper.querySelector('select');
+      
+      if (!trigger || !options || !select) return;
+      
+      trigger.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var isOpen = wrapper.classList.contains('open');
+        document.querySelectorAll('.custom-select-wrapper.open').forEach(function(w) {
+          w.classList.remove('open');
+        });
+        if (!isOpen) {
+          wrapper.classList.add('open');
+        }
+      });
+      
+      options.querySelectorAll('li').forEach(function (li) {
+        li.addEventListener('click', function (e) {
+          e.stopPropagation();
+          var value = li.getAttribute('data-value');
+          select.value = value;
+          
+          trigger.querySelector('.custom-select-value').textContent = li.textContent;
+          
+          options.querySelectorAll('li').forEach(function(item) {
+            item.removeAttribute('data-selected');
+          });
+          li.setAttribute('data-selected', '1');
+          
+          wrapper.classList.remove('open');
+          select.dispatchEvent(new Event('change', { bubbles: true }));
+        });
+      });
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    initCustomSelects();
+  });
+  // Script is at end of body, so DOM is already parsed — initialize immediately too
+  initCustomSelects();
+  
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('.custom-select-wrapper')) {
+      document.querySelectorAll('.custom-select-wrapper.open').forEach(function(w) {
+        w.classList.remove('open');
+      });
+    }
+  });
+  
+  window.initCustomSelects = initCustomSelects;
+</script>
+
+</body>
+</html>
