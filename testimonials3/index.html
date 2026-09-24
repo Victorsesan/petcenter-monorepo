@@ -1,0 +1,2353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Read adoption reviews from happy Pet Center families in a Google Business Profile-style listing. Share your own story.">
+  <title>Reviews — Pet Center Adoption (v2)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Sora:wght@300;400;500;600;700&family=Roboto:wght@400;500;700&family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/styles.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { overflow-x: hidden; width: 100%; }
+    body { overflow-x: hidden; width: 100%; position: relative; }
+
+    /* ═══════════════════════════════════════════════════════════════
+       MANUAL OPACITY CONTROL — "Powered by Google" badge
+       Change the number below (0–100) to set the badge's opacity.
+       Example: 30 = 30% visible, 100 = fully solid. Default: 50.
+       This is the ONLY line you need to touch — the calc() elsewhere
+       converts it automatically, do not edit that part.
+       ═══════════════════════════════════════════════════════════════ */
+    :root {
+      --gr-opacity: 50;
+    }
+
+    /* ── Header ── */
+    .pc-header {
+      position: sticky; top: 0; z-index: 1000;
+      background: rgba(16,33,75,0.97);
+      padding: 0 24px; height: 68px;
+      display: flex; align-items: center; justify-content: space-between;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.18);
+    }
+    .pc-header__logo img { height: 40px; width: auto; }
+    .pc-header__nav { display: flex; align-items: center; gap: 4px; list-style: none; }
+    .pc-header__nav a {
+      display: block; padding: 8px 11px;
+      font-family: 'Sora', sans-serif; font-size: 13px; font-weight: 500;
+      color: rgba(255,255,255,0.9); text-decoration: none;
+      border-radius: 6px; transition: color 0.2s, background 0.2s;
+    }
+    .pc-header__nav a:hover { color: #d7bd88; background: rgba(255,255,255,0.08); }
+    .pc-header__nav .nav-donate a { background: #ED7624; color: #fff; font-weight: 600; padding: 8px 16px; }
+    .pc-header__nav .nav-donate a:hover { background: #d4621a; }
+    .pc-hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      cursor: pointer; padding: 8px; background: none; border: none;
+    }
+    .pc-hamburger span { display: block; width: 24px; height: 2px; background: #fff; border-radius: 2px; transition: all 0.3s; }
+    .pc-mobile-menu {
+      display: none; position: fixed; top: 68px; left: 0; right: 0;
+      background: rgba(16,33,75,0.98); z-index: 999;
+      padding: 16px 0 24px; box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    }
+    .pc-mobile-menu.open { display: block; }
+    .pc-mobile-menu a {
+      display: block; padding: 12px 28px;
+      font-family: 'Sora', sans-serif; font-size: 15px; font-weight: 500;
+      color: rgba(255,255,255,0.9); text-decoration: none;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .pc-mobile-menu a:hover { color: #d7bd88; }
+    @media (max-width: 900px) {
+      .pc-header__nav { display: none; }
+      .pc-hamburger { display: flex; }
+    }
+
+    /* ── Hero ── */
+    /* ══════════════════════════════════════════════════════════════
+       V2: GOOGLE BUSINESS PROFILE-STYLE HERO
+       Photo cover strip + identity block + action buttons + nav tabs,
+       modeled directly on a real Google Maps/Business Profile listing.
+       ══════════════════════════════════════════════════════════════ */
+
+    /* Old hero classes kept (unused now) so nothing else in the file breaks
+       if referenced elsewhere; new markup below uses .pcgb- prefixed classes
+       exclusively, to keep this visually and structurally distinct from the
+       v1 design system rather than fighting it. */
+    .pc-testi-hero { display: none; }
+
+    .pcgb-page { background: #f8f9fa; min-height: 100vh; }
+
+    /* ── Cover photo strip ── */
+    .pcgb-cover {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 2px;
+      height: 220px;
+      overflow: hidden;
+      background: #10214b;
+    }
+    .pcgb-cover-main { grid-row: 1 / 3; position: relative; }
+    .pcgb-cover img, .pcgb-cover-fallback {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+    }
+    .pcgb-cover-fallback {
+      background: linear-gradient(135deg, #10214b 0%, #1a3070 55%, #2a4080 100%);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .pcgb-cover-fallback svg { opacity: .35; }
+    .pcgb-cover-more {
+      position: absolute; right: 10px; bottom: 10px;
+      background: rgba(0,0,0,.65); color: #fff;
+      font-family: 'Roboto', sans-serif; font-size: 12.5px; font-weight: 500;
+      padding: 6px 12px; border-radius: 6px; cursor: pointer;
+      display: flex; align-items: center; gap: 6px;
+      transition: background .15s ease;
+    }
+    .pcgb-cover-more:hover { background: rgba(0,0,0,.8); }
+
+    /* ── Identity block ── */
+    .pcgb-identity {
+      max-width: 1100px; margin: 0 auto;
+      padding: 20px 24px 0;
+    }
+    .pcgb-identity-top {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      gap: 20px; flex-wrap: wrap;
+    }
+    .pcgb-name {
+      font-family: 'Google Sans', 'Roboto', sans-serif;
+      font-size: clamp(1.5rem, 3vw, 2.1rem); font-weight: 500;
+      color: #202124; line-height: 1.2;
+    }
+    .pcgb-category-row {
+      display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+      margin-top: 6px;
+    }
+    .pcgb-category {
+      font-family: 'Roboto', sans-serif; font-size: 14px; color: #1a73e8;
+    }
+    .pcgb-dot { color: #5f6368; font-size: 12px; }
+    .pcgb-rating-row {
+      display: flex; align-items: center; gap: 8px; margin-top: 8px; flex-wrap: wrap;
+    }
+    .pcgb-rating-num {
+      font-family: 'Roboto', sans-serif; font-size: 16px; color: #202124; font-weight: 400;
+    }
+    .pcgb-rating-stars { color: #fbbc04; font-size: 16px; letter-spacing: 1px; }
+    .pcgb-rating-count {
+      font-family: 'Roboto', sans-serif; font-size: 14px; color: #1a73e8; cursor: pointer;
+    }
+    .pcgb-rating-count:hover { text-decoration: underline; }
+    .pcgb-status-row {
+      font-family: 'Roboto', sans-serif; font-size: 14px; color: #5f6368;
+      margin-top: 4px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+    }
+    .pcgb-status-open { color: #188038; font-weight: 500; }
+    .pcgb-status-closed { color: #d93025; font-weight: 500; }
+    .pcgb-address { font-family: 'Roboto', sans-serif; font-size: 14px; color: #5f6368; margin-top: 2px; }
+
+    /* ── Action buttons (Directions / Call / Website / Share) ── */
+    .pcgb-actions {
+      display: flex; gap: 8px; flex-wrap: wrap; margin-top: 18px;
+    }
+    .pcgb-action-btn {
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
+      background: none; border: none; cursor: pointer;
+      min-width: 64px; padding: 6px 8px;
+      font-family: 'Roboto', sans-serif; font-size: 12px; color: #1a73e8; font-weight: 500;
+    }
+    .pcgb-action-icon {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: #e8f0fe; color: #1a73e8;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .15s ease;
+    }
+    .pcgb-action-btn:hover .pcgb-action-icon { background: #d2e3fc; }
+
+    /* ── Nav tabs (Overview / Reviews / Photos / Q&A / About) ── */
+    .pcgb-tabs {
+      display: flex; gap: 4px; margin-top: 22px;
+      border-bottom: 1px solid #dadce0;
+      overflow-x: auto; -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .pcgb-tabs::-webkit-scrollbar { display: none; }
+    .pcgb-tab {
+      font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 500;
+      color: #5f6368; background: none; border: none; cursor: pointer;
+      padding: 14px 16px 12px; white-space: nowrap;
+      border-bottom: 3px solid transparent;
+      transition: color .15s ease, border-color .15s ease;
+    }
+    .pcgb-tab:hover { color: #202124; }
+    .pcgb-tab.active { color: #1a73e8; border-bottom-color: #1a73e8; font-weight: 700; }
+
+    .pc-testi-hero__eyebrow {
+      display: inline-block; font-family: 'Sora', sans-serif;
+      font-size: 11px; font-weight: 700; letter-spacing: .14em;
+      text-transform: uppercase; color: #d7bd88;
+      background: rgba(215,189,136,0.12); border: 1px solid rgba(215,189,136,0.3);
+      padding: 5px 16px; border-radius: 20px; margin-bottom: 20px;
+    }
+    .pc-testi-hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 4vw, 3rem); font-weight: 700;
+      color: #fff; margin-bottom: 14px;
+    }
+    .pc-testi-hero p {
+      font-family: 'Sora', sans-serif; font-size: 15px;
+      color: rgba(255,255,255,0.75); max-width: 500px; margin: 0 auto;
+    }
+
+    /* ══════════════════════════════════════════════════════════════
+       V2: TAB PANELS + NEW FEATURE SECTIONS
+       ══════════════════════════════════════════════════════════════ */
+    .pcgb-tabpanel { display: none; max-width: 1100px; margin: 0 auto; padding: 28px 24px; }
+    .pcgb-tabpanel.active { display: block; }
+    .pcgb-section-title {
+      font-family: 'Google Sans', 'Roboto', sans-serif; font-size: 18px; font-weight: 500;
+      color: #202124; margin-bottom: 16px;
+    }
+
+    /* ── Rating distribution bar chart (recommendation #1) ── */
+    .pcgb-rating-breakdown {
+      display: flex; gap: 32px; flex-wrap: wrap; align-items: center;
+      background: #fff; border-radius: 12px; padding: 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,.08); margin-bottom: 24px;
+    }
+    .pcgb-rb-score { text-align: center; min-width: 110px; }
+    .pcgb-rb-score-num { font-family: 'Google Sans', 'Roboto', sans-serif; font-size: 48px; font-weight: 500; color: #202124; line-height: 1; }
+    .pcgb-rb-score-stars { color: #fbbc04; font-size: 18px; margin: 8px 0 4px; letter-spacing: 2px; }
+    .pcgb-rb-score-count { font-family: 'Roboto', sans-serif; font-size: 13px; color: #5f6368; }
+    .pcgb-rb-bars { flex: 1; min-width: 220px; display: flex; flex-direction: column; gap: 6px; }
+    .pcgb-rb-row { display: flex; align-items: center; gap: 10px; }
+    .pcgb-rb-row-label { font-family: 'Roboto', sans-serif; font-size: 13px; color: #5f6368; width: 46px; flex-shrink: 0; }
+    .pcgb-rb-row-track { flex: 1; height: 8px; background: #e8eaed; border-radius: 4px; overflow: hidden; }
+    .pcgb-rb-row-fill { height: 100%; background: #fbbc04; border-radius: 4px; transition: width .5s ease; }
+    .pcgb-rb-row-count { font-family: 'Roboto', sans-serif; font-size: 12.5px; color: #5f6368; width: 24px; text-align: right; flex-shrink: 0; }
+
+    /* ── Templated topic summary sentence (recommendation #3) ── */
+    .pcgb-summary-sentence {
+      font-family: 'Roboto', sans-serif; font-size: 14.5px; line-height: 1.7;
+      color: #3c4043; background: #f8f9fa; border-left: 3px solid #1a73e8;
+      padding: 14px 18px; border-radius: 4px; margin-bottom: 24px;
+    }
+    .pcgb-summary-sentence strong { color: #202124; font-weight: 700; }
+    .pcgb-summary-label {
+      font-family: 'Roboto', sans-serif; font-size: 11px; font-weight: 700;
+      color: #1a73e8; text-transform: uppercase; letter-spacing: .06em;
+      margin-bottom: 6px; display: flex; align-items: center; gap: 6px;
+    }
+
+    /* ── Quick topic chips (recommendation #11) ── */
+    .pcgb-quick-topics { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+    .pcgb-quick-chip {
+      background: #fff; border: 1px solid #dadce0; border-radius: 8px;
+      padding: 8px 14px; font-family: 'Roboto', sans-serif; font-size: 13px;
+      color: #3c4043; cursor: pointer; display: flex; align-items: center; gap: 6px;
+      transition: all .15s ease;
+    }
+    .pcgb-quick-chip:hover { background: #f1f3f4; border-color: #dadce0; }
+    .pcgb-quick-chip svg { color: #1a73e8; flex-shrink: 0; }
+
+    /* ── 90-day freshness stat (recommendation #9) ── */
+    .pcgb-freshness {
+      font-family: 'Roboto', sans-serif; font-size: 13px; color: #5f6368;
+      display: flex; align-items: center; gap: 6px; margin-bottom: 4px;
+    }
+    .pcgb-freshness strong { color: #188038; }
+
+    /* ── Popular times chart (extra, not in the .md) ── */
+    .pcgb-popular-times {
+      background: #fff; border-radius: 12px; padding: 22px;
+      box-shadow: 0 1px 3px rgba(0,0,0,.08); margin-top: 24px;
+    }
+    .pcgb-pt-daypicker { display: flex; gap: 4px; overflow-x: auto; margin-bottom: 18px; scrollbar-width: none; }
+    .pcgb-pt-daypicker::-webkit-scrollbar { display: none; }
+    .pcgb-pt-day {
+      font-family: 'Roboto', sans-serif; font-size: 12.5px; font-weight: 500;
+      color: #5f6368; background: #f1f3f4; border: none; border-radius: 6px;
+      padding: 8px 12px; cursor: pointer; white-space: nowrap;
+    }
+    .pcgb-pt-day.active { background: #1a73e8; color: #fff; }
+    .pcgb-pt-chart { display: flex; align-items: flex-end; gap: 3px; height: 120px; }
+    .pcgb-pt-bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; position: relative; }
+    .pcgb-pt-bar { width: 100%; max-width: 18px; background: #3c4c6e; border-radius: 2px 2px 0 0; transition: background .15s ease; }
+    .pcgb-pt-bar.now { background: #1a73e8; }
+    .pcgb-pt-bar-wrap:hover .pcgb-pt-bar { background: #1a73e8; }
+    .pcgb-pt-labels { display: flex; gap: 3px; margin-top: 6px; }
+    .pcgb-pt-label { flex: 1; text-align: center; font-family: 'Roboto', sans-serif; font-size: 9.5px; color: #9aa0a6; }
+    .pcgb-pt-caption { font-family: 'Roboto', sans-serif; font-size: 12.5px; color: #5f6368; margin-top: 12px; }
+
+    /* ── Photo gallery grid ── */
+    .pcgb-photo-cats {
+      display: flex; gap: 8px; overflow-x: auto; margin-bottom: 16px;
+      scrollbar-width: none;
+    }
+    .pcgb-photo-cats::-webkit-scrollbar { display: none; }
+    .pcgb-photo-cat {
+      font-family: 'Roboto', sans-serif; font-size: 13px; font-weight: 500;
+      color: #3c4043; background: #f1f3f4; border: none; border-radius: 8px;
+      padding: 8px 16px; cursor: pointer; white-space: nowrap;
+      transition: background .15s ease, color .15s ease;
+    }
+    .pcgb-photo-cat:hover { background: #e8eaed; }
+    .pcgb-photo-cat.active { background: #1a73e8; color: #fff; }
+    .pcgb-photo-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 8px;
+    }
+    .pcgb-photo-grid img, .pcgb-photo-fallback {
+      width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 8px;
+      background: linear-gradient(135deg, #10214b, #1a3070);
+      display: flex; align-items: center; justify-content: center; cursor: pointer;
+    }
+    .pcgb-photo-fallback svg { opacity: .4; }
+
+    /* ── Q&A panel ── */
+    .pcgb-qa-card {
+      background: #fff; border-radius: 12px; padding: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,.08); margin-bottom: 14px;
+    }
+    .pcgb-qa-q { display: flex; gap: 10px; margin-bottom: 12px; }
+    .pcgb-qa-q-icon {
+      width: 28px; height: 28px; border-radius: 50%; background: #e8eaed;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+      font-family: 'Google Sans', 'Roboto', sans-serif; font-size: 13px; font-weight: 700; color: #5f6368;
+    }
+    .pcgb-qa-q-text { font-family: 'Roboto', sans-serif; font-size: 14.5px; color: #202124; font-weight: 500; }
+    .pcgb-qa-q-meta { font-family: 'Roboto', sans-serif; font-size: 12px; color: #9aa0a6; margin-top: 3px; }
+    .pcgb-qa-a { display: flex; gap: 10px; padding-left: 38px; }
+    .pcgb-qa-a-icon {
+      width: 26px; height: 26px; border-radius: 50%; background: #10214b;
+      color: #d7bd88; display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; font-size: 12px; font-weight: 700;
+    }
+    .pcgb-qa-a-text { font-family: 'Roboto', sans-serif; font-size: 13.5px; color: #3c4043; line-height: 1.6; }
+    .pcgb-qa-a-meta { font-family: 'Roboto', sans-serif; font-size: 11.5px; color: #9aa0a6; margin-top: 4px; }
+
+    /* ── About panel ── */
+    .pcgb-about-card {
+      background: #fff; border-radius: 12px; padding: 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,.08); margin-bottom: 16px;
+    }
+    .pcgb-about-desc { font-family: 'Roboto', sans-serif; font-size: 14.5px; line-height: 1.7; color: #3c4043; }
+    .pcgb-about-row {
+      display: flex; align-items: center; gap: 12px; padding: 12px 0;
+      border-top: 1px solid #f1f3f4; font-family: 'Roboto', sans-serif; font-size: 14px; color: #3c4043;
+    }
+    .pcgb-about-row:first-of-type { border-top: none; }
+    .pcgb-about-row svg { color: #5f6368; flex-shrink: 0; }
+    .pcgb-about-row a { color: #1a73e8; text-decoration: none; }
+    .pcgb-about-row a:hover { text-decoration: underline; }
+    .pcgb-hours-table { font-family: 'Roboto', sans-serif; font-size: 13.5px; }
+    .pcgb-hours-row { display: flex; justify-content: space-between; padding: 5px 0; color: #3c4043; }
+    .pcgb-hours-row.today { font-weight: 700; color: #188038; }
+
+    /* ── Main layout ── */
+    .pc-testi-main {
+      max-width: 1100px; margin: 0 auto;
+      padding: 20px 24px 24px;
+    }
+
+    /* ── Powered by Google badge ── */
+    .pc-testi-poweredby {
+      display: flex; align-items: center; justify-content: center;
+      gap: 2px; padding: 20px 24px 12px;
+      opacity: calc(var(--gr-opacity) / 100);
+    }
+    .pc-poweredby-text {
+      font-family: 'Sora', sans-serif; font-size: 13px; font-weight: 600;
+      color: #10214b; letter-spacing: .02em;
+      margin-right: -6px; /* compensates for transparent padding baked into the logo image itself */
+    }
+    .pc-poweredby-logo { width: 92px; height: auto; display: block; margin-top: 1px; }
+    /* Fallback SVG (only appears if the PNG fails to load) sized to match */
+    .pc-testi-poweredby svg { width: 92px; height: auto; display: block; margin-top: 1px; }
+
+    /* ── Business info + search/filter controls row ── */
+    .pc-testi-controls-bar {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      gap: 16px; flex-wrap: wrap;
+      margin-bottom: 4px;
+    }
+    .pc-biz-info { display: flex; flex-direction: column; gap: 2px; }
+    .pc-biz-rating-line { display: flex; align-items: center; gap: 6px; }
+    .pc-biz-score { font-family: 'Sora', sans-serif; font-weight: 700; font-size: 16px; color: #10214b; }
+    .pc-biz-stars { color: #f59e0b; font-size: 14px; letter-spacing: 1px; }
+    .pc-biz-count { font-family: 'Sora', sans-serif; font-size: 13.5px; color: #7a6d5f; }
+    .pc-biz-type { font-family: 'Sora', sans-serif; font-size: 13px; color: #7a6d5f; }
+    .pc-biz-status { font-family: 'Sora', sans-serif; font-size: 13px; font-weight: 600; }
+    .pc-biz-status.open { color: #16a34a; }
+    .pc-biz-status.closed { color: #dc2626; }
+
+    .pc-controls-actions { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .pc-search-btn {
+      width: 38px; height: 38px; border-radius: 50%;
+      background: #10214b; color: #d7bd88; border: 1.5px solid transparent;
+      display: flex; align-items: center; justify-content: center; cursor: pointer;
+      transition: border-color .2s ease, transform .15s ease, background .2s ease;
+    }
+    .pc-search-btn:hover, .pc-search-btn.active { border-color: #d7bd88; background: #1a3070; transform: translateY(-1px); }
+    .pc-search-btn:active { transform: translateY(0); }
+
+    .pc-filter-btn {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: #10214b; color: #d7bd88; border: 1.5px solid transparent;
+      border-radius: 999px; padding: 9px 18px;
+      font-family: 'Sora', sans-serif; font-size: 13.5px; font-weight: 600;
+      cursor: pointer;
+      transition: border-color .2s ease, transform .15s ease, background .2s ease;
+    }
+    .pc-filter-btn:hover, .pc-filter-btn:focus-visible, .pc-filter-btn.active {
+      border-color: #d7bd88; background: #1a3070; transform: translateY(-1px);
+    }
+    .pc-filter-btn:active { transform: translateY(0); }
+    .pc-filter-icon { flex-shrink: 0; }
+
+    /* ── Search bar (fade in/out, beneath the controls row) ── */
+    .pc-search-bar-wrap {
+      max-height: 0; opacity: 0; overflow: hidden;
+      transition: max-height .35s ease, opacity .35s ease;
+      margin-top: 0;
+    }
+    .pc-search-bar-wrap.open { max-height: 70px; opacity: 1; margin-top: 14px; }
+    .pc-search-bar {
+      display: flex; align-items: center; gap: 10px;
+      border: 1.5px solid #d0c3ba; border-radius: 999px;
+      padding: 10px 18px; background: #fff;
+      transition: border-color .2s ease;
+    }
+    .pc-search-bar:focus-within { border-color: #b89968; }
+    .pc-search-bar input {
+      flex: 1; border: none; outline: none;
+      font-family: 'Sora', sans-serif; font-size: 14px; color: #10214b;
+      background: transparent;
+    }
+    .pc-search-bar input::placeholder { color: #b0a69a; }
+    .pc-search-clear {
+      background: none; border: none; font-size: 19px; cursor: pointer;
+      color: #7a6d5f; line-height: 1; padding: 2px 4px;
+    }
+    .pc-search-clear:hover { color: #10214b; }
+    .pc-search-highlight {
+      background: rgba(215,189,136,0.4); color: #10214b; font-weight: 700;
+      border-radius: 3px; padding: 0 1px;
+    }
+
+    /* ── Loading squares (search debounce state) ── */
+    .pc-loading-squares {
+      display: flex; gap: 8px; justify-content: center;
+      padding: 60px 0; grid-column: 1 / -1;
+    }
+    .pc-loading-squares span {
+      width: 14px; height: 14px; background: #d7bd88; border-radius: 3px;
+      animation: pcSquareMorph 1.2s ease-in-out infinite;
+    }
+    .pc-loading-squares span:nth-child(2) { animation-delay: .15s; }
+    .pc-loading-squares span:nth-child(3) { animation-delay: .3s; }
+    @keyframes pcSquareMorph {
+      0%, 100% { transform: scale(1) rotate(0deg); border-radius: 3px; }
+      50%      { transform: scale(1.3) rotate(45deg); border-radius: 6px; }
+    }
+
+    /* ── Bottom sheet (shared by Filters + Review-form) ── */
+    .pc-sheet-backdrop {
+      position: fixed; inset: 0; background: rgba(0,0,0,.55);
+      opacity: 0; visibility: hidden; transition: opacity .3s ease;
+      z-index: 1400;
+    }
+    .pc-sheet-backdrop.show { opacity: 1; visibility: visible; }
+
+    .pc-filter-sheet, .pc-review-sheet {
+      position: fixed; left: 0; right: 0; bottom: 0;
+      background: #121212; border-radius: 18px 18px 0 0;
+      z-index: 1500; max-height: 82vh; max-height: 82dvh;
+      display: flex; flex-direction: column;
+      transform: translateY(100%);
+      transition: transform .35s cubic-bezier(.32,.72,0,1);
+      box-shadow: 0 -8px 40px rgba(0,0,0,.4);
+    }
+    .pc-filter-sheet.open, .pc-review-sheet.open { transform: translateY(0); }
+
+    /* Desktop now uses the SAME full-width, edge-to-edge sheet as mobile —
+       the previous centered-card desktop treatment has been removed per
+       explicit instruction; the panel must occupy the full screen width
+       on every breakpoint. */
+
+    .pc-sheet-handle { width: 40px; height: 4px; background: rgba(255,255,255,.25); border-radius: 4px; margin: 10px auto 0; flex-shrink: 0; }
+    .pc-sheet-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 20px 8px; flex-shrink: 0;
+    }
+    .pc-sheet-header h3 { font-family: 'Sora', sans-serif; font-size: 18px; color: #fff; font-weight: 700; }
+    .pc-sheet-close {
+      background: none; border: none; color: #fff; font-size: 22px; line-height: 1;
+      cursor: pointer; padding: 4px 8px; opacity: .8;
+    }
+    .pc-sheet-close:hover { opacity: 1; }
+    .pc-sheet-body { overflow-y: auto; padding: 8px 20px 20px; flex: 1; }
+    .pc-sheet-group { margin-bottom: 22px; }
+    .pc-sheet-group h4 {
+      font-family: 'Sora', sans-serif; font-size: 13px; color: rgba(255,255,255,.6);
+      font-weight: 600; margin-bottom: 12px; text-transform: uppercase; letter-spacing: .04em;
+    }
+    .pc-chip-row { display: flex; flex-wrap: wrap; gap: 10px; }
+    .pc-chip {
+      background: #1e1e1e; border: 1px solid rgba(255,255,255,.15);
+      color: #e5e5e5; border-radius: 999px; padding: 9px 16px;
+      font-family: 'Sora', sans-serif; font-size: 13px; cursor: pointer;
+      display: flex; align-items: center; gap: 6px; transition: all .15s ease;
+    }
+    .pc-chip:hover { border-color: rgba(215,189,136,.5); }
+    .pc-chip.selected { background: #d7bd88; color: #10214b; border-color: #d7bd88; font-weight: 600; }
+    .pc-chip.selected::before { content: "✓"; font-weight: 700; }
+    .pc-chip-empty { color: rgba(255,255,255,.4); font-family: 'Sora', sans-serif; font-size: 13px; }
+
+    .pc-sheet-footer {
+      display: flex; gap: 12px; padding: 16px 20px 22px;
+      border-top: 1px solid rgba(255,255,255,.08); flex-shrink: 0;
+    }
+    .pc-sheet-clear, .pc-sheet-apply {
+      flex: 1; padding: 13px; border-radius: 999px;
+      font-family: 'Sora', sans-serif; font-size: 14px; font-weight: 700;
+      cursor: pointer; border: 1.5px solid transparent;
+    }
+    .pc-sheet-clear { background: transparent; border-color: #d0c3ba; color: #d7bd88; }
+    .pc-sheet-clear:hover { border-color: #b89968; }
+    .pc-sheet-apply { background: #d7bd88; color: #10214b; }
+    .pc-sheet-apply:hover { background: #b89968; color: #fff; }
+
+    /* ── Grid ── */
+    .pc-testi-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+    @media (max-width: 700px) { .pc-testi-grid { grid-template-columns: 1fr; } }
+
+    /* ── Card ── */
+    .pc-testi-card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 28px;
+      box-shadow: 0 4px 20px rgba(16,33,75,0.08);
+      display: flex; flex-direction: column; gap: 14px;
+    }
+    .pc-testi-card__top {
+      display: flex; align-items: flex-start; gap: 14px;
+    }
+    .pc-testi-card__avatar {
+      width: 50px; height: 50px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-weight: 700; font-size: 17px; flex-shrink: 0;
+    }
+    .pc-testi-card__meta { flex: 1; }
+    .pc-testi-card__name {
+      font-family: 'Sora', sans-serif; font-size: 14.5px; font-weight: 600; color: #10214b;
+    }
+    /* Stars now render UNDER the name (Google-style), timestamp sits beside the stars */
+    .pc-testi-card__stars-row {
+      display: flex; align-items: center; gap: 8px; margin-top: 3px; flex-wrap: wrap;
+    }
+    .pc-testi-card__stars { font-size: 15px; letter-spacing: 1.5px; }
+    .pc-testi-card__date {
+      font-family: 'Sora', sans-serif; font-size: 11.5px; color: #9ca3af;
+    }
+    /* Green "recent" timestamp badge — under 1 month old */
+    .pc-time-badge {
+      background: rgba(16,163,74,.12); color: #15803d;
+      font-family: 'Sora', sans-serif; font-size: 11px; font-weight: 600;
+      padding: 3px 10px; border-radius: 20px; display: inline-block;
+    }
+    .pc-testi-card__text {
+      font-family: 'Sora', sans-serif; font-size: 14px;
+      line-height: 1.7; color: #3d2817;
+    }
+    .pc-testi-card__text strong { background: rgba(215,189,136,.35); font-weight: 700; border-radius: 2px; }
+
+    /* ── Helpful votes (thumbs up/down) — now sits at the very end of the
+       card, after the admin reply, per redesign. Its own top border gives
+       it separation from the reply above it. ── */
+    .pc-helpful-block {
+      border-top: 1px solid #f0ebe4;
+      padding-top: 12px;
+      margin-top: 4px;
+    }
+    .pc-helpful-count {
+      font-family: 'Sora', sans-serif; font-size: 12px; color: #9ca3af; margin-bottom: 8px;
+    }
+    .pc-helpful-row {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+    }
+    .pc-report-link {
+      background: none; border: none; cursor: pointer;
+      font-family: 'Sora', sans-serif; font-size: 12px; color: #b0a69a;
+      text-decoration: underline; padding: 4px 0;
+    }
+    .pc-report-link:hover { color: #7a6d5f; }
+    .pc-report-link.reported { color: #16a34a; text-decoration: none; cursor: default; }
+    .pc-helpful-btns { display: flex; gap: 8px; }
+    .pc-thumb {
+      width: 36px; height: 36px; border-radius: 50%;
+      border: 1.5px solid #d0c3ba; background: transparent; color: #10214b;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: all .18s ease;
+    }
+    .pc-thumb svg { fill: none; stroke: currentColor; stroke-width: 1.8; }
+    .pc-thumb:hover:not(:disabled) { border-color: #b89968; }
+    .pc-thumb.voted { background: #10214b; border-color: #d7bd88; }
+    .pc-thumb.voted svg { fill: #d7bd88; stroke: #d7bd88; }
+    .pc-thumb:disabled { cursor: default; }
+    .pc-thumb:disabled:not(.voted) { opacity: .4; }
+
+    /* ── Admin reply (L-shaped thread — profile AND reply text both shift).
+       No longer has its own top border/separator line — it now sits
+       directly under the review text as part of one continuous block,
+       with the helpful-votes footer providing the only divider, below it. ── */
+    .pc-testi-card__reply {
+      padding-top: 6px;
+      margin-top: 2px;
+      position: relative;
+    }
+    .pc-testi-card__reply-inner {
+      padding-left: 28px;
+      position: relative;
+    }
+    /* Vertical stem of the L, running down from the top of the reply block */
+    .pc-reply-line-v {
+      position: absolute; left: 0; top: -6px; bottom: 12px;
+      width: 2px; background: #e5ddd2;
+    }
+    /* Horizontal elbow of the L, turning right into the avatar */
+    .pc-reply-line-h {
+      position: absolute; left: 0; top: 20px;
+      width: 14px; height: 2px; background: #e5ddd2;
+    }
+    .pc-testi-card__reply-header {
+      display: flex; align-items: flex-start; gap: 10px;
+      margin-bottom: 8px;
+    }
+    .pc-testi-card__reply-av {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: #10214b; color: #d7bd88;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 14px; flex-shrink: 0;
+      overflow: hidden;
+    }
+    .pc-testi-card__reply-av img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+    }
+    .pc-testi-card__reply-name {
+      font-family: 'Sora', sans-serif; font-size: 13px; font-weight: 600; color: #10214b;
+      display: flex; align-items: center; gap: 4px;
+    }
+    .pc-testi-card__reply-role {
+      font-size: 11px; color: #9ca3af;
+    }
+    .pc-testi-card__reply-date {
+      font-size: 11px; color: #b0a69a; margin-top: 3px;
+    }
+    .pc-testi-card__reply-text {
+      /* now shifts together with the profile — part of the same thread box */
+      font-family: 'Sora', sans-serif; font-size: 13.5px;
+      line-height: 1.6; color: #7a6d5f; font-style: normal; font-weight: 400;
+    }
+
+    /* ── Pagination ── */
+    .pc-testi-pagination {
+      display: flex; align-items: center; justify-content: center;
+      gap: 6px; margin-bottom: 16px; flex-wrap: wrap;
+    }
+    .pc-testi-page-label {
+      text-align: center; font-family: 'Sora', sans-serif;
+      font-size: 13px; color: #9ca3af; margin-bottom: 8px;
+    }
+    .pc-page-btn {
+      width: 38px; height: 38px;
+      border: 1px solid #d0c3ba; background: #fff;
+      border-radius: 8px; cursor: pointer;
+      font-family: 'Sora', sans-serif; font-size: 13.5px; font-weight: 500;
+      color: #10214b; transition: all 0.2s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .pc-page-btn:hover:not(:disabled) { background: #10214b; color: #fff; border-color: #10214b; }
+    .pc-page-btn.active { background: #10214b; color: #fff; border-color: #10214b; font-weight: 700; }
+    .pc-page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .pc-page-btn.wide { width: auto; padding: 0 14px; font-size: 13px; }
+
+    /* ── "Leave a review" trigger (replaces old navy form section) ── */
+    .pc-leave-review-trigger {
+      text-align: center; padding: 8px 24px 50px;
+    }
+    .pc-leave-review-trigger h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.4rem, 3vw, 1.9rem);
+      color: #10214b; font-weight: 700; margin-bottom: 6px;
+    }
+    .pc-leave-review-trigger p {
+      font-family: 'Sora', sans-serif; font-size: 14px; color: #7a6d5f; margin-bottom: 20px;
+    }
+    .pc-trigger-stars { display: flex; gap: 10px; justify-content: center; }
+    .pc-t-star {
+      font-size: 34px; color: #d1d5db; cursor: pointer; transition: color .15s ease;
+      user-select: none;
+    }
+    .pc-t-star:hover, .pc-t-star.active { color: #f59e0b; }
+
+    /* ── Review-form sheet contents (dark theme, shares sheet mechanics with Filters) ── */
+    .pc-testi-form { display: flex; flex-direction: column; gap: 16px; }
+    .pc-testi-form .fg { display: flex; flex-direction: column; gap: 6px; }
+    .pc-testi-form label {
+      font-family: 'Sora', sans-serif; font-size: 13px; font-weight: 600;
+      color: rgba(255,255,255,0.85);
+    }
+    .pc-testi-form input,
+    .pc-testi-form textarea {
+      padding: 11px 14px;
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 8px;
+      font-family: 'Sora', sans-serif; font-size: 14px;
+      background: rgba(255,255,255,0.08); color: #fff;
+      outline: none; transition: border-color 0.2s;
+    }
+    .pc-testi-form input::placeholder,
+    .pc-testi-form textarea::placeholder { color: rgba(255,255,255,0.35); }
+    .pc-testi-form input:focus,
+    .pc-testi-form textarea:focus { border-color: #d7bd88; background: rgba(255,255,255,0.12); }
+    .pc-testi-form textarea { resize: vertical; min-height: 100px; }
+    .pc-stars-row { display: flex; gap: 9px; }
+    .pc-star {
+      font-size: 28px; color: rgba(255,255,255,0.3);
+      cursor: pointer; transition: color 0.2s; user-select: none;
+    }
+    .pc-star.active, .pc-star:hover { color: #f59e0b; }
+    .pc-star-text { font-family: 'Sora', sans-serif; font-size: 12px; color: rgba(255,255,255,0.55); margin-top: 4px; }
+    .pc-star-text.chosen { color: #f59e0b; font-weight: 600; }
+    .pc-char-count { font-family: 'Sora', sans-serif; font-size: 11.5px; color: rgba(255,255,255,0.4); text-align: right; }
+    .pc-submit-btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      background: #d7bd88; color: #10214b;
+      border: none; border-radius: 999px;
+      padding: 13px 32px;
+      font-family: 'Sora', sans-serif; font-size: 14px; font-weight: 700;
+      cursor: pointer; transition: background 0.2s, color 0.2s;
+    }
+    .pc-submit-btn:hover { background: #b89968; color: #fff; }
+    .pc-submit-btn:disabled { opacity: .6; cursor: default; }
+    .pc-form-msg {
+      padding: 12px 16px; border-radius: 8px;
+      font-family: 'Sora', sans-serif; font-size: 13.5px;
+      display: none;
+    }
+    .pc-form-msg.success { display: block; background: rgba(13,124,74,0.25); color: #7affc3; border: 1px solid rgba(13,124,74,0.4); }
+    .pc-form-msg.error   { display: block; background: rgba(192,57,43,0.2); color: #ffaaaa; border: 1px solid rgba(192,57,43,0.4); }
+
+    /* ── Footer ── */
+    .pc-footer-mini {
+      background: #0b1834; padding: 28px 24px;
+      text-align: center;
+      font-family: 'Sora', sans-serif; font-size: 12.5px;
+      color: rgba(255,255,255,0.4);
+    }
+    .pc-footer-mini a { color: rgba(255,255,255,0.55); text-decoration: none; }
+    .pc-footer-mini a:hover { color: #d7bd88; }
+  </style>
+</head>
+<body>
+<script src="adopt.petcenterco.com/admin/chat-widget.js"></script>
+<!-- Header -->
+<header class="pc-header">
+  <a href="../index.html" class="pc-header__logo">
+    <img src="../assets/images/logo-petcenter.png" alt="Pet Center">
+  </a>
+  <ul class="pc-header__nav">
+    <li><a href="../index.html">Home</a></li>
+    <li><a href="../dogs.html">Our Pets</a></li>
+    <li><a href="../blog-home.html">Blog</a></li>
+    <li><a href="index.html" style="color:#d7bd88;">Testimonials</a></li>
+    <li class="nav-donate"><a href="https://donate.petcenterco.com" target="_blank" rel="noopener">Donate</a></li>
+    <li><a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact</a></li>
+  </ul>
+  <button class="pc-hamburger" id="pcHam" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+<nav class="pc-mobile-menu" id="pcMobMenu">
+  <a href="../index.html">Home</a>
+  <a href="../dogs.html">Dogs</a>
+  <a href="../cats.html">Cats</a>
+  <a href="../birds.html">Birds</a>
+  <a href="../reptiles.html">Reptiles</a>
+  <a href="../small-mammals.html">Small Mammals</a>
+  <a href="../blog-home.html">Blog</a>
+  <a href="index.html">Testimonials</a>
+  <a href="https://docs.petcenterco.com/contact-us" target="_blank">Contact</a>
+</nav>
+
+<!-- Hero -->
+<div class="pcgb-page" id="pcgbPage">
+
+<!-- ══════════════════════════════════════════════════════════
+     V2: GOOGLE BUSINESS PROFILE-STYLE HERO
+     Cover photo strip + identity block + action row + nav tabs
+     ══════════════════════════════════════════════════════════ -->
+<!-- ══════════════════════════════════════════════════════════
+     "Powered by Google" now sits at the very top of the whole
+     page (moved per instruction) — the first thing a visitor
+     sees, before the cover photo strip, so it is clear from
+     the very start that everything on this page is Google-
+     review-style content, not just the Reviews tab specifically.
+     ══════════════════════════════════════════════════════════ -->
+<!-- Powered by Google: PNG first, SVG fallback if PNG is missing/fails to load -->
+<div class="pc-testi-poweredby">
+  <span class="pc-poweredby-text">Powered by</span>
+  <img class="pc-poweredby-logo" src="Google-reviews.png" alt="Google reviews" width="120" height="66"
+       onerror="pcGoogleBadgeFallback(this)">
+  <template id="pcGoogleSvgFallback">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="1316" height="733" viewBox="-8 -8 1316 733" overflow="visible">
+<path d="M0 0 C1.77491821 0.00845947 1.77491821 0.00845947 3.58569336 0.01708984 C31.28367701 0.39881821 56.27365424 9.98399404 77.8125 27.3125 C79.14180114 28.3178538 80.47356982 29.3200063 81.8125 30.3125 C81.28201294 34.37840409 79.25195684 36.20771664 76.375 39.0078125 C75.48039063 39.88824219 74.58578125 40.76867187 73.6640625 41.67578125 C72.72304688 42.58714844 71.78203125 43.49851563 70.8125 44.4375 C68.95627435 46.25049848 67.10200323 48.06550097 65.25 49.8828125 C64.42371094 50.68477051 63.59742188 51.48672852 62.74609375 52.31298828 C60.7607518 54.16575816 60.7607518 54.16575816 59.8125 56.3125 C56.73175397 54.8836472 54.1562096 53.15243361 51.4375 51.125 C32.0690029 37.49321318 9.13141526 32.41566551 -14.28515625 35.80859375 C-32.94156303 39.53146184 -47.86486218 48.04671554 -61.1875 61.3125 C-61.91839844 62.00859375 -62.64929688 62.7046875 -63.40234375 63.421875 C-77.63854996 77.96817679 -83.93141226 99.68665029 -84.5 119.5625 C-84.08237752 141.17446354 -76.44033085 161.04301622 -62.1875 177.3125 C-61.31544922 178.32763672 -61.31544922 178.32763672 -60.42578125 179.36328125 C-46.13777237 194.82904357 -25.11427265 203.62400797 -4.2890625 204.59375 C16.04338995 205.14865813 37.80685193 200.32563209 53.375 186.4375 C53.99503906 185.84195313 54.61507812 185.24640625 55.25390625 184.6328125 C56.8125 183.3125 56.8125 183.3125 58.8125 183.3125 C59.08449219 182.72726562 59.35648438 182.14203125 59.63671875 181.5390625 C60.79216487 179.35100838 62.07496014 177.60971302 63.625 175.6875 C69.51911898 167.91013813 72.56742999 159.73400769 74.8125 150.3125 C75.47515197 147.64482226 76.14446805 144.97883807 76.8125 142.3125 C75.51030518 142.31773682 74.20811035 142.32297363 72.86645508 142.32836914 C48.48501601 142.41786799 24.17487459 142.37173368 -0.1875 141.3125 C-0.1875 130.4225 -0.1875 119.5325 -0.1875 108.3125 C36.1125 108.3125 72.4125 108.3125 109.8125 108.3125 C117.19862126 130.47086377 109.86270908 162.00022653 99.8125 182.3125 C85.7738237 208.75744838 62.29384442 226.56313678 33.8125 235.3125 C1.10808185 244.32831257 -32.41545063 239.38149673 -61.78125 222.9375 C-87.13624179 208.15071234 -105.70074397 184.2376262 -115.0625 156.625 C-115.34891357 155.78251709 -115.63532715 154.94003418 -115.93041992 154.07202148 C-119.55304909 142.82062556 -120.55370127 131.84409066 -120.5 120.0625 C-120.49508545 118.78487793 -120.4901709 117.50725586 -120.48510742 116.19091797 C-120.36934779 106.85534879 -119.68573571 98.32036615 -117.1875 89.3125 C-116.71183594 87.52005859 -116.71183594 87.52005859 -116.2265625 85.69140625 C-111.41817884 69.57820569 -103.0165897 55.09261578 -92.1875 42.3125 C-91.52105469 41.49523437 -90.85460937 40.67796875 -90.16796875 39.8359375 C-68.26591281 13.87464105 -33.50343846 -0.16858894 0 0 Z " fill="#3174F1" transform="translate(304.1875,151.6875)"/>
+<path d="M0 0 C1.0828125 1.0209375 1.0828125 1.0209375 2.1875 2.0625 C2.5175 -1.5675 2.8475 -5.1975 3.1875 -8.9375 C14.0775 -8.9375 24.9675 -8.9375 36.1875 -8.9375 C36.25543516 10.32647194 36.31060813 29.59034565 36.34293652 48.85440731 C36.35835158 57.80068717 36.3793375 66.74688686 36.41381836 75.69311523 C36.44388603 83.49809486 36.46311387 91.30301637 36.46976548 99.10805231 C36.47364859 103.23400835 36.48266002 107.35979826 36.50469017 111.48570061 C36.64813575 139.46357589 36.51260784 167.88217984 15.5625 189.3125 C0.17331927 204.30987698 -18.82971793 208.91146735 -39.765625 209.09765625 C-58.99319849 208.27304274 -75.27132113 201.79013228 -88.8125 188.0625 C-89.85857422 187.03189453 -89.85857422 187.03189453 -90.92578125 185.98046875 C-95.80466623 180.87421826 -104.8125 170.5498584 -104.8125 163.0625 C-100.86347186 161.34889979 -96.91244188 159.64002932 -92.95947266 157.93554688 C-91.61450831 157.35481849 -90.27010347 156.77279255 -88.92626953 156.18945312 C-86.99656846 155.35206255 -85.06491516 154.51933167 -83.1328125 153.6875 C-81.97023926 153.18476563 -80.80766602 152.68203125 -79.60986328 152.1640625 C-76.8125 151.0625 -76.8125 151.0625 -74.8125 151.0625 C-73.660738 152.70405769 -72.59115539 154.40362397 -71.5625 156.125 C-65.03976641 166.5720887 -58.09116461 173.69127974 -45.8125 177.0625 C-33.43340019 178.21648388 -19.98094107 176.45370703 -9.9453125 168.6015625 C-0.60699429 160.06481666 2.36352493 148.25733103 3.1875 136.0625 C3.61635045 130.39241748 3.61635045 130.39241748 2.1875 125.0625 C1.56746094 125.57039062 0.94742188 126.07828125 0.30859375 126.6015625 C-15.13466326 138.60549153 -31.90109164 141.9169765 -51.1640625 139.671875 C-70.05373086 135.612938 -87.4160406 123.3155564 -97.94238281 107.34863281 C-109.27344537 89.29763467 -114.96958716 70.33197218 -111.1953125 48.99609375 C-107.90809448 35.27995836 -101.39077398 22.42756077 -91.8125 12.0625 C-90.966875 11.13695312 -90.12125 10.21140625 -89.25 9.2578125 C-65.18554112 -15.96885036 -28.31824379 -23.39911224 0 0 Z M-66.5625 33.25 C-75.51765583 45.37069929 -76.93411604 58.5120532 -75.8125 73.0625 C-73.69469167 84.1114086 -67.74154477 95.06637105 -58.8125 102.0625 C-48.24354536 109.10304978 -38.33349372 111.30432248 -25.8125 109.0625 C-14.86164006 106.21917583 -6.40742195 99.08139015 -0.28125 89.71875 C6.03550565 78.2948302 8.05559482 65.30144722 5.46875 52.5078125 C1.47245168 38.81082228 -5.15762368 28.06939461 -17.8125 21.0625 C-34.90568542 12.25089666 -54.86759345 19.33709394 -66.5625 33.25 Z " fill="#3174F1" transform="translate(869.8125,249.9375)"/>
+<path d="M0 0 C2.43641814 1.8982683 4.74296561 3.86307217 7.01953125 5.94921875 C7.65117188 6.51253906 8.2828125 7.07585937 8.93359375 7.65625 C22.99961979 20.88575026 31.00361582 40.02669811 32.22265625 59.1328125 C32.4205394 72.8692009 30.19765807 85.57603873 24.01953125 97.94921875 C23.53871094 98.92246094 23.05789063 99.89570313 22.5625 100.8984375 C16.17157228 112.7939599 6.72831384 123.14338172 -4.98046875 129.94921875 C-6.01558594 130.55378906 -7.05070313 131.15835938 -8.1171875 131.78125 C-25.84238059 141.38155412 -46.56670665 144.19115337 -66.16845703 138.92895508 C-77.40564848 135.51333906 -88.29429722 129.88433034 -96.98046875 121.94921875 C-97.810625 121.19898438 -98.64078125 120.44875 -99.49609375 119.67578125 C-105.46484199 114.01083157 -109.94287736 108.10300246 -113.98046875 100.94921875 C-114.44195312 100.17191406 -114.9034375 99.39460938 -115.37890625 98.59375 C-124.38625812 82.29863162 -125.78865315 61.32589561 -121.41796875 43.38671875 C-118.07029627 31.95276695 -112.74516622 22.00803247 -104.98046875 12.94921875 C-104.31144531 12.06556641 -104.31144531 12.06556641 -103.62890625 11.1640625 C-78.99257437 -20.45976702 -31.03001479 -21.35092761 0 0 Z M-78.23046875 33.13671875 C-86.60459729 43.0288666 -89.22137873 55.55372955 -88.89453125 68.30078125 C-87.61757875 79.9636141 -81.96764575 92.20725302 -72.98046875 99.94921875 C-62.40534092 107.52517098 -51.09645984 111.45322539 -37.98046875 109.38671875 C-25.80083277 106.4003657 -15.74625161 99.6219314 -9.09765625 88.91796875 C-4.7507316 80.6021129 -2.59302693 72.93766412 -2.66796875 63.57421875 C-2.6736084 62.82962402 -2.67924805 62.0850293 -2.68505859 61.31787109 C-2.945688 49.46052356 -7.49564425 38.55604764 -15.48046875 29.69921875 C-24.98423305 20.78369518 -36.56666512 17.54282436 -49.27734375 17.67578125 C-61.57895732 18.58412824 -69.88240331 24.53945733 -78.23046875 33.13671875 Z " fill="#E63125" transform="translate(547.98046875,250.05078125)"/>
+<path d="M0 0 C1.36089276 1.13783667 2.71565895 2.28306482 4.0625 3.4375 C4.65160156 3.88351563 5.24070312 4.32953125 5.84765625 4.7890625 C19.24260057 15.22430386 28.95907808 33.71028758 31.0625 50.4375 C32.83856471 73.20766 29.47393898 94.200233 14.21875 112.06640625 C13.5071875 112.84886719 12.795625 113.63132812 12.0625 114.4375 C11.2890625 115.29214844 10.515625 116.14679688 9.71875 117.02734375 C-4.17185841 131.64325291 -23.17429712 140.20314322 -43.3293457 140.9128418 C-66.48980148 141.13718303 -85.64920273 133.18881878 -102.328125 117.13671875 C-116.34652524 102.56997972 -123.76338196 83.03022845 -124.3125 62.9375 C-123.68992125 41.09310659 -115.0381726 21.1110483 -99.40234375 5.81738281 C-72.63983939 -19.39289629 -29.45187162 -22.48690198 0 0 Z M-77.81640625 31.453125 C-86.54702132 42.56879532 -90.150001 55.37585645 -88.9375 69.4375 C-86.87997126 83.06862792 -80.64563713 93.86532103 -69.66015625 102.15625 C-59.73096147 108.72207086 -48.57549169 110.70261248 -36.9375 108.4375 C-25.66596253 105.60814527 -16.61096183 98.94011024 -9.9375 89.4375 C-2.61295938 76.32326945 -0.88900465 62.84167411 -4.96484375 48.3203125 C-9.35388026 35.31184283 -16.78022135 26.82007129 -28.9375 20.4375 C-45.96318819 12.74319861 -65.36327958 18.09384566 -77.81640625 31.453125 Z " fill="#F6AD01" transform="translate(714.9375,250.5625)"/>
+<path d="M0 0 C0.87398437 0.00563965 1.74796875 0.0112793 2.6484375 0.01708984 C20.62510856 0.35183243 34.66660304 7.17755206 47.5546875 19.51953125 C56.53652428 28.88985578 68.25 44.93072469 68.25 58.3125 C47.42336259 67.29417576 26.54957227 76.15540204 5.61401367 84.88037109 C-6.5401553 89.94878985 -18.6554483 95.10342273 -30.75 100.3125 C-30.75 104.49798429 -27.24881884 108.1462616 -24.75 111.3125 C-22.2843181 113.72022783 -19.70940783 115.55501773 -16.75 117.3125 C-16.05648438 117.72628906 -15.36296875 118.14007813 -14.6484375 118.56640625 C-5.02135308 123.31378293 7.72902023 122.76031458 17.8125 119.6875 C26.88764404 116.10256741 35.75615499 110.30019002 40.25 101.3125 C44.08401618 102.69625052 47.19991082 104.47676595 50.55078125 106.7890625 C51.52724609 107.459375 52.50371094 108.1296875 53.50976562 108.8203125 C55.02086914 109.86832031 55.02086914 109.86832031 56.5625 110.9375 C57.58923828 111.64390625 58.61597656 112.3503125 59.67382812 113.078125 C62.20223556 114.81861012 64.72746624 116.56351786 67.25 118.3125 C60.79124801 131.88588721 45.93622023 142.73738822 32.1484375 148.13525391 C11.29040164 155.5066734 -9.22950476 155.26894439 -29.53515625 145.97265625 C-34.31657782 143.50351388 -38.55839206 140.67964291 -42.75 137.3125 C-43.58144531 136.64476562 -44.41289063 135.97703125 -45.26953125 135.2890625 C-59.93690506 122.80714992 -70.38007392 104.97209467 -71.97753906 85.54541016 C-73.13449054 63.2322548 -68.57582485 42.64979751 -53.66015625 25.40625 C-53.02980469 24.7153125 -52.39945313 24.024375 -51.75 23.3125 C-51.23308594 22.7040625 -50.71617187 22.095625 -50.18359375 21.46875 C-37.67762036 7.67770165 -18.36907372 -0.12517866 0 0 Z M-29.0625 43.6875 C-34.9382263 51.07691756 -37.57153971 59.18721837 -38.30078125 68.546875 C-38.38626221 69.62678711 -38.47174316 70.70669922 -38.55981445 71.81933594 C-38.6539563 73.05345215 -38.6539563 73.05345215 -38.75 74.3125 C-37.98151733 73.99164429 -37.98151733 73.99164429 -37.19750977 73.66430664 C-26.17001408 69.06166073 -15.13766286 64.47098813 -4.09765625 59.8984375 C-3.17535721 59.51636642 -2.25305817 59.13429535 -1.30281067 58.74064636 C3.36732466 56.80607294 8.03779671 54.8723185 12.70874023 52.93969727 C14.44906825 52.21894237 16.18938453 51.49815913 17.9296875 50.77734375 C18.74014023 50.44233856 19.55059296 50.10733337 20.38560486 49.76217651 C24.35940314 48.12995063 24.35940314 48.12995063 28.25 46.3125 C27.34902348 41.17693386 24.18517903 38.49917982 20.25 35.3125 C4.75181281 25.41499613 -17.11345154 30.73532154 -29.0625 43.6875 Z " fill="#E63125" transform="translate(1047.75,236.6875)"/>
+<path d="M0 0 C11.55 0 23.1 0 35 0 C35 74.58 35 149.16 35 226 C23.45 226 11.9 226 0 226 C0 151.42 0 76.84 0 0 Z " fill="#249A41" transform="translate(927,160)"/>
+<path d="M0 0 C0.66 0 1.32 0 2 0 C2.35715088 0.66418945 2.71430176 1.32837891 3.08227539 2.01269531 C3.83238892 3.40633301 3.83238892 3.40633301 4.59765625 4.828125 C5.42197144 6.36182739 5.42197144 6.36182739 6.26293945 7.92651367 C7.46771484 10.15153163 8.68382265 12.37044883 9.91088867 14.58325195 C15.11527409 23.98933024 15.11527409 23.98933024 16.578125 28.08984375 C18.01663907 31.69978571 18.97474763 33.523975 22 36 C28.69418918 38.58994715 35.8319694 39.56264158 42.90478516 40.56054688 C45.80635164 40.97250615 48.68794276 41.44608356 51.57421875 41.953125 C55.71019172 42.67902071 59.85057473 43.35558168 64 44 C64 47 64 47 62.71484375 48.32421875 C62.12832031 48.77410156 61.54179688 49.22398437 60.9375 49.6875 C57.46438879 52.51071314 54.64338026 55.59249688 51.75 58.99609375 C50.07015423 60.91966714 48.32349781 62.71313496 46.5 64.5 C45.64921875 65.36625 45.64921875 65.36625 44.78125 66.25 C43 68 43 68 40.96875 69.6875 C37.8181199 72.58808009 36.14268307 74.66365125 35.6796875 79 C35.85880881 82.20985392 36.18618668 85.35638845 36.64697266 88.53759766 C37.05879197 91.41008007 37.41157809 94.28732598 37.76171875 97.16796875 C38.38831301 102.3102036 39.0514173 107.44658334 39.74047852 112.58081055 C40 115 40 115 40 119 C35.50062688 118.37010922 31.77656935 116.59522284 27.7578125 114.5859375 C26.34799982 113.90033474 24.93783232 113.21546119 23.52734375 112.53125 C21.32265903 111.45469199 19.12103097 110.37302121 16.92529297 109.27832031 C14.79359681 108.21892034 12.65198249 107.18230711 10.5078125 106.1484375 C9.85966583 105.81830658 9.21151917 105.48817566 8.54373169 105.14804077 C3.91607349 102.94426242 0.93587642 102.71222988 -4 104 C-6.52947766 105.06524313 -8.89806897 106.15713147 -11.32421875 107.4140625 C-12.69593861 108.09900827 -14.06768415 108.78390261 -15.43945312 109.46875 C-17.57405605 110.54973639 -19.70656636 111.63472257 -21.83813477 112.72167969 C-23.91201079 113.77488107 -25.99265132 114.81366751 -28.07421875 115.8515625 C-28.70970139 116.18169342 -29.34518402 116.51182434 -29.99992371 116.85195923 C-34.45694305 119.06768457 -34.45694305 119.06768457 -37.43286133 118.69677734 C-38.20859497 118.35187256 -38.20859497 118.35187256 -39 118 C-38.84329834 116.87505127 -38.68659668 115.75010254 -38.52514648 114.59106445 C-37.94471952 110.40826239 -37.37516139 106.22403956 -36.80883789 102.03930664 C-36.56244324 100.22998259 -36.31312164 98.42105459 -36.06079102 96.61254883 C-35.69814042 94.00961878 -35.34611687 91.40543561 -34.99609375 88.80078125 C-34.88156357 87.99538406 -34.76703339 87.18998688 -34.64903259 86.36018372 C-34.1217768 82.35804855 -33.71386821 78.91530385 -35 75 C-37.03873232 72.51423985 -37.03873232 72.51423985 -39.625 70.1875 C-42.78691858 67.15601619 -45.84225366 64.14383626 -48.6875 60.8125 C-52.43940177 56.4308464 -56.46723632 52.34106368 -60.703125 48.42578125 C-62 47 -62 47 -62 45 C-55.59161638 43.16680037 -49.40953384 41.8535989 -42.7578125 41.30859375 C-28.92028505 40.18386564 -28.92028505 40.18386564 -17.35449219 33.33837891 C-12.98163241 27.06945177 -10.07452851 20.26375226 -7.31640625 13.16601562 C-5.38630065 8.52402574 -3.05898424 4.00667847 0 0 Z " fill="#F6AD01" transform="translate(782,448)"/>
+<path d="M0 0 C3.9689043 1.3229681 4.25997516 2.81182713 6.1796875 6.46875 C6.77910156 7.59796875 7.37851562 8.7271875 7.99609375 9.890625 C8.62271612 11.09358322 9.24901626 12.29670933 9.875 13.5 C11.1011099 15.8231556 12.32766435 18.14607663 13.5546875 20.46875 C14.09593262 21.50451172 14.63717773 22.54027344 15.19482422 23.60742188 C15.79053223 24.72697266 16.38624023 25.84652344 17 27 C17.49766624 28.14801086 17.49766624 28.14801086 18.00538635 29.31921387 C20.12958734 33.94809995 20.12958734 33.94809995 23.97247314 37.0826416 C26.36935217 37.78777156 28.69688846 38.22610467 31.16796875 38.59375 C32.48200432 38.83744324 32.48200432 38.83744324 33.82258606 39.08605957 C36.60580064 39.59419962 39.39466593 40.04805859 42.1875 40.5 C44.07551482 40.8322932 45.96289835 41.1681947 47.84960938 41.5078125 C50.49890067 41.98423175 53.14790393 42.45497899 55.80302429 42.89782715 C61.79849176 43.89924588 61.79849176 43.89924588 64 45 C64 47 64 47 61.8359375 49.29296875 C60.90007812 50.18628906 59.96421875 51.07960938 59 52 C50.5494239 60.32253828 50.5494239 60.32253828 42.6328125 69.1484375 C41 71 41 71 38.2734375 73.171875 C35.87378563 76.15700894 35.67018615 76.49703214 35.84375 80.0546875 C36.03433448 81.665042 36.25505559 83.27201332 36.5 84.875 C36.60876465 85.73254883 36.7175293 86.59009766 36.82958984 87.47363281 C37.06796734 89.32679342 37.31896172 91.17836481 37.58105469 93.02832031 C38.02241091 96.15896599 38.42503093 99.29290654 38.8203125 102.4296875 C39.52039775 107.9568098 40.25019848 113.47941727 41 119 C36.21611131 118.43554003 32.60611335 117.04033563 28.31640625 114.875 C27.04625588 114.24472733 25.77607257 113.61452104 24.50585938 112.984375 C22.53196779 111.99313547 20.55977777 110.99862356 18.58862305 110.00195312 C16.66859114 109.03463439 14.74285318 108.07946326 12.81640625 107.125 C11.67631104 106.55007813 10.53621582 105.97515625 9.36157227 105.3828125 C4.27388445 103.28994709 0.31578193 102.22016021 -4.86816406 104.35522461 C-6.25921582 105.01996382 -7.64147001 105.70334354 -9.015625 106.40234375 C-9.75327087 106.75889542 -10.49091675 107.11544708 -11.25091553 107.48280334 C-13.59241949 108.61790082 -15.92134456 109.77630349 -18.25 110.9375 C-20.59473608 112.09088135 -22.94178293 113.23917224 -25.29193115 114.38148499 C-26.75017286 115.09192403 -28.20496438 115.8094987 -29.65582275 116.53489685 C-34.66804954 119 -34.66804954 119 -38 119 C-36.95353309 108.13455639 -35.84878206 97.29610903 -34.3671875 86.48046875 C-34.24601563 85.33191406 -34.12484375 84.18335938 -34 83 C-33.82984375 81.86691406 -33.6596875 80.73382812 -33.484375 79.56640625 C-34.27133501 74.12326615 -37.54591156 71.49976003 -41.375 67.75 C-42.84456662 66.25601116 -44.31331651 64.76121851 -45.78125 63.265625 C-46.50183594 62.54181641 -47.22242188 61.81800781 -47.96484375 61.07226562 C-51.50348219 57.46910307 -54.8256828 53.68092647 -58.1796875 49.90625 C-59.86445904 47.92693077 -59.86445904 47.92693077 -62 47 C-61.67 46.01 -61.34 45.02 -61 44 C-59.86981445 43.79842285 -58.73962891 43.5968457 -57.57519531 43.38916016 C-53.37712014 42.63871649 -49.18054634 41.88015147 -44.984375 41.11914062 C-43.16901859 40.79107979 -41.35326398 40.46521442 -39.53710938 40.14160156 C-36.92469895 39.67571218 -34.31382849 39.20191201 -31.703125 38.7265625 C-30.89256653 38.58376862 -30.08200806 38.44097473 -29.24688721 38.29385376 C-22.68980142 37.31176237 -22.68980142 37.31176237 -17.77075195 33.28271484 C-17.25967896 32.25718506 -17.25967896 32.25718506 -16.73828125 31.2109375 C-16.34560059 30.44112549 -15.95291992 29.67131348 -15.54833984 28.87817383 C-15.1405127 28.05212646 -14.73268555 27.2260791 -14.3125 26.375 C-13.43821863 24.65652254 -12.56187545 22.93909266 -11.68359375 21.22265625 C-11.24128418 20.35398926 -10.79897461 19.48532227 -10.34326172 18.59033203 C-8.28000896 14.61157671 -6.08828389 10.70927103 -3.875 6.8125 C-3.28972534 5.77971924 -3.28972534 5.77971924 -2.69262695 4.72607422 C-1.79739195 3.14940381 -0.89908222 1.57447973 0 0 Z " fill="#F6AD01" transform="translate(651,448)"/>
+<path d="M0 0 C3.9689043 1.3229681 4.25997516 2.81182713 6.1796875 6.46875 C6.77910156 7.59796875 7.37851562 8.7271875 7.99609375 9.890625 C8.62271612 11.09358322 9.24901626 12.29670933 9.875 13.5 C11.1011099 15.8231556 12.32766435 18.14607663 13.5546875 20.46875 C14.09593262 21.50451172 14.63717773 22.54027344 15.19482422 23.60742188 C15.79053223 24.72697266 16.38624023 25.84652344 17 27 C17.49766624 28.14801086 17.49766624 28.14801086 18.00538635 29.31921387 C20.12958734 33.94809995 20.12958734 33.94809995 23.97247314 37.0826416 C26.36935217 37.78777156 28.69688846 38.22610467 31.16796875 38.59375 C32.48200432 38.83744324 32.48200432 38.83744324 33.82258606 39.08605957 C36.60580064 39.59419962 39.39466593 40.04805859 42.1875 40.5 C44.07551482 40.8322932 45.96289835 41.1681947 47.84960938 41.5078125 C50.49890067 41.98423175 53.14790393 42.45497899 55.80302429 42.89782715 C61.79849176 43.89924588 61.79849176 43.89924588 64 45 C64 47 64 47 61.8359375 49.29296875 C60.90007812 50.18628906 59.96421875 51.07960938 59 52 C50.5494239 60.32253828 50.5494239 60.32253828 42.6328125 69.1484375 C41 71 41 71 38.2734375 73.171875 C35.87378563 76.15700894 35.67018615 76.49703214 35.84375 80.0546875 C36.03433448 81.665042 36.25505559 83.27201332 36.5 84.875 C36.60876465 85.73254883 36.7175293 86.59009766 36.82958984 87.47363281 C37.06796734 89.32679342 37.31896172 91.17836481 37.58105469 93.02832031 C38.02241091 96.15896599 38.42503093 99.29290654 38.8203125 102.4296875 C39.52039775 107.9568098 40.25019848 113.47941727 41 119 C36.21611131 118.43554003 32.60611335 117.04033563 28.31640625 114.875 C27.04625588 114.24472733 25.77607257 113.61452104 24.50585938 112.984375 C22.53196779 111.99313547 20.55977777 110.99862356 18.58862305 110.00195312 C16.66859114 109.03463439 14.74285318 108.07946326 12.81640625 107.125 C11.67631104 106.55007813 10.53621582 105.97515625 9.36157227 105.3828125 C4.27388445 103.28994709 0.31578193 102.22016021 -4.86816406 104.35522461 C-6.25921582 105.01996382 -7.64147001 105.70334354 -9.015625 106.40234375 C-9.75327087 106.75889542 -10.49091675 107.11544708 -11.25091553 107.48280334 C-13.59241949 108.61790082 -15.92134456 109.77630349 -18.25 110.9375 C-20.59473608 112.09088135 -22.94178293 113.23917224 -25.29193115 114.38148499 C-26.75017286 115.09192403 -28.20496438 115.8094987 -29.65582275 116.53489685 C-34.66804954 119 -34.66804954 119 -38 119 C-36.95353309 108.13455639 -35.84878206 97.29610903 -34.3671875 86.48046875 C-34.24601562 85.33191406 -34.12484375 84.18335938 -34 83 C-33.82984375 81.86691406 -33.6596875 80.73382812 -33.484375 79.56640625 C-34.27133501 74.12326615 -37.54591156 71.49976003 -41.375 67.75 C-42.84456662 66.25601116 -44.31331651 64.76121851 -45.78125 63.265625 C-46.50183594 62.54181641 -47.22242188 61.81800781 -47.96484375 61.07226562 C-51.50348219 57.46910307 -54.8256828 53.68092647 -58.1796875 49.90625 C-59.86445904 47.92693077 -59.86445904 47.92693077 -62 47 C-61.67 46.01 -61.34 45.02 -61 44 C-59.86981445 43.79842285 -58.73962891 43.5968457 -57.57519531 43.38916016 C-53.37712014 42.63871649 -49.18054634 41.88015147 -44.984375 41.11914062 C-43.16901859 40.79107979 -41.35326398 40.46521442 -39.53710938 40.14160156 C-36.92469895 39.67571218 -34.31382849 39.20191201 -31.703125 38.7265625 C-30.89256653 38.58376862 -30.08200806 38.44097473 -29.24688721 38.29385376 C-22.68980142 37.31176237 -22.68980142 37.31176237 -17.77075195 33.28271484 C-17.25967896 32.25718506 -17.25967896 32.25718506 -16.73828125 31.2109375 C-16.34560059 30.44112549 -15.95291992 29.67131348 -15.54833984 28.87817383 C-15.1405127 28.05212646 -14.73268555 27.2260791 -14.3125 26.375 C-13.43821863 24.65652254 -12.56187545 22.93909266 -11.68359375 21.22265625 C-11.24128418 20.35398926 -10.79897461 19.48532227 -10.34326172 18.59033203 C-8.28000896 14.61157671 -6.08828389 10.70927103 -3.875 6.8125 C-3.28972534 5.77971924 -3.28972534 5.77971924 -2.69262695 4.72607422 C-1.79739195 3.14940381 -0.89908222 1.57447973 0 0 Z " fill="#F6AD01" transform="translate(519,448)"/>
+<path d="M0 0 C0.66 0 1.32 0 2 0 C2.35715088 0.66418945 2.71430176 1.32837891 3.08227539 2.01269531 C3.83238892 3.40633301 3.83238892 3.40633301 4.59765625 4.828125 C5.42197144 6.36182739 5.42197144 6.36182739 6.26293945 7.92651367 C7.46771484 10.15153163 8.68382265 12.37044883 9.91088867 14.58325195 C15.11527409 23.98933024 15.11527409 23.98933024 16.578125 28.08984375 C18.01663907 31.69978571 18.97474763 33.523975 22 36 C28.69418918 38.58994715 35.8319694 39.56264158 42.90478516 40.56054688 C45.80635164 40.97250615 48.68794276 41.44608356 51.57421875 41.953125 C55.71019172 42.67902071 59.85057473 43.35558168 64 44 C64 47 64 47 62.71484375 48.32421875 C62.12832031 48.77410156 61.54179687 49.22398437 60.9375 49.6875 C57.46438879 52.51071314 54.64338026 55.59249688 51.75 58.99609375 C50.07015423 60.91966714 48.32349781 62.71313496 46.5 64.5 C45.64921875 65.36625 45.64921875 65.36625 44.78125 66.25 C43 68 43 68 40.96875 69.6875 C37.8181199 72.58808009 36.14268307 74.66365125 35.6796875 79 C35.85880881 82.20985392 36.18618668 85.35638845 36.64697266 88.53759766 C37.05879197 91.41008007 37.41157809 94.28732598 37.76171875 97.16796875 C38.38831301 102.3102036 39.0514173 107.44658334 39.74047852 112.58081055 C40 115 40 115 40 119 C35.50062688 118.37010922 31.77656935 116.59522284 27.7578125 114.5859375 C26.34799982 113.90033474 24.93783232 113.21546119 23.52734375 112.53125 C21.32265903 111.45469199 19.12103097 110.37302121 16.92529297 109.27832031 C14.79359681 108.21892034 12.65198249 107.18230711 10.5078125 106.1484375 C9.85966583 105.81830658 9.21151917 105.48817566 8.54373169 105.14804077 C3.91607349 102.94426242 0.93587642 102.71222988 -4 104 C-6.52947766 105.06524313 -8.89806897 106.15713147 -11.32421875 107.4140625 C-12.69593861 108.09900827 -14.06768415 108.78390261 -15.43945312 109.46875 C-17.57405605 110.54973639 -19.70656636 111.63472257 -21.83813477 112.72167969 C-23.91201079 113.77488107 -25.99265132 114.81366751 -28.07421875 115.8515625 C-28.70970139 116.18169342 -29.34518402 116.51182434 -29.99992371 116.85195923 C-34.45694305 119.06768457 -34.45694305 119.06768457 -37.43286133 118.69677734 C-38.20859497 118.35187256 -38.20859497 118.35187256 -39 118 C-38.84329834 116.87505127 -38.68659668 115.75010254 -38.52514648 114.59106445 C-37.94471952 110.40826239 -37.37516139 106.22403956 -36.80883789 102.03930664 C-36.56244324 100.22998259 -36.31312164 98.42105459 -36.06079102 96.61254883 C-35.69814042 94.00961878 -35.34611687 91.40543561 -34.99609375 88.80078125 C-34.88156357 87.99538406 -34.76703339 87.18998688 -34.64903259 86.36018372 C-34.1217768 82.35804855 -33.71386821 78.91530385 -35 75 C-37.03873232 72.51423985 -37.03873232 72.51423985 -39.625 70.1875 C-42.78691858 67.15601619 -45.84225366 64.14383626 -48.6875 60.8125 C-52.43940177 56.4308464 -56.46723632 52.34106368 -60.703125 48.42578125 C-62 47 -62 47 -62 45 C-55.59161638 43.16680037 -49.40953384 41.8535989 -42.7578125 41.30859375 C-28.92028505 40.18386564 -28.92028505 40.18386564 -17.35449219 33.33837891 C-12.98163241 27.06945177 -10.07452851 20.26375226 -7.31640625 13.16601562 C-5.38630065 8.52402574 -3.05898424 4.00667847 0 0 Z " fill="#F6AD01" transform="translate(386,448)"/>
+<path d="M0 0 C0.99 0 1.98 0 3 0 C3.29132813 0.56283691 3.58265625 1.12567383 3.8828125 1.70556641 C9.26571752 12.0883946 14.67831621 22.41447007 20.63671875 32.48046875 C22 35 22 35 22 37 C23.14339844 37.10183594 24.28679687 37.20367187 25.46484375 37.30859375 C32.89701116 38.13439013 40.22305868 39.65683374 47.5625 41.0625 C49.06309211 41.34731585 50.56374274 41.6318236 52.06445312 41.91601562 C55.71031699 42.60712556 59.35537092 43.30240392 63 44 C63 48 63 48 61.05859375 50.296875 C59.76115234 51.51117188 59.76115234 51.51117188 58.4375 52.75 C55.27632365 55.78223948 52.21576505 58.78990228 49.375 62.125 C46.34490272 65.68050607 43.08348093 68.92258395 39.69921875 72.140625 C37.46500354 74.58542142 36.03339923 76.6574755 35.9493103 80.03753662 C36.08920883 81.11675385 36.08920883 81.11675385 36.23193359 82.21777344 C36.33218842 83.03832214 36.43244324 83.85887085 36.53573608 84.70428467 C36.65542755 85.58046448 36.77511902 86.45664429 36.8984375 87.359375 C37.06915268 88.71594208 37.06915268 88.71594208 37.24331665 90.09991455 C37.60905513 92.98488359 37.9917931 95.86730451 38.375 98.75 C38.62612363 100.70688738 38.87613704 102.66391758 39.125 104.62109375 C39.73713499 109.41581411 40.36452379 114.20831968 41 119 C36.50062688 118.37010922 32.77656935 116.59522284 28.7578125 114.5859375 C27.34799982 113.90033474 25.93783232 113.21546119 24.52734375 112.53125 C22.32265903 111.45469199 20.12103097 110.37302121 17.92529297 109.27832031 C15.79359681 108.21892034 13.65198249 107.18230711 11.5078125 106.1484375 C10.85966583 105.81830658 10.21151917 105.48817566 9.54373169 105.14804077 C4.91212399 102.94238159 1.94047476 102.71996477 -3 104 C-5.60576357 105.05408074 -8.06703992 106.13972892 -10.578125 107.37890625 C-11.27137878 107.71043198 -11.96463257 108.0419577 -12.67889404 108.38352966 C-14.87369455 109.43425738 -17.06219375 110.49729495 -19.25 111.5625 C-21.45267413 112.62993127 -23.65658186 113.6944952 -25.86395264 114.75218201 C-27.23244229 115.40835059 -28.59817491 116.07030781 -29.96075439 116.73866272 C-32.83883008 118.12255504 -34.76250118 119 -38 119 C-37.80140381 117.78006348 -37.60280762 116.56012695 -37.39819336 115.30322266 C-36.66998562 110.74409542 -36.00997512 106.17717049 -35.36938477 101.60498047 C-35.08365913 99.63348977 -34.779878 97.66452351 -34.45727539 95.69873047 C-32.23384682 84.37496776 -32.23384682 84.37496776 -34.75976562 73.54443359 C-37.02892779 71.01269695 -39.27989357 69.02653901 -42 67 C-43.2261462 65.80974609 -44.43847396 64.60475398 -45.625 63.375 C-46.4603125 62.55515625 -46.4603125 62.55515625 -47.3125 61.71875 C-49.78066428 59.20487898 -52.05625029 56.53490373 -54.35546875 53.8671875 C-56.47130895 51.46487962 -58.7024661 49.22791166 -61 47 C-60.67 46.01 -60.34 45.02 -60 44 C-54.80476367 42.99839862 -49.60863419 42.0016185 -44.41162109 41.00927734 C-42.64411506 40.6710809 -40.87685947 40.33157286 -39.10986328 39.99072266 C-36.56868292 39.50077051 -34.02663665 39.01555609 -31.484375 38.53125 C-30.69569031 38.37813354 -29.90700562 38.22501709 -29.09442139 38.06726074 C-25.64430196 37.41426912 -22.52556557 37 -19 37 C-18.76667969 36.360625 -18.53335938 35.72125 -18.29296875 35.0625 C-16.53953157 30.90934366 -14.42901505 26.97783345 -12.3125 23 C-11.86986816 22.16364014 -11.42723633 21.32728027 -10.97119141 20.46557617 C-7.34668105 13.62619722 -3.68938584 6.80459573 0 0 Z " fill="#F6AD01" transform="translate(916,448)"/>
+<path d="M0 0 C0.99 0 1.98 0 3 0 C2.67 0.99 2.34 1.98 2 3 C1.34 3 0.68 3 0 3 C0 2.01 0 1.02 0 0 Z " fill="#FFFFFF" transform="translate(413,167)"/>
+</svg>  </template>
+</div>
+
+<div class="pcgb-cover" id="pcgbCover">
+  <div class="pcgb-cover-main">
+    <img src="photos/facility-1.jpg" alt="Pet Center facility" onerror="pcCoverImageFallback(this)">
+    <button class="pcgb-cover-more" onclick="pcOpenTab('photos')" type="button">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+      See all photos
+    </button>
+  </div>
+  <div>
+    <img src="photos/dogs-1.jpg" alt="Dogs at Pet Center" onerror="pcCoverImageFallback(this)">
+  </div>
+  <div>
+    <img src="photos/cats-1.jpg" alt="Cats at Pet Center" onerror="pcCoverImageFallback(this)">
+  </div>
+</div>
+
+<div class="pcgb-identity">
+  <div class="pcgb-identity-top">
+    <div>
+      <div class="pcgb-name" id="pcgbName">Pet Center Foundation</div>
+      <div class="pcgb-category-row">
+        <span class="pcgb-category" id="pcgbCategory">Pet Shelter</span>
+      </div>
+      <div class="pcgb-rating-row">
+        <span class="pcgb-rating-num" id="pcgbRatingNum">4.9</span>
+        <span class="pcgb-rating-stars" id="pcgbRatingStars">★★★★★</span>
+        <span class="pcgb-rating-count" id="pcgbRatingCount" onclick="pcOpenTab('reviews')">(16 reviews)</span>
+      </div>
+      <div class="pcgb-status-row">
+        <span id="pcgbStatus"></span>
+      </div>
+      <div class="pcgb-address" id="pcgbAddress">235-269 N Beverly Dr, Beverly Hills, CA</div>
+    </div>
+  </div>
+
+  <div class="pcgb-actions">
+    <button class="pcgb-action-btn" type="button" onclick="pcActionDirections()">
+      <span class="pcgb-action-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg></span>
+      Directions
+    </button>
+    <button class="pcgb-action-btn" type="button" onclick="pcActionCall()">
+      <span class="pcgb-action-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span>
+      Call
+    </button>
+    <button class="pcgb-action-btn" type="button" onclick="pcActionWebsite()">
+      <span class="pcgb-action-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span>
+      Website
+    </button>
+    <button class="pcgb-action-btn" type="button" onclick="pcActionShare()">
+      <span class="pcgb-action-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.59 13.51l6.83 3.98M15.41 6.51L8.59 10.49"/></svg></span>
+      Share
+    </button>
+  </div>
+
+  <div class="pcgb-tabs" id="pcgbTabs">
+    <button class="pcgb-tab active" data-tab="overview" type="button">Overview</button>
+    <button class="pcgb-tab" data-tab="reviews" type="button">Reviews</button>
+    <button class="pcgb-tab" data-tab="photos" type="button">Photos</button>
+    <button class="pcgb-tab" data-tab="qanda" type="button">Q&amp;A</button>
+    <button class="pcgb-tab" data-tab="about" type="button">About</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     TAB PANELS
+     ══════════════════════════════════════════════════════════ -->
+<div class="pcgb-tabpanel active" id="pcgbTab-overview"></div>
+<div class="pcgb-tabpanel" id="pcgbTab-photos"></div>
+<div class="pcgb-tabpanel" id="pcgbTab-qanda"></div>
+<div class="pcgb-tabpanel" id="pcgbTab-about"></div>
+<div class="pcgb-tabpanel" id="pcgbTab-reviews">
+<!-- Testimonials Page -->
+<main class="pc-testi-main">
+  <div class="pc-testi-controls-bar">
+    <div class="pc-biz-info">
+      <div class="pc-biz-rating-line">
+        <span class="pc-biz-score" id="pcOverallScore">&nbsp;</span>
+        <span class="pc-biz-stars" id="pcOverallStars"></span>
+        <span class="pc-biz-count">(<span id="pcReviewCount">0</span>)</span>
+      </div>
+      <div class="pc-biz-type" id="pcBizType"></div>
+      <div class="pc-biz-status" id="pcBizStatus"></div>
+    </div>
+
+    <div class="pc-controls-actions">
+      <button class="pc-search-btn" id="pcSearchBtn" aria-label="Search reviews" type="button">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+      </button>
+      <button class="pc-filter-btn" id="pcFilterBtn" type="button" aria-haspopup="true" aria-expanded="false">
+        <svg class="pc-filter-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="4" y1="6" x2="20" y2="6"/><circle cx="9" cy="6" r="2" fill="currentColor" stroke="none"/>
+          <line x1="4" y1="12" x2="20" y2="12"/><circle cx="15" cy="12" r="2" fill="currentColor" stroke="none"/>
+          <line x1="4" y1="18" x2="20" y2="18"/><circle cx="11" cy="18" r="2" fill="currentColor" stroke="none"/>
+        </svg>
+        Filters
+      </button>
+    </div>
+  </div>
+
+  <!-- Search bar (hidden by default, fades in below the controls row) -->
+  <div class="pc-search-bar-wrap" id="pcSearchBarWrap">
+    <div class="pc-search-bar">
+      <input type="text" id="pcSearchInput" placeholder="Search reviews" autocomplete="off">
+      <button class="pc-search-clear" id="pcSearchClear" aria-label="Clear search" type="button">&times;</button>
+    </div>
+  </div>
+
+  <!-- Review summary block: rating breakdown, templated summary sentence,
+       90-day freshness stat, quick topic chips, popular times chart —
+       all moved here from Overview to match the real Google Business
+       Profile's actual Reviews-tab layout (see reference screenshots). -->
+  <div id="pcgbReviewsSummaryBlock" style="margin-top: 24px;"></div>
+
+  <div class="pc-testi-grid" id="testiGrid" style="margin-top: 28px;"></div>
+
+  <div class="pc-testi-pagination" id="testiPagination"></div>
+  <div class="pc-testi-page-label" id="testiPageLabel"></div>
+</main>
+
+<!-- Filters bottom sheet -->
+<div class="pc-sheet-backdrop" id="pcFilterBackdrop"></div>
+<div class="pc-filter-sheet" id="pcFilterSheet" role="dialog" aria-modal="true" aria-label="Filter reviews">
+  <div class="pc-sheet-handle"></div>
+  <div class="pc-sheet-header">
+    <h3>Filters</h3>
+    <button class="pc-sheet-close" id="pcFilterClose" aria-label="Close filters" type="button">&times;</button>
+  </div>
+  <div class="pc-sheet-body">
+    <div class="pc-sheet-group">
+      <h4>Sort by</h4>
+      <div class="pc-chip-row" id="pcSortChips">
+        <button class="pc-chip selected" data-sort="relevant" type="button">Most relevant</button>
+        <button class="pc-chip" data-sort="newest" type="button">Newest</button>
+        <button class="pc-chip" data-sort="highest" type="button">Highest</button>
+        <button class="pc-chip" data-sort="lowest" type="button">Lowest</button>
+        <button class="pc-chip" data-sort="helpful" type="button">Most helpful</button>
+      </div>
+    </div>
+    <div class="pc-sheet-group">
+      <h4>Topics</h4>
+      <div class="pc-chip-row" id="pcTopicChips"><span class="pc-chip-empty">No repeated topics yet</span></div>
+    </div>
+  </div>
+  <div class="pc-sheet-footer">
+    <button class="pc-sheet-clear" id="pcFilterClear" type="button">Clear</button>
+    <button class="pc-sheet-apply" id="pcFilterApply" type="button">Apply</button>
+  </div>
+</div>
+
+<!-- Leave a review trigger -->
+<section class="pc-leave-review-trigger">
+  <h3>Leave a review</h3>
+  <p>Help others by sharing your experience with Pet Center</p>
+  <div class="pc-trigger-stars" id="pcTriggerStars">
+    <span class="pc-t-star" data-v="1">&#9733;</span>
+    <span class="pc-t-star" data-v="2">&#9733;</span>
+    <span class="pc-t-star" data-v="3">&#9733;</span>
+    <span class="pc-t-star" data-v="4">&#9733;</span>
+    <span class="pc-t-star" data-v="5">&#9733;</span>
+  </div>
+</section>
+
+<!-- Review-form bottom sheet -->
+<div class="pc-sheet-backdrop" id="pcReviewBackdrop"></div>
+<div class="pc-review-sheet" id="pcReviewSheet" role="dialog" aria-modal="true" aria-label="Leave a review">
+  <div class="pc-sheet-handle"></div>
+  <div class="pc-sheet-header">
+    <h3>Leave a review</h3>
+    <button class="pc-sheet-close" id="pcReviewClose" aria-label="Close review form" type="button">&times;</button>
+  </div>
+  <div class="pc-sheet-body">
+    <form class="pc-testi-form" id="testiForm" novalidate>
+      <div class="fg">
+        <label for="tName">Your Name *</label>
+        <input type="text" id="tName" name="name" placeholder="Jane Smith" required minlength="2">
+      </div>
+      <div class="fg">
+        <label for="tEmail">Email Address *</label>
+        <input type="email" id="tEmail" name="email" placeholder="you@example.com" required>
+      </div>
+      <div class="fg">
+        <label>Rate Your Experience *</label>
+        <div class="pc-stars-row" id="starRow">
+          <span class="pc-star" data-v="1">&#9733;</span>
+          <span class="pc-star" data-v="2">&#9733;</span>
+          <span class="pc-star" data-v="3">&#9733;</span>
+          <span class="pc-star" data-v="4">&#9733;</span>
+          <span class="pc-star" data-v="5">&#9733;</span>
+        </div>
+        <input type="hidden" id="tRating" name="rating" value="0">
+        <span class="pc-star-text" id="starText">Select a rating</span>
+      </div>
+      <div class="fg">
+        <label for="tText">Your Review *</label>
+        <textarea id="tText" name="text" placeholder="Tell us about your adoption experience. Be honest and specific..." rows="5" required minlength="10" maxlength="1000"></textarea>
+        <span class="pc-char-count"><span id="tCharCount">0</span> / 1000 characters</span>
+      </div>
+      <button type="submit" class="pc-submit-btn">Post Review</button>
+      <div class="pc-form-msg" id="tFormMsg"></div>
+    </form>
+  </div>
+</div>
+</div><!-- /#pcgbTab-reviews -->
+</div><!-- /#pcgbPage -->
+
+<!-- Footer -->
+<footer style="background:#10214b;color:#fff;padding:48px 24px 24px;margin-top:60px;">
+  <div style="max-width:1280px;margin:0 auto;">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:36px;margin-bottom:36px;">
+      <div>
+        <img src="../assets/images/logo-petcenter.png" alt="Pet Center" style="height:44px;margin-bottom:16px;">
+        <p style="color:rgba(255,255,255,.65);font-size:13.5px;line-height:1.7;">Connecting loving families with animals in need. Every adoption changes two lives.</p>
+      </div>
+      <div>
+        <h5 style="font-family:'Sora',sans-serif;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#d7bd88;margin-bottom:14px;">Our Pets</h5>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;padding:0;margin:0;">
+          <li><a href="../dogs.html" style="color:rgba(255,255,255,.72);font-size:13.5px;text-decoration:none;">Dogs</a></li>
+          <li><a href="../cats.html" style="color:rgba(255,255,255,.72);font-size:13.5px;text-decoration:none;">Cats</a></li>
+          <li><a href="../birds.html" style="color:rgba(255,255,255,.72);font-size:13.5px;text-decoration:none;">Birds</a></li>
+          <li><a href="../reptiles.html" style="color:rgba(255,255,255,.72);font-size:13.5px;text-decoration:none;">Reptiles</a></li>
+          <li><a href="../small-mammals.html" style="color:rgba(255,255,255,.72);font-size:13.5px;text-decoration:none;">Small Mammals</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5 style="font-family:'Sora',sans-serif;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#d7bd88;margin-bottom:14px;">Quick Links</h5>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;padding:0;margin:0;">
+          <li><a href="../adoption-application.html" style="color:rgba(255,255,255,.72);font-size:13.5px;text-decoration:none;">Apply to Adopt</a></li>
+          <li><a href="../index.html" style="color:rgba(255,255,255,.72);font-size:13.5px;text-decoration:none;">Home</a></li>
+          <li><a href="../rehome/" style="color:rgba(255,255,255,.72);font-size:13.5px;text-decoration:none;">Sign Up</a></li>
+          <li><a href="https://donate.petcenterco.com" target="_blank" style="color:rgba(255,255,255,.72);font-size:13.5px;text-decoration:none;">Donate</a></li>
+          <li><a href="https://docs.petcenterco.com/contact-us" target="_blank" style="color:rgba(255,255,255,.72);font-size:13.5px;text-decoration:none;">Contact Us</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5 style="font-family:'Sora',sans-serif;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#d7bd88;margin-bottom:14px;">Visit Us</h5>
+        <p style="color:rgba(255,255,255,.72);font-size:13.5px;line-height:1.7;margin-bottom:12px;">235-269 N Beverly Dr<br>Beverly Hills, CA<br>Golden Triangle Shopping Center<br>Section #257</p>
+        <p style="color:rgba(255,255,255,.72);font-size:13.5px;line-height:1.7;"><strong style="color:#d7bd88;">Hours:</strong><br>Mon &ndash; Fri: 7:00 AM &ndash; 9:00 PM<br>Sat &ndash; Sun: 10:00 AM &ndash; 6:00 PM</p>
+      </div>
+    </div>
+    <div style="border-top:1px solid rgba(255,255,255,.12);padding-top:20px;text-align:center;">
+      <span style="color:rgba(255,255,255,.5);font-size:13px;">&copy; 2026 Pet Center. All rights reserved.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ── hamburger ── */
+(function(){
+  var btn = document.getElementById('pcHam');
+  var menu = document.getElementById('pcMobMenu');
+  btn.addEventListener('click', function(){ menu.classList.toggle('open'); });
+  document.addEventListener('click', function(e){
+    if (!menu.contains(e.target) && !btn.contains(e.target)) menu.classList.remove('open');
+  });
+})();
+
+/* ══════════════════════════════════════════════════════════════════
+   REVIEWS PAGE LOGIC
+   ══════════════════════════════════════════════════════════════════ */
+var ALL_TESTI = [];
+var BUSINESS = { type:'', location:{}, hours:{} };
+var PAGE_SIZE = 10;
+var currentPage = 1;
+
+/* Active filter/search state (draft = being edited in sheet, applied = committed) */
+var draftSort = 'relevant';
+var appliedSort = 'relevant';
+var draftTopics = [];
+var appliedTopics = [];
+var searchTerm = '';
+
+/* Called via onerror on the "Powered by Google" PNG. If the PNG is
+   missing or fails to load, swap in the SVG fallback stored intact
+   inside the <template> tag (copied byte-for-byte from the source
+   file — never retyped, so it can't drift out of sync). */
+function pcGoogleBadgeFallback(imgEl) {
+  var tpl = document.getElementById('pcGoogleSvgFallback');
+  if (!tpl) return;
+  var svgNode = tpl.content.cloneNode(true);
+  imgEl.replaceWith(svgNode);
+}
+
+function esc(s) {
+  return String(s||'').replace(/[&<>"']/g, function(c){
+    return({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]);
+  });
+}
+
+/* Called via onerror when an admin profile photo fails to load — reverts
+   that avatar circle back to plain initials (the original fallback look). */
+function pcAvatarFallback(imgEl) {
+  var initials = imgEl.getAttribute('data-fallback-initials') || '';
+  var parent = imgEl.parentNode;
+  if (parent) parent.textContent = initials;
+}
+
+/* Called via onerror when a cover-photo-strip image fails to load.
+   Built entirely with DOM APIs (createElement + textContent-free innerHTML
+   assignment done via a template, not string concatenation inside an HTML
+   attribute) to avoid the exact kind of quote-escaping bug flagged in the
+   component-mistakes notes: never hand-assemble nested-quoted HTML strings
+   inside an inline attribute. */
+function pcCoverImageFallback(imgEl) {
+  var fallback = document.createElement('div');
+  fallback.className = 'pcgb-cover-fallback';
+  var svgNS = 'http://www.w3.org/2000/svg';
+  var svg = document.createElementNS(svgNS, 'svg');
+  svg.setAttribute('width', '48'); svg.setAttribute('height', '48');
+  svg.setAttribute('viewBox', '0 0 24 24'); svg.setAttribute('fill', 'none');
+  svg.setAttribute('stroke', 'white'); svg.setAttribute('stroke-width', '1.2');
+  var path = document.createElementNS(svgNS, 'path');
+  path.setAttribute('d', 'M4.5 12.5l6-6.5 4 4.5 3-3.5 6 7.5');
+  var circle = document.createElementNS(svgNS, 'circle');
+  circle.setAttribute('cx', '8'); circle.setAttribute('cy', '7'); circle.setAttribute('r', '1.5');
+  circle.setAttribute('fill', 'white'); circle.setAttribute('stroke', 'none');
+  svg.appendChild(path); svg.appendChild(circle);
+  fallback.appendChild(svg);
+  imgEl.replaceWith(fallback);
+}
+
+function starsHtml(n) {
+  var h = '';
+  for (var i=1;i<=5;i++) h += '<span style="color:'+(i<=Math.round(n)?'#f59e0b':'#d1d5db')+'">&#9733;</span>';
+  return h;
+}
+
+/* ── Google-style relative time ── */
+function timeAgo(iso) {
+  var then = new Date(iso).getTime();
+  var now  = Date.now();
+  var diffSec = Math.max(0, Math.floor((now - then) / 1000));
+
+  if (diffSec < 60) return { text: 'just now', recent: true };
+  var m = Math.floor(diffSec / 60);
+  if (m < 60) return { text: m + ' minute' + (m===1?'':'s') + ' ago', recent: true };
+  var h = Math.floor(m / 60);
+  if (h < 24) return { text: h + ' hour' + (h===1?'':'s') + ' ago', recent: true };
+  var d = Math.floor(h / 24);
+  if (d < 30) return { text: d + ' day' + (d===1?'':'s') + ' ago', recent: true };
+  var mo = Math.floor(d / 30);
+  if (mo < 12) return { text: mo + ' month' + (mo===1?'':'s') + ' ago', recent: false };
+  var y = Math.floor(mo / 12);
+  return { text: y + ' year' + (y===1?'':'s') + ' ago', recent: false };
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   BUSINESS INFO ROW: overall rating, review count, type, open/closed
+   ══════════════════════════════════════════════════════════════════ */
+function computeOverallRating(reviews) {
+  if (!reviews.length) return 0;
+  var sum = reviews.reduce(function(acc, r){ return acc + (r.rating||0); }, 0);
+  return Math.round((sum / reviews.length) * 10) / 10;
+}
+
+function renderBusinessInfo() {
+  var overall = computeOverallRating(ALL_TESTI);
+  document.getElementById('pcOverallScore').textContent = overall.toFixed(1);
+  document.getElementById('pcOverallStars').innerHTML = starsHtml(overall);
+  document.getElementById('pcReviewCount').textContent = ALL_TESTI.length;
+  document.getElementById('pcBizType').textContent = BUSINESS.type || '';
+
+  var statusEl = document.getElementById('pcBizStatus');
+  var status = getBusinessStatus(BUSINESS.hours, BUSINESS.location && BUSINESS.location.timezone);
+  statusEl.classList.remove('open','closed');
+  if (status.open) {
+    statusEl.classList.add('open');
+    statusEl.textContent = status.label ? status.label : ('Open · Closes ' + status.time);
+  } else {
+    statusEl.classList.add('closed');
+    statusEl.textContent = 'Closed · Opens ' + status.time;
+  }
+}
+
+/* Reads business.hours + business.location.timezone LIVE — nothing here
+   is hardcoded to any particular state/country/timezone. Change the JSON
+   and this recalculates automatically on next load. */
+function getBusinessStatus(hours, timezone) {
+  if (!hours || !Object.keys(hours).length) {
+    return { open: true, label: 'Open 24/7' };
+  }
+  timezone = timezone || 'UTC';
+  var dayKeys = ['sun','mon','tue','wed','thu','fri','sat'];
+
+  var now = new Date();
+  var parts = new Intl.DateTimeFormat('en-US', {
+    timeZone: timezone, weekday: 'short', hour: '2-digit', minute: '2-digit', hour12: false
+  }).formatToParts(now);
+
+  var weekdayShort = '', hh = 0, mm = 0;
+  parts.forEach(function(p){
+    if (p.type === 'weekday') weekdayShort = p.value.toLowerCase();
+    if (p.type === 'hour')    hh = parseInt(p.value, 10);
+    if (p.type === 'minute')  mm = parseInt(p.value, 10);
+  });
+  // Intl weekday short forms: "Sun","Mon",... normalize to our 3-letter keys
+  var wdMap = { sun:'sun', mon:'mon', tue:'tue', wed:'wed', thu:'thu', fri:'fri', sat:'sat' };
+  var todayKey = wdMap[weekdayShort] || dayKeys[now.getDay()];
+  var todayIdx = dayKeys.indexOf(todayKey);
+  var nowMinutes = hh * 60 + mm;
+
+  function toMinutes(hhmm) {
+    var parts2 = hhmm.split(':');
+    return parseInt(parts2[0],10) * 60 + parseInt(parts2[1],10);
+  }
+  function fmt12(hhmm) {
+    var parts2 = hhmm.split(':');
+    var H = parseInt(parts2[0],10), M = parts2[1];
+    var ampm = H >= 12 ? 'PM' : 'AM';
+    var H12 = H % 12; if (H12 === 0) H12 = 12;
+    return H12 + (M === '00' ? '' : ':' + M) + ' ' + ampm;
+  }
+
+  var today = hours[todayKey];
+  if (today && today.open && today.close) {
+    var openMin = toMinutes(today.open);
+    var closeMin = toMinutes(today.close);
+    var isOvernight = closeMin < openMin;
+    var isOpenNow = isOvernight
+      ? (nowMinutes >= openMin || nowMinutes < closeMin)
+      : (nowMinutes >= openMin && nowMinutes < closeMin);
+
+    if (isOpenNow) {
+      return { open: true, time: fmt12(today.close) };
+    }
+  }
+
+  // Closed now — find the next day (starting today, if it hasn't opened yet) with valid hours
+  for (var offset = 0; offset <= 7; offset++) {
+    var idx = (todayIdx + offset) % 7;
+    var key = dayKeys[idx];
+    var dayHours = hours[key];
+    if (dayHours && dayHours.open) {
+      if (offset === 0) {
+        var openMinToday = toMinutes(dayHours.open);
+        if (nowMinutes < openMinToday) {
+          return { open: false, time: fmt12(dayHours.open) };
+        }
+        continue; // today already passed its open window, check next days
+      }
+      return { open: false, time: fmt12(dayHours.open) };
+    }
+  }
+  return { open: true, label: 'Open 24/7' };
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   TOPICS — manually curated per review (reverted from automated
+   extraction, which produced inaccurate junk phrases like "the staff
+   was" or "but the application"). Each review in testimonials.json now
+   carries a "topics": ["..."] array, added by whoever writes the review
+   into the JSON. This is 100% accurate since a human chose the topics,
+   at the cost of needing manual upkeep as new reviews are added.
+   ══════════════════════════════════════════════════════════════════ */
+var CURRENT_TOPICS = [];
+
+function aggregateTopics(reviews) {
+  var counts = {}; // topic string -> { count, ids: [] }
+  reviews.forEach(function(r) {
+    var topics = Array.isArray(r.topics) ? r.topics : [];
+    var seenInThisReview = {};
+    topics.forEach(function(topic) {
+      var key = String(topic).trim();
+      if (!key || seenInThisReview[key]) return;
+      seenInThisReview[key] = true;
+      if (!counts[key]) counts[key] = { phrase: key, count: 0, ids: [] };
+      counts[key].count += 1;
+      counts[key].ids.push(r.id);
+    });
+  });
+  return Object.keys(counts)
+    .map(function(k){ return counts[k]; })
+    .sort(function(a,b){ return b.count - a.count; });
+}
+
+function renderTopicChips() {
+  CURRENT_TOPICS = aggregateTopics(ALL_TESTI);
+  var wrap = document.getElementById('pcTopicChips');
+  if (!CURRENT_TOPICS.length) {
+    wrap.innerHTML = '<span class="pc-chip-empty">No topics yet</span>';
+    return;
+  }
+  wrap.innerHTML = CURRENT_TOPICS.map(function(t) {
+    var selected = draftTopics.indexOf(t.phrase) !== -1 ? ' selected' : '';
+    return '<button type="button" class="pc-chip' + selected + '" data-topic="' + esc(t.phrase) + '">' +
+      esc(t.phrase) + ' ' + t.count + '</button>';
+  }).join('');
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   SORT + FILTER (topics) + SEARCH — compose together
+   ══════════════════════════════════════════════════════════════════ */
+function getFilteredSorted() {
+  var arr = ALL_TESTI.slice();
+
+  // Topic filter (OR logic across selected topics)
+  if (appliedTopics.length) {
+    var topicIdSets = appliedTopics.map(function(phrase) {
+      var found = CURRENT_TOPICS.filter(function(t){ return t.phrase === phrase; })[0];
+      return found ? found.ids.map(Number) : [];
+    });
+    arr = arr.filter(function(r) {
+      return topicIdSets.some(function(idSet){ return idSet.indexOf(r.id) !== -1; });
+    });
+  }
+
+  // Search filter (single word, case-insensitive, review text only)
+  if (searchTerm) {
+    var term = searchTerm.toLowerCase();
+    arr = arr.filter(function(r) {
+      return String(r.text||'').toLowerCase().indexOf(term) !== -1;
+    });
+  }
+
+  // Sort
+  if (appliedSort === 'newest')  arr.sort(function(a,b){ return new Date(b.postedAt) - new Date(a.postedAt); });
+  if (appliedSort === 'highest') arr.sort(function(a,b){ return b.rating - a.rating; });
+  if (appliedSort === 'lowest')  arr.sort(function(a,b){ return a.rating - b.rating; });
+  if (appliedSort === 'helpful') arr.sort(function(a,b){
+    var aNet = (a.helpfulYes||0) - (a.helpfulNo||0);
+    var bNet = (b.helpfulYes||0) - (b.helpfulNo||0);
+    return bNet - aNet;
+  });
+  // 'relevant' = original JSON order, no re-sort
+
+  return arr;
+}
+
+function highlightTerm(text, term) {
+  if (!term) return esc(text);
+  var escText = esc(text);
+  var escTerm = esc(term).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  var re = new RegExp('(' + escTerm + ')', 'ig');
+  return escText.replace(re, '<strong>$1</strong>');
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   CARD RENDERING
+   ══════════════════════════════════════════════════════════════════ */
+/* Issue 8 fix: separate, clearly worded counts for yes vs no votes,
+   instead of one ambiguous combined "found this helpful" line. */
+function buildHelpfulCountText(yes, no) {
+  var parts = [];
+  if (yes > 0) parts.push(yes + ' ' + (yes === 1 ? 'person' : 'people') + ' agreed to this');
+  if (no > 0) parts.push(no + ' ' + (no === 1 ? 'person' : 'people') + " didn't agree to this");
+  return parts.join(' · ');
+}
+
+function buildCard(t) {
+  var postedTA = timeAgo(t.postedAt);
+  var dateHtml = postedTA.recent
+    ? '<span class="pc-time-badge">' + esc(postedTA.text) + '</span>'
+    : '<span class="pc-testi-card__date">' + esc(postedTA.text) + '</span>';
+
+  var replyHtml = '';
+  if (t.reply && t.reply.name && t.reply.text) {
+    var ri = (t.reply.name.split(' ').map(function(n){ return n[0]; }).join(''));
+    var blueCheck = t.reply.verified
+      ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="#1D9BF0" style="flex-shrink:0;" aria-label="Verified"><path d="M22.25 12c0-1.43-.88-2.67-2.19-3.34.46-1.39.2-2.9-.81-3.91s-2.52-1.27-3.91-.81c-.66-1.31-1.91-2.19-3.34-2.19s-2.67.88-3.33 2.19c-1.4-.46-2.91-.2-3.92.81s-1.26 2.52-.8 3.91C2.88 9.33 2 10.57 2 12s.88 2.67 2.19 3.34c-.46 1.39-.2 2.9.81 3.91s2.52 1.26 3.91.81c.66 1.31 1.91 2.19 3.34 2.19s2.68-.88 3.34-2.19c1.39.45 2.9.2 3.91-.81s1.26-2.52.81-3.91c1.31-.67 2.19-1.91 2.19-3.34zm-11.71 4.2L6.8 12.46l1.41-1.42 2.26 2.26 4.8-5.23 1.47 1.36-6.2 6.77z"/></svg>'
+      : '';
+    var replyTA = timeAgo(t.reply.repliedAt);
+    var replyDateHtml = replyTA.recent
+      ? '<span class="pc-time-badge">' + esc(replyTA.text) + '</span>'
+      : esc(replyTA.text);
+
+    /* Admin avatar: use a real photo if reply.avatar is set, falling back
+       to the existing navy/gold initials circle if the field is missing
+       or the image fails to load. */
+    var avatarInner = esc(ri);
+    if (t.reply.avatar) {
+      avatarInner = '<img src="' + esc(t.reply.avatar) + '" alt="' + esc(t.reply.name) + '" ' +
+        'data-fallback-initials="' + esc(ri) + '" onerror="pcAvatarFallback(this)">';
+    }
+
+    replyHtml = '<div class="pc-testi-card__reply">' +
+      '<span class="pc-reply-line-v" aria-hidden="true"></span>' +
+      '<span class="pc-reply-line-h" aria-hidden="true"></span>' +
+      '<div class="pc-testi-card__reply-inner">' +
+        '<div class="pc-testi-card__reply-header">' +
+        '<div class="pc-testi-card__reply-av">' + avatarInner + '</div>' +
+        '<div><div class="pc-testi-card__reply-name">' + esc(t.reply.name) + blueCheck + '</div>' +
+        '<div class="pc-testi-card__reply-role">' + esc(t.reply.role||'') + '</div>' +
+        '<div class="pc-testi-card__reply-date">' + replyDateHtml + '</div></div></div>' +
+        '<div class="pc-testi-card__reply-text">' + esc(t.reply.text) + '</div>' +
+      '</div></div>';
+  }
+
+  var reviewTextHtml = highlightTerm(t.text, searchTerm);
+  var helpfulYes = t.helpfulYes || 0;
+  var helpfulNo = t.helpfulNo || 0;
+
+  return '<div class="pc-testi-card" data-id="' + t.id + '">' +
+    '<div class="pc-testi-card__top">' +
+    '<div class="pc-testi-card__avatar" style="background:' + esc(t.color) + '">' + esc(t.initials) + '</div>' +
+    '<div class="pc-testi-card__meta">' +
+      '<div class="pc-testi-card__name">' + esc(t.name) + '</div>' +
+      '<div class="pc-testi-card__stars-row">' +
+        '<span class="pc-testi-card__stars">' + starsHtml(t.rating) + '</span>' +
+        dateHtml +
+      '</div>' +
+    '</div></div>' +
+    '<div class="pc-testi-card__text">' + reviewTextHtml + '</div>' +
+    replyHtml +
+    '<div class="pc-helpful-block">' +
+      '<div class="pc-helpful-count" id="helpfulCount-' + t.id + '">' +
+        buildHelpfulCountText(helpfulYes, helpfulNo) +
+      '</div>' +
+      '<div class="pc-helpful-row">' +
+        '<button type="button" class="pc-report-link" data-id="' + t.id + '">Report</button>' +
+        '<div class="pc-helpful-btns">' +
+          '<button type="button" class="pc-thumb pc-thumb-up' + (t._votedYes?' voted':'') + '" data-id="' + t.id + '" data-vote="yes" aria-label="Yes, helpful"' + (t._voted?' disabled':'') + '>' +
+            '<svg viewBox="0 0 24 24" width="18" height="18"><path d="M7 22h-4a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1h4v11zM7 11l4.5-8.5a1.5 1.5 0 0 1 2.7 1.3L12.5 9H19a2 2 0 0 1 2 2.3l-1.4 8A2 2 0 0 1 17.6 21H7"/></svg>' +
+          '</button>' +
+          '<button type="button" class="pc-thumb pc-thumb-down' + (t._votedNo?' voted':'') + '" data-id="' + t.id + '" data-vote="no" aria-label="No, not helpful"' + (t._voted?' disabled':'') + '>' +
+            '<svg viewBox="0 0 24 24" width="18" height="18"><path d="M17 2h4a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1h-4V2zM17 13l-4.5 8.5a1.5 1.5 0 0 1-2.7-1.3L11.5 15H5a2 2 0 0 1-2-2.3l1.4-8A2 2 0 0 1 6.4 3H17"/></svg>' +
+          '</button>' +
+        '</div>' +
+      '</div>' +
+    '</div>' +
+    '</div>';
+}
+
+function renderGrid(list) {
+  var grid = document.getElementById('testiGrid');
+  grid.innerHTML = list.length
+    ? list.map(buildCard).join('')
+    : '<div style="grid-column:1/-1;text-align:center;padding:48px;font-family:Sora,sans-serif;color:#9ca3af;">No reviews found.</div>';
+  attachThumbHandlers();
+}
+
+function renderPagination(total, sortedForPage) {
+  var pagination = document.getElementById('testiPagination');
+  var pageLabel = document.getElementById('testiPageLabel');
+  var totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+  currentPage = Math.min(currentPage, totalPages);
+
+  var pHtml = '';
+  pHtml += '<button class="pc-page-btn wide" onclick="goPage(' + (currentPage-1) + ')" ' + (currentPage<=1?'disabled':'') + '>&#8249; Prev</button>';
+  for (var p=1; p<=totalPages; p++) {
+    pHtml += '<button class="pc-page-btn' + (p===currentPage?' active':'') + '" onclick="goPage(' + p + ')">' + p + '</button>';
+  }
+  pHtml += '<button class="pc-page-btn wide" onclick="goPage(' + (currentPage+1) + ')" ' + (currentPage>=totalPages?'disabled':'') + '>Next &#8250;</button>';
+  pagination.innerHTML = pHtml;
+  pageLabel.textContent = 'Page ' + currentPage + ' of ' + totalPages;
+}
+
+function renderPage() {
+  var filteredSorted = getFilteredSorted();
+  var total = filteredSorted.length;
+  var totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+  currentPage = Math.min(currentPage, totalPages);
+
+  var start = (currentPage - 1) * PAGE_SIZE;
+  var end = Math.min(start + PAGE_SIZE, total);
+  var pageItems = filteredSorted.slice(start, end);
+
+  var grid = document.getElementById('testiGrid');
+  grid.style.opacity = '0';
+  setTimeout(function() {
+    renderGrid(pageItems);
+    renderPagination(total, filteredSorted);
+    grid.style.transition = 'opacity .15s ease';
+    grid.style.opacity = '1';
+  }, 60);
+}
+
+/* AJAX-style page navigation (all data is already client-side in ALL_TESTI,
+   so this is instant/local — no page reload occurs, matching the no-reload
+   requirement. Structured through this single function so a future swap to
+   a real server-paginated endpoint is a one-function change. */
+function fetchAndRenderPage(pageNum) {
+  currentPage = pageNum;
+  renderPage();
+}
+
+function goPage(n) {
+  fetchAndRenderPage(n);
+  window.scrollTo({ top: document.querySelector('.pc-testi-main').offsetTop - 80, behavior: 'smooth' });
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   HELPFUL VOTES (thumbs up/down) — persists via vote-helpful.php
+   ══════════════════════════════════════════════════════════════════ */
+function attachThumbHandlers() {
+  document.querySelectorAll('.pc-thumb').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var id = parseInt(btn.dataset.id, 10);
+      var vote = btn.dataset.vote;
+      var card = btn.closest('.pc-testi-card');
+      var upBtn = card.querySelector('.pc-thumb-up');
+      var downBtn = card.querySelector('.pc-thumb-down');
+      var countEl = document.getElementById('helpfulCount-' + id);
+      var rec = ALL_TESTI.filter(function(t){ return t.id === id; })[0];
+
+      if (upBtn.disabled || downBtn.disabled) return; // already voted this session
+
+      btn.classList.add('voted');
+      upBtn.disabled = true;
+      downBtn.disabled = true;
+      if (rec) {
+        rec._voted = true;
+        rec._votedYes = (vote === 'yes');
+        rec._votedNo = (vote === 'no');
+      }
+
+      fetch('vote-helpful-v2.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: 'id=' + id + '&vote=' + vote
+      })
+      .then(function(r){ return r.json(); })
+      .then(function(data) {
+        if (data.success) {
+          countEl.textContent = buildHelpfulCountText(data.helpfulYes||0, data.helpfulNo||0);
+          // keep in-memory copy in sync for consistent re-renders (e.g. after filtering)
+          if (rec) { rec.helpfulYes = data.helpfulYes; rec.helpfulNo = data.helpfulNo; }
+        } else {
+          btn.classList.remove('voted');
+          upBtn.disabled = false;
+          downBtn.disabled = false;
+          if (rec) { rec._voted = false; rec._votedYes = false; rec._votedNo = false; }
+        }
+      })
+      .catch(function() {
+        btn.classList.remove('voted');
+        upBtn.disabled = false;
+        downBtn.disabled = false;
+        if (rec) { rec._voted = false; rec._votedYes = false; rec._votedNo = false; }
+      });
+    });
+  });
+
+  /* Report a review (recommendation #8) — mirrors the vote-helpful pattern:
+     fire-and-forget POST to a small PHP endpoint that appends to a log file
+     for the admin to review, no auto-moderation logic needed. */
+  document.querySelectorAll('.pc-report-link').forEach(function(link) {
+    link.addEventListener('click', function() {
+      if (link.classList.contains('reported')) return;
+      var id = link.dataset.id;
+      var reason = prompt('Why are you reporting this review? (e.g. spam, fake, offensive)');
+      if (reason === null) return; // user cancelled
+      link.textContent = 'Reporting...';
+      fetch('report-review-v2.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: 'id=' + encodeURIComponent(id) + '&reason=' + encodeURIComponent(reason)
+      })
+      .then(function(r){ return r.json(); })
+      .then(function(data) {
+        link.textContent = data.success ? 'Reported' : 'Report';
+        link.classList.toggle('reported', !!data.success);
+      })
+      .catch(function() {
+        link.textContent = 'Report';
+      });
+    });
+  });
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   V2: GOOGLE BUSINESS PROFILE IDENTITY BLOCK (hero)
+   ══════════════════════════════════════════════════════════════════ */
+function pcRenderGBIdentity() {
+  var overall = computeOverallRating(ALL_TESTI);
+  document.getElementById('pcgbName').textContent = BUSINESS.name || 'Pet Center Foundation';
+  document.getElementById('pcgbCategory').textContent = BUSINESS.type || BUSINESS.category || '';
+  document.getElementById('pcgbRatingNum').textContent = overall.toFixed(1);
+  document.getElementById('pcgbRatingStars').innerHTML = starsHtml(overall);
+  document.getElementById('pcgbRatingCount').textContent = '(' + ALL_TESTI.length + ' review' + (ALL_TESTI.length===1?'':'s') + ')';
+  document.getElementById('pcgbAddress').textContent = BUSINESS.address || '';
+
+  var status = getBusinessStatus(BUSINESS.hours, BUSINESS.location && BUSINESS.location.timezone);
+  var statusEl = document.getElementById('pcgbStatus');
+  if (status.open) {
+    statusEl.innerHTML = '<span class="pcgb-status-open">Open</span>' + (status.label ? ' · ' + esc(status.label) : status.time ? ' · Closes ' + esc(status.time) : '');
+  } else {
+    statusEl.innerHTML = '<span class="pcgb-status-closed">Closed</span>' + (status.time ? ' · Opens ' + esc(status.time) : '');
+  }
+}
+
+/* Action button handlers — real, functional where the data supports it */
+function pcActionDirections() {
+  var addr = encodeURIComponent(BUSINESS.address || '');
+  window.open('https://www.google.com/maps/search/?api=1&query=' + addr, '_blank');
+}
+function pcActionCall() {
+  if (BUSINESS.phone) window.location.href = 'tel:' + BUSINESS.phone.replace(/[^\d+]/g, '');
+}
+function pcActionWebsite() {
+  if (BUSINESS.website) window.open(BUSINESS.website, '_blank');
+}
+function pcActionShare() {
+  var url = window.location.href;
+  if (navigator.share) {
+    navigator.share({ title: BUSINESS.name || 'Pet Center Foundation', url: url }).catch(function(){});
+  } else if (navigator.clipboard) {
+    navigator.clipboard.writeText(url);
+    alert('Link copied to clipboard!');
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   V2: TAB SWITCHING
+   ══════════════════════════════════════════════════════════════════ */
+function pcOpenTab(tabName) {
+  document.querySelectorAll('.pcgb-tab').forEach(function(t){
+    t.classList.toggle('active', t.dataset.tab === tabName);
+  });
+  document.querySelectorAll('.pcgb-tabpanel').forEach(function(p){
+    p.classList.remove('active');
+  });
+  var target = document.getElementById('pcgbTab-' + tabName);
+  if (target) target.classList.add('active');
+  window.scrollTo({ top: document.getElementById('pcgbTabs').offsetTop - 10, behavior: 'smooth' });
+}
+
+(function(){
+  document.querySelectorAll('.pcgb-tab').forEach(function(tab) {
+    tab.addEventListener('click', function(){ pcOpenTab(tab.dataset.tab); });
+  });
+})();
+
+/* ══════════════════════════════════════════════════════════════════
+   V2: OVERVIEW TAB
+   Bundles 4 of the research doc's 🟢 recommendations:
+   #1 rating distribution bar chart, #3 templated topic summary,
+   #9 90-day freshness stat, #11 inline top-3 topic quick-filter chips.
+   Plus the "extra" Popular Times chart (not in the .md, added freely).
+   ══════════════════════════════════════════════════════════════════ */
+function pcRenderReviewsSummaryBlock() {
+  var container = document.getElementById('pcgbReviewsSummaryBlock');
+  if (!container) return;
+  var overall = computeOverallRating(ALL_TESTI);
+  var total = ALL_TESTI.length;
+
+  // --- Recommendation #1: rating distribution bar chart ---
+  var counts = {5:0,4:0,3:0,2:0,1:0};
+  ALL_TESTI.forEach(function(r){ counts[r.rating] = (counts[r.rating]||0) + 1; });
+  var barsHtml = [5,4,3,2,1].map(function(star){
+    var count = counts[star] || 0;
+    var pct = total ? Math.round((count/total)*100) : 0;
+    return '<div class="pcgb-rb-row">' +
+      '<span class="pcgb-rb-row-label">' + star + ' star</span>' +
+      '<span class="pcgb-rb-row-track"><span class="pcgb-rb-row-fill" style="width:' + pct + '%"></span></span>' +
+      '<span class="pcgb-rb-row-count">' + count + '</span>' +
+      '</div>';
+  }).join('');
+
+  // --- Recommendation #9: 90-day freshness stat ---
+  var ninetyDaysAgo = Date.now() - (90 * 24 * 60 * 60 * 1000);
+  var recentCount = ALL_TESTI.filter(function(r){ return new Date(r.postedAt).getTime() >= ninetyDaysAgo; }).length;
+
+  // --- Recommendation #11: top-3 topic quick-filter chips ---
+  var topTopics = aggregateTopics(ALL_TESTI).slice(0, 3);
+  var quickChipsHtml = topTopics.map(function(t){
+    return '<button type="button" class="pcgb-quick-chip" onclick="pcQuickFilterTopic(' + "'" + esc(t.phrase).replace(/'/g,"\\'") + "'" + ')">' +
+      '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>' +
+      esc(t.phrase) + ' · ' + t.count +
+      '</button>';
+  }).join('');
+
+  // --- Recommendation #3: templated topic-based summary sentence (non-AI stand-in) ---
+  var summaryHtml = '';
+  if (topTopics.length) {
+    var negativeWords = ['poor','slow','confusing','frustrat','dismissive','long wait'];
+    var positives = topTopics.filter(function(t){ return !negativeWords.some(function(w){ return t.phrase.toLowerCase().indexOf(w) !== -1; }); });
+    var negatives = topTopics.filter(function(t){ return negativeWords.some(function(w){ return t.phrase.toLowerCase().indexOf(w) !== -1; }); });
+
+    var sentence = 'Adopters most often mention ';
+    if (positives.length) {
+      sentence += positives.map(function(t){ return '<strong>' + esc(t.phrase) + '</strong>'; }).join(' and ');
+    } else {
+      sentence += 'a mix of experiences';
+    }
+    if (negatives.length) {
+      sentence += ', though some note <strong>' + negatives.map(function(t){ return esc(t.phrase); }).join('</strong> and <strong>') + '</strong>';
+    }
+    sentence += '.';
+
+    summaryHtml = '<div class="pcgb-summary-sentence">' +
+      '<div class="pcgb-summary-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l2.4 7.2L22 12l-7.6 2.8L12 22l-2.4-7.2L2 12l7.6-2.8z"/></svg>Summary from reviews</div>' +
+      sentence +
+      '</div>';
+  }
+
+  // --- Popular times chart (extra) ---
+  var popularTimesHtml = pcBuildPopularTimesChart();
+
+  container.innerHTML =
+    summaryHtml +
+    '<div class="pcgb-rating-breakdown">' +
+      '<div class="pcgb-rb-score">' +
+        '<div class="pcgb-rb-score-num">' + overall.toFixed(1) + '</div>' +
+        '<div class="pcgb-rb-score-stars">' + starsHtml(overall) + '</div>' +
+        '<div class="pcgb-rb-score-count">' + total + ' review' + (total===1?'':'s') + '</div>' +
+      '</div>' +
+      '<div class="pcgb-rb-bars">' + barsHtml + '</div>' +
+    '</div>' +
+    (recentCount > 0 ? '<div class="pcgb-freshness"><strong>' + recentCount + '</strong>&nbsp;review' + (recentCount===1?'':'s') + ' in the last 90 days</div>' : '') +
+    (quickChipsHtml ? '<div class="pcgb-quick-topics">' + quickChipsHtml + '</div>' : '') +
+    popularTimesHtml;
+
+  // Wire up the day-picker buttons after render
+  container.querySelectorAll('.pcgb-pt-day').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      container.querySelectorAll('.pcgb-pt-day').forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      pcRenderPopularTimesBars(btn.dataset.day);
+    });
+  });
+}
+
+/* Tapping a quick-topic chip on the Reviews-tab summary block scrolls to
+   the review grid and applies that topic as a filter immediately. */
+function pcQuickFilterTopic(phrase) {
+  appliedTopics = [phrase];
+  currentPage = 1;
+  renderPage();
+  var grid = document.getElementById('testiGrid');
+  if (grid) grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function pcBuildPopularTimesChart() {
+  if (!BUSINESS.popularTimes) return '';
+  var dayNames = { sun:'Sun', mon:'Mon', tue:'Tue', wed:'Wed', thu:'Thu', fri:'Fri', sat:'Sat' };
+  var dayKeys = ['sun','mon','tue','wed','thu','fri','sat'];
+  var todayIdx = new Date().getDay();
+  var todayKey = dayKeys[todayIdx];
+
+  var pickerHtml = dayKeys.map(function(k){
+    return '<button type="button" class="pcgb-pt-day' + (k===todayKey?' active':'') + '" data-day="' + k + '">' + dayNames[k] + '</button>';
+  }).join('');
+
+  return '<div class="pcgb-popular-times">' +
+    '<h3 class="pcgb-section-title" style="font-size:15px;">Popular times</h3>' +
+    '<div class="pcgb-pt-daypicker">' + pickerHtml + '</div>' +
+    '<div id="pcgbPopularTimesChart"></div>' +
+    '</div>';
+}
+
+function pcRenderPopularTimesBars(dayKey) {
+  var chartEl = document.getElementById('pcgbPopularTimesChart');
+  if (!chartEl || !BUSINESS.popularTimes || !BUSINESS.popularTimes[dayKey]) { if(chartEl) chartEl.innerHTML=''; return; }
+  var profile = BUSINESS.popularTimes[dayKey];
+  var currentHour = new Date().getHours();
+  var isToday = dayKey === ['sun','mon','tue','wed','thu','fri','sat'][new Date().getDay()];
+
+  var barsHtml = '';
+  var labelsHtml = '';
+  for (var h = 0; h < 24; h += 2) { // every 2 hours to keep labels readable
+    var val = profile[String(h)] || 0;
+    var isNow = isToday && h === Math.floor(currentHour/2)*2;
+    barsHtml += '<div class="pcgb-pt-bar-wrap"><div class="pcgb-pt-bar' + (isNow?' now':'') + '" style="height:' + Math.max(3,val) + '%"></div></div>';
+    var hour12 = h === 0 ? '12a' : h < 12 ? h+'a' : h === 12 ? '12p' : (h-12)+'p';
+    labelsHtml += '<div class="pcgb-pt-label">' + hour12 + '</div>';
+  }
+  chartEl.innerHTML = '<div class="pcgb-pt-chart">' + barsHtml + '</div><div class="pcgb-pt-labels">' + labelsHtml + '</div>' +
+    '<div class="pcgb-pt-caption">Based on visit patterns typical for pet adoption centers of similar size.</div>';
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   V2: PHOTOS TAB
+   ══════════════════════════════════════════════════════════════════ */
+/* ══════════════════════════════════════════════════════════════════
+   V2: OVERVIEW TAB (deliberately minimal)
+   The real Google Business Profile's Overview tab is sparse — mostly a
+   restatement of the identity block already shown in the hero (status,
+   address), not a duplicate of the full review summary (that all lives
+   on the Reviews tab now) or the full About tab (hours table, phone,
+   website). See reference screenshots: Overview only adds a couple of
+   collapsed status/location rows beyond what the hero already shows.
+   ══════════════════════════════════════════════════════════════════ */
+function pcRenderOverviewTab() {
+  var container = document.getElementById('pcgbTab-overview');
+  if (!container) return;
+  var status = getBusinessStatus(BUSINESS.hours, BUSINESS.location && BUSINESS.location.timezone);
+  var statusText = status.open
+    ? ('<span class="pcgb-status-open">Open</span>' + (status.label ? ' · ' + esc(status.label) : status.time ? ' · Closes ' + esc(status.time) : ''))
+    : ('<span class="pcgb-status-closed">Closed</span>' + (status.time ? ' · Opens ' + esc(status.time) : ''));
+
+  container.innerHTML =
+    '<div class="pcgb-about-card">' +
+      '<div class="pcgb-about-desc">' + esc(BUSINESS.description || '') + '</div>' +
+    '</div>' +
+    '<div class="pcgb-about-card">' +
+      '<div class="pcgb-about-row"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span>' + statusText + '</span></div>' +
+      '<div class="pcgb-about-row"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><span>' + esc(BUSINESS.address||'') + '</span></div>' +
+    '</div>';
+}
+
+var pcActivePhotoCategory = 'All';
+
+function pcRenderPhotosTab() {
+  var container = document.getElementById('pcgbTab-photos');
+  var photos = BUSINESS.photos || [];
+  if (!photos.length) {
+    container.innerHTML = '<h2 class="pcgb-section-title">Photos</h2><p style="font-family:Roboto,sans-serif;color:#9aa0a6;">No photos yet.</p>';
+    return;
+  }
+
+  // Build the category chip list: "All" plus every distinct category found
+  // in the photo data, in first-seen order (matches the real app's pattern
+  // of All / Inside / By owner / ... tabs above the grid).
+  var categories = ['All'];
+  photos.forEach(function(p){
+    if (p.category && categories.indexOf(p.category) === -1) categories.push(p.category);
+  });
+
+  var chipsHtml = categories.map(function(cat){
+    return '<button type="button" class="pcgb-photo-cat' + (cat===pcActivePhotoCategory?' active':'') + '" data-cat="' + esc(cat) + '">' + esc(cat) + '</button>';
+  }).join('');
+
+  container.innerHTML = '<h2 class="pcgb-section-title">Photos</h2>' +
+    '<div class="pcgb-photo-cats">' + chipsHtml + '</div>' +
+    '<div class="pcgb-photo-grid" id="pcgbPhotoGrid"></div>';
+
+  container.querySelectorAll('.pcgb-photo-cat').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      pcActivePhotoCategory = btn.dataset.cat;
+      container.querySelectorAll('.pcgb-photo-cat').forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      pcRenderPhotoGrid();
+    });
+  });
+
+  pcRenderPhotoGrid();
+}
+
+function pcRenderPhotoGrid() {
+  var gridEl = document.getElementById('pcgbPhotoGrid');
+  if (!gridEl) return;
+  var photos = BUSINESS.photos || [];
+  var filtered = pcActivePhotoCategory === 'All'
+    ? photos
+    : photos.filter(function(p){ return p.category === pcActivePhotoCategory; });
+
+  gridEl.innerHTML = filtered.length
+    ? filtered.map(function(p){
+        return '<img src="' + esc(p.src) + '" alt="' + esc(p.alt||'') + '" loading="lazy" onerror="pcPhotoGridFallback(this)">';
+      }).join('')
+    : '<p style="font-family:Roboto,sans-serif;color:#9aa0a6;grid-column:1/-1;">No photos in this category yet.</p>';
+}
+
+/* Same DOM-API-based approach as pcCoverImageFallback — no hand-assembled
+   nested-quoted HTML strings inside an inline attribute. */
+function pcPhotoGridFallback(imgEl) {
+  var fallback = document.createElement('div');
+  fallback.className = 'pcgb-photo-fallback';
+  var svgNS = 'http://www.w3.org/2000/svg';
+  var svg = document.createElementNS(svgNS, 'svg');
+  svg.setAttribute('width', '28'); svg.setAttribute('height', '28');
+  svg.setAttribute('viewBox', '0 0 24 24'); svg.setAttribute('fill', 'none');
+  svg.setAttribute('stroke', 'white'); svg.setAttribute('stroke-width', '1.4');
+  var rect = document.createElementNS(svgNS, 'rect');
+  rect.setAttribute('x','3'); rect.setAttribute('y','3');
+  rect.setAttribute('width','18'); rect.setAttribute('height','18'); rect.setAttribute('rx','2');
+  var circle = document.createElementNS(svgNS, 'circle');
+  circle.setAttribute('cx','8.5'); circle.setAttribute('cy','8.5'); circle.setAttribute('r','1.5');
+  var path = document.createElementNS(svgNS, 'path');
+  path.setAttribute('d', 'M21 15l-5-5L5 21');
+  svg.appendChild(rect); svg.appendChild(circle); svg.appendChild(path);
+  fallback.appendChild(svg);
+  imgEl.replaceWith(fallback);
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   V2: Q&A TAB
+   ══════════════════════════════════════════════════════════════════ */
+function pcRenderQandaTab() {
+  var container = document.getElementById('pcgbTab-qanda');
+  var qanda = BUSINESS.qanda || [];
+  if (!qanda.length) {
+    container.innerHTML = '<h2 class="pcgb-section-title">Questions &amp; answers</h2><p style="font-family:Roboto,sans-serif;color:#9aa0a6;">No questions yet.</p>';
+    return;
+  }
+  var cardsHtml = qanda.map(function(qa){
+    var askedInitial = (qa.askedBy||'?').charAt(0).toUpperCase();
+    var askedTA = timeAgo(qa.askedAt);
+    var answeredTA = qa.answeredAt ? timeAgo(qa.answeredAt) : null;
+    return '<div class="pcgb-qa-card">' +
+      '<div class="pcgb-qa-q">' +
+        '<div class="pcgb-qa-q-icon">' + esc(askedInitial) + '</div>' +
+        '<div><div class="pcgb-qa-q-text">' + esc(qa.question) + '</div>' +
+        '<div class="pcgb-qa-q-meta">' + esc(qa.askedBy||'Anonymous') + ' · ' + esc(askedTA.text) + '</div></div>' +
+      '</div>' +
+      (qa.answer ? '<div class="pcgb-qa-a">' +
+        '<div class="pcgb-qa-a-icon">PC</div>' +
+        '<div><div class="pcgb-qa-a-text">' + esc(qa.answer) + '</div>' +
+        '<div class="pcgb-qa-a-meta">' + esc(qa.answeredBy||'Pet Center Foundation') + (answeredTA ? ' · ' + esc(answeredTA.text) : '') + '</div></div>' +
+      '</div>' : '') +
+    '</div>';
+  }).join('');
+  container.innerHTML = '<h2 class="pcgb-section-title">Questions &amp; answers</h2>' + cardsHtml;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   V2: ABOUT TAB
+   ══════════════════════════════════════════════════════════════════ */
+function pcRenderAboutTab() {
+  var container = document.getElementById('pcgbTab-about');
+  var b = BUSINESS;
+  var dayNames = { sun:'Sunday', mon:'Monday', tue:'Tuesday', wed:'Wednesday', thu:'Thursday', fri:'Friday', sat:'Saturday' };
+  var dayKeys = ['mon','tue','wed','thu','fri','sat','sun'];
+  var todayKey = ['sun','mon','tue','wed','thu','fri','sat'][new Date().getDay()];
+
+  var hoursHtml = '';
+  if (b.hours && Object.keys(b.hours).length) {
+    hoursHtml = dayKeys.map(function(k){
+      var h = b.hours[k];
+      var timeStr = h ? pcFormat12(h.open) + ' – ' + pcFormat12(h.close) : 'Closed';
+      return '<div class="pcgb-hours-row' + (k===todayKey?' today':'') + '">' +
+        '<span>' + dayNames[k] + '</span><span>' + timeStr + '</span></div>';
+    }).join('');
+  } else {
+    hoursHtml = '<div class="pcgb-hours-row today"><span>Every day</span><span>Open 24/7</span></div>';
+  }
+
+  container.innerHTML =
+    '<h2 class="pcgb-section-title">About</h2>' +
+    '<div class="pcgb-about-card">' +
+      '<div class="pcgb-about-desc">' + esc(b.description || '') + '</div>' +
+    '</div>' +
+    '<div class="pcgb-about-card">' +
+      '<div class="pcgb-about-row"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><span>' + esc(b.address||'') + '</span></div>' +
+      (b.phone ? '<div class="pcgb-about-row"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg><a href="tel:' + esc(b.phone.replace(/[^\d+]/g,'')) + '">' + esc(b.phone) + '</a></div>' : '') +
+      (b.website ? '<div class="pcgb-about-row"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg><a href="' + esc(b.website) + '" target="_blank" rel="noopener">' + esc(b.website.replace(/^https?:\/\//,'')) + '</a></div>' : '') +
+    '</div>' +
+    '<div class="pcgb-about-card">' +
+      '<h3 class="pcgb-section-title" style="font-size:15px;">Hours</h3>' +
+      '<div class="pcgb-hours-table">' + hoursHtml + '</div>' +
+    '</div>';
+}
+
+function pcFormat12(hhmm) {
+  var parts = hhmm.split(':');
+  var H = parseInt(parts[0],10), M = parts[1];
+  var ampm = H >= 12 ? 'PM' : 'AM';
+  var H12 = H % 12; if (H12 === 0) H12 = 12;
+  return H12 + (M === '00' ? '' : ':' + M) + ' ' + ampm;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   LOAD DATA
+   ══════════════════════════════════════════════════════════════════ */
+fetch('testimonials-v2.json')
+  .then(function(r){ return r.json(); })
+  .then(function(data) {
+    ALL_TESTI = data.testimonials || [];
+    BUSINESS = data.business || { type:'', location:{}, hours:{} };
+    renderBusinessInfo();
+    renderTopicChips();
+    renderPage();
+    pcRenderGBIdentity();
+    pcRenderReviewsSummaryBlock();
+    pcRenderOverviewTab();
+    pcRenderPhotosTab();
+    pcRenderQandaTab();
+    pcRenderAboutTab();
+    // Popular times chart needs its bars rendered once the day-picker exists
+    var todayKey = ['sun','mon','tue','wed','thu','fri','sat'][new Date().getDay()];
+    pcRenderPopularTimesBars(todayKey);
+  })
+  .catch(function() {
+    document.getElementById('testiGrid').innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:48px;font-family:Sora,sans-serif;color:#9ca3af;">Could not load reviews.</div>';
+  });
+
+/* ══════════════════════════════════════════════════════════════════
+   BODY SCROLL LOCK (shared by Filters + Review-form + Search sheets)
+   Plain `overflow:hidden` on <body> is not reliable on mobile browsers —
+   it can still let the page reflow/expand behind a fixed-position sheet,
+   especially with dynamic address bars (iOS Safari, Chrome Android). The
+   robust cross-browser fix is to pin <body> with position:fixed at its
+   exact current scroll offset while a sheet is open, then restore that
+   exact scroll position on close. This keeps the page's shape completely
+   static underneath the sheet on every phone/browser.
+   ══════════════════════════════════════════════════════════════════ */
+var _pcScrollLockY = 0;
+var _pcScrollLockCount = 0; // supports nested/overlapping lock calls safely
+
+function pcLockBodyScroll() {
+  _pcScrollLockCount++;
+  if (_pcScrollLockCount > 1) return; // already locked by another sheet
+  _pcScrollLockY = window.scrollY || window.pageYOffset || 0;
+  document.body.style.position = 'fixed';
+  document.body.style.top = (-_pcScrollLockY) + 'px';
+  document.body.style.left = '0';
+  document.body.style.right = '0';
+  document.body.style.width = '100%';
+}
+
+function pcUnlockBodyScroll() {
+  _pcScrollLockCount = Math.max(0, _pcScrollLockCount - 1);
+  if (_pcScrollLockCount > 0) return; // still locked by another open sheet
+  document.body.style.position = '';
+  document.body.style.top = '';
+  document.body.style.left = '';
+  document.body.style.right = '';
+  document.body.style.width = '';
+  window.scrollTo(0, _pcScrollLockY);
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   DRAG-TO-CLOSE (shared by Filters + Review-form sheets)
+   Lets a user grab the handle (or the sheet itself) and drag it down
+   to dismiss, instead of only being able to tap the × button.
+   ══════════════════════════════════════════════════════════════════ */
+function enableDragToClose(sheetEl, handleEl, onClose) {
+  var startY = 0;
+  var currentY = 0;
+  var dragging = false;
+  var sheetHeight = 0;
+
+  function pointerDown(e) {
+    dragging = true;
+    startY = (e.touches ? e.touches[0].clientY : e.clientY);
+    currentY = startY;
+    sheetHeight = sheetEl.offsetHeight || 1;
+    sheetEl.style.transition = 'none';
+  }
+  function pointerMove(e) {
+    if (!dragging) return;
+    currentY = (e.touches ? e.touches[0].clientY : e.clientY);
+    var delta = Math.max(0, currentY - startY); // only allow dragging downward
+    sheetEl.style.transform = 'translateY(' + delta + 'px)';
+  }
+  function pointerUp() {
+    if (!dragging) return;
+    dragging = false;
+    sheetEl.style.transition = '';
+    var delta = Math.max(0, currentY - startY);
+    if (delta > sheetHeight * 0.25) {
+      // dragged down far enough — close it
+      sheetEl.style.transform = '';
+      onClose();
+    } else {
+      // snap back open
+      sheetEl.style.transform = '';
+    }
+  }
+
+  [handleEl, sheetEl].forEach(function(el) {
+    if (!el) return;
+    el.addEventListener('touchstart', pointerDown, { passive: true });
+    el.addEventListener('mousedown', function(e) {
+      // Only start a drag from the handle itself for mouse (desktop),
+      // so normal clicks inside the sheet body/form still work fine.
+      if (el === handleEl) pointerDown(e);
+    });
+  });
+  document.addEventListener('touchmove', pointerMove, { passive: true });
+  document.addEventListener('mousemove', pointerMove);
+  document.addEventListener('touchend', pointerUp);
+  document.addEventListener('mouseup', pointerUp);
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   FILTERS BOTTOM SHEET
+   ══════════════════════════════════════════════════════════════════ */
+(function(){
+  var filterBtn = document.getElementById('pcFilterBtn');
+  var sheet = document.getElementById('pcFilterSheet');
+  var backdrop = document.getElementById('pcFilterBackdrop');
+  var closeBtn = document.getElementById('pcFilterClose');
+  var clearBtn = document.getElementById('pcFilterClear');
+  var applyBtn = document.getElementById('pcFilterApply');
+  var sortChips = document.getElementById('pcSortChips');
+  var topicChips = document.getElementById('pcTopicChips');
+
+  function openSheet() {
+    draftSort = appliedSort;
+    draftTopics = appliedTopics.slice();
+    syncSortChipsUI();
+    renderTopicChips();
+    sheet.classList.add('open');
+    backdrop.classList.add('show');
+    filterBtn.classList.add('active');
+    pcLockBodyScroll();
+  }
+  function closeSheet() {
+    sheet.classList.remove('open');
+    backdrop.classList.remove('show');
+    filterBtn.classList.remove('active');
+    pcUnlockBodyScroll();
+  }
+  function syncSortChipsUI() {
+    sortChips.querySelectorAll('.pc-chip').forEach(function(chip) {
+      chip.classList.toggle('selected', chip.dataset.sort === draftSort);
+    });
+  }
+
+  filterBtn.addEventListener('click', openSheet);
+  closeBtn.addEventListener('click', closeSheet);
+  backdrop.addEventListener('click', function(e){ if (e.target === backdrop) closeSheet(); });
+  enableDragToClose(sheet, sheet.querySelector('.pc-sheet-handle'), closeSheet);
+
+  sortChips.addEventListener('click', function(e) {
+    var chip = e.target.closest('.pc-chip');
+    if (!chip) return;
+    draftSort = chip.dataset.sort;
+    syncSortChipsUI();
+  });
+
+  topicChips.addEventListener('click', function(e) {
+    var chip = e.target.closest('.pc-chip');
+    if (!chip || !chip.dataset.topic) return;
+    var phrase = chip.dataset.topic;
+    var idx = draftTopics.indexOf(phrase);
+    if (idx === -1) draftTopics.push(phrase); else draftTopics.splice(idx, 1);
+    renderTopicChips();
+  });
+
+  clearBtn.addEventListener('click', function() {
+    draftSort = 'relevant';
+    draftTopics = [];
+    syncSortChipsUI();
+    renderTopicChips();
+  });
+
+  applyBtn.addEventListener('click', function() {
+    appliedSort = draftSort;
+    appliedTopics = draftTopics.slice();
+    currentPage = 1;
+    renderPage();
+    closeSheet();
+  });
+})();
+
+/* ══════════════════════════════════════════════════════════════════
+   SEARCH BAR — single word, case-insensitive, debounced, Squares loader
+   ══════════════════════════════════════════════════════════════════ */
+(function(){
+  var searchBtn = document.getElementById('pcSearchBtn');
+  var wrap = document.getElementById('pcSearchBarWrap');
+  var input = document.getElementById('pcSearchInput');
+  var clearBtn = document.getElementById('pcSearchClear');
+  var debounceTimer = null;
+  var DEBOUNCE_MS = 450;
+
+  searchBtn.addEventListener('click', function() {
+    var isOpen = wrap.classList.toggle('open');
+    searchBtn.classList.toggle('active', isOpen);
+    if (isOpen) {
+      setTimeout(function(){ input.focus(); }, 150);
+    } else {
+      input.value = '';
+      searchTerm = '';
+      currentPage = 1;
+      renderPage();
+    }
+  });
+
+  clearBtn.addEventListener('click', function() {
+    input.value = '';
+    searchTerm = '';
+    currentPage = 1;
+    wrap.classList.remove('open');
+    searchBtn.classList.remove('active');
+    renderPage();
+  });
+
+  function showLoadingSquares() {
+    var grid = document.getElementById('testiGrid');
+    grid.innerHTML = '<div class="pc-loading-squares"><span></span><span></span><span></span></div>';
+  }
+
+  input.addEventListener('input', function() {
+    var raw = input.value.trim();
+    // Single-word only: if a space is typed, use just the first word for matching
+    var word = raw.split(/\s+/)[0] || '';
+
+    clearTimeout(debounceTimer);
+    if (word) showLoadingSquares();
+
+    debounceTimer = setTimeout(function() {
+      searchTerm = word;
+      currentPage = 1;
+      renderPage();
+    }, DEBOUNCE_MS);
+  });
+})();
+
+/* ══════════════════════════════════════════════════════════════════
+   "LEAVE A REVIEW" TRIGGER STARS ↔ REVIEW-FORM SHEET
+   ══════════════════════════════════════════════════════════════════ */
+var selectedRating = 0;
+
+function setRatingEverywhere(v) {
+  selectedRating = v;
+
+  // Page-level trigger stars
+  document.querySelectorAll('#pcTriggerStars .pc-t-star').forEach(function(s, i) {
+    s.classList.toggle('active', i < v);
+  });
+
+  // Form-sheet stars
+  var formStars = document.querySelectorAll('#starRow .pc-star');
+  var ratingInput = document.getElementById('tRating');
+  var starText = document.getElementById('starText');
+  var labels = ['','Terrible','Poor','Average','Good','Excellent'];
+  ratingInput.value = v;
+  formStars.forEach(function(s, i){ s.classList.toggle('active', i < v); s.style.color = i < v ? '#f59e0b' : ''; });
+  if (v > 0) {
+    starText.textContent = labels[v] + ' (' + v + '/5)';
+    starText.classList.add('chosen');
+  } else {
+    starText.textContent = 'Select a rating';
+    starText.classList.remove('chosen');
+  }
+}
+
+(function(){
+  var reviewSheet = document.getElementById('pcReviewSheet');
+  var reviewBackdrop = document.getElementById('pcReviewBackdrop');
+  var reviewClose = document.getElementById('pcReviewClose');
+
+  function openReviewSheet() {
+    reviewSheet.classList.add('open');
+    reviewBackdrop.classList.add('show');
+    pcLockBodyScroll();
+  }
+  function closeReviewSheet() {
+    reviewSheet.classList.remove('open');
+    reviewBackdrop.classList.remove('show');
+    pcUnlockBodyScroll();
+  }
+  window._pcCloseReviewSheet = closeReviewSheet;
+
+  // Trigger stars on the page — clicking any star opens the sheet immediately
+  document.querySelectorAll('#pcTriggerStars .pc-t-star').forEach(function(star) {
+    star.addEventListener('click', function() {
+      var v = parseInt(star.dataset.v, 10);
+      setRatingEverywhere(v);
+      openReviewSheet();
+    });
+  });
+
+  reviewClose.addEventListener('click', closeReviewSheet);
+  reviewBackdrop.addEventListener('click', function(e){ if (e.target === reviewBackdrop) closeReviewSheet(); });
+  enableDragToClose(reviewSheet, reviewSheet.querySelector('.pc-sheet-handle'), closeReviewSheet);
+
+  // Form-sheet stars also settable directly (keeps trigger stars in sync too)
+  document.querySelectorAll('#starRow .pc-star').forEach(function(star) {
+    star.addEventListener('click', function() {
+      setRatingEverywhere(parseInt(star.dataset.v, 10));
+    });
+  });
+})();
+
+/* ── Char count ── */
+document.getElementById('tText').addEventListener('input', function() {
+  document.getElementById('tCharCount').textContent = this.value.length;
+});
+
+/* ── Form submit ── */
+document.getElementById('testiForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  var name   = document.getElementById('tName').value.trim();
+  var email  = document.getElementById('tEmail').value.trim();
+  var rating = parseInt(document.getElementById('tRating').value);
+  var text   = document.getElementById('tText').value.trim();
+
+  if (!name || name.length < 2) { showMsg('error','Please enter your name (min 2 characters).'); return; }
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showMsg('error','Please enter a valid email address.'); return; }
+  if (!rating || rating < 1 || rating > 5) { showMsg('error','Please select a star rating.'); return; }
+  if (!text || text.length < 10) { showMsg('error','Please write at least 10 characters.'); return; }
+
+  var btn = document.querySelector('.pc-submit-btn');
+  btn.disabled = true;
+  btn.textContent = 'Posting...';
+
+  var body = 'name=' + encodeURIComponent(name) +
+             '&email=' + encodeURIComponent(email) +
+             '&rating=' + rating +
+             '&text=' + encodeURIComponent(text);
+
+  fetch('save-testimonial-v2.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: body
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(data) {
+    btn.disabled = false;
+    btn.textContent = 'Post Review';
+    if (data.success) {
+      showMsg('success', 'Thank you! Your review has been posted.');
+      document.getElementById('testiForm').reset();
+      document.getElementById('tCharCount').textContent = '0';
+      setRatingEverywhere(0);
+
+      if (data.testimonial) {
+        var t = data.testimonial;
+        t.helpfulYes = t.helpfulYes || 0;
+        t.helpfulNo = t.helpfulNo || 0;
+        ALL_TESTI.unshift(t); // newest first for immediate visibility
+        renderBusinessInfo();
+        renderTopicChips();
+        currentPage = 1;
+        renderPage();
+      }
+      // Clear form + auto-close the sheet on success
+      setTimeout(function(){
+        if (window._pcCloseReviewSheet) window._pcCloseReviewSheet();
+      }, 900);
+    } else {
+      showMsg('error', data.message || 'Could not save your review. Please try again.');
+    }
+  })
+  .catch(function() {
+    btn.disabled = false;
+    btn.textContent = 'Post Review';
+    showMsg('error', 'Network error. Please try again.');
+  });
+});
+
+function showMsg(type, text) {
+  var el = document.getElementById('tFormMsg');
+  el.className = 'pc-form-msg ' + type;
+  el.textContent = text;
+  setTimeout(function(){ el.className = 'pc-form-msg'; }, 6000);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="List your pet for adoption on Pet Center — coming soon.">
+  <title>List a Pet — Pet Center</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/preload.css">
+  <link rel="stylesheet" href="/assets/css/styles.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #f9f7f4; padding-top: 68px; }
+    /* ─── Global Header (pc-header) — copied verbatim from cats.html (canonical blueprint, Warning & Instructions rule 13) ─── */
+    .pc-header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      padding: 0 24px;
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: transparent;
+      transition: background 0.35s ease, box-shadow 0.35s ease;
+      overflow: visible;
+    }
+    .pc-header.scrolled,
+    .pc-header--solid {
+      background: rgba(16,33,75,0.97);
+      box-shadow: 0 2px 20px rgba(0,0,0,0.18);
+    }
+    .pc-header__logo img { height: 44px; width: auto; display: block; }
+    .pc-header__logo--desktop { display: block; }
+    .pc-header__logo--mobile  { display: none; }
+    @media (max-width: 900px) {
+      .pc-header__logo--desktop { display: none; }
+      .pc-header__logo--mobile  { display: block; }
+    }
+    .pc-header__nav {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      list-style: none;
+    }
+    .pc-header__nav li { position: relative; }
+    .pc-header__nav a {
+      display: block;
+      padding: 8px 11px;
+      font-family: 'Sora', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.9);
+      text-decoration: none;
+      border-radius: 6px;
+      transition: color 0.2s, background 0.2s;
+      white-space: nowrap;
+    }
+    .pc-header__nav a:hover { color: #d7bd88; background: rgba(255,255,255,0.08); }
+    .pc-header__nav .nav-donate a { background: #ED7624; color: #fff; font-weight: 600; padding: 8px 16px; }
+    .pc-header__nav .nav-donate a:hover { background: #d4621a; color: #fff; }
+    .pc-header__nav .nav-signup a,
+    .pc-header__nav .nav-login a { border: 1px solid rgba(215,189,136,0.5); color: #d7bd88; }
+    .pc-header__nav .nav-signup a:hover,
+    .pc-header__nav .nav-login a:hover { background: rgba(215,189,136,0.12); }
+    .pc-header__nav .has-drop > ul {
+      display: none;
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      background: #10214b;
+      border-radius: 8px;
+      list-style: none;
+      min-width: 168px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.22);
+      padding: 6px 0;
+      z-index: 100;
+    }
+    .pc-header__nav .has-drop:hover > ul { display: block; }
+    .pc-header__nav .has-drop > ul a { padding: 9px 18px; font-size: 13px; border-radius: 0; }
+    .pc-hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 8px;
+      background: none;
+      border: none;
+      width: 32px;
+      height: auto;
+      justify-content: center;
+    }
+    .pc-hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: #fff;
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+    .pc-hamburger.active span:nth-child(1) {
+      transform: rotate(45deg) translate(8px, 8px);
+    }
+    .pc-hamburger.active span:nth-child(2) {
+      opacity: 0;
+    }
+    .pc-hamburger.active span:nth-child(3) {
+      transform: rotate(-45deg) translate(7px, -7px);
+    }
+    .pc-mobile-menu {
+      display: flex;
+      flex-direction: column;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: rgba(16,33,75,0.98);
+      z-index: 999;
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    }
+    .pc-mobile-menu.open {
+      max-height: calc(100vh - 68px);
+      overflow-y: auto;
+      opacity: 1;
+      pointer-events: auto;
+      padding: 16px 0 calc(100vh - 68px - 56px);
+      overscroll-behavior: contain;
+      -webkit-overflow-scrolling: touch;
+    }
+    .pc-mobile-menu a {
+      display: block;
+      padding: 12px 28px;
+      font-family: 'Sora', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.9);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      transition: all 0.2s ease;
+    }
+    .pc-mobile-menu a:hover {
+      color: #d7bd88;
+      background: rgba(255,255,255,0.05);
+    }
+    .pc-mobile-menu .mobile-donate {
+      margin: 12px 28px 0;
+      display: inline-block;
+      background: #ED7624;
+      color: #fff;
+      padding: 11px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      border-bottom: none;
+    }
+    @media (max-width: 900px) {
+      .pc-header__nav { display: none; }
+      .pc-hamburger { display: flex; }
+    }
+    /* ─── Global Footer — copied verbatim from cats.html (canonical blueprint) ─── */
+    .pc-footer {
+      background: #0b1834;
+      padding: 60px 24px 28px;
+      color: rgba(255,255,255,0.65);
+      font-family: 'Sora', sans-serif;
+    }
+    .pc-footer__inner { max-width: 1200px; margin: 0 auto; }
+    .pc-footer__top {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1.5fr;
+      gap: 40px;
+      padding-bottom: 40px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+    .pc-footer__brand img { height: 40px; margin-bottom: 16px; display: block; }
+    .pc-footer__brand p { font-size: 13.5px; line-height: 1.7; max-width: 280px; }
+    .pc-footer__col h5 { font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; font-weight: 700; color: #d7bd88; margin-bottom: 16px; }
+    .pc-footer__col ul { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+    .pc-footer__col ul a { font-size: 13px; color: rgba(255,255,255,0.6); text-decoration: none; transition: color 0.2s; }
+    .pc-footer__col ul a:hover { color: #d7bd88; }
+    .pc-footer__bottom { padding-top: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+    .pc-footer__copy { font-size: 12.5px; }
+    .pc-footer__links { display: flex; gap: 20px; }
+    .pc-footer__links a { font-size: 12.5px; color: rgba(255,255,255,0.5); text-decoration: none; }
+    .pc-footer__links a:hover { color: #d7bd88; }
+    @media (max-width: 900px) { .pc-footer__top { grid-template-columns: 1fr 1fr; gap: 28px; } }
+    @media (max-width: 560px) { .pc-footer__top { grid-template-columns: 1fr; gap: 24px; } }
+    .rehome-page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 24px;
+      text-align: center;
+      background: linear-gradient(135deg, #f9f7f4 0%, #f0ebe4 100%);
+    }
+    .rehome-card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 56px 48px;
+      max-width: 560px;
+      width: 100%;
+      box-shadow: 0 8px 48px rgba(16,33,75,0.10);
+    }
+    .rehome-logo { height: 52px; margin-bottom: 32px; }
+    .rehome-eyebrow {
+      font-family: 'Sora', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #ED7624;
+      background: rgba(237,118,36,0.08);
+      padding: 5px 16px;
+      border-radius: 20px;
+      display: inline-block;
+      margin-bottom: 20px;
+    }
+    .rehome-card h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      font-weight: 700;
+      color: #10214b;
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+    .rehome-card > p {
+      font-family: 'Sora', sans-serif;
+      font-size: 15px;
+      line-height: 1.7;
+      color: #7a6d5f;
+      margin-bottom: 36px;
+    }
+    .rehome-notify-form {
+      display: flex;
+      gap: 10px;
+      background: #f9f7f4;
+      border-radius: 10px;
+      padding: 6px 6px 6px 18px;
+      box-shadow: 0 2px 16px rgba(16,33,75,0.07);
+      margin-bottom: 28px;
+    }
+    .rehome-notify-form input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      font-family: 'Sora', sans-serif;
+      font-size: 14px;
+      color: #10214b;
+      outline: none;
+      min-width: 0;
+    }
+    .rehome-notify-form input::placeholder { color: #b0a69a; }
+    .rehome-notify-form button {
+      background: #10214b;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 22px;
+      font-family: 'Sora', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.2s;
+    }
+    .rehome-notify-form button:hover { background: #1a2f5c; }
+    .rehome-features {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 36px;
+      text-align: left;
+    }
+    .rehome-feature {
+      background: #f9f7f4;
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .rehome-feature__icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: rgba(237,118,36,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .rehome-feature__icon svg { width: 18px; height: 18px; color: #ED7624; }
+    .rehome-feature__title { font-family: 'Sora', sans-serif; font-size: 13px; font-weight: 600; color: #10214b; margin-bottom: 3px; }
+    .rehome-feature__desc { font-family: 'Sora', sans-serif; font-size: 12px; color: #7a6d5f; line-height: 1.5; }
+    .rehome-back { font-family: 'Sora', sans-serif; font-size: 13px; color: #b0a69a; }
+    .rehome-back a { color: #10214b; font-weight: 600; text-decoration: none; }
+    .rehome-back a:hover { color: #ED7624; }
+    .notify-success {
+      display: none;
+      background: #f0fbf6;
+      border-radius: 10px;
+      padding: 16px 20px;
+      font-family: 'Sora', sans-serif;
+      font-size: 14px;
+      color: #0d7c4a;
+      font-weight: 500;
+      margin-bottom: 28px;
+    }
+    @media (max-width: 560px) {
+      .rehome-card { padding: 40px 24px; }
+      .rehome-features { grid-template-columns: 1fr; }
+      .rehome-notify-form { flex-direction: column; padding: 14px 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Header copied verbatim from cats.html (canonical blueprint, Warning & Instructions rule 13) -->
+<header class="pc-header pc-header--solid" id="pcHeader">
+  <a href="/" class="pc-header__logo pc-header__logo--desktop">
+    <img src="/assets/images/logo-petcenter.png" alt="Pet Center">
+  </a>
+  <a href="/" class="pc-header__logo pc-header__logo--mobile">
+    <img src="/assets/images/logo-petcenter-icon.png" alt="Pet Center">
+  </a>
+  <ul class="pc-header__nav">
+    <li><a href="/">Home</a></li>
+    <li class="has-drop"><a href="#">Our Pets</a>
+      <ul>
+        <li><a href="/pets/dogs/">Dogs</a></li>
+        <li><a href="/pets/cats/">Cats</a></li>
+        <li><a href="/pets/birds/">Birds</a></li>
+        <li><a href="/pets/reptiles/">Reptiles</a></li>
+        <li><a href="/pets/small-mammals/">Small Mammals</a></li>
+      </ul>
+    </li>
+    <li><a href="/blog/">Blog</a></li>
+    <li><a href="/testimonials/">Testimonials</a></li>
+    <li class="nav-donate"><a href="https://donate.petcenterco.com" target="_blank" rel="noopener">Donate</a></li>
+    <li><a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact</a></li>
+    <!-- Path changed from /rehome/ to /signin/ per CEO's request to retire the "rehome" URL sitewide -->
+    <li class="nav-signup"><a href="/signin/">Sign Up</a></li>
+  </ul>
+  <button class="pc-hamburger" id="pcHamburger" aria-label="Open menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+  <nav class="pc-mobile-menu" id="pcMobileMenu" aria-label="Mobile navigation">
+    <a href="/">Home</a>
+    <a href="/pets/dogs/">Dogs</a>
+    <a href="/pets/cats/">Cats</a>
+    <a href="/pets/birds/">Birds</a>
+    <a href="/pets/reptiles/">Reptiles</a>
+    <a href="/pets/small-mammals/">Small Mammals</a>
+    <a href="/blog/">Blog</a>
+    <a href="/testimonials/">Testimonials</a>
+    <a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact</a>
+    <a href="/signin/">Sign Up</a>
+    <a href="https://donate.petcenterco.com" class="mobile-donate" target="_blank" rel="noopener">Donate</a>
+  </nav>
+</header>
+
+<div id="pc-preload" role="status" aria-label="Loading Pet Center">
+  <img class="pc-preload__logo" src="/assets/images/logo-petcenter.png" alt="Pet Center">
+  <!-- Paw icon replaced with a verified, sourced Font Awesome 6 "paw" solid icon (single path, up-facing by
+       default, CC BY 4.0/MIT licensed — https://fontawesome.com/icons/paw), per Task 1c -->
+  <div class="pc-preload__paw">
+    <svg viewBox="0 0 512 512" fill="currentColor"><path d="M226.5 92.9c14.3 42.9-.3 86.2-32.6 96.8s-70.1-15.6-84.4-58.5s.3-86.2 32.6-96.8s70.1 15.6 84.4 58.5zM100.4 198.6c18.9 32.4 14.3 70.1-10.2 84.1s-59.7-.9-78.5-33.3S-2.7 179.3 21.8 165.3s59.7 .9 78.5 33.3zM69.2 401.2C121.6 259.9 214.7 224 256 224s134.4 35.9 186.8 177.2c3.6 9.7 5.2 20.1 5.2 30.5v1.6c0 25.8-20.9 46.7-46.7 46.7c-11.5 0-22.9-1.4-34-4.2l-88-22c-15.3-3.8-31.3-3.8-46.6 0l-88 22c-11.1 2.8-22.5 4.2-34 4.2C84.9 480 64 459.1 64 433.3v-1.6c0-10.4 1.6-20.8 5.2-30.5zM421.8 282.7c-24.5-14-29.1-51.7-10.2-84.1s54-47.3 78.5-33.3s29.1 51.7 10.2 84.1s-54 47.3-78.5 33.3zM310.1 189.7c-32.3-10.6-46.9-53.9-32.6-96.8s52.1-69.1 84.4-58.5s46.9 53.9 32.6 96.8s-52.1 69.1-84.4 58.5z"/></svg>
+  </div>
+  <div class="pc-preload__dots">
+    <span class="pc-preload__dot"></span>
+    <span class="pc-preload__dot"></span>
+    <span class="pc-preload__dot"></span>
+  </div>
+</div>
+
+<div class="rehome-page">
+  <div class="rehome-card">
+    <img src="/assets/images/logo-petcenter.png" alt="Pet Center" class="rehome-logo">
+    <div class="rehome-eyebrow">Coming Soon</div>
+    <h1>List Your Pet for Adoption</h1>
+    <p>We're building a self-service portal so you can list pets directly on Pet Center. Be the first to know when it launches.</p>
+
+    <div class="rehome-notify-form" id="notifyForm">
+      <input type="email" id="notifyEmail" placeholder="Enter your email address" autocomplete="email">
+      <button onclick="submitNotify()">Notify Me</button>
+    </div>
+    <div class="notify-success" id="notifySuccess">
+      &#10003; You're on the list! We'll email you when the pet listing portal is ready.
+    </div>
+
+    <div class="rehome-features">
+      <div class="rehome-feature">
+        <div class="rehome-feature__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div>
+          <div class="rehome-feature__title">Safe &amp; Verified</div>
+          <div class="rehome-feature__desc">All listings reviewed by our team before going live.</div>
+        </div>
+      </div>
+      <div class="rehome-feature">
+        <div class="rehome-feature__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div>
+          <div class="rehome-feature__title">Fast Matching</div>
+          <div class="rehome-feature__desc">Connect with adopters quickly through our platform.</div>
+        </div>
+      </div>
+      <div class="rehome-feature">
+        <div class="rehome-feature__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <div>
+          <div class="rehome-feature__title">Loving Homes</div>
+          <div class="rehome-feature__desc">We screen adopters so your pet goes to the right family.</div>
+        </div>
+      </div>
+      <div class="rehome-feature">
+        <div class="rehome-feature__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        </div>
+        <div>
+          <div class="rehome-feature__title">No Listing Fee</div>
+          <div class="rehome-feature__desc">Listing your pet on Pet Center is completely free.</div>
+        </div>
+      </div>
+    </div>
+
+    <p class="rehome-back">
+      In a hurry? <a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact us directly</a> and we'll help you list your pet manually.
+    </p>
+    <br>
+    <p class="rehome-back"><a href="/">&larr; Back to Pet Center</a></p>
+  </div>
+</div>
+
+<!-- Footer copied verbatim from cats.html (canonical blueprint, Warning & Instructions rule 13) -->
+<footer class="pc-footer">
+  <div class="pc-footer__inner">
+    <div class="pc-footer__top">
+      <div class="pc-footer__brand">
+        <img src="/assets/images/logo-petcenter.png" alt="Pet Center">
+        <p>Every pet deserves a loving home. Browse our available pets and start your adoption journey today.</p>
+      </div>
+      <div class="pc-footer__col">
+        <h5>Our Pets</h5>
+        <ul>
+          <li><a href="/pets/dogs/">Dogs</a></li>
+          <li><a href="/pets/cats/">Cats</a></li>
+          <li><a href="/pets/birds/">Birds</a></li>
+          <li><a href="/pets/reptiles/">Reptiles</a></li>
+          <li><a href="/pets/small-mammals/">Small Mammals</a></li>
+        </ul>
+      </div>
+      <div class="pc-footer__col">
+        <h5>Information</h5>
+        <ul>
+          <li><a href="/">About Us</a></li>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/testimonials/">Testimonials</a></li>
+          <li><a href="https://donate.petcenterco.com" target="_blank" rel="noopener">Donate</a></li>
+          <li><a href="https://docs.petcenterco.com/health-guarantee/" target="_blank" rel="noopener">Health Guarantee</a></li>
+          <li><a href="https://docs.petcenterco.com/shipping-cancellation/" target="_blank" rel="noopener">Shipping &amp; Cancellation</a></li>
+          <li><a href="https://docs.petcenterco.com/shipping-insurance-claims/" target="_blank" rel="noopener">Shipping Insurance</a></li>
+          <li><a href="https://docs.petcenterco.com/data-retention-security/" target="_blank" rel="noopener">Data &amp; Security</a></li>
+        </ul>
+      </div>
+      <div class="pc-footer__col">
+        <h5>Support</h5>
+        <ul>
+          <li><a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact Us</a></li>
+          <!-- Path changed from /rehome/ to /signin/ per CEO's request to retire the "rehome" URL sitewide -->
+          <li><a href="/signin/">Sign Up</a></li>
+          <li><a href="https://docs.petcenterco.com/returns-refunds/" target="_blank" rel="noopener">Returns &amp; Refunds</a></li>
+          <li><a href="https://docs.petcenterco.com/faq/" target="_blank" rel="noopener">FAQ</a></li>
+        </ul>
+      </div>
+      <div class="pc-footer__col">
+        <h5>Visit Us</h5>
+        <p style="color:rgba(255,255,255,.7);font-size:13px;line-height:1.8;margin-bottom:0;">235-269 N Beverly Dr<br>Beverly Hills, CA</p>
+        <p style="color:rgba(255,255,255,.6);font-size:12px;line-height:1.6;margin-top:4px;">Golden Triangle Shopping Center, Section #257</p>
+        <p style="color:rgba(255,255,255,.7);font-size:13px;line-height:1.8;margin-top:10px;"><strong style="color:#d7bd88;">Hours:</strong><br>Mon &#8211; Fri: 7am &#8211; 9pm<br>Sat &#8211; Sun: 10am &#8211; 6pm</p>
+      </div>
+    </div>
+    <div class="pc-footer__bottom">
+      <span class="pc-footer__copy">&copy; 2026 Pet Center. All rights reserved.</span>
+      <div class="pc-footer__links">
+        <a href="https://docs.petcenterco.com/privacy-policy/" target="_blank" rel="noopener">Privacy Policy</a>
+        <a href="https://docs.petcenterco.com/terms-of-service/" target="_blank" rel="noopener">Terms of Service</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="/assets/js/preload.js"></script>
+<script>
+function submitNotify() {
+  var email = document.getElementById('notifyEmail').value.trim();
+  if (!email || !email.includes('@')) {
+    document.getElementById('notifyEmail').style.outline = '2px solid #c0392b';
+    return;
+  }
+  document.getElementById('notifyEmail').style.outline = '';
+  document.getElementById('notifyForm').style.display = 'none';
+  document.getElementById('notifySuccess').style.display = 'block';
+}
+document.getElementById('notifyEmail').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') submitNotify();
+});
+
+// Header scroll effect — copied verbatim from cats.html (canonical blueprint)
+(function() {
+  var header = document.getElementById('pcHeader');
+  if (!header) return;
+
+  function updateHeaderOnScroll() {
+    if (window.scrollY > 0) {
+      header.classList.add('scrolled');
+    } else {
+      header.classList.remove('scrolled');
+    }
+  }
+
+  window.addEventListener('scroll', updateHeaderOnScroll, { passive: true });
+  updateHeaderOnScroll();
+})();
+
+// Mobile Menu Toggle — canonical implementation (Section 2.4), copied verbatim from cats.html
+(function () {
+  var hamburger = document.getElementById('pcHamburger');
+  var mobileMenu = document.getElementById('pcMobileMenu');
+  if (!hamburger || !mobileMenu) return;
+
+  function openMenu() {
+    hamburger.classList.add('active');
+    mobileMenu.classList.add('open');
+    hamburger.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeMenu() {
+    hamburger.classList.remove('active');
+    mobileMenu.classList.remove('open');
+    hamburger.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  hamburger.addEventListener('click', function (e) {
+    e.stopPropagation();
+    mobileMenu.classList.contains('open') ? closeMenu() : openMenu();
+  });
+
+  mobileMenu.querySelectorAll('a').forEach(function (link) {
+    link.addEventListener('click', closeMenu);
+  });
+
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest('header') && !e.target.closest('.pc-mobile-menu')) {
+      closeMenu();
+    }
+  });
+})();
+</script>
+<script src="/admin/chat-widget.js"></script>
+</body>
+</html>

@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Check the status of your Pet Center adoption application.">
+  <title>Check Adoption Status — Pet Center</title>
+  <!-- TASK-10 START: added Bitter — design system mandates it for all timestamp display,
+       used for the new "Approved On" value (fmtApprovedDate) below -->
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Sora:wght@300;400;500;600;700&family=Bitter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- TASK-10 END -->
+  <style>
+/* ════════════════════════════════════════════════════════════════════════════
+   PET CENTER — adoptions/status/index.html — Adoption Status Dashboard
+   Colors: Navy #10214b | Gold #d7bd88 | Orange #ED7624
+   Fonts: Cormorant Garamond (headings) | Sora (body)
+   ════════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  --navy: #10214b;
+  --navy-light: #1a2f5c;
+  --gold: #d7bd88;
+  --gold-dark: #b89968;
+  --orange: #ED7624;
+  --orange-light: #fef0e6;
+  --warm-gray: #d0c3ba;
+  --chocolate: #3d2817;
+  --bg: #f9f7f4;
+  --surface: #ffffff;
+  --text: #2c2416;
+  --muted: #7a6d5f;
+  --success: #0d7c4a;
+  --success-bg: #e6f7ef;
+  --error: #c0392b;
+  --error-bg: #fdecea;
+  --shadow-sm: 0 2px 8px rgba(16,33,75,0.06);
+  --shadow-md: 0 4px 20px rgba(16,33,75,0.10);
+  --shadow-lg: 0 8px 40px rgba(16,33,75,0.14);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --transition: 0.25s ease;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+  font-family: 'Sora', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+img { max-width: 100%; height: auto; display: block; }
+a { color: var(--orange); text-decoration: none; transition: color var(--transition); }
+a:hover { color: var(--navy); }
+h1, h2, h3, h4, h5, h6 { font-family: 'Cormorant Garamond', Georgia, serif; color: var(--navy); line-height: 1.25; }
+.pc-container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+
+/* ─── Global Header (identical to index.html) ─────────────────────────────── */
+.pc-header {
+  position: fixed; top: 0; left: 0; right: 0;
+  z-index: 1000; padding: 0 24px; height: 68px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: transparent;
+  transition: background 0.35s ease, box-shadow 0.35s ease;
+  overflow: visible;
+}
+.pc-header.scrolled,
+.pc-header--solid {
+  background: rgba(16,33,75,0.97);
+  box-shadow: 0 2px 20px rgba(0,0,0,0.18);
+}
+.pc-header__logo img { height: 44px; width: auto; display: block; }
+.pc-header__logo--desktop { display: block; }
+.pc-header__logo--mobile  { display: none; }
+@media (max-width: 900px) {
+  .pc-header__logo--desktop { display: none; }
+  .pc-header__logo--mobile  { display: block; }
+}
+.pc-header__nav { display: flex; align-items: center; gap: 4px; list-style: none; }
+.pc-header__nav li { position: relative; }
+.pc-header__nav a {
+  display: block; padding: 8px 11px;
+  font-family: 'Sora', sans-serif; font-size: 13px; font-weight: 500;
+  color: rgba(255,255,255,0.9); text-decoration: none;
+  border-radius: 6px; transition: color 0.2s, background 0.2s; white-space: nowrap;
+}
+.pc-header__nav a:hover { color: #d7bd88; background: rgba(255,255,255,0.08); }
+.pc-header__nav .nav-donate a { background: #ED7624; color: #fff; font-weight: 600; padding: 8px 16px; }
+.pc-header__nav .nav-donate a:hover { background: #d4621a; color: #fff; }
+.pc-header__nav .nav-signup a { border: 1px solid rgba(215,189,136,0.5); color: #d7bd88; }
+.pc-header__nav .nav-signup a:hover { background: rgba(215,189,136,0.12); }
+.pc-header__nav .has-drop > ul {
+  display: none; position: absolute; top: calc(100% + 4px); left: 0;
+  background: #10214b; border-radius: 8px; list-style: none;
+  min-width: 168px; box-shadow: 0 8px 32px rgba(0,0,0,0.22);
+  padding: 6px 0; z-index: 100;
+}
+.pc-header__nav .has-drop:hover > ul { display: block; }
+.pc-header__nav .has-drop > ul a { padding: 9px 18px; font-size: 13px; border-radius: 0; }
+.pc-hamburger {
+  display: none; flex-direction: column; gap: 5px;
+  cursor: pointer; padding: 8px; background: none; border: none;
+  width: 32px; height: auto; justify-content: center;
+}
+.pc-hamburger span {
+  display: block; width: 24px; height: 2px;
+  background: #fff; border-radius: 2px; transition: all 0.3s ease;
+}
+.pc-hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(8px, 8px); }
+.pc-hamburger.active span:nth-child(2) { opacity: 0; }
+.pc-hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -7px); }
+.pc-mobile-menu {
+  display: flex; flex-direction: column;
+  position: absolute; top: 100%; left: 0; right: 0;
+  background: rgba(16,33,75,0.98); z-index: 999;
+  max-height: 0; overflow: hidden; opacity: 0; pointer-events: none;
+  transition: all 0.3s ease; box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+}
+.pc-mobile-menu.open {
+  max-height: calc(100vh - 68px); overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  padding: 16px 0 calc(100vh - 68px - 56px);
+  opacity: 1; pointer-events: auto;
+}
+.pc-mobile-menu a {
+  display: block; padding: 12px 28px;
+  font-family: 'Sora', sans-serif; font-size: 15px; font-weight: 500;
+  color: rgba(255,255,255,0.9); text-decoration: none;
+  border-bottom: 1px solid rgba(255,255,255,0.06); transition: all 0.2s ease;
+}
+.pc-mobile-menu a:hover { color: #d7bd88; background: rgba(255,255,255,0.05); }
+.pc-mobile-menu .mobile-donate {
+  margin: 12px 28px 0; display: inline-block;
+  background: #ED7624; color: #fff; padding: 11px 24px;
+  border-radius: 8px; font-weight: 600; border-bottom: none;
+}
+@media (max-width: 900px) {
+  .pc-header__nav { display: none; }
+  .pc-hamburger { display: flex; }
+}
+
+/* ─── Global Footer (identical to index.html) ─────────────────────────────── */
+.pc-footer { background: #0b1834; padding: 60px 24px 28px; color: rgba(255,255,255,0.65); font-family: 'Sora', sans-serif; }
+.pc-footer__inner { max-width: 1200px; margin: 0 auto; }
+.pc-footer__top { display: grid; grid-template-columns: 2fr 1fr 1.2fr 1fr 1.3fr; gap: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(255,255,255,0.07); }
+.pc-footer__brand img { height: 40px; margin-bottom: 16px; display: block; }
+.pc-footer__brand p { font-size: 13.5px; line-height: 1.7; max-width: 280px; }
+.pc-footer__col h5 { font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; font-weight: 700; color: #d7bd88; margin-bottom: 16px; }
+.pc-footer__col ul { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+.pc-footer__col ul a { font-size: 13px; color: rgba(255,255,255,0.6); text-decoration: none; transition: color 0.2s; }
+.pc-footer__col ul a:hover { color: #d7bd88; }
+.pc-footer__bottom { padding-top: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+.pc-footer__copy { font-size: 12.5px; }
+.pc-footer__links { display: flex; gap: 20px; }
+.pc-footer__links a { font-size: 12.5px; color: rgba(255,255,255,0.5); text-decoration: none; }
+.pc-footer__links a:hover { color: #d7bd88; }
+@media (max-width: 1024px) { .pc-footer__top { grid-template-columns: 1fr 1fr 1fr; } }
+@media (max-width: 900px) { .pc-footer__top { grid-template-columns: 1fr 1fr; gap: 28px; } }
+@media (max-width: 560px) { .pc-footer__top { grid-template-columns: 1fr; gap: 24px; } }
+@media (max-width: 480px) { .pc-footer__bottom { flex-direction: column; text-align: center; } .pc-footer__links { justify-content: center; } }
+
+
+/* ════════════════════════════════════
+   STATUS DASHBOARD — page content
+   ════════════════════════════════════ */
+.dash-hero {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+  padding: 140px 24px 64px; text-align: center;
+}
+.dash-hero .eyebrow {
+  display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--gold); background: rgba(215,189,136,0.12);
+  padding: 4px 14px; border-radius: 20px; margin-bottom: 16px;
+}
+.dash-hero h1 { color: #fff; font-size: clamp(1.8rem, 4vw, 2.6rem); margin-bottom: 10px; }
+.dash-hero p { color: rgba(255,255,255,0.75); font-size: 14.5px; max-width: 480px; margin: 0 auto; }
+
+.dash-lookup {
+  max-width: 560px; margin: -32px auto 0; padding: 0 24px;
+  position: relative; z-index: 5;
+}
+.dash-lookup-card {
+  background: #fff; border-radius: var(--radius-lg); box-shadow: var(--shadow-lg);
+  padding: 22px; display: flex; gap: 10px;
+}
+.dash-lookup-card input {
+  flex: 1; border: 1.5px solid #ece6dd; border-radius: 9px; padding: 12px 16px;
+  font-family: 'Sora', sans-serif; font-size: 15px; color: var(--navy); outline: none;
+  transition: border-color 0.2s;
+}
+.dash-lookup-card input:focus { border-color: var(--orange); }
+.dash-lookup-card button {
+  background: var(--orange); color: #fff; border: none; border-radius: 9px;
+  padding: 12px 24px; font-family: 'Sora', sans-serif; font-size: 13.5px; font-weight: 600;
+  cursor: pointer; white-space: nowrap; transition: background 0.2s;
+}
+.dash-lookup-card button:hover { background: #d4621a; }
+@media (max-width: 480px) { .dash-lookup-card { flex-direction: column; } .dash-lookup-card button { width: 100%; } }
+
+.dash-body { max-width: 720px; margin: 0 auto; padding: 48px 24px 100px; }
+
+/* States */
+.dash-state { text-align: center; padding: 48px 24px; }
+.dash-state p { color: var(--muted); font-size: 14.5px; }
+.dash-state.error p { color: var(--error); }
+
+/* Result card */
+.dash-card { background: #fff; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); overflow: hidden; }
+.dash-card__top { padding: 32px 28px; text-align: center; }
+.dash-badge {
+  display: inline-flex; align-items: center; gap: 6px; padding: 5px 16px; border-radius: 20px;
+  font-size: 11.5px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; margin-bottom: 18px;
+}
+.dash-badge--pending  { background: rgba(215,189,136,0.2); color: #8a6d2f; }
+.dash-badge--approved { background: rgba(13,124,74,0.12); color: #0d7c4a; }
+.dash-badge--rejected { background: rgba(192,57,43,0.1); color: #c0392b; }
+
+.dash-checkmark {
+  width: 64px; height: 64px; border-radius: 50%; background: var(--success-bg);
+  display: flex; align-items: center; justify-content: center; margin: 0 auto 18px;
+  animation: popIn 0.45s cubic-bezier(0.34,1.56,0.64,1);
+}
+@keyframes popIn { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+.dash-pet-row { display: flex; align-items: center; gap: 16px; justify-content: center; margin-bottom: 6px; flex-wrap: wrap; }
+.dash-pet-row img { width: 88px; height: 88px; object-fit: cover; border-radius: 12px; background: #eee; }
+.dash-pet-row .info { text-align: left; }
+.dash-pet-row h2 { font-size: 1.5rem; margin-bottom: 2px; }
+.dash-pet-row .info p { font-size: 13px; color: var(--muted); }
+
+/* Pet carousel */
+.dash-pets-outer { overflow: hidden; width: 100%; }
+.dash-pets-track { display: flex; transition: transform 0.35s cubic-bezier(0.4,0,0.2,1); }
+.dash-pets-slide { flex: 0 0 100%; min-width: 0; }
+.dash-pets-nav {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 0 4px; margin-bottom: 4px;
+}
+.dash-pets-arrow {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: #fff; border: 1.5px solid #e8e2da;
+  color: var(--navy); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color 0.2s, color 0.2s; flex-shrink: 0;
+}
+.dash-pets-arrow:hover { border-color: var(--orange); color: var(--orange); }
+.dash-pets-arrow:disabled { opacity: 0.3; cursor: not-allowed; }
+.dash-pets-dots { display: flex; gap: 6px; align-items: center; }
+.dash-pets-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #e8e2da; cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+.dash-pets-dot.active { background: var(--orange); transform: scale(1.3); }
+
+.dash-card__details { padding: 0 28px 28px; }
+.dash-detail-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+  border: 1px solid #f0ebe4; border-radius: var(--radius-md); overflow: hidden;
+}
+.dash-detail-item { padding: 14px 18px; border-bottom: 1px solid #f0ebe4; border-right: 1px solid #f0ebe4; }
+.dash-detail-item:nth-child(2n) { border-right: none; }
+.dash-detail-item .label { font-size: 10.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+.dash-detail-item .value { font-size: 14px; color: var(--text); font-weight: 600; }
+@media (max-width: 480px) {
+  .dash-detail-grid { grid-template-columns: 1fr; }
+  .dash-detail-item { border-right: none; }
+}
+
+.dash-card__msg { padding: 24px 28px; border-top: 1px solid #f0ebe4; }
+.dash-card__msg p { font-size: 14px; color: var(--text); line-height: 1.7; }
+
+.dash-payment-box { margin: 0 28px 28px; background: var(--bg); border-radius: var(--radius-md); padding: 22px; }
+.dash-payment-box h5 { font-size: 12.5px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--navy); margin-bottom: 14px; }
+.dash-payment-box ul { list-style: none; display: flex; flex-direction: column; gap: 13px; margin-bottom: 14px; }
+.dash-payment-box ul li { font-size: 13.5px; color: var(--chocolate); line-height: 1.65; padding-left: 20px; position: relative; }
+.dash-payment-box ul li::before { content: ''; position: absolute; left: 0; top: 7px; width: 8px; height: 8px; background: var(--orange); border-radius: 50%; }
+.dash-payment-box ul li strong { color: var(--navy); }
+.dash-payment-box .full-pay { font-size: 13.5px; color: var(--chocolate); line-height: 1.6; margin-bottom: 12px; }
+.dash-payment-box .notice { font-size: 12.5px; color: var(--muted); line-height: 1.6; background: #fff; border-radius: 8px; padding: 14px 16px; margin-bottom: 10px; }
+.dash-payment-box .tip { font-size: 12.5px; color: var(--muted); font-style: italic; }
+
+.dash-checkout-btn {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  background: var(--success); color: #fff; padding: 15px 28px; border-radius: 9px;
+  font-size: 14.5px; font-weight: 700; text-decoration: none; margin: 0 28px 28px;
+  transition: background 0.2s;
+}
+.dash-checkout-btn:hover { background: #0a6038; color: #fff; }
+
+.dash-contact-cta {
+  text-align: center; padding: 0 28px 28px; font-size: 13.5px; color: var(--muted);
+}
+.dash-contact-cta a { font-weight: 600; }
+
+.dash-meta-row { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 24px; }
+.dash-meta-row .item { text-align: center; }
+.dash-meta-row .item .label { font-size: 10.5px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+.dash-meta-row .item .value { font-size: 13px; font-weight: 600; color: var(--navy); font-family: monospace; }
+
+@media (max-width: 600px) {
+  .dash-hero { padding: 120px 20px 56px; }
+  .dash-pet-row { flex-direction: column; text-align: center; }
+  .dash-pet-row .info { text-align: center; }
+}
+  </style>
+</head>
+<body>
+
+<header class="pc-header pc-header--solid" id="pcHeader">
+  <a href="/" class="pc-header__logo pc-header__logo--desktop">
+    <img src="/assets/images/logo-petcenter.png" alt="Pet Center">
+  </a>
+  <a href="/" class="pc-header__logo pc-header__logo--mobile">
+    <img src="/assets/images/logo-petcenter-icon.png" alt="Pet Center">
+  </a>
+  <ul class="pc-header__nav">
+    <li><a href="/">Home</a></li>
+    <li class="has-drop"><a href="#">Our Pets</a>
+      <ul>
+        <li><a href="/pets/dogs/">Dogs</a></li>
+        <li><a href="/pets/cats/">Cats</a></li>
+        <li><a href="/pets/birds/">Birds</a></li>
+        <li><a href="/pets/reptiles/">Reptiles</a></li>
+        <li><a href="/pets/small-mammals/">Small Mammals</a></li>
+        <!-- TASK-2 START — Livestocks & Aquariums added to Our Pets dropdown -->
+        <li><a href="/pets/livestocks/">Livestocks</a></li>
+        <li><a href="/pets/aquariums/">Aquariums</a></li>
+        <!-- TASK-2 END -->
+      </ul>
+    </li>
+    <li><a href="/blog/">Blog</a></li>
+    <li><a href="/testimonials/">Testimonials</a></li>
+    <li class="nav-donate"><a href="https://donate.petcenterco.com" target="_blank" rel="noopener">Donate</a></li>
+    <li><a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact</a></li>
+    <li class="nav-signup"><a href="/rehome/">Sign Up</a></li>
+  </ul>
+  <button class="pc-hamburger" id="pcHamburger" aria-label="Open menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+  <nav class="pc-mobile-menu" id="pcMobileMenu" aria-label="Mobile navigation">
+    <a href="/">Home</a>
+    <a href="/pets/dogs/">Dogs</a>
+    <a href="/pets/cats/">Cats</a>
+    <a href="/pets/birds/">Birds</a>
+    <a href="/pets/reptiles/">Reptiles</a>
+    <a href="/pets/small-mammals/">Small Mammals</a>
+    <!-- TASK-2 START — Livestocks & Aquariums added to mobile menu -->
+    <a href="/pets/livestocks/">Livestocks</a>
+    <a href="/pets/aquariums/">Aquariums</a>
+    <!-- TASK-2 END -->
+    <a href="/blog/">Blog</a>
+    <a href="/testimonials/">Testimonials</a>
+    <a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact</a>
+    <a href="/rehome/">Sign Up</a>
+    <a href="https://donate.petcenterco.com" class="mobile-donate" target="_blank" rel="noopener">Donate</a>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="dash-hero">
+  <span class="eyebrow">Adoption Status Dashboard</span>
+  <h1>Check Your Application</h1>
+  <p>Enter your adoption code to see full details, payment options, and next steps for your application.</p>
+</section>
+
+<!-- LOOKUP CARD -->
+<div class="dash-lookup">
+  <div class="dash-lookup-card">
+    <input type="text" id="codeInput" placeholder="e.g. AD-47293-2026" maxlength="16" autocomplete="off" spellcheck="false">
+    <button id="lookupBtn" onclick="lookupStatus()">Check Status</button>
+  </div>
+</div>
+
+<!-- RESULT BODY -->
+<div class="dash-body" id="dashBody">
+  <div class="dash-state">
+    <p>Enter your adoption code above to view your application status.</p>
+  </div>
+</div>
+
+
+<footer class="pc-footer">
+  <div class="pc-footer__inner">
+    <div class="pc-footer__top">
+      <div class="pc-footer__brand">
+        <img src="/assets/images/logo-petcenter.png" alt="Pet Center">
+        <p>Every pet deserves a loving home. Browse our available pets and start your adoption journey today.</p>
+      </div>
+      <div class="pc-footer__col">
+        <h5>Our Pets</h5>
+        <ul>
+          <li><a href="/pets/dogs/">Dogs</a></li>
+          <li><a href="/pets/cats/">Cats</a></li>
+          <li><a href="/pets/birds/">Birds</a></li>
+          <li><a href="/pets/reptiles/">Reptiles</a></li>
+          <li><a href="/pets/small-mammals/">Small Mammals</a></li>
+          <!-- TASK-2 START — Livestocks & Aquariums added to footer Our Pets column -->
+          <li><a href="/pets/livestocks/">Livestocks</a></li>
+          <li><a href="/pets/aquariums/">Aquariums</a></li>
+          <!-- TASK-2 END -->
+        </ul>
+      </div>
+      <div class="pc-footer__col">
+        <h5>Information</h5>
+        <ul>
+          <li><a href="/">About Us</a></li>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/testimonials/">Testimonials</a></li>
+          <li><a href="https://donate.petcenterco.com" target="_blank" rel="noopener">Donate</a></li>
+          <li><a href="https://docs.petcenterco.com/health-guarantee/" target="_blank" rel="noopener">Health Guarantee</a></li>
+          <li><a href="https://docs.petcenterco.com/shipping-cancellation/" target="_blank" rel="noopener">Shipping & Cancellation</a></li>
+          <li><a href="https://docs.petcenterco.com/shipping-insurance-claims/" target="_blank" rel="noopener">Shipping Insurance</a></li>
+          <li><a href="https://docs.petcenterco.com/data-retention-security/" target="_blank" rel="noopener">Data & Security</a></li>
+        </ul>
+      </div>
+      <div class="pc-footer__col">
+        <h5>Support</h5>
+        <ul>
+          <li><a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact Us</a></li>
+          <li><a href="/rehome/">Sign Up</a></li>
+          <li><a href="https://docs.petcenterco.com/returns-refunds/" target="_blank" rel="noopener">Returns & Refunds</a></li>
+          <li><a href="https://docs.petcenterco.com/faq/" target="_blank" rel="noopener">FAQ</a></li>
+        </ul>
+      </div>
+      <div class="pc-footer__col">
+        <h5>Visit Us</h5>
+        <p style="color:rgba(255,255,255,.7);font-size:13px;line-height:1.8;margin-bottom:0;">235-269 N Beverly Dr<br>Beverly Hills, CA</p>
+        <p style="color:rgba(255,255,255,.6);font-size:12px;line-height:1.6;margin-top:4px;">Golden Triangle Shopping Center, Section #257</p>
+        <p style="color:rgba(255,255,255,.7);font-size:13px;line-height:1.8;margin-top:10px;"><strong style="color:#d7bd88;">Hours:</strong><br>Mon – Fri: 7am – 9pm<br>Sat – Sun: 10am – 6pm</p>
+      </div>
+    </div>
+    <div class="pc-footer__bottom">
+      <span class="pc-footer__copy">&copy; 2026 Pet Center. All rights reserved.</span>
+      <div class="pc-footer__links">
+        <a href="https://docs.petcenterco.com/privacy-policy/" target="_blank" rel="noopener">Privacy Policy</a>
+        <a href="https://docs.petcenterco.com/terms-of-service/" target="_blank" rel="noopener">Terms of Service</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+'use strict';
+
+// ─── Header scroll effect ──────────────────────────────────────────────────
+(function () {
+  var hdr = document.getElementById('pcHeader');
+  if (!hdr) return;
+  function onScroll() { hdr.classList.toggle('scrolled', window.scrollY > 40); }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+})();
+
+// ─── Mobile hamburger menu ─────────────────────────────────────────────────
+(function () {
+  var hamburger = document.getElementById('pcHamburger');
+  var mobileMenu = document.getElementById('pcMobileMenu');
+  if (!hamburger || !mobileMenu) return;
+
+  function openMenu() {
+    hamburger.classList.add('active');
+    mobileMenu.classList.add('open');
+    hamburger.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeMenu() {
+    hamburger.classList.remove('active');
+    mobileMenu.classList.remove('open');
+    hamburger.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  hamburger.addEventListener('click', function (e) {
+    e.stopPropagation();
+    mobileMenu.classList.contains('open') ? closeMenu() : openMenu();
+  });
+
+  var links = mobileMenu.querySelectorAll('a');
+  links.forEach(function (link) {
+    link.addEventListener('click', closeMenu);
+  });
+
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest('header') && !e.target.closest('.pc-mobile-menu')) {
+      closeMenu();
+    }
+  });
+})();
+
+
+// ─── Status Dashboard Logic ─────────────────────────────────────────────────
+function escapeHtml(str) {
+  if (str === null || str === undefined) return '';
+  return String(str).replace(/[&<>"']/g, function (c) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+  });
+}
+
+function fmtDate(s) {
+  if (!s) return '\u2014';
+  var d = new Date(s.replace(' ', 'T'));
+  if (isNaN(d.getTime())) return s;
+  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) +
+    ' at ' + d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+}
+
+// TASK-10 START: "Approved on" needs the specific dd/mm/yy, hour:minute:second format
+// called out in the task spec — separate from fmtDate()'s longer, word-based format
+// used everywhere else, so the rest of the page's date rendering is untouched.
+function fmtApprovedDate(s) {
+  if (!s) return '\u2014';
+  var d = new Date(s.replace(' ', 'T'));
+  if (isNaN(d.getTime())) return s;
+  var pad = function (n) { return n < 10 ? '0' + n : String(n); };
+  var dd = pad(d.getDate());
+  var mm = pad(d.getMonth() + 1);
+  var yy = String(d.getFullYear()).slice(-2);
+  return dd + '/' + mm + '/' + yy + ', ' + pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds());
+}
+// TASK-10 END
+
+function showDashState(html) {
+  document.getElementById('dashBody').innerHTML = '<div class="dash-state">' + html + '</div>';
+}
+
+function lookupStatus() {
+  var input = document.getElementById('codeInput');
+  var code = input.value.trim().toUpperCase();
+  if (!code) return;
+  if (!code.match(/^AD-\d{5}-\d{4}$/)) {
+    showDashState('<p style="color:var(--error);">Please enter a valid adoption code (e.g.\u00a0AD-47293-2026).</p>');
+    return;
+  }
+  // Reflect code in URL without reloading, so the page is shareable/bookmarkable
+  if (window.history && window.history.replaceState) {
+    var url = new URL(window.location.href);
+    url.searchParams.set('code', code);
+    window.history.replaceState({}, '', url);
+  }
+  fetchAndRender(code);
+}
+
+function fetchAndRender(code) {
+  showDashState('<p>Checking status&hellip;</p>');
+  fetch('/adoptions/applications/' + encodeURIComponent(code) + '/application.json', { cache: 'no-store' })
+    .then(function (r) {
+      if (!r.ok) throw new Error('not-found');
+      return r.json();
+    })
+    .then(function (d) { renderDashboard(d, code); })
+    .catch(function () {
+      showDashState('<p class="error" style="color:var(--error);">Code not found. Please check your adoption code and try again.</p>');
+    });
+}
+
+function renderDashboard(d, code) {
+  var status = (d.status || 'PENDING').toUpperCase();
+  var petImg = d.pet_image_url || '/assets/images/pet-placeholder.jpg';
+  var body = document.getElementById('dashBody');
+
+  var html = '<div class="dash-card"><div class="dash-card__top">';
+
+  if (status === 'APPROVED') {
+    html += '<div class="dash-checkmark"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#0d7c4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>';
+    html += '<span class="dash-badge dash-badge--approved">Approved</span>';
+  } else if (status === 'REJECTED') {
+    html += '<span class="dash-badge dash-badge--rejected">Not Approved</span>';
+  } else {
+    html += '<span class="dash-badge dash-badge--pending">Pending</span>';
+  }
+
+  // Primary pet slide — always slide 0
+  html += '<div class="dash-pets-outer" id="dashPetsOuter">' +
+            '<div class="dash-pets-track" id="dashPetsTrack">' +
+              '<div class="dash-pets-slide">' +
+                '<div class="dash-pet-row">' +
+                  '<img src="' + escapeHtml(petImg) + '" alt="' + escapeHtml(d.pet_name || 'Pet') + '" onerror="this.src=\'/assets/images/pet-placeholder.jpg\'">' +
+                  '<div class="info"><h2>' + escapeHtml(d.pet_name || 'Pet') + '</h2>' +
+                  '<p>' + escapeHtml(d.pet_breed || '') + (d.pet_breed && d.pet_age ? ' \u00b7 ' : '') + escapeHtml(d.pet_age || '') + '</p></div>' +
+                '</div>' +
+              '</div>' +
+            '</div>' +
+          '</div>' +
+          // Nav placeholder — shown by JS only if multiple pets
+          '<div class="dash-pets-nav" id="dashPetsNav" style="display:none;">' +
+            '<button class="dash-pets-arrow" id="dashPetsPrev" disabled>' +
+              '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>' +
+            '</button>' +
+            '<div class="dash-pets-dots" id="dashPetsDots"></div>' +
+            '<button class="dash-pets-arrow" id="dashPetsNext">' +
+              '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>' +
+            '</button>' +
+          '</div>';
+
+  html += '<div class="dash-meta-row">' +
+            '<div class="item"><div class="label">Adoption Code</div><div class="value">' + escapeHtml(code) + '</div></div>' +
+            '<div class="item"><div class="label">Applicant</div><div class="value">' + escapeHtml(d.applicant_name || '\u2014') + '</div></div>' +
+          '</div>';
+
+  html += '</div>'; // .dash-card__top
+
+  // Detail grid
+  html += '<div class="dash-card__details"><div class="dash-detail-grid">';
+  html += detailItem('Applied On', fmtDate(d.applied_at));
+  html += '<div class="dash-detail-item" id="dashFeeItem"><div class="label">Adoption Fee</div><div class="value" id="dashFeeValue" style="transition:opacity 0.35s ease;">' + (d.adoption_fee ? '$' + d.adoption_fee : '\u2014') + '</div></div>';
+  html += detailItem('Email', d.applicant_email || '\u2014');
+  html += detailItem('Phone', d.applicant_phone || '\u2014');
+  // TASK-10 START: "Approved By" (name + position, position in small font under the name)
+  // and "Approved On" (dd/mm/yy, hour:minute:second) — replaces the old detailItem()
+  // call that read fmtDate(d.approved_at) and never actually rendered a value because
+  // update-adoption.php never wrote approved_at until this task's PHP-side fix.
+  if (status === 'APPROVED') {
+    html += '<div class="dash-detail-item"><div class="label">Approved By</div><div class="value">' +
+      escapeHtml(d.approved_by || '\u2014') +
+      (d.approved_position ? '<div style="font-size:12px;font-weight:400;color:var(--muted);margin-top:2px;">' + escapeHtml(d.approved_position) + '</div>' : '') +
+      '</div></div>';
+    html += '<div class="dash-detail-item"><div class="label">Approved On</div><div class="value" style="font-family:\'Bitter\',serif;">' +
+      fmtApprovedDate(d.approved_at) + '</div></div>';
+  }
+  // TASK-10 END
+  html += '</div></div>';
+
+  // Status-specific messaging
+  if (status === 'PENDING') {
+    html += '<div class="dash-card__msg"><p>Your application is under review. Our adoption team carefully reviews every application — check back in 1&#8211;2 hours for an update. You\'ll also receive an email as soon as your status changes.</p></div>';
+  } else if (status === 'REJECTED') {
+    html += '<div class="dash-card__msg"><p><strong>Application not approved.</strong></p>' +
+            '<p style="margin-top:8px;">' + (d.rejection_notes ? escapeHtml(d.rejection_notes) : 'No additional reason was provided.') + '</p></div>';
+    html += '<div class="dash-contact-cta">Click on our floating contact button below if you have any questions.</div>';
+  } else if (status === 'APPROVED') {
+    html += '<div class="dash-payment-box">' +
+      '<h5>Congratulations! Your application has been approved!</h5>' +
+      '<p class="full-pay" style="margin-bottom:14px;">You are eligible for the following flexible payment options during checkout:</p>' +
+      '<ul>' +
+        '<li><strong>BNPL (Buy Now Pay Later):</strong> Select &ldquo;Apply for BNPL&rdquo; during checkout inside the card checkout option. It only takes about 2&#8211;5 minutes to apply and is reviewed within 24 hours. Once approved, your pet is usually shipped or delivered locally the same day.</li>' +
+        '<li><strong>Pay on Delivery:</strong> Adopt your pet and pay only when you receive them at home.</li>' +
+        '<li><strong>Installment Plans (Pay in 4 / In-House):</strong> Pay for your pet in 4 payments over the months via your PayPal account, or choose our in-house installment option for even more flexible terms. To set up either plan, contact our customer support team &mdash; they will help configure the plan for you.</li>' +
+      '</ul>' +
+      '<p class="full-pay">Prefer to pay in full now? At checkout just choose your preferred secured payment method available and checkout directly, hassle free.</p>' +
+      '<div class="notice">Notice: Shipping/delivery cost might vary for some pets or not be included at all for some pets. If not included during checkout, you will see just the allocated adoption fee to pay for. If included, a shipping and delivery cost will automatically be added to your total fee.<br><br>BNPL and other services also cover shipping and delivery cost &mdash; if selected, you will also be eligible to pay the shipping and delivery cost only when your pet is home. However, your BNPL application must have been approved and your selected preferred payment method choice to use and pay on delivery must have been verified too.</div>' +
+      '<p class="tip"><em>Tip: Always check your inbox/spam folder for email updates from us to stay up to date.</em></p>' +
+    '</div>';
+
+    if (d.checkout_url) {
+      html += '<a href="' + escapeHtml(d.checkout_url) + '" class="dash-checkout-btn">' +
+        'Proceed to Checkout ' +
+        '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>' +
+      '</a>';
+    }
+  }
+
+  html += '</div>'; // .dash-card
+
+  body.innerHTML = html;
+
+  // ── Pet carousel — wire only if additional_pet_ids exist ──────────────────
+  var additionalIds = Array.isArray(d.additional_pet_ids) ? d.additional_pet_ids.filter(Boolean) : [];
+  if (additionalIds.length > 0) {
+    var track   = document.getElementById('dashPetsTrack');
+    var nav     = document.getElementById('dashPetsNav');
+    var dotsEl  = document.getElementById('dashPetsDots');
+    var prevBtn = document.getElementById('dashPetsPrev');
+    var nextBtn = document.getElementById('dashPetsNext');
+    var current = 0;
+    var total   = 1 + additionalIds.length; // primary + additional
+
+    // TASK-2 START — Livestocks & Aquariums added (LVS/AQU), consistent with adoption-application.html's categoryMap
+    var catMap = { 'DOG': 'dogs', 'CAT': 'cats', 'BIRD': 'birds', 'REP': 'reptiles', 'SM': 'small-mammals', 'LVS': 'livestocks', 'AQU': 'aquariums' };
+    // TASK-2 END
+
+    function goTo(idx) {
+      current = idx;
+      track.style.transform = 'translateX(-' + (idx * 100) + '%)';
+      prevBtn.disabled = idx === 0;
+      nextBtn.disabled = idx === total - 1;
+      dotsEl.querySelectorAll('.dash-pets-dot').forEach(function(dot, i) {
+        dot.classList.toggle('active', i === idx);
+      });
+      // Fade adoption fee to current pet's fee
+      var feeEl = document.getElementById('dashFeeValue');
+      if (feeEl) {
+        var slide = track.querySelectorAll('.dash-pets-slide')[idx];
+        var fee = slide ? (slide.dataset.fee || '\u2014') : '\u2014';
+        feeEl.style.opacity = '0';
+        setTimeout(function() {
+          feeEl.textContent = fee;
+          feeEl.style.opacity = '1';
+        }, 350);
+      }
+    }
+
+    function buildDots() {
+      dotsEl.innerHTML = '';
+      for (var i = 0; i < total; i++) {
+        var dot = document.createElement('span');
+        dot.className = 'dash-pets-dot' + (i === 0 ? ' active' : '');
+        (function(idx) { dot.addEventListener('click', function() { goTo(idx); }); })(i);
+        dotsEl.appendChild(dot);
+      }
+    }
+
+    function buildSlide(name, breed, age, imgUrl) {
+      var slide = document.createElement('div');
+      slide.className = 'dash-pets-slide';
+      var sub = (breed || '') + (breed && age ? ' \u00b7 ' : '') + (age || '');
+      slide.innerHTML = '<div class="dash-pet-row">' +
+        '<img src="' + escapeHtml(imgUrl || '/assets/images/pet-placeholder.jpg') + '" alt="' + escapeHtml(name || 'Pet') + '" onerror="this.src=\'/assets/images/pet-placeholder.jpg\'">' +
+        '<div class="info"><h2>' + escapeHtml(name || 'Pet') + '</h2>' +
+        '<p>' + escapeHtml(sub) + '</p></div>' +
+        '</div>';
+      return slide;
+    }
+
+    // Show nav and build initial dots
+    nav.style.display = 'flex';
+    buildDots();
+    prevBtn.addEventListener('click', function() { if (current > 0) goTo(current - 1); });
+    nextBtn.addEventListener('click', function() { if (current < total - 1) goTo(current + 1); });
+
+    // Store primary pet fee on slide 0
+    var slide0 = track.querySelector('.dash-pets-slide');
+    if (slide0) slide0.dataset.fee = d.adoption_fee ? '$' + d.adoption_fee : '\u2014';
+
+    // Touch swipe
+    var startX = 0;
+    var outer = document.getElementById('dashPetsOuter');
+    outer.addEventListener('touchstart', function(e) { startX = e.touches[0].clientX; }, { passive: true });
+    outer.addEventListener('touchend', function(e) {
+      var dx = e.changedTouches[0].clientX - startX;
+      if (Math.abs(dx) > 40) {
+        if (dx < 0 && current < total - 1) goTo(current + 1);
+        if (dx > 0 && current > 0) goTo(current - 1);
+      }
+    }, { passive: true });
+
+    // Fetch each additional pet and inject its slide
+    additionalIds.forEach(function(petId) {
+      var prefix = petId.split('-')[0];
+      var cat = catMap[prefix];
+
+      // Append a loading placeholder slide immediately
+      var placeholder = buildSlide(petId, 'Loading\u2026', '', '');
+      track.appendChild(placeholder);
+
+      if (!cat) {
+        placeholder.querySelector('h2').textContent = petId;
+        placeholder.querySelector('p').textContent = 'Unknown pet type';
+        return;
+      }
+
+      fetch('/adoptions/pets/' + cat + '/' + encodeURIComponent(petId) + '/pet.json', { cache: 'no-store' })
+        .then(function(r) { return r.ok ? r.json() : null; })
+        .then(function(pet) {
+          if (!pet) { placeholder.querySelector('p').textContent = 'Could not load details'; return; }
+          var ageText = pet.age_years ? (pet.age_years + (Number(pet.age_years) === 1 ? ' year' : ' years')) : '';
+          var slide = buildSlide(pet.name, pet.breed, ageText, pet.single_image_url);
+          var feeNum = parseFloat(pet.adoption_fee);
+          slide.dataset.fee = !isNaN(feeNum) ? '$' + feeNum.toLocaleString('en-US') : (pet.adoption_fee || '\u2014');
+          track.replaceChild(slide, placeholder);
+        })
+        .catch(function() { placeholder.querySelector('p').textContent = 'Could not load details'; });
+    });
+  }
+}
+
+function detailItem(label, value) {
+  return '<div class="dash-detail-item"><div class="label">' + escapeHtml(label) + '</div><div class="value">' + escapeHtml(value) + '</div></div>';
+}
+
+// ─── Auto-lookup from ?code= URL param on page load ────────────────────────
+(function () {
+  var params = new URLSearchParams(window.location.search);
+  var code = params.get('code');
+  if (code) {
+    code = code.trim().toUpperCase();
+    document.getElementById('codeInput').value = code;
+    if (code.match(/^AD-\d{5}-\d{4}$/)) {
+      fetchAndRender(code);
+    } else {
+      showDashState('<p style="color:var(--error);">Invalid adoption code in URL.</p>');
+    }
+  }
+  document.getElementById('codeInput').addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') lookupStatus();
+  });
+})();
+</script>
+<script src="/admin/chat-widget.js"></script>
+</body>
+</html>

@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact & Support — Pet Center</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <style>
+    :root {
+      --primary: #10214b;
+      --primary-light: #1a2f5c;
+      --gold: #d7bd88;
+      --warm-gray: #d0c3ba;
+      --orange: #ED7624;
+      --success: #10b981;
+      --error: #ef4444;
+      --background: #f9f7f4;
+      --surface: #ffffff;
+      --text: #2c2416;
+      --muted: #7a6d5f;
+      --border: rgba(16,33,75,0.12);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Sora', system-ui, sans-serif;
+      background: var(--background);
+      color: var(--text);
+      line-height: 1.65;
+      padding: 0;
+      margin: 0;
+    }
+
+    .contact-wrap {
+      padding: 24px;
+    }
+
+    /* Hero banner inside popup */
+    .hero {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      border-radius: 12px;
+      padding: 28px 28px;
+      color: white;
+      margin-bottom: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      right: -60px; top: -60px;
+      width: 280px; height: 280px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(215,189,136,0.1) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      position: relative;
+      z-index: 1;
+    }
+    .hero p {
+      font-size: 14px;
+      color: rgba(255,255,255,0.85);
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Form wrapper */
+    .form-wrapper {
+      background: white;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      padding: 28px;
+      margin-bottom: 24px;
+    }
+    .form-wrapper h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 18px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid var(--gold);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    @media (max-width: 560px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .form-wrapper { padding: 18px; }
+      .contact-wrap { padding: 16px; }
+    }
+
+    .field { display: flex; flex-direction: column; gap: 6px; }
+    .field.full { grid-column: 1 / -1; }
+
+    .field label {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--primary);
+    }
+
+    .field input,
+    .field textarea,
+    .field select {
+      background: white;
+      border: 1.5px solid var(--border);
+      border-radius: 9px;
+      padding: 10px 13px;
+      font-size: 13.5px;
+      color: var(--text);
+      font-family: inherit;
+      transition: all 0.25s ease;
+    }
+    .field input:focus,
+    .field textarea:focus,
+    .field select:focus {
+      outline: none;
+      border-color: var(--gold);
+      background: #fafaf8;
+      box-shadow: 0 0 0 3px rgba(215,189,136,0.15);
+    }
+    .field textarea { resize: vertical; min-height: 110px; }
+    .field input::placeholder,
+    .field textarea::placeholder { color: var(--muted); }
+
+    /* Department */
+    .dept-select {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: 8px;
+      grid-column: 1 / -1;
+    }
+    .dept-option input { display: none; }
+    .dept-option label {
+      display: block;
+      padding: 9px 12px;
+      background: white;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      text-align: center;
+      transition: all 0.2s ease;
+      text-transform: none;
+      letter-spacing: 0;
+    }
+    .dept-option input:checked + label {
+      border-color: var(--gold);
+      background: linear-gradient(135deg, rgba(215,189,136,0.15) 0%, rgba(215,189,136,0.08) 100%);
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    /* File Upload */
+    .file-drop {
+      padding: 20px;
+      border-radius: 9px;
+      border: 2px dashed var(--gold);
+      background: rgba(215,189,136,0.08);
+      cursor: pointer;
+      text-align: center;
+      font-size: 13px;
+      color: var(--muted);
+      transition: all 0.25s ease;
+    }
+    .file-drop:hover, .file-drop.dragover {
+      border-color: var(--primary);
+      background: rgba(16,33,75,0.06);
+      color: var(--text);
+    }
+    .uploaded-list { margin-top: 10px; display: flex; flex-direction: column; gap: 8px; }
+    .uploaded-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px; background: white;
+      border-radius: 8px; border: 1px solid var(--border);
+      animation: slideUp 0.3s ease;
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .uploaded-item img { width: 48px; height: 48px; object-fit: cover; border-radius: 6px; border: 1px solid var(--border); }
+    .uploaded-item-meta { flex: 1; min-width: 0; }
+    .uploaded-item-meta strong { display: block; font-size: 12px; color: var(--text); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .uploaded-item-meta .small { font-size: 11px; color: var(--muted); }
+    .uploaded-item-btns { display: flex; flex-direction: column; gap: 4px; }
+    .small-btn {
+      background: white; border: 1px solid var(--border); border-radius: 5px;
+      padding: 4px 8px; font-size: 11px; font-weight: 600; color: var(--primary);
+      cursor: pointer; font-family: inherit; transition: all 0.2s ease;
+    }
+    .small-btn:hover { border-color: var(--gold); background: rgba(215,189,136,0.08); }
+    .small-btn.danger:hover { background: rgba(239,68,68,0.1); border-color: #ef4444; color: #ef4444; }
+
+    /* Submit */
+    .submit-btn {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      color: white; border: none; border-radius: 10px;
+      padding: 13px 40px; font-size: 15px; font-weight: 700;
+      cursor: pointer; font-family: inherit;
+      transition: all 0.25s ease;
+      box-shadow: 0 6px 20px rgba(16,33,75,0.25);
+      width: 100%;
+    }
+    .submit-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(16,33,75,0.35); }
+    .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    /* Status messages */
+    .status-msg { padding: 12px 14px; border-radius: 8px; margin-bottom: 16px; font-size: 13px; display: none; }
+    .status-msg.show { display: block; animation: slideUp 0.3s ease; }
+    .status-msg.success { background: #ecfdf5; border: 1px solid #d1fae5; color: #065f46; }
+    .status-msg.error   { background: #fef2f2; border: 1px solid #fee2e2; color: #7f1d1d; }
+    .status-msg.info    { background: #f0f9ff; border: 1px solid #bfdbfe; color: #0c2340; }
+
+    /* Response times */
+    .response-times {
+      background: rgba(16,33,75,0.07);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+    .response-times h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px; margin-bottom: 14px;
+    }
+    .response-times .grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 14px; font-size: 13px;
+    }
+
+    /* Image preview modal */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(16,33,75,0.5);
+      backdrop-filter: blur(6px);
+      display: none; align-items: center; justify-content: center;
+      z-index: 9999; padding: 20px;
+    }
+    .modal-overlay.show { display: flex; }
+    .modal-box {
+      background: rgba(255,255,255,0.97);
+      border: 1.5px solid rgba(215,189,136,0.3);
+      border-radius: 12px; padding: 20px;
+      max-width: 560px; width: 100%;
+      box-shadow: 0 20px 60px rgba(16,33,75,0.2);
+    }
+    .modal-box img { width: 100%; max-height: 65vh; object-fit: contain; border-radius: 8px; margin-bottom: 12px; }
+    .modal-close {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      color: white; border: none; border-radius: 8px;
+      padding: 9px 20px; font-weight: 600; cursor: pointer; width: 100%;
+      transition: all 0.25s ease; font-family: inherit;
+    }
+    .modal-close:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(16,33,75,0.25); }
+  </style>
+</head>
+<body>
+
+<div class="contact-wrap">
+
+  <div class="hero">
+    <h1>Contact &amp; Support</h1>
+    <p>We're here to help. Send us a message along with photos or documents, and we'll respond within 24 hours during business days.</p>
+  </div>
+
+  <div class="form-wrapper">
+    <h2>Send us a Message</h2>
+    <div id="statusMsg" class="status-msg"></div>
+    <form id="contactForm" method="POST">
+
+      <div class="form-grid">
+        <div class="field">
+          <label for="fullName">Full Name *</label>
+          <input type="text" id="fullName" name="fullName" required placeholder="Your full name">
+        </div>
+        <div class="field">
+          <label for="email">Email Address *</label>
+          <input type="email" id="email" name="email" required placeholder="your@email.com">
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="field">
+          <label for="phone">Phone Number <span style="font-size:11px;color:var(--muted);">(optional)</span></label>
+          <input type="tel" id="phone" name="phone" placeholder="+1 (555) 000-0000">
+        </div>
+        <div class="field">
+          <label for="subject">Subject *</label>
+          <input type="text" id="subject" name="subject" required placeholder="How can we help?">
+        </div>
+      </div>
+
+      <div class="field full" style="margin-bottom:16px;">
+        <label>Department *</label>
+        <div class="dept-select">
+          <div class="dept-option"><input type="radio" id="dept_support" name="department" value="support" required><label for="dept_support">Support</label></div>
+          <div class="dept-option"><input type="radio" id="dept_sales" name="department" value="sales"><label for="dept_sales">Sales</label></div>
+          <div class="dept-option"><input type="radio" id="dept_adoption" name="department" value="adoption"><label for="dept_adoption">Adoption</label></div>
+          <div class="dept-option"><input type="radio" id="dept_shipping" name="department" value="shipping"><label for="dept_shipping">Shipping</label></div>
+          <div class="dept-option"><input type="radio" id="dept_health" name="department" value="health"><label for="dept_health">Health Claim</label></div>
+          <div class="dept-option"><input type="radio" id="dept_other" name="department" value="other"><label for="dept_other">Other</label></div>
+        </div>
+      </div>
+
+      <div class="field full" style="margin-bottom:16px;">
+        <label for="message">Message *</label>
+        <textarea id="message" name="message" required placeholder="Please describe your issue or question..."></textarea>
+      </div>
+
+      <div class="field full" style="margin-bottom:20px;">
+        <label for="dropZone">Attach Images <span style="font-size:11px;color:var(--muted);">(optional, max 10 images)</span></label>
+        <div id="dropZone" class="file-drop" tabindex="0">
+          <i class="fas fa-cloud-upload-alt" style="font-size:20px;margin-bottom:8px;display:block;color:var(--gold);"></i>
+          Click or drag up to 10 images here (JPG, PNG only, max 5MB each)
+        </div>
+        <div id="uploadedList" class="uploaded-list"></div>
+      </div>
+
+      <button type="submit" class="submit-btn">Send Message</button>
+
+    </form>
+  </div>
+
+  <div class="response-times">
+    <h3>Response Times</h3>
+    <div class="grid">
+      <div><strong>General Inquiries</strong><br>Within 24 business hours</div>
+      <div><strong>Health Claims</strong><br>Within 48 business hours</div>
+      <div><strong>Shipping Issues</strong><br>Within 24 business hours</div>
+      <div><strong>Business Hours</strong><br>Monday–Friday, 9am–6pm ET</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Image preview modal (internal to this form) -->
+<div id="previewModal" class="modal-overlay">
+  <div class="modal-box">
+    <div id="modalContent"></div>
+    <button id="modalClose" class="modal-close">Close Preview</button>
+  </div>
+</div>
+
+<script>
+'use strict';
+const $ = id => document.getElementById(id);
+const esc = s => (s+'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+const MAX_FILES = 10;
+const MAX_BYTES = 5 * 1024 * 1024;
+const ALLOWED = ['image/jpeg','image/jpg','image/png'];
+
+const uploadField = { drop: $('dropZone'), list: $('uploadedList'), arr: [] };
+
+const fileInput = document.createElement('input');
+fileInput.type = 'file';
+fileInput.accept = '.jpg,.jpeg,.png';
+fileInput.multiple = true;
+fileInput.style.display = 'none';
+document.body.appendChild(fileInput);
+
+uploadField.drop.addEventListener('click', () => fileInput.click());
+uploadField.drop.addEventListener('keydown', e => {
+  if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fileInput.click(); }
+});
+['dragenter','dragover'].forEach(ev => uploadField.drop.addEventListener(ev, e => { e.preventDefault(); uploadField.drop.classList.add('dragover'); }));
+['dragleave','drop','dragend'].forEach(ev => uploadField.drop.addEventListener(ev, e => { e.preventDefault(); uploadField.drop.classList.remove('dragover'); }));
+uploadField.drop.addEventListener('drop', e => { handleFiles(Array.from(e.dataTransfer?.files || [])); });
+fileInput.addEventListener('change', e => { handleFiles(Array.from(e.target.files || [])); fileInput.value = ''; });
+
+async function preUploadFile(item) {
+  item.uploading = true; item.uploaded = false; item.token = null;
+  renderUploadList();
+  try {
+    const fd = new FormData();
+    fd.append('file', item.file, item.name);
+    fd.append('field', 'contact_images');
+    const res = await fetch('/contact-us/upload-temp.php', { method: 'POST', body: fd });
+    const json = await res.json();
+    if (json && json.token) { item.token = json.token; item.uploaded = true; }
+    else { item.uploadError = json.message || 'Upload failed'; }
+  } catch(e) { item.uploadError = 'Network error'; }
+  item.uploading = false;
+  renderUploadList();
+}
+
+function handleFiles(files) {
+  for (const f of files) {
+    if (uploadField.arr.length >= MAX_FILES) { showStatus('Maximum ' + MAX_FILES + ' images allowed.', 'error'); break; }
+    if (f.size > MAX_BYTES) { showStatus('"' + f.name + '" is too large. Max 5MB.', 'error'); continue; }
+    if (!ALLOWED.includes(f.type)) { showStatus('"' + f.name + '" not allowed. Use JPG or PNG.', 'error'); continue; }
+    const item = { file: f, url: URL.createObjectURL(f), name: f.name, size: f.size, type: f.type, uploading: false, uploaded: false, token: null, uploadError: null };
+    uploadField.arr.push(item);
+    renderUploadList();
+    preUploadFile(item);
+  }
+}
+
+function renderUploadList() {
+  uploadField.list.innerHTML = '';
+  uploadField.arr.forEach((it, idx) => {
+    const div = document.createElement('div');
+    div.className = 'uploaded-item';
+    const thumb = document.createElement('img');
+    thumb.src = it.type.startsWith('image/') ? it.url : '';
+    const meta = document.createElement('div');
+    meta.className = 'uploaded-item-meta';
+    let status = it.uploaded ? ' <span style="color:#16a34a;font-size:11px;">[DONE]</span>' : it.uploading ? ' <span style="color:#6b7280;font-size:11px;">uploading…</span>' : it.uploadError ? ' <span style="color:#dc2626;font-size:11px;">[ERROR]</span>' : '';
+    meta.innerHTML = '<strong>' + esc(it.name) + '</strong><div class="small">' + (it.size/1024).toFixed(0) + ' KB' + status + '</div>';
+    const btns = document.createElement('div');
+    btns.className = 'uploaded-item-btns';
+    const previewBtn = document.createElement('button');
+    previewBtn.type = 'button'; previewBtn.className = 'small-btn'; previewBtn.textContent = 'Preview';
+    previewBtn.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); openPreview(it); });
+    const removeBtn = document.createElement('button');
+    removeBtn.type = 'button'; removeBtn.className = 'small-btn danger'; removeBtn.textContent = 'Remove';
+    removeBtn.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); URL.revokeObjectURL(it.url); uploadField.arr.splice(idx, 1); renderUploadList(); });
+    btns.appendChild(previewBtn); btns.appendChild(removeBtn);
+    div.appendChild(thumb); div.appendChild(meta); div.appendChild(btns);
+    uploadField.list.appendChild(div);
+  });
+}
+
+const modal = $('previewModal');
+const modalContent = $('modalContent');
+$('modalClose').addEventListener('click', () => { modal.classList.remove('show'); modalContent.innerHTML = ''; });
+modal.addEventListener('click', e => { if (e.target === modal) { modal.classList.remove('show'); modalContent.innerHTML = ''; } });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && modal.classList.contains('show')) { modal.classList.remove('show'); modalContent.innerHTML = ''; } });
+
+function openPreview(item) {
+  modalContent.innerHTML = '';
+  if (item.type.startsWith('image/')) {
+    const img = document.createElement('img'); img.src = item.url; img.alt = item.name;
+    modalContent.appendChild(img);
+  } else { modalContent.innerHTML = '<p style="text-align:center;color:var(--muted);">Preview not available.</p>'; }
+  modal.classList.add('show');
+}
+
+function showStatus(message, type) {
+  type = type || 'info';
+  const s = $('statusMsg');
+  s.textContent = message;
+  s.className = 'status-msg show ' + type;
+  if (type !== 'error') setTimeout(() => s.classList.remove('show'), 5000);
+}
+
+$('contactForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const btn = e.target.querySelector('.submit-btn');
+  const btnText = btn.textContent;
+  if (!document.querySelector('input[name="department"]:checked')) { showStatus('Please select a department.', 'error'); return; }
+  const stillUploading = uploadField.arr.filter(it => it.uploading);
+  if (stillUploading.length > 0) { showStatus('Please wait — files are still uploading…', 'info'); return; }
+  const failed = uploadField.arr.filter(it => it.uploadError);
+  if (failed.length > 0) { showStatus('Some files failed to upload. Please remove and re-add them.', 'error'); return; }
+  const formData = new FormData(e.target);
+  uploadField.arr.forEach((it, idx) => { if (it.token) formData.append('image_token_' + idx, it.token); });
+  btn.disabled = true; btn.textContent = 'Sending...';
+  try {
+    const response = await fetch('/contact-us/contact-handler.php', { method: 'POST', body: formData });
+    const result = await response.json();
+    if (result.success) {
+      showStatus('Message sent successfully! We\'ll respond within 24 hours.', 'success');
+      $('contactForm').reset();
+      uploadField.arr = []; renderUploadList();
+      $('statusMsg').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } else {
+      showStatus(result.message || 'Failed to send message.', 'error');
+    }
+  } catch(err) {
+    showStatus('Network error. Please try again.', 'error');
+  } finally {
+    btn.disabled = false; btn.textContent = btnText;
+  }
+});
+</script>
+</body>
+</html>

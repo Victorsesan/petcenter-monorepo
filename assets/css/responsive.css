@@ -1,0 +1,115 @@
+/* ════════════════════════════════════════════════════════════════
+   Pet Center — responsive.css
+   Site-wide responsive / mobile-first breakpoints
+   Colors: Navy #10214b | Gold #d7bd88 | Orange #ED7624
+   ════════════════════════════════════════════════════════════════ */
+
+/* ── 1280px and below: constrain max container ─────────────── */
+@media (max-width: 1280px) {
+  .pc-container { padding: 0 20px; }
+}
+
+/* ── 1024px: tablet landscape ──────────────────────────────── */
+@media (max-width: 1024px) {
+  .pc-grid-4 { grid-template-columns: repeat(2, 1fr); }
+  .pc-catalog-wrap { grid-template-columns: 1fr; }
+  .pc-catalog-sidebar { display: none; }
+}
+
+/* ── 900px: tablet portrait / wide mobile ──────────────────── */
+@media (max-width: 900px) {
+  /* Header */
+  .pc-header__nav { display: none; }
+  .pc-hamburger { display: flex; }
+
+  /* Catalog */
+  .pc-catalog-grid { grid-template-columns: repeat(2, 1fr); gap: 18px; }
+  .pc-banner { padding: 80px 20px 40px; }
+  .pc-banner h1 { font-size: clamp(1.8rem, 5vw, 2.8rem); }
+  .pc-filter-bar { flex-wrap: wrap; gap: 10px; }
+
+  /* Homepage sections */
+  .pc-pets-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  .pc-blog-slide { grid-template-columns: repeat(2, 1fr); }
+  .pc-how-steps { grid-template-columns: repeat(3, 1fr); }
+  .pc-footer__top { grid-template-columns: 1fr 1fr; gap: 28px; }
+}
+
+/* ── 768px: tablet ─────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .pc-grid-3 { grid-template-columns: repeat(2, 1fr); }
+  .pc-grid-2 { grid-template-columns: 1fr; }
+
+  /* Blog featured card */
+  .pc-blog-featured { grid-template-columns: 1fr; }
+
+  /* Pet detail */
+  .pc-detail-grid { grid-template-columns: 1fr; }
+  .pc-detail-gallery { max-width: 100%; }
+
+  /* Admin table */
+  .pc-admin-table { font-size: 13px; }
+  .pc-admin-table td, .pc-admin-table th { padding: 10px 12px; }
+}
+
+/* ── 640px: large mobile ───────────────────────────────────── */
+@media (max-width: 640px) {
+  .pc-section { padding: 48px 0; }
+  .pc-filter-bar .pc-select-wrap,
+  .pc-filter-bar select { width: 100%; }
+
+  /* Form steps */
+  .step-indicator__item { padding: 10px 4px; font-size: 10px; }
+  .step-indicator__num { width: 24px; height: 24px; font-size: 11px; line-height: 24px; }
+  .form-nav { flex-direction: column; }
+  .form-nav .pc-btn { width: 100%; justify-content: center; }
+
+  /* Post nav */
+  .pc-post-nav { grid-template-columns: 1fr; }
+}
+
+/* ── 560px: mobile ─────────────────────────────────────────── */
+@media (max-width: 560px) {
+  /* Homepage */
+  .pc-pets-grid { grid-template-columns: 1fr; }
+  .pc-blog-slide { grid-template-columns: 1fr; }
+  .pc-how-steps { grid-template-columns: 1fr 1fr; gap: 14px; }
+  .pc-footer__top { grid-template-columns: 1fr; gap: 24px; }
+
+  /* Catalog */
+  .pc-catalog-grid { grid-template-columns: 1fr; }
+
+  /* Header hero */
+  .pc-hero__btns { flex-direction: column; align-items: center; }
+
+  /* Pet detail gallery */
+  .pc-gallery-thumbs { gap: 8px; }
+  .pc-gallery-thumb { width: 56px; height: 56px; }
+}
+
+/* ── 480px: small mobile ───────────────────────────────────── */
+@media (max-width: 480px) {
+  .pc-grid-4 { grid-template-columns: 1fr; }
+  .pc-testi-card { padding: 22px 18px; }
+  .pc-testi-reply { padding-left: 0; }
+
+  /* Footer */
+  .pc-footer__bottom { flex-direction: column; text-align: center; }
+  .pc-footer__links { justify-content: center; }
+
+  /* Status form */
+  .pc-status-form { flex-direction: column; padding: 12px; gap: 8px; }
+  .pc-status-form button { width: 100%; }
+}
+
+/* ── Print styles ──────────────────────────────────────────── */
+@media print {
+  .pc-header,
+  .pc-hamburger,
+  .pc-mobile-menu,
+  #pc-preload,
+  .pc-footer,
+  .pc-filter-bar,
+  .no-print { display: none !important; }
+  body { padding-top: 0 !important; }
+}
