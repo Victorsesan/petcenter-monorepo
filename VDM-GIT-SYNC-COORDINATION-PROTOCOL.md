@@ -102,6 +102,18 @@ Everything else about how you write a sub-task — what and where, never how, re
 
 ---
 
+## SETTING UP YOUR COPY OF THE REPO (ONCE, TESTED)
+
+Attach `Victorsesan/petcenter-monorepo` with push access in a Claude Code session and clone it with a generous timeout (up to 10 minutes; one clone at a time; on HTTP 429 wait 10 seconds and retry once). Then run this once so you can see every worker's branch and diff it:
+```
+git remote set-branches origin '*'
+git fetch --deepen=100 origin
+git branch -r        # you should see every worker's origin/task/... branch
+```
+If a diff says "no merge base", run `git fetch --deepen=100 origin` again. If your session stops a command and asks for permission, tell the CEO the exact command and wait; do not work around it. Pushing documents to `main` (your task docs, `TODO.md`) has been tested and works without a pull request.
+
+---
+
 ## HOW EVERY DEPARTMENT USES GIT (SO NOTHING GETS LOST)
 
 | Role | Pushes to | Never does |

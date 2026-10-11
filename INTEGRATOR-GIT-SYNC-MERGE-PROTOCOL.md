@@ -34,6 +34,13 @@ cd petcenter-monorepo
 git config user.name "Pet Center Integrator"
 git config user.email "integrator@petcenterco.com"
 ```
+**Right after cloning, run this once (it also lets you switch to the deploy branch in Step 6).** A shallow clone only knows about `main`, so without it you cannot see other workers' branches, and `git diff origin/main...origin/task/N` fails with "no merge base". This was tested from a fresh clone:
+```
+git remote set-branches origin '*'
+git fetch --deepen=100 origin
+git branch -r        # you should now see origin/main, origin/adopt-deploy and every worker's origin/task/... branch
+```
+
 Repo layout: `main` holds `adopt/`, `docs/`, `petpay/`, `reports/` and the core documents at the root. Live deployment is done from separate branches — `adopt-deploy` (and later `docs-deploy`, `petpay-deploy`) — which Hostinger publishes. **Merging to `main` alone does not change the live site.**
 
 ---
@@ -93,7 +100,14 @@ git switch main
 ```
 What each line does: switch to the deploy branch; make sure it is current; remove its old tracked files (so files deleted on `main` are deleted live too); copy the current contents of `main`'s `adopt/` folder into the root of the branch; restore the `.gitignore` so server-only files (`config.php`, `pet.json`, `applications/`) stay protected; review; commit; push. Never commit the root documents (`TODO.md`, protocol docs, summaries) into a deploy branch — only the `adopt/` folder contents go live.
 
-After the push, Hostinger's Git deployment publishes it automatically **if the connection shows the "Auto-deployment" chip in hPanel (Advanced → Git)**. If it does not update, tell the CEO (the deploy action in hPanel, or the connection, needs attention) — do not assume it deployed. Then **verify the live result**: open the affected live pages (or `curl -sI` the URL) and confirm the change is visible; if caching is enabled the CEO may need to clear it. Add a line under your merge report in `TODO.md` if something went wrong. For `docs/` and `petpay/`, repeat the same block with `docs-deploy` / `petpay-deploy` and the matching folder name, once those branches exist.
+**How this was proven on 2026-10-11 (so you can rely on it):** Hostinger's Git connection (hPanel → Advanced → Git, "Auto-deployment" on, branch `adopt-deploy`, root `public_html/adopt`) deploys on every push to `adopt-deploy`. A one-line test file pushed to `adopt-deploy` was live about 45 seconds later; removing it removed it from the live site. Server-only files (`config.php`, `pet.json`, `applications/`) survived the deploy. No hPanel action is needed.
+
+**Roadblocks you may hit, and what to do:**
+- **Pushing `adopt-deploy` is a production deploy, and your session may stop it and ask the CEO for approval.** When that happens, tell the CEO the exact command (`git push origin adopt-deploy`), wait for approval, then run it again. Do not try to disguise it or reach the same result another way, and do not stop for good: the approval path works.
+- `git switch adopt-deploy` fails with "invalid reference": you skipped the setup block in Step 2. Run it, or `git fetch origin adopt-deploy:refs/remotes/origin/adopt-deploy`, then switch again.
+- Never ask a worker to do this step.
+
+**Verify the live result — do not assume.** Wait about 45 seconds after the push. Your shell usually cannot reach the live site, so open the changed live pages with your page-fetch or browser tool, adding a changing `?v=1`, `?v=2` … to the URL because results are cached. Confirm the change is visible and the site still loads normally (pets and images show). To check a file was removed, request its URL and expect a 404. The CEO can also check from the Hostinger server over SSH: `curl -s -o /dev/null -w "%{http_code}\n" https://adopt.petcenterco.com/[path]`. If the live site did not change, tell the CEO; if caching is enabled the CEO may need to clear it. Add a line under your merge report in `TODO.md` if something went wrong. For `docs/` and `petpay/`, repeat the same block with `docs-deploy` / `petpay-deploy` and the matching folder name, once those branches exist.
 
 ---
 

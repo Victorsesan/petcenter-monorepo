@@ -51,6 +51,13 @@ cd petcenter-monorepo
 git config user.name "Pet Center Worker"
 git config user.email "worker@petcenterco.com"
 ```
+**Right after cloning, run this once.** A shallow clone only knows about `main`, so without it you cannot see other workers' branches, and `git diff origin/main...origin/task/N` fails with "no merge base". This was tested from a fresh clone:
+```
+git remote set-branches origin '*'
+git fetch --deepen=100 origin
+git branch -r        # you should now see origin/main, origin/adopt-deploy and every worker's origin/task/... branch
+```
+
 Then: read your assigned task in full and note your **task number** — your branch, commits, comments and report all use it. Read the core files listed above that apply to your task **before you write anything**, then read the Table of Contents of `TODO.md` and open every entry addressed to you or to `ALL`.
 
 ---
@@ -184,6 +191,21 @@ If your task has a reference image or design source, it is the literal target. C
 ## STEP 8 — IF YOU'RE ASKED FOR A SECOND ROUND
 
 Push new commits to the *same branch* and add a short "Round 2" section to the *same* report file (never a new file). Scope Lock and the bug rules above still apply in full.
+
+---
+
+## KNOWN ROADBLOCKS AND HOW TO GET PAST THEM (ALREADY HIT AND SOLVED — DO NOT REPEAT THEM)
+
+| Problem | What to do |
+|---|---|
+| Clone is slow or seems stuck | The repo is large. Use a generous timeout (up to 10 minutes) and do not interrupt it. |
+| Clone fails with HTTP 429 / "Too many concurrent git operations" | Run only **one** clone at a time. Wait 10 seconds and retry **once**. Do not start a second clone in parallel. |
+| `git branch -r` shows only `origin/main`, or another worker's branch is missing | Run the setup block in Step 1 (`git remote set-branches origin '*'` then `git fetch --deepen=100 origin`). Note that `git fetch origin task/3` on its own only fills a temporary pointer and does **not** create `origin/task/3`. |
+| `fatal: ... no merge base` when diffing | Run `git fetch --deepen=100 origin`, then repeat the diff. |
+| Push rejected | `git fetch origin`, merge, resolve conflicts, push again. Never force-push. |
+| Your session stops a command and asks for permission (for example a push) | Tell the CEO the exact command and wait for approval. Do not try to disguise it or reach the same result another way. Pushing your own `task/...` branch and your `TODO.md` entries normally works without any prompt. |
+| You cannot reach the live website from the shell | That is normal. You do not deploy; the Integrator does. Visual checks use the Playwright browser on your local copy. |
+| `Host not in allowlist: github.com` | Your session cannot reach GitHub. Tell the CEO and stop. |
 
 ---
 
