@@ -96,6 +96,7 @@ Keep the same overall structure your project's task-tracker convention already u
 - **Branch name** (point 1)
 - **Shared-file / merge-order note**, if applicable (point 2) — omit entirely if the sub-task shares no file
 - **"Read first" line** naming the core files above
+- **Warning & Instructions copied from the UPDATED summary documents in the repo root, never from older copies you may still hold.** Rules 14a–14c (adoption summary) and 13a–13c (admin summary) changed: the old "completion file with pasted code" rules are replaced by the git workflow. Any older tracker or sub-task that still carries the old rules must be regenerated before it is given to a worker.
 - **The bug/follow-up and self-test line** from point 3
 
 Everything else about how you write a sub-task — what and where, never how, real file requests when your own project brief calls for it — stays exactly as it was.
