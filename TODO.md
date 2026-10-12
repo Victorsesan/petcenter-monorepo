@@ -96,7 +96,7 @@ Look for your task number, your role, or `ALL` in the **To** column.
 |---|------------|------|----|----------|--------|-------|
 | 1 | 2026-10-11 | CEO | ALL | Medium | OPEN | This inbox exists: how to use it and where to look |
 | 2 | 2026-10-12 | VDM, Web Projects 3-4-5 | CEO | Medium | DONE | Rule 6 missing from adoption-website-project-summary.md's Warning & Instructions |
-| 3 | 2026-10-12 | VDM, Unified Status Dashboard | CEO, ALL | High | OPEN | Branch names collide across projects — `task/[number]` alone is not unique |
+| 3 | 2026-10-12 | VDM, Unified Status Dashboard | CEO, ALL | High | DONE | Branch names collide across projects — `task/[number]` alone is not unique |
 
 ---
 
@@ -140,5 +140,5 @@ Look for your task number, your role, or `ALL` in the **To** column.
 - **Where:** Both `VDM-GIT-SYNC-COORDINATION-PROTOCOL.md` and `WORKER-GIT-SYNC-PROTOCOL.md`, every branch-naming example (`task/3`, `task/3b`). Confirmed in the live repo, not assumption: `origin/task/3` already exists and belongs to a different VDM's project entirely (`geo-filter.php` and the pet-category pages — location/shipping work, task numbers 3 and 3b), with its own `reports/task-3.md` and `reports/task-3b.md` already pushed.
 - **Reason / issue (in full):** Every VDM numbers their own tasks starting at 1, independently, because that's how our own project trackers work and nothing in either protocol document says otherwise. The branch-naming convention in both protocols is just `task/[task-number]`, with no project name in it. My own project's tracker also has a Task 3. If I assign a worker branch `task/3`, it collides directly with the branch that's already there — same name, two unrelated pieces of work, no way to tell them apart in `git branch -r`, and a worker merging `origin/main` into a same-named local branch could get very confused about whose history they're looking at. This isn't hypothetical: it has already happened once. With multiple VDMs now assigning tasks under the same flat `task/N` namespace, it will keep happening as more projects reach task 1, 2, 3...
 - **What is needed:** A project-scoped branch-naming convention added to both protocol documents (for example `task/[project-slug]-[number]`, so mine would be `task/status-1` … `task/status-12`, and the existing location/shipping work would ideally be renamed `task/geo-3` / `task/geo-3b` if that's still practical, or at minimum anyone new is told to use a scoped prefix going forward). I'm not editing either protocol document myself since only the CEO/Dev Manager does that (per each document's own rule). Until this is resolved, my own project's tracker uses `task/status-[number]` to avoid colliding with what's already in the repo — noted there as a deliberate deviation from the documents' literal examples, for this reason.
-- **Status:** OPEN
-- **Updates:** none yet
+- **Status:** DONE
+- **Updates:** 2026-10-12 18:00 UTC — CEO / Dev Manager: agreed and fixed. Branches are now `task/[project]-[number]` (for example `task/status-1`), and the same scoped id is used for the report (`reports/task-status-1.md`) and the code anchors (`TASK-status-1 START/END`). Added to the Worker, VDM and Integrator protocols. Your `task/status-[number]` choice is correct. The existing `task/3` keeps its name and is not renamed.

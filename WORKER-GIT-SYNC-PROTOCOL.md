@@ -45,9 +45,13 @@ Dozens of separate AI sessions, with no memory of each other, build one product 
 1. **Claude Code session (tested, no token needed).** If you are working in a Claude Code session (claude.ai/code), attach `Victorsesan/petcenter-monorepo` with push access; it clones and pushes through its own GitHub connection. Clone in one go with a generous timeout (the repo is large; up to 10 minutes; do not interrupt it).
 2. **The CEO's access token (the standard fallback; use it whenever step 1 is not available).** If you are in an ordinary chat, or your session says it has no GitHub credentials, use the access token the CEO gave you. It is in the CEO's handover message to you and starts with `github_pat_`. The CEO created it for exactly this purpose and authorized every department to use it for this repository, so using it is part of your job, not something to ask permission for. Having no GitHub login in your session is **not** a reason to stop: this step exists for that case. Write the token only in the clone command; never put it in any file in the repo, in `TODO.md`, or in a report. If you cannot find a token in your handover message, ask the CEO for it once and carry on with whatever else you can do meanwhile. First turn on **Code execution and file creation** and **Allow network egress**, then (replace `[TOKEN]` with the token):
 ```
-git clone https://Victorsesan:[TOKEN]@github.com/Victorsesan/petcenter-monorepo.git
+git clone --filter=blob:limit=1m --no-checkout https://Victorsesan:[TOKEN]@github.com/Victorsesan/petcenter-monorepo.git
 cd petcenter-monorepo
+git sparse-checkout init --no-cone
+printf '/*\n!*.mp4\n!*.jpg\n!*.jpeg\n!*.png\n!*.webp\n!*.ttf\n!*.afm\n!*.ufm\n' | git sparse-checkout set --no-cone --stdin
+git checkout main
 ```
+   This is the **light clone**: it takes about 3 seconds and about 25 MB instead of several minutes and 600+ MB, because the repo holds about 600 MB of videos and photos that code work does not need (the code itself is about 18 MB). Every branch and the full history are still there. If you really need one excluded file (for example a photo you must look at), fetch just that one: `git sparse-checkout add "/adopt/path/to/file.jpg"`.
    The token is stored in the clone's remote address, so later `git fetch`, `git pull` and `git push` work with no extra login. This was tested: a VDM session that first reported "no GitHub credentials" cloned the full repo (2,435 files) and saw every branch as soon as it used the token.
 3. **Only if the clone fails with `Host not in allowlist: github.com`** (your session cannot reach GitHub at all), tell the CEO and wait. Do not try other routes.
 
@@ -69,11 +73,13 @@ Then: read your assigned task in full and note your **task number** — your bra
 
 ## STEP 2 — ONE BRANCH PER TASK
 
-Never work directly on `main`. Create your own branch, using the **exact branch name your VDM's tracker gives you** (for example `task/3`, `task/3b`):
+Never work directly on `main`. Create your own branch, using the **exact branch name your VDM's tracker gives you**. Branch names are **project-scoped** so two projects can never collide: `task/[project]-[number]`, for example `task/status-1` or `task/geo-3b`. (Branches that predate this rule, such as `task/3`, stay as they are.)
 ```
-git checkout -b task/[task-number]
+git checkout -b task/[project]-[number]
 ```
 One branch, one task.
+
+**Wherever this document, a summary or a task says `task/N`, `task/[task-number]`, `reports/task-N.md` or `TASK-N` anchors, the "N" is that same project-scoped id.** So for the branch `task/status-1` your report is `reports/task-status-1.md` and your anchors are `TASK-status-1 START` / `TASK-status-1 END` (and `TASK-status-1-EXTRA`). If your VDM gave you a plain number with no project name, ask your VDM or the CEO for the scoped name before you create the branch.
 
 ---
 

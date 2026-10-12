@@ -30,9 +30,13 @@ If a project summary or task still mentions the old "completion file with pasted
 1. **Claude Code session (tested, no token needed).** If you are working in a Claude Code session (claude.ai/code), attach `Victorsesan/petcenter-monorepo` with push access; it clones and pushes through its own GitHub connection. Clone in one go with a generous timeout (the repo is large; up to 10 minutes; do not interrupt it).
 2. **The CEO's access token (the standard fallback; use it whenever step 1 is not available).** If you are in an ordinary chat, or your session says it has no GitHub credentials, use the access token the CEO gave you. It is in the CEO's handover message to you and starts with `github_pat_`. The CEO created it for exactly this purpose and authorized every department to use it for this repository, so using it is part of your job, not something to ask permission for. Having no GitHub login in your session is **not** a reason to stop: this step exists for that case. Write the token only in the clone command; never put it in any file in the repo, in `TODO.md`, or in a report. If you cannot find a token in your handover message, ask the CEO for it once and carry on with whatever else you can do meanwhile. First turn on **Code execution and file creation** and **Allow network egress**, then (replace `[TOKEN]` with the token):
 ```
-git clone https://Victorsesan:[TOKEN]@github.com/Victorsesan/petcenter-monorepo.git
+git clone --filter=blob:limit=1m --no-checkout https://Victorsesan:[TOKEN]@github.com/Victorsesan/petcenter-monorepo.git
 cd petcenter-monorepo
+git sparse-checkout init --no-cone
+printf '/*\n!*.mp4\n!*.jpg\n!*.jpeg\n!*.png\n!*.webp\n!*.ttf\n!*.afm\n!*.ufm\n' | git sparse-checkout set --no-cone --stdin
+git checkout main
 ```
+   This is the **light clone**: about 3 seconds and about 25 MB instead of several minutes and 600+ MB, because the repo holds about 600 MB of videos and photos that code review does not need. Every branch and the full history are still there. If you really need one excluded file, fetch just that one: `git sparse-checkout add "/adopt/path/to/file.jpg"`.
    The token is stored in the clone's remote address, so later `git fetch`, `git pull` and `git push` work with no extra login. This was tested: a VDM session that first reported "no GitHub credentials" cloned the full repo (2,435 files) and saw every branch as soon as it used the token.
 3. **Only if the clone fails with `Host not in allowlist: github.com`** (your session cannot reach GitHub at all), tell the CEO and wait. Do not try other routes.
 
@@ -54,7 +58,7 @@ Repo layout: `main` holds `adopt/`, `docs/`, `petpay/`, `reports/` and the core 
 
 ## STEP 3 — REVIEWING A WORKER'S BRANCH (LINE BY LINE)
 
-Each worker pushes a branch `task/[number]` containing their code and `reports/task-[number].md`. For each branch assigned to you:
+Each worker pushes a branch `task/[project]-[number]` (for example `task/status-1`; older branches such as `task/3` keep their plain names) containing their code and `reports/task-[project]-[number].md`. Anchors in the code use the same scoped id (`TASK-status-1 START`). For each branch assigned to you:
 
 1. **Read the report first** (it is short; it contains no pasted code): Task Number, What Was Required, What I Built, Files Changed, Small Out-of-Scope Fixes Made, Bugs and Follow-ups Sent to TODO.md, Things the Next Person Must Know, Self-Check. Compare "What Was Required" with the original task in the task project document.
 2. **Read the real diff against main**, step by step, every changed line:
@@ -78,6 +82,8 @@ Some tasks touch both website and admin files. Review only the files belonging t
 ---
 
 ## STEP 5 — MERGING INTO `main`
+
+**CEO shortcut (saves your tokens):** the CEO has a small tool, `tools/pc.sh`, that does Steps 5 and 6 with one command each (`pc merge [scoped-id]` and `pc deploy`). When the CEO tells you "I will merge and deploy", you only review and report **APPROVED** (or send it back with reasons); you do not run Steps 5 and 6 yourself. Otherwise, do them as written below.
 
 ```
 git checkout main
