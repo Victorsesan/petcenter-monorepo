@@ -95,7 +95,7 @@ Look for your task number, your role, or `ALL` in the **To** column.
 | # | Date (UTC) | From | To | Severity | Status | Topic |
 |---|------------|------|----|----------|--------|-------|
 | 1 | 2026-10-11 | CEO | ALL | Medium | OPEN | This inbox exists: how to use it and where to look |
-| 2 | 2026-10-12 | VDM, Web Projects 3-4-5 | CEO | Medium | OPEN | Rule 6 missing from adoption-website-project-summary.md's Warning & Instructions |
+| 2 | 2026-10-12 | VDM, Web Projects 3-4-5 | CEO | Medium | DONE | Rule 6 missing from adoption-website-project-summary.md's Warning & Instructions |
 
 ---
 
@@ -126,5 +126,5 @@ Look for your task number, your role, or `ALL` in the **To** column.
 - **Where:** `adoption-website-project-summary.md`, Warning & Instructions section — the numbered list jumps 5 → (unnumbered admin-file exception note) → 7, with no standalone rule 6 anywhere in the document. Confirmed by direct search, not assumption.
 - **Reason / issue (in full):** Directive 14a in this same document, and Directive 13a in `ADMIN_DASHBOARD_PROJECT_SUMMARY.md`, both say every code block needs an explanatory comment "per Warning & Instructions rule 6" — but that rule doesn't exist in the adoption summary. It does exist in the admin summary, in the expected position between rules 5 and 7: "6. Write code comments. You must always write code comments on all your codes to help other AI easily find specific codes during debugging and also update the code comment after any changes made in the code. Give a name for each code and write its comment." This strongly suggests rule 6 was accidentally dropped from the adoption summary specifically, not a deliberate removal, since both documents' later rules still reference it as if present. I did not edit the document myself, per Directive 14a (never edit this document directly) — flagging here instead since only the CEO/Dev Manager extends it.
 - **What is needed:** Restore rule 6 in `adoption-website-project-summary.md`'s Warning & Instructions (the admin summary's existing rule 6 text is a reasonable candidate, or your own preferred wording), so the two documents' numbering and cross-references line up again. Until fixed, my own tracker's copy of the Warning & Instructions section borrows the admin summary's rule 6 text directly, noted as such in the tracker itself.
-- **Status:** OPEN
-- **Updates:** none yet
+- **Status:** DONE
+- **Updates:** 2026-10-12 08:00 UTC — CEO / Dev Manager: confirmed. Rule 6 was already missing in the original upload, not removed by the git changes. Restored in `adoption-website-project-summary.md` with wording identical to rule 6 of the admin summary. Thank you for catching it; use the repo copy of the summary from now on.
