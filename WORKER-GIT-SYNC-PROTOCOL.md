@@ -40,14 +40,19 @@ Dozens of separate AI sessions, with no memory of each other, build one product 
 
 ## STEP 1 — SETUP, EVERY SESSION
 
-**Tested method (use this first):** work in a **Claude Code session** (claude.ai/code) and attach the repository to it — choose `Victorsesan/petcenter-monorepo` with push access. The session then clones and pushes through its own GitHub connection; no token is needed. Clone it in one go, with a generous timeout (the repo is large; this can take several minutes — do not interrupt it).
+**How to get the repository — follow these in order, and do not stop at the first failure:**
 
-**If your session is an ordinary chat instead:** turn on **Code execution and file creation** and **Allow network egress**, then use the token clone below. If the clone fails with `Host not in allowlist: github.com`, your session cannot reach GitHub; tell the CEO and stop (do not try other routes).
-
-Token clone (replace `[TOKEN]` with the token you were given):
+1. **Claude Code session (tested, no token needed).** If you are working in a Claude Code session (claude.ai/code), attach `Victorsesan/petcenter-monorepo` with push access; it clones and pushes through its own GitHub connection. Clone in one go with a generous timeout (the repo is large; up to 10 minutes; do not interrupt it).
+2. **The CEO's access token (the standard fallback; use it whenever step 1 is not available).** If you are in an ordinary chat, or your session says it has no GitHub credentials, use the access token the CEO gave you. It is in the CEO's handover message to you and starts with `github_pat_`. The CEO created it for exactly this purpose and authorized every department to use it for this repository, so using it is part of your job, not something to ask permission for. Having no GitHub login in your session is **not** a reason to stop: this step exists for that case. Write the token only in the clone command; never put it in any file in the repo, in `TODO.md`, or in a report. If you cannot find a token in your handover message, ask the CEO for it once and carry on with whatever else you can do meanwhile. First turn on **Code execution and file creation** and **Allow network egress**, then (replace `[TOKEN]` with the token):
 ```
 git clone https://Victorsesan:[TOKEN]@github.com/Victorsesan/petcenter-monorepo.git
 cd petcenter-monorepo
+```
+   The token is stored in the clone's remote address, so later `git fetch`, `git pull` and `git push` work with no extra login. This was tested: a VDM session that first reported "no GitHub credentials" cloned the full repo (2,435 files) and saw every branch as soon as it used the token.
+3. **Only if the clone fails with `Host not in allowlist: github.com`** (your session cannot reach GitHub at all), tell the CEO and wait. Do not try other routes.
+
+**Whichever method you used, now set your git identity.** Without it your first commit fails with "Author identity unknown / Please tell me who you are":
+```
 git config user.name "Pet Center Worker"
 git config user.email "worker@petcenterco.com"
 ```
@@ -204,7 +209,9 @@ Push new commits to the *same branch* and add a short "Round 2" section to the *
 | `fatal: ... no merge base` when diffing | Run `git fetch --deepen=100 origin`, then repeat the diff. |
 | Push rejected | `git fetch origin`, merge, resolve conflicts, push again. Never force-push. |
 | Your session stops a command and asks for permission (for example a push) | Tell the CEO the exact command and wait for approval. Do not try to disguise it or reach the same result another way. Pushing your own `task/...` branch and your `TODO.md` entries normally works without any prompt. |
-| You cannot reach the live website from the shell | That is normal. You do not deploy; the Integrator does. Visual checks use the Playwright browser on your local copy. |
+| You cannot reach the live website from the shell | That is normal. You do not deploy and nobody uploads files by hand any more: after an Integrator merges your branch into `main`, the Integrator refreshes the `adopt-deploy` branch and Hostinger publishes it automatically about 45 seconds later (details in `INTEGRATOR-GIT-SYNC-MERGE-PROTOCOL.md`). Visual checks use the Playwright browser on your local copy. |
+| Your session says it has no GitHub credentials, or a clone asks for a username | Use the CEO's access token from your handover message (Step 1, point 2). Do not stop. |
+| Commit fails with "Author identity unknown" / "Please tell me who you are" | Run the two `git config user.name` / `user.email` lines from Step 1, then commit again. |
 | `Host not in allowlist: github.com` | Your session cannot reach GitHub. Tell the CEO and stop. |
 
 ---

@@ -105,7 +105,26 @@ Everything else about how you write a sub-task — what and where, never how, re
 
 ## SETTING UP YOUR COPY OF THE REPO (ONCE, TESTED)
 
-Attach `Victorsesan/petcenter-monorepo` with push access in a Claude Code session and clone it with a generous timeout (up to 10 minutes; one clone at a time; on HTTP 429 wait 10 seconds and retry once). Then run this once so you can see every worker's branch and diff it:
+**A session with no GitHub login is not a blocker. Use the token route in step 2.**
+
+**How to get the repository — follow these in order, and do not stop at the first failure:**
+
+1. **Claude Code session (tested, no token needed).** If you are working in a Claude Code session (claude.ai/code), attach `Victorsesan/petcenter-monorepo` with push access; it clones and pushes through its own GitHub connection. Clone in one go with a generous timeout (the repo is large; up to 10 minutes; do not interrupt it).
+2. **The CEO's access token (the standard fallback; use it whenever step 1 is not available).** If you are in an ordinary chat, or your session says it has no GitHub credentials, use the access token the CEO gave you. It is in the CEO's handover message to you and starts with `github_pat_`. The CEO created it for exactly this purpose and authorized every department to use it for this repository, so using it is part of your job, not something to ask permission for. Having no GitHub login in your session is **not** a reason to stop: this step exists for that case. Write the token only in the clone command; never put it in any file in the repo, in `TODO.md`, or in a report. If you cannot find a token in your handover message, ask the CEO for it once and carry on with whatever else you can do meanwhile. First turn on **Code execution and file creation** and **Allow network egress**, then (replace `[TOKEN]` with the token):
+```
+git clone https://Victorsesan:[TOKEN]@github.com/Victorsesan/petcenter-monorepo.git
+cd petcenter-monorepo
+```
+   The token is stored in the clone's remote address, so later `git fetch`, `git pull` and `git push` work with no extra login. This was tested: a VDM session that first reported "no GitHub credentials" cloned the full repo (2,435 files) and saw every branch as soon as it used the token.
+3. **Only if the clone fails with `Host not in allowlist: github.com`** (your session cannot reach GitHub at all), tell the CEO and wait. Do not try other routes.
+
+**Whichever method you used, now set your git identity.** Without it your first commit fails with "Author identity unknown / Please tell me who you are":
+```
+git config user.name "Pet Center VDM"
+git config user.email "vdm@petcenterco.com"
+```
+
+Clone one at a time; on HTTP 429 wait 10 seconds and retry once. **Then run this once** so you can see every worker's branch and diff it:
 ```
 git remote set-branches origin '*'
 git fetch --deepen=100 origin
@@ -122,6 +141,8 @@ If a diff says "no merge base", run `git fetch --deepen=100 origin` again. If yo
 | Worker | their own `task/...` branch; `TODO.md` entries and updates straight to `main` | merge into `main` (except `TODO.md`), force-push, touch deploy branches |
 | VDM | `TODO.md` and own task documents straight to `main` | merge workers' branches, push code to `main` |
 | Integrator | merges approved branches into `main`, publishes the deploy branch | publish anything not reviewed |
+
+**How work reaches the live site (so you can tell workers):** nobody uploads files by hand in hPanel any more. After an Integrator merges an approved branch into `main`, the Integrator refreshes the `adopt-deploy` branch and Hostinger Git publishes it into the live site automatically (about 45 seconds). Only Integrators do this; the full explanation is in `INTEGRATOR-GIT-SYNC-MERGE-PROTOCOL.md`.
 
 Everyone: `git fetch origin` and merge the latest `main` before starting, never force-push, never commit secrets (`config.php`, `pet.json`, `applications/`, tokens, passwords).
 

@@ -25,12 +25,19 @@ If a project summary or task still mentions the old "completion file with pasted
 
 ## STEP 2 — SETUP
 
-**Tested method (use this first):** work in a **Claude Code session** (claude.ai/code) and attach `Victorsesan/petcenter-monorepo` with push access; it clones and pushes through its own GitHub connection, no token needed. Clone in one go with a generous timeout (large repo, several minutes).
+**How to get the repository — follow these in order, and do not stop at the first failure:**
 
-If your session is an ordinary chat instead: turn on Code execution and Allow network egress, then (replace `[TOKEN]` with the token the CEO gave you); if the clone fails with `Host not in allowlist: github.com`, tell the CEO and stop:
+1. **Claude Code session (tested, no token needed).** If you are working in a Claude Code session (claude.ai/code), attach `Victorsesan/petcenter-monorepo` with push access; it clones and pushes through its own GitHub connection. Clone in one go with a generous timeout (the repo is large; up to 10 minutes; do not interrupt it).
+2. **The CEO's access token (the standard fallback; use it whenever step 1 is not available).** If you are in an ordinary chat, or your session says it has no GitHub credentials, use the access token the CEO gave you. It is in the CEO's handover message to you and starts with `github_pat_`. The CEO created it for exactly this purpose and authorized every department to use it for this repository, so using it is part of your job, not something to ask permission for. Having no GitHub login in your session is **not** a reason to stop: this step exists for that case. Write the token only in the clone command; never put it in any file in the repo, in `TODO.md`, or in a report. If you cannot find a token in your handover message, ask the CEO for it once and carry on with whatever else you can do meanwhile. First turn on **Code execution and file creation** and **Allow network egress**, then (replace `[TOKEN]` with the token):
 ```
 git clone https://Victorsesan:[TOKEN]@github.com/Victorsesan/petcenter-monorepo.git
 cd petcenter-monorepo
+```
+   The token is stored in the clone's remote address, so later `git fetch`, `git pull` and `git push` work with no extra login. This was tested: a VDM session that first reported "no GitHub credentials" cloned the full repo (2,435 files) and saw every branch as soon as it used the token.
+3. **Only if the clone fails with `Host not in allowlist: github.com`** (your session cannot reach GitHub at all), tell the CEO and wait. Do not try other routes.
+
+**Whichever method you used, now set your git identity.** Without it your first commit fails with "Author identity unknown / Please tell me who you are":
+```
 git config user.name "Pet Center Integrator"
 git config user.email "integrator@petcenterco.com"
 ```
@@ -105,9 +112,32 @@ What each line does: switch to the deploy branch; make sure it is current; remov
 **Roadblocks you may hit, and what to do:**
 - **Pushing `adopt-deploy` is a production deploy, and your session may stop it and ask the CEO for approval.** When that happens, tell the CEO the exact command (`git push origin adopt-deploy`), wait for approval, then run it again. Do not try to disguise it or reach the same result another way, and do not stop for good: the approval path works.
 - `git switch adopt-deploy` fails with "invalid reference": you skipped the setup block in Step 2. Run it, or `git fetch origin adopt-deploy:refs/remotes/origin/adopt-deploy`, then switch again.
+- Your session says it has no GitHub credentials: use the CEO's access token from your handover message (Step 2, point 2).
+- A commit fails with "Author identity unknown": run the two `git config` lines from Step 2, then commit again.
 - Never ask a worker to do this step.
 
 **Verify the live result — do not assume.** Wait about 45 seconds after the push. Your shell usually cannot reach the live site, so open the changed live pages with your page-fetch or browser tool, adding a changing `?v=1`, `?v=2` … to the URL because results are cached. Confirm the change is visible and the site still loads normally (pets and images show). To check a file was removed, request its URL and expect a 404. The CEO can also check from the Hostinger server over SSH: `curl -s -o /dev/null -w "%{http_code}\n" https://adopt.petcenterco.com/[path]`. If the live site did not change, tell the CEO; if caching is enabled the CEO may need to clear it. Add a line under your merge report in `TODO.md` if something went wrong. For `docs/` and `petpay/`, repeat the same block with `docs-deploy` / `petpay-deploy` and the matching folder name, once those branches exist.
+
+---
+
+## HOSTINGER: HOW THE LIVE SITE IS WIRED (SET UP ONCE, NO MANUAL UPLOADS EVER AGAIN)
+
+Nobody uploads files by hand in hPanel any more. The whole chain is automatic:
+
+```
+worker branch  →  Integrator merges into main  →  Integrator refreshes adopt-deploy (Step 6)  →  GitHub  →  Hostinger Git deploys it into public_html/adopt  →  live in about 45 seconds
+```
+
+**What is configured in hPanel for `adopt.petcenterco.com` (already done and proven on 2026-10-11):** hPanel → **Advanced → Git**. Repository `Victorsesan/petcenter-monorepo` (connected through the GitHub App connection), branch `adopt-deploy`, install directory `public_html/adopt`, **Auto-deployment switched on**. The same page shows the date and trigger of the last deployment (the old entry from 2026-09-24 was a manual one). Each deploy replaces the files inside that directory with the branch contents; files that exist only on the server and are gitignored (`config.php`, `pet.json`, `applications/`) are left alone, which was tested.
+
+**Rules that follow from this:**
+- Only the contents of `main`'s `adopt/` folder go to `adopt-deploy`, so the root documents (`TODO.md`, protocols, summaries) never reach the live server.
+- Deleting a file on `main` and refreshing the deploy branch with the Step 6 block removes it from the live site (tested with a one-line test file).
+- Workers and VDMs never touch deploy branches or hPanel.
+
+**Adding another site later (`docs.` or `petpay.`), done by the CEO together with the Integrator.** Use the same screen with its own branch (`docs-deploy` or `petpay-deploy`), its own install directory, and Auto-deployment on. The deploy branch is filled with the Step 6 block, replacing `adopt` and `adopt-deploy` with the matching folder and branch names. This has been proven for `adopt` only; the first run for each new site must be verified with the method below before anyone relies on it.
+
+**Checking that the live site really updated (CEO, from a phone):** connect to the Hostinger server over SSH in Termux, then run `curl -s -o /dev/null -w "%{http_code}\n" https://adopt.petcenterco.com/[path]` (200 means the file is live, 404 means it is not). The Integrator checks the same pages with a browser or page-fetch tool and a changing `?v=1`, `?v=2` at the end of the URL, because results are cached for about 15 minutes.
 
 ---
 
