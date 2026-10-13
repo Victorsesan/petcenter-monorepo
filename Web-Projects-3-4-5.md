@@ -263,11 +263,11 @@ touched by **five separate tasks**:
 
 | Task | Branch | Named Zone | Dependency |
 |---|---|---|---|
-| 3 | `task/3` | `FILTER` | None — already assigned |
-| 5 | `task/5` | `CTA` | None — runs in parallel with 3, separate zone |
-| 3b | `task/3b` | `FILTER` (extends 3's zone) | Hard: `task/3` must merge to `main` first |
-| 2 | `task/2` (or split) | `NAV-LINKS` | Soft: after Task 1's completion file |
-| 8 | `task/8` | `NAV-LINKS` (extends 2's zone) | Hard: `task/2` must merge to `main` first |
+| 3 | `task/3` (grandfathered, see above) | `FILTER` | None — already assigned |
+| 5 | `task/web345-5` | `CTA` | None — runs in parallel with 3, separate zone |
+| 3b | `task/web345-3b` | `FILTER` (extends 3's zone) | Hard: `task/3` must merge to `main` first |
+| 2 | `task/web345-2` (or split) | `NAV-LINKS` | Soft: after Task 1's completion file |
+| 8 | `task/web345-8` | `NAV-LINKS` (extends 2's zone) | Hard: `task/web345-2` must merge to `main` first |
 
 Tasks 3 and 5 sit in genuinely separate zones of the same files and can be
 developed and merged independently — git resolves non-overlapping changes
@@ -279,20 +279,20 @@ against) the other task's already-merged changes, not a stale copy. Tasks
 predecessor is actually merged into `main`, so those are hard dependencies
 with a real wait, not just a courtesy merge.
 
-**The visitor pet-match form** (built in Task 5, branch `task/5`) is
+**The visitor pet-match form** (built in Task 5, branch `task/web345-5`) is
 touched by up to four tasks: 5 (`FORM-CORE`), 7a
 (`NOTIFICATION-PREFS`, hard dependency on 5), 9 (`SUBMISSION-CHECK`, hard
 dependency on 5 *and* 6a), and optionally 5b (`FORM-HARDENING`, hard
 dependency on 5, not currently assigned). All three dependents wait for
-`task/5` to merge into `main` before starting on this file.
+`task/web345-5` to merge into `main` before starting on this file.
 
-**The admin pet-match listing** (built in Task 6a, branch `task/6a`) is
-touched by two tasks: 6a (`LISTING-CORE`) and 6b (`DETAIL-MODAL`, hard
+**The admin pet-match listing** (built in Task 6a, branch `task/web345-6a`)
+is touched by two tasks: 6a (`LISTING-CORE`) and 6b (`DETAIL-MODAL`, hard
 dependency on 6a); 9 also touches it separately in a third zone,
 `DUPLICATE-FLAG` (hard dependency on 6a too).
 
-**The shipping calculator page** (built in Task 4, branch `task/4`) is
-touched by 4 (`CALCULATOR-CORE`) and 4b (`COMPLIANCE-FLAG`, hard
+**The shipping calculator page** (built in Task 4, branch `task/web345-4`)
+is touched by 4 (`CALCULATOR-CORE`) and 4b (`COMPLIANCE-FLAG`, hard
 dependency on 4).
 
 No other files in this document are touched by more than one task.
