@@ -35,7 +35,22 @@ it shares a file with another task, a merge-order note. Get the repo the
 same way `WORKER-GIT-SYNC-PROTOCOL.md` (repo root) describes before starting
 any task, and follow that document's report format — this tracker still
 tells you *what* to build and *where*, the Worker protocol tells you *how*
-to deliver it.
+to deliver it. **Read `ROADBLOCKS-AND-FIXES.md` (repo root) before your
+first command too** — every wall already hit setting this up, with the
+exact fix, so you don't lose time rediscovering one.
+
+**Branch names are project-scoped: `task/web345-[number]`** (for example
+`task/web345-1`, `task/web345-3b`), so this project's branches can never
+collide with another VDM's project using the same task numbers. **Task 3's
+branch is the one exception — it's `task/3`, not `task/web345-3`**, because
+that branch already existed before this scoping rule was introduced and is
+explicitly grandfathered (see `TODO.md` #3). Every other task in this
+document uses the full scoped name. Wherever a rule below or the Worker
+protocol says `task/N`, `reports/task-N.md`, or `TASK-N` anchors, use your
+task's actual branch id in place of `N` — for Task 1 that's
+`reports/task-web345-1.md` and `TASK-web345-1 START/END`; for Task 3,
+because it predates the scoping rule, it stays `reports/task-3.md` and
+`TASK-3 START/END`.
 
 ## ⚠️ WARNING & INSTRUCTIONS — READ THIS FIRST, EVERY WORD
 
@@ -315,7 +330,7 @@ ambiguity).
 ## TASK 1 — Project 3: Research, Brainstorm & Finalize New Page List
 
 **Complexity: Medium | Files touched: None (planning/research only, output is a completion file)**
-**Branch:** `task/1`
+**Branch:** `task/web345-1`
 **Bug/follow-up and self-test:** Follow Step 4 of the Worker protocol for anything you find outside your scope: verify it first; small fix (about 10 lines or fewer, one place, no shared structure, no clash with another active branch) → fix it yourself as a separate `TASK-N-EXTRA` commit; anything bigger or uncertain → add an entry to `TODO.md`. Test your own work with the installed tools before you report.
 **Read First:** `adoption-website-project-summary.md`, in full
 **Files to Request Before Starting:** `PETCENTER_DESIGN_SYSTEM_v1.0.md`. Also check `TODO.md`'s table of contents at the start and before finishing for entries addressed to you.
@@ -387,7 +402,7 @@ in submission order, each keeping the file-touch scope and read/request
 list below, narrowed to that worker's specific pages.
 
 **Complexity: High (per split — see rule above) | Files touched: One new file per page assigned, plus header/footer nav updates on existing pages (see Shared File Coordination)**
-**Branch:** `task/2 (or task/2a, task/2b... per sub-split, once Task 1's list is final)`
+**Branch:** `task/web345-2` (or `task/web345-2a`, `task/web345-2b`... per sub-split, once Task 1's list is final)
 **Merge-order note:** This task's NAV-LINKS zone on the shared category pages/`pets.html` merges to `main` *before* Task 8's — Task 8 extends the nav links this task adds, so it needs this task's branch merged first, then merges latest `main` into its own branch before finishing.
 **Bug/follow-up and self-test:** Follow Step 4 of the Worker protocol for anything you find outside your scope: verify it first; small fix (about 10 lines or fewer, one place, no shared structure, no clash with another active branch) → fix it yourself as a separate `TASK-N-EXTRA` commit; anything bigger or uncertain → add an entry to `TODO.md`. Test your own work with the installed tools before you report.
 **Read First:** `adoption-website-project-summary.md`, in full
@@ -484,7 +499,7 @@ for work this size.
 ## TASK 3b — Project 4: Extend Location Filter to Canada, UK & Australia
 
 **Complexity: Medium | Files touched: The same files from Task 3 (named zone: country-selector and geocoding-lookup logic only; see Shared File Coordination)**
-**Branch:** `task/3b`
+**Branch:** `task/web345-3b`
 **Merge-order note:** Hard dependency on Task 3: do not start until `task/3` is merged into `main`. Merge latest `main` into your own branch before starting, since you're extending code that only exists after that merge.
 **Bug/follow-up and self-test:** Follow Step 4 of the Worker protocol for anything you find outside your scope: verify it first; small fix (about 10 lines or fewer, one place, no shared structure, no clash with another active branch) → fix it yourself as a separate `TASK-N-EXTRA` commit; anything bigger or uncertain → add an entry to `TODO.md`. Test your own work with the installed tools before you report.
 **Read First:** `adoption-website-project-summary.md`, in full
@@ -543,8 +558,8 @@ each.*
 ## TASK 4 — Project 4: Worldwide Shipping Calculator Page
 
 **Complexity: High | Files touched: One new page (see Shared File Coordination — Task 4b builds on this file)**
-**Branch:** `task/4`
-**Merge-order note:** Task 4b extends this task's file in a separate zone (compliance-flag). This task's branch must merge into `main` before Task 4b starts.
+**Branch:** `task/web345-4`
+**Merge-order note:** Task 4b extends this task's file in a separate zone (compliance-flag). This task's branch (`task/web345-4`) must merge into `main` before Task 4b starts.
 **Bug/follow-up and self-test:** Follow Step 4 of the Worker protocol for anything you find outside your scope: verify it first; small fix (about 10 lines or fewer, one place, no shared structure, no clash with another active branch) → fix it yourself as a separate `TASK-N-EXTRA` commit; anything bigger or uncertain → add an entry to `TODO.md`. Test your own work with the installed tools before you report.
 **Read First:** `adoption-website-project-summary.md`, in full
 **Files to Request Before Starting:** CEO reference screenshots for this
@@ -598,8 +613,8 @@ follow-on task.
 ## TASK 4b — Project 4: Destination Compliance Flag Lookup
 
 **Complexity: High | Files touched: The page from Task 4 (named zone: compliance-flag section only; see Shared File Coordination)**
-**Branch:** `task/4b`
-**Merge-order note:** Hard dependency on Task 4: do not start until `task/4` is merged into `main`. Merge latest `main` into your own branch before starting.
+**Branch:** `task/web345-4b`
+**Merge-order note:** Hard dependency on Task 4: do not start until `task/web345-4` is merged into `main`. Merge latest `main` into your own branch before starting.
 **Bug/follow-up and self-test:** Follow Step 4 of the Worker protocol for anything you find outside your scope: verify it first; small fix (about 10 lines or fewer, one place, no shared structure, no clash with another active branch) → fix it yourself as a separate `TASK-N-EXTRA` commit; anything bigger or uncertain → add an entry to `TODO.md`. Test your own work with the installed tools before you report.
 **Read First:** `adoption-website-project-summary.md`, in full
 **Files to Request Before Starting:** Task 4's completion file — this
@@ -654,7 +669,7 @@ estimate, it doesn't replace it.
 ## TASK 5 — Project 5: Pet-Match Request — Naming, Visitor Form & Category CTAs
 
 **Complexity: High | Files touched: One new page (see Shared File Coordination — Tasks 7a/9 build on this file), plus `cats.html`, `dogs.html`, `birds.html`, `reptiles.html`, `small-mammals.html`, `livestocks.html`, `aquariums.html` (CTA insert only, see Shared File Coordination)**
-**Branch:** `task/5`
+**Branch:** `task/web345-5`
 **Merge-order note:** This task's CTA zone on the category pages runs in parallel with Task 3's FILTER zone on the same files — no ordering dependency, merge latest `main` before finishing. On the new visitor-form page itself, Tasks 5b, 7a, and 9 all extend this task's file in separate zones and have a hard dependency on this branch merging into `main` first.
 **Bug/follow-up and self-test:** Follow Step 4 of the Worker protocol for anything you find outside your scope: verify it first; small fix (about 10 lines or fewer, one place, no shared structure, no clash with another active branch) → fix it yourself as a separate `TASK-N-EXTRA` commit; anything bigger or uncertain → add an entry to `TODO.md`. Test your own work with the installed tools before you report.
 **Read First:** `adoption-website-project-summary.md`, in full (Section 5
@@ -716,8 +731,8 @@ ready-to-hand-off candidate if the CEO decides to use it.** It is not an
 Recommended Enhancements — a headstart, not a final decision.
 
 **Complexity: Medium | Files touched: The visitor form from Task 5 (named zone: form-hardening only; see Shared File Coordination)**
-**Branch:** `task/5b`
-**Merge-order note:** Hard dependency on Task 5: do not start until `task/5` is merged into `main`. This task is optional — not currently assigned (see the task write-up below).
+**Branch:** `task/web345-5b`
+**Merge-order note:** Hard dependency on Task 5: do not start until `task/web345-5` is merged into `main`. This task is optional — not currently assigned (see the task write-up below).
 **Bug/follow-up and self-test:** Follow Step 4 of the Worker protocol for anything you find outside your scope: verify it first; small fix (about 10 lines or fewer, one place, no shared structure, no clash with another active branch) → fix it yourself as a separate `TASK-N-EXTRA` commit; anything bigger or uncertain → add an entry to `TODO.md`. Test your own work with the installed tools before you report.
 **Read First:** `adoption-website-project-summary.md`, in full
 **Files to Request Before Starting:** Task 5's completion file — this task
@@ -747,7 +762,7 @@ form-hardening zone, and wrap additions in anchor comments.
 ## TASK 6a — Project 5: Pet-Match Request — Admin Listing & Filtering Structure
 
 **Complexity: High | Files touched: New admin dashboard section/page(s) (see Shared File Coordination — Tasks 6b/9 build on this file)**
-**Branch:** `task/6a`
+**Branch:** `task/web345-6a`
 **Merge-order note:** Tasks 6b and 9 both extend this task's file in separate zones and have a hard dependency on this branch merging into `main` first.
 **Bug/follow-up and self-test:** Follow Step 4 of the Worker protocol for anything you find outside your scope: verify it first; small fix (about 10 lines or fewer, one place, no shared structure, no clash with another active branch) → fix it yourself as a separate `TASK-N-EXTRA` commit; anything bigger or uncertain → add an entry to `TODO.md`. Test your own work with the installed tools before you report.
 **Read First:** `ADMIN_DASHBOARD_PROJECT_SUMMARY.md`, in full
@@ -791,8 +806,8 @@ ahead into the detail modal.
 ## TASK 6b — Project 5: Pet-Match Request — Admin Detail Modal & Actions
 
 **Complexity: High | Files touched: The admin section built in Task 6a (named zone: detail modal and its trigger only; see Shared File Coordination)**
-**Branch:** `task/6b`
-**Merge-order note:** Hard dependency on Task 6a: do not start until `task/6a` is merged into `main`. Merge latest `main` into your own branch before starting.
+**Branch:** `task/web345-6b`
+**Merge-order note:** Hard dependency on Task 6a: do not start until `task/web345-6a` is merged into `main`. Merge latest `main` into your own branch before starting.
 **Bug/follow-up and self-test:** Follow Step 4 of the Worker protocol for anything you find outside your scope: verify it first; small fix (about 10 lines or fewer, one place, no shared structure, no clash with another active branch) → fix it yourself as a separate `TASK-N-EXTRA` commit; anything bigger or uncertain → add an entry to `TODO.md`. Test your own work with the installed tools before you report.
 **Read First:** `ADMIN_DASHBOARD_PROJECT_SUMMARY.md`, in full
 **Files to Request Before Starting:** Task 6a's completion file (for
@@ -837,8 +852,8 @@ modal patterns rather than designing a new one.
 ## TASK 7a — Project 5: Pet-Match Request — Notification Preferences UI & Match Tagging
 
 **Complexity: High | Files touched: The visitor form from Task 5 (named zone: notification-preference section only), plus registered-user account UI and matched-pet card/detail-page templates**
-**Branch:** `task/7a`
-**Merge-order note:** Hard dependency on Task 5 for the visitor-form portion: do not touch that file until `task/5` is merged into `main`. The account-UI and matched-pet-card files are not shared with another task in this document.
+**Branch:** `task/web345-7a`
+**Merge-order note:** Hard dependency on Task 5 for the visitor-form portion: do not touch that file until `task/web345-5` is merged into `main`. The account-UI and matched-pet-card files are not shared with another task in this document.
 **Bug/follow-up and self-test:** Follow Step 4 of the Worker protocol for anything you find outside your scope: verify it first; small fix (about 10 lines or fewer, one place, no shared structure, no clash with another active branch) → fix it yourself as a separate `TASK-N-EXTRA` commit; anything bigger or uncertain → add an entry to `TODO.md`. Test your own work with the installed tools before you report.
 **Read First:** Both `adoption-website-project-summary.md` and
 `ADMIN_DASHBOARD_PROJECT_SUMMARY.md`, in full (the admin-to-user email
@@ -915,7 +930,7 @@ file as an unreconciled stub, not a finished integration.
 ## TASK 7b — Project 5: Pet-Match Request — Live-Chat Verification Design
 
 **Complexity: High (direction is confirmed — this task works out the concrete design, not an open-ended search for one) | Files touched: None until the design is confirmed as buildable; this task's output is a specification in its completion file, not shipped code**
-**Branch:** `task/7b`
+**Branch:** `task/web345-7b`
 **Bug/follow-up and self-test:** Follow Step 4 of the Worker protocol for anything you find outside your scope: verify it first; small fix (about 10 lines or fewer, one place, no shared structure, no clash with another active branch) → fix it yourself as a separate `TASK-N-EXTRA` commit; anything bigger or uncertain → add an entry to `TODO.md`. Test your own work with the installed tools before you report.
 **Read First:** Both `adoption-website-project-summary.md` and
 `ADMIN_DASHBOARD_PROJECT_SUMMARY.md`, in full (the live-chat system's
@@ -975,8 +990,8 @@ flag as optional at this time.
 ## TASK 8 — Project 3: All-Category Breed/Species Match Quiz
 
 **Complexity: High | Files touched: One new page**
-**Branch:** `task/8`
-**Merge-order note:** Hard dependency on Task 2: the quiz's nav link extends Task 2's NAV-LINKS zone, so do not touch the shared category-page files until `task/2` (or its relevant split) is merged into `main`. The new quiz page file itself has no dependency.
+**Branch:** `task/web345-8`
+**Merge-order note:** Hard dependency on Task 2: the quiz's nav link extends Task 2's NAV-LINKS zone, so do not touch the shared category-page files until `task/web345-2` (or its relevant split) is merged into `main`. The new quiz page file itself has no dependency.
 **Bug/follow-up and self-test:** Follow Step 4 of the Worker protocol for anything you find outside your scope: verify it first; small fix (about 10 lines or fewer, one place, no shared structure, no clash with another active branch) → fix it yourself as a separate `TASK-N-EXTRA` commit; anything bigger or uncertain → add an entry to `TODO.md`. Test your own work with the installed tools before you report.
 **Read First:** `adoption-website-project-summary.md`, in full
 (`pet.json`'s schema and Section 11's filter attributes are what this
@@ -1021,8 +1036,8 @@ Sequential File Ownership Chain (Rule 12).
 ## TASK 9 — Project 5: Duplicate-Submission Detection
 
 **Complexity: Medium | Files touched: The visitor form from Task 5 (named zone: submission-check logic only) and the admin listing from Task 6a (named zone: duplicate-flag indicator only; see Shared File Coordination)**
-**Branch:** `task/9`
-**Merge-order note:** Hard dependency on both Task 5 and Task 6a: do not start until `task/5` *and* `task/6a` are both merged into `main`. Merge latest `main` into your own branch before starting.
+**Branch:** `task/web345-9`
+**Merge-order note:** Hard dependency on both Task 5 and Task 6a: do not start until `task/web345-5` *and* `task/web345-6a` are both merged into `main`. Merge latest `main` into your own branch before starting.
 **Bug/follow-up and self-test:** Follow Step 4 of the Worker protocol for anything you find outside your scope: verify it first; small fix (about 10 lines or fewer, one place, no shared structure, no clash with another active branch) → fix it yourself as a separate `TASK-N-EXTRA` commit; anything bigger or uncertain → add an entry to `TODO.md`. Test your own work with the installed tools before you report.
 **Read First:** Both `adoption-website-project-summary.md` and
 `ADMIN_DASHBOARD_PROJECT_SUMMARY.md`, in full
