@@ -97,6 +97,7 @@ Look for your task number, your role, or `ALL` in the **To** column.
 | 1 | 2026-10-11 | CEO | ALL | Medium | OPEN | This inbox exists: how to use it and where to look |
 | 2 | 2026-10-12 | VDM, Web Projects 3-4-5 | CEO | Medium | DONE | Rule 6 missing from adoption-website-project-summary.md's Warning & Instructions |
 | 3 | 2026-10-12 | VDM, Unified Status Dashboard | CEO, ALL | High | DONE | Branch names collide across projects — `task/[number]` alone is not unique |
+| 4 | 2026-10-13 | CEO | VDM Unified Status Dashboard, VDM Web Projects 3-4-5 | High | OPEN | Trackers still tell workers to "request completion files from the CEO" |
 
 ---
 
@@ -142,3 +143,16 @@ Look for your task number, your role, or `ALL` in the **To** column.
 - **What is needed:** A project-scoped branch-naming convention added to both protocol documents (for example `task/[project-slug]-[number]`, so mine would be `task/status-1` … `task/status-12`, and the existing location/shipping work would ideally be renamed `task/geo-3` / `task/geo-3b` if that's still practical, or at minimum anyone new is told to use a scoped prefix going forward). I'm not editing either protocol document myself since only the CEO/Dev Manager does that (per each document's own rule). Until this is resolved, my own project's tracker uses `task/status-[number]` to avoid colliding with what's already in the repo — noted there as a deliberate deviation from the documents' literal examples, for this reason.
 - **Status:** DONE
 - **Updates:** 2026-10-12 18:00 UTC — CEO / Dev Manager: agreed and fixed. Branches are now `task/[project]-[number]` (for example `task/status-1`), and the same scoped id is used for the report (`reports/task-status-1.md`) and the code anchors (`TASK-status-1 START/END`). Added to the Worker, VDM and Integrator protocols. Your `task/status-[number]` choice is correct. The existing `task/3` keeps its name and is not renamed.
+
+### #4 — Trackers still tell workers to "request completion files from the CEO"
+
+- **From:** CEO
+- **To:** VDM Unified Status Dashboard, VDM Web Projects 3-4-5
+- **Type:** Instruction
+- **Severity:** High
+- **Date and time:** 2026-10-13 19:00 UTC
+- **Where:** `Unified-Status-Dashboard-Task-Tracker-v3-FINAL.md` (Directive 3 at line 47, and the "Files to request from the CEO" / "Read first" lines of Tasks 5, 6, 7, 8, 9, 10, 11, 12 — about a dozen places) and `Web-Projects-3-4-5.md` (lines about 269, 332, 393, 410, 506: "Task 1's completion file", "Files to Request Before Starting"). Both on `main`.
+- **Reason / issue (in full):** Both trackers were updated to the git workflow (branches, short reports, scoped names), but they still contain the old hand-off wording. Directive 3 of the Status tracker still says completion files "are required, not optional", which contradicts Directive 8a in the same file. Many tasks still say "Files to request from the CEO: Task N's completion file" or "Read first: Task N's completion file". There are no completion files any more. If a worker follows those lines it will stop and ask the CEO for a file that does not exist, which wastes the worker's tokens and sends work back to the CEO by hand. Everything now lives in the repo: a finished task is a branch `task/[project]-[N]` plus `reports/task-[project]-[N].md`, and once the CEO merges it, the code is on `main`.
+- **What is needed:** In both trackers: (1) delete the "required completion files" exception in Directive 3 and say that the only `.md` file a worker adds is its short `reports/task-[project]-[N].md`. (2) Replace every "Task N's completion file" with "the code from Task N on `main` once it has been merged (the CEO merges after approval), plus `reports/task-[project]-[N].md`". If Task N is not merged yet, say "read branch `origin/task/[project]-[N]` with `git diff origin/main...origin/task/[project]-[N]`". (3) Replace "Files to request from the CEO: [files that are in the repo]" with the repo path and "read it from `main`". Keep "Files to request" only for things that are NOT in the repo (for example the SVG Icon Library doc, until it is added). (4) Re-upload the tracker the same way as before and add a line under Updates here.
+- **Status:** OPEN
+- **Updates:** none yet
