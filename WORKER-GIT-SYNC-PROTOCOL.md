@@ -21,6 +21,7 @@ Dozens of separate AI sessions, with no memory of each other, build one product 
   - `ADMIN_DASHBOARD_PROJECT_SUMMARY.md` — how the admin dashboard works
   - `PETCENTER_DESIGN_SYSTEM_v1.0.md` — the design system; the visual source of truth
   - `TODO.md` — the shared inbox (see below)
+  - `ROADBLOCKS-AND-FIXES.md` — every wall already hit while setting this up, with the exact fix. **Skim it before your first command** so you do not waste time and tokens on a problem that is already solved.
   - the **task project documents** for your project, uploaded by your VDM at the repo root (they tell you exactly what each worker was asked to do, and Integrators use them to check your work)
   - the three protocol documents (`WORKER-…`, `VDM-…`, `INTEGRATOR-…`)
 - Server-only private files (`config.php`, `pet.json`, `applications/`) are **not** in the repo and must **never** be added to it. Never put tokens, passwords or personal data in any file, report, comment or `TODO.md` entry.

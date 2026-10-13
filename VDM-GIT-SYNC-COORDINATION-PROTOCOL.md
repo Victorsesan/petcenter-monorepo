@@ -34,6 +34,7 @@ These live at the **repo root on `main`**. List the ones that apply in every sub
 - `adoption-website-project-summary.md`
 - `ADMIN_DASHBOARD_PROJECT_SUMMARY.md`
 - `PETCENTER_DESIGN_SYSTEM_v1.0.md`
+- `ROADBLOCKS-AND-FIXES.md` — every wall already hit while setting this up, with the exact fix. Skim it before your first command, and **tell every worker you assign to read it** (add it to each sub-task's "read first" line).
 - `TODO.md` — the shared inbox for notices, suggestions, bigger out-of-scope bug fixes and instructions to specific workers. Workers, VDMs and Integrators all edit it. **Tell every worker you assign to read its Table of Contents at the start and before finishing, and to handle entries addressed to them.** Use it yourself to give a worker an instruction or follow-up (see the template in the file).
 - **Your own task project documents** (see the next section) — workers and Integrators need to see what each worker was asked.
 

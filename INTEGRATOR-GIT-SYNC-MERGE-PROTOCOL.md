@@ -19,7 +19,8 @@ If a project summary or task still mentions the old "completion file with pasted
 1. The summary document for your domain in full (`adoption-website-project-summary.md` for the website, `ADMIN_DASHBOARD_PROJECT_SUMMARY.md` for the admin dashboard), so you know how the system works and can judge whether a branch is correct.
 2. `PETCENTER_DESIGN_SYSTEM_v1.0.md` — the visual source of truth.
 3. The **task project documents** at the repo root (uploaded by the VDMs) — these tell you exactly what each worker was asked, which is what you check the work against.
-4. `TODO.md` — read the Table of Contents; open every entry addressed to `Integrator` (your domain) or `ALL`, and any entry that mentions a branch you are about to review.
+4. `ROADBLOCKS-AND-FIXES.md` — every wall already hit while setting this up, with the exact fix. Skim it first so you do not waste time and tokens rediscovering them.
+5. `TODO.md` — read the Table of Contents; open every entry addressed to `Integrator` (your domain) or `ALL`, and any entry that mentions a branch you are about to review.
 
 ---
 
