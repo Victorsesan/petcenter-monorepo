@@ -37,7 +37,7 @@ git sparse-checkout init --no-cone
 printf '/*\n!*.mp4\n!*.jpg\n!*.jpeg\n!*.png\n!*.webp\n!*.ttf\n!*.afm\n!*.ufm\n' | git sparse-checkout set --no-cone --stdin
 git checkout main
 ```
-   This is the **light clone**: about 3 seconds and about 25 MB instead of several minutes and 600+ MB, because the repo holds about 600 MB of videos and photos that code review does not need. Every branch and the full history are still there. If you really need one excluded file, fetch just that one: `git sparse-checkout add "/adopt/path/to/file.jpg"`.
+   This is the **light clone**: about 3 seconds and downloads about 115 MB (about 25 MB of files on disk) instead of several minutes, about 330 MB downloaded and 640 MB on disk, because the repo holds about 600 MB of videos and photos that code review does not need. Every branch and the full history are still there. If you really need one excluded file, fetch just that one: `git sparse-checkout add "/adopt/path/to/file.jpg"`.
    The token is stored in the clone's remote address, so later `git fetch`, `git pull` and `git push` work with no extra login. This was tested: a VDM session that first reported "no GitHub credentials" cloned the full repo (2,435 files) and saw every branch as soon as it used the token.
 3. **Only if the clone fails with `Host not in allowlist: github.com`** (your session cannot reach GitHub at all), tell the CEO and wait. Do not try other routes.
 
