@@ -219,7 +219,7 @@ Push new commits to the *same branch* and add a short "Round 2" section to the *
 | You cannot reach the live website from the shell | That is normal. You do not deploy and nobody uploads files by hand any more: after an Integrator merges your branch into `main`, the Integrator refreshes the `adopt-deploy` branch and Hostinger publishes it automatically about 45 seconds later (details in `INTEGRATOR-GIT-SYNC-MERGE-PROTOCOL.md`). Visual checks use the Playwright browser on your local copy. |
 | Your session says it has no GitHub credentials, or a clone asks for a username | Use the CEO's access token from your handover message (Step 1, point 2). Do not stop. |
 | Commit fails with "Author identity unknown" / "Please tell me who you are" | Run the two `git config user.name` / `user.email` lines from Step 1, then commit again. |
-| `Host not in allowlist: github.com` | Your session cannot reach GitHub. Tell the CEO and stop. |
+| `Host not in allowlist: github.com`, `Could not resolve host: github.com`, or `host_not_allowed` | Your chat's sandbox cannot reach GitHub. Do not hunt for ways around it. Open a **new chat** and test `curl -s -o /dev/null -w "%{http_code}" https://github.com`. If it is still blocked, finish the work and hand the CEO one `.zip` laid out like the repo (including `reports/task-[id].md`); the CEO puts it on your branch with `pc import`. Details in `ROADBLOCKS-AND-FIXES.md`, section 1. |
 
 ---
 

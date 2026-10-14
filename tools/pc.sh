@@ -7,6 +7,7 @@
 #   pc status           who is doing what: branches, open TODO items, is live current?
 #   pc merge N          merge the approved branch task/N into main (asks before pushing)
 #   pc deploy           publish main's adopt/ folder to the live site (asks before pushing)
+#   pc import ID FILES  put a worker's files (zip or folder) on branch task/ID when that worker cannot reach GitHub
 #   pc live [path]      HTTP status of the live site, e.g.  pc live /pets/
 #
 # Needs: git, bash, curl.   Termux:  pkg install git curl
@@ -96,6 +97,37 @@ cmd_deploy() {
   g push origin "$commit:refs/heads/${DEPLOY_BRANCH}" && say "Pushed. Check in ~45 s with: pc live /"
 }
 
+# For a worker whose chat cannot reach GitHub at all: the worker gives the CEO the finished files
+# (a .zip or a folder laid out exactly like the repo, plus reports/task-[id].md) and the CEO puts
+# them on that worker's branch with one command.
+cmd_import() {
+  id="${1:-}"; src="${2:-}"
+  [ -n "$id" ] && [ -n "$src" ] || die "Usage: pc import [branch-id] [zip-or-folder]   e.g. pc import status-4 ~/storage/downloads/worker.zip"
+  need
+  [ -z "$(g status --porcelain)" ] || die "Your local copy has uncommitted changes. Stop and ask for help."
+  tmp=$(mktemp -d)
+  if [ -d "$src" ]; then cp -a "$src"/. "$tmp"/
+  else command -v unzip >/dev/null || die "Run first: pkg install unzip"; unzip -q "$src" -d "$tmp" || die "could not unzip $src"; fi
+  # If everything sits inside one wrapper folder (for example worker/), step into it.
+  while [ "$(ls -A "$tmp" | wc -l | tr -d ' ')" = "1" ] && [ -d "$tmp/$(ls -A "$tmp")" ] && \
+        ! echo "$(ls -A "$tmp")" | grep -qxE 'adopt|docs|petpay|reports'; do tmp="$tmp/$(ls -A "$tmp")"; done
+  list=$(cd "$tmp" && find . -type f | sed 's#^\./##' | grep -v '^__MACOSX/' | sort)
+  [ -n "$list" ] || die "No files found in $src"
+  bad=$(echo "$list" | grep -vE '^(adopt|docs|petpay|reports)/' ; echo "$list" | grep -E '(^|/)(config\.php|pet\.json|\.env)$|/applications/|\.\./' )
+  [ -z "$bad" ] || { say "Refused. These paths are not allowed (only adopt/, docs/, petpay/, reports/; never config.php, pet.json, applications/, .env):"; echo "$bad" | sort -u | head -20; exit 1; }
+  br="task/$id"
+  if g rev-parse -q --verify "origin/$br" >/dev/null; then g switch -q -C "$br" "origin/$br" || die "could not switch to $br"
+  else g switch -q -C "$br" origin/main || die "could not create $br"; fi
+  echo "$list" | while IFS= read -r f; do mkdir -p "$DIR/$(dirname "$f")"; cp "$tmp/$f" "$DIR/$f"; done
+  echo "$list" | tr '\n' '\0' | xargs -0 git -C "$DIR" add --sparse --
+  say "Branch $br will get these changes:"; g status --short | head -40
+  ask "Commit and push to $br?" || { g switch -q main; say "Cancelled (nothing pushed)."; exit 0; }
+  g commit -q -m "Task $id: files delivered through the CEO (worker had no GitHub access)" || die "nothing to commit"
+  if [ "${PC_DRY:-0}" = 1 ]; then say "(dry run: committed locally on $br, not pushed)"; g switch -q main; exit 0; fi
+  g push -u origin "$br" && say "Pushed $br. Tell the VDM the branch is ready for review."
+  g switch -q main
+}
+
 cmd_live() {
   p="${1:-/}"; code=$(curl -s -o /dev/null -w '%{http_code}' "${SITE}${p}?v=$(date +%s)")
   say "${SITE}${p}  ->  HTTP ${code}   (200 = live, 404 = not there)"
@@ -106,6 +138,7 @@ case "${1:-help}" in
   status) cmd_status ;;
   merge)  shift; cmd_merge "$@" ;;
   deploy) cmd_deploy ;;
+  import) shift; cmd_import "$@" ;;
   live)   shift; cmd_live "$@" ;;
-  *) sed -n 2,14p "$0" ;;
+  *) sed -n 2,16p "$0" ;;
 esac
