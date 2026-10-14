@@ -266,7 +266,7 @@ touched by **five separate tasks**:
 | 3 | `task/3` (grandfathered, see above) | `FILTER` | None — already assigned |
 | 5 | `task/web345-5` | `CTA` | None — runs in parallel with 3, separate zone |
 | 3b | `task/web345-3b` | `FILTER` (extends 3's zone) | Hard: `task/3` must merge to `main` first |
-| 2 | `task/web345-2` (or split) | `NAV-LINKS` | Soft: after Task 1's completion file |
+| 2 | `task/web345-2` (or split) | `NAV-LINKS` | Soft: after Task 1's report |
 | 8 | `task/web345-8` | `NAV-LINKS` (extends 2's zone) | Hard: `task/web345-2` must merge to `main` first |
 
 Tasks 3 and 5 sit in genuinely separate zones of the same files and can be
@@ -329,7 +329,7 @@ ambiguity).
 <a name="task-1"></a>
 ## TASK 1 — Project 3: Research, Brainstorm & Finalize New Page List
 
-**Complexity: Medium | Files touched: None (planning/research only, output is a completion file)**
+**Complexity: Medium | Files touched: None (planning/research only, output is `reports/task-web345-1.md`)**
 **Branch:** `task/web345-1`
 **Bug/follow-up and self-test:** Follow Step 4 of the Worker protocol for anything you find outside your scope: verify it first; small fix (about 10 lines or fewer, one place, no shared structure, no clash with another active branch) → fix it yourself as a separate `TASK-N-EXTRA` commit; anything bigger or uncertain → add an entry to `TODO.md`. Test your own work with the installed tools before you report.
 **Read First:** `adoption-website-project-summary.md`, in full
@@ -390,7 +390,7 @@ Task 2 builds from this list, so be specific about page names and URLs
 ## TASK 2 — Project 3: Build the New Content Pages
 
 **Splitting rule — read before assigning this to anyone:** this task's
-page count isn't known until Task 1's completion file delivers the
+page count isn't known until Task 1's report delivers the
 finalized list, so it cannot be handed to a single worker as written. Once
 the list arrives, split it into multiple worker assignments at roughly
 **2 pages per worker**, adjusted up or down for how substantial each
@@ -407,7 +407,7 @@ list below, narrowed to that worker's specific pages.
 **Bug/follow-up and self-test:** Follow Step 4 of the Worker protocol for anything you find outside your scope: verify it first; small fix (about 10 lines or fewer, one place, no shared structure, no clash with another active branch) → fix it yourself as a separate `TASK-N-EXTRA` commit; anything bigger or uncertain → add an entry to `TODO.md`. Test your own work with the installed tools before you report.
 **Read First:** `adoption-website-project-summary.md`, in full
 **Files to Request Before Starting:** The finalized page list and nav plan
-from Task 1's completion file; `PETCENTER_DESIGN_SYSTEM_v1.0.md`. Also check `TODO.md`'s table of contents at the start and before finishing for entries addressed to you.
+from Task 1's code on `main` once merged (the CEO merges after approval), plus `reports/task-web345-1.md`. If not yet merged, read branch `origin/task/web345-1` directly with `git diff origin/main...origin/task/web345-1`; `PETCENTER_DESIGN_SYSTEM_v1.0.md`. Also check `TODO.md`'s table of contents at the start and before finishing for entries addressed to you.
 
 Build the pages from the finalized list. Use `cats.html`'s header, footer,
 and hamburger menu as the canonical blueprint (Rule 13) — copy verbatim,
@@ -503,7 +503,7 @@ for work this size.
 **Merge-order note:** Hard dependency on Task 3: do not start until `task/3` is merged into `main`. Merge latest `main` into your own branch before starting, since you're extending code that only exists after that merge.
 **Bug/follow-up and self-test:** Follow Step 4 of the Worker protocol for anything you find outside your scope: verify it first; small fix (about 10 lines or fewer, one place, no shared structure, no clash with another active branch) → fix it yourself as a separate `TASK-N-EXTRA` commit; anything bigger or uncertain → add an entry to `TODO.md`. Test your own work with the installed tools before you report.
 **Read First:** `adoption-website-project-summary.md`, in full
-**Files to Request Before Starting:** Task 3's completion file — this
+**Files to Request Before Starting:** Task 3's code on `main` once merged (the CEO merges after approval), plus `reports/task-3.md`. If not yet merged, read branch `origin/task/3` directly with `git diff origin/main...origin/task/3` — this
 task builds directly on that filter, not a separate one. Also check `TODO.md`'s table of contents at the start and before finishing for entries addressed to you.
 
 Confirmed target markets for this feature are the USA, Canada, UK, and
@@ -511,8 +511,8 @@ Australia. Task 3 was scoped and assigned before that was confirmed, so
 rather than change that worker's in-progress assignment, this follow-on
 task extends their finished filter to the other three countries.
 
-Follow the Sequential File Ownership Chain (Rule 12): pull the most
-recently submitted version of the file(s) from Task 3, stay inside the
+Follow the Sequential File Ownership Chain (Rule 12): merge latest
+`main` into your branch so you're building on Task 3's merged code, stay inside the
 country-selector/geocoding zone, and wrap your additions in anchor
 comments.
 
@@ -617,11 +617,11 @@ follow-on task.
 **Merge-order note:** Hard dependency on Task 4: do not start until `task/web345-4` is merged into `main`. Merge latest `main` into your own branch before starting.
 **Bug/follow-up and self-test:** Follow Step 4 of the Worker protocol for anything you find outside your scope: verify it first; small fix (about 10 lines or fewer, one place, no shared structure, no clash with another active branch) → fix it yourself as a separate `TASK-N-EXTRA` commit; anything bigger or uncertain → add an entry to `TODO.md`. Test your own work with the installed tools before you report.
 **Read First:** `adoption-website-project-summary.md`, in full
-**Files to Request Before Starting:** Task 4's completion file — this
+**Files to Request Before Starting:** Task 4's code on `main` once merged (the CEO merges after approval), plus `reports/task-web345-4.md`. If not yet merged, read branch `origin/task/web345-4` directly with `git diff origin/main...origin/task/web345-4` — this
 task adds to that page, not a separate one. Also check `TODO.md`'s table of contents at the start and before finishing for entries addressed to you.
 
-Follow the Sequential File Ownership Chain (Rule 12): pull the most
-recently submitted version of the file from Task 4, stay inside the
+Follow the Sequential File Ownership Chain (Rule 12): merge latest
+`main` into your branch so you're building on Task 4's merged code, stay inside the
 compliance-flag zone, and wrap your additions in anchor comments.
 
 Full CITES and import-restriction coverage for every country and species
@@ -735,11 +735,11 @@ Recommended Enhancements — a headstart, not a final decision.
 **Merge-order note:** Hard dependency on Task 5: do not start until `task/web345-5` is merged into `main`. This task is optional — not currently assigned (see the task write-up below).
 **Bug/follow-up and self-test:** Follow Step 4 of the Worker protocol for anything you find outside your scope: verify it first; small fix (about 10 lines or fewer, one place, no shared structure, no clash with another active branch) → fix it yourself as a separate `TASK-N-EXTRA` commit; anything bigger or uncertain → add an entry to `TODO.md`. Test your own work with the installed tools before you report.
 **Read First:** `adoption-website-project-summary.md`, in full
-**Files to Request Before Starting:** Task 5's completion file — this task
+**Files to Request Before Starting:** Task 5's code on `main` once merged (the CEO merges after approval), plus `reports/task-web345-5.md`. If not yet merged, read branch `origin/task/web345-5` directly with `git diff origin/main...origin/task/web345-5` — this task
 builds on that form, not from scratch. Also check `TODO.md`'s table of contents at the start and before finishing for entries addressed to you.
 
-Follow the Sequential File Ownership Chain (Rule 12): pull the most
-recently submitted version of the file from Task 5, stay inside the
+Follow the Sequential File Ownership Chain (Rule 12): merge latest
+`main` into your branch so you're building on Task 5's merged code, stay inside the
 form-hardening zone, and wrap additions in anchor comments.
 
 1. **Bot/spam protection on this public form.** Unlike the site's
@@ -767,7 +767,7 @@ form-hardening zone, and wrap additions in anchor comments.
 **Bug/follow-up and self-test:** Follow Step 4 of the Worker protocol for anything you find outside your scope: verify it first; small fix (about 10 lines or fewer, one place, no shared structure, no clash with another active branch) → fix it yourself as a separate `TASK-N-EXTRA` commit; anything bigger or uncertain → add an entry to `TODO.md`. Test your own work with the installed tools before you report.
 **Read First:** `ADMIN_DASHBOARD_PROJECT_SUMMARY.md`, in full
 **Files to Request Before Starting:** The finalized terminology and form
-field list from Task 5's completion file. Also check `TODO.md`'s table of contents at the start and before finishing for entries addressed to you.
+field list from Task 5's code on `main` once merged (the CEO merges after approval), plus `reports/task-web345-5.md`. If not yet merged, read branch `origin/task/web345-5` directly with `git diff origin/main...origin/task/web345-5`. Also check `TODO.md`'s table of contents at the start and before finishing for entries addressed to you.
 
 Build a new admin-dashboard section for managing submitted pet-match
 requests, organized into sub-sections by pet category — mirroring the
@@ -810,12 +810,12 @@ ahead into the detail modal.
 **Merge-order note:** Hard dependency on Task 6a: do not start until `task/web345-6a` is merged into `main`. Merge latest `main` into your own branch before starting.
 **Bug/follow-up and self-test:** Follow Step 4 of the Worker protocol for anything you find outside your scope: verify it first; small fix (about 10 lines or fewer, one place, no shared structure, no clash with another active branch) → fix it yourself as a separate `TASK-N-EXTRA` commit; anything bigger or uncertain → add an entry to `TODO.md`. Test your own work with the installed tools before you report.
 **Read First:** `ADMIN_DASHBOARD_PROJECT_SUMMARY.md`, in full
-**Files to Request Before Starting:** Task 6a's completion file (for
+**Files to Request Before Starting:** Task 6a's code on `main` once merged (the CEO merges after approval), plus `reports/task-web345-6a.md`. If not yet merged, read branch `origin/task/web345-6a` directly with `git diff origin/main...origin/task/web345-6a` (for
 the listing structure this modal attaches to), plus the finalized
-terminology and form field list from Task 5's completion file. Also check `TODO.md`'s table of contents at the start and before finishing for entries addressed to you.
+terminology and form field list from Task 5's code on `main` once merged (the CEO merges after approval), plus `reports/task-web345-5.md`. If not yet merged, read branch `origin/task/web345-5` directly with `git diff origin/main...origin/task/web345-5`. Also check `TODO.md`'s table of contents at the start and before finishing for entries addressed to you.
 
-Follow the Sequential File Ownership Chain (Rule 12): pull the most
-recently submitted version of the file(s) from Task 6a, stay inside the
+Follow the Sequential File Ownership Chain (Rule 12): merge latest
+`main` into your branch so you're building on Task 6a's merged code, stay inside the
 detail-modal zone, and wrap your additions in anchor comments.
 
 Every submitted request needs to show its full detail, including the
@@ -929,7 +929,7 @@ file as an unreconciled stub, not a finished integration.
 <a name="task-7b"></a>
 ## TASK 7b — Project 5: Pet-Match Request — Live-Chat Verification Design
 
-**Complexity: High (direction is confirmed — this task works out the concrete design, not an open-ended search for one) | Files touched: None until the design is confirmed as buildable; this task's output is a specification in its completion file, not shipped code**
+**Complexity: High (direction is confirmed — this task works out the concrete design, not an open-ended search for one) | Files touched: None until the design is confirmed as buildable; this task's output is a specification in `reports/task-web345-7b.md`, not shipped code**
 **Branch:** `task/web345-7b`
 **Bug/follow-up and self-test:** Follow Step 4 of the Worker protocol for anything you find outside your scope: verify it first; small fix (about 10 lines or fewer, one place, no shared structure, no clash with another active branch) → fix it yourself as a separate `TASK-N-EXTRA` commit; anything bigger or uncertain → add an entry to `TODO.md`. Test your own work with the installed tools before you report.
 **Read First:** Both `adoption-website-project-summary.md` and
@@ -960,7 +960,7 @@ the link is clicked.
 existing chat thread" alternative.** That would require binding chat IDs
 to a verified email at chat-*creation* time — a change to the live-chat
 system itself, bigger than this task's scope — so note it in the
-completion file as an open question for a possible future project, not
+report as an open question for a possible future project, not
 something this task resolves or implements.
 
 Once this design is confirmed as buildable, the actual send-logic
@@ -996,7 +996,7 @@ flag as optional at this time.
 **Read First:** `adoption-website-project-summary.md`, in full
 (`pet.json`'s schema and Section 11's filter attributes are what this
 quiz's questions and matching logic are built from)
-**Files to Request Before Starting:** Task 1's completion file (the
+**Files to Request Before Starting:** Task 1's code on `main` once merged (the CEO merges after approval), plus `reports/task-web345-1.md`. If not yet merged, read branch `origin/task/web345-1` directly with `git diff origin/main...origin/task/web345-1` (the
 finalized page list and nav plan this quiz page slots into). Also check `TODO.md`'s table of contents at the start and before finishing for entries addressed to you.
 
 Petfinder's version of this feature only covers dogs. Build one that spans
@@ -1041,13 +1041,14 @@ Sequential File Ownership Chain (Rule 12).
 **Bug/follow-up and self-test:** Follow Step 4 of the Worker protocol for anything you find outside your scope: verify it first; small fix (about 10 lines or fewer, one place, no shared structure, no clash with another active branch) → fix it yourself as a separate `TASK-N-EXTRA` commit; anything bigger or uncertain → add an entry to `TODO.md`. Test your own work with the installed tools before you report.
 **Read First:** Both `adoption-website-project-summary.md` and
 `ADMIN_DASHBOARD_PROJECT_SUMMARY.md`, in full
-**Files to Request Before Starting:** Task 5's completion file and
-Task 6a's completion file — this task builds on both, not from
+**Files to Request Before Starting:** Task 5's code on `main` once merged (the CEO merges after approval), plus `reports/task-web345-5.md`. If not yet merged, read branch `origin/task/web345-5` directly with `git diff origin/main...origin/task/web345-5` and
+Task 6a's code on `main` once merged (the CEO merges after approval), plus `reports/task-web345-6a.md`. If not yet merged, read branch `origin/task/web345-6a` directly with `git diff origin/main...origin/task/web345-6a` — this task builds on both, not from
 scratch. Also check `TODO.md`'s table of contents at the start and before finishing for entries addressed to you.
 
 Follow the Sequential File Ownership Chain (Rule 12) on both files
-independently: pull the most recently submitted version of each, stay
-inside your named zone in each, and wrap your additions in anchor
+independently: merge latest `main` into your branch so you're building on
+both tasks' merged code, stay inside your named zone in each, and wrap
+your additions in anchor
 comments.
 
 When a new pet-match request is submitted, check for an existing
