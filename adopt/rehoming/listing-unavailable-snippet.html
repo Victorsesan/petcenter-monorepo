@@ -1,0 +1,147 @@
+<!--
+  TASK E2 — "This listing is no longer available" full-page treatment
+  -----------------------------------------------------------------------
+  Ready-to-merge snippet for the rehoming-platform listing detail page
+  (owned for real by Task A1 — that page does not exist yet, so this is
+  delivered as a standalone, anchor-commented block rather than edited
+  directly into a file that isn't built). Modeled deliberately on the
+  already-proven "Adopted-pet full-page treatment" pattern documented in
+  adoption-website-project-summary.md Section 13.10 (dims the info
+  panel, hides the sticky action bar, shows a badge) rather than
+  designed fresh, per platform Rule 7. Uses the design system's
+  CANCELLED status-badge color (Error Red #ef4444) from
+  PETCENTER_DESIGN_SYSTEM_v1_0.md Section 18, since "no longer
+  available" is functionally the same category of state as CANCELLED
+  in that five-state system (stopped before completion / no longer
+  actionable).
+
+  Icons only, never emoji, per the platform's standing rule — the badge
+  and empty-state icon below are both inline SVG (Feather-style),
+  matching the icon convention already used sitewide.
+  -----------------------------------------------------------------------
+-->
+
+<!-- TASK-rehoming-E2 START (new component — listing unavailable treatment) -->
+<style>
+  /* Badge shown in the hero/image area of the listing, matching the
+     placement convention already used for the adoption site's
+     "ADOPTED" badge (adoption-website-project-summary.md Section 15.5,
+     13.10) — top-left corner of the hero image. */
+  .rh-unavailable-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: #ef4444; /* Design System Section 18 — CANCELLED status color */
+    color: #fff;
+    font-family: 'Sora', sans-serif; font-weight: 700; font-size: 13px;
+    padding: 8px 14px; border-radius: 999px;
+    position: absolute; top: 16px; left: 16px; z-index: 5;
+  }
+
+  /* Dims the listing's own info panel once unavailable — same visual
+     language as the adopted-pet treatment: content stays readable but
+     is clearly de-emphasized rather than removed outright, so a
+     bookmarked link still shows what the listing WAS. Opacity only —
+     adoption-website-project-summary.md Section 13.10 dims the info
+     panel but never disables interaction inside it; a merchant-profile
+     link, a photo, or a "Report" control inside this panel should stay
+     clickable even on an unavailable listing, so pointer-events is
+     deliberately NOT disabled here. Only the sticky action bar below
+     (the actual "message/apply" action) is actually blocked. */
+  .rh-listing-info--unavailable {
+    opacity: 0.55;
+  }
+
+  /* The sticky bottom action bar (the rehoming-platform equivalent of
+     the adoption site's "Apply to Adopt" bar, Section 2.5/13.7) is
+     hidden entirely when a listing is unavailable — messaging/applying
+     to a closed listing isn't a real action, same reasoning already
+     applied to the adopted-pet case. */
+  .rh-sticky-action-bar[data-listing-unavailable="true"] {
+    display: none !important;
+  }
+
+  /* The friendly, non-technical banner explaining why — reuses the
+     paw-icon "friendly empty state" visual language from
+     adoption-website-project-summary.md Section 15.3, adapted for a
+     single-listing context rather than a whole empty category. */
+  .rh-unavailable-banner {
+    display: flex; align-items: center; gap: 12px;
+    background: rgba(239,68,68,0.08); /* soft tint, per Design System
+                                          Section 18's toast-background
+                                          convention — calm, not alarming */
+    border: 1px solid rgba(239,68,68,0.25);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 0 0 20px;
+    color: #7a1f1f;
+    font-family: 'Sora', sans-serif; font-size: 14px;
+  }
+  .rh-unavailable-banner svg { flex-shrink: 0; color: #ef4444; }
+</style>
+
+<!--
+  Badge — place inside the listing's hero/image wrapper, same position
+  convention as the adoption site's ADOPTED badge. INTEGRATION NOTE:
+  this badge is position:absolute, so whichever element it is placed
+  inside on the real page (owned by Task A1) must itself have
+  position:relative (or another positioning context) or the badge will
+  anchor to the page body instead of the hero image — the same
+  requirement the adoption site's own ADOPTED badge already depends on.
+-->
+<span class="rh-unavailable-badge" id="rhUnavailableBadge" style="display:none;">
+  <!-- Feather "x-circle" icon, copied byte-for-byte per the platform's
+       own rule against hand-retyping SVG path data
+       (adoption-website-project-summary.md Section 11.1, mistake #3) -->
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="10"></circle>
+    <line x1="15" y1="9" x2="9" y2="15"></line>
+    <line x1="9" y1="9" x2="15" y2="15"></line>
+  </svg>
+  No Longer Available
+</span>
+
+<!--
+  Banner — place at the top of the listing's info panel, above the
+  Breed/Health/Temperament sections.
+-->
+<div class="rh-unavailable-banner" id="rhUnavailableBanner" style="display:none;">
+  <!-- Feather "info" icon -->
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="10"></circle>
+    <line x1="12" y1="16" x2="12" y2="12"></line>
+    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+  </svg>
+  <span>This listing is no longer available.</span>
+</div>
+
+<script>
+  /**
+   * applyListingUnavailableTreatment(listing)
+   * Call this once the listing's JSON record has been fetched (same
+   * fetch-then-render pattern used sitewide, e.g. pet-detail.html's
+   * status handling documented in adoption-website-project-summary.md
+   * Section 13.10). Never 404s — the page still renders the listing's
+   * last-known info, just visually marked unavailable, so a
+   * bookmarked/shared link keeps working exactly as this task's spec
+   * requires.
+   *
+   * @param {Object} listing - the fetched listing record (must include
+   *   a `status` field per the SHARED CONTRACTS enum)
+   */
+  function applyListingUnavailableTreatment(listing) {
+    // Guard: only act on the exact status value this task owns — any
+    // other status is somebody else's display logic (D1's placement
+    // states) and must not be touched here, per Scope Lock.
+    if (!listing || listing.status !== 'no_longer_available') return;
+
+    var badge = document.getElementById('rhUnavailableBadge');
+    var banner = document.getElementById('rhUnavailableBanner');
+    var infoPanel = document.querySelector('.rh-listing-info');
+    var actionBar = document.querySelector('.rh-sticky-action-bar');
+
+    if (badge) badge.style.display = 'inline-flex';
+    if (banner) banner.style.display = 'flex';
+    if (infoPanel) infoPanel.classList.add('rh-listing-info--unavailable');
+    if (actionBar) actionBar.setAttribute('data-listing-unavailable', 'true');
+  }
+</script>
+<!-- TASK-rehoming-E2 END (new component — listing unavailable treatment) -->

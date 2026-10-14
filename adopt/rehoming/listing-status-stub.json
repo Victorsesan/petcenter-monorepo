@@ -1,0 +1,20 @@
+{
+  "_comment": "Local stub only \u2014 matches the SHARED CONTRACTS field shape from Rehoming-Platform-Task-Assignments.md (Task A1's listing core schema + Task D1's status enum + this task's own no_longer_available addition). Not a real listing file; Task A1/D1 own the real one. Reconcile this shape against the real listing data file once A1 and D1's completion files exist.",
+  "listing_id": "RH-00001",
+  "merchant_id": "MERCH-00001",
+  "pet_name": "Sample Pet",
+  "species": "Dog",
+  "health_status": "Up to date on all vaccinations, no known conditions.",
+  "temperament": "Friendly and energetic, gets along well with children.",
+  "reason_for_rehoming": "Owner relocating internationally, cannot bring pet.",
+  "spay_neuter_status": "spayed_neutered",
+  "listing_type": "permanent",
+  "currency_code": "USD",
+  "is_urgent": false,
+  "status": "active",
+  "unavailable_reason": null,
+  "unavailable_at": null,
+  "date_listed": "2026-08-01T00:00:00Z",
+  "status_before_unavailable": null,
+  "was_placement_complete": false
+}
