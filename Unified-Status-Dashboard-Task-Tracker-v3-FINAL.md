@@ -44,7 +44,7 @@ This is copied word-for-word from the Warning & Instructions section given to me
 
 2. **Never use emojis anywhere in the page or the code.** Use icons only (inline SVG, matching the existing icon style already in use on the page you're editing).
 
-3. **Never create a `.md` or `.txt` file unless explicitly told to** — with one exception: task/project completion files (see Directive 8 below) are required, not optional.
+3. **Never create a `.md` or `.txt` file unless explicitly told to** — with one exception: the short report every task requires (see Directive 8 below; `reports/task-status-N.md` is the only `.md` file a worker adds).
 
 4. **Carry these instructions through every command you run.** Don't let them apply only to the first task and quietly drop off later.
 
@@ -112,7 +112,7 @@ Full mechanics (cloning, syncing, testing, the report format, Design-Fidelity Lo
 
 ## SHARED DATA CONTRACTS — READ BEFORE TOUCHING ANY SHARED SCHEMA
 
-Several tasks below read or write the *same* status record from different files. If each worker independently guesses field names or status values, the pieces won't agree once combined — so these are fixed here, once, as the single source of truth every task must follow exactly. If a task's own completion file ever documents these fields differently, this section wins; flag the mismatch rather than silently going with whichever you saw last.
+Several tasks below read or write the *same* status record from different files. If each worker independently guesses field names or status values, the pieces won't agree once combined — so these are fixed here, once, as the single source of truth every task must follow exactly. If a task's own report or merged code ever shows these fields differently, this section wins; flag the mismatch rather than silently going with whichever you saw last.
 
 **BNPL status record** (Tasks 4, 5, 6, 7 all read and/or write this): JSON field names are `submission_id` (string, exact `IP-XXXXXXXX` format), `status` (string, one of exactly `"pending"`, `"approved"`, `"rejected"` — lowercase, no other spellings or values), `approved_by`, `approved_at` (ISO 8601), `rejection_notes` (string, empty string if not rejected), `history` (array of `{ from, to, by, at }` objects — this is Task 4's audit trail; Task 5's UI, Task 6's trigger, and Task 7's checker all read this same array, not a separate log). Task 4 defines this schema when it builds the backend — every later task using it must match these exact names, not invent its own.
 
@@ -165,8 +165,8 @@ Use **Claude Sonnet 5** (free tier is the practical ceiling). Turn on **extended
 ### Recommended Enhancements (Not Mandatory)
 
 - Consider a small "last checked/updated" timestamp on the homepage, so visitors trust the data is current rather than a stale cache.
-- VDM-2 is building a dark/light mode toggle for the admin dashboard elsewhere on this project. Worth a quick thought on whether `status.petcenterco.com` should visually support it too for consistency across Pet Center's properties — not required, your call based on time and whether it fits the shell you build.
-- VDM-3 is building sitewide auto-translation for the main site. If that ships, this new subdomain could end up the one page that isn't translated. Not something to build into this task now — just worth a mental note to flag to the CEO later if it becomes relevant, rather than something to solve here.
+- Another team is building a dark/light mode toggle for the admin dashboard elsewhere on this project. Worth a quick thought on whether `status.petcenterco.com` should visually support it too for consistency across Pet Center's properties — not required, your call based on time and whether it fits the shell you build.
+- Another team is building sitewide auto-translation for the main site. If that ships, this new subdomain could end up the one page that isn't translated. Not something to build into this task now — just worth a mental note to flag to the CEO later if it becomes relevant, rather than something to solve here.
 
 **⚠️ Not a final decision:** This is a headstart, not a directive. You own the code and the files, and by the time you're building this you'll have context I don't have right now. Weigh it yourself, search the web if it helps, and go with what's actually right for what you're building — not just what's written here.
 
@@ -190,7 +190,7 @@ Use **Claude Sonnet 5** (free tier is the practical ceiling). Turn on **extended
 ### Recommended Enhancements (Not Mandatory)
 
 - A brief server-side cache (30–60 seconds) on successful proxy lookups could reduce repeat load on `adopt.petcenterco.com` if someone refreshes rapidly — worth considering, not required.
-- VDM-1 is doing a security overhaul of the live-chat system, which has a very similar problem to solve: preventing a guessable identifier (a chat ID there, an application code here) from being abused. If VDM-1 lands on a specific anti-enumeration pattern, aligning this task's second-identifier approach with it would keep the whole site consistent — worth a quick check if their work is visible to you, but not worth waiting on if it isn't.
+- Another team is doing a security overhaul of the live-chat system, which has a very similar problem to solve: preventing a guessable identifier (a chat ID there, an application code here) from being abused. If they land on a specific anti-enumeration pattern, aligning this task's second-identifier approach with it would keep the whole site consistent — worth a quick check if their work is visible to you, but not worth waiting on if it isn't.
 
 **⚠️ Not a final decision:** This is a headstart, not a directive. You own the code and the files, and by the time you're building this you'll have context I don't have right now. Weigh it yourself, search the web if it helps, and go with what's actually right for what you're building — not just what's written here.
 
@@ -203,17 +203,17 @@ Use **Claude Sonnet 5** (free tier is the practical ceiling). Turn on **extended
 
 **Branch:** `task/status-3` **Report:** `reports/task-status-3.md`
 
-**What:** `adopt.petcenterco.com`'s existing `status-2.html` fetches `application.json` directly, client-side, with no authentication and no rate limiting. That JSON contains the applicant's full name, phone number, and home address. The code space (`AD-#####-####`) is small enough to be practically guessable at scale. Add rate limiting on this lookup, and require a second identifier (matching Task 2's approach, for consistency) before the real data is returned — which likely means restructuring this from "fetch a static JSON file directly" to "call a small PHP endpoint that checks the second identifier server-side before returning the data," since a static file can't gate on anything by itself. Preserve the exact current UX for legitimate users (same inputs, same look) — this is a security fix, not a redesign.
+**What:** `adopt.petcenterco.com`'s existing checker page (`adopt/adoptions/status/index.html` in the repo) fetches `application.json` directly, client-side, with no authentication and no rate limiting. That JSON contains the applicant's full name, phone number, and home address. The code space (`AD-#####-####`) is small enough to be practically guessable at scale. Add rate limiting on this lookup, and require a second identifier (matching Task 2's approach, for consistency) before the real data is returned — which likely means restructuring this from "fetch a static JSON file directly" to "call a small PHP endpoint that checks the second identifier server-side before returning the data," since a static file can't gate on anything by itself. Preserve the exact current UX for legitimate users (same inputs, same look) — this is a security fix, not a redesign.
 
-**Where:** `adopt.petcenterco.com`'s `status-2.html`, plus a new small PHP endpoint alongside it. Does not touch `status.petcenterco.com` or any other task's files.
+**Where:** `adopt/adoptions/status/index.html`, plus a new small PHP endpoint alongside it. Does not touch `status.petcenterco.com` or any other task's files.
 
-**Files to request from the CEO:** `status-2.html`, `adoption-application-6.php` (for the exact `application.json` shape).
+**Files:** no CEO hand-off needed — in the repo on `main`: `adopt/adoptions/status/index.html` and `adopt/apply/adoption-application.php` (for the exact `application.json` shape) — not the decoy copy in `adopt/apply/Old/`.
 
 **Read first:** `adoption-website-project-summary.md` Section 7, `PETCENTER_DESIGN_SYSTEM_v1.0.md` (even though this preserves existing UX, any code touching the rendered page falls under Rule 9).
 
 ### Recommended Enhancements (Not Mandatory)
 
-- Same note as Task 2: this and the live-chat security work (VDM-1) are solving the same underlying problem (an enumerable identifier) in two different parts of the site. Keeping the two fixes conceptually consistent is a nice-to-have, not a requirement, given they're different workers on different timelines.
+- Same note as Task 2: this and the live-chat security work are solving the same underlying problem (an enumerable identifier) in two different parts of the site. Keeping the two fixes conceptually consistent is a nice-to-have, not a requirement, given they're different workers on different timelines.
 - A simple failed-lookup counter (not a full audit trail — just a number) could give the CEO visibility into whether this endpoint is actively being probed right now. Optional, and only worth it if it's cheap to add alongside the rate limiting you're already building.
 
 **⚠️ Not a final decision:** This is a headstart, not a directive. You own the code and the files, and by the time you're building this you'll have context I don't have right now. Weigh it yourself, search the web if it helps, and go with what's actually right for what you're building — not just what's written here.
@@ -231,7 +231,7 @@ Use **Claude Sonnet 5** (free tier is the practical ceiling). Turn on **extended
 
 **Where:** New backend file(s) alongside `submit-installment.php`; `submit-installment.php` itself may need modification (in-scope).
 
-**Files to request from the CEO:** `submit-installment.php`, `installment_submissions.log`, `adoption-application-6.php`, `update-adoption.php` documentation.
+**Files:** `submit-installment.php` and `installment_submissions.log` aren't in the repo yet — request these from the CEO. `adoption-application.php` (`adopt/apply/`) and `update-adoption.php` (`adopt/admin/`) are both on `main` — read them there for the exact shape to mirror. Note: `adopt/admin/` also has an `update-adoption8.php` that differs meaningfully from `update-adoption.php` — confirm with the CEO which one is actually live before treating either as the reference, rather than assuming.
 
 **Read first:** `ADMIN_DASHBOARD_PROJECT_SUMMARY.md` in full.
 
@@ -249,17 +249,17 @@ Use **Claude Sonnet 5** (free tier is the practical ceiling). Turn on **extended
 
 **Branch:** `task/status-5` **Report:** `reports/task-status-5.md`
 
-**What:** New "BNPL Applications" panel in `admin-dashboard.html` — list, status filter, detail view, approve/reject — matching the existing adoption Applications panel's shape. Reuse the existing upload/preview modal (documented in both project summaries) for viewing submitted documents — do not build a new viewer. Add bulk approve/reject and a staff notes field on each submission.
+**What:** New "BNPL Applications" panel in the admin dashboard (`adopt/admin/index.html` in the repo — this tracker previously called it "admin-dashboard.html"; that's not the real file name, use the path) — list, status filter, detail view, approve/reject — matching the existing adoption Applications panel's shape. Reuse the existing upload/preview modal (documented in both project summaries) for viewing submitted documents — do not build a new viewer. Add bulk approve/reject and a staff notes field on each submission.
 
-**Where:** `admin-dashboard.html` — shared with other in-flight work on this codebase (chat security, dark/light mode), each under its own project-scoped id (e.g. `admin1`). Wrap your additions in `TASK-status-5 START/END`, not a bare number, so your zone is distinguishable from theirs in the same file. Pull the latest version of this file from the repo (`git fetch origin` / check other branches), not an original copy.
+**Where:** `adopt/admin/index.html` — **not** the decoy copy in `adopt/admin/Old/`. Shared with other in-flight work on this codebase, each under its own project-scoped id. Wrap your additions in `TASK-status-5 START/END`, not a bare number, so your zone is distinguishable from theirs in the same file. Pull the latest version of this file from the repo (`git fetch origin` / check other branches), not an original copy.
 
-**Files to request from the CEO:** current `admin-dashboard.html`, Task 4's completion file, `ADMIN_DASHBOARD_PROJECT_SUMMARY.md` Section 9.
+**Files:** `adopt/admin/index.html`, from the repo on `main`, plus `ADMIN_DASHBOARD_PROJECT_SUMMARY.md` Section 9. For Task 4: its merged code on `main` once approved, or if not yet merged, read it with `git diff origin/main...origin/task/status-4` plus `reports/task-status-4.md`.
 
 **Read first:** `ADMIN_DASHBOARD_PROJECT_SUMMARY.md` in full, `PETCENTER_DESIGN_SYSTEM_v1.0.md` (this task makes UI decisions for the new panel).
 
 ### Recommended Enhancements (Not Mandatory)
 
-- `admin-dashboard.html` is being touched by this task and by VDM-2's dark/light mode work around a similar timeframe, possibly VDM-1 too. Double-checking with the CEO for the truly latest version immediately before starting — not just relying on whatever you were handed — is worth the extra thirty seconds given how many hands are in this one file right now.
+- `adopt/admin/index.html` is being touched by this task and by other in-flight work on the admin dashboard (dark/light mode, chat security) around a similar timeframe. Double-checking with the CEO for the truly latest version immediately before starting — not just relying on whatever you were handed — is worth the extra thirty seconds given how many hands are in this one file right now.
 
 **⚠️ Not a final decision:** This is a headstart, not a directive. You own the code and the files, and by the time you're building this you'll have context I don't have right now. Weigh it yourself, search the web if it helps, and go with what's actually right for what you're building — not just what's written here.
 
@@ -276,9 +276,9 @@ Use **Claude Sonnet 5** (free tier is the practical ceiling). Turn on **extended
 
 **Where:** New helper file (e.g. alongside Task 4's backend files); adds a hook into Task 4's write endpoint — shared file, wrap your addition in `TASK-status-6 START/END`, merge `task/status-4` into `main` (or at minimum pull its latest commits) before you branch, so you're hooking into Task 4's real endpoint, not a stale copy.
 
-**Files to request from the CEO:** Task 4's completion file.
+**Files:** Task 4's merged code on `main` once approved, or if not yet merged, `git diff origin/main...origin/task/status-4` plus `reports/task-status-4.md`.
 
-**Read first:** none beyond Task 4's completion file — this is a focused, self-contained piece.
+**Read first:** the same — this is a focused, self-contained piece, nothing else needed.
 
 ### Recommended Enhancements (Not Mandatory)
 
@@ -299,7 +299,7 @@ Use **Claude Sonnet 5** (free tier is the practical ceiling). Turn on **extended
 
 **Where:** New page under `status.petcenterco.com`; extends Task 2's proxy endpoint — shared file, wrap your addition in `TASK-status-7 START/END` alongside Task 2's existing `TASK-status-2` block, merge `task/status-2`'s latest commits before you start per Rule 12.
 
-**Files to request from the CEO:** Task 2's and Task 4's completion files.
+**Files:** Task 2's and Task 4's merged code on `main` once approved, or if either isn't merged yet, `git diff origin/main...origin/task/status-2` / `...task/status-4` plus their `reports/task-status-N.md` files.
 
 **Read first:** `adoption-website-project-summary.md` Section 7, `PETCENTER_DESIGN_SYSTEM_v1.0.md` (this task makes UI decisions on the checker page).
 
@@ -320,7 +320,7 @@ Use **Claude Sonnet 5** (free tier is the practical ceiling). Turn on **extended
 
 **What:** Admin-facing manual up/down/degraded control per domain/subdomain, a public display, and an incident history log (append an entry — timestamp, old→new status, optional note — every time status changes; display it publicly per domain). The log rides on the same write action as the manual control, so it's part of this task's core build, not a separate one.
 
-**Where:** New page(s) under `status.petcenterco.com`, plus a lightweight admin-side control (your call whether that's a protected page on `status.petcenterco.com` itself or elsewhere — state your choice clearly in your completion file).
+**Where:** New page(s) under `status.petcenterco.com`, plus a lightweight admin-side control (your call whether that's a protected page on `status.petcenterco.com` itself or elsewhere — state your choice clearly in your report).
 
 **Files to request from the CEO:** current list of domains/subdomains under `petcenterco.com`.
 
@@ -328,7 +328,7 @@ Use **Claude Sonnet 5** (free tier is the practical ceiling). Turn on **extended
 
 ### Recommended Enhancements (Not Mandatory)
 
-- VDM-5 is building a separate Rehoming Platform that may eventually get its own subdomain. If/when it does, it could be worth adding to this dashboard's domain list later — nothing to build now, just worth keeping the domain list easy to extend rather than hard-coded to a fixed set.
+- Another team is building a separate Rehoming Platform that may eventually get its own subdomain. If/when it does, it could be worth adding to this dashboard's domain list later — nothing to build now, just worth keeping the domain list easy to extend rather than hard-coded to a fixed set.
 
 **⚠️ Not a final decision:** This is a headstart, not a directive. You own the code and the files, and by the time you're building this you'll have context I don't have right now. Weigh it yourself, search the web if it helps, and go with what's actually right for what you're building — not just what's written here.
 
@@ -344,9 +344,9 @@ Use **Claude Sonnet 5** (free tier is the practical ceiling). Turn on **extended
 
 **Where:** Extends Task 8's files — wrap your addition in `TASK-status-9 START/END` alongside Task 8's `TASK-status-8` block, merge `task/status-8`'s latest commits before you start — reads Task 1's subscriber-list storage, calls Task 6's helper.
 
-**Files to request from the CEO:** Task 8's, Task 1's, and Task 6's completion files.
+**Files:** Task 8's, Task 1's, and Task 6's merged code on `main` once approved, or for any not yet merged, `git diff origin/main...origin/task/status-N` plus that task's `reports/task-status-N.md`.
 
-**Read first:** Task 8's, Task 1's, and Task 6's completion files, `PETCENTER_DESIGN_SYSTEM_v1.0.md` (the banner and badge are new UI elements).
+**Read first:** the same three, plus `PETCENTER_DESIGN_SYSTEM_v1.0.md` (the banner and badge are new UI elements).
 
 ### Recommended Enhancements (Not Mandatory)
 
@@ -366,9 +366,9 @@ Use **Claude Sonnet 5** (free tier is the practical ceiling). Turn on **extended
 
 **Where:** Extends Task 8's files — wrap your addition in `TASK-status-10 START/END` alongside the `TASK-status-8`/`TASK-status-9` blocks already there, merge `task/status-9`'s latest commits before you start — plus new integration/sync code.
 
-**Files to request from the CEO:** Task 8's completion file.
+**Files:** Task 8's merged code on `main` once approved, or if not yet merged, `git diff origin/main...origin/task/status-8` plus `reports/task-status-8.md`.
 
-**Read first:** none beyond Task 8's completion file.
+**Read first:** the same — nothing else needed.
 
 ### Recommended Enhancements (Not Mandatory)
 
@@ -394,8 +394,8 @@ Use **Claude Sonnet 5** (free tier is the practical ceiling). Turn on **extended
 
 ### Recommended Enhancements (Not Mandatory)
 
-- VDM-4 is working on location/shipping content pages elsewhere on this project. Shipping-status is your leading candidate category — check what VDM-4 has actually built before assuming that data source needs to be created from scratch; there may already be a foundation to check status against.
-- VDM-5's Rehoming Platform (a separate marketplace-style project) is a different application/listing flow that doesn't exist yet, but may be worth noting as a future category once it ships — not something to research now, just worth flagging in your proposal as a "watch for later" rather than leaving it undiscovered.
+- Another team is working on location/shipping content pages elsewhere on this project. Shipping-status is your leading candidate category — check what's actually been built there before assuming that data source needs to be created from scratch; there may already be a foundation to check status against.
+- A separate Rehoming Platform (a marketplace-style project) is in progress elsewhere — a different application/listing flow that doesn't exist yet, but may be worth noting as a future category once it ships — not something to research now, just worth flagging in your proposal as a "watch for later" rather than leaving it undiscovered.
 
 **⚠️ Not a final decision:** This is a headstart, not a directive. You own the code and the files, and by the time you're building this you'll have context I don't have right now. Weigh it yourself, search the web if it helps, and go with what's actually right for what you're building — not just what's written here.
 
@@ -409,11 +409,11 @@ Use **Claude Sonnet 5** (free tier is the practical ceiling). Turn on **extended
 
 **What:** CEO-approved: adoption applicants should get the same "your status changed" email treatment BNPL applicants get from Task 6. Hook `update-adoption.php` so that when an admin approves or rejects an adoption application, it calls Task 6's existing email helper to notify the applicant — mirroring exactly how Task 6 wired the same trigger into the BNPL write endpoint. This is a trigger addition to an existing, working file, not a redesign of the approval flow itself — Scope Lock still applies: touch only what's needed to add the email call, nothing else in `update-adoption.php`.
 
-**Where:** `update-adoption.php` (existing, on `adopt.petcenterco.com`'s admin side). New file for this project, not shared with any other task above.
+**Where:** `adopt/admin/update-adoption.php` (existing). Not shared with any other task above — but see the note below before you touch it.
 
-**Files to request from the CEO:** `update-adoption.php`, Task 6's completion file.
+**Files:** `adopt/admin/update-adoption.php`, from the repo on `main`. **Confirm with the CEO this is actually the live file before starting** — `adopt/admin/` also has an `update-adoption8.php` that differs from it meaningfully (found while scoping Task 4), and this tracker doesn't know which one the admin dashboard actually calls. Also: Task 6's merged code on `main` once approved, or if not yet merged, `git diff origin/main...origin/task/status-6` plus `reports/task-status-6.md`.
 
-**Read first:** Task 6's completion file (for the exact helper interface), `ADMIN_DASHBOARD_PROJECT_SUMMARY.md` Section 9 (`update-adoption.php` documentation).
+**Read first:** the same, for the exact helper interface, plus `ADMIN_DASHBOARD_PROJECT_SUMMARY.md` Section 9 (`update-adoption.php` documentation).
 
 ### Recommended Enhancements (Not Mandatory)
 
