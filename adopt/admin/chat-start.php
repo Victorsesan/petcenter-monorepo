@@ -30,6 +30,16 @@ require_once __DIR__ . '/chat-config.php';
 // exact trigger scenarios (this file fires chatNotifyNewThread() below, at
 // Path 3, the only place a genuinely new thread is created).
 require_once __DIR__ . '/chat-mail.php';
+/* TASK-1 START — session-token base layer
+   chat-start.php is the single point where email+chatID lookup succeeds
+   and a session token gets issued for the resulting thread. Every path
+   below (explicit chatId resume, email-match resume, brand-new thread)
+   now returns a sessionToken the client must send on every subsequent
+   read/write call against that chat_id — see includes/chat-auth.php for
+   why this closes the "email+chatID is a bare lookup, not a secret"
+   vulnerability this task exists to fix. */
+require_once __DIR__ . '/includes/chat-auth.php';
+/* TASK-1 END */
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     chatRespond(['success' => false, 'error' => 'POST required'], 405);
@@ -93,13 +103,25 @@ if ($chatId !== '') {
             }
         }
 
+        /* TASK-1 START — issue a fresh session token on every successful
+           resume (Path 1: explicit chat ID). A fresh token is issued on
+           each resume rather than trying to reuse/return a prior one —
+           simpler, and it means a customer resuming on a new device/browser
+           naturally gets their own valid token without needing to reason
+           about whether an old one is still around. */
+        $sessionToken = issue_token($thread['chat_id']);
+        /* TASK-1 END */
+
         chatRespond([
-            'success'  => true,
-            'resumed'  => true,
-            'chatId'   => $thread['chat_id'],
-            'status'   => $thread['status'],
-            'fullName' => $thread['full_name'],
-            'email'    => $thread['email'],
+            'success'      => true,
+            'resumed'      => true,
+            'chatId'       => $thread['chat_id'],
+            'status'       => $thread['status'],
+            'fullName'     => $thread['full_name'],
+            'email'        => $thread['email'],
+            /* TASK-1 START — sessionToken in the response payload */
+            'sessionToken' => $sessionToken,
+            /* TASK-1 END */
         ]);
     }
 
@@ -135,13 +157,21 @@ if ($existing) {
         }
     }
 
+    /* TASK-1 START — issue a fresh session token on every successful
+       resume (Path 2: email match). Same reasoning as Path 1 above. */
+    $sessionToken = issue_token($existing['chat_id']);
+    /* TASK-1 END */
+
     chatRespond([
-        'success'  => true,
-        'resumed'  => true,
-        'chatId'   => $existing['chat_id'],
-        'status'   => $existing['status'],
-        'fullName' => $existing['full_name'],
-        'email'    => $existing['email'],
+        'success'      => true,
+        'resumed'      => true,
+        'chatId'       => $existing['chat_id'],
+        'status'       => $existing['status'],
+        'fullName'     => $existing['full_name'],
+        'email'        => $existing['email'],
+        /* TASK-1 START — sessionToken in the response payload */
+        'sessionToken' => $sessionToken,
+        /* TASK-1 END */
     ]);
 }
 
@@ -203,11 +233,23 @@ chatNotifyNewThread([
     'reason'    => $reason,
 ]);
 
+/* TASK-1 START — issue the very first session token for a brand-new thread.
+   Placed after chatNotifyNewThread() deliberately: notification failure is
+   already non-fatal (wrapped internally in chat-mail.php), and token issuance
+   should happen last, immediately before the response, so nothing after it
+   can fail and leave a token issued for a request that never actually
+   completed. */
+$sessionToken = issue_token($newChatId);
+/* TASK-1 END */
+
 chatRespond([
-    'success'  => true,
-    'resumed'  => false,
-    'chatId'   => $newChatId,
-    'status'   => 'waiting',
-    'fullName' => $fullName,
-    'email'    => $email,
+    'success'      => true,
+    'resumed'      => false,
+    'chatId'       => $newChatId,
+    'status'       => 'waiting',
+    'fullName'     => $fullName,
+    'email'        => $email,
+    /* TASK-1 START — sessionToken in the response payload */
+    'sessionToken' => $sessionToken,
+    /* TASK-1 END */
 ]);

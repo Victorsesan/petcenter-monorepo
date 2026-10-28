@@ -2,23 +2,33 @@
 /**
  * chat-history.php
  *
- * Powers the "See previous messages" inline reveal on a Done thread
- * (Section 7b). Two modes:
+ * TASK-1 (second verification round) — corrected header: the two
+ * paragraphs below used to claim this powers a "See previous messages"
+ * inline reveal with dual customer/admin usage. That's stale —
+ * ADMIN_DASHBOARD_PROJECT_SUMMARY.md's current, authoritative section for
+ * this file confirms it actually powers "Download transcript" only,
+ * customer-side exclusively (downloadTranscript() in chat-widget.js), with
+ * the same no-admin-usage, chatId-is-the-credential trust model as
+ * chat-poll.php. Corrected here rather than left standing, since it
+ * directly contradicts this file's own TASK-1 enforcement block below.
+ *
+ * Powers the widget's "Download transcript" feature. Two modes:
  *
  *  - mode=full   -> returns every prior message, but image/audio/video
  *                   messages come back as lightweight placeholder metadata
  *                   only (type, original filename if known, size) — the
  *                   actual media_path is deliberately withheld here so the
- *                   initial reveal stays fast even with a long history full
+ *                   response stays fast even with a long history full
  *                   of attachments. This is the lazy-loading principle
  *                   already used for fast video uploads, applied to history
- *                   loading instead.
+ *                   loading instead. This is the only mode actually used
+ *                   end-to-end.
  *  - mode=media  -> given one specific messageId, returns that single
- *                   message's actual media path, resolved only at the
- *                   moment the customer taps that specific item.
+ *                   message's actual media path. Not currently wired to
+ *                   any UI control in either the widget or the dashboard.
  *
- * Works for both the customer (by chatId) and an admin reviewing a Done
- * thread (by chatId + admin auth) — same data, same lazy-loading shape.
+ * Customer-side only, no admin usage — chatId is the credential, same
+ * trust model as chat-poll.php.
  */
 
 header('Content-Type: application/json');
@@ -26,9 +36,15 @@ error_reporting(0);
 @ini_set('display_errors', 0);
 
 require_once __DIR__ . '/chat-config.php';
+/* TASK-1 START — session-token base layer */
+require_once __DIR__ . '/includes/chat-auth.php';
+/* TASK-1 END */
 
 $chatId = trim($_GET['chatId'] ?? '');
 $mode   = $_GET['mode'] ?? 'full';
+/* TASK-1 START */
+$sessionToken = trim($_GET['sessionToken'] ?? '');
+/* TASK-1 END */
 
 if ($chatId === '') {
     chatRespond(['success' => false, 'error' => 'chatId is required'], 400);
@@ -43,6 +59,24 @@ $threadId = $stmt->fetchColumn();
 if (!$threadId) {
     chatRespond(['success' => false, 'error' => 'Chat not found'], 404);
 }
+
+/* TASK-1 START (revised — second verification round)
+   This file's own header comment above (lines 5-21) claims dual
+   customer/admin usage and describes a "See previous messages" inline
+   reveal. Both claims are stale: ADMIN_DASHBOARD_PROJECT_SUMMARY.md's
+   current, authoritative chat-history.php section explicitly supersedes
+   that description — this endpoint actually powers "Download transcript"
+   only, is driven exclusively by downloadTranscript() in chat-widget.js
+   (the customer widget), and is documented as "no auth (chatId is the
+   credential), same trust model as chat-poll.php" with no admin usage
+   anywhere in the shipped code. The first version of this fix trusted the
+   file's own (stale) header comment and added a chatIsAdminAuthenticated()
+   bypass here; that was wrong and has been removed. Session-token
+   enforcement is now unconditional, matching chat-poll.php's own
+   TASK-1 block exactly — this file has the same trust model, so it gets
+   the same fix, nothing more. */
+chatRequireSessionToken($chatId, $sessionToken);
+/* TASK-1 END */
 
 if ($mode === 'full') {
 

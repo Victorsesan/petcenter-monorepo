@@ -18,6 +18,9 @@ error_reporting(0);
 @ini_set('display_errors', 0);
 
 require_once __DIR__ . '/chat-config.php';
+/* TASK-1 START — session-token base layer */
+require_once __DIR__ . '/includes/chat-auth.php';
+/* TASK-1 END */
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     chatRespond(['success' => false, 'error' => 'POST required'], 405);
@@ -56,6 +59,20 @@ if ($who === 'admin' || $who === 'admin_recording') {
     chatRequireAdmin();
 }
 // TASK-8 END (8b — accept voice-recording-in-progress ping values)
+
+/* TASK-1 START — customer-side pings (who=user/user_recording) now require
+   the same session token every other customer-facing endpoint requires.
+   Previously these were the one class of write against a real, existing
+   thread that needed no proof of anything beyond a guessed chatId — a
+   typing/recording ping doesn't leak conversation content by itself, but
+   letting an unauthenticated caller write into chat_typing for any known
+   chatId was still a real gap in the "chatId is a lookup, not an
+   authorization" fix this task exists to close. */
+if ($who === 'user' || $who === 'user_recording') {
+    $sessionToken = trim($input['sessionToken'] ?? '');
+    chatRequireSessionToken($chatId, $sessionToken);
+}
+/* TASK-1 END */
 
 $db = chatDb();
 

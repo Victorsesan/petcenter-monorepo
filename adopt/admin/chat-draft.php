@@ -21,6 +21,9 @@ error_reporting(0);
 @ini_set('display_errors', 0);
 
 require_once __DIR__ . '/chat-config.php';
+/* TASK-1 START — session-token base layer */
+require_once __DIR__ . '/includes/chat-auth.php';
+/* TASK-1 END */
 
 $action = $_REQUEST['action'] ?? '';
 $draftKey = trim($_REQUEST['draftKey'] ?? '');
@@ -30,6 +33,43 @@ if ($draftKey === '' || mb_strlen($draftKey) > 64) {
 }
 
 $db = chatDb();
+
+/* TASK-1 START — conditional session-token enforcement
+   draftKey takes three real shapes in this system, and each needs
+   different treatment:
+     1. A real chat_id (once a thread exists) -> this draft belongs to an
+        existing, real conversation, so it gets the same protection every
+        other piece of that conversation's data now gets: a valid session
+        token for that exact chat_id, or the request is rejected. Without
+        this, chat-draft.php would have been the one file where a bare
+        guessed chatId still reached real data (an in-progress unsent
+        message) after every other endpoint was hardened.
+     2. 'unread:{chatId}' (the persistent unread-badge count, piggybacking
+        on this same save/get mechanism per this file's own header note)
+        -> also tied to a real chat_id, embedded after the prefix, so it
+        gets the same enforcement, scoped to that embedded chat_id rather
+        than the literal draftKey string.
+     3. A pre-thread, client-generated UUID (used before the first message
+        has created a thread) -> no thread, no principal_id, and therefore
+        nothing for a session token to even be issued against yet. Not a
+        meaningful exposure the way a real conversation is, either: the
+        UUID is unguessable and tied to nothing else an attacker could
+        look up — matching how chat-start.php itself never requires a
+        token to CREATE a thread in the first place. Left unauthenticated,
+        exactly as before. */
+// substr() check, not str_starts_with() — this project's stated server
+// requirement is PHP 7.4+ (str_starts_with is PHP 8.0+)
+$draftKeyPrincipal = (substr($draftKey, 0, 7) === 'unread:') ? substr($draftKey, 7) : $draftKey;
+
+$draftKeyThreadCheck = $db->prepare("SELECT id FROM chat_threads WHERE chat_id = ? LIMIT 1");
+$draftKeyThreadCheck->execute([$draftKeyPrincipal]);
+$draftKeyIsRealChatId = (bool)$draftKeyThreadCheck->fetchColumn();
+
+if ($draftKeyIsRealChatId) {
+    $draftSessionToken = trim($_REQUEST['sessionToken'] ?? '');
+    chatRequireSessionToken($draftKeyPrincipal, $draftSessionToken);
+}
+/* TASK-1 END */
 
 if ($action === 'save') {
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {

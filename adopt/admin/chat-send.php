@@ -26,6 +26,9 @@ require_once __DIR__ . '/chat-config.php';
 // done->waiting state transition below, not after the message finishes
 // saving — see the inline comment at that call site for why).
 require_once __DIR__ . '/chat-mail.php';
+/* TASK-1 START — session-token base layer */
+require_once __DIR__ . '/includes/chat-auth.php';
+/* TASK-1 END */
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     chatRespond(['success' => false, 'error' => 'POST required'], 405);
@@ -44,6 +47,9 @@ $audioToken     = trim($input['audioToken'] ?? '');
 $videoTokens    = $input['videoTokens'] ?? (($input['videoToken'] ?? '') !== '' ? [$input['videoToken']] : []);
 $replyToId      = $input['replyToId'] ?? null;
 $idempotencyKey = trim($input['idempotencyKey'] ?? '');
+/* TASK-1 START */
+$sessionToken   = trim($input['sessionToken'] ?? '');
+/* TASK-1 END */
 
 // Ensure arrays
 if (!is_array($imageTokens)) $imageTokens = [];
@@ -82,6 +88,16 @@ $thread = $stmt->fetch();
 if (!$thread) {
     chatRespond(['success' => false, 'error' => 'Chat not found'], 404);
 }
+
+/* TASK-1 START — this was the customer's own message-send endpoint, and
+   previously the single biggest piece of the vulnerability this task
+   exists to close: anyone who guessed/enumerated a chatId could send
+   messages into that customer's conversation with no proof of ownership
+   at all. Enforced here, right after the thread lookup (so an unknown
+   chatId still gets the existing, more specific 404) and before anything
+   below reads or mutates thread/message state. */
+chatRequireSessionToken($chatId, $sessionToken);
+/* TASK-1 END */
 
 $wasReopenedFromDone = false;
 if ($thread['status'] === 'done') {

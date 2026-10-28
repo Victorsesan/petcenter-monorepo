@@ -22,6 +22,9 @@ error_reporting(0);
 @ini_set('display_errors', 0);
 
 require_once __DIR__ . '/chat-config.php';
+/* TASK-1 START — session-token base layer */
+require_once __DIR__ . '/includes/chat-auth.php';
+/* TASK-1 END */
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     chatRespond(['success' => false, 'error' => 'POST required'], 405);
@@ -36,6 +39,9 @@ $chatId    = trim($input['chatId'] ?? '');
 $messageId = (int)($input['messageId'] ?? 0);
 $newBody   = trim($input['body'] ?? '');
 $adminId   = (int)($input['adminId'] ?? 0);
+/* TASK-1 START */
+$sessionToken = trim($input['sessionToken'] ?? '');
+/* TASK-1 END */
 
 if ($chatId === '' || !$messageId) {
     chatRespond(['success' => false, 'error' => 'chatId and messageId are required'], 400);
@@ -83,6 +89,14 @@ if ($adminId) {
     if ($message['from_type'] !== 'user') {
         chatRespond(['success' => false, 'error' => 'You can only edit your own messages'], 403);
     }
+    /* TASK-1 START — the customer branch previously had NO auth check at
+       all beyond "the message happens to be from_type='user'" — anyone
+       who knew a chatId and a messageId could edit that customer's own
+       message on their behalf, purely by guessing/enumerating IDs. A
+       valid session token for this exact chatId is now required on this
+       branch, same as every other customer-facing write in this task. */
+    chatRequireSessionToken($chatId, $sessionToken);
+    /* TASK-1 END */
 }
 
 // ── Time window check ────────────────────────────────────────────────────

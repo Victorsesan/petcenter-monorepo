@@ -16,6 +16,9 @@ error_reporting(0);
 header('Content-Type: application/json');
 
 require_once __DIR__ . '/chat-config.php';
+/* TASK-1 START — session-token base layer */
+require_once __DIR__ . '/includes/chat-auth.php';
+/* TASK-1 END */
 
 $action    = $_POST['action'] ?? 'upload';
 $uploadId  = $_POST['uploadId'] ?? '';
@@ -25,6 +28,42 @@ if (!$uploadId) {
     echo json_encode(['success' => false, 'error' => 'Missing uploadId']);
     exit;
 }
+
+/* TASK-1 START — same structural limit as chat-upload-temp.php's TASK-1
+   block above (see that file for the full reasoning on why full
+   enforcement isn't possible here without an out-of-scope chat-widget.js
+   change) — with one additional, genuinely free improvement specific to
+   this file: ADMIN_DASHBOARD_PROJECT_SUMMARY.md documents that the admin
+   dashboard ALREADY sends an X-Admin-Token header to this endpoint today,
+   even though nothing here has ever checked it. That means the admin path
+   can be fully, correctly hardened right now with zero frontend changes —
+   only the customer (chat widget) path needs the same soft/rate-limited
+   fallback as chat-upload-temp.php, since chat-widget.js doesn't send a
+   chatId here today.
+   Precedence: a valid admin token wins outright (this endpoint is
+   genuinely shared by both sides, unlike every other file in this task).
+   Otherwise, an explicit chatId+sessionToken pair is verified for real if
+   supplied (ready for whenever chat-widget.js is updated to send them).
+   Otherwise, rate-limited + audit-logged, matching the customer widget's
+   actual behavior today. */
+if (chatIsAdminAuthenticated()) {
+    log_audit('admin', 'chat-upload-video-chunk', $action . '_admin');
+} else {
+    $uploadChatId = trim($_POST['chatId'] ?? '');
+    $uploadSessionToken = trim($_POST['sessionToken'] ?? '');
+    if ($uploadChatId !== '') {
+        chatRequireSessionToken($uploadChatId, $uploadSessionToken);
+        log_audit($uploadChatId, 'chat-upload-video-chunk', $action);
+    } else {
+        $uploadIp = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+        if (!chatCheckRateLimit('chat_upload_video_ip:' . $uploadIp, 60, 600)) { // 60 chunk calls / 10 min / IP — chunked uploads mean many small calls per real video, so this ceiling is higher than the single-shot chat-upload-temp.php limit
+            echo json_encode(['success' => false, 'error' => 'Too many uploads. Please wait a few minutes and try again.']);
+            exit;
+        }
+        log_audit('unknown', 'chat-upload-video-chunk', $action . '_no_session');
+    }
+}
+/* TASK-1 END */
 
 $chunkDir = CHAT_UPLOAD_TEMP_DIR . 'chunks/';
 if (!is_dir($chunkDir)) @mkdir($chunkDir, 0755, true);
