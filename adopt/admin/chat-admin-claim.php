@@ -42,6 +42,35 @@ if (!chatValidateAdminId($adminId)) {
     chatRespond(['success' => false, 'error' => 'That admin profile no longer exists or is inactive. Pick a different one.'], 400);
 }
 
+// TASK-2 — Rate limiting on claim attempts (Recommended Enhancement, adopted
+// and modified). Reuses the existing generic chatCheckRateLimit()/
+// chat_rate_limits infrastructure from chat-config.php rather than a new
+// table, per the standing "never rebuild an existing reusable feature" rule
+// — chat_rate_limits already accepts an arbitrary rate_key, so no schema
+// change is needed here (and chat_auth is untouched, as required).
+//
+// Deviation from the enhancement's literal wording: this app authenticates
+// with one shared ADMIN_TOKEN (see chatIsAdminAuthenticated() above) —
+// adminId is only an attribution label, not a real credential boundary
+// (chatValidateAdminId() and chat-admin-list.php both say so explicitly).
+// Anyone holding the token can pick any active adminId per request, so a
+// per-adminId-only limit is trivially evaded by rotating adminId on each
+// claim. Current rate-limiting best practice for exactly this shape
+// (a spoofable account dimension) is to layer a coarser IP-based limit
+// alongside the account-based one, so a rotating-identity attacker still
+// gets caught on the IP axis. Both are checked independently; either one
+// tripping throttles the request. This is a sliding window, not a lockout —
+// it recovers on its own — and its purpose per the task brief is primarily
+// to leave an audit trail if a compromised token is used to rapidly claim
+// many chats, not to be the security boundary itself (the token is that).
+$clientIp = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+$adminRateOk = chatCheckRateLimit("admin_claim:admin:$adminId", 20, 300); // 20 claims / 5 min per admin identity
+$ipRateOk    = chatCheckRateLimit("admin_claim:ip:$clientIp", 40, 300);   // 40 claims / 5 min per source IP (coarser, catches identity-rotation)
+if (!$adminRateOk || !$ipRateOk) {
+    error_log("chat-admin-claim.php rate limit exceeded — adminId=$adminId ip=$clientIp");
+    chatRespond(['success' => false, 'error' => 'Too many claim attempts. Please slow down and try again shortly.'], 429);
+}
+
 $db = chatDb();
 
 $stmt = $db->prepare("SELECT * FROM chat_threads WHERE chat_id = ? LIMIT 1");
