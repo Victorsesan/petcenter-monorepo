@@ -1,0 +1,571 @@
+{
+  "now": "2026-10-04T12:00:00.000Z",
+  "cases": [
+    {
+      "name": "fast merchant",
+      "messages": [
+        {
+          "thread_id": 1,
+          "from_type": "user",
+          "created_at": "2026-09-30T08:00:00.000Z"
+        },
+        {
+          "thread_id": 1,
+          "from_type": "admin",
+          "created_at": "2026-09-30T09:00:00.000Z"
+        },
+        {
+          "thread_id": 2,
+          "from_type": "user",
+          "created_at": "2026-10-01T04:00:00.000Z"
+        },
+        {
+          "thread_id": 2,
+          "from_type": "admin",
+          "created_at": "2026-10-01T06:00:00.000Z"
+        },
+        {
+          "thread_id": 3,
+          "from_type": "user",
+          "created_at": "2026-10-02T00:00:00.000Z"
+        },
+        {
+          "thread_id": 3,
+          "from_type": "admin",
+          "created_at": "2026-10-02T03:00:00.000Z"
+        }
+      ],
+      "expected": {
+        "sample_size": 3,
+        "avg_reply_hours": 2,
+        "response_rate": 1,
+        "window_hours": 48,
+        "tier": "few_hours"
+      }
+    },
+    {
+      "name": "mixed with ignored enquiry",
+      "messages": [
+        {
+          "thread_id": 1,
+          "from_type": "user",
+          "created_at": "2026-09-26T04:00:00.000Z"
+        },
+        {
+          "thread_id": 1,
+          "from_type": "admin",
+          "created_at": "2026-09-26T05:00:00.000Z"
+        },
+        {
+          "thread_id": 2,
+          "from_type": "user",
+          "created_at": "2026-09-28T06:00:00.000Z"
+        },
+        {
+          "thread_id": 2,
+          "from_type": "admin",
+          "created_at": "2026-09-29T12:00:00.000Z"
+        },
+        {
+          "thread_id": 3,
+          "from_type": "user",
+          "created_at": "2026-09-30T08:00:00.000Z"
+        }
+      ],
+      "expected": {
+        "sample_size": 3,
+        "avg_reply_hours": 15.5,
+        "response_rate": 0.67,
+        "window_hours": 48,
+        "tier": "slower"
+      }
+    },
+    {
+      "name": "burst counts once",
+      "messages": [
+        {
+          "thread_id": 1,
+          "from_type": "user",
+          "created_at": "2026-09-30T08:00:00.000Z"
+        },
+        {
+          "thread_id": 1,
+          "from_type": "user",
+          "created_at": "2026-09-30T08:06:00.000Z"
+        },
+        {
+          "thread_id": 1,
+          "from_type": "user",
+          "created_at": "2026-09-30T08:12:00.000Z"
+        },
+        {
+          "thread_id": 1,
+          "from_type": "admin",
+          "created_at": "2026-09-30T09:00:00.000Z"
+        },
+        {
+          "thread_id": 2,
+          "from_type": "user",
+          "created_at": "2026-10-01T04:00:00.000Z"
+        },
+        {
+          "thread_id": 2,
+          "from_type": "admin",
+          "created_at": "2026-10-01T05:00:00.000Z"
+        },
+        {
+          "thread_id": 3,
+          "from_type": "user",
+          "created_at": "2026-10-02T00:00:00.000Z"
+        },
+        {
+          "thread_id": 3,
+          "from_type": "admin",
+          "created_at": "2026-10-02T01:00:00.000Z"
+        }
+      ],
+      "expected": {
+        "sample_size": 3,
+        "avg_reply_hours": 1,
+        "response_rate": 1,
+        "window_hours": 48,
+        "tier": "few_hours"
+      }
+    },
+    {
+      "name": "bot and system replies ignored",
+      "messages": [
+        {
+          "thread_id": 1,
+          "from_type": "user",
+          "created_at": "2026-09-30T08:00:00.000Z"
+        },
+        {
+          "thread_id": 1,
+          "from_type": "bot",
+          "created_at": "2026-09-30T08:00:00.000Z"
+        },
+        {
+          "thread_id": 1,
+          "from_type": "system",
+          "created_at": "2026-09-30T08:06:00.000Z"
+        },
+        {
+          "thread_id": 2,
+          "from_type": "user",
+          "created_at": "2026-09-30T18:00:00.000Z"
+        },
+        {
+          "thread_id": 2,
+          "from_type": "bot",
+          "created_at": "2026-09-30T18:00:00.000Z"
+        },
+        {
+          "thread_id": 3,
+          "from_type": "user",
+          "created_at": "2026-10-01T04:00:00.000Z"
+        },
+        {
+          "thread_id": 3,
+          "from_type": "bot",
+          "created_at": "2026-10-01T04:00:00.000Z"
+        }
+      ],
+      "expected": {
+        "sample_size": 3,
+        "avg_reply_hours": null,
+        "response_rate": 0,
+        "window_hours": 48,
+        "tier": "slower"
+      }
+    },
+    {
+      "name": "deleted reply ignored",
+      "messages": [
+        {
+          "thread_id": 1,
+          "from_type": "user",
+          "created_at": "2026-09-30T08:00:00.000Z"
+        },
+        {
+          "thread_id": 1,
+          "from_type": "admin",
+          "created_at": "2026-09-30T09:00:00.000Z",
+          "deleted_at": "2026-10-01 10:00:00"
+        },
+        {
+          "thread_id": 2,
+          "from_type": "user",
+          "created_at": "2026-10-01T04:00:00.000Z"
+        },
+        {
+          "thread_id": 2,
+          "from_type": "admin",
+          "created_at": "2026-10-01T05:00:00.000Z"
+        },
+        {
+          "thread_id": 3,
+          "from_type": "user",
+          "created_at": "2026-10-02T00:00:00.000Z"
+        },
+        {
+          "thread_id": 3,
+          "from_type": "admin",
+          "created_at": "2026-10-02T01:00:00.000Z"
+        }
+      ],
+      "expected": {
+        "sample_size": 3,
+        "avg_reply_hours": 1,
+        "response_rate": 0.67,
+        "window_hours": 48,
+        "tier": "within_day"
+      }
+    },
+    {
+      "name": "fresh unanswered not counted",
+      "messages": [
+        {
+          "thread_id": 1,
+          "from_type": "user",
+          "created_at": "2026-09-30T08:00:00.000Z"
+        },
+        {
+          "thread_id": 1,
+          "from_type": "admin",
+          "created_at": "2026-09-30T09:00:00.000Z"
+        },
+        {
+          "thread_id": 2,
+          "from_type": "user",
+          "created_at": "2026-10-01T04:00:00.000Z"
+        },
+        {
+          "thread_id": 2,
+          "from_type": "admin",
+          "created_at": "2026-10-01T05:00:00.000Z"
+        },
+        {
+          "thread_id": 3,
+          "from_type": "user",
+          "created_at": "2026-10-02T00:00:00.000Z"
+        },
+        {
+          "thread_id": 3,
+          "from_type": "admin",
+          "created_at": "2026-10-02T01:00:00.000Z"
+        },
+        {
+          "thread_id": 4,
+          "from_type": "user",
+          "created_at": "2026-10-04T10:00:00.000Z"
+        }
+      ],
+      "expected": {
+        "sample_size": 3,
+        "avg_reply_hours": 1,
+        "response_rate": 1,
+        "window_hours": 48,
+        "tier": "few_hours"
+      }
+    },
+    {
+      "name": "too few enquiries",
+      "messages": [
+        {
+          "thread_id": 1,
+          "from_type": "user",
+          "created_at": "2026-09-30T08:00:00.000Z"
+        },
+        {
+          "thread_id": 1,
+          "from_type": "admin",
+          "created_at": "2026-09-30T09:00:00.000Z"
+        },
+        {
+          "thread_id": 2,
+          "from_type": "user",
+          "created_at": "2026-10-01T04:00:00.000Z"
+        },
+        {
+          "thread_id": 2,
+          "from_type": "admin",
+          "created_at": "2026-10-01T05:00:00.000Z"
+        }
+      ],
+      "expected": {
+        "sample_size": 2,
+        "avg_reply_hours": 1,
+        "response_rate": null,
+        "window_hours": 48,
+        "tier": null
+      }
+    },
+    {
+      "name": "outside window",
+      "messages": [
+        {
+          "thread_id": 1,
+          "from_type": "user",
+          "created_at": "2026-07-01T12:00:00.000Z"
+        },
+        {
+          "thread_id": 1,
+          "from_type": "admin",
+          "created_at": "2026-07-01T13:00:00.000Z"
+        },
+        {
+          "thread_id": 2,
+          "from_type": "user",
+          "created_at": "2026-06-26T12:00:00.000Z"
+        },
+        {
+          "thread_id": 2,
+          "from_type": "admin",
+          "created_at": "2026-06-26T13:00:00.000Z"
+        },
+        {
+          "thread_id": 3,
+          "from_type": "user",
+          "created_at": "2026-06-06T12:00:00.000Z"
+        },
+        {
+          "thread_id": 3,
+          "from_type": "admin",
+          "created_at": "2026-06-06T13:00:00.000Z"
+        }
+      ],
+      "expected": {
+        "sample_size": 0,
+        "avg_reply_hours": null,
+        "response_rate": null,
+        "window_hours": 48,
+        "tier": null
+      }
+    },
+    {
+      "name": "one of four answered",
+      "messages": [
+        {
+          "thread_id": 1,
+          "from_type": "user",
+          "created_at": "2026-09-26T04:00:00.000Z"
+        },
+        {
+          "thread_id": 1,
+          "from_type": "admin",
+          "created_at": "2026-09-26T05:00:00.000Z"
+        },
+        {
+          "thread_id": 2,
+          "from_type": "user",
+          "created_at": "2026-09-28T06:00:00.000Z"
+        },
+        {
+          "thread_id": 3,
+          "from_type": "user",
+          "created_at": "2026-09-30T08:00:00.000Z"
+        },
+        {
+          "thread_id": 4,
+          "from_type": "user",
+          "created_at": "2026-09-30T18:00:00.000Z"
+        }
+      ],
+      "expected": {
+        "sample_size": 4,
+        "avg_reply_hours": 1,
+        "response_rate": 0.25,
+        "window_hours": 48,
+        "tier": "slower"
+      }
+    },
+    {
+      "name": "day tier",
+      "messages": [
+        {
+          "thread_id": 1,
+          "from_type": "user",
+          "created_at": "2026-09-30T08:00:00.000Z"
+        },
+        {
+          "thread_id": 1,
+          "from_type": "admin",
+          "created_at": "2026-09-30T18:00:00.000Z"
+        },
+        {
+          "thread_id": 2,
+          "from_type": "user",
+          "created_at": "2026-10-01T04:00:00.000Z"
+        },
+        {
+          "thread_id": 2,
+          "from_type": "admin",
+          "created_at": "2026-10-01T14:00:00.000Z"
+        },
+        {
+          "thread_id": 3,
+          "from_type": "user",
+          "created_at": "2026-10-02T00:00:00.000Z"
+        },
+        {
+          "thread_id": 3,
+          "from_type": "admin",
+          "created_at": "2026-10-02T10:00:00.000Z"
+        }
+      ],
+      "expected": {
+        "sample_size": 3,
+        "avg_reply_hours": 10,
+        "response_rate": 1,
+        "window_hours": 48,
+        "tier": "within_day"
+      }
+    },
+    {
+      "name": "junk rows",
+      "messages": [
+        null,
+        {},
+        {
+          "thread_id": 1,
+          "from_type": "user",
+          "created_at": "garbage"
+        }
+      ],
+      "expected": {
+        "sample_size": 0,
+        "avg_reply_hours": null,
+        "response_rate": null,
+        "window_hours": 48,
+        "tier": null
+      }
+    },
+    {
+      "name": "same-timestamp reply keeps input order",
+      "messages": [
+        {
+          "thread_id": 1,
+          "from_type": "user",
+          "created_at": "2026-09-30T08:00:00.000Z"
+        },
+        {
+          "thread_id": 1,
+          "from_type": "admin",
+          "created_at": "2026-09-30T08:00:00.000Z"
+        },
+        {
+          "thread_id": 2,
+          "from_type": "user",
+          "created_at": "2026-10-01T04:00:00.000Z"
+        },
+        {
+          "thread_id": 2,
+          "from_type": "admin",
+          "created_at": "2026-10-01T04:00:00.000Z"
+        },
+        {
+          "thread_id": 3,
+          "from_type": "user",
+          "created_at": "2026-10-02T00:00:00.000Z"
+        },
+        {
+          "thread_id": 3,
+          "from_type": "admin",
+          "created_at": "2026-10-02T00:00:00.000Z"
+        }
+      ],
+      "expected": {
+        "sample_size": 3,
+        "avg_reply_hours": 0,
+        "response_rate": 1,
+        "window_hours": 48,
+        "tier": "few_hours"
+      }
+    },
+    {
+      "name": "mysql datetimes",
+      "messages": [
+        {
+          "thread_id": 1,
+          "from_type": "user",
+          "created_at": "2026-09-30 08:00:00"
+        },
+        {
+          "thread_id": 1,
+          "from_type": "admin",
+          "created_at": "2026-09-30 09:00:00"
+        },
+        {
+          "thread_id": 2,
+          "from_type": "user",
+          "created_at": "2026-10-01 04:00:00"
+        },
+        {
+          "thread_id": 2,
+          "from_type": "admin",
+          "created_at": "2026-10-01 05:00:00"
+        },
+        {
+          "thread_id": 3,
+          "from_type": "user",
+          "created_at": "2026-10-02 00:00:00"
+        },
+        {
+          "thread_id": 3,
+          "from_type": "admin",
+          "created_at": "2026-10-02 01:00:00"
+        }
+      ],
+      "expected": {
+        "sample_size": 3,
+        "avg_reply_hours": 1,
+        "response_rate": 1,
+        "window_hours": 48,
+        "tier": "few_hours"
+      }
+    },
+    {
+      "name": "timezone-less string equals UTC",
+      "messages": [
+        {
+          "thread_id": 1,
+          "from_type": "user",
+          "created_at": "2026-10-01 00:00:00"
+        },
+        {
+          "thread_id": 1,
+          "from_type": "admin",
+          "created_at": "2026-10-01T02:00:00Z"
+        },
+        {
+          "thread_id": 2,
+          "from_type": "user",
+          "created_at": "2026-10-02 00:00:00"
+        },
+        {
+          "thread_id": 2,
+          "from_type": "admin",
+          "created_at": "2026-10-02T02:00:00Z"
+        },
+        {
+          "thread_id": 3,
+          "from_type": "user",
+          "created_at": "2026-10-03 00:00:00"
+        },
+        {
+          "thread_id": 3,
+          "from_type": "admin",
+          "created_at": "2026-10-03T02:00:00Z"
+        }
+      ],
+      "expected": {
+        "sample_size": 3,
+        "avg_reply_hours": 2,
+        "response_rate": 1,
+        "window_hours": 48,
+        "tier": "few_hours"
+      }
+    }
+  ]
+}

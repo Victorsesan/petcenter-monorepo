@@ -306,6 +306,61 @@ p { color: var(--muted); }
 .pc-badge--available { background: var(--success-bg); color: var(--success); }
 .pc-badge--adopted { background: var(--bg); color: var(--muted); }
 
+/* <!-- TASK-B4 START --> */
+/* ─── TASK B4: Merchant reputation chips (reduced inline version) ───────────
+   Icon+label chips shown beside the merchant name in the "Posted by" row.
+   Same pill shape/weight as .pc-badge, but not uppercase status pills — these
+   sit next to plain text, not in a table cell.
+   NAMING NOTE: deliberately `.pc-merchant-chip`, NOT `.pc-chip`. The design
+   system already owns `.pc-chip` / `.pc-chip-row` as an interactive, dark,
+   multi-select FILTER chip (hover/selected/checkmark states, bottom sheets).
+   Reusing those names for static reputation labels would collide with that
+   component wherever both ship in one document. Colors use this page's own
+   existing tokens (--success, --orange, --muted...) rather than the design
+   system's generic example hex values, per the site's established palette.
+   Full badge row / impact stats / response-rate styles live with B6's profile
+   page sections, not here (this page never renders them). */
+.pc-merchant-chip-row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.pc-merchant-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 11px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+.pc-merchant-chip svg { width: 12px; height: 12px; flex-shrink: 0; }
+.pc-merchant-chip--verified         { background: var(--success-bg); color: var(--success); }
+.pc-merchant-chip--tier-trusted      { background: #fff8e6; color: #b7791f; }
+.pc-merchant-chip--tier-active       { background: var(--orange-light); color: var(--orange); }
+.pc-merchant-chip--tier-new-merchant { background: var(--bg); color: var(--muted); }
+/* Reduced inline size: smaller than the profile page's full-size chips so the
+   listing page stays uncluttered (see B4 spec). */
+.pc-merchant-chip--inline { font-size: 11px; padding: 2px 9px; }
+
+/* Posted-by row: name + chips are wider than the narrow side-by-side layout
+   allows (the label was wrapping "Posted / by" at 280px). Reuses this file's
+   existing stacked-row pattern (see #petKitSpecifyRow): label on its own
+   line, value below, left-aligned. Scoped by ID, and only when chips are
+   present (class toggled in renderMerchantBadgeInline) so listings without
+   merchant data keep the original side-by-side row untouched. */
+#petPostedByRow.pc-has-merchant-chips {
+  flex-direction: column;
+  align-items: flex-start;
+}
+#petPostedByRow.pc-has-merchant-chips .pc-info-row__val {
+  text-align: left;
+  margin-top: 6px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+}
+/* <!-- TASK-B4 END --> */
+
 /* ─── Pet Form (Admin Publish) ──────────────────────────────────────────────── */
 .pet-form-card {
   background: var(--bg);
@@ -2787,12 +2842,20 @@ body { padding-bottom: 84px; }
             <!-- TASK-2 END -->
 
             <!-- Posted By — pen/nib icon ✒ -->
-            <div class="pc-info-row">
+            <div class="pc-info-row" id="petPostedByRow"><!-- TASK-B4: id attribute added for stacked-layout scoping (single attribute change, not a code block) -->
               <span class="pc-info-row__label">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></svg>
                 Posted by
               </span>
-              <span class="pc-info-row__val" id="petPostedBy">—</span>
+              <span class="pc-info-row__val">
+                <span id="petPostedBy">—</span>
+                <!-- TASK-B4 START -->
+                <!-- Reduced inline merchant badge (activity tier + Verified only, per spec —
+                     NOT the full badge row, which lives on the merchant profile page).
+                     Filled by renderMerchantBadgeInline() from pet.merchant (B2 + B3 fields). -->
+                <span class="pc-merchant-chip-row" id="petMerchantBadgeInline"></span>
+                <!-- TASK-B4 END -->
+              </span>
             </div>
 
             <!-- Includes Starter Kits — gift icon -->
@@ -3240,6 +3303,56 @@ body { padding-bottom: 84px; }
   }
   // TASK-2 END
 
+  /* <!-- TASK-B4 START --> */
+  // ═══════════════════════════════════════════════════════════════════════════
+  // TASK B4 — Reduced inline merchant badge (activity tier + Verified only)
+  // This page shows ONLY the reduced version, per the B4 spec — the full badge
+  // row, impact stats and response-rate label live on the merchant profile
+  // page (B6's `badges` / `impact-stats` sections), not here.
+  // Reads the `badges` object that B3's badge-logic.php writes onto the merchant record
+  // (recalculateAllBadges() — B3 documents `badges` as "what B4's display layer reads").
+  // It deliberately does NOT read raw `verification_status`: that field lives in profile.json,
+  // which B3 blocks from direct browser access (it also holds charity registration numbers).
+  //   merchant = { badges: { verified: bool, activity_tier: 'new_merchant'|'active'|'trusted',
+  //                          charity: bool, takeback_commitment: bool } }
+  // This reduced version uses only `verified` and `activity_tier`. Reconcile at integration
+  // if B3 renames a field.
+  // ═══════════════════════════════════════════════════════════════════════════
+  var MERCHANT_BADGE_ICONS = {
+    shield: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>',
+    trophy: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4z"/><path d="M17 5h3a2 2 0 0 1-2 4M7 5H4a2 2 0 0 0 2 4"/></svg>',
+    sprout: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/></svg>'
+  };
+  var ACTIVITY_TIER_LABEL = { new_merchant: 'New Merchant', active: 'Active', trusted: 'Trusted' };
+  var ACTIVITY_TIER_ICON  = { new_merchant: 'sprout', active: 'shield', trusted: 'trophy' };
+
+  // Renders the reduced chips into `containerId` and flags the "Posted by" row
+  // so CSS can switch it to the stacked layout only when chips are present.
+  // Order follows the spec's precedence: Verified first, then activity tier.
+  function renderMerchantBadgeInline(merchant, containerId) {
+    var el = document.getElementById(containerId);
+    if (!el) return;
+    var badges = merchant && merchant.badges;
+    var html = '';
+    if (badges) {
+      if (badges.verified === true) {
+        html += '<span class="pc-merchant-chip pc-merchant-chip--inline pc-merchant-chip--verified">' +
+                MERCHANT_BADGE_ICONS.shield + 'Verified</span>';
+      }
+      // Whitelisted lookup: an unknown tier value renders nothing (never injected as HTML).
+      if (badges.activity_tier && ACTIVITY_TIER_LABEL[badges.activity_tier]) {
+        html += '<span class="pc-merchant-chip pc-merchant-chip--inline pc-merchant-chip--tier-' +
+                badges.activity_tier.replace('_', '-') + '">' +
+                MERCHANT_BADGE_ICONS[ACTIVITY_TIER_ICON[badges.activity_tier]] +
+                ACTIVITY_TIER_LABEL[badges.activity_tier] + '</span>';
+      }
+    }
+    el.innerHTML = html;
+    var rowEl = document.getElementById('petPostedByRow');
+    if (rowEl) rowEl.classList.toggle('pc-has-merchant-chips', html !== '');
+  }
+  /* <!-- TASK-B4 END --> */
+
   function ynIcon(val) {
     if (val === 'yes') {
       return '<span class="pc-yn pc-yn--yes"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#0d7c4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>';
@@ -3436,6 +3549,15 @@ body { padding-bottom: 84px; }
 
     var postedEl = document.getElementById('petPostedBy');
     if (postedEl) postedEl.textContent = pet.posted_by || '—';
+
+    /* <!-- TASK-B4 START --> */
+    // Inline reduced merchant badge (activity tier + Verified only)
+    // PLACEHOLDER SOURCE: per the resolved contract, a listing stores only `merchant_id`, and the
+    // merchant's CURRENT badges come from B3's merchant record at render time (never copied into
+    // pet.json). B3's lookup does not exist yet, so `pet.merchant` stands in. At B3's integration
+    // checkpoint, replace `pet.merchant` with the record fetched for `pet.merchant_id`.
+    renderMerchantBadgeInline(pet.merchant || null, 'petMerchantBadgeInline');
+    /* <!-- TASK-B4 END --> */
 
     var kitEl = document.getElementById('petIncludesKit');
     if (kitEl) kitEl.textContent = pet.includes_starter_kits || '—';
