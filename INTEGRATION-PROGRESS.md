@@ -141,3 +141,16 @@ cat /home/ubuntu/workspace/intake/TASK-HEADERS.txt
 ```
 
 **Round-one reminder:** Pushed to `main`; not published and not bug-fixed. Continue mechanical integration only. Round two handles collected bugs, pending items, and cross-worker conflicts.
+
+## Latest update — Rehoming B batch
+
+The following tasks were integrated and pushed after the original checkpoint:
+
+| Task | Result | Commit | Validation |
+|---|---|---|---|
+| Rehoming Platform Task B1 | applied | `bc7e04d` | Added `adopt/verify/index.html` and `adopt/verify/verify-submit.php`; PHP and diff checks passed. |
+| Rehoming Platform Task B2 | applied | `3fb1e45` | Seven exact dashboard replacements plus four verification PHP files; PHP, anchor, and diff checks passed. Runtime `adopt/verifications/requests/` is created by code and was not committed. |
+| Rehoming Platform Task B3 | applied | `01f3176` | Added four merchant badge files under the inferred `adopt/rehoming/` path; PHP and JSON checks passed. |
+| Rehoming Platform Task B4 | applied | `4dcbb64` | Four exact pet-detail replacements plus five response-statistics support/test files; 17 JavaScript tests and 14 PHP tests passed. |
+
+The next Manus account should treat `4dcbb64` as the last feature commit and then include this document’s subsequent handoff-update commit when checking the current `HEAD`. The repository must be clean before continuing.
