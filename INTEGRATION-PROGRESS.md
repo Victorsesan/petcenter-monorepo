@@ -4,14 +4,14 @@
 
 **Last updated:** 2026-10-29
 **Current branch:** `main`
-**Current pushed commit:** `a237825`
+**Current pushed commit:** `ef94580`
 **Repository:** `Victorsesan/petcenter-monorepo`
 **Site root in repository:** `adopt/`
 **Live-site mapping:** repository `adopt/` = server `public_html/adopt/` = `https://adopt.petcenterco.com/`
 
 ## Current checkpoint
 
-The working tree was clean at the time this document was created. The latest successful integration was Rehoming Platform Task A3, pushed as commit `a237825`. No live publishing has been performed. Round one remains mechanical integration only: unzip, reconcile paths, apply exact documented changes, lint, commit, and push to `main`. Do not redesign, fix unrelated bugs, or perform round-two debugging during this round.
+The working tree was clean at the time this document was created. The latest successful integration in this continuation is Rehoming Platform Task C3, pushed as commit `ef94580`. No live publishing has been performed. Round one remains mechanical integration only: unzip, reconcile paths, apply exact documented changes, lint, commit, and push to `main`. Do not redesign, fix unrelated bugs, or perform round-two debugging during this round.
 
 The external intake workspace is expected at `/home/ubuntu/workspace/intake/`. The uploaded outer archive was extracted there, with each worker archive unpacked under `/home/ubuntu/workspace/intake/tmp/<worker-folder>/`. The outer archive itself is `/home/ubuntu/workspace/intake/Workerszipfiles.zip`. The standalone research/completion document is preserved at `/home/ubuntu/workspace/intake/reference/Task-1-Completion-14.md`; it is not a live-site file and must remain available for round-two comparison/debugging.
 
@@ -164,3 +164,13 @@ The next Manus account should treat `4dcbb64` as the last feature commit and the
 | Rehoming Platform Task C1a/C1b | stopped | Blocks 1–6 passed sequential exact matching, but block 7 for `adopt/admin/index.html` had old-snippet count 0 after B2’s shared verification-queue integration. No C1a/C1b files were applied. |
 
 Current feature commit before this documentation update is `9eb816e`. The next account must reconcile C1a/C1b block 7 against the current admin page instead of retrying blindly.
+
+
+## Latest update — Rehoming C2/C3 continuation
+
+| Task | Result | Commit | Validation |
+|---|---|---|---|
+| Rehoming Platform Task C2 | applied before this session | `8d5b45f` | Two new PHP files; current `main` checkpoint confirmed clean. |
+| Rehoming Platform Task C3 | applied | `ef94580` | Added `adopt/assets/js/merchant-code-of-conduct.js` and `adopt/assets/js/safe-exchange-prompt.js`; `node --check` and diff checks passed. |
+
+The standalone `Task-1-Completion-14.md` remains outside the worker ZIPs under intake reference storage for round-two research comparison/debugging. Task C3's gift-adoption HTML is a fragment for a future Task C5 compose UI and was not merged.
