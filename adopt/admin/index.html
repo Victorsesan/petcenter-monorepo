@@ -5191,6 +5191,17 @@ function renderThreadList() {
       updateBulkActionBar();
     });
 
+    // <!-- TASK-7 START -->
+    // Auth-state badge pill for this thread's protection state — only
+    // rendered when the field is present, so a response without it (e.g.
+    // before this field existed) degrades gracefully instead of showing a
+    // wrong default.
+    const authCfg = t.auth_badge ? chatAuthBadgeConfig(t.auth_badge) : null;
+    const authBadgeHtml = authCfg
+      ? `<span title="${escapeHtml(authCfg.label)}" style="margin-left:6px;background:${authCfg.color};color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:8px;"><i class="fas ${authCfg.icon}"></i> ${escapeHtml(authCfg.label)}</span>`
+      : '';
+    // <!-- TASK-7 END -->
+
     const body = document.createElement('div');
     body.innerHTML = `
       <div class="chat-thread-name">${escapeHtml(t.full_name)}</div>
@@ -5199,6 +5210,7 @@ function renderThreadList() {
         <span>${escapeHtml(t.chat_id)}</span>
         ${t.is_stale ? '<span style="color:#ED7624;font-weight:700;">· Stale</span>' : ''}
         ${t.unread_for_admin && t.status !== 'done' ? '<span style="color:#ED7624;">· New</span>' : ''}
+        ${authBadgeHtml}
       </div>`;
     body.style.paddingLeft = '26px';
     checkbox.style.cssText = 'position:absolute;top:12px;left:10px;width:16px;height:16px;cursor:pointer;';
@@ -5271,6 +5283,26 @@ function chatMsgPreviewIcon(type) {
   return '';
 }
 
+// <!-- TASK-7 START -->
+// Task 7 — Admin Auth-State Badge (frontend half). chat-admin-list.php now
+// returns an `auth_badge` field on every thread (list results and lookup
+// results alike) — one of: none, pin_set, password_set, locked,
+// verified_session. This maps that state to a label/color/icon for the
+// small pill rendered at both render sites (renderThreadList() and
+// buildAdminBanner()), centralized here so they stay visually consistent
+// and only need one place to update if the palette ever changes.
+function chatAuthBadgeConfig(state) {
+  const configs = {
+    none:             { label: 'No Protection', color: '#a89c8a', icon: 'fa-lock-open' },
+    pin_set:          { label: 'PIN Set',        color: '#d7bd88', icon: 'fa-key' },
+    password_set:     { label: 'Password Set',   color: '#2f6fed', icon: 'fa-key' },
+    locked:           { label: 'Locked',         color: '#c0392b', icon: 'fa-lock' },
+    verified_session: { label: 'Verified',       color: '#10b981', icon: 'fa-check' },
+  };
+  return configs[state] || configs.none;
+}
+// <!-- TASK-7 END -->
+
 function escapeHtml(str) {
   const d = document.createElement('div');
   d.textContent = str == null ? '' : String(str);
@@ -5330,12 +5362,24 @@ function buildAdminBanner(chatId, thread) {
      needed to change after all. Inline cssText below is untouched. */
   header.style.cssText = 'background:#f4f1ea;padding:12px 16px;border-bottom:1px solid rgba(16,33,75,0.08);flex-shrink:0;';
   const statusBadge = { waiting: '#d7bd88', active: '#10b981', done: '#a89c8a' }[thread.status] || '#a89c8a';
+  // <!-- TASK-7 START -->
+  // Auth-state badge for the thread detail header. Not present on the
+  // fakeBanner's placeholder thread object used before real data has
+  // loaded (see renderAdminPollResult()), so this only appears once
+  // loadThreadMeta() replaces the banner with the real thread — same
+  // graceful-degradation approach as the list card badge above.
+  const authCfg = thread.auth_badge ? chatAuthBadgeConfig(thread.auth_badge) : null;
+  const authBadgeHtml = authCfg
+    ? `<span style="margin-left:6px;background:${authCfg.color};color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;"><i class="fas ${authCfg.icon}"></i> ${escapeHtml(authCfg.label)}</span>`
+    : '';
+  // <!-- TASK-7 END -->
   header.innerHTML = `
     <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
       <div>
         <strong style="color:#10214b;font-size:14px;">${escapeHtml(thread.full_name)}</strong>
         <span style="font-size:11px;color:#7a6d5f;margin-left:8px;">${escapeHtml(thread.email)}</span>
         <span style="margin-left:8px;background:${statusBadge};color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;">${thread.status}</span>
+        ${authBadgeHtml}
       </div>
       <div style="display:flex;gap:8px;align-items:center;">
         ${thread.pet_context ? `<span title="Asking about: ${escapeHtml(thread.pet_context?.name || '')}" style="font-size:11px;color:#7a6d5f;"><i class="fas fa-paw"></i> ${escapeHtml(thread.pet_context?.name || '')}</span>` : ''}
