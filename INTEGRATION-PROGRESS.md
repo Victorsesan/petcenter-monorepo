@@ -210,3 +210,12 @@ E2's `_NOT-FOR-LIVE` snippet and JSON fixture were retained only in intake for l
 | Rehoming Platform Task E3 | stopped | All four documented old snippets for `adopt/admin/index.html` occurred zero times in the current file; no E3 files were applied. The worker expected an unavailable/older C1b admin state. |
 
 E3's proposed support/FAQ routes and PHP endpoints remain in intake only until the admin-page dependency is reconciled.
+
+
+## Latest update — Rehoming E4 stop
+
+| Task | Result | Reason |
+|---|---|---|
+| Rehoming Platform Task E4 | stopped | The completion file gives insertion instructions for the E1 shell but no exact old/new snippets; no E4 files were applied under the exact-match rule. |
+
+E4's theme CSS and JS remain in intake for a corrected integration pass.
