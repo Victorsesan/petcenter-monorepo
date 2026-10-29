@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Manage your Pet Center adopter profile and view your adoption track record.">
+  <title>Account Settings — Pet Center</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Sora:wght@300;400;500;600;700&family=Bitter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+/* Task B5 — Visitor Account Settings. Everything between the "cats.html" markers below is copied
+   programmatically and verbatim from cats.html (Directive 13 canonical blueprint); only the TASK-B5
+   blocks are new. Do not hand-edit the verbatim blocks here — change them at the shared source. */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Sora:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bitter:wght@400;600&display=swap'); /* TASK-B5: Bitter for numerals per design system */
+
+/* >>> cats.html verbatim: variables, reset, typography, utilities */
+/* ─── CSS Variables ─────────────────────────────────────────────────────────── */
+:root {
+  --navy: #10214b;
+  --navy-light: #1a2f5c;
+  --gold: #d7bd88;
+  --gold-dark: #b89968;
+  --orange: #ED7624;
+  --orange-light: #fef0e6;
+  --warm-gray: #d0c3ba;
+  --chocolate: #3d2817;
+  --bg: #f9f7f4;
+  --surface: #ffffff;
+  --text: #2c2416;
+  --muted: #7a6d5f;
+  --success: #0d7c4a;
+  --success-bg: #e6f7ef;
+  --error: #c0392b;
+  --error-bg: #fdecea;
+  --shadow-sm: 0 2px 8px rgba(16,33,75,0.06);
+  --shadow-md: 0 4px 20px rgba(16,33,75,0.10);
+  --shadow-lg: 0 8px 40px rgba(16,33,75,0.14);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --transition: 0.25s ease;
+}
+
+/* ─── Reset & Base ───────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; overflow-x: hidden; width: 100%; }
+body {
+  font-family: 'Sora', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  padding-top: 68px;
+  overflow-x: hidden;
+  width: 100%;
+  position: relative;
+}
+img { max-width: 100%; height: auto; display: block; }
+a { color: var(--orange); text-decoration: none; transition: color var(--transition); }
+a:hover { color: var(--navy); }
+
+/* ─── Typography ─────────────────────────────────────────────────────────────── */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  color: var(--navy);
+  line-height: 1.25;
+}
+h1 { font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 700; }
+h2 { font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 600; }
+h3 { font-size: clamp(1.2rem, 2.2vw, 1.8rem); font-weight: 600; }
+h4 { font-size: 1.2rem; font-weight: 600; }
+p { color: var(--muted); }
+
+/* ─── Layout Utilities ───────────────────────────────────────────────────────── */
+.pc-container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+.pc-section { padding: 72px 0; }
+.pc-section--sm { padding: 40px 0; }
+.pc-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+.pc-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.pc-grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+.text-center { text-align: center; }
+.text-navy { color: var(--navy); }
+.text-orange { color: var(--orange); }
+.text-muted { color: var(--muted); }
+
+/* >>> cats.html verbatim: buttons */
+/* ─── Buttons ─────────────────────────────────────────────────────────────────── */
+.pc-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 28px;
+  border-radius: var(--radius-sm);
+  font-family: 'Sora', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  border: none;
+  transition: all var(--transition);
+  text-decoration: none;
+  white-space: nowrap;
+  min-height: 44px;
+}
+.pc-btn--primary {
+  background: linear-gradient(135deg, var(--navy), var(--navy-light));
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(16,33,75,0.25);
+}
+.pc-btn--primary:hover {
+  background: linear-gradient(135deg, var(--navy-light), #243970);
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(16,33,75,0.32);
+}
+.pc-btn--orange {
+  background: linear-gradient(135deg, var(--orange), #d96919);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(237,118,36,0.30);
+}
+.pc-btn--orange:hover {
+  background: linear-gradient(135deg, #d96919, #c45e10);
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(237,118,36,0.38);
+}
+.pc-btn--ghost {
+  background: transparent;
+  color: var(--navy);
+  box-shadow: inset 0 0 0 2px var(--gold);
+}
+.pc-btn--ghost:hover { background: var(--orange-light); color: var(--orange); }
+/* TASK-1 START */
+/* TASK 1b: .pc-btn--signin matches the site's existing .nav-login Signin style (gold border/text) for the retexted "Signin" button (was "List Out A Pet") */
+.pc-btn--signin { background: transparent; color: #d7bd88; box-shadow: inset 0 0 0 1px rgba(215,189,136,0.5); }
+.pc-btn--signin:hover { background: rgba(215,189,136,0.12); color: #d7bd88; }
+/* TASK-1 END */
+.pc-btn--sm { padding: 8px 18px; font-size: 13px; min-height: 36px; }
+.pc-btn--lg { padding: 16px 40px; font-size: 16px; }
+.pc-btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+.pc-btn--lg { padding: 16px 40px; font-size: 16px; }
+.pc-btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+
+/* >>> cats.html verbatim: animations + spinner */
+/* ─── Animations ─────────────────────────────────────────────────────────────── */
+.fade-in { animation: fadeIn 0.5s ease both; }
+.slide-up { animation: slideUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) both; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+.stagger-1 { animation-delay: 0.05s; }
+.stagger-2 { animation-delay: 0.10s; }
+.stagger-3 { animation-delay: 0.15s; }
+.stagger-4 { animation-delay: 0.20s; }
+
+/* ─── Spinner ─────────────────────────────────────────────────────────────────── */
+.pc-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  display: inline-block;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.pc-spinner--dark { border-color: rgba(16,33,75,0.15); border-top-color: var(--navy); }
+
+/* >>> cats.html verbatim: global header */
+/* ─── Global Header (pc-header) ─────────────────────────────────────────────── */
+.pc-header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  padding: 0 24px;
+  height: 68px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: transparent;
+  transition: background 0.35s ease, box-shadow 0.35s ease;
+  overflow: visible;
+}
+.pc-header.scrolled,
+.pc-header--solid {
+  background: rgba(16,33,75,0.97);
+  box-shadow: 0 2px 20px rgba(0,0,0,0.18);
+}
+.pc-header__logo img { height: 44px; width: auto; display: block; }
+.pc-header__logo--desktop { display: block; }
+.pc-header__logo--mobile  { display: none; }
+@media (max-width: 900px) {
+  .pc-header__logo--desktop { display: none; }
+  .pc-header__logo--mobile  { display: block; }
+}
+.pc-header__nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  list-style: none;
+}
+.pc-header__nav li { position: relative; }
+.pc-header__nav a {
+  display: block;
+  padding: 8px 11px;
+  font-family: 'Sora', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.9);
+  text-decoration: none;
+  border-radius: 6px;
+  transition: color 0.2s, background 0.2s;
+  white-space: nowrap;
+}
+.pc-header__nav a:hover { color: #d7bd88; background: rgba(255,255,255,0.08); }
+.pc-header__nav .nav-donate a { background: #ED7624; color: #fff; font-weight: 600; padding: 8px 16px; }
+.pc-header__nav .nav-donate a:hover { background: #d4621a; color: #fff; }
+.pc-header__nav .nav-signup a,
+.pc-header__nav .nav-login a { border: 1px solid rgba(215,189,136,0.5); color: #d7bd88; }
+.pc-header__nav .nav-signup a:hover,
+.pc-header__nav .nav-login a:hover { background: rgba(215,189,136,0.12); }
+.pc-header__nav .has-drop > ul {
+  display: none;
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  background: #10214b;
+  border-radius: 8px;
+  list-style: none;
+  min-width: 168px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.22);
+  padding: 6px 0;
+  z-index: 100;
+}
+.pc-header__nav .has-drop:hover > ul { display: block; }
+.pc-header__nav .has-drop > ul a { padding: 9px 18px; font-size: 13px; border-radius: 0; }
+.pc-hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  padding: 8px;
+  background: none;
+  border: none;
+  width: 32px;
+  height: auto;
+  justify-content: center;
+}
+.pc-hamburger span { 
+  display: block; 
+  width: 24px; 
+  height: 2px; 
+  background: #fff; 
+  border-radius: 2px; 
+  transition: all 0.3s ease;
+}
+.pc-hamburger.active span:nth-child(1) { 
+  transform: rotate(45deg) translate(8px, 8px); 
+}
+.pc-hamburger.active span:nth-child(2) { 
+  opacity: 0; 
+}
+.pc-hamburger.active span:nth-child(3) { 
+  transform: rotate(-45deg) translate(7px, -7px); 
+}
+.pc-mobile-menu {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: rgba(16,33,75,0.98);
+  z-index: 999;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+}
+.pc-mobile-menu.open {
+  max-height: calc(100vh - 68px);
+  overflow-y: auto;
+  opacity: 1;
+  pointer-events: auto;
+  padding: 16px 0 calc(100vh - 68px - 56px);
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+.pc-mobile-menu a {
+  display: block;
+  padding: 12px 28px;
+  font-family: 'Sora', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.9);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  transition: all 0.2s ease;
+}
+.pc-mobile-menu a:hover { 
+  color: #d7bd88; 
+  background: rgba(255,255,255,0.05); 
+}
+.pc-mobile-menu .mobile-donate {
+  margin: 12px 28px 0;
+  display: inline-block;
+  background: #ED7624;
+  color: #fff;
+  padding: 11px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  border-bottom: none;
+}
+@media (max-width: 900px) {
+  .pc-header__nav { display: none; }
+  .pc-hamburger { display: flex; }
+}
+
+/* >>> cats.html verbatim: global footer + responsive + print */
+/* ─── Global Footer ─────────────────────────────────────────────────────────── */
+.pc-footer {
+  background: #0b1834;
+  padding: 60px 24px 28px;
+  color: rgba(255,255,255,0.65);
+  font-family: 'Sora', sans-serif;
+}
+.pc-footer__inner { max-width: 1200px; margin: 0 auto; }
+.pc-footer__top {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1.5fr;
+  gap: 40px;
+  padding-bottom: 40px;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+.pc-footer__brand img { height: 40px; margin-bottom: 16px; display: block; }
+.pc-footer__brand p { font-size: 13.5px; line-height: 1.7; max-width: 280px; }
+.pc-footer__col h5 { font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; font-weight: 700; color: #d7bd88; margin-bottom: 16px; }
+.pc-footer__col ul { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+.pc-footer__col ul a { font-size: 13px; color: rgba(255,255,255,0.6); text-decoration: none; transition: color 0.2s; }
+.pc-footer__col ul a:hover { color: #d7bd88; }
+.pc-footer__bottom { padding-top: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+.pc-footer__copy { font-size: 12.5px; }
+.pc-footer__links { display: flex; gap: 20px; }
+.pc-footer__links a { font-size: 12.5px; color: rgba(255,255,255,0.5); text-decoration: none; }
+.pc-footer__links a:hover { color: #d7bd88; }
+@media (max-width: 900px) { .pc-footer__top { grid-template-columns: 1fr 1fr; gap: 28px; } }
+@media (max-width: 560px) { .pc-footer__top { grid-template-columns: 1fr; gap: 24px; } }
+
+/* ════════════════════════════════════════════════════════════════
+   Pet Center — responsive.css
+   Site-wide responsive / mobile-first breakpoints
+   Colors: Navy #10214b | Gold #d7bd88 | Orange #ED7624
+   ════════════════════════════════════════════════════════════════ */
+
+/* ── 1280px and below: constrain max container ─────────────── */
+@media (max-width: 1280px) {
+  .pc-container { padding: 0 20px; }
+}
+
+/* ── 1024px: tablet landscape ──────────────────────────────── */
+@media (max-width: 1024px) {
+  .pc-grid-4 { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ── 900px: tablet portrait / wide mobile ──────────────────── */
+@media (max-width: 900px) {
+  /* Header */
+  .pc-header__nav { display: none; }
+  .pc-hamburger { display: flex; }
+
+  /* Footer */
+  .pc-footer__top { grid-template-columns: 1fr 1fr; gap: 28px; }
+}
+
+/* ── 768px: tablet ─────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .pc-grid-3 { grid-template-columns: repeat(2, 1fr); }
+  .pc-grid-2 { grid-template-columns: 1fr; }
+}
+
+/* ── 640px: large mobile ───────────────────────────────────── */
+@media (max-width: 640px) {
+  .pc-section { padding: 48px 0; }
+}
+
+/* ── 560px: mobile ─────────────────────────────────────────── */
+@media (max-width: 560px) {
+  /* Footer */
+  .pc-footer__top { grid-template-columns: 1fr; gap: 24px; }
+}
+
+/* ── 480px: small mobile ───────────────────────────────────── */
+@media (max-width: 480px) {
+  .pc-grid-4 { grid-template-columns: 1fr; }
+
+  /* Footer */
+  .pc-footer__bottom { flex-direction: column; text-align: center; }
+  .pc-footer__links { justify-content: center; }
+}
+
+/* ── Print styles ──────────────────────────────────────────── */
+@media print {
+  .pc-header,
+  .pc-hamburger,
+  .pc-mobile-menu,
+  .pc-footer,
+  .pc-filter-bar,
+  .no-print { display: none !important; }
+  body { padding-top: 0 !important; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   TASK-B5 START — page-specific content (new page, not shared chrome)
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* Page-scoped tokens not present in cats.html base variables */
+:root { --border: rgba(16,33,75,0.12); --accent: var(--gold); }
+
+/* ─── Page banner ─────────────────────────────────────────────────────── */
+.pc-settings-banner {
+  background: linear-gradient(120deg, #10214b 0%, #1a3070 60%, #2a4080 100%);
+  padding: 84px 24px 44px;
+}
+.pc-settings-banner__inner { max-width: 900px; margin: 0 auto; }
+.pc-settings-banner h1 {
+  font-family: 'Cormorant Garamond', serif; font-weight: 700;
+  font-size: clamp(30px, 4vw, 44px); color: #fff; margin-bottom: 8px;
+}
+.pc-settings-banner p { color: rgba(255,255,255,0.75); font-size: 14.5px; }
+
+/* ─── Layout ───────────────────────────────────────────────────────────── */
+.pc-settings-wrap { max-width: 900px; margin: 0 auto; padding: 40px 24px 80px; display: flex; flex-direction: column; gap: 28px; }
+.b5-card {
+  background: var(--surface); border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md); padding: 32px;
+}
+.b5-card h2 {
+  font-family: 'Cormorant Garamond', serif; font-weight: 700; font-size: 24px;
+  color: var(--navy); margin-bottom: 6px;
+}
+.b5-card > p.b5-card__lede { color: var(--muted); font-size: 13.5px; margin-bottom: 24px; }
+
+/* ─── Form styling (Section 6) ────────────────────────────────────────── */
+.pc-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+@media (max-width: 640px) { .pc-form-grid { grid-template-columns: 1fr; } }
+.field { display: flex; flex-direction: column; gap: 6px; position: relative; }
+.field--full { grid-column: 1 / -1; }
+.field label {
+  font-size: 13px; font-weight: 600; color: var(--text);
+  text-transform: uppercase; letter-spacing: 0.04em;
+}
+.field label .opt { color: var(--muted); font-weight: 400; font-size: 12px; text-transform: none; letter-spacing: 0; }
+.field input, .field textarea {
+  background: #ffffff; border: 1.5px solid var(--border); border-radius: 9px;
+  padding: 11px 14px; font-size: 14px; color: var(--text); font-family: inherit;
+  outline: none; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.field input:focus, .field textarea:focus {
+  border-color: var(--accent); background: #fafaf8;
+  box-shadow: 0 0 0 3px rgba(215, 189, 136, 0.15);
+}
+.field input::placeholder, .field textarea::placeholder { color: var(--muted); }
+.field textarea { resize: vertical; min-height: 78px; }
+.field__hint { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.field--hidden { display: none; }
+
+/* ─── Custom dropdown — locked "Message Bubble" shell (Section 24) ────── */
+/* Wrapper must be the positioning context so the flip-up (bottom:100%) anchors to the trigger, not the whole field */
+.dropdown { position: relative; }
+.dropdown-trigger {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  width: 100%; padding: 11px 14px; background: #ffffff;
+  border: 1.5px solid rgba(16,33,75,0.12); border-radius: 9px;
+  cursor: pointer; user-select: none;
+  transition: all 0.2s cubic-bezier(.4,0,.2,1); font-size: 14px; color: var(--text);
+}
+.dropdown-trigger .dropdown-trigger__value.is-placeholder { color: var(--muted); }
+.dropdown-trigger:hover, .dropdown-trigger.active {
+  border-color: var(--gold); box-shadow: 0 0 0 3px rgba(215,189,136,0.15);
+}
+.dropdown-trigger .chevron { transition: transform 0.2s cubic-bezier(.4,0,.2,1); flex-shrink: 0; }
+.dropdown-trigger.active .chevron { transform: rotate(180deg); }
+
+.dropdown-panel {
+  position: absolute; top: 100%; margin-top: 6px; min-width: 100%;
+  background: #ffffff; border: 1.5px solid rgba(16,33,75,0.10);
+  border-radius: 14px 0 14px 14px; /* sharp top-right = the message-bubble notch, not a mistake */
+  box-shadow: 0 12px 32px rgba(16,33,75,0.18), 0 2px 8px rgba(16,33,75,0.08);
+  overflow: hidden; z-index: 999;
+  opacity: 0; visibility: hidden;
+  transform: translateY(-8px) scale(0.98); transform-origin: top left;
+  transition: opacity 0.2s ease, transform 0.2s cubic-bezier(.4,0,.2,1), visibility 0.2s;
+  pointer-events: none;
+}
+.dropdown-panel.open { opacity: 1; visibility: visible; transform: translateY(0) scale(1); pointer-events: auto; }
+.dropdown-panel__scroll { max-height: 225px; overflow-y: auto; padding: 6px 0; }
+.dropdown-panel__row {
+  display: flex; align-items: center; gap: 10px; padding: 11px 16px;
+  border-left: 3px solid transparent; border-bottom: 1px solid rgba(16,33,75,0.06);
+  cursor: pointer; transition: background 0.15s ease, border-color 0.15s ease;
+  font-size: 14px; min-height: 44px;
+}
+.dropdown-panel__row:last-child { border-bottom: none; }
+.dropdown-panel__row:hover { background: rgba(16,33,75,0.05); }
+.dropdown-panel__row.selected { background: rgba(215,189,136,0.12); border-left-color: var(--gold); font-weight: 600; }
+
+/* Save button uses the canonical .pc-btn .pc-btn--orange from cats.html (no custom button) */
+.b5-save-row { margin-top: 8px; }
+.pc-save-toast {
+  display: none; align-items: center; gap: 8px; margin-top: 14px;
+  background: var(--success-bg); color: var(--success); border-radius: 8px;
+  padding: 10px 14px; font-size: 13px; font-weight: 500;
+}
+.pc-save-toast.show { display: flex; }
+
+/* ─── Track record card ────────────────────────────────────────────────── */
+.pc-track-record { display: flex; gap: 28px; flex-wrap: wrap; }
+.pc-track-stat { display: flex; flex-direction: column; gap: 2px; min-width: 140px; }
+.pc-track-stat__num {
+  font-family: 'Bitter', serif; font-weight: 600; font-size: 34px; color: var(--navy); line-height: 1;
+}
+.pc-track-stat__label { font-size: 12.5px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; margin-top: 4px; }
+.pc-track-newcomer {
+  display: flex; align-items: center; gap: 10px; background: var(--orange-light);
+  border-radius: var(--radius-md); padding: 16px 18px; color: var(--chocolate); font-size: 13.5px;
+}
+.pc-track-newcomer svg { flex-shrink: 0; }
+
+/* TASK-B5 END */
+  </style>
+</head>
+<body>
+
+<header class="pc-header pc-header--solid" id="pcHeader">
+  <a href="/" class="pc-header__logo pc-header__logo--desktop">
+    <img src="/assets/images/logo-petcenter.png" alt="Pet Center">
+  </a>
+  <a href="/" class="pc-header__logo pc-header__logo--mobile">
+    <img src="/assets/images/logo-petcenter-icon.png" alt="Pet Center">
+  </a>
+  <ul class="pc-header__nav">
+    <li><a href="/">Home</a></li>
+    <li class="has-drop"><a href="#">Our Pets</a>
+      <ul>
+        <li><a href="/pets/dogs/">Dogs</a></li>
+        <li><a href="/pets/cats/">Cats</a></li>
+        <li><a href="/pets/birds/">Birds</a></li>
+        <li><a href="/pets/reptiles/">Reptiles</a></li>
+        <li><a href="/pets/small-mammals/">Small Mammals</a></li>
+        <!-- TASK-2 START — Livestocks & Aquariums added to Our Pets dropdown -->
+        <li><a href="/pets/livestocks/">Livestocks</a></li>
+        <li><a href="/pets/aquariums/">Aquariums</a></li>
+        <!-- TASK-2 END -->
+      </ul>
+    </li>
+    <li><a href="/blog/">Blog</a></li>
+    <li><a href="/testimonials/">Testimonials</a></li>
+    <li class="nav-donate"><a href="https://donate.petcenterco.com" target="_blank" rel="noopener">Donate</a></li>
+    <li><a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact</a></li>
+    <!-- TASK-1 START -->
+    <!-- Path changed from /rehome/ to /signin/ per CEO's request to retire the "rehome" URL sitewide (propagated for sitewide consistency during merge) -->
+    <li class="nav-signup"><a href="/signin/">Sign Up</a></li>
+    <!-- TASK-1 END -->
+  </ul>
+  <button class="pc-hamburger" id="pcHamburger" aria-label="Open menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+  <nav class="pc-mobile-menu" id="pcMobileMenu" aria-label="Mobile navigation">
+    <a href="/">Home</a>
+    <a href="/pets/dogs/">Dogs</a>
+    <a href="/pets/cats/">Cats</a>
+    <a href="/pets/birds/">Birds</a>
+    <a href="/pets/reptiles/">Reptiles</a>
+    <a href="/pets/small-mammals/">Small Mammals</a>
+    <!-- TASK-2 START — Livestocks & Aquariums added to mobile menu -->
+    <a href="/pets/livestocks/">Livestocks</a>
+    <a href="/pets/aquariums/">Aquariums</a>
+    <!-- TASK-2 END -->
+    <a href="/blog/">Blog</a>
+    <a href="/testimonials/">Testimonials</a>
+    <a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact</a>
+    <!-- TASK-1 START -->
+    <!-- Path changed from /rehome/ to /signin/ per CEO's request to retire the "rehome" URL sitewide (propagated for sitewide consistency during merge) -->
+    <a href="/signin/">Sign Up</a>
+    <!-- TASK-1 END -->
+    <a href="https://donate.petcenterco.com" class="mobile-donate" target="_blank" rel="noopener">Donate</a>
+  </nav>
+</header>
+
+<!-- TASK-B5 START — visitor account settings page content -->
+<section class="pc-settings-banner">
+  <div class="pc-settings-banner__inner">
+    <h1>Account Settings</h1>
+    <p>Your adopter profile and adoption track record.</p>
+  </div>
+</section>
+
+<main class="pc-settings-wrap">
+
+  <!-- Adopter Profile form -->
+  <form class="b5-card" id="adopterProfileForm" novalidate>
+    <h2>Adopter Profile</h2>
+    <p class="b5-card__lede">
+      Filled out once — it's shared automatically with a merchant the first time you message them about a
+      listing. It's never public and never visible to any other merchant unless you message them too.
+    </p>
+
+    <div class="pc-form-grid">
+
+      <!-- Household type — custom dropdown, single-select, 3 options -->
+      <div class="field">
+        <label id="householdTypeLabel">Household Type</label>
+        <div class="dropdown" data-dropdown data-field-name="householdType">
+          <div class="dropdown-trigger" tabindex="0" role="button" aria-haspopup="listbox"
+               aria-expanded="false" aria-labelledby="householdTypeLabel">
+            <span class="dropdown-trigger__value is-placeholder" data-trigger-value>Select one</span>
+            <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="dropdown-panel" role="listbox">
+            <div class="dropdown-panel__scroll">
+              <div class="dropdown-panel__row" role="option" data-value="apartment">Apartment</div>
+              <div class="dropdown-panel__row" role="option" data-value="house_yard">House with yard</div>
+              <div class="dropdown-panel__row" role="option" data-value="house_no_yard">House without yard</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Experience level — custom dropdown, single-select, 3 options -->
+      <div class="field">
+        <label id="experienceLevelLabel">Pet Experience Level</label>
+        <div class="dropdown" data-dropdown data-field-name="experienceLevel">
+          <div class="dropdown-trigger" tabindex="0" role="button" aria-haspopup="listbox"
+               aria-expanded="false" aria-labelledby="experienceLevelLabel">
+            <span class="dropdown-trigger__value is-placeholder" data-trigger-value>Select one</span>
+            <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="dropdown-panel" role="listbox">
+            <div class="dropdown-panel__scroll">
+              <div class="dropdown-panel__row" role="option" data-value="first_time">First-time pet owner</div>
+              <div class="dropdown-panel__row" role="option" data-value="some">Some experience</div>
+              <div class="dropdown-panel__row" role="option" data-value="experienced">Experienced</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Other pets in home — yes/no dropdown + conditional species field -->
+      <div class="field">
+        <label id="otherPetsLabel">Other Pets In Home</label>
+        <div class="dropdown" data-dropdown data-field-name="otherPets">
+          <div class="dropdown-trigger" tabindex="0" role="button" aria-haspopup="listbox"
+               aria-expanded="false" aria-labelledby="otherPetsLabel">
+            <span class="dropdown-trigger__value is-placeholder" data-trigger-value>Select one</span>
+            <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="dropdown-panel" role="listbox">
+            <div class="dropdown-panel__scroll">
+              <div class="dropdown-panel__row" role="option" data-value="yes">Yes</div>
+              <div class="dropdown-panel__row" role="option" data-value="no">No</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Revealed only when "Other Pets In Home" = Yes -->
+      <div class="field field--hidden" id="otherPetsSpeciesField">
+        <label for="otherPetsSpecies">Which Species? <span class="opt">(optional detail)</span></label>
+        <input type="text" id="otherPetsSpecies" name="otherPetsSpecies" placeholder="e.g. one dog, two cats">
+      </div>
+
+      <!-- Kids in home — yes/no dropdown -->
+      <div class="field">
+        <label id="kidsInHomeLabel">Kids In Home</label>
+        <div class="dropdown" data-dropdown data-field-name="kidsInHome">
+          <div class="dropdown-trigger" tabindex="0" role="button" aria-haspopup="listbox"
+               aria-expanded="false" aria-labelledby="kidsInHomeLabel">
+            <span class="dropdown-trigger__value is-placeholder" data-trigger-value>Select one</span>
+            <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="dropdown-panel" role="listbox">
+            <div class="dropdown-panel__scroll">
+              <div class="dropdown-panel__row" role="option" data-value="yes">Yes</div>
+              <div class="dropdown-panel__row" role="option" data-value="no">No</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Why this pet — SHORT free-text field. Per Section 25's explicit scope note,
+           the Quill rich-text editor is for long-form narrative fields only; this is a
+           short-answer field, so it stays a plain Section 6 textarea, not the WYSIWYG editor. -->
+      <div class="field field--full">
+        <label for="whyThisPet">Why This Pet? <span class="opt">(a sentence or two is plenty)</span></label>
+        <textarea id="whyThisPet" name="whyThisPet" maxlength="400"
+                  placeholder="Tell the merchant a little about why you're interested..."></textarea>
+        <span class="field__hint">This is sent along with your first message to a merchant, not shown publicly.</span>
+      </div>
+
+    </div>
+
+    <div class="b5-save-row"><button type="submit" class="pc-btn pc-btn--orange">Save Adopter Profile</button></div>
+    <div class="pc-save-toast" id="saveToast" role="status">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Saved. This will attach to your next new enquiry.
+    </div>
+  </form>
+
+  <!-- Visitor track record -->
+  <section class="b5-card" id="trackRecordCard">
+    <h2>Your Track Record</h2>
+    <p class="b5-card__lede">Shown to merchants alongside your adopter profile once you message them.</p>
+    <div id="trackRecordContent">
+      <!-- Populated by script below: either the two-stat layout or the "New to Pet Center" fallback -->
+    </div>
+  </section>
+
+</main>
+<!-- TASK-B5 END -->
+
+<footer class="pc-footer">
+  <div class="pc-footer__inner">
+    <div class="pc-footer__top">
+      <div class="pc-footer__brand">
+        <img src="/assets/images/logo-petcenter.png" alt="Pet Center">
+        <p>Every pet deserves a loving home. Browse our available pets and start your adoption journey today.</p>
+      </div>
+      <div class="pc-footer__col">
+        <h5>Our Pets</h5>
+        <ul>
+          <li><a href="/pets/dogs/">Dogs</a></li>
+          <li><a href="/pets/cats/">Cats</a></li>
+          <li><a href="/pets/birds/">Birds</a></li>
+          <li><a href="/pets/reptiles/">Reptiles</a></li>
+          <li><a href="/pets/small-mammals/">Small Mammals</a></li>
+          <!-- TASK-2 START — Livestocks & Aquariums added to footer Our Pets column -->
+          <li><a href="/pets/livestocks/">Livestocks</a></li>
+          <li><a href="/pets/aquariums/">Aquariums</a></li>
+          <!-- TASK-2 END -->
+        </ul>
+      </div>
+      <div class="pc-footer__col">
+        <h5>Information</h5>
+        <ul>
+          <li><a href="/">About Us</a></li>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/testimonials/">Testimonials</a></li>
+          <li><a href="https://donate.petcenterco.com" target="_blank" rel="noopener">Donate</a></li>
+          <li><a href="https://docs.petcenterco.com/health-guarantee/" target="_blank" rel="noopener">Health Guarantee</a></li>
+          <li><a href="https://docs.petcenterco.com/shipping-cancellation/" target="_blank" rel="noopener">Shipping & Cancellation</a></li>
+          <li><a href="https://docs.petcenterco.com/shipping-insurance-claims/" target="_blank" rel="noopener">Shipping Insurance</a></li>
+          <li><a href="https://docs.petcenterco.com/data-retention-security/" target="_blank" rel="noopener">Data & Security</a></li>
+        </ul>
+      </div>
+      <div class="pc-footer__col">
+        <h5>Support</h5>
+        <ul>
+          <li><a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact Us</a></li>
+          <!-- TASK-1 START -->
+          <!-- Path changed from /rehome/ to /signin/ per CEO's request to retire the "rehome" URL sitewide (propagated for sitewide consistency during merge) -->
+          <li><a href="/signin/">Sign Up</a></li>
+          <!-- TASK-1 END -->
+          <li><a href="https://docs.petcenterco.com/returns-refunds/" target="_blank" rel="noopener">Returns & Refunds</a></li>
+          <li><a href="https://docs.petcenterco.com/faq/" target="_blank" rel="noopener">FAQ</a></li>
+        </ul>
+      </div>
+      <div class="pc-footer__col">
+        <h5>Visit Us</h5>
+        <p style="color:rgba(255,255,255,.7);font-size:13px;line-height:1.8;margin-bottom:0;">235-269 N Beverly Dr<br>Beverly Hills, CA</p>
+        <p style="color:rgba(255,255,255,.6);font-size:12px;line-height:1.6;margin-top:4px;">Golden Triangle Shopping Center, Section #257</p>
+        <p style="color:rgba(255,255,255,.7);font-size:13px;line-height:1.8;margin-top:10px;"><strong style="color:#d7bd88;">Hours:</strong><br>Mon – Fri: 7am – 9pm<br>Sat – Sun: 10am – 6pm</p>
+      </div>
+    </div>
+    <div class="pc-footer__bottom">
+      <span class="pc-footer__copy">&copy; 2026 Pet Center. All rights reserved.</span>
+      <div class="pc-footer__links">
+        <a href="https://docs.petcenterco.com/privacy-policy/" target="_blank" rel="noopener">Privacy Policy</a>
+        <a href="https://docs.petcenterco.com/terms-of-service/" target="_blank" rel="noopener">Terms of Service</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+'use strict';
+
+// Header scroll effect
+(function() {
+  var header = document.getElementById('pcHeader');
+  if (!header) return;
+  
+  function updateHeaderOnScroll() {
+    if (window.scrollY > 0) {
+      header.classList.add('scrolled');
+    } else {
+      header.classList.remove('scrolled');
+    }
+  }
+  
+  window.addEventListener('scroll', updateHeaderOnScroll, { passive: true });
+  updateHeaderOnScroll();
+})();
+
+// Mobile Menu Toggle — canonical implementation (Section 2.4)
+(function () {
+  var hamburger = document.getElementById('pcHamburger');
+  var mobileMenu = document.getElementById('pcMobileMenu');
+  if (!hamburger || !mobileMenu) return;
+
+  function openMenu() {
+    hamburger.classList.add('active');
+    mobileMenu.classList.add('open');
+    hamburger.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeMenu() {
+    hamburger.classList.remove('active');
+    mobileMenu.classList.remove('open');
+    hamburger.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  hamburger.addEventListener('click', function (e) {
+    e.stopPropagation();
+    mobileMenu.classList.contains('open') ? closeMenu() : openMenu();
+  });
+
+  mobileMenu.querySelectorAll('a').forEach(function (link) {
+    link.addEventListener('click', closeMenu);
+  });
+
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest('header') && !e.target.closest('.pc-mobile-menu')) {
+      closeMenu();
+    }
+  });
+})();
+
+// ═══════════════════════════════════════════════════════════════════════
+// TASK-B5 START — Adopter Profile settings page logic
+// ═══════════════════════════════════════════════════════════════════════
+(function () {
+
+  // ─── Custom dropdown (Section 24 "Message Bubble" shell) ────────────────
+  // Single-select, no search bar needed — every list here has only 2-3 fixed
+  // options, well under the 5-item cap, so Variant A's search input is
+  // intentionally omitted (content inside the shell is flexible per spec).
+  var dropdowns = Array.prototype.slice.call(document.querySelectorAll('[data-dropdown]'));
+
+  function closeAllDropdowns(except) {
+    dropdowns.forEach(function (dd) {
+      if (dd === except) return;
+      dd.querySelector('.dropdown-trigger').classList.remove('active');
+      dd.querySelector('.dropdown-trigger').setAttribute('aria-expanded', 'false');
+      dd.querySelector('.dropdown-panel').classList.remove('open');
+    });
+  }
+
+  dropdowns.forEach(function (dd) {
+    var trigger = dd.querySelector('.dropdown-trigger');
+    var panel = dd.querySelector('.dropdown-panel');
+    var valueEl = trigger.querySelector('[data-trigger-value]');
+    var rows = Array.prototype.slice.call(dd.querySelectorAll('.dropdown-panel__row'));
+    var fieldName = dd.getAttribute('data-field-name');
+
+    function selectRow(row) {
+      rows.forEach(function (r) { r.classList.remove('selected'); });
+      row.classList.add('selected');
+      valueEl.textContent = row.textContent;
+      valueEl.classList.remove('is-placeholder');
+      dd.setAttribute('data-value', row.getAttribute('data-value'));
+      close();
+      dd.dispatchEvent(new CustomEvent('pc-dropdown-change', {
+        bubbles: true, detail: { field: fieldName, value: row.getAttribute('data-value') }
+      }));
+    }
+
+    function open() {
+      closeAllDropdowns(dd);
+      trigger.classList.add('active');
+      trigger.setAttribute('aria-expanded', 'true');
+      panel.classList.add('open');
+      reposition();
+    }
+    function close() {
+      trigger.classList.remove('active');
+      trigger.setAttribute('aria-expanded', 'false');
+      panel.classList.remove('open');
+    }
+    function toggle() { panel.classList.contains('open') ? close() : open(); }
+
+    // Smart positioning: flip upward if not enough room below (Section 24 requirement)
+    function reposition() {
+      var rect = trigger.getBoundingClientRect();
+      var panelHeight = panel.offsetHeight || 225;
+      var spaceBelow = window.innerHeight - rect.bottom;
+      if (spaceBelow < panelHeight && rect.top > panelHeight) {
+        panel.style.top = 'auto';
+        panel.style.bottom = '100%';
+        panel.style.marginTop = '0';
+        panel.style.marginBottom = '6px';
+      } else {
+        panel.style.top = '100%';
+        panel.style.bottom = 'auto';
+        panel.style.marginTop = '6px';
+        panel.style.marginBottom = '0';
+      }
+    }
+
+    trigger.addEventListener('click', function (e) { e.stopPropagation(); toggle(); });
+    trigger.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
+      else if (e.key === 'ArrowDown') { e.preventDefault(); if (!panel.classList.contains('open')) open(); }
+      else if (e.key === 'Escape') { close(); }
+    });
+    rows.forEach(function (row) {
+      row.addEventListener('click', function (e) { e.stopPropagation(); selectRow(row); });
+    });
+
+    window.addEventListener('resize', function () { if (panel.classList.contains('open')) reposition(); }, { passive: true });
+    window.addEventListener('scroll', function () {
+      if (!panel.classList.contains('open')) return;
+      var rect = trigger.getBoundingClientRect();
+      if (rect.bottom < 0 || rect.top > window.innerHeight) { close(); } else { reposition(); }
+    }, { passive: true });
+  });
+
+  document.addEventListener('click', function () { closeAllDropdowns(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeAllDropdowns(); });
+
+  // ─── Conditional reveal: species field only when "Other Pets In Home" = Yes ──
+  var otherPetsSpeciesField = document.getElementById('otherPetsSpeciesField');
+  document.addEventListener('pc-dropdown-change', function (e) {
+    if (e.detail.field === 'otherPets') {
+      otherPetsSpeciesField.classList.toggle('field--hidden', e.detail.value !== 'yes');
+    }
+  });
+
+  // ─── Persistence stub ─────────────────────────────────────────────────
+  // TODO(integration): the real visitor account system doesn't exist yet.
+  // This stub keys on a placeholder visitor email in localStorage purely so
+  // the form is demoable end-to-end. Once the CEO's account system ships,
+  // replace STORAGE_KEY's lookup with the real logged-in visitor's ID and
+  // swap localStorage for a real backend call.
+  var PLACEHOLDER_VISITOR_EMAIL = 'demo.visitor@example.com';
+  var STORAGE_KEY = 'pc_adopter_profile_' + PLACEHOLDER_VISITOR_EMAIL;
+
+  var form = document.getElementById('adopterProfileForm');
+  var saveToast = document.getElementById('saveToast');
+
+  function loadProfile() {
+    var raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    try {
+      var data = JSON.parse(raw);
+      dropdowns.forEach(function (dd) {
+        var fieldName = dd.getAttribute('data-field-name');
+        if (data[fieldName]) {
+          var row = dd.querySelector('.dropdown-panel__row[data-value="' + data[fieldName] + '"]');
+          if (row) row.click();
+        }
+      });
+      if (data.otherPetsSpecies) document.getElementById('otherPetsSpecies').value = data.otherPetsSpecies;
+      if (data.whyThisPet) document.getElementById('whyThisPet').value = data.whyThisPet;
+    } catch (err) { /* malformed stub data — ignore and start fresh */ }
+  }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var data = {};
+    dropdowns.forEach(function (dd) { data[dd.getAttribute('data-field-name')] = dd.getAttribute('data-value') || ''; });
+    // Species detail only applies when other pets = yes; clear it otherwise so stale text is never saved/shared
+    data.otherPetsSpecies = (data.otherPets === 'yes') ? document.getElementById('otherPetsSpecies').value.trim() : '';
+    data.whyThisPet = document.getElementById('whyThisPet').value.trim();
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    saveToast.classList.add('show');
+    setTimeout(function () { saveToast.classList.remove('show'); }, 3000);
+  });
+
+  loadProfile();
+
+  // ─── Track record display ─────────────────────────────────────────────
+  // TODO(integration, Task D1): completedAdoptions should come from D1's
+  // placement records, counting listings where status = "placement_complete"
+  // and this visitor was the adopter. Not available yet — stubbed at 0.
+  // TODO(integration, Task B3 — confirm scope): thumbsReceived only applies
+  // if reviews-of-visitors is in scope; left null here since unconfirmed.
+  var trackRecordStub = {
+    completedAdoptions: 0,
+    thumbsReceived: null // null = feature not confirmed in scope yet
+  };
+
+  // Builds one stat block with textContent only (no innerHTML) so real data can never inject markup
+  function buildStat(value, label) {
+    var wrap = document.createElement('div'); wrap.className = 'pc-track-stat';
+    var num = document.createElement('span'); num.className = 'pc-track-stat__num';
+    num.textContent = String(Number(value) || 0);
+    var lab = document.createElement('span'); lab.className = 'pc-track-stat__label'; lab.textContent = label;
+    wrap.appendChild(num); wrap.appendChild(lab); return wrap;
+  }
+
+  function renderTrackRecord(record) {
+    var el = document.getElementById('trackRecordContent');
+    el.textContent = '';
+    var adoptions = Number(record.completedAdoptions) || 0;
+    var thumbs = (record.thumbsReceived === null || record.thumbsReceived === undefined) ? null : (Number(record.thumbsReceived) || 0);
+    // First-time visitor = no completed adoptions AND no thumbs (feature absent OR zero) -> friendly fallback, never a row of zeros
+    var isNewcomer = adoptions === 0 && (thumbs === null || thumbs === 0);
+
+    if (isNewcomer) {
+      var box = document.createElement('div'); box.className = 'pc-track-newcomer';
+      box.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">' +
+        '<path d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7-5.4-4.7 7.1-.6L12 2z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>'; // static icon markup only, no data interpolated
+      var msg = document.createElement('span'); msg.textContent = 'New to Pet Center \u2014 this will fill in once your first adoption is complete.';
+      box.appendChild(msg); el.appendChild(box); return;
+    }
+    var row = document.createElement('div'); row.className = 'pc-track-record';
+    row.appendChild(buildStat(adoptions, 'Completed Adoptions'));
+    if (thumbs !== null) row.appendChild(buildStat(thumbs, 'Thumbs Received'));
+    el.appendChild(row);
+  }
+
+  renderTrackRecord(trackRecordStub);
+
+})();
+// TASK-B5 END
+</script>
+</body>
+</html>
