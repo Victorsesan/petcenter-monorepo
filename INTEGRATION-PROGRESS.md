@@ -4,14 +4,14 @@
 
 **Last updated:** 2026-10-29
 **Current branch:** `main`
-**Current pushed commit:** `ef94580`
+**Current pushed commit:** `a28b2e8`
 **Repository:** `Victorsesan/petcenter-monorepo`
 **Site root in repository:** `adopt/`
 **Live-site mapping:** repository `adopt/` = server `public_html/adopt/` = `https://adopt.petcenterco.com/`
 
 ## Current checkpoint
 
-The working tree was clean at the time this document was created. The latest successful integration in this continuation is Rehoming Platform Task C3, pushed as commit `ef94580`. No live publishing has been performed. Round one remains mechanical integration only: unzip, reconcile paths, apply exact documented changes, lint, commit, and push to `main`. Do not redesign, fix unrelated bugs, or perform round-two debugging during this round.
+The working tree was clean at the time this document was created. The latest successful integration in this continuation is Rehoming Platform Task D1, pushed as commit `a28b2e8`. No live publishing has been performed. Round one remains mechanical integration only: unzip, reconcile paths, apply exact documented changes, lint, commit, and push to `main`. Do not redesign, fix unrelated bugs, or perform round-two debugging during this round.
 
 The external intake workspace is expected at `/home/ubuntu/workspace/intake/`. The uploaded outer archive was extracted there, with each worker archive unpacked under `/home/ubuntu/workspace/intake/tmp/<worker-folder>/`. The outer archive itself is `/home/ubuntu/workspace/intake/Workerszipfiles.zip`. The standalone research/completion document is preserved at `/home/ubuntu/workspace/intake/reference/Task-1-Completion-14.md`; it is not a live-site file and must remain available for round-two comparison/debugging.
 
@@ -174,3 +174,12 @@ Current feature commit before this documentation update is `9eb816e`. The next a
 | Rehoming Platform Task C3 | applied | `ef94580` | Added `adopt/assets/js/merchant-code-of-conduct.js` and `adopt/assets/js/safe-exchange-prompt.js`; `node --check` and diff checks passed. |
 
 The standalone `Task-1-Completion-14.md` remains outside the worker ZIPs under intake reference storage for round-two research comparison/debugging. Task C3's gift-adoption HTML is a fragment for a future Task C5 compose UI and was not merged.
+
+
+## Latest update — Rehoming D1
+
+| Task | Result | Commit | Validation |
+|---|---|---|---|
+| Rehoming Platform Task D1 | applied | `a28b2e8` | Added six placement lifecycle JavaScript modules under `adopt/assets/js/`; all passed `node --check` and diff checks. |
+
+D1's `merchant-placement-panel-v1.html` is a test/demo harness with no live path and was not deployed; future E1a owns the real merchant dashboard integration.
