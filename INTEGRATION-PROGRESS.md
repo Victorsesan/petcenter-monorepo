@@ -4,14 +4,14 @@
 
 **Last updated:** 2026-10-29
 **Current branch:** `main`
-**Current pushed commit:** `fa30746`
+**Current feature commit:** `fa30746`
 **Repository:** `Victorsesan/petcenter-monorepo`
 **Site root in repository:** `adopt/`
 **Live-site mapping:** repository `adopt/` = server `public_html/adopt/` = `https://adopt.petcenterco.com/`
 
 ## Current checkpoint
 
-The working tree was clean at the time this document was created. The latest successful integration in this continuation is Rehoming Platform Task E2, pushed as commit `fa30746`. No live publishing has been performed. Round one remains mechanical integration only: unzip, reconcile paths, apply exact documented changes, lint, commit, and push to `main`. Do not redesign, fix unrelated bugs, or perform round-two debugging during this round.
+The working tree was clean at the time this document was created. The latest successful feature integration in this continuation is Rehoming Platform Task E2, pushed as commit `fa30746`; documentation and verification checkpoints follow it. No live publishing has been performed. Round one remains mechanical integration only: unzip, reconcile paths, apply exact documented changes, lint, commit, and push to `main`. Do not redesign, fix unrelated bugs, or perform round-two debugging during this round.
 
 The external intake workspace is expected at `/home/ubuntu/workspace/intake/`. The uploaded outer archive was extracted there, with each worker archive unpacked under `/home/ubuntu/workspace/intake/tmp/<worker-folder>/`. The outer archive itself is `/home/ubuntu/workspace/intake/Workerszipfiles.zip`. The standalone research/completion document is preserved at `/home/ubuntu/workspace/intake/reference/Task-1-Completion-14.md`; it is not a live-site file and must remain available for round-two comparison/debugging.
 
@@ -219,3 +219,18 @@ E3's proposed support/FAQ routes and PHP endpoints remain in intake only until t
 | Rehoming Platform Task E4 | stopped | The completion file gives insertion instructions for the E1 shell but no exact old/new snippets; no E4 files were applied under the exact-match rule. |
 
 E4's theme CSS and JS remain in intake for a corrected integration pass.
+
+
+## Verification update — applied worker files
+
+The round-one integration audit completed successfully for the feature commits in this continuation:
+
+- Task C2: both PHP files match the ZIP sources after the documented `rehome/` source to `adopt/rehoming/` live-path mapping.
+- Task C3: both JavaScript files match their ZIP sources byte-for-byte.
+- Task D1: all six JavaScript modules match their ZIP sources byte-for-byte; task anchors are balanced.
+- Task E1: `adopt/merchant/index.html` matches its ZIP source byte-for-byte; inline JavaScript syntax and 16/16 task anchors pass.
+- Task E2: `adopt/rehoming/account-lifecycle.php` matches its ZIP source byte-for-byte; PHP syntax and 10/10 task anchors pass.
+- All audited PHP files pass `php -l`; all audited JavaScript files pass `node --check`; `git diff --check` passes.
+- No protected files or intake files were introduced by these feature commits.
+
+Task E3 and E4 remain stopped exactly as recorded below; no partial files from either task were applied. This is verification only, not round-two debugging.
