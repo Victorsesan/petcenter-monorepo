@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verify Your Account | Pet Center</title>
+
+<!-- TASK-B1: fonts + icon set, same CDN sources used site-wide (per Design System Section 3/11) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Exact font import from Design System Section 3 — copied verbatim, not
+     cherry-picked weights, per Rule 7. Bodoni Moda is loaded but unused on
+     this page (it's an optional accent font); harmless to include, and
+     matches the documented import exactly rather than a near-miss of it. -->
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@600;700&family=Bitter:wght@400;500;600;700&family=Bodoni+Moda:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+<style>
+/* ==========================================================================
+   TASK-B1 START — Root palette
+   Core PetCenter brand palette (Design System Section 2). This is a
+   standalone, pre-account page (no merchant account exists yet at this
+   point per the task's "Important context" note), so it does not carry the
+   site's shared header/footer/hamburger (Design System Section 26/27) —
+   those are locked to adoption-related public pages, not this flow.
+   Orange stays present per Section 1's "no exceptions" brand-anchor rule
+   (primary action buttons here use it).
+   ========================================================================== */
+:root {
+  --primary: #10214b;      /* Navy — primary text/borders/CTAs */
+  --primary-light: #1a2f5c;
+  --accent: #d7bd88;       /* Gold — focus states, accents */
+  --accent-dark: #b89968;
+  --orange: #ED7624;       /* Brand orange — mandatory, primary submit action */
+  --success: #10b981;
+  --error: #ef4444;
+  --warning: #f59e0b;
+  --muted: #7a6d5f;
+  --text: #2c2416;
+  --bg: #f9f7f4;
+  --surface: #ffffff;
+  --border: rgba(16,33,75,0.12);
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: 'Sora', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+}
+h1, h2, h3 { font-family: 'Cormorant Garamond', serif; color: var(--primary); margin: 0 0 8px; }
+.numeral, .step-num { font-family: 'Bitter', serif; } /* Section 1: all numerals use Bitter, never Cormorant */
+
+.page-wrap {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 32px 20px 80px;
+}
+.brand-row {
+  display: flex; align-items: center; gap: 10px;
+  justify-content: center; margin-bottom: 28px;
+}
+.brand-row img { height: 36px; }
+.brand-row span { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 700; color: var(--primary); }
+
+/* ---------- UX Stepper (Design System Section 16 — Type 5, numbered circle
+   with solid connector; a free-choice gallery item, this is my pick) ---------- */
+.stepper { display: flex; align-items: center; justify-content: center; margin-bottom: 32px; }
+.stepper .step { display: flex; flex-direction: column; align-items: center; gap: 6px; flex: 1; position: relative; }
+.stepper .circle {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: var(--surface); border: 2px solid var(--border);
+  color: var(--muted); font-weight: 700; font-size: 14px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.25s;
+}
+.stepper .step.active .circle { border-color: var(--orange); color: var(--orange); background: #fff3ea; }
+.stepper .step.done .circle { border-color: var(--success); color: #fff; background: var(--success); }
+.stepper .label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; text-align: center; }
+.stepper .step.active .label { color: var(--primary); font-weight: 600; }
+.stepper .connector { position: absolute; top: 17px; left: calc(-50% + 17px); width: calc(100% - 34px); height: 2px; background: var(--border); z-index: -1; }
+.stepper .step.done .connector, .stepper .step.active .connector { background: var(--orange); }
+.stepper .step:first-child .connector { display: none; }
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 28px;
+  margin-bottom: 20px;
+}
+.panel[hidden] { display: none; }
+.hint { color: var(--muted); font-size: 13.5px; margin-bottom: 18px; }
+
+/* ---------- Buttons (Design System Section 17: never Orange next to Orange/Navy) ---------- */
+.btn {
+  font-family: 'Sora', sans-serif; font-weight: 600; font-size: 14px;
+  padding: 12px 22px; border-radius: 9px; border: none; cursor: pointer;
+  transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px;
+}
+.btn--primary { background: var(--orange); color: #fff; }
+.btn--primary:hover:not(:disabled) { background: #d3661a; }
+.btn--primary:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn--secondary { background: #f0ede8; color: var(--primary); border: 1px solid var(--border); }
+.btn--secondary:hover { background: var(--border); }
+.small-btn {
+  background: #f3f4f6; border-radius: 6px; padding: 6px 8px; border: 1px solid #e5e7eb;
+  color: #111; cursor: pointer; font-size: 13px; font-family: 'Sora', sans-serif; transition: background 0.2s;
+}
+.small-btn:hover { background: #e5e7eb; }
+
+/* ---------- Liveness check UI ---------- */
+.camera-frame {
+  position: relative; width: 100%; max-width: 420px; aspect-ratio: 4/3;
+  margin: 0 auto 18px; border-radius: 12px; overflow: hidden; background: #0d1730;
+  border: 2px solid var(--border);
+}
+.camera-frame video { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
+.camera-frame.recording { border-color: var(--error); }
+.rec-dot {
+  position: absolute; top: 10px; left: 10px; display: flex; align-items: center; gap: 6px;
+  background: rgba(0,0,0,0.55); color: #fff; font-size: 12px; padding: 4px 10px; border-radius: 999px;
+  display: none;
+}
+.camera-frame.recording .rec-dot { display: flex; }
+.rec-dot .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--error); animation: pulse 1s infinite; }
+@keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+.challenge-banner {
+  text-align: center; font-size: 15px; font-weight: 600; color: var(--primary);
+  background: #fff8e7; border: 1.5px solid rgba(237,118,36,0.2); border-radius: 8px;
+  padding: 12px; margin-bottom: 16px; min-height: 20px;
+}
+.challenge-progress { display: flex; justify-content: center; gap: 8px; margin-bottom: 18px; }
+.challenge-progress .dot-step {
+  width: 10px; height: 10px; border-radius: 50%; background: var(--border);
+}
+.challenge-progress .dot-step.complete { background: var(--success); }
+.challenge-progress .dot-step.active { background: var(--orange); }
+
+/* ---------- File upload component (Design System Section 7, adapted —
+   see JS comments below for why the background-preupload-to-temp-endpoint
+   behavior is intentionally NOT used here) ---------- */
+.file-drop {
+  padding: 12px; border-radius: 8px; border: 2px dashed #eee;
+  background: linear-gradient(180deg, #fff, #fffaf6); cursor: pointer; text-align: center;
+  margin-top: 10px; font-size: 14px; color: var(--muted); transition: border-color 0.2s, background 0.2s;
+}
+.file-drop.dragover { border-color: var(--orange); background: linear-gradient(180deg, #fff8f0, #fffefb); }
+.uploaded-list { margin-top: 8px; display: flex; flex-direction: column; gap: 8px; }
+.uploaded-item { display: flex; align-items: center; gap: 12px; padding: 8px; background: #fff; border-radius: 6px; border: 1px solid #f1f5f9; }
+.uploaded-item img { width: 64px; height: 64px; object-fit: cover; border-radius: 6px; border: 1px solid #ddd; }
+.field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 18px; }
+.field label { font-size: 13px; font-weight: 600; color: var(--text); text-transform: uppercase; letter-spacing: 0.04em; }
+
+/* ---------- Modal (Design System Section 5 — shared shell; use A for
+   success/confirmation, use B for the ID-preview) ---------- */
+.modal { position: fixed; inset: 0; background: rgba(0,0,0,0.65); display: none; align-items: center; justify-content: center; z-index: 9999; padding: 16px; }
+.modal.open { display: flex; }
+.modal-box { background: #fff; border-radius: 12px; padding: 0; max-width: 600px; width: 100%; max-height: 85vh; max-height: 85dvh; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.3); display: flex; flex-direction: column; }
+.modal-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 14px 18px; border-bottom: 1px solid var(--border); flex-shrink: 0; background: #fff; }
+.modal-top__actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.modal-scroll { flex: 1; overflow-y: auto; padding: 20px 20px 24px; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+.modal-close { padding: 6px 12px; background: #f0ede8; border: 1px solid var(--border); border-radius: 6px; cursor: pointer; font-size: 13px; font-family: 'Sora', sans-serif; font-weight: 500; color: var(--text); transition: all 0.2s; flex-shrink: 0; }
+.modal-close:hover { background: var(--border); color: var(--primary); }
+.modal-content img { max-width: 100%; height: auto; border-radius: 8px; }
+.success-modal { text-align: center; padding: 24px; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+.success-icon { width: 64px; height: 64px; background: rgba(13,124,74,0.12); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; } /* exact color from Design System Section 5's canonical "Use A" markup */
+.success-warning { background: #fff8e7; border: 1.5px solid rgba(237,118,36,0.2); border-radius: 8px; padding: 16px; margin: 20px 0; font-size: 13.5px; line-height: 1.7; color: #6b4d2a; text-align: left; }
+.success-warning strong { display: block; color: #c67c1a; margin-bottom: 8px; font-size: 14px; font-weight: 700; }
+.success-modal .btn { margin-top: 20px; }
+
+.gate-msg { text-align: center; padding: 60px 20px; }
+.gate-msg .icon { color: var(--muted); margin-bottom: 12px; }
+
+.error-inline { color: var(--error); font-size: 13.5px; margin-top: 10px; display: none; align-items: center; gap: 6px; }
+.error-inline.show { display: flex; }
+.step-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+
+@media (max-width: 480px) {
+  .panel { padding: 20px 16px; }
+  .stepper .label { font-size: 9.5px; }
+}
+/* TASK-B1 END — Root palette / shared component CSS */
+</style>
+</head>
+<body>
+
+<div class="page-wrap">
+  <div class="brand-row">
+    <span>Pet Center — Merchant Verification</span>
+  </div>
+
+  <!-- ==========================================================================
+       TASK-B1: Entry-contract gate. This flow is entered via a URL parameter
+       (`?verify=true`, plus `username` and `country` passed along at the same
+       time — this task's own call on the exact mechanism, per SHARED
+       CONTRACTS/B1's entry contract; documented in Task-B1-Completion.md).
+       No account/session exists at this point, so this gate simply checks the
+       URL — it deliberately never touches or assumes any login/session state.
+       ========================================================================== -->
+  <div id="gateBlock" class="gate-msg" hidden>
+    <!-- TASK-B1 (fix): was a hand-drawn SVG, forbidden by Rule 2 — swapped
+         for the already-loaded Font Awesome set, per Section 11. -->
+    <div class="icon"><i class="fa-solid fa-circle-info" style="font-size:40px;"></i></div>
+    <h2>This link isn't valid</h2>
+    <p class="hint">The verification flow needs a valid entry link. Please use the link provided to you to start verification.</p>
+  </div>
+
+  <div id="flowWrap" hidden>
+    <!-- Stepper -->
+    <div class="stepper">
+      <div class="step active" id="stepDot1"><div class="connector"></div><div class="circle numeral">1</div><div class="label">Liveness Check</div></div>
+      <div class="step" id="stepDot2"><div class="connector"></div><div class="circle numeral">2</div><div class="label">Upload ID</div></div>
+      <div class="step" id="stepDot3"><div class="connector"></div><div class="circle numeral">3</div><div class="label">Submit</div></div>
+    </div>
+
+    <!-- ============================ STEP 1 — LIVENESS CHECK ============================ -->
+    <div class="panel" id="panelLiveness">
+      <h2>Confirm you're a real person</h2>
+      <p class="hint">We'll ask you to blink and turn your head. This is recorded, start to finish, as part of your verification submission.</p>
+
+      <div class="camera-frame" id="cameraFrame">
+        <video id="camVideo" autoplay playsinline muted></video>
+        <div class="rec-dot"><span class="dot"></span> Recording</div>
+      </div>
+
+      <div class="challenge-banner" id="challengeBanner">Click "Start Verification" to begin</div>
+      <div class="challenge-progress" id="challengeProgress">
+        <div class="dot-step" data-i="0"></div>
+        <div class="dot-step" data-i="1"></div>
+      </div>
+
+      <div class="error-inline" id="livenessError"><i class="fa-solid fa-triangle-exclamation"></i> <span></span></div>
+
+      <div class="step-actions">
+        <button type="button" class="btn btn--primary" id="startLivenessBtn">Start Verification</button>
+      </div>
+    </div>
+
+    <!-- ============================ STEP 2 — ID UPLOAD ============================ -->
+    <div class="panel" id="panelUpload" hidden>
+      <h2>Upload your ID</h2>
+      <p class="hint">Two clear photos — the front and back of the same government-issued ID.</p>
+
+      <div class="field">
+        <label>Front of ID — required *</label>
+        <div id="drop_idFront" class="file-drop" tabindex="0">Click or drag a photo here</div>
+        <div id="list_idFront" class="uploaded-list"></div>
+      </div>
+
+      <div class="field">
+        <label>Back of ID — required *</label>
+        <div id="drop_idBack" class="file-drop" tabindex="0">Click or drag a photo here</div>
+        <div id="list_idBack" class="uploaded-list"></div>
+      </div>
+
+      <div class="error-inline" id="uploadError"><i class="fa-solid fa-triangle-exclamation"></i> <span></span></div>
+
+      <div class="step-actions">
+        <button type="button" class="btn btn--secondary" id="backToLivenessBtn">Back</button>
+        <button type="button" class="btn btn--primary" id="continueToSubmitBtn" disabled>Continue</button>
+      </div>
+    </div>
+
+    <!-- ============================ STEP 3 — REVIEW & SUBMIT ============================ -->
+    <div class="panel" id="panelSubmit" hidden>
+      <h2>Review &amp; submit</h2>
+      <p class="hint">Once submitted, your verification video and ID photos are sent directly to our review team and are not kept on our servers afterward.</p>
+
+      <div class="field">
+        <label>Email</label>
+        <div id="emailDisplay" style="padding:11px 14px;border:1.5px solid var(--border);border-radius:9px;background:#fafaf8;color:var(--text);"></div>
+      </div>
+
+      <div class="field">
+        <label>Country</label>
+        <div id="countryDisplay" style="padding:11px 14px;border:1.5px solid var(--border);border-radius:9px;background:#fafaf8;color:var(--text);"></div>
+      </div>
+
+      <div class="error-inline" id="submitError"><i class="fa-solid fa-triangle-exclamation"></i> <span></span></div>
+
+      <div class="step-actions">
+        <button type="button" class="btn btn--secondary" id="backToUploadBtn">Back</button>
+        <button type="button" class="btn btn--primary" id="submitBtn">
+          <span id="submitBtnLabel">Submit for Verification</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- USE B: single-item ID preview modal (Design System Section 5) -->
+<div id="previewModal" class="modal">
+  <div class="modal-box">
+    <div class="modal-top" id="modalTop">
+      <div id="modalTopTitle" style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:1.2rem;color:var(--orange);margin:0;"></div>
+      <div class="modal-top__actions"><button class="modal-close" id="modalClose">Close</button></div>
+    </div>
+    <div class="modal-scroll"><div id="modalContent" class="modal-content"></div></div>
+  </div>
+</div>
+
+<!-- USE A: success / confirmation modal (Design System Section 5) -->
+<div id="successModal" class="modal">
+  <div class="modal-box success-modal">
+    <!-- TASK-B1 (fix): was a hand-drawn SVG, forbidden by Rule 2 — swapped
+         for Font Awesome, per Section 11. -->
+    <div class="success-icon">
+      <i class="fa-solid fa-check" style="font-size:28px;color:#0d7c4a;"></i>
+    </div>
+    <h2 style="font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--primary);margin-bottom:8px;">Verification submitted</h2>
+    <p style="color:var(--muted);margin-bottom:16px;">You'll hear back within <strong class="numeral">3</strong> business days.</p>
+    <div class="success-warning">
+      <strong>Keep an eye on your inbox</strong>
+      During this period we may also reach out within 24 hours by email if there's any issue with your verification details, so you can update them before the deadline. Please check your inbox and spam folder for updates.
+    </div>
+    <button type="button" class="btn btn--primary" id="successCloseBtn">Done</button>
+  </div>
+</div>
+
+<script>
+/* ==========================================================================
+   TASK-B1 START — Verify-account flow controller
+   Standalone identity-verification flow: liveness challenge -> full-duration
+   video recording -> front/back ID upload -> single combined submission.
+   No account/session exists yet for this person (per B1's task text) — every
+   piece of state below lives only in this page's memory for the duration of
+   the flow and is never persisted client-side (no localStorage), matching
+   the "nothing stored" intent of the flow as a whole.
+   ========================================================================== */
+
+// ---------------------------------------------------------------------------
+// Entry-contract gate: ?verify=true is required to enter this flow at all.
+// username/country are read the same way — passed along in the same URL by
+// whoever links here (my own call on the entry mechanism, see completion file).
+// ---------------------------------------------------------------------------
+const params = new URLSearchParams(window.location.search);
+/* TASK-B1 (integration fix, B2 reconciliation): entry contract now also
+   carries the merchant's email — B2's admin review queue needs a way to
+   correspond about approval/rejection, and B1's original spec never
+   collected one. Added to the same URL-param entry contract rather than a
+   new mechanism, per Directive 7 (don't introduce a second pattern where
+   the existing one extends cleanly). */
+const ENTRY = {
+  verify: params.get('verify') === 'true',
+  username: params.get('username') || '',
+  country: params.get('country') || '',
+  email: params.get('email') || ''
+};
+
+const gateBlock = document.getElementById('gateBlock');
+const flowWrap = document.getElementById('flowWrap');
+
+if (!ENTRY.verify || !ENTRY.username || !ENTRY.country || !ENTRY.email) {
+  gateBlock.hidden = false;
+} else {
+  flowWrap.hidden = false;
+  document.getElementById('countryDisplay').textContent = ENTRY.country;
+  document.getElementById('emailDisplay').textContent = ENTRY.email;
+  initLivenessStep();
+  initUploadStep();
+  initSubmitStep();
+}
+
+// ---------------------------------------------------------------------------
+// Shared flow state
+// ---------------------------------------------------------------------------
+const flowState = {
+  recordedVideoBlob: null,   // full-duration liveness recording
+  idFront: null,             // { file, url }
+  idBack: null
+};
+
+function goToStep(n) {
+  document.getElementById('panelLiveness').hidden = n !== 1;
+  document.getElementById('panelUpload').hidden = n !== 2;
+  document.getElementById('panelSubmit').hidden = n !== 3;
+  [1, 2, 3].forEach(i => {
+    const dot = document.getElementById('stepDot' + i);
+    dot.classList.toggle('active', i === n);
+    dot.classList.toggle('done', i < n);
+  });
+}
+
+function showInlineError(el, msg) {
+  el.querySelector('span').textContent = msg;
+  el.classList.add('show');
+}
+function clearInlineError(el) { el.classList.remove('show'); }
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+// ===========================================================================
+// STEP 1 — LIVENESS CHECK
+// Uses MediaPipe FaceMesh (Google, Apache-2.0, actively maintained, loaded
+// via CDN <script> tags — no bundler/build step, matching this platform's
+// hand-authored no-build architecture) for face landmarks. Blink is detected
+// via eye-aspect-ratio (EAR) on the eye landmarks; head-turn via the nose
+// tip's horizontal offset from the face's bounding-box center. Evaluated
+// against alternatives (see Task-B1-Completion.md for the write-up) —
+// picked over the previously-flagged face-liveness-detector package because
+// that package requires npm bundling + large model/WASM downloads with a
+// manual patch step, which doesn't fit this site's plain hand-authored,
+// no-build-step architecture; MediaPipe's CDN build does.
+// ===========================================================================
+function initLivenessStep() {
+  const video = document.getElementById('camVideo');
+  const frame = document.getElementById('cameraFrame');
+  const banner = document.getElementById('challengeBanner');
+  const progressDots = document.querySelectorAll('#challengeProgress .dot-step');
+  const errEl = document.getElementById('livenessError');
+  const startBtn = document.getElementById('startLivenessBtn');
+
+  // Randomized 2-action challenge sequence per run (anti-spoofing: unpredictable order)
+  const ACTIONS = ['blink', 'turn'];
+  let sequence = [...ACTIONS].sort(() => Math.random() - 0.5);
+  let seqIndex = 0;
+  let mediaStream = null;
+  let recorder = null;
+  let recordedChunks = [];
+  let faceMesh = null;
+  let camera = null;
+
+  // Simple state machine per action so a fast, single-frame false-positive
+  // can't complete a challenge — requires the "return to neutral" phase too.
+  let blinkPhase = 'waiting_close'; // waiting_close -> waiting_open -> done
+  let turnPhase = 'waiting_turn';   // waiting_turn -> waiting_center -> done
+  const EAR_CLOSED = 0.20;
+  const EAR_OPEN = 0.27;
+  const TURN_THRESHOLD = 0.055; // fraction of face width the nose must offset
+
+  function dist(a, b) { return Math.hypot(a.x - b.x, a.y - b.y); }
+
+  // Eye landmark indices per MediaPipe FaceMesh topology (468-point model)
+  const LEFT_EYE = [33, 160, 158, 133, 153, 144];
+  const RIGHT_EYE = [263, 387, 385, 362, 380, 373];
+
+  function eyeAspectRatio(landmarks, idx) {
+    const p = i => landmarks[idx[i]];
+    const vert1 = dist(p(1), p(5));
+    const vert2 = dist(p(2), p(4));
+    const horiz = dist(p(0), p(3));
+    return (vert1 + vert2) / (2 * horiz);
+  }
+
+  function onFaceMeshResults(results) {
+    if (!results.multiFaceLandmarks || !results.multiFaceLandmarks.length) return;
+    const lm = results.multiFaceLandmarks[0];
+
+    const action = sequence[seqIndex];
+    if (!action) return;
+
+    if (action === 'blink') {
+      const ear = (eyeAspectRatio(lm, LEFT_EYE) + eyeAspectRatio(lm, RIGHT_EYE)) / 2;
+      if (blinkPhase === 'waiting_close' && ear < EAR_CLOSED) blinkPhase = 'waiting_open';
+      else if (blinkPhase === 'waiting_open' && ear > EAR_OPEN) { blinkPhase = 'done'; completeCurrentAction(); }
+    } else if (action === 'turn') {
+      // Nose tip (1) vs. face bounding box center, normalized by face width
+      const nose = lm[1];
+      const xs = lm.map(p => p.x);
+      const minX = Math.min(...xs), maxX = Math.max(...xs);
+      const faceWidth = maxX - minX || 1;
+      const center = (minX + maxX) / 2;
+      const offset = (nose.x - center) / faceWidth;
+      if (turnPhase === 'waiting_turn' && Math.abs(offset) > TURN_THRESHOLD) turnPhase = 'waiting_center';
+      else if (turnPhase === 'waiting_center' && Math.abs(offset) < TURN_THRESHOLD * 0.6) { turnPhase = 'done'; completeCurrentAction(); }
+    }
+  }
+
+  function completeCurrentAction() {
+    progressDots[seqIndex].classList.add('complete');
+    seqIndex++;
+    if (seqIndex >= sequence.length) {
+      finishChallenge();
+    } else {
+      updateBanner();
+    }
+  }
+
+  function updateBanner() {
+    progressDots.forEach((d, i) => d.classList.toggle('active', i === seqIndex));
+    const action = sequence[seqIndex];
+    banner.textContent = action === 'blink' ? 'Please blink naturally' : 'Please turn your head, then face forward again';
+  }
+
+  async function finishChallenge() {
+    banner.textContent = 'Verified — finishing up...';
+    if (camera) camera.stop();
+    stopRecording();
+  }
+
+  function stopRecording() {
+    frame.classList.remove('recording');
+    if (recorder && recorder.state !== 'inactive') recorder.stop();
+  }
+
+  startBtn.addEventListener('click', async () => {
+    clearInlineError(errEl);
+    startBtn.disabled = true;
+    startBtn.textContent = 'Starting camera...';
+
+    try {
+      mediaStream = await navigator.mediaDevices.getUserMedia({ video: { width: 480, height: 360 }, audio: false });
+      video.srcObject = mediaStream;
+    } catch (e) {
+      showInlineError(errEl, 'Camera access is required to verify your account. Please allow camera access and try again.');
+      startBtn.disabled = false;
+      startBtn.textContent = 'Start Verification';
+      return;
+    }
+
+    // Full-duration recording starts the moment the camera stream is ready —
+    // not just a snapshot at the end, per the task's explicit requirement.
+    recordedChunks = [];
+    const mime = MediaRecorder.isTypeSupported('video/webm;codecs=vp9') ? 'video/webm;codecs=vp9' : 'video/webm';
+    recorder = new MediaRecorder(mediaStream, { mimeType: mime });
+    recorder.ondataavailable = e => { if (e.data.size > 0) recordedChunks.push(e.data); };
+    recorder.onstop = () => {
+      flowState.recordedVideoBlob = new Blob(recordedChunks, { type: mime });
+      mediaStream.getTracks().forEach(t => t.stop());
+      startBtn.textContent = 'Start Verification';
+      banner.textContent = 'Liveness check complete';
+      goToStep(2);
+    };
+    recorder.start();
+    frame.classList.add('recording');
+
+    startBtn.hidden = true;
+    updateBanner();
+
+    // Lazy-load MediaPipe FaceMesh from CDN (Apache-2.0, Google) — no local
+    // bundling; matches this codebase's plain hand-authored/no-build-step
+    // architecture, per Directive 7/11.
+    if (typeof FaceMesh === 'undefined') {
+      await loadScript('https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js');
+      await loadScript('https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js');
+    }
+
+    faceMesh = new FaceMesh({ locateFile: f => `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${f}` });
+    faceMesh.setOptions({ maxNumFaces: 1, refineLandmarks: true, minDetectionConfidence: 0.6, minTrackingConfidence: 0.6 });
+    faceMesh.onResults(onFaceMeshResults);
+
+    camera = new Camera(video, {
+      onFrame: async () => { await faceMesh.send({ image: video }); },
+      width: 480, height: 360
+    });
+    camera.start();
+  });
+
+  function loadScript(src) {
+    return new Promise((resolve, reject) => {
+      const s = document.createElement('script');
+      s.src = src; s.onload = resolve; s.onerror = () => reject(new Error('Failed to load ' + src));
+      document.head.appendChild(s);
+    });
+  }
+}
+
+// ===========================================================================
+// STEP 2 — ID UPLOAD
+// Adapted from the Design System's Section 7 file-upload component. The
+// drop-zone markup/CSS/interaction (click, drag/drop, keyboard) is copied
+// verbatim per Rule 7. The background "upload-to-a-temp-endpoint-on-select"
+// half of that component is deliberately NOT used here: B1's spec bundles
+// the video + both ID images into a single combined submission at the very
+// end, with nothing persisted server-side until that one send — a per-file
+// temp upload immediately on selection would create exactly the kind of
+// server-side interim storage the task says not to have. Files are held as
+// in-memory File objects until the final Submit click instead.
+// ===========================================================================
+function initUploadStep() {
+  const maxBytes = 8 * 1024 * 1024; // 8MB per ID photo
+  const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+  const uploadError = document.getElementById('uploadError');
+  const continueBtn = document.getElementById('continueToSubmitBtn');
+
+  function setupField(key, stateKey) {
+    const drop = document.getElementById('drop_' + key);
+    const list = document.getElementById('list_' + key);
+
+    const inp = document.createElement('input');
+    inp.type = 'file'; inp.accept = '.jpg,.jpeg,.png'; inp.style.display = 'none';
+    document.body.appendChild(inp);
+
+    drop.addEventListener('click', () => inp.click());
+    drop.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); inp.click(); } });
+    ['dragenter', 'dragover'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('dragover'); }));
+    ['dragleave', 'drop', 'dragend'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('dragover'); }));
+    drop.addEventListener('drop', e => {
+      const f = e.dataTransfer && e.dataTransfer.files ? e.dataTransfer.files[0] : null;
+      if (f) handleFile(f);
+    });
+    inp.addEventListener('change', e => {
+      const f = e.target.files ? e.target.files[0] : null;
+      if (f) handleFile(f);
+      inp.value = '';
+    });
+
+    function handleFile(f) {
+      clearInlineError(uploadError);
+      if (f.size > maxBytes) { showInlineError(uploadError, 'File "' + f.name + '" is too large. Max 8MB.'); return; }
+      if (!allowedTypes.includes(f.type)) { showInlineError(uploadError, 'File "' + f.name + '" must be a JPG or PNG image.'); return; }
+
+      if (flowState[stateKey] && flowState[stateKey].url) URL.revokeObjectURL(flowState[stateKey].url);
+      const url = URL.createObjectURL(f);
+      flowState[stateKey] = { file: f, url, name: f.name };
+      render();
+      checkReady();
+    }
+
+    function render() {
+      list.innerHTML = '';
+      const it = flowState[stateKey];
+      if (!it) return;
+      const div = document.createElement('div');
+      div.className = 'uploaded-item';
+      const thumb = document.createElement('img');
+      thumb.src = it.url;
+      const meta = document.createElement('div');
+      meta.style.flex = '1';
+      meta.innerHTML = '<strong>' + escapeHtml(it.name) + '</strong>';
+      const btns = document.createElement('div');
+      btns.style.cssText = 'display:flex;flex-direction:column;gap:8px;';
+      const preview = document.createElement('button');
+      preview.type = 'button'; preview.className = 'small-btn'; preview.textContent = 'Preview';
+      preview.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); openItemPreview(it); });
+      const rem = document.createElement('button');
+      rem.type = 'button'; rem.className = 'small-btn'; rem.textContent = 'Remove';
+      rem.addEventListener('click', e => {
+        e.preventDefault(); e.stopPropagation();
+        URL.revokeObjectURL(it.url);
+        flowState[stateKey] = null;
+        render();
+        checkReady();
+      });
+      btns.append(preview, rem);
+      div.append(thumb, meta, btns);
+      list.appendChild(div);
+    }
+  }
+
+  function checkReady() {
+    continueBtn.disabled = !(flowState.idFront && flowState.idBack);
+  }
+
+  setupField('idFront', 'idFront');
+  setupField('idBack', 'idBack');
+
+  document.getElementById('backToLivenessBtn').addEventListener('click', () => goToStep(1));
+  continueBtn.addEventListener('click', () => goToStep(3));
+
+  // USE B preview modal wiring (Design System Section 5)
+  const modal = document.getElementById('previewModal');
+  const modalContent = document.getElementById('modalContent');
+  const modalTopTitle = document.getElementById('modalTopTitle');
+  window.openItemPreview = function (item) {
+    modalContent.innerHTML = '';
+    modalTopTitle.textContent = item.name || 'Preview';
+    const img = document.createElement('img');
+    img.src = item.url; img.alt = item.name;
+    modalContent.appendChild(img);
+    modal.classList.add('open');
+  };
+  function closePreviewModal() {
+    modal.classList.remove('open');
+    modalContent.innerHTML = '';
+    modalTopTitle.textContent = '';
+  }
+  document.getElementById('modalClose').addEventListener('click', closePreviewModal);
+  // TASK-B1 (polish): overlay-click-to-close and Escape-to-close — per
+  // Design System Section 5's Accessibility note, these are "common,
+  // low-cost additions not present in the base implementation... add them
+  // per-modal if the use case calls for it." Added here for both modals.
+  modal.addEventListener('click', e => { if (e.target === modal) closePreviewModal(); });
+  window.closePreviewModal = closePreviewModal;
+}
+
+// ===========================================================================
+// STEP 3 — REVIEW & SUBMIT
+// Single combined POST: recorded video + both ID images + username/country,
+// sent to verify-submit.php, which emails them as attachments via the
+// platform's existing mailer (contact-config.php's sendContactEmail(), per
+// Directive 7) and deletes its own temp copies immediately once the email
+// dispatch confirms success.
+// ===========================================================================
+function initSubmitStep() {
+  const submitBtn = document.getElementById('submitBtn');
+  const submitLabel = document.getElementById('submitBtnLabel');
+  const submitError = document.getElementById('submitError');
+
+  document.getElementById('backToUploadBtn').addEventListener('click', () => goToStep(2));
+
+  submitBtn.addEventListener('click', async () => {
+    clearInlineError(submitError);
+
+    if (!flowState.recordedVideoBlob || !flowState.idFront || !flowState.idBack) {
+      showInlineError(submitError, 'Please complete the liveness check and upload both ID photos first.');
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitLabel.textContent = 'Submitting...';
+
+    const fd = new FormData();
+    fd.append('username', ENTRY.username);
+    fd.append('email', ENTRY.email);
+    fd.append('country', ENTRY.country);
+    fd.append('video', flowState.recordedVideoBlob, 'liveness-check.webm');
+    fd.append('id_front', flowState.idFront.file, flowState.idFront.name);
+    fd.append('id_back', flowState.idBack.file, flowState.idBack.name);
+
+    try {
+      // Root-absolute path to match verify-submit.php's actual deployed
+      // location inside this same /verify/ folder (confirmed against the
+      // site's documented root structure: admin/, contact-us/, adoptions/
+      // are siblings, and /verify/ is a new one) — mirrors the convention
+      // ADMIN_DASHBOARD_PROJECT_SUMMARY.md documents for chat-widget.js,
+      // using an absolute path so it resolves correctly regardless of how
+      // deep a page embedding this flow might sit.
+      const res = await fetch('/verify/verify-submit.php', { method: 'POST', body: fd });
+      let json;
+      try { json = await res.json(); } catch (e) { json = null; }
+
+      if (!res.ok || !json || !json.success) {
+        showInlineError(submitError, (json && json.message) || 'Submission failed. Please try again.');
+        submitBtn.disabled = false;
+        submitLabel.textContent = 'Submit for Verification';
+        return;
+      }
+
+      document.getElementById('successModal').classList.add('open');
+    } catch (e) {
+      showInlineError(submitError, 'Network error while submitting. Please check your connection and try again.');
+      submitBtn.disabled = false;
+      submitLabel.textContent = 'Submit for Verification';
+    }
+  });
+
+  const successModalEl = document.getElementById('successModal');
+  function closeSuccessModal() {
+    successModalEl.classList.remove('open');
+    // Nothing further to do client-side — the merchant's account gets
+    // created by the separate CEO-built system once admin approval (Task
+    // B2) happens; this page's job ends at successful submission.
+  }
+  document.getElementById('successCloseBtn').addEventListener('click', closeSuccessModal);
+  // TASK-B1 (polish): overlay-click-to-close, matching the same optional
+  // addition wired onto the preview modal above.
+  successModalEl.addEventListener('click', e => { if (e.target === successModalEl) closeSuccessModal(); });
+
+  // Shared Escape-to-close for whichever modal is currently open (only one
+  // of these two is realistically open at a time in this flow).
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Escape') return;
+    const preview = document.getElementById('previewModal');
+    if (preview.classList.contains('open') && typeof window.closePreviewModal === 'function') {
+      window.closePreviewModal();
+    } else if (successModalEl.classList.contains('open')) {
+      closeSuccessModal();
+    }
+  });
+}
+/* TASK-B1 END — Verify-account flow controller */
+</script>
+</body>
+</html>
