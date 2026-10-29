@@ -1742,6 +1742,21 @@ p { color: var(--muted); }
 /* TASK-4 END (CSS portion — the HTML markup and JS functions each have
    their own TASK-4 START/END markers further down this file) */
 
+/* TASK-B2 START: Verification Requests rows get their own class instead of
+   reusing .pc-app-row, because TASK-4's mobile rule forces .pc-app-row into a
+   28px/1fr/44px checkbox-applicant-actions grid that does not fit this
+   4-column (username/submitted/country/actions) shape. Desktop shape is set
+   inline on each row/header; mobile override below needs !important to beat
+   that inline style, same pattern TASK-4 documents above. */
+.pc-verif-row__meta { display: none; }
+@media (max-width: 767px) {
+  .pc-verif-row, #verifRequestsHeaderRow { grid-template-columns: 1fr 100px !important; }
+  .pc-verif-row__desktop-col { display: none !important; }
+  /* Submitted date + country move under the username on mobile so no info is lost */
+  .pc-verif-row__meta { display: block; font-size: 12px; color: #8b7d6b; margin-top: 2px; }
+}
+/* TASK-B2 END */
+
 
   </style>
 </head>
@@ -1956,6 +1971,11 @@ p { color: var(--muted); }
       <button class="admin-icon-rail__item" data-panel="publish" onclick="switchPanel('publish')" title="Publish Pets"><i class="fas fa-plus"></i></button>
       <button class="admin-icon-rail__item" data-panel="edit" onclick="switchPanel('edit')" title="Edit Pets"><i class="fas fa-pen"></i></button>
       <button class="admin-icon-rail__item" data-panel="applications" onclick="switchPanel('applications')" title="Applications"><i class="fas fa-file-lines"></i></button>
+      <!-- TASK-B2 START: nav icon for the new Verification Requests panel, added
+           directly after Applications since both are review/approve/reject
+           queues — same icon-rail pattern as every other item here (Rule 7). -->
+      <button class="admin-icon-rail__item" data-panel="verifRequests" onclick="switchPanel('verifRequests')" title="Verification Requests"><i class="fas fa-shield-halved"></i></button>
+      <!-- TASK-B2 END -->
       <button class="admin-icon-rail__item" data-panel="adminProfiles" onclick="switchPanel('adminProfiles')" title="Admin Profiles"><i class="fas fa-user-shield"></i></button>
       <button class="admin-icon-rail__item" data-panel="chatReviews" onclick="switchPanel('chatReviews')" title="Reviews"><i class="fas fa-star"></i></button>
       <button class="admin-icon-rail__item" data-panel="chatBot" onclick="switchPanel('chatBot')" title="Bot Profile"><i class="fas fa-robot"></i></button>
@@ -2235,6 +2255,42 @@ p { color: var(--muted); }
         </div>
         </div>
       </div>
+
+      <!-- TASK-B2 START: Verification Requests panel — Task B2 (Admin verification
+           review queue). Cloned structure/CSS classes from the Applications panel
+           directly above (.pc-app-row, .pc-app-actions, .pc-modal-shell — see Rule 7
+           "Reuse note" in the task spec: use the exact list-row-and-action-button
+           styling already proven in Applications, don't design new list UI).
+           Deliberately simpler than Applications: per the task's exact spec, this
+           queue shows only merchant username / submission timestamp / country and
+           Approve/Reject — no raw media (video/ID images), since the admin already
+           received those by email per Task B1's flow, and no filter/bulk-delete
+           controls since the spec doesn't call for them here. No dropdown/select
+           elements are built in this panel (Directive 9a n/a to this panel). -->
+      <div id="verifRequestsPanel" class="admin-panel" style="display:none;">
+        <h2 style="font-family:'Cormorant Garamond',serif;color:#10214b;margin-bottom:6px;">Verification Requests</h2>
+        <p style="color:#888;margin-bottom:24px;font-size:14px;">Review pending merchant identity verifications — approve or reject based on the video + ID images already sent to your verification inbox by email</p>
+
+        <div style="flex:0 0 auto;margin-bottom:14px;">
+          <div id="verifCount" style="font-size:13px;color:#8b7d6b;"></div>
+        </div>
+
+        <!-- Reused .pc-apps-scroll wrapper from Applications (TASK-4's mobile
+             horizontal-scroll fallback applies here too, same column-collapse need). -->
+        <div class="pc-apps-scroll">
+          <div id="verifRequestsHeaderRow" style="display:grid;grid-template-columns:2fr 1.4fr 1fr 100px;gap:0;background:#f0ece7;border-radius:8px 8px 0 0;padding:10px 16px;border-bottom:2px solid #d7bd88;">
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#7a6d5f;">Merchant Username</div>
+            <div class="pc-verif-row__desktop-col" style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#7a6d5f;">Submitted</div>
+            <div class="pc-verif-row__desktop-col" style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#7a6d5f;">Country</div>
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#7a6d5f;">Actions</div>
+          </div>
+          <div id="verifRequestsList"></div>
+          <div id="verifRequestsEmpty" style="display:none;padding:48px 24px;text-align:center;background:#fff;border-radius:0 0 8px 8px;border:1px solid #eee;border-top:none;">
+            <p style="color:#aaa;font-size:14px;">No pending verification requests.</p>
+          </div>
+        </div>
+      </div>
+      <!-- TASK-B2 END -->
 
     </div>
 
@@ -2616,6 +2672,42 @@ p { color: var(--muted); }
     </div>
   </div>
 </div>
+
+<!-- TASK-B2 START: Verification approve/reject modals — cloned shell/box/typography
+     from approveModal/rejectModal directly above (same .pc-modal-shell pattern,
+     same Use-A confirmation-modal box with its own overflow-y:auto + max-height
+     safety net). Approve here is a plain confirm (no checkout-link step — that's
+     an Applications-specific field with no equivalent in a verification review),
+     Reject requires a reason (task spec: "prompts a required short reason field
+     on Reject" — unlike Applications' reject reason, which is optional, this one
+     is enforced both here via the `required` attribute and again in submitVerifReject()
+     below, since HTML `required` alone doesn't fire on a programmatic button click
+     the way it does on a real form submit). -->
+<div id="verifApproveModal" class="pc-modal-shell" style="position:fixed;left:0;top:0;width:100%;height:100%;background:rgba(16,33,75,0.65);display:none;align-items:center;justify-content:center;z-index:10000;padding:20px;">
+  <div style="width:100%;max-width:480px;max-height:85vh;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;background:#fff;border-radius:14px;padding:32px;box-shadow:0 20px 60px rgba(16,33,75,0.25);">
+    <h3 style="font-family:'Cormorant Garamond',serif;font-size:22px;color:#10214b;margin:0 0 8px;">Approve this merchant?</h3>
+    <p style="color:#7a6d5f;font-size:14px;margin-bottom:22px;">Their <code style="background:#f0ece7;padding:1px 5px;border-radius:4px;">verification_status</code> will be set to <strong>verified</strong>, the Verified badge (Task B3) will apply immediately, and a confirmation email will be sent to them.</p>
+    <div style="display:flex;gap:10px;">
+      <button onclick="submitVerifApprove()" class="pc-btn pc-btn--primary" style="flex:1;background:linear-gradient(135deg,#0d7c4a,#0a6340);">Approve</button>
+      <button onclick="closeVerifApproveModal()" class="pc-btn pc-btn--ghost">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div id="verifRejectModal" class="pc-modal-shell" style="position:fixed;left:0;top:0;width:100%;height:100%;background:rgba(16,33,75,0.65);display:none;align-items:center;justify-content:center;z-index:10000;padding:20px;">
+  <div style="width:100%;max-width:480px;max-height:85vh;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;background:#fff;border-radius:14px;padding:32px;box-shadow:0 20px 60px rgba(16,33,75,0.25);">
+    <h3 style="font-family:'Cormorant Garamond',serif;font-size:22px;color:#10214b;margin:0 0 8px;">Reject this verification?</h3>
+    <p style="color:#7a6d5f;font-size:14px;margin-bottom:20px;">Their <code style="background:#f0ece7;padding:1px 5px;border-radius:4px;">verification_status</code> will be set to <strong>rejected</strong>. They keep the ability to resubmit — this reason is included in their email so they know what to fix.</p>
+    <label class="pc-form-label" style="margin-bottom:6px;">Reason for rejection <span style="font-weight:400;text-transform:none;color:#c0392b;">(required)</span></label>
+    <textarea id="verifRejectReason" class="pc-form-input" required placeholder="e.g., ID images unclear, video did not complete the liveness challenge, name on ID doesn't match account..." style="min-height:90px;resize:vertical;margin-bottom:6px;"></textarea>
+    <div id="verifRejectReasonError" style="display:none;color:#c0392b;font-size:12px;margin-bottom:12px;">Please enter a reason — the merchant needs to know why, and how to fix it before resubmitting.</div>
+    <div style="display:flex;gap:10px;margin-top:12px;">
+      <button onclick="submitVerifReject()" class="pc-btn pc-btn--primary" style="flex:1;background:linear-gradient(135deg,#c0392b,#a93226);">Send Rejection</button>
+      <button onclick="closeVerifRejectModal()" class="pc-btn pc-btn--ghost">Cancel</button>
+    </div>
+  </div>
+</div>
+<!-- TASK-B2 END -->
 
 <!-- TASK-4 (CEO task-list item 6): upload/file preview modal — was Use B
      already (single-item preview) but its Close button floated INSIDE
@@ -3629,6 +3721,17 @@ const PC = window.PC = {
   }
 };
 
+/* HOTFIX (authorized directly by CEO in chat, outside Task B2's own scope —
+   not a B2 anchor, logged separately so it isn't mistaken for feature work):
+   showToast() was called from checkTokenBeforeAction() and validateToken()
+   (the not-logged-in and invalid-session paths) but was never defined
+   anywhere in this file, throwing a ReferenceError and silently killing
+   whichever action triggered it — reproduced via Playwright before this fix.
+   PC.toast() already does exactly this job everywhere else in the
+   dashboard, so showToast() is defined as a thin pass-through to it rather
+   than a second, divergent toast implementation. */
+function showToast(msg, type) { PC.toast(msg, type); }
+
 // CUSTOM DROPDOWN INIT
 // TASK-4 (CEO task-list item 10): re-sync happens on EVERY call now, even
 // for an already-initialized wrapper — event-listener attachment is still
@@ -4419,6 +4522,11 @@ function switchPanel(panel) {
   if (panel === 'chatBot') {
     loadChatBotProfile();
   }
+  // TASK-B2 START: same load-on-open pattern as 'applications' above
+  if (panel === 'verifRequests') {
+    loadVerificationRequests();
+  }
+  // TASK-B2 END
 }
 
 function selectPublishCategory(category) {
@@ -7387,6 +7495,183 @@ async function submitReject() {
     window.dlog('Reject Application: network error — ' + e.message, 'error');
   }
 }
+
+// TASK-B2 START ═══════════════════════════════════════════════════════════════
+// Verification Requests panel (Task B2). Load/render/approve/reject functions,
+// deliberately mirroring loadApplications()/renderApplications()/
+// submitApprove()/submitReject() above (Rule 7 — reuse the proven pattern
+// rather than inventing a new one), simplified to match this panel's smaller
+// row shape (username/timestamp/country/actions, no status filter, no
+// checkboxes/bulk actions, no view-detail expansion — none of those were
+// asked for in the task spec).
+let allVerificationRequests = [];
+let currentVerifApproveUsername = null;
+let currentVerifRejectUsername = null;
+
+// Fetches the pending-verification queue from the new get-verification-requests.php
+// endpoint (same token-based auth + FormData POST shape as loadApplications()'s
+// call to get-applications.php above).
+async function loadVerificationRequests() {
+  if (!await checkTokenBeforeAction('loadVerificationRequests')) return;
+  try {
+    const fd = new FormData();
+    fd.append('token', adminToken);
+    const res  = await fetch('./get-verification-requests.php', { method: 'POST', body: fd });
+    const json = await res.json();
+    allVerificationRequests = Array.isArray(json.requests) ? json.requests : [];
+    // Newest submission first, same sort direction as Applications.
+    allVerificationRequests.sort((a, b) => (b.submitted_at || '').localeCompare(a.submitted_at || ''));
+    renderVerificationRequests();
+  } catch (e) {
+    PC.toast('Error loading verification requests', 'error');
+    window.dlog('Verification Requests: load error — ' + e.message, 'error');
+  }
+}
+
+// Renders each pending request as a row. Only 'pending' requests are shown —
+// once approved/rejected they drop out of this queue (they're done, no
+// further action needed here; B3's badge/B1's resubmission flow take over).
+function renderVerificationRequests() {
+  const list  = document.getElementById('verifRequestsList');
+  const empty = document.getElementById('verifRequestsEmpty');
+  const count = document.getElementById('verifCount');
+  if (!list) return;
+
+  const pending = allVerificationRequests.filter(r => (r.verification_status || 'pending') === 'pending');
+  list.innerHTML = '';
+
+  if (count) count.textContent = pending.length + ' pending request' + (pending.length !== 1 ? 's' : '');
+
+  if (!pending.length) {
+    if (empty) empty.style.display = 'block';
+    return;
+  }
+  if (empty) empty.style.display = 'none';
+
+  pending.forEach((req, idx) => {
+    const isEven = idx % 2 === 0;
+    const usernameEsc = PC.esc(req.username || '');
+    // Same D/MM/YY short-date formatter Applications already uses (formatAppDateShort,
+    // defined above) — reused rather than writing a second date formatter.
+    const submittedLabel = req.submitted_at ? formatAppDateShort(req.submitted_at) : '—';
+    const countryLabel = req.country ? PC.esc(req.country) : '<span style="color:#aaa;">—</span>';
+    // TASK-B2 (forward compatibility): request_type isn't used by B2 itself — B2 only
+    // ever creates 'identity' requests — but Task B3's spec explicitly says its
+    // Registered Charity/Rescue review "lands in the same B2 admin review queue...
+    // as a second request type, not a separate dashboard section." This label is the
+    // only change that needed: a 'charity' row rendered by B3's own code will show
+    // "Charity/Rescue" here automatically, with no further changes to this file.
+    const requestTypeLabel = req.request_type === 'charity' ? 'Charity/Rescue' : 'Identity';
+
+    const row = document.createElement('div');
+    row.className = 'pc-verif-row'; // TASK-B2: own class, see .pc-verif-row CSS block
+    row.style.cssText = `display:grid;grid-template-columns:2fr 1.4fr 1fr 100px;gap:0;padding:13px 16px;background:${isEven ? '#fff' : '#faf8f5'};border-bottom:1px solid #ece7e0;align-items:center;`;
+    row.innerHTML = `
+      <div style="min-width:0;">
+        <div style="font-weight:600;color:#10214b;font-size:14px;overflow-wrap:anywhere;">${usernameEsc}</div>
+        <div class="pc-verif-row__meta">${requestTypeLabel} &middot; ${submittedLabel} &middot; ${countryLabel}</div>
+      </div>
+      <div class="pc-verif-row__desktop-col" style="font-size:13px;color:#7a6d5f;">${submittedLabel}</div>
+      <div class="pc-verif-row__desktop-col" style="font-size:14px;color:#2c2416;">${countryLabel}</div>
+      <div style="display:flex;gap:6px;">
+        <button class="pc-app-actions__btn pc-app-actions__btn--approve" onclick="openVerifApproveModal('${usernameEsc}')" title="Approve"><i class="ph-fill ph-check-circle"></i></button>
+        <button class="pc-app-actions__btn pc-app-actions__btn--reject" onclick="openVerifRejectModal('${usernameEsc}')" title="Reject"><i class="ph-fill ph-x-circle"></i></button>
+      </div>
+    `;
+    list.appendChild(row);
+  });
+}
+
+// ── APPROVE ──────────────────────────────────────────────────────────────────
+function openVerifApproveModal(username) {
+  currentVerifApproveUsername = username;
+  document.getElementById('verifApproveModal').style.display = 'flex';
+}
+
+function closeVerifApproveModal() {
+  document.getElementById('verifApproveModal').style.display = 'none';
+  currentVerifApproveUsername = null;
+}
+
+async function submitVerifApprove() {
+  if (!await checkTokenBeforeAction('approveVerification')) return;
+  const username = currentVerifApproveUsername;
+  if (!username) return;
+  try {
+    const fd = new FormData();
+    fd.append('token', adminToken);
+    fd.append('username', username);
+    fd.append('verification_status', 'verified');
+    window.dlog(`Verification Approve: username=${username}`, 'info');
+    const res  = await fetch('./update-verification.php', { method: 'POST', body: fd });
+    const json = await res.json();
+    if (json.success) {
+      PC.toast('Approved — verified badge applied, confirmation email sent.');
+      window.dlog(`Verification Approve: success — username=${username}, email_sent=${!!json.email_sent}`, 'ok');
+      closeVerifApproveModal();
+      loadVerificationRequests();
+    } else {
+      PC.toast(json.message || 'Error', 'error');
+      window.dlog('Verification Approve: failed — ' + (json.message || 'unknown error'), 'error');
+    }
+  } catch (e) {
+    PC.toast('Network error: ' + e.message, 'error');
+    window.dlog('Verification Approve: network error — ' + e.message, 'error');
+  }
+}
+
+// ── REJECT ───────────────────────────────────────────────────────────────────
+function openVerifRejectModal(username) {
+  currentVerifRejectUsername = username;
+  document.getElementById('verifRejectReason').value = '';
+  document.getElementById('verifRejectReasonError').style.display = 'none';
+  document.getElementById('verifRejectModal').style.display = 'flex';
+}
+
+function closeVerifRejectModal() {
+  document.getElementById('verifRejectModal').style.display = 'none';
+  currentVerifRejectUsername = null;
+}
+
+async function submitVerifReject() {
+  if (!await checkTokenBeforeAction('rejectVerification')) return;
+  const username = currentVerifRejectUsername;
+  const reason = document.getElementById('verifRejectReason').value.trim();
+  if (!username) return;
+  // Reason is REQUIRED here (unlike Applications' optional reject reason) —
+  // per the task spec: "Prompts a required short reason field on Reject...
+  // merchants should know why, not just that they were rejected." Enforced
+  // client-side here AND again server-side in update-verification.php, since
+  // this is a programmatic button click, not a real <form> submit, so the
+  // textarea's `required` attribute never fires on its own.
+  if (!reason) {
+    document.getElementById('verifRejectReasonError').style.display = 'block';
+    return;
+  }
+  try {
+    const fd = new FormData();
+    fd.append('token', adminToken);
+    fd.append('username', username);
+    fd.append('verification_status', 'rejected');
+    fd.append('rejection_reason', reason);
+    window.dlog(`Verification Reject: username=${username}`, 'info');
+    const res  = await fetch('./update-verification.php', { method: 'POST', body: fd });
+    const json = await res.json();
+    if (json.success) {
+      PC.toast('Rejected — reason sent, merchant may resubmit.');
+      window.dlog(`Verification Reject: success — username=${username}, email_sent=${!!json.email_sent}`, 'ok');
+      closeVerifRejectModal();
+      loadVerificationRequests();
+    } else {
+      PC.toast(json.message || 'Error', 'error');
+      window.dlog('Verification Reject: failed — ' + (json.message || 'unknown error'), 'error');
+    }
+  } catch (e) {
+    PC.toast('Network error: ' + e.message, 'error');
+    window.dlog('Verification Reject: network error — ' + e.message, 'error');
+  }
+}
+// TASK-B2 END ═══════════════════════════════════════════════════════════════
 
 // ── EDIT STATUS (for APPROVED apps) ──────────────────────────────────────────
 function openEditStatusModal(code) {
