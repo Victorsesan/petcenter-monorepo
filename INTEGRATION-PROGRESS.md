@@ -201,3 +201,12 @@ The worker's proposed `merchant/index.html` path was adopted because no authorit
 | Rehoming Platform Task E2 | applied | `fa30746` | Added `adopt/rehoming/account-lifecycle.php`; PHP syntax and diff checks passed. |
 
 E2's `_NOT-FOR-LIVE` snippet and JSON fixture were retained only in intake for later integration/testing.
+
+
+## Latest update — Rehoming E3 stop
+
+| Task | Result | Reason |
+|---|---|---|
+| Rehoming Platform Task E3 | stopped | All four documented old snippets for `adopt/admin/index.html` occurred zero times in the current file; no E3 files were applied. The worker expected an unavailable/older C1b admin state. |
+
+E3's proposed support/FAQ routes and PHP endpoints remain in intake only until the admin-page dependency is reconciled.
