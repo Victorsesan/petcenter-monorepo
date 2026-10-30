@@ -6,7 +6,7 @@ Work package: cross-cutting security, PHP quality, HTML quality, upload safety, 
 
 Original review starting commit: `f26629e82aa3a5d5b47eb0864311d759cce9f840`.
 Repository-wide correction-pass starting commit: `251d8c2` (corrected `origin/main`).
-Final commit for this report revision: recorded after this report update.
+Correction merge commit: `4922a4b`. Report revision commit: `01ce447`.
 
 The correction notice confirms that the worker-package inventory was generated from an intake workspace whose 62 task completion/handoff files were not copied into this repository. I did not claim to read, compare, or rely on any unavailable completion file. I used the available core assignment documents, project summaries, issue register, Git history, and current source for independently verifiable checks.
 
@@ -73,4 +73,4 @@ Exact application-code changes: none. New debugging anchors: none. The only chan
 
 Branch: `task/second-round-MANUS-09`.
 Commit message requirement: `MANUS-09:` prefix.
-Final commit hash: recorded after this corrected report is committed and pushed.
+Final report revision commit before push: `01ce447`; final branch tip may include the credential-free push reference only.
