@@ -52,6 +52,18 @@ if ($action === 'submit' && $_SERVER['REQUEST_METHOD'] === 'POST') {
     chatRequireSessionToken($chatId, $sessionToken);
     /* TASK-1 END */
 
+    /* BUGFIX-MANUS-01-1-START — keep a valid session token from being paired
+       with an unrelated syntactically valid email when saving a rating. */
+    $threadEmailStmt = chatDb()->prepare(
+        "SELECT email FROM chat_threads WHERE chat_id = ? LIMIT 1"
+    );
+    $threadEmailStmt->execute([$chatId]);
+    $storedEmail = $threadEmailStmt->fetchColumn();
+    if ($storedEmail === false || strcasecmp(trim((string)$storedEmail), $email) !== 0) {
+        chatRespond(['success' => false, 'error' => 'Email does not match this chat'], 403);
+    }
+    /* BUGFIX-MANUS-01-1-END */
+
     $file = $reviewsDir . preg_replace('/[^A-Za-z0-9\-]/', '', $chatId) . '.json';
     $reviews = [];
     if (file_exists($file)) {
