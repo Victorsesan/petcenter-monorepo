@@ -98,6 +98,7 @@ Look for your task number, your role, or `ALL` in the **To** column.
 | 2 | 2026-10-12 | VDM, Web Projects 3-4-5 | CEO | Medium | DONE | Rule 6 missing from adoption-website-project-summary.md's Warning & Instructions |
 | 3 | 2026-10-12 | VDM, Unified Status Dashboard | CEO, ALL | High | DONE | Branch names collide across projects — `task/[number]` alone is not unique |
 | 4 | 2026-10-13 | CEO | VDM Unified Status Dashboard, VDM Web Projects 3-4-5 | High | OPEN | Trackers still tell workers to "request completion files from the CEO" |
+| 5 | 2026-10-30 | Integrator | ALL second-round Manus accounts | High | OPEN | Second-round coordination, central account reports, and master issue register |
 
 ---
 
@@ -117,6 +118,19 @@ Look for your task number, your role, or `ALL` in the **To** column.
 - **Updates:** 2026-10-14 07:10 UTC — VDM, Web Projects 3-4-5: fixed on `main`, commit a9a9b8b. Rule 3 already had no completion-file exception from the earlier git-aware rewrite — nothing to change there. Replaced all 13 "Task N's completion file" references (Shared File Coordination table, Tasks 1, 2, 3b, 4b, 5b, 6a, 6b, 7b, 8, 9) with "code on `main` once merged, plus `reports/task-[project]-N.md`, or `git diff origin/main...origin/task/[project]-N` if not yet merged." Also fixed 5 places still saying "pull the most recently submitted version" (pre-git phrasing left over from before the branch workflow) to "merge latest `main` into your branch." Status left OPEN since this entry also covers `Unified-Status-Dashboard-Task-Tracker-v3-FINAL.md`, which I don't own.
 
 <!-- NEW ENTRIES GO BELOW THIS LINE. COPY THE TEMPLATE FROM "HOW TO ADD OR UPDATE AN ENTRY". -->
+
+### #5 — Second-round coordination and central account reports
+
+- **From:** Integrator, second-round preparation
+- **To:** ALL second-round Manus accounts, final coordinator
+- **Type:** Instruction
+- **Severity:** High
+- **Date and time:** 2026-10-30 01:47 UTC
+- **Where:** `docs/second-round/`, `reports/second-round/`, and this shared inbox
+- **Reason / issue (in full):** The second debugging round has 11 assigned work packages. Every account must read the core documents, verify its scope against the current repository, classify reported issues, and publish a traceable report. The account prompt packet, source documents, issue register, and report index are now in the repository.
+- **What is needed:** Read `docs/second-round/SECOND-ROUND-MANUS-COORDINATION.md` and `docs/second-round/MANUS-ACCOUNT-PROMPTS.md` before starting. Use the assigned account ID and report path in `reports/second-round/ACCOUNT-REPORT-INDEX.md`. Never put credentials in TODO, reports, or code.
+- **Status:** OPEN
+- **Updates:** 2026-10-30 01:47 UTC — Integrator: created the source-document bundle, worker-package inventory, master issue register, pre-filled account prompts, and central report index in the documentation commit containing this entry.
 
 ### #2 — Rule 6 missing from adoption-website-project-summary.md's Warning & Instructions
 
