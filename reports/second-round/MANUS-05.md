@@ -1,0 +1,86 @@
+# MANUS-05 — Second-Round Rehoming Review
+
+## Assignment and repository state
+
+- **Account:** MANUS-05
+- **Package:** Rehoming Platform, Tasks A1–C6
+- **Starting commit:** `251d8c26ab89bc9a3fd2bc12e155af41b1d03a87` (corrected `main`)
+- **Branch:** `task/second-round-MANUS-05`
+- **Ending commit:** pending report commit
+- **Code changes:** none. This handoff is an evidence/review report only; no application code or protected path was changed.
+
+## Documents read
+
+Read the MANUS-05 prompt and the repository-wide correction, plus the required project packet: `INTEGRATION-PROGRESS.md`, `TODO.md`, `docs/second-round/README.md`, `SECOND-ROUND-REQUEST.md`, `SECOND-ROUND-SETUP-AND-SKILLS.md`, `SECOND-ROUND-MANUS-COORDINATION.md`, `WORKER-PACKAGE-INVENTORY.md`, and `SECOND-ROUND-ISSUE-REGISTER.md`. Read the relevant core documents: `core-docs/Rehoming-Platform-Task-Assignments-9.md`, `core-docs/TODO-5.md`, and `core-docs/WORKER-GIT-SYNC-PROTOCOL-7.md`; project references `adoption-website-project-summary.md`, `ADMIN_DASHBOARD_PROJECT_SUMMARY.md`, and `ROADBLOCKS-AND-FIXES.md`. Also read `docs/second-round/ACCOUNT-WIDE-CORRECTION.md` and re-read the MANUS-05 account section in `MANUS-ACCOUNT-PROMPTS.md`. Design system was not used to make design changes; no UI was edited.
+
+The 62 worker completion/handoff documents described by the inventory are absent from this repository, and the old intake workspace is not present in this environment. No completion-file comparison is claimed below.
+
+## Missing completion/handoff files — evidence gaps
+
+The inventory names these files as present in the original intake, but they are unavailable both in the repository and the original intake workspace:
+
+| Original intake package | Missing file |
+|---|---|
+| `Rehoming-Platform-Task-A1` | `Task-A1-Completion.md` |
+| `Rehoming-Platform-Task-A2` | `Task-A2-Completion.md` |
+| `Rehoming-Platform-Task-A3` | `Task-A3-Completion.md` |
+| `Rehoming-Platform-Task-B1` | `Task-B1-Completion.md` |
+| `Rehoming-Platform-Task-B2` | `Task-B2-Completion.md` |
+| `Rehoming-Platform-Task-B3` | `Task-B3-Completion.md` |
+| `Rehoming-Platform-Task-B4` | `Task-B4-Completion.md` |
+| `Rehoming-Platform-Task-B5` | `Task-B5-Completion.md` |
+| `Rehoming-Platform-Task-B6` | `Task-B6-Completion.md` |
+| `Rehoming-Platform-C1a-C1b` | `Task-C1a-C1b-Completion.md` |
+| `Rehoming-Platform-Task-C2` | `Task-C2-Completion.md` |
+| `Rehoming-Platform-Task-C3` | `Task-C3-Completion.md` |
+| `rehoming-platform-task-C5` | Inventory says no completion/handoff file (`—`) |
+| `Rehoming-Platform-C6` | Inventory says no completion/handoff file (`—`) |
+
+For the first 12, the exact inventory package/file pair above is the expected intake location; it is not a Git path. The inventory supplies no filename for C5/C6. A4 has no separate completion package listed; C4 is explicitly gated on C5 in the assignment. These absences are evidence gaps, not assertions about the original reports' content.
+
+## Current-source verification and classification
+
+“Fixed” below means the reported defect is already corrected in the current `main` source; MANUS-05 did not make that correction. “Needs My Review” means current artifacts expose an incomplete integration or a decision requiring confirmation. “Blocked” means the required feature/dependency is not present to test or safely complete. The issue register is treated as a lead, not proof.
+
+| Task / register concern | Classification | Independently verifiable evidence on current `main` |
+|---|---|---|
+| A1 — contracted listing fields and incomplete posting path | **Needs My Review** | `adopt/merchant/index.html` has the A1 health, temperament, rehoming reason, spay/neuter, listing-type/foster, currency and urgent edit fields, with 20/20/15-character checks. But the page’s “Post New Listing” action navigates through `A1_POSTING_PANEL_URL`; no merchant publish/upload endpoint was found among tracked rehoming files. The inventory-listed A1 completion is unavailable, so the posted-form/backend history cannot be confirmed. |
+| A2 — grouped listings / Needs Extra Love | **Needs My Review** | Current sources contain the `grouped_with`/`needs_extra_love` contract and B6 profile demo rendering. The category browse implementation in `adopt/pets/cats/index.html` does exclude `held_for_review` and non-active contract statuses, but no `needs_extra_love`/`grouped_with` browse integration or A2 daily job was found in tracked non-protected files. The A2 completion is unavailable. |
+| A3 — browse/filter limitations | **Needs My Review** | `adopt/pets/cats/index.html` contains A3 filter logic and a four-value non-active status list. The register’s legacy `Available`/`Adopted` status caveat and finite `PC_CITY_COORDS` coverage are still relevant: old status handling is distinct from the new enum, and unknown city strings are not distance-filtered. These are disclosed limitations/contract decisions, not silently changed. |
+| A4 — `showAuthPrompt(contextMessage)` | **Blocked** | Current tracked sources only inject/call a `deps.showAuthPrompt` dependency from other modules; no shared `showAuthPrompt` implementation file was found. A4 has no separate completion package in the inventory. |
+| B1 — verification submission and route | **Fixed / Needs My Review** | `adopt/verify/index.html` posts to `/verify/verify-submit.php`, and `adopt/verify/verify-submit.php` requires the sibling `contact-us/contact-config.php` path documented in the project summary. The biometric temp-file cleanup and non-sensitive queue-record approach are visible in source. The queue-storage interpretation and real mail delivery/live server setup remain **Needs My Review**; no protected config or runtime credentials were opened. |
+| B2 — concurrent approve/reject lost update | **Fixed** | `adopt/admin/update-verification.php` calls `verifSaveOneRequest($match)`; `verification-store.php` defines a one-record writer and the list writer delegates to it. This matches the register’s claimed race correction. PHP syntax checks pass. No concurrent database/server reproduction was possible here. |
+| B3 — badge tiers / data-source stubs | **Needs My Review** | `adopt/rehoming/badge-logic.php` and `badge-calculation-cron.php` are present and parse. Their comments and code identify provisional/stub placement-count and response-rate sources; reconcile against the eventual real placement and enquiry systems before treating the public data as production-backed. |
+| B4 — response-rate calculation | **Needs My Review** | Both PHP and JS implementations and fixture suites exist. All 14 PHP fixtures and all 17 JS cases pass. The documented message shape remains an assumption until the real merchant-enquiry messaging data exists; do not conflate it with the separate admin support chat. |
+| B5 — adopter profile integration/privacy | **Blocked** | The issue register describes dependencies on D1’s enquiry flow and real account persistence. D1 is outside this package and its completion record is unavailable. This review did not inspect private account data or infer the account backend’s behavior. |
+| B6 — merchant profile stubs/contract | **Needs My Review** | `adopt/merchants/index.html` contains the named `badges`, `impact-stats`, `reviews`, and `actions` sections and sample/stub merchant/listing data. Placeholder/review handoffs remain; C1/C6 integration is not present. Missing B6 completion prevents confirming the intended final handoff state. |
+| C1a/C1b — reports and moderation queue | **Blocked** | No current C1 report modal, merchant response page, reports library/queue, or `TASK-C1` anchor was found in tracked source. The required C1 completion file is absent. |
+| C2 — four anti-fraud detectors and integration | **Needs My Review** | `adopt/rehoming/anti-fraud-detectors.php` contains detector functions and explicitly describes itself as standalone. A repository-wide search of tracked, non-protected source found no call sites outside that module; listing/chat-handler integration and test-account/report-storage integration therefore remain unverified. The C2 completion file is absent. |
+| C3 — safety prompts | **Needs My Review** | `adopt/assets/js/merchant-code-of-conduct.js` exists and exposes `requireBeforeListing`; its configured `/merchant-conduct-agree` endpoint and the safe-exchange/gift UI require the missing C5 compose/chat integration. The issue register’s endpoint and persistence concerns remain evidence-limited. |
+| C4 — image moderation | **Blocked** | The assignment explicitly gates C4 on C5’s hardened messaging/upload endpoint being merged. No C5 branch exists in fetched remote refs, and the C5 endpoints are absent from current tracked source. |
+| C5 — merchant/visitor messaging | **Blocked** | No in-scope merchant send/poll/thread endpoints or C5 anchor were found. The package inventory lists no C5 completion file. Do not infer implementation from the unrelated admin-support-chat system. |
+| C6 — reviews/thumbs/moderation | **Blocked** | The merchant profile has the contracted review/actions locations, but no C6 submission/display/moderation implementation or C6 anchor was found. The inventory lists no C6 completion file. |
+
+No issue was classified as **False Alarm / Already Resolved** in this pass: findings above either have direct supporting source evidence or remain unresolved/decision-dependent. No unsupported issue-register assertions were accepted merely because they appear in the register.
+
+## Files inspected
+
+Scoped non-protected source reviewed: `adopt/merchant/index.html`, `adopt/merchants/index.html`, `adopt/pets/cats/index.html`, `adopt/pets/detail/index.html` (targeted task anchors), `adopt/verify/index.html`, `adopt/verify/verify-submit.php`, `adopt/admin/verification-store.php`, `adopt/admin/update-verification.php`, `adopt/rehoming/anti-fraud-detectors.php`, `badge-logic.php`, `badge-calculation-cron.php`, `merchant-response-stats.php`, its PHP/JS test runners and fixtures, and `adopt/assets/js/merchant-code-of-conduct.js`. Protected `.env`, `config.php`, `pet.json`, application/upload/chat-media/log content was not opened or copied.
+
+## Tests and tooling
+
+- `php adopt/rehoming/merchant-response-stats.test.php`: **14 passed, 0 failed**.
+- `node adopt/rehoming/merchant-response-stats.test-v1.js`: **17 passed, 0 failed**.
+- `php -l` on tracked non-protected scoped PHP files in `adopt/rehoming/` and `adopt/verify/`, plus B2 `verification-store.php` and `update-verification.php`: **all passed**.
+- `node --check` on tracked scoped rehoming JS and `merchant-code-of-conduct.js`: **all passed**.
+- Local Chromium render/screenshot smoke checks for merchant dashboard, verification page, and merchant profile at **1280×800** and **390×844**: all six viewport loads completed. Temporary screenshots are in `/tmp` only and are not repository deliverables.
+- Playwright CLI 1.64.1 is installed, but its bundled Chromium headless-shell binary is missing; its screenshot attempt failed before page launch. Used installed system Chromium successfully as a local-render fallback. No production PHP/database/email endpoint or authenticated flow was exercised; no supplied design-reference comparison was required for this report-only pass.
+- Browser-level console/network inspection was not completed; CLI Chromium render success should not be read as endpoint/runtime validation.
+
+## Files changed, handoffs, and unresolved dependencies
+
+- **Files changed:** only `reports/second-round/MANUS-05.md` (this report); no code anchors added.
+- **Handoffs:** integrator/CEO review is needed for the A1 posting route and missing merchant endpoints, A2 browse/scheduler integration, A3 legacy-status/distance decisions, B1 queue interpretation/mail runtime, B3/B4 real data reconciliation, B5 account/privacy persistence, B6 section integrations, and C1/C2/C3/C4/C5/C6 dependencies listed above.
+- **Starting commit:** `251d8c26ab89bc9a3fd2bc12e155af41b1d03a87`.
+- **Commit hash:** pending.
+- **Self-check:** branch contains only this scoped report; no protected paths, credentials, intake artifacts, or applicant data are staged. `git diff --check` is required before commit.
