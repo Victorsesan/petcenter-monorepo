@@ -2641,7 +2641,9 @@ body { padding-bottom: 84px; }
                  only ever one hero image on this page, unlike the card
                  grids which rebuild many cards from an array each render. -->
             <div id="heroAdoptedBadge" class="pc-hero-adopted-badge" style="display:none;">ADOPTED</div>
-            <img id="galleryMain" src="/assets/images/pet-placeholder.jpg" alt="Pet photo" onerror="this.src='/assets/images/pet-placeholder.jpg'">
+            <!-- BUGFIX-MANUS-06-4-START — stop a failed placeholder from recursively reloading itself. -->
+            <img id="galleryMain" src="/assets/images/pet-placeholder.jpg" alt="Pet photo" onerror="this.onerror=null;this.src='/assets/images/pet-placeholder.jpg'">
+            <!-- BUGFIX-MANUS-06-4-END -->
           </div>
           <div class="pc-gallery-thumbs" id="galleryThumbs"></div>
         </div>
