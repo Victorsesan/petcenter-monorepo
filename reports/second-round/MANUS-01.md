@@ -131,5 +131,6 @@ The following classifications refer to the 18 MANUS-01 register rows (register l
 ## Commit and final state
 
 - **Expected commit message:** `MANUS-01: fix chat rating email ownership check`
-- **Ending commit:** `14c209d`.
+- **Implementation commit:** `73f6b98`.
+- **Final report update:** subsequent report-only commit on this branch; final tip is supplied in the handoff.
 - **Branch:** `task/second-round-MANUS-01`
