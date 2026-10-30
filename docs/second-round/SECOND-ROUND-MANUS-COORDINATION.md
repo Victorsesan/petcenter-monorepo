@@ -6,6 +6,10 @@ This document coordinates the second debugging round after mechanical integratio
 
 The source documents are preserved beside this plan in `docs/second-round/core-docs/`. The pasted CEO instructions are preserved as `SECOND-ROUND-REQUEST.md`. The extracted worker-package inventory and issue register are the starting point for every account.
 
+## Repository evidence availability
+
+The worker-package inventory was generated from the original intake workspace, but the 62 worker-package completion/handoff files were not copied into this repository. The repository contains the inventory and extracted issue register, not those original source completion files. This applies to every account, not only MANUS-01. Each account must check the files named for its scope, record unavailable files as evidence gaps, use the available core assignment, issue register, Git history, and current source for independent verification, and still create its report. Missing completion files may make individual items **Blocked** or **Needs My Review**, but they must not stop the entire account.
+
 ## Non-negotiable operating rules
 
 1. Read the relevant core assignment, project summary, worker protocol, current `INTEGRATION-PROGRESS.md`, the task completion file, and the current repository files before editing.

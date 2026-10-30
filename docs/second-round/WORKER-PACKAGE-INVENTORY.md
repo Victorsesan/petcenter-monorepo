@@ -2,6 +2,8 @@
 
 Generated from the extracted worker packages under `/home/ubuntu/workspace/intake/tmp/`. This is an inventory for review, not a claim that every package is correct or complete.
 
+**Repository availability notice:** This inventory was generated from the original intake workspace. The 62 worker-package completion/handoff files listed below were not copied into this Git repository. Only the core documents under `docs/second-round/core-docs/` are available here. Accounts must treat every unavailable completion file as an evidence gap, continue with independently verifiable work, and publish a report that records the gap.
+
 | Worker package | Files | Completion/handoff present | Completion files |
 |---|---:|---|---|
 | Admin-Project-1-Task-1 | 3 | True | Task-1-Completion.md |
