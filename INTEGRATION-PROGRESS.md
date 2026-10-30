@@ -234,3 +234,9 @@ The round-one integration audit completed successfully for the feature commits i
 - No protected files or intake files were introduced by these feature commits.
 
 Task E3 and E4 remain stopped exactly as recorded below; no partial files from either task were applied. This is verification only, not round-two debugging.
+
+## Second-round preparation — core documents and coordination
+
+The 14 core documents from `Coredocs.zip` and the CEO's second-round request are preserved under `docs/second-round/`. The extracted worker-package inventory covers 64 packages: 62 with completion/handoff documents and 2 completion-less packages. A generated master issue register consolidates bug, flag, pending, roadblock, doubt, and open-request sections from the available completion/handoff files. A Manus-account coordination plan and setup/quality-gate document assign the second-round review across admin security, Admin234 chat features, web projects, rehoming, unified status, accessibility/design, security, browser QA, and final reconciliation.
+
+No debugging or feature fixes were made in this checkpoint. The documents are preparation and traceability artifacts only; all issues remain subject to verification against the current repository.
