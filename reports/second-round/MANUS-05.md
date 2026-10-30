@@ -6,7 +6,7 @@
 - **Package:** Rehoming Platform, Tasks A1–C6
 - **Starting commit:** `251d8c26ab89bc9a3fd2bc12e155af41b1d03a87` (corrected `main`)
 - **Branch:** `task/second-round-MANUS-05`
-- **Ending commit:** pending report commit
+- **Initial report commit:** `d2f4786ccdac84931c7f3c9ee1583d181bf2d641`; the final report-update commit is recorded in the branch handoff.
 - **Code changes:** none. This handoff is an evidence/review report only; no application code or protected path was changed.
 
 ## Documents read
@@ -82,5 +82,5 @@ Scoped non-protected source reviewed: `adopt/merchant/index.html`, `adopt/mercha
 - **Files changed:** only `reports/second-round/MANUS-05.md` (this report); no code anchors added.
 - **Handoffs:** integrator/CEO review is needed for the A1 posting route and missing merchant endpoints, A2 browse/scheduler integration, A3 legacy-status/distance decisions, B1 queue interpretation/mail runtime, B3/B4 real data reconciliation, B5 account/privacy persistence, B6 section integrations, and C1/C2/C3/C4/C5/C6 dependencies listed above.
 - **Starting commit:** `251d8c26ab89bc9a3fd2bc12e155af41b1d03a87`.
-- **Commit hash:** pending.
-- **Self-check:** branch contains only this scoped report; no protected paths, credentials, intake artifacts, or applicant data are staged. `git diff --check` is required before commit.
+- **Initial report commit hash:** `d2f4786ccdac84931c7f3c9ee1583d181bf2d641`.
+- **Self-check:** branch contains only this scoped report; no protected paths, credentials, intake artifacts, or applicant data are staged. `git diff --cached --check` passed before commit.
