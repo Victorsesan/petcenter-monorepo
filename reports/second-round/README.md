@@ -4,6 +4,8 @@ This directory is the central reporting location for the 11 second-round Manus a
 
 The aggregate status is maintained in [ACCOUNT-REPORT-INDEX.md](ACCOUNT-REPORT-INDEX.md). The issue source is [the master issue register](../../docs/second-round/SECOND-ROUND-ISSUE-REGISTER.md), and the work ownership is defined in [the coordination plan](../../docs/second-round/SECOND-ROUND-MANUS-COORDINATION.md).
 
+**Universal evidence rule:** The inventory was generated from the original intake workspace. The 62 worker-package completion/handoff files referenced by it are not in this repository. This is a repository-wide condition affecting all 11 accounts. Every account must record missing files as evidence gaps, continue independently verifiable checks, and submit its report even when some items are Blocked or Needs My Review.
+
 Do not put GitHub tokens, passwords, API keys, private keys, applicant data, or other secrets in these reports. Reports are repository artifacts and are visible to every participating account.
 
 ## Required report structure

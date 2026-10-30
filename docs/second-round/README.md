@@ -7,6 +7,7 @@ This directory contains the source material and coordination artifacts for the s
 - [CEO second-round request](SECOND-ROUND-REQUEST.md)
 - [Core documents](core-docs/)
 - [Worker-package and completion inventory](WORKER-PACKAGE-INVENTORY.md)
+- [Account-wide missing-completion correction](ACCOUNT-WIDE-CORRECTION.md)
 
 ## Coordination artifacts
 
