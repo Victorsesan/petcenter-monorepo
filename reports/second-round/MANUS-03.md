@@ -6,7 +6,7 @@
 - **Assignment:** Web Projects 1–2 — Tasks 1–10: translation architecture, language detection, CSS logical properties, five language surfaces, widget/persistence core, and widget rollout.
 - **Starting commit:** `251d8c2` (`Docs: apply completion evidence rule to all accounts`)
 - **Branch:** `task/second-round-MANUS-03`
-- **Application code changed:** None. This pass records independently verifiable findings only; no large translation or shared-widget rebuild was guessed from the issue register.
+- **Application code changed:** `adopt/assets/js/accessibility-widget.js`. The archived Task 9 implementation was recovered from the original uploaded worker package and integrated, including six-zone positioning, focus-reading controls, mobile panel behavior, and the documented Task 2 preference-seeding follow-up.
 - **Protected paths:** No protected path was opened, copied, modified, or staged. No credentials or personal data are included.
 
 ## Evidence gaps
@@ -65,16 +65,21 @@ The issue register was used as a lead list only, not as a substitute for the mis
 - Python inventory of non-backup public HTML files — passed; 44 files enumerated for the initial source scan.
 - Search for language directories, translation manifests, `Accept-Language`, `hreflang`, localStorage preferences, and widget references — completed.
 - Duplicate-ID scan on the initial public HTML inventory — found existing findings listed above; no change made.
-- No browser implementation test was run because no MANUS-03 code change was made and the intended translated/widget architecture is not available for safe reconstruction.
+- `node --check adopt/assets/js/accessibility-widget.js` — passed.
+- `git diff --check` — passed after removing one whitespace-only artifact from the archived worker file.
+- No live browser or Apache redirect test was claimed: the sandbox has no translated destination tree and no confirmed production `.htaccess` context.
 - No PHP runtime or live deployment test was claimed.
 
 ## Changes and unresolved handoff
 
-Only this report was added:
+The following changes are now present on this branch:
 
-- `reports/second-round/MANUS-03.md`
+- `adopt/assets/js/accessibility-widget.js` — replaced the older current-main copy with the archived Task 9 implementation, then applied the archived Task 2 `pc_lang_checked` URL-to-preferences synchronization.
+- `reports/second-round/MANUS-03.md` — this audit and implementation record.
 
-No application source, protected path, shared data contract, or `TODO.md` was changed. The coordinator must obtain or repository-publish the missing completion packages through an approved workflow, then reconcile the intended translation schema, language routes, widget ownership, and CSS/RTL ownership before implementation. MANUS-08 should review the shared logical-properties/RTL boundary; MANUS-10 should later perform the browser rollout QA.
+The archived Task 2 `.htaccess` was not activated. The current checkout has no `/es/`, `/pt/`, `/fr/`, `/ar/`, or `/zh/` translated destination trees, so enabling those redirects now would create broken first visits. Once the language trees are present, the archived `.htaccess` can be added at the actual site root after checking for an existing live server file.
+
+The remaining translation architecture and five language surfaces still require the missing Task 1 and Tasks 4–8 deliverables or an explicit fresh implementation decision; I did not fabricate those translations from the issue register. MANUS-08 should review the shared logical-properties/RTL boundary, and MANUS-10 should perform browser rollout QA after the remaining page integration is resolved.
 
 ## Commit metadata
 
