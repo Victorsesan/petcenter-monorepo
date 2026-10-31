@@ -67,6 +67,7 @@ The issue register was used as a lead list only, not as a substitute for the mis
 - Duplicate-ID scan on the initial public HTML inventory — found existing findings listed above; no change made.
 - `node --check adopt/assets/js/accessibility-widget.js` — passed.
 - `git diff --check` — passed after removing one whitespace-only artifact from the archived worker file.
+- The 15-page rollout was structurally checked for one widget root and one real closing `</head>`/`</body>` tag per declared page.
 - No live browser or Apache redirect test was claimed: the sandbox has no translated destination tree and no confirmed production `.htaccess` context.
 - No PHP runtime or live deployment test was claimed.
 
@@ -75,11 +76,12 @@ The issue register was used as a lead list only, not as a substitute for the mis
 The following changes are now present on this branch:
 
 - `adopt/assets/js/accessibility-widget.js` — replaced the older current-main copy with the archived Task 9 implementation, then applied the archived Task 2 `pc_lang_checked` URL-to-preferences synchronization.
+- The archived Task 10 insertion blocks were applied once to all 15 supplied target pages: View Transitions before `</head>` and the Settings Widget block before `</body>`. Each target has exactly one `pcSettingsWidget` root.
 - `reports/second-round/MANUS-03.md` — this audit and implementation record.
 
 The archived Task 2 `.htaccess` was not activated. The current checkout has no `/es/`, `/pt/`, `/fr/`, `/ar/`, or `/zh/` translated destination trees, so enabling those redirects now would create broken first visits. Once the language trees are present, the archived `.htaccess` can be added at the actual site root after checking for an existing live server file.
 
-The remaining translation architecture and five language surfaces still require the missing Task 1 and Tasks 4–8 deliverables or an explicit fresh implementation decision; I did not fabricate those translations from the issue register. MANUS-08 should review the shared logical-properties/RTL boundary, and MANUS-10 should perform browser rollout QA after the remaining page integration is resolved.
+`signin/index.html` remains the one Task 10 exception because the worker package explicitly said its source was not supplied. The remaining translation architecture and five language surfaces still require the missing Task 1 and Tasks 4–8 deliverables or an explicit fresh implementation decision; I did not fabricate those translations from the issue register. MANUS-08 should review the shared logical-properties/RTL boundary, and MANUS-10 should perform browser rollout QA after the remaining page integration is resolved.
 
 ## Commit metadata
 
