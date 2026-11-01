@@ -147,3 +147,17 @@ Only this report was updated in this continuation; the audited source commit rem
 
 [1]: https://dev.mysql.com/doc/refman/8.0/en/alter-table.html "MySQL 8.0 ALTER TABLE Statement"
 [2]: https://dev.mysql.com/doc/refman/8.4/en/alter-table.html "MySQL 8.4 ALTER TABLE Statement"
+
+
+## Worker completion archive intake — 2026-11-01
+
+The user-provided `/home/ubuntu/upload/Workerszipfiles.zip` was inspected by filename/ZIP metadata. Its 64 worker-package ZIPs include 62 completion reports; two packages have no completion report. It also contains the standalone `Task-1-Completion-14.md`. The canonical repository location is `docs/second-round/completion-evidence/<worker-package>/`, as specified by the second-round evidence gate and established by the coordinating branch.
+
+Only one completion report was read: `docs/second-round/completion-evidence/admin-project-2-task-1a/Task-1a-Completion.md`. The report says the previous worker consolidated Task 1a and Task 1b code changes because the tasks shared files, describes a Groq Whisper transcription endpoint, and claims fixes for the selected model, request races, stale pending claims, rate limiting, and transcript UI handling. It also states that live end-to-end testing with a real key/database and testing with real customer audio remained outstanding. These are historical claims, not source verification. The claimed source changes are not present in current `main`; this intake did not extract or apply any application source, and Task 1a remains **Blocked** pending code-package comparison and review.
+
+All 63 completion Markdown files (the 62 package reports plus the standalone completion report) were copied into their canonical evidence paths. No other completion report was opened or read. This includes the Task 1b and Task 3 reports, which are now present but remain unread as directed; their implementation claims are therefore unverified. The archive's non-completion handoff, integrator guide, ZIP files, and application-source files were not copied. The evidence directory README and inventory/availability notices were updated to describe the preserved reports and their read-only historical status.
+
+No application files, database migrations, credentials, or secrets were intentionally extracted or changed. Newly added paths are completion-evidence Markdown only, plus the evidence README and status/report documentation. `git diff --check` and path/count verification are to be completed before the evidence-only commit.
+
+
+**Import validation:** All 64 files in the evidence directory are Markdown (63 completion reports plus its README), and the 63 report paths match the canonical paths already used on the coordinating branch. The non-evidence staged documentation passes `git diff --cached --check`. That check reports pre-existing trailing whitespace in six imported historical completion reports and a blank line at EOF in one; these source artifacts were kept byte-identical rather than silently reformatted. No non-Markdown archive member was staged.

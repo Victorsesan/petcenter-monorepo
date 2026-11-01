@@ -2,7 +2,7 @@
 
 Generated from the extracted worker packages under `/home/ubuntu/workspace/intake/tmp/`. This is an inventory for review, not a claim that every package is correct or complete.
 
-**Repository availability notice:** This inventory was generated from the original intake workspace. The 62 worker-package completion/handoff files listed below were not copied into this Git repository. Only the core documents under `docs/second-round/core-docs/` are available here. Accounts must treat every unavailable completion file as an evidence gap, continue with independently verifiable work, and publish a report that records the gap.
+**Repository availability notice:** The 62 worker-package completion reports listed below are now preserved under `docs/second-round/completion-evidence/<worker-package>/`. A separate standalone completion report is also preserved at `docs/second-round/completion-evidence/Task-1-Completion-14.md`. The two packages marked `False` still have no completion document; those gaps remain. All imported files are read-only historical evidence, not proof that the current source contains the claimed implementation.
 
 | Worker package | Files | Completion/handoff present | Completion files |
 |---|---:|---|---|
