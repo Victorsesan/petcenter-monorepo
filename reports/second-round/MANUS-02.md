@@ -109,3 +109,41 @@ No application source, protected path, shared data contract, or `TODO.md` was ch
 - Ending audited source commit: `251d8c2`
 - Report publication commit: recorded in the final handoff after commit creation.
 - Next handoff: MANUS-11 coordinator, with dependencies on the original-intake completion evidence and shared-file ownership decisions.
+
+
+## Independent verification continuation — 2026-11-01
+
+The existing MANUS-02 branch was continued rather than recreated. Its prior commit `37e3319` adds this report only; its source base remains `251d8c2`, the current `origin/main`. No task implementation branch for `admin234` or the referenced Admin Project 1 Tasks 3/4 was present among fetched remote branches. The local intake directory `/home/ubuntu/workspace/intake` is absent, and the expected completion-file names are not present in the repository. The Admin 2/3/4 task tracker identifies no matching Project 5 completion artifact.
+
+### Current source audit and status
+
+| Assigned task | Independent source check | Status |
+|---|---|---|
+| Task 1a — admin-to-customer transcription | `adopt/admin/chat-widget.js` has voice recording/playback and a “Download transcript” option that exports chat history; that is not speech-to-text. `adopt/admin/chat-admin-reply.php` handles audio attachments, but current `main` has no transcription endpoint, transcript fields, task anchors, or transcription UI/model. | **Blocked** — the completion evidence and intended implementation are unavailable; do not reconstruct from issue-register descriptions alone. |
+| Task 1b — customer-to-admin transcription and read-aloud | Current widget plays attached audio using an HTML `<audio>` element. There is no `SpeechSynthesis`/`speechSynthesis` feature, transcript request/UI, transcription endpoint, or Task 1b anchor in the current implementation. | **Blocked** — shared-file changes, completion evidence, and any live customer-audio validation are unavailable. |
+| Task 2 — admin dark/light/system mode | `adopt/admin/index.html` applies only `data-dash-theme="suite"`. Its comments explicitly say the switcher and persisted choice were removed and that the theme is always “suite” (CSS notes near lines 1137–1154; initializer near lines 2960–2986). No Task 2 anchor, three-state control, early preference script, or dark/light system exists. | **Needs My Review** — the feature is absent, but the current shell explicitly documents a separate direction to remove the switcher. Resolve ownership and design intent before changing the shared admin shell. |
+| Task 3 — chat-language selection and admin visibility | Current widget pre-chat form requires name/email/reason and has no language picker or notice. `chat-start.php` validates name and email before creating/resuming a thread (lines 53–67); therefore this flow does not permit a customer to begin live chat before email is captured, and a database-only preference would suffice if implementation is approved. Current setup/schema and responses have no `preferred_chat_language`; `chat-admin-list.php` uses `SELECT t.*`, but no such current column exists. There are no `AP4-TASK-3` anchors or `chatAdmin.activeThreadMeta` implementation. | **Needs My Review** — the contract and implementation are absent, and the options panel is shared with Admin Project 1 Tasks 3/4. The pre-email question is resolved for the current flow, but that does not authorize a partial shared-contract change. |
+
+### Issue-register cross-check
+
+Entries 103–106 and 108–111 describe transcription code changes that are absent from current `main`; they remain **Blocked** pending the original completion artifacts and coordinator reconciliation. Entry 107’s rationale for declining the “visual link” enhancement is documented in the register, but there is no implementation to verify; no new message-link mechanism was added. Entry 112’s deployment/key/audio-test ledger cannot be checked without the missing completion file and live provider/database context.
+
+Entries 102, 113, and 115 repeat the migration/design-document note. The `archived` migration statement remains at `adopt/admin/chat-migrate.php:26`. MySQL’s official 8.0 and 8.4 `ALTER TABLE` grammars show `ADD [COLUMN] col_name ...` without an `IF NOT EXISTS` clause [1] [2]. Since the production database version was not found in the project references and no live database is available, classify this as **Needs My Review** for the database owner; it was not edited. The separate historical claim that the design-system document was unavailable is no longer true for this workspace: `PETCENTER_DESIGN_SYSTEM_v1.0.md` is present and was read in the required sequence.
+
+Entries 114 and 116 remain **Blocked**: the customer-direction low-confidence behavior cannot be verified without the missing implementation, and testing against real customer audio requires samples and a live transcription environment. Entry 117’s `chat-poll.php` concern cannot be assessed as a regression until Task 3’s field exists; the current endpoint has no language field. Entries 118–120 likewise cannot be verified because the notice, preference, normalization, and admin metadata implementation are absent. Entry 121’s translation-tool access choice remains a **CEO/owner decision**; no translation tool was selected or introduced. Entry 122 describes expected staleness in a read-only summary and does not call for an application change.
+
+### Verification run in this continuation
+
+- Installed the missing environment baseline packages `php-cli` and `rsync`; this did not change repository files.
+- `node --check adopt/admin/chat-widget.js` passed.
+- `php -l` passed for `chat-start.php`, `chat-poll.php`, `chat-admin-list.php`, `chat-admin-reply.php`, `chat-admin-poll.php`, `chat-send.php`, `chat-migrate.php`, and `chat-setup.php`. No configuration file was opened, and no migration was run.
+- `git diff --check` passed. A Python HTML parse of `adopt/admin/index.html` passed with 142 IDs and no duplicates.
+- System Chromium generated non-empty render screenshots at 1440×900 and 390×844; the temporary screenshots were removed. This was a render smoke check, not a visual comparison against a reference or an authenticated/runtime test.
+- No PHP/MySQL application runtime, transcription API call, authenticated admin session, Playwright assertion, or live customer-audio test was performed. No application source was changed.
+
+Only this report was updated in this continuation; the audited source commit remains `251d8c2`.
+
+## References
+
+[1]: https://dev.mysql.com/doc/refman/8.0/en/alter-table.html "MySQL 8.0 ALTER TABLE Statement"
+[2]: https://dev.mysql.com/doc/refman/8.4/en/alter-table.html "MySQL 8.4 ALTER TABLE Statement"
