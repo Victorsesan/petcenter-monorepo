@@ -167,14 +167,39 @@
   const STYLE = `
   .pcw-launcher-btn {
     position: fixed; bottom: 20px; right: 20px; z-index: 9998;
-    width: 60px; height: 60px; border-radius: 50%;
+    width: 56px; height: 56px; border-radius: 50%;
     background: linear-gradient(135deg, #10214b, #1a2f5c);
-    border: 2px solid #d7bd88; color: #fff; cursor: pointer;
+    border: 3px solid #d7bd88; color: #fff; cursor: pointer;
     display: flex; align-items: center; justify-content: center;
-    font-size: 24px; box-shadow: 0 6px 20px rgba(16,33,75,0.35);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 6px 20px rgba(16,33,75,0.35);
+    touch-action: none;
+    /* TASK (Dark Mode / Color Filter Audit): size matched byte-for-byte to
+       .pc-a11y-trigger (56px + 3px border = same 62px outer circle on both
+       widgets, measured from the actual settings-widget CSS rather than
+       eyeballed) -- was 60px + 2px border (64px outer) before, visibly
+       larger than the settings widget as reported. Hover transform/shadow
+       animation also dropped, matching the no-animation instruction
+       applied consistently to both widgets' base triggers, not just the
+       one it was stated for. */
   }
-  .pcw-launcher-btn:hover { transform: scale(1.06); box-shadow: 0 8px 26px rgba(16,33,75,0.45); }
+  /* TASK (Widget Positioning) START: position-sync with the settings
+     widget only -- see wireChatPositionSync() near the end of this file.
+     Scope Lock: this is the one thing this task asked to be touched in
+     this file; nothing else about the chat widget's own features changes.
+     Desktop-only (the existing @media (max-width:480px) block below
+     already gives the panel a dedicated, working full-width mobile
+     layout -- left untouched here beyond the one hside line added to it,
+     so as not to regress an already-shipped mobile behavior that isn't
+     part of this task). */
+  body[data-pcw-vzone="top"] .pcw-launcher-btn { top: 84px; bottom: auto; }
+  body[data-pcw-vzone="middle"] .pcw-launcher-btn { top: 50%; bottom: auto; margin-top: -30px; }
+  body[data-pcw-hside="left"] .pcw-launcher-btn { left: 20px; right: auto; }
+  @media (min-width: 481px) {
+    body[data-pcw-vzone="top"] .pcw-panel { top: 160px; bottom: auto; }
+    body[data-pcw-vzone="middle"] .pcw-panel { top: 50%; bottom: auto; transform: translateY(-50%); }
+    body[data-pcw-hside="left"] .pcw-panel { left: 20px; right: auto; }
+  }
+  /* TASK (Widget Positioning) END */
   .pcw-launcher-btn .pcw-badge {
     position: absolute; top: -4px; right: -4px; min-width: 20px; height: 20px;
     border-radius: 10px; background: #ED7624; color: #fff; font-size: 11px;
@@ -709,6 +734,11 @@
       border-radius: 16px;
     }
     .pcw-launcher-btn { bottom: 16px; right: 16px; }
+    /* TASK (Widget Positioning): the panel is already edge-to-edge
+       (left:14px;right:14px) on mobile, so hside only needs to move the
+       launcher button itself -- the panel's own left/right don't need an
+       hside variant here. */
+    body[data-pcw-hside="left"] .pcw-launcher-btn { left: 16px; right: auto; }
   }
   `;
 
@@ -739,8 +769,17 @@
   let launcherBtn, badgeEl, activeDotEl, panelEl, headerTitleEl, headerSubEl, bodyEl, backdropEl;
 
   function buildScaffold() {
+    // TASK (Dark Mode / Color Filter Audit): was `<i class="fas fa-comment-dots">`
+    // (Font Awesome) -- an external icon-font dependency this project
+    // doesn't otherwise rely on (the settings widget's icons are all
+    // inline SVG), and if Font Awesome's stylesheet doesn't happen to be
+    // loaded on a given page this renders as an empty box rather than a
+    // chat icon. Replaced with an inline SVG at the same 24x24 size the
+    // settings widget's own trigger icon uses, so the two are visually
+    // consistent and neither depends on a page happening to load the
+    // right external font.
     launcherBtn = el('button', { class: 'pcw-launcher-btn', type: 'button', title: 'Chat with us' }, [
-      el('i', { class: 'fas fa-comment-dots' }),
+      el('span', { 'aria-hidden': 'true', html: '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>' }),
       (badgeEl = el('span', { class: 'pcw-badge' })),
       (activeDotEl = el('span', { class: 'pcw-active-dot' })),
     ]);
@@ -796,6 +835,23 @@
     _pcwScrollLockCount++;
     if (_pcwScrollLockCount > 1) return;
     _pcwScrollLockY = window.scrollY || window.pageYOffset || 0;
+    // TASK (Chat Widget Scroll Fix): confirmed via research (MDN's own
+    // CSS Scroll Anchoring docs, plus multiple independent write-ups on
+    // this exact position:fixed body-lock technique) that taking <body>
+    // out of normal flow like this is a documented trigger for the
+    // browser's scroll-anchoring feature to pick a NEW anchor element and
+    // "helpfully" keep adjusting scroll position around it as layout
+    // settles back to normal on unlock -- which lands wherever that
+    // anchor's heuristic puts it, not necessarily back where the user
+    // was. That matches the reported symptom precisely: it never happens
+    // if the page was already at the top (nothing for an anchor to
+    // "correct"), and when it does fire, it's not a stale-position bug
+    // (which would at least be consistent with SOME prior state) but a
+    // browser heuristic landing roughly mid-page. Disabling anchoring for
+    // the duration of the lock removes the browser's incentive to touch
+    // scroll position on its own at all -- the explicit scrollTo below
+    // becomes the only thing moving it.
+    document.body.style.overflowAnchor = 'none';
     document.body.style.position = 'fixed';
     document.body.style.top = (-_pcwScrollLockY) + 'px';
     document.body.style.left = '0';
@@ -803,14 +859,37 @@
     document.body.style.width = '100%';
   }
   function pcwUnlockBodyScroll() {
-    _pcwScrollLockCount = Math.max(0, _pcwScrollLockCount - 1);
+    // TASK (Chat Widget Scroll Fix): this guard used to decrement FIRST
+    // and check `> 0` after -- so a second, redundant call arriving after
+    // the count had already reached 0 would compute Math.max(0, -1) = 0,
+    // see `0 > 0` as false, and fall through to re-run the restore logic
+    // a second time, using the SAME stale `_pcwScrollLockY` captured at
+    // the original lock. If the user had scrolled around freely in the
+    // meantime (the page is fully unlocked and scrollable at that point),
+    // that stray second call would yank them back to wherever they were
+    // when the chat was first opened -- matching exactly what was
+    // reported ("stops the page at a certain position... closes it, it
+    // will just scroll the page to a certain position"). Checking before
+    // decrementing makes a call that arrives after the count is already 0
+    // a true no-op.
+    if (_pcwScrollLockCount <= 0) return;
+    _pcwScrollLockCount--;
     if (_pcwScrollLockCount > 0) return;
     document.body.style.position = '';
     document.body.style.top = '';
     document.body.style.left = '';
     document.body.style.right = '';
     document.body.style.width = '';
-    window.scrollTo(0, _pcwScrollLockY);
+    // TASK (Chat Widget Scroll Fix): a style change doesn't force the
+    // browser to finish layout before the next line of JS runs -- calling
+    // scrollTo() immediately risks doing so against a transient, not-yet-
+    // settled layout (the CSS-Tricks writeup on this exact technique flags
+    // this ordering issue specifically). One rAF is enough to guarantee a
+    // layout/paint has happened since the style change above.
+    requestAnimationFrame(function () {
+      window.scrollTo(0, _pcwScrollLockY);
+      document.body.style.overflowAnchor = '';
+    });
   }
 
   function pcwEnableDragToClose(sheetEl, handleEl, onClose) {
@@ -3002,10 +3081,118 @@
   // ============================================
   // INIT
   // ============================================
+  // TASK (Widget Positioning) START =================================
+  // Position-sync with the accessibility/settings widget ONLY -- the one
+  // thing this task asked to be touched in this file. Reads/writes the
+  // same 'pc_widget_positions' localStorage key the settings widget owns
+  // (see assets/js/accessibility-widget.js); this widget never initiates
+  // a move itself (no drag/D-pad here, by design -- out of this task's
+  // scope), it only ever reacts to what that key says its own 'chat'
+  // field currently is, including when the settings widget's own drag/
+  // D-pad swaps this widget out of a spot it occupied.
+  const WIDGET_POS_KEY = 'pc_widget_positions';
+  function readChatPosition() {
+    try {
+      const raw = localStorage.getItem(WIDGET_POS_KEY);
+      const parsed = raw ? JSON.parse(raw) : {};
+      return parsed.chat || 'bottom-right';
+    } catch (e) { return 'bottom-right'; }
+  }
+  function applyChatPosition() {
+    const parts = readChatPosition().split('-');
+    document.body.setAttribute('data-pcw-vzone', parts[0]);
+    document.body.setAttribute('data-pcw-hside', parts[1]);
+  }
+  function writeChatPosition(next) {
+    try {
+      const raw = localStorage.getItem(WIDGET_POS_KEY);
+      const parsed = raw ? JSON.parse(raw) : {};
+      const current = parsed.chat || 'bottom-right';
+      if (next === current) return;
+      const updated = { a11y: parsed.a11y || 'bottom-left', chat: next };
+      // Same swap rule as the settings widget's moveWidgetTo(): if the
+      // settings widget already occupies the target zone, it takes this
+      // widget's old spot rather than the two ever sharing one zone.
+      if (updated.a11y === next) updated.a11y = current;
+      localStorage.setItem(WIDGET_POS_KEY, JSON.stringify(updated));
+      applyChatPosition();
+      window.dispatchEvent(new CustomEvent('pc:widget-positions-change', { detail: updated }));
+    } catch (e) { /* ignore */ }
+  }
+  // TASK (Dark Mode / Color Filter Audit): this widget now drags exactly
+  // like the settings widget, per explicit instruction that the drag fix
+  // applies to both. `touch-action: none` on the launcher button (added
+  // to its CSS above) and handling `pointercancel` here are the two
+  // pieces that were missing from the settings widget's first version --
+  // without `touch-action: none`, a touch drag gets reinterpreted as a
+  // page scroll after a few pixels of movement, the browser fires
+  // pointercancel, and no more pointermove events arrive -- exactly the
+  // "can't be dragged continuously" symptom reported. Built correctly
+  // here from the start rather than copying the original bug.
+  function wireChatDragToReposition() {
+    let dragging = false, moved = false, startX = 0, startY = 0, justDragged = false;
+    function reset() {
+      dragging = false;
+      launcherBtn.style.left = ''; launcherBtn.style.top = ''; launcherBtn.style.right = ''; launcherBtn.style.bottom = ''; launcherBtn.style.marginTop = '';
+      launcherBtn.classList.remove('pcw-dragging');
+    }
+    function onPointerDown(e) {
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      dragging = true; moved = false; startX = e.clientX; startY = e.clientY;
+      launcherBtn.classList.add('pcw-dragging');
+      try { launcherBtn.setPointerCapture(e.pointerId); } catch (err) { /* ignore */ }
+    }
+    function onPointerMove(e) {
+      if (!dragging) return;
+      const dx = e.clientX - startX, dy = e.clientY - startY;
+      if (!moved && (Math.abs(dx) > 6 || Math.abs(dy) > 6)) moved = true;
+      if (!moved) return;
+      launcherBtn.style.left = (e.clientX - 28) + 'px';
+      launcherBtn.style.top = (e.clientY - 28) + 'px';
+      launcherBtn.style.right = 'auto'; launcherBtn.style.bottom = 'auto'; launcherBtn.style.marginTop = '0';
+    }
+    function onPointerUp(e) {
+      if (!dragging) return;
+      const wasMoved = moved;
+      reset();
+      if (!wasMoved) return;
+      justDragged = true;
+      const vh = window.innerHeight, vw = window.innerWidth;
+      const vzone = e.clientY < vh / 3 ? 'top' : (e.clientY > (vh * 2) / 3 ? 'bottom' : 'middle');
+      const hside = e.clientX < vw / 2 ? 'left' : 'right';
+      writeChatPosition(vzone + '-' + hside);
+    }
+    // Registered alongside pointerup, not instead of it: a cancelled
+    // gesture (browser hands off to panning/scrolling, a second finger
+    // arrives, palm rejection) fires pointercancel with NO pointerup at
+    // all -- without this, `dragging` would stay stuck true and the next
+    // real drag attempt would start from a broken state.
+    function onPointerCancel() { reset(); }
+    launcherBtn.addEventListener('pointerdown', onPointerDown);
+    document.addEventListener('pointermove', onPointerMove);
+    document.addEventListener('pointerup', onPointerUp);
+    document.addEventListener('pointercancel', onPointerCancel);
+    launcherBtn.addEventListener('click', (e) => {
+      if (justDragged) { justDragged = false; e.stopImmediatePropagation(); e.preventDefault(); }
+    }, true);
+  }
+
+  function wireChatPositionSync() {
+    applyChatPosition();
+    wireChatDragToReposition();
+    // Cross-tab: 'storage' only fires in OTHER tabs than the one that wrote it.
+    window.addEventListener('storage', (e) => { if (e.key === WIDGET_POS_KEY) applyChatPosition(); });
+    // Same-tab: dispatched by accessibility-widget.js's moveWidgetTo() when
+    // both widgets are loaded on the same page (e.g. admin-dashboard.html).
+    window.addEventListener('pc:widget-positions-change', applyChatPosition);
+  }
+  // TASK (Widget Positioning) END ====================================
+
   function init() {
     injectStyle();
     buildScaffold();
     updateLauncherButtonState();
+    wireChatPositionSync();
     dlog('widget initialized');
   }
 

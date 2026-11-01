@@ -1,6 +1,6 @@
 # Pre-filled Manus Account Prompts
 
-The canonical copy-paste launcher is [`UNIFIED-MANUS-WORKER-PROMPT.md`](UNIFIED-MANUS-WORKER-PROMPT.md). Use it first, replacing `[ACCOUNT ID]` with the assigned account. The 11 prompt sections below then provide the account-specific work package, reading order, protected paths, tests, branch, report, and commit requirements.
+The canonical and only copy-paste launcher is [`UNIFIED-MANUS-WORKER-PROMPT.md`](UNIFIED-MANUS-WORKER-PROMPT.md). Use that prompt first, replacing `[ACCOUNT ID]` with the assigned account. This file is an internal reference appendix; do not paste this entire file into an account. After cloning, an account reads only its own `Prompt for MANUS-XX` section below for the account-specific work package, reading order, protected paths, tests, branch, report, and commit requirements.
 
 Every account must try the environment's existing authorized GitHub connector or CLI first. A GitHub token is a last resort only, and it is intentionally not included in this document or any repository file. If private token authentication is genuinely required, supply it transiently during setup; never echo, save, persist in a remote URL, commit, or report it. Missing worker completion files are evidence gaps for every account, not a reason to stop the entire assignment: continue all independently verifiable work and publish the required report.
 

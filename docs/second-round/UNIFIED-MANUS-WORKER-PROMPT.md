@@ -23,14 +23,18 @@ ACCESS ORDER — TOKEN IS LAST RESORT ONLY
    - never ask for a token again if authorized repository access already works.
 4. If access fails, report the exact command/error and the access method tried. Do not invent a workaround and do not ask for manual document uploads.
 
-After access succeeds, immediately fetch the latest repository state and read, in order:
+After access succeeds, immediately synchronize the complete repository view before inspecting code:
 
-- docs/second-round/UNIFIED-MANUS-WORKER-PROMPT.md
-- docs/second-round/MANUS-ACCOUNT-PROMPTS.md
-- docs/second-round/ACCOUNT-WIDE-CORRECTION.md
-- the section titled `Prompt for [ACCOUNT ID]` in docs/second-round/MANUS-ACCOUNT-PROMPTS.md
+    git fetch --all --prune
+    git checkout main
+    git pull --ff-only origin main
+    git branch -r
 
-Then follow that account-specific section exactly, including its required reading order, tools, skills, assignment boundaries, protected paths, tests, branch name, report path, commit prefix, and handoff format. Read the required repository documents before inspecting or editing application code.
+The remote branches named `origin/task/second-round-MANUS-*` are the other workers' handoffs. You must be able to inspect their commits, changed-file lists, and reports with `git log`, `git show`, `git diff`, and the files under `reports/second-round/`. Do not assume that `main` contains unfinished worker work, and do not overwrite or recreate another account's changes. Start your work from the latest `origin/main`, then compare shared files and relevant worker branches before editing.
+
+The file `docs/second-round/MANUS-ACCOUNT-PROMPTS.md` is an internal reference appendix, not a second launcher to paste. Read only the section titled `Prompt for [ACCOUNT ID]` after cloning. Follow that section for the account-specific work package, required core documents, tools, skills, assignment boundaries, protected paths, tests, branch name, report path, commit prefix, and handoff format. Do not read or paste all 11 prompt sections as if they were separate instructions.
+
+The required core-document reading order is authoritative and must be completed before inspecting or editing application code. At minimum, read `INTEGRATION-PROGRESS.md`, `TODO.md`, `docs/second-round/README.md`, `docs/second-round/SECOND-ROUND-REQUEST.md`, `docs/second-round/SECOND-ROUND-SETUP-AND-SKILLS.md`, `docs/second-round/SECOND-ROUND-MANUS-COORDINATION.md`, `docs/second-round/WORKER-PACKAGE-INVENTORY.md`, `docs/second-round/SECOND-ROUND-ISSUE-REGISTER.md`, `docs/second-round/ACCOUNT-WIDE-CORRECTION.md`, every relevant file under `docs/second-round/core-docs/`, and the relevant project summary and assignment tracker.
 
 REPOSITORY-WIDE EVIDENCE RULE
 
