@@ -1,8 +1,8 @@
 # Second-Round Worker Package and Completion Inventory
 
-Generated from the extracted worker packages under `/home/ubuntu/workspace/intake/tmp/`. This is an inventory for review, not a claim that every package is correct or complete.
+Generated from the original worker archive and the extracted evidence now preserved under `docs/second-round/completion-evidence/`. This is an inventory for review, not a claim that every package is correct or complete.
 
-**Repository availability notice:** This inventory was generated from the original intake workspace. The 62 worker-package completion/handoff files listed below were not copied into this Git repository. Only the core documents under `docs/second-round/core-docs/` are available here. Accounts must treat every unavailable completion file as an evidence gap, continue with independently verifiable work, and publish a report that records the gap.
+**Repository availability notice:** The historical completion/handoff files are now preserved under `docs/second-round/completion-evidence/`, grouped by worker-package name. They are evidence of what previous workers attempted, not proof that the current source matches or that the work was complete. Every account must read the matching evidence before opening application source, compare it with the original tracker and current branches, and record any mismatch or unfinished item in its report.
 
 | Worker package | Files | Completion/handoff present | Completion files |
 |---|---:|---|---|

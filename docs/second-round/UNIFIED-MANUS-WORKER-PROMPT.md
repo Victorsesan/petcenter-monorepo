@@ -34,7 +34,20 @@ The remote branches named `origin/task/second-round-MANUS-*` are the other worke
 
 The file `docs/second-round/MANUS-ACCOUNT-PROMPTS.md` is an internal reference appendix, not a second launcher to paste. Read only the section titled `Prompt for [ACCOUNT ID]` after cloning. Follow that section for the account-specific work package, required core documents, tools, skills, assignment boundaries, protected paths, tests, branch name, report path, commit prefix, and handoff format. Do not read or paste all 11 prompt sections as if they were separate instructions.
 
-The required core-document reading order is authoritative and must be completed before inspecting or editing application code. At minimum, read `INTEGRATION-PROGRESS.md`, `TODO.md`, `docs/second-round/README.md`, `docs/second-round/SECOND-ROUND-REQUEST.md`, `docs/second-round/SECOND-ROUND-SETUP-AND-SKILLS.md`, `docs/second-round/SECOND-ROUND-MANUS-COORDINATION.md`, `docs/second-round/WORKER-PACKAGE-INVENTORY.md`, `docs/second-round/SECOND-ROUND-ISSUE-REGISTER.md`, `docs/second-round/ACCOUNT-WIDE-CORRECTION.md`, every relevant file under `docs/second-round/core-docs/`, and the relevant project summary and assignment tracker.
+## HARD READING GATE — DO NOT INSPECT OR EDIT CODE BEFORE THIS IS COMPLETE
+
+Read `docs/second-round/CORE-DOCUMENT-READING-GATE.md` first. Then read, in full and in its stated order, both structural summaries before any task tracker or source code:
+
+- `adoption-website-project-summary.md`
+- `ADMIN_DASHBOARD_PROJECT_SUMMARY.md`
+
+Next read every document listed in the gate, including the design system, `ROADBLOCKS-AND-FIXES-2.md`, `TODO-5.md`, the Worker Git Sync Protocol, the VDM Git Sync Coordination Protocol, both Admin/Web Code Integrator protocols, all six project task trackers, both shared-widget references, and all second-round coordination documents. Do not skim only the section that appears related to your task. The two project summaries are the structural backbone of the public site and admin dashboard.
+
+After the core-document gate, use the account identity and task numbers to locate and read every matching file under `docs/second-round/completion-evidence/`. Read the previous worker's completion/handoff evidence before opening the application files it names. Record each evidence path, prior result, known bug, shared-file dependency, and unfinished point in your report. The completion evidence is historical evidence to reconcile against current GitHub code; it does not override the original task tracker or the current repository.
+
+All accounts must perform the role sequence themselves: Worker implementation and tests, VDM branch/report review, then Integrator reconciliation and bug triage. The Worker protocol governs repository delivery; the VDM protocol governs coordination; the legacy Integrator documents govern evidence comparison and merge-review discipline only. Their historical instructions to use manual uploads or avoid GitHub are superseded by the Git-aware protocols and must not be followed.
+
+Do not inspect, compare, edit, or test application source until the full gate and matching completion evidence have been read. The final report must state that this hard gate was completed.
 
 REPOSITORY-WIDE EVIDENCE RULE
 
