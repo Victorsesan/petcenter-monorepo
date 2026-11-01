@@ -37,17 +37,11 @@ if ($action === 'submit' && $_SERVER['REQUEST_METHOD'] === 'POST') {
         chatRespond(['success' => false, 'error' => 'Rating must be 1–5'], 400);
     }
 
-    /* TASK-1 START — submitting a rating was previously completely open:
-       anyone who knew a chatId (and could supply any syntactically valid
-       email — the submitted email is never checked against the thread's
-       actual email) could post a fake rating attributed to a real admin
-       for a real conversation that wasn't theirs. A valid session token
-       for this exact chatId is now required, same as every other
-       customer-facing write in this task. Note: this does NOT fix the
-       separate pre-existing gap that $email isn't cross-checked against
-       the thread's stored email — that's unrelated to session-token
-       enforcement and out of this task's scope; logged under "Bugs Found
-       Outside Task Scope" in Task-1-Completion.md. */
+    /* TASK-1 START — submitting a rating now requires a valid session token
+       for this exact chatId, same as every other customer-facing write in
+       this task. The stored-thread-email ownership check immediately below
+       is an additional integrity guard: a valid token must not be paired
+       with a different syntactically valid email address. */
     $sessionToken = trim($input['sessionToken'] ?? '');
     chatRequireSessionToken($chatId, $sessionToken);
     /* TASK-1 END */

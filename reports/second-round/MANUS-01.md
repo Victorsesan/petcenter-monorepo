@@ -120,6 +120,16 @@ The following classifications refer to the 18 MANUS-01 register rows (register l
 - Browser/viewport checks — not run. The change is a server-side PHP endpoint, no UI was changed, and no live database or running application endpoint was available. Desktop/phone viewport results are therefore **N/A**, not claimed.
 - PHPStan and HTML validator — unavailable in the environment; no arbitrary framework or library was installed.
 
+### Independent continuation verification
+
+- Re-reviewed the current branch source rather than relying only on the prior report: all twelve Task 1 endpoint paths are present and session-gated (with `chat-start.php` correctly serving as the token-issuance entry point), and all six Task 2 admin endpoints call `chatRequireAdmin()`.
+- Confirmed that the repository still has no independently verifiable PIN, lock, password/device, or password-reset implementation files; no speculative implementation was added.
+- Confirmed that the Task 7 badge reader is wired into both list and lookup responses, reads `chat_auth_audit_log`, and excludes high-frequency `verify_token` audit noise.
+- `node --check adopt/admin/chat-widget.js` — passed.
+- Focused static assertions for the rating session gate, prepared stored-email lookup, case-insensitive ownership rejection, HTTP 403 response, and stale-comment removal — passed.
+- `git diff --check` — passed.
+- PHP was not installed in this sandbox session, so a new PHP lint run could not be executed; the earlier report's successful lint result remains the available PHP syntax evidence.
+
 ## Unresolved blockers and handoff
 
 - All seven original MANUS-01 completion files remain unavailable evidence gaps.
@@ -132,5 +142,5 @@ The following classifications refer to the 18 MANUS-01 register rows (register l
 
 - **Expected commit message:** `MANUS-01: fix chat rating email ownership check`
 - **Implementation commit:** `73f6b98`.
-- **Final report update:** subsequent report-only commit on this branch; final tip is supplied in the handoff.
+- **Final report update:** this continuation verification and comment-only documentation cleanup are included in the current branch tip.
 - **Branch:** `task/second-round-MANUS-01`
