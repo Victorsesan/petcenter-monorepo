@@ -39,6 +39,10 @@
     /* TASK-1 START — session-token persistence key, same localStorage
        pattern as the other pc_chat_* keys above. */
     storageKeyToken: 'pc_chat_session_token',
+    /* TASK-5 START — random browser-held device secret; only its server hash
+       is persisted remotely. */
+    storageKeyDevice: 'pc_chat_device_token',
+    /* TASK-5 END */
     /* TASK-1 END */
     storageKeyDraftUuid: 'pc_chat_draft_uuid', // pre-thread temporary draft key, Section 4
     contactFormUrl: '/contact-us/contact-us.html', // absolute path — contact-us.html lives at /contact-us/ not site root
@@ -65,6 +69,9 @@
        below, so individual call sites below don't each need to remember
        to attach it by hand. */
     sessionToken: null,
+    /* TASK-3 START — current protection tier for the open conversation. */
+    authTier: 'none',
+    /* TASK-3 END */
     /* TASK-1 END */
     fullName: null,
     email: null,
@@ -146,6 +153,54 @@
     });
     return res.json();
   }
+
+  /* TASK-5 START — create one random browser-held device secret; the server
+     stores only its SHA-256 verifier and never the raw value. */
+  function deviceToken() {
+    let token = localStorage.getItem(CONFIG.storageKeyDevice);
+    if (!token) {
+      token = uuid().replace(/-/g, '') + uuid().replace(/-/g, '');
+      localStorage.setItem(CONFIG.storageKeyDevice, token);
+    }
+    return token;
+  }
+  /* TASK-5 END */
+
+  /* TASK-3 START — shared PIN/password gate contract. */
+  function AuthGate({ tier, principalId, email, onVerifySuccess, onVerifyFail }) {
+    const wrap = el('div', { class: 'pcw-auth-gate' });
+    const input = el('input', { type: tier === 'pin' ? 'tel' : 'password', inputmode: tier === 'pin' ? 'numeric' : 'text', maxlength: tier === 'pin' ? '6' : '1024', placeholder: tier === 'pin' ? 'Enter your 6-digit PIN' : 'Enter your chat password' });
+    const remember = el('label', { class: 'pcw-check-row' }, [el('input', { type: 'checkbox' }), el('span', {}, 'Remember this device')]);
+    const error = el('div', { class: 'pcw-error-msg' });
+    const submit = el('button', { type: 'button', class: 'pcw-primary-btn' }, 'Unlock chat');
+    wrap.appendChild(el('h3', {}, tier === 'pin' ? 'This chat is PIN protected' : 'This chat is password protected'));
+    wrap.appendChild(input); wrap.appendChild(remember); wrap.appendChild(error); wrap.appendChild(submit);
+    submit.addEventListener('click', async () => {
+      submit.disabled = true; error.classList.remove('show');
+      try {
+        const json = await apiPost('chat-auth-gate.php', { action:'verify', chatId:principalId, email, tier, secret:input.value, rememberDevice:remember.querySelector('input').checked, deviceToken:deviceToken() });
+        if (!json.success) throw new Error(json.error || 'Could not unlock chat.');
+        onVerifySuccess(json);
+      } catch (e) { error.textContent = e.message; error.classList.add('show'); if (onVerifyFail) onVerifyFail(e); submit.disabled = false; }
+    });
+    if (tier === 'password') {
+      const forgot = el('button', { type: 'button', class: 'pcw-link-btn' }, 'Forgot password?');
+      forgot.addEventListener('click', async () => {
+        const reset = await apiPost('chat-password-reset.php', { action:'request', email });
+        const temp = window.prompt(reset.message || 'Check your email, then enter the temporary password:');
+        if (!temp) return;
+        const logged = await apiPost('chat-password-reset.php', { action:'temporaryLogin', email, temporaryPassword:temp });
+        if (!logged.success) { error.textContent = logged.error || 'Temporary password rejected.'; error.classList.add('show'); return; }
+        const next = window.prompt('Choose a new password of at least 12 characters:');
+        if (!next) return;
+        const changed = await apiPost('chat-password-reset.php', { action:'change', email, chatId:logged.chatId, sessionToken:logged.sessionToken, newPassword:next });
+        error.textContent = changed.message || changed.error || 'Password reset complete. Enter the new password above.'; error.classList.add('show');
+      });
+      wrap.appendChild(forgot);
+    }
+    return wrap;
+  }
+  /* TASK-3 END */
 
   function initials(name) {
     if (!name) return '?';
@@ -992,6 +1047,16 @@
       accessibilityRow.classList.toggle('open', isOpen);
     });
 
+    /* TASK-4/5 START — self-contained protection section appended after
+       accessibility so other workers can merge their own section unchanged. */
+    const protectionRow = el('div', { class: 'pcw-option-row pcw-option-clickable' }, [
+      el('div', { class: 'pcw-option-icon' }, el('i', { class: 'fas fa-shield-alt' })),
+      el('div', { class: 'pcw-option-label' }, 'Chat protection'),
+      el('i', { class: 'fas fa-chevron-right pcw-option-chevron' }),
+    ]);
+    protectionRow.addEventListener('click', manageChatProtection);
+    /* TASK-4/5 END */
+
     const endSessionRow = el('div', { class: 'pcw-option-row pcw-option-clickable' }, [
       el('div', { class: 'pcw-option-icon', style: 'background:rgba(239,68,68,0.15);color:#ef4444;' }, el('i', { class: 'fas fa-rotate-left' })),
       el('div', { class: 'pcw-option-label' }, 'End chat session'),
@@ -999,7 +1064,7 @@
     endSessionRow.addEventListener('click', endChatSession);
 
     const body = el('div', { class: 'pcw-sheet-body' }, [
-      soundRow, transcriptRow, accessibilityRow, accessibilityPanel, endSessionRow,
+      soundRow, transcriptRow, accessibilityRow, accessibilityPanel, protectionRow, endSessionRow,
     ]);
 
     optionsSheetEl = el('div', { class: 'pcw-options-sheet', role: 'dialog', 'aria-modal': 'true', 'aria-label': 'Chat options' }, [
@@ -1014,6 +1079,25 @@
 
     panelEl.appendChild(optionsBackdropEl);
     panelEl.appendChild(optionsSheetEl);
+  }
+
+  // Applies protection changes through the authenticated server endpoints.
+  async function manageChatProtection() {
+    if (!state.chatId || !state.sessionToken) return;
+    const choice = window.prompt('Enter PIN, password, lock, or forget-devices:');
+    if (!choice) return;
+    if (choice === 'lock') {
+      const seconds = parseInt(window.prompt('Lock after close (seconds):', '300'), 10) || 300;
+      const aggressive = window.confirm('Lock immediately when this panel closes?');
+      await apiPost('chat-lock.php', { action:'set', chatId:state.chatId, delaySeconds:seconds, aggressive });
+    } else if (choice === 'forget-devices') {
+      await apiPost('chat-auth-gate.php', { action:'forgetDevices', chatId:state.chatId, email:state.email });
+    } else if (choice === 'pin' || choice === 'password') {
+      const secret = window.prompt(choice === 'pin' ? 'Set a 6-digit PIN:' : 'Set a password of at least 12 characters:');
+      if (!secret) return;
+      const json = await apiPost('chat-auth-gate.php', { action:'set', chatId:state.chatId, email:state.email, tier:choice, secret });
+      if (json.success && json.sessionToken) { state.sessionToken = json.sessionToken; localStorage.setItem(CONFIG.storageKeyToken, json.sessionToken); state.authTier = choice; }
+    }
   }
 
   function openOptionsSheet() {
@@ -1110,7 +1194,10 @@
       // closed — rebuild the message view from scratch so anything that
       // arrived while closed (and was never appended to messagesEl) is
       // actually shown, rather than silently missing.
-      rebuildLiveView();
+      apiPost('chat-lock.php', { action: 'status', chatId: state.chatId }).then(lockCheck => {
+        if (lockCheck.success) rebuildLiveView();
+        else { state.sessionToken = null; localStorage.removeItem(CONFIG.storageKeyToken); renderAuthGate(state.chatId, state.fullName, state.email, state.status, state.authTier); }
+      }).catch(() => renderAuthGate(state.chatId, state.fullName, state.email, state.status, state.authTier));
       return;
     }
 
@@ -1150,6 +1237,12 @@
   }
 
   function closePanel() {
+    /* TASK-4 START — the browser timer is advisory; the server timestamps the
+       close and re-checks it on every later token verification. */
+    if (state.mode === 'live' && state.chatId && state.sessionToken) {
+      apiPost('chat-lock.php', { action: 'closed', chatId: state.chatId }).catch(() => {});
+    }
+    /* TASK-4 END */
     state.panelOpen = false;
     panelEl.classList.remove('open');
     if (backdropEl) backdropEl.classList.remove('show');
@@ -1292,6 +1385,16 @@
       el('label', {}, 'Email'),
       el('input', { type: 'email', name: 'email', required: 'required' }),
     ]);
+    /* TASK-3 START — optional protection is collected directly after email so
+       a new chat can be born protected without a second unguarded session. */
+    const authTierInput = el('select', { name: 'authTier' }, [
+      el('option', { value: '' }, 'No chat lock'),
+      el('option', { value: 'pin' }, 'Protect with a 6-digit PIN'),
+      el('option', { value: 'password' }, 'Protect with a password'),
+    ]);
+    const authSecretInput = el('input', { type: 'password', name: 'authSecret', minlength: '6', maxlength: '1024', placeholder: 'Set a PIN or password (optional)' });
+    const protectionField = el('div', { class: 'pcw-field' }, [el('label', {}, 'Protect this chat (optional)'), authTierInput, authSecretInput]);
+    /* TASK-3 END */
     // TASK-9 START
     // TASK-9b: phone number field, optional, added to the pre-chat gate.
     // Follows the exact same .pcw-field / label+input pattern as
@@ -1370,6 +1473,7 @@
 
     form.appendChild(nameField);
     form.appendChild(emailField);
+    form.appendChild(protectionField);
     // TASK-9 START
     // TASK-9b: mount the new phone field directly after email, before the
     // reason dropdown — grouping it with the other plain text-style fields.
@@ -1407,6 +1511,9 @@
         /* TASK-9 END */
         reason: selectedReason,  // use the tracked value directly, not fd.get (more reliable)
         chatId: fd.get('chatId').trim(),
+        authTier: fd.get('authTier'),
+        authSecret: fd.get('authSecret'),
+        deviceToken: deviceToken(),
       };
 
       // Clean up the outside-click listener once form is submitted
@@ -1422,7 +1529,12 @@
           // path, the one moment the entrance animation should play.
           /* TASK-1 START — pass through the sessionToken chat-start.php's
              response now includes on every success path. */
-          openLiveThread(json.chatId, json.fullName, json.email, json.status, undefined, true, json.sessionToken);
+          if (json.authRequired) {
+            renderAuthGate(json.chatId, json.fullName, json.email, json.status, json.authTier);
+          } else {
+            state.authTier = json.authTier || 'none';
+            openLiveThread(json.chatId, json.fullName, json.email, json.status, undefined, true, json.sessionToken);
+          }
           /* TASK-1 END */
           // TASK-9 END
         } else {
@@ -1446,48 +1558,21 @@
   // ============================================
   // RESUME A STORED SESSION (Tier 1 item 22 — persistence across navigation)
   // ============================================
+  // Renders the shared gate after chat-start has identified a protected thread.
+  function renderAuthGate(chatId, fullName, email, status, tier) {
+    state.mode = 'auth-gate'; state.chatId = chatId; state.fullName = fullName; state.email = email; state.status = status; state.authTier = tier;
+    headerTitleEl.textContent = 'Unlock Chat'; headerSubEl.textContent = chatId; bodyEl.innerHTML = ''; bodyEl.appendChild(renderBackToLauncher());
+    bodyEl.appendChild(AuthGate({ tier, principalId: chatId, email, onVerifySuccess: (json) => { state.sessionToken = json.sessionToken; localStorage.setItem(CONFIG.storageKeyToken, json.sessionToken); openLiveThread(chatId, fullName, email, status, false, false, json.sessionToken); } }));
+  }
+
   function resumeStoredChat(storedChatId) {
     dlog('resuming stored chat: ' + storedChatId);
-    /* TASK-1 START — load the token stored by a prior openLiveThread()
-       call BEFORE polling, since apiGet() (see its own TASK-1 comment
-       above) only attaches whatever's already in state.sessionToken. This
-       endpoint no longer works on storedChatId alone — see chat-poll.php's
-       own TASK-1 hardening — so a resume with no stored token, or an
-       expired one, now correctly falls into the same "no longer resolves"
-       branch below as a deleted thread would, sending the customer back
-       through the pre-chat gate rather than silently failing. Using the
-       SAME email there resumes this exact thread and issues a fresh
-       token (chat-start.php Path 2), so no history is actually lost —
-       only a rare, safe extra step. */
-    state.sessionToken = localStorage.getItem(CONFIG.storageKeyToken) || null;
-    /* TASK-1 END */
-    // Always fetch from message 0 on resume so the full history loads —
-    // using the stored lastMessageId would skip all existing messages and
-    // show an empty panel, which is the bug that was reported.
-    apiGet('chat-poll.php', { chatId: storedChatId, lastMessageId: 0, lastEventId: 0 }).then(json => {
-      if (json.success) {
-        const storedName = localStorage.getItem('pc_chat_name') || '';
-        const storedEmail = localStorage.getItem('pc_chat_email') || '';
-        // Pass skipRestore=false so openLiveThread also starts from 0.
-        // No sessionToken arg needed here — state.sessionToken was already
-        // set above, and openLiveThread() only overwrites it when a real
-        // one is passed (see that function's own TASK-1 comment).
-        openLiveThread(storedChatId, storedName, storedEmail, json.status, false);
-      } else {
-        // Stored chat no longer resolves — either genuinely deleted by an
-        // admin, or (TASK-1) the stored session token was missing/expired.
-        // Same safe fallback either way: clear the stale pointers and
-        // return to the launcher.
-        localStorage.removeItem(CONFIG.storageKeyChatId);
-        localStorage.removeItem(CONFIG.storageKeyLastMsg);
-        localStorage.removeItem('pc_chat_name');
-        localStorage.removeItem('pc_chat_email');
-        /* TASK-1 START */
-        localStorage.removeItem(CONFIG.storageKeyToken);
-        state.sessionToken = null;
-        /* TASK-1 END */
-        renderLauncher();
-      }
+    const storedName = localStorage.getItem('pc_chat_name') || '';
+    const storedEmail = localStorage.getItem('pc_chat_email') || '';
+    apiPost('chat-start.php', { fullName: storedName || 'Customer', email: storedEmail, reason: 'general', chatId: storedChatId, deviceToken: deviceToken() }).then(json => {
+      if (!json.success) { renderLauncher(); return; }
+      if (json.authRequired) renderAuthGate(json.chatId, json.fullName, json.email, json.status, json.authTier);
+      else { state.sessionToken = json.sessionToken; openLiveThread(json.chatId, json.fullName, json.email, json.status, false, false, json.sessionToken); }
     }).catch(() => renderLauncher());
   }
 
