@@ -45,13 +45,13 @@ Read these files from the current main branch:
 
 Read every core document relevant to your package under docs/second-round/core-docs/. Then read the relevant project summary, assignment tracker, worker protocol, completion files, and current repository files. Compare each available completion file against the original assignment and current main; never trust a completion file in isolation.
 
-Completion files that existed in the original intake archive are not all copied into this repository. The inventory and issue register identify what was reported, but they are not substitutes for missing source completion files. If a listed completion file is absent, record the exact missing path in your report as an evidence gap, use the original assignment, issue register, Git history, and current source to verify whatever can be verified, and do not claim that the missing completion-file comparison was completed. A missing completion file must not stop the entire account: create the report, classify affected items as Blocked or Needs My Review where evidence is insufficient, and continue with independently verifiable checks.
+Completion files that existed in the original intake archive are not all copied into this repository. The inventory and issue register identify what was reported, but they are not substitutes for missing source completion files. If a listed completion file is absent, record the exact missing path in your report as an evidence gap, use the original assignment, issue register, Git history, and current source to verify whatever can be verified, and do not claim that the missing completion-file comparison was completed. A missing completion file does not prevent completion of independently verifiable account work: create the report, classify affected items as Blocked or Needs My Review where evidence is insufficient, and continue with independently verifiable checks.
 
 3. SCOPE AND SECOND-ROUND METHOD
 
 Work only on MANUS-01's package. First build a task/completion/status matrix. For every reported bug or missing task: locate the real file and anchor, reproduce it with a test or controlled check, classify it as Fixed, False Alarm/Already Resolved, Needs My Review, or Blocked, and record evidence. Do not redesign unrelated code, guess missing implementations, silently change paths, or silently alter shared data contracts.
 
-If another account owns the shared file or contract, stop at the boundary and record the dependency. Do not apply partial work when a specific task is blocked, but continue the rest of your package and publish the required report even when one or more tasks are blocked.
+If another account owns the shared file or contract, pause at that boundary and record the dependency. Do not apply partial work when a specific task is blocked, but continue the rest of your package and publish the required report even when one or more tasks are blocked.
 
 4. PROTECTED CONTENT
 
@@ -121,13 +121,13 @@ Read these files from the current main branch:
 
 Read every core document relevant to your package under docs/second-round/core-docs/. Then read the relevant project summary, assignment tracker, worker protocol, completion files, and current repository files. Compare each available completion file against the original assignment and current main; never trust a completion file in isolation.
 
-Completion files that existed in the original intake archive are not all copied into this repository. The inventory and issue register identify what was reported, but they are not substitutes for missing source completion files. If a listed completion file is absent, record the exact missing path in your report as an evidence gap, use the original assignment, issue register, Git history, and current source to verify whatever can be verified, and do not claim that the missing completion-file comparison was completed. A missing completion file must not stop the entire account: create the report, classify affected items as Blocked or Needs My Review where evidence is insufficient, and continue with independently verifiable checks.
+Completion files that existed in the original intake archive are not all copied into this repository. The inventory and issue register identify what was reported, but they are not substitutes for missing source completion files. If a listed completion file is absent, record the exact missing path in your report as an evidence gap, use the original assignment, issue register, Git history, and current source to verify whatever can be verified, and do not claim that the missing completion-file comparison was completed. A missing completion file does not prevent completion of independently verifiable account work: create the report, classify affected items as Blocked or Needs My Review where evidence is insufficient, and continue with independently verifiable checks.
 
 3. SCOPE AND SECOND-ROUND METHOD
 
 Work only on MANUS-02's package. First build a task/completion/status matrix. For every reported bug or missing task: locate the real file and anchor, reproduce it with a test or controlled check, classify it as Fixed, False Alarm/Already Resolved, Needs My Review, or Blocked, and record evidence. Do not redesign unrelated code, guess missing implementations, silently change paths, or silently alter shared data contracts.
 
-If another account owns the shared file or contract, stop at the boundary and record the dependency. Do not apply partial work when a specific task is blocked, but continue the rest of your package and publish the required report even when one or more tasks are blocked.
+If another account owns the shared file or contract, pause at that boundary and record the dependency. Do not apply partial work when a specific task is blocked, but continue the rest of your package and publish the required report even when one or more tasks are blocked.
 
 4. PROTECTED CONTENT
 
@@ -197,13 +197,13 @@ Read these files from the current main branch:
 
 Read every core document relevant to your package under docs/second-round/core-docs/. Then read the relevant project summary, assignment tracker, worker protocol, completion files, and current repository files. Compare each available completion file against the original assignment and current main; never trust a completion file in isolation.
 
-Completion files that existed in the original intake archive are not all copied into this repository. The inventory and issue register identify what was reported, but they are not substitutes for missing source completion files. If a listed completion file is absent, record the exact missing path in your report as an evidence gap, use the original assignment, issue register, Git history, and current source to verify whatever can be verified, and do not claim that the missing completion-file comparison was completed. A missing completion file must not stop the entire account: create the report, classify affected items as Blocked or Needs My Review where evidence is insufficient, and continue with independently verifiable checks.
+Completion files that existed in the original intake archive are not all copied into this repository. The inventory and issue register identify what was reported, but they are not substitutes for missing source completion files. If a listed completion file is absent, record the exact missing path in your report as an evidence gap, use the original assignment, issue register, Git history, and current source to verify whatever can be verified, and do not claim that the missing completion-file comparison was completed. A missing completion file does not prevent completion of independently verifiable account work: create the report, classify affected items as Blocked or Needs My Review where evidence is insufficient, and continue with independently verifiable checks.
 
 3. SCOPE AND SECOND-ROUND METHOD
 
 Work only on MANUS-03's package. First build a task/completion/status matrix. For every reported bug or missing task: locate the real file and anchor, reproduce it with a test or controlled check, classify it as Fixed, False Alarm/Already Resolved, Needs My Review, or Blocked, and record evidence. Do not redesign unrelated code, guess missing implementations, silently change paths, or silently alter shared data contracts.
 
-If another account owns the shared file or contract, stop at the boundary and record the dependency. Do not apply partial work when a specific task is blocked, but continue the rest of your package and publish the required report even when one or more tasks are blocked.
+If another account owns the shared file or contract, pause at that boundary and record the dependency. Do not apply partial work when a specific task is blocked, but continue the rest of your package and publish the required report even when one or more tasks are blocked.
 
 4. PROTECTED CONTENT
 
@@ -273,13 +273,13 @@ Read these files from the current main branch:
 
 Read every core document relevant to your package under docs/second-round/core-docs/. Then read the relevant project summary, assignment tracker, worker protocol, completion files, and current repository files. Compare each available completion file against the original assignment and current main; never trust a completion file in isolation.
 
-Completion files that existed in the original intake archive are not all copied into this repository. The inventory and issue register identify what was reported, but they are not substitutes for missing source completion files. If a listed completion file is absent, record the exact missing path in your report as an evidence gap, use the original assignment, issue register, Git history, and current source to verify whatever can be verified, and do not claim that the missing completion-file comparison was completed. A missing completion file must not stop the entire account: create the report, classify affected items as Blocked or Needs My Review where evidence is insufficient, and continue with independently verifiable checks.
+Completion files that existed in the original intake archive are not all copied into this repository. The inventory and issue register identify what was reported, but they are not substitutes for missing source completion files. If a listed completion file is absent, record the exact missing path in your report as an evidence gap, use the original assignment, issue register, Git history, and current source to verify whatever can be verified, and do not claim that the missing completion-file comparison was completed. A missing completion file does not prevent completion of independently verifiable account work: create the report, classify affected items as Blocked or Needs My Review where evidence is insufficient, and continue with independently verifiable checks.
 
 3. SCOPE AND SECOND-ROUND METHOD
 
 Work only on MANUS-04's package. First build a task/completion/status matrix. For every reported bug or missing task: locate the real file and anchor, reproduce it with a test or controlled check, classify it as Fixed, False Alarm/Already Resolved, Needs My Review, or Blocked, and record evidence. Do not redesign unrelated code, guess missing implementations, silently change paths, or silently alter shared data contracts.
 
-If another account owns the shared file or contract, stop at the boundary and record the dependency. Do not apply partial work when a specific task is blocked, but continue the rest of your package and publish the required report even when one or more tasks are blocked.
+If another account owns the shared file or contract, pause at that boundary and record the dependency. Do not apply partial work when a specific task is blocked, but continue the rest of your package and publish the required report even when one or more tasks are blocked.
 
 4. PROTECTED CONTENT
 
@@ -349,13 +349,13 @@ Read these files from the current main branch:
 
 Read every core document relevant to your package under docs/second-round/core-docs/. Then read the relevant project summary, assignment tracker, worker protocol, completion files, and current repository files. Compare each available completion file against the original assignment and current main; never trust a completion file in isolation.
 
-Completion files that existed in the original intake archive are not all copied into this repository. The inventory and issue register identify what was reported, but they are not substitutes for missing source completion files. If a listed completion file is absent, record the exact missing path in your report as an evidence gap, use the original assignment, issue register, Git history, and current source to verify whatever can be verified, and do not claim that the missing completion-file comparison was completed. A missing completion file must not stop the entire account: create the report, classify affected items as Blocked or Needs My Review where evidence is insufficient, and continue with independently verifiable checks.
+Completion files that existed in the original intake archive are not all copied into this repository. The inventory and issue register identify what was reported, but they are not substitutes for missing source completion files. If a listed completion file is absent, record the exact missing path in your report as an evidence gap, use the original assignment, issue register, Git history, and current source to verify whatever can be verified, and do not claim that the missing completion-file comparison was completed. A missing completion file does not prevent completion of independently verifiable account work: create the report, classify affected items as Blocked or Needs My Review where evidence is insufficient, and continue with independently verifiable checks.
 
 3. SCOPE AND SECOND-ROUND METHOD
 
 Work only on MANUS-05's package. First build a task/completion/status matrix. For every reported bug or missing task: locate the real file and anchor, reproduce it with a test or controlled check, classify it as Fixed, False Alarm/Already Resolved, Needs My Review, or Blocked, and record evidence. Do not redesign unrelated code, guess missing implementations, silently change paths, or silently alter shared data contracts.
 
-If another account owns the shared file or contract, stop at the boundary and record the dependency. Do not apply partial work when a specific task is blocked, but continue the rest of your package and publish the required report even when one or more tasks are blocked.
+If another account owns the shared file or contract, pause at that boundary and record the dependency. Do not apply partial work when a specific task is blocked, but continue the rest of your package and publish the required report even when one or more tasks are blocked.
 
 4. PROTECTED CONTENT
 
@@ -425,13 +425,13 @@ Read these files from the current main branch:
 
 Read every core document relevant to your package under docs/second-round/core-docs/. Then read the relevant project summary, assignment tracker, worker protocol, completion files, and current repository files. Compare each available completion file against the original assignment and current main; never trust a completion file in isolation.
 
-Completion files that existed in the original intake archive are not all copied into this repository. The inventory and issue register identify what was reported, but they are not substitutes for missing source completion files. If a listed completion file is absent, record the exact missing path in your report as an evidence gap, use the original assignment, issue register, Git history, and current source to verify whatever can be verified, and do not claim that the missing completion-file comparison was completed. A missing completion file must not stop the entire account: create the report, classify affected items as Blocked or Needs My Review where evidence is insufficient, and continue with independently verifiable checks.
+Completion files that existed in the original intake archive are not all copied into this repository. The inventory and issue register identify what was reported, but they are not substitutes for missing source completion files. If a listed completion file is absent, record the exact missing path in your report as an evidence gap, use the original assignment, issue register, Git history, and current source to verify whatever can be verified, and do not claim that the missing completion-file comparison was completed. A missing completion file does not prevent completion of independently verifiable account work: create the report, classify affected items as Blocked or Needs My Review where evidence is insufficient, and continue with independently verifiable checks.
 
 3. SCOPE AND SECOND-ROUND METHOD
 
 Work only on MANUS-06's package. First build a task/completion/status matrix. For every reported bug or missing task: locate the real file and anchor, reproduce it with a test or controlled check, classify it as Fixed, False Alarm/Already Resolved, Needs My Review, or Blocked, and record evidence. Do not redesign unrelated code, guess missing implementations, silently change paths, or silently alter shared data contracts.
 
-If another account owns the shared file or contract, stop at the boundary and record the dependency. Do not apply partial work when a specific task is blocked, but continue the rest of your package and publish the required report even when one or more tasks are blocked.
+If another account owns the shared file or contract, pause at that boundary and record the dependency. Do not apply partial work when a specific task is blocked, but continue the rest of your package and publish the required report even when one or more tasks are blocked.
 
 4. PROTECTED CONTENT
 
@@ -501,13 +501,13 @@ Read these files from the current main branch:
 
 Read every core document relevant to your package under docs/second-round/core-docs/. Then read the relevant project summary, assignment tracker, worker protocol, completion files, and current repository files. Compare each available completion file against the original assignment and current main; never trust a completion file in isolation.
 
-Completion files that existed in the original intake archive are not all copied into this repository. The inventory and issue register identify what was reported, but they are not substitutes for missing source completion files. If a listed completion file is absent, record the exact missing path in your report as an evidence gap, use the original assignment, issue register, Git history, and current source to verify whatever can be verified, and do not claim that the missing completion-file comparison was completed. A missing completion file must not stop the entire account: create the report, classify affected items as Blocked or Needs My Review where evidence is insufficient, and continue with independently verifiable checks.
+Completion files that existed in the original intake archive are not all copied into this repository. The inventory and issue register identify what was reported, but they are not substitutes for missing source completion files. If a listed completion file is absent, record the exact missing path in your report as an evidence gap, use the original assignment, issue register, Git history, and current source to verify whatever can be verified, and do not claim that the missing completion-file comparison was completed. A missing completion file does not prevent completion of independently verifiable account work: create the report, classify affected items as Blocked or Needs My Review where evidence is insufficient, and continue with independently verifiable checks.
 
 3. SCOPE AND SECOND-ROUND METHOD
 
 Work only on MANUS-07's package. First build a task/completion/status matrix. For every reported bug or missing task: locate the real file and anchor, reproduce it with a test or controlled check, classify it as Fixed, False Alarm/Already Resolved, Needs My Review, or Blocked, and record evidence. Do not redesign unrelated code, guess missing implementations, silently change paths, or silently alter shared data contracts.
 
-If another account owns the shared file or contract, stop at the boundary and record the dependency. Do not apply partial work when a specific task is blocked, but continue the rest of your package and publish the required report even when one or more tasks are blocked.
+If another account owns the shared file or contract, pause at that boundary and record the dependency. Do not apply partial work when a specific task is blocked, but continue the rest of your package and publish the required report even when one or more tasks are blocked.
 
 4. PROTECTED CONTENT
 
@@ -577,13 +577,13 @@ Read these files from the current main branch:
 
 Read every core document relevant to your package under docs/second-round/core-docs/. Then read the relevant project summary, assignment tracker, worker protocol, completion files, and current repository files. Compare each available completion file against the original assignment and current main; never trust a completion file in isolation.
 
-Completion files that existed in the original intake archive are not all copied into this repository. The inventory and issue register identify what was reported, but they are not substitutes for missing source completion files. If a listed completion file is absent, record the exact missing path in your report as an evidence gap, use the original assignment, issue register, Git history, and current source to verify whatever can be verified, and do not claim that the missing completion-file comparison was completed. A missing completion file must not stop the entire account: create the report, classify affected items as Blocked or Needs My Review where evidence is insufficient, and continue with independently verifiable checks.
+Completion files that existed in the original intake archive are not all copied into this repository. The inventory and issue register identify what was reported, but they are not substitutes for missing source completion files. If a listed completion file is absent, record the exact missing path in your report as an evidence gap, use the original assignment, issue register, Git history, and current source to verify whatever can be verified, and do not claim that the missing completion-file comparison was completed. A missing completion file does not prevent completion of independently verifiable account work: create the report, classify affected items as Blocked or Needs My Review where evidence is insufficient, and continue with independently verifiable checks.
 
 3. SCOPE AND SECOND-ROUND METHOD
 
 Work only on MANUS-08's package. First build a task/completion/status matrix. For every reported bug or missing task: locate the real file and anchor, reproduce it with a test or controlled check, classify it as Fixed, False Alarm/Already Resolved, Needs My Review, or Blocked, and record evidence. Do not redesign unrelated code, guess missing implementations, silently change paths, or silently alter shared data contracts.
 
-If another account owns the shared file or contract, stop at the boundary and record the dependency. Do not apply partial work when a specific task is blocked, but continue the rest of your package and publish the required report even when one or more tasks are blocked.
+If another account owns the shared file or contract, pause at that boundary and record the dependency. Do not apply partial work when a specific task is blocked, but continue the rest of your package and publish the required report even when one or more tasks are blocked.
 
 4. PROTECTED CONTENT
 
@@ -653,13 +653,13 @@ Read these files from the current main branch:
 
 Read every core document relevant to your package under docs/second-round/core-docs/. Then read the relevant project summary, assignment tracker, worker protocol, completion files, and current repository files. Compare each available completion file against the original assignment and current main; never trust a completion file in isolation.
 
-Completion files that existed in the original intake archive are not all copied into this repository. The inventory and issue register identify what was reported, but they are not substitutes for missing source completion files. If a listed completion file is absent, record the exact missing path in your report as an evidence gap, use the original assignment, issue register, Git history, and current source to verify whatever can be verified, and do not claim that the missing completion-file comparison was completed. A missing completion file must not stop the entire account: create the report, classify affected items as Blocked or Needs My Review where evidence is insufficient, and continue with independently verifiable checks.
+Completion files that existed in the original intake archive are not all copied into this repository. The inventory and issue register identify what was reported, but they are not substitutes for missing source completion files. If a listed completion file is absent, record the exact missing path in your report as an evidence gap, use the original assignment, issue register, Git history, and current source to verify whatever can be verified, and do not claim that the missing completion-file comparison was completed. A missing completion file does not prevent completion of independently verifiable account work: create the report, classify affected items as Blocked or Needs My Review where evidence is insufficient, and continue with independently verifiable checks.
 
 3. SCOPE AND SECOND-ROUND METHOD
 
 Work only on MANUS-09's package. First build a task/completion/status matrix. For every reported bug or missing task: locate the real file and anchor, reproduce it with a test or controlled check, classify it as Fixed, False Alarm/Already Resolved, Needs My Review, or Blocked, and record evidence. Do not redesign unrelated code, guess missing implementations, silently change paths, or silently alter shared data contracts.
 
-If another account owns the shared file or contract, stop at the boundary and record the dependency. Do not apply partial work when a specific task is blocked, but continue the rest of your package and publish the required report even when one or more tasks are blocked.
+If another account owns the shared file or contract, pause at that boundary and record the dependency. Do not apply partial work when a specific task is blocked, but continue the rest of your package and publish the required report even when one or more tasks are blocked.
 
 4. PROTECTED CONTENT
 
@@ -729,13 +729,13 @@ Read these files from the current main branch:
 
 Read every core document relevant to your package under docs/second-round/core-docs/. Then read the relevant project summary, assignment tracker, worker protocol, completion files, and current repository files. Compare each available completion file against the original assignment and current main; never trust a completion file in isolation.
 
-Completion files that existed in the original intake archive are not all copied into this repository. The inventory and issue register identify what was reported, but they are not substitutes for missing source completion files. If a listed completion file is absent, record the exact missing path in your report as an evidence gap, use the original assignment, issue register, Git history, and current source to verify whatever can be verified, and do not claim that the missing completion-file comparison was completed. A missing completion file must not stop the entire account: create the report, classify affected items as Blocked or Needs My Review where evidence is insufficient, and continue with independently verifiable checks.
+Completion files that existed in the original intake archive are not all copied into this repository. The inventory and issue register identify what was reported, but they are not substitutes for missing source completion files. If a listed completion file is absent, record the exact missing path in your report as an evidence gap, use the original assignment, issue register, Git history, and current source to verify whatever can be verified, and do not claim that the missing completion-file comparison was completed. A missing completion file does not prevent completion of independently verifiable account work: create the report, classify affected items as Blocked or Needs My Review where evidence is insufficient, and continue with independently verifiable checks.
 
 3. SCOPE AND SECOND-ROUND METHOD
 
 Work only on MANUS-10's package. First build a task/completion/status matrix. For every reported bug or missing task: locate the real file and anchor, reproduce it with a test or controlled check, classify it as Fixed, False Alarm/Already Resolved, Needs My Review, or Blocked, and record evidence. Do not redesign unrelated code, guess missing implementations, silently change paths, or silently alter shared data contracts.
 
-If another account owns the shared file or contract, stop at the boundary and record the dependency. Do not apply partial work when a specific task is blocked, but continue the rest of your package and publish the required report even when one or more tasks are blocked.
+If another account owns the shared file or contract, pause at that boundary and record the dependency. Do not apply partial work when a specific task is blocked, but continue the rest of your package and publish the required report even when one or more tasks are blocked.
 
 4. PROTECTED CONTENT
 
@@ -805,13 +805,13 @@ Read these files from the current main branch:
 
 Read every core document relevant to your package under docs/second-round/core-docs/. Then read the relevant project summary, assignment tracker, worker protocol, completion files, and current repository files. Compare each available completion file against the original assignment and current main; never trust a completion file in isolation.
 
-Completion files that existed in the original intake archive are not all copied into this repository. The inventory and issue register identify what was reported, but they are not substitutes for missing source completion files. If a listed completion file is absent, record the exact missing path in your report as an evidence gap, use the original assignment, issue register, Git history, and current source to verify whatever can be verified, and do not claim that the missing completion-file comparison was completed. A missing completion file must not stop the entire account: create the report, classify affected items as Blocked or Needs My Review where evidence is insufficient, and continue with independently verifiable checks.
+Completion files that existed in the original intake archive are not all copied into this repository. The inventory and issue register identify what was reported, but they are not substitutes for missing source completion files. If a listed completion file is absent, record the exact missing path in your report as an evidence gap, use the original assignment, issue register, Git history, and current source to verify whatever can be verified, and do not claim that the missing completion-file comparison was completed. A missing completion file does not prevent completion of independently verifiable account work: create the report, classify affected items as Blocked or Needs My Review where evidence is insufficient, and continue with independently verifiable checks.
 
 3. SCOPE AND SECOND-ROUND METHOD
 
 Work only on MANUS-11's package. First build a task/completion/status matrix. For every reported bug or missing task: locate the real file and anchor, reproduce it with a test or controlled check, classify it as Fixed, False Alarm/Already Resolved, Needs My Review, or Blocked, and record evidence. Do not redesign unrelated code, guess missing implementations, silently change paths, or silently alter shared data contracts.
 
-If another account owns the shared file or contract, stop at the boundary and record the dependency. Do not apply partial work when a specific task is blocked, but continue the rest of your package and publish the required report even when one or more tasks are blocked.
+If another account owns the shared file or contract, pause at that boundary and record the dependency. Do not apply partial work when a specific task is blocked, but continue the rest of your package and publish the required report even when one or more tasks are blocked.
 
 4. PROTECTED CONTENT
 

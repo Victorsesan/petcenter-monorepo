@@ -8,7 +8,7 @@ The source documents are preserved beside this plan in `docs/second-round/core-d
 
 ## Repository evidence availability
 
-The worker-package inventory was generated from the original intake workspace, but the 62 worker-package completion/handoff files were not copied into this repository. The repository contains the inventory and extracted issue register, not those original source completion files. This applies to every account, not only MANUS-01. Each account must check the files named for its scope, record unavailable files as evidence gaps, use the available core assignment, issue register, Git history, and current source for independent verification, and still create its report. Missing completion files may make individual items **Blocked** or **Needs My Review**, but they must not stop the entire account.
+The worker-package inventory was generated from the original intake workspace, but the 62 worker-package completion/handoff files were not copied into this repository. The repository contains the inventory and extracted issue register, not those original source completion files. This applies to every account, not only MANUS-01. Each account must check the files named for its scope, record unavailable files as evidence gaps, use the available core assignment, issue register, Git history, and current source for independent verification, and still create its report. Missing completion files may make individual items **Blocked** or **Needs My Review**, but they do not prevent completion of independently verifiable account work.
 
 ## Non-negotiable operating rules
 
