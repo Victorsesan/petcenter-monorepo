@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="Volunteer with Pet Center in Beverly Hills — help at adoption events, walk and socialize animals, foster, photograph pets, or lend admin support. See roles, requirements, and sign up.">
+<title>Volunteer With Us — Pet Center</title>
+
+<meta property="og:title" content="Volunteer With Us — Pet Center">
+<meta property="og:description" content="Help at adoption events, walk and socialize animals, or lend your skills behind the scenes. See open volunteer roles and sign up.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://adopt.petcenterco.com/volunteer/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Volunteer With Us — Pet Center">
+<meta name="twitter:description" content="Help at adoption events, walk and socialize animals, or lend your skills behind the scenes.">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://adopt.petcenterco.com/" },
+    { "@type": "ListItem", "position": 2, "name": "Volunteer", "item": "https://adopt.petcenterco.com/volunteer/" }
+  ]
+}
+</script>
+
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<style>
+/* ════════════════════════════════════════════════════════════════════════════
+   PET CENTER — Volunteer With Us (/volunteer/)
+   Colors: Navy #10214b | Gold #d7bd88 | Orange #ED7624
+   Base reset/typography/header/footer copied verbatim from cats.html (Rule 13).
+   Rule: NO borders on cards — shadows only | NO emojis — SVG icons only
+   ════════════════════════════════════════════════════════════════════════════ */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Sora:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --navy: #10214b; --navy-light: #1a2f5c; --gold: #d7bd88; --gold-dark: #b89968;
+  --orange: #ED7624; --orange-light: #fef0e6; --warm-gray: #d0c3ba; --chocolate: #3d2817;
+  --bg: #f9f7f4; --surface: #ffffff; --text: #2c2416; --muted: #7a6d5f;
+  --success: #0d7c4a; --success-bg: #e6f7ef; --error: #c0392b; --error-bg: #fdecea;
+  --shadow-sm: 0 2px 8px rgba(16,33,75,0.06); --shadow-md: 0 4px 20px rgba(16,33,75,0.10);
+  --shadow-lg: 0 8px 40px rgba(16,33,75,0.14);
+  --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px; --transition: 0.25s ease;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; overflow-x: hidden; width: 100%; }
+body {
+  font-family: 'Sora', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.65;
+  -webkit-font-smoothing: antialiased; padding-top: 68px; overflow-x: hidden; width: 100%; position: relative;
+}
+img { max-width: 100%; height: auto; display: block; }
+a { color: var(--orange); text-decoration: none; transition: color var(--transition); }
+a:hover { color: var(--navy); }
+h1, h2, h3, h4 { font-family: 'Cormorant Garamond', Georgia, serif; color: var(--navy); line-height: 1.25; }
+h1 { font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 700; }
+h2 { font-size: clamp(1.6rem, 3vw, 2.3rem); font-weight: 700; margin-bottom: 12px; }
+h3 { font-size: 1.2rem; font-weight: 600; margin-bottom: 8px; }
+p { color: var(--muted); }
+.pc-container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+.pc-container--narrow { max-width: 880px; margin: 0 auto; padding: 0 24px; }
+.pc-section { padding: 68px 0; }
+.pc-section--sm { padding: 40px 0; }
+.pc-section--alt { background: var(--surface); }
+.pc-eyebrow { display: inline-block; font-family: 'Sora', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--orange); margin-bottom: 10px; }
+@media (max-width: 640px) { .pc-section { padding: 44px 0; } }
+
+/* ─── Buttons ─────────────────────────────────────────────────────────────── */
+.pc-btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 28px; border-radius: var(--radius-sm); font-family: 'Sora', sans-serif; font-size: 14px; font-weight: 600; letter-spacing: 0.02em; cursor: pointer; border: none; transition: all var(--transition); text-decoration: none; white-space: nowrap; min-height: 44px; }
+.pc-btn--primary { background: linear-gradient(135deg, var(--navy), var(--navy-light)); color: #fff; box-shadow: 0 4px 14px rgba(16,33,75,0.25); }
+.pc-btn--primary:hover { background: linear-gradient(135deg, var(--navy-light), #243970); color: #fff; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(16,33,75,0.32); }
+.pc-btn--orange { background: linear-gradient(135deg, var(--orange), #d96919); color: #fff; box-shadow: 0 4px 14px rgba(237,118,36,0.30); }
+.pc-btn--orange:hover { background: linear-gradient(135deg, #d96919, #c45e10); color: #fff; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(237,118,36,0.38); }
+.pc-btn--ghost { background: transparent; color: var(--navy); box-shadow: inset 0 0 0 2px var(--gold); }
+.pc-btn--ghost:hover { background: var(--orange-light); color: var(--orange); }
+.pc-btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+
+/* ─── Header (verbatim from cats.html, Section 2.6 + TASK-2c Get Involved dropdown) ────── */
+.pc-header { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; display: flex; align-items: center; justify-content: space-between; padding: 12px 32px; transition: background 0.35s ease, box-shadow 0.35s ease; overflow: visible; }
+.pc-header.scrolled, .pc-header--solid { background: rgba(16,33,75,0.97); box-shadow: 0 2px 20px rgba(0,0,0,0.18); }
+.pc-header__logo img { height: 44px; width: auto; display: block; }
+.pc-header__logo--desktop { display: block; }
+.pc-header__logo--mobile { display: none; }
+@media (max-width: 900px) { .pc-header__logo--desktop { display: none; } .pc-header__logo--mobile { display: block; } }
+.pc-header__nav { display: flex; align-items: center; gap: 4px; list-style: none; }
+.pc-header__nav li { position: relative; }
+.pc-header__nav a { display: block; padding: 8px 11px; font-family: 'Sora', sans-serif; font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.9); text-decoration: none; border-radius: 6px; transition: color 0.2s, background 0.2s; white-space: nowrap; }
+.pc-header__nav a:hover { color: #d7bd88; background: rgba(255,255,255,0.08); }
+.pc-header__nav .nav-donate a { background: #ED7624; color: #fff; font-weight: 600; padding: 8px 16px; }
+.pc-header__nav .nav-donate a:hover { background: #d4621a; color: #fff; }
+.pc-header__nav .nav-signup a { border: 1px solid rgba(215,189,136,0.5); color: #d7bd88; }
+.pc-header__nav .nav-signup a:hover { background: rgba(215,189,136,0.12); }
+/* Section 24 — Custom Dropdown System ("Message Bubble" locked shell), applied to header nav */
+.pc-nav-dropdown { position: relative; }
+.pc-nav-dropdown__trigger { display: flex; align-items: center; gap: 6px; background: none; border: none; cursor: pointer; padding: 8px 11px; font-family: 'Sora', sans-serif; font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.9); border-radius: 6px; transition: color 0.2s, background 0.2s; }
+.pc-nav-dropdown__trigger:hover, .pc-nav-dropdown__trigger.active { color: #d7bd88; background: rgba(255,255,255,0.08); }
+.pc-nav-dropdown__chevron { transition: transform 0.2s cubic-bezier(.4,0,.2,1); flex-shrink: 0; }
+.pc-nav-dropdown__trigger.active .pc-nav-dropdown__chevron { transform: rotate(180deg); }
+.pc-nav-dropdown__panel { position: absolute; top: 100%; left: 0; margin-top: 6px; min-width: 190px; background: #ffffff; border: 1.5px solid rgba(16,33,75,0.10); border-radius: 14px 0 14px 14px; box-shadow: 0 12px 32px rgba(16,33,75,0.18), 0 2px 8px rgba(16,33,75,0.08); overflow: hidden; z-index: 999; opacity: 0; visibility: hidden; transform: translateY(-8px) scale(0.98); transform-origin: top left; transition: opacity 0.2s ease, transform 0.2s cubic-bezier(.4,0,.2,1), visibility 0.2s; pointer-events: none; }
+.pc-nav-dropdown__panel.open { opacity: 1; visibility: visible; transform: translateY(0) scale(1); pointer-events: auto; }
+.pc-nav-dropdown__panel.flip-up { top: auto; bottom: 100%; margin-top: 0; margin-bottom: 6px; transform-origin: bottom left; border-radius: 14px 14px 14px 0; }
+.pc-nav-dropdown__scroll { max-height: 225px; overflow-y: auto; padding: 6px 0; }
+.pc-nav-dropdown__row { display: flex; align-items: center; padding: 11px 16px; border-left: 3px solid transparent; border-bottom: 1px solid rgba(16,33,75,0.06); font-family: 'Sora', sans-serif; font-size: 13.5px; color: var(--navy); text-decoration: none; transition: background 0.15s ease, border-color 0.15s ease; }
+.pc-nav-dropdown__row:last-child { border-bottom: none; }
+.pc-nav-dropdown__row:hover { background: rgba(16,33,75,0.05); color: var(--navy); border-left-color: var(--gold); }
+.pc-hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 8px; background: none; border: none; width: 32px; height: auto; justify-content: center; }
+.pc-hamburger span { display: block; width: 24px; height: 2px; background: #fff; border-radius: 2px; transition: all 0.3s ease; }
+.pc-hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(8px, 8px); }
+.pc-hamburger.active span:nth-child(2) { opacity: 0; }
+.pc-hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -7px); }
+.pc-mobile-menu { display: flex; flex-direction: column; position: absolute; top: 100%; left: 0; right: 0; background: rgba(16,33,75,0.98); z-index: 999; max-height: 0; overflow: hidden; opacity: 0; pointer-events: none; transition: all 0.3s ease; box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
+.pc-mobile-menu.open { max-height: calc(100vh - 68px); overflow-y: auto; opacity: 1; pointer-events: auto; padding: 16px 0 calc(100vh - 68px - 56px); overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+.pc-mobile-menu a { display: block; padding: 12px 28px; font-family: 'Sora', sans-serif; font-size: 15px; font-weight: 500; color: rgba(255,255,255,0.9); text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.06); transition: all 0.2s ease; }
+.pc-mobile-menu a:hover { color: #d7bd88; background: rgba(255,255,255,0.05); }
+.pc-mobile-menu .mobile-donate { margin: 12px 28px 0; display: inline-block; background: #ED7624; color: #fff; padding: 11px 24px; border-radius: 8px; font-weight: 600; border-bottom: none; }
+@media (max-width: 900px) { .pc-header__nav { display: none; } .pc-hamburger { display: flex; } }
+
+/* ─── Hero banner ─────────────────────────────────────────────────────────── */
+.pc-page-banner { background: linear-gradient(120deg, #10214b 0%, #1a3070 60%, #2a4080 100%); padding: 100px 0 64px; text-align: center; position: relative; overflow: hidden; }
+.pc-page-banner__eyebrow { display: inline-block; font-family: 'Sora', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #d7bd88; background: rgba(215,189,136,0.12); border: 1px solid rgba(215,189,136,0.3); padding: 5px 16px; border-radius: 20px; margin-bottom: 18px; }
+.pc-page-banner h1 { color: #fff; margin-bottom: 14px; }
+.pc-page-banner p { color: rgba(255,255,255,0.78); max-width: 620px; margin: 0 auto 26px; font-size: 16px; }
+
+/* ─── Stat strip ─────────────────────────────────────────────────────────── */
+.pc-stat-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-top: 8px; }
+@media (max-width: 760px) { .pc-stat-strip { grid-template-columns: 1fr 1fr; } }
+.pc-stat { text-align: center; }
+.pc-stat__num { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 700; color: var(--navy); line-height: 1; }
+.pc-stat__label { font-family: 'Sora', sans-serif; font-size: 12.5px; color: var(--muted); margin-top: 6px; }
+
+/* ─── Role cards ─────────────────────────────────────────────────────────── */
+.pc-role-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+@media (max-width: 900px) { .pc-role-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 600px) { .pc-role-grid { grid-template-columns: 1fr; } }
+.pc-role-card { background: var(--surface); border-radius: var(--radius-md); box-shadow: var(--shadow-sm); padding: 26px; transition: box-shadow var(--transition), transform var(--transition); display: flex; flex-direction: column; }
+.pc-role-card:hover { box-shadow: var(--shadow-md); transform: translateY(-3px); }
+.pc-role-card__icon { color: var(--orange); margin-bottom: 14px; }
+.pc-role-card p { font-size: 13.5px; line-height: 1.6; margin-bottom: 12px; }
+.pc-role-card__meta { margin-top: auto; display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--gold-dark); text-transform: uppercase; letter-spacing: 0.04em; }
+.pc-role-card__meta svg { flex-shrink: 0; }
+
+/* ─── Requirements list ──────────────────────────────────────────────────── */
+.pc-req-list { list-style: none; display: flex; flex-direction: column; gap: 14px; margin-top: 18px; }
+.pc-req-list li { display: flex; gap: 12px; align-items: flex-start; font-size: 14px; color: var(--text); }
+.pc-req-list svg { flex-shrink: 0; color: var(--success); margin-top: 2px; }
+
+/* ─── Testimonials ───────────────────────────────────────────────────────── */
+.pc-quote-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+@media (max-width: 900px) { .pc-quote-grid { grid-template-columns: 1fr; } }
+.pc-quote-card { background: var(--navy); border-radius: var(--radius-md); padding: 26px; color: rgba(255,255,255,0.9); position: relative; }
+.pc-quote-card__mark { color: var(--gold); opacity: 0.5; margin-bottom: 10px; }
+.pc-quote-card p { color: rgba(255,255,255,0.85); font-size: 14px; line-height: 1.65; margin-bottom: 16px; font-style: italic; }
+.pc-quote-card__name { font-family: 'Sora', sans-serif; font-size: 13px; font-weight: 700; color: var(--gold); }
+.pc-quote-card__role { font-family: 'Sora', sans-serif; font-size: 12px; color: rgba(255,255,255,0.55); }
+
+/* ─── FAQ ─────────────────────────────────────────────────────────────────── */
+.pc-faq-item { border-bottom: 1px solid var(--warm-gray); padding: 18px 0; }
+.pc-faq-item:first-child { padding-top: 0; }
+.pc-faq-item h3 { font-size: 15px; margin-bottom: 6px; display: flex; gap: 10px; align-items: flex-start; }
+.pc-faq-item h3 svg { flex-shrink: 0; color: var(--orange); margin-top: 3px; }
+.pc-faq-item p { font-size: 13.5px; padding-left: 26px; }
+
+/* ─── Sign-up form ────────────────────────────────────────────────────────── */
+.pc-contact-section { background: #F0EDE9; border-radius: var(--radius-lg); padding: 44px; }
+@media (max-width: 640px) { .pc-contact-section { padding: 28px 20px; } }
+.pc-contact-section h2 { color: #776B75; }
+.pc-contact-section > p { color: #776B75; opacity: 0.75; margin-bottom: 26px; max-width: 560px; }
+.pc-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 20px; }
+@media (max-width: 540px) { .pc-form-grid { grid-template-columns: 1fr; } }
+.pc-field { display: flex; flex-direction: column; gap: 6px; }
+.pc-field.pc-field--full { grid-column: 1 / -1; }
+.pc-field label { font-family: 'Sora', sans-serif; font-size: 13px; font-weight: 600; color: #776B75; text-transform: uppercase; letter-spacing: 0.04em; }
+.pc-field input, .pc-field select, .pc-field textarea { background: #ffffff; border: 1.5px solid rgba(119,107,117,0.3); border-radius: 9px; padding: 11px 14px; font-size: 14px; color: var(--text); font-family: inherit; outline: none; transition: all 0.3s cubic-bezier(0.4,0,0.2,1); }
+.pc-field input:focus, .pc-field select:focus, .pc-field textarea:focus { border-color: var(--gold); background: #fafaf8; box-shadow: 0 0 0 3px rgba(215,189,136,0.15); }
+.pc-field textarea { resize: vertical; min-height: 90px; }
+.pc-checkbox-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+@media (max-width: 640px) { .pc-checkbox-grid { grid-template-columns: 1fr 1fr; } }
+.pc-checkbox-item { display: flex; align-items: center; gap: 8px; background: #ffffff; border: 1.5px solid rgba(119,107,117,0.25); border-radius: 9px; padding: 10px 12px; font-size: 13px; color: var(--text); cursor: pointer; }
+.pc-checkbox-item input { width: 16px; height: 16px; accent-color: var(--orange); flex-shrink: 0; }
+.pc-form-footer { margin-top: 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.pc-form-note { font-size: 12.5px; color: #776B75; opacity: 0.7; }
+.pc-form-success { display: none; align-items: center; gap: 10px; background: var(--success-bg); color: var(--success); border-radius: var(--radius-sm); padding: 14px 18px; font-size: 13.5px; font-weight: 600; margin-top: 20px; }
+.pc-form-success.show { display: flex; }
+.pc-form-success svg { flex-shrink: 0; }
+
+/* ─── Cross-link callout ─────────────────────────────────────────────────── */
+.pc-cross-callout { background: var(--orange-light); border-radius: var(--radius-md); padding: 24px 28px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; justify-content: space-between; margin-top: 8px; }
+.pc-cross-callout p { color: var(--text); font-size: 14px; max-width: 480px; }
+.pc-cross-callout strong { color: var(--navy); }
+
+/* ─── Footer (structure verbatim from cats.html, corrected grid — Section 8) ────────────── */
+.pc-footer { background: #0b1834; padding: 60px 24px 28px; color: rgba(255,255,255,0.65); font-family: 'Sora', sans-serif; }
+.pc-footer__inner { max-width: 1200px; margin: 0 auto; }
+.pc-footer__top { display: grid; grid-template-columns: 2fr 1fr 1.2fr 1fr 1.3fr; gap: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(255,255,255,0.07); }
+.pc-footer__brand img { height: 40px; margin-bottom: 16px; display: block; }
+.pc-footer__brand p { font-size: 13.5px; line-height: 1.7; max-width: 280px; }
+.pc-footer__col h5 { font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; font-weight: 700; color: #d7bd88; margin-bottom: 16px; }
+.pc-footer__col ul { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+.pc-footer__col ul a { font-size: 13px; color: rgba(255,255,255,0.6); text-decoration: none; transition: color 0.2s; }
+.pc-footer__col ul a:hover { color: #d7bd88; }
+.pc-footer__bottom { padding-top: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+.pc-footer__copy { font-size: 12.5px; }
+.pc-footer__links { display: flex; gap: 20px; }
+.pc-footer__links a { font-size: 12.5px; color: rgba(255,255,255,0.5); text-decoration: none; }
+.pc-footer__links a:hover { color: #d7bd88; }
+@media (max-width: 900px) { .pc-footer__top { grid-template-columns: 1fr 1fr; gap: 28px; } }
+@media (max-width: 560px) { .pc-footer__top { grid-template-columns: 1fr; gap: 24px; } }
+</style>
+</head>
+<body>
+
+<header class="pc-header pc-header--solid" id="pcHeader">
+  <a href="/" class="pc-header__logo pc-header__logo--desktop"><img src="/assets/images/logo-petcenter.png" alt="Pet Center"></a>
+  <a href="/" class="pc-header__logo pc-header__logo--mobile"><img src="/assets/images/logo-petcenter-icon.png" alt="Pet Center"></a>
+  <ul class="pc-header__nav">
+    <li><a href="/">Home</a></li>
+    <li><a href="/about/">About Us</a></li>
+    <li><a href="/partners/">Partners</a></li>
+    <li class="pc-nav-dropdown">
+    <button class="pc-nav-dropdown__trigger" aria-expanded="false" aria-haspopup="true">Our Pets
+      <svg class="pc-nav-dropdown__chevron" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <div class="pc-nav-dropdown__panel">
+      <div class="pc-nav-dropdown__scroll">
+      <a class="pc-nav-dropdown__row" href="/pets/dogs/">Dogs</a>
+      <a class="pc-nav-dropdown__row" href="/pets/cats/">Cats</a>
+      <a class="pc-nav-dropdown__row" href="/pets/birds/">Birds</a>
+      <a class="pc-nav-dropdown__row" href="/pets/reptiles/">Reptiles</a>
+      <a class="pc-nav-dropdown__row" href="/pets/small-mammals/">Small Mammals</a>
+      <a class="pc-nav-dropdown__row" href="/pets/livestocks/">Livestocks</a>
+      <a class="pc-nav-dropdown__row" href="/pets/aquariums/">Aquariums</a>
+      </div>
+    </div>
+  </li>
+    <li class="pc-nav-dropdown">
+    <button class="pc-nav-dropdown__trigger" aria-expanded="false" aria-haspopup="true">Get Involved
+      <svg class="pc-nav-dropdown__chevron" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <div class="pc-nav-dropdown__panel">
+      <div class="pc-nav-dropdown__scroll">
+      <a class="pc-nav-dropdown__row" href="/volunteer/">Volunteer</a>
+      <a class="pc-nav-dropdown__row" href="/foster/">Foster a Pet</a>
+      <a class="pc-nav-dropdown__row" href="/events/">Events &amp; Adoption Days</a>
+      <a class="pc-nav-dropdown__row" href="/lost-and-found/">Lost &amp; Found Pets</a>
+      <a class="pc-nav-dropdown__row" href="/sponsor-a-pet/">Sponsor a Pet</a>
+      </div>
+    </div>
+  </li>
+    <li><a href="/blog/">Blog</a></li>
+    <li><a href="/testimonials/">Testimonials</a></li>
+    <li><a href="/success-stories/">Success Stories</a></li>
+    <li class="nav-donate"><a href="https://donate.petcenterco.com" target="_blank" rel="noopener">Donate</a></li>
+    <li><a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact</a></li>
+    <li class="nav-signup"><a href="/signin/">Sign Up</a></li>
+  </ul>
+  <button class="pc-hamburger" id="pcHamburger" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
+  <nav class="pc-mobile-menu" id="pcMobileMenu" aria-label="Mobile navigation">
+    <a href="/">Home</a>
+    <a href="/about/">About Us</a>
+    <a href="/partners/">Partners</a>
+    <a href="/pets/dogs/">Dogs</a>
+    <a href="/pets/cats/">Cats</a>
+    <a href="/pets/birds/">Birds</a>
+    <a href="/pets/reptiles/">Reptiles</a>
+    <a href="/pets/small-mammals/">Small Mammals</a>
+    <a href="/pets/livestocks/">Livestocks</a>
+    <a href="/pets/aquariums/">Aquariums</a>
+    <a href="/volunteer/">Volunteer</a>
+    <a href="/foster/">Foster a Pet</a>
+    <a href="/events/">Events &amp; Adoption Days</a>
+    <a href="/lost-and-found/">Lost &amp; Found Pets</a>
+    <a href="/sponsor-a-pet/">Sponsor a Pet</a>
+    <a href="/blog/">Blog</a>
+    <a href="/testimonials/">Testimonials</a>
+    <a href="/success-stories/">Success Stories</a>
+    <a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact</a>
+    <a href="/signin/">Sign Up</a>
+    <a href="https://donate.petcenterco.com" class="mobile-donate" target="_blank" rel="noopener">Donate</a>
+  </nav>
+</header>
+
+<section class="pc-page-banner">
+  <div class="pc-container">
+    <span class="pc-page-banner__eyebrow">Join Our Team</span>
+    <h1>Volunteer With Us</h1>
+    <p>Pet Center runs on people who show up. Whether you've got an hour on a Saturday or a weekly slot in your schedule, there's a role that fits — no experience required for most of them.</p>
+    <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
+      <a href="#pcVolunteerForm" class="pc-btn pc-btn--orange">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+        Sign Up to Volunteer
+      </a>
+      <a href="/foster/" class="pc-btn pc-btn--ghost" style="background:rgba(255,255,255,0.08);box-shadow:inset 0 0 0 2px rgba(215,189,136,0.6);color:#d7bd88;">Looking to Foster Instead?</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Stats ═══ -->
+<section class="pc-section pc-section--sm">
+  <div class="pc-container">
+    <div class="pc-stat-strip">
+      <div class="pc-stat"><div class="pc-stat__num">180+</div><div class="pc-stat__label">Active volunteers</div></div>
+      <div class="pc-stat"><div class="pc-stat__num">6,200</div><div class="pc-stat__label">Volunteer hours last year</div></div>
+      <div class="pc-stat"><div class="pc-stat__num">40+</div><div class="pc-stat__label">Adoption events staffed annually</div></div>
+      <div class="pc-stat"><div class="pc-stat__num">1</div><div class="pc-stat__label">Orientation session to get started</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Ways to volunteer ═══ -->
+<section class="pc-section pc-section--alt">
+  <div class="pc-container">
+    <span class="pc-eyebrow">Open Roles</span>
+    <h2>Ways to Volunteer</h2>
+    <p style="max-width:620px;margin-bottom:30px;">Pick whatever matches your time, skills, and comfort level around animals. Most volunteers rotate between a couple of roles once they've settled in.</p>
+    <div class="pc-role-grid">
+      <div class="pc-role-card">
+        <div class="pc-role-card__icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18.7 8a4 4 0 1 1-5.4 5.4"/><path d="M7 15l4-4 3 3 5-5"/></svg></div>
+        <h3>Adoption Events</h3>
+        <p>Greet visitors, walk them through the adoption process, and help match people with the right pet at our weekend adoption days and off-site pop-ups.</p>
+        <div class="pc-role-card__meta"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Weekends, 3–4 hr shifts</div>
+      </div>
+      <div class="pc-role-card">
+        <div class="pc-role-card__icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.5l4-4a3 3 0 0 1 4.24 0l1.5 1.5a3 3 0 0 0 4.24 0l2-2"/><path d="M2 20l4-4"/><path d="M18 6l4-4"/></svg></div>
+        <h3>Dog Walking &amp; Enrichment</h3>
+        <p>Walk, play with, and socialize dogs and cats between visits — the single biggest factor in how quickly an anxious animal settles in and becomes adoptable.</p>
+        <div class="pc-role-card__meta"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Flexible, any day</div>
+      </div>
+      <div class="pc-role-card">
+        <div class="pc-role-card__icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="7" y1="14" x2="13" y2="14"/></svg></div>
+        <h3>Admin &amp; Front Desk</h3>
+        <p>Answer phones, manage intake paperwork, and keep our pet records tidy. A great fit if you'd rather help from behind the scenes than out on the floor.</p>
+        <div class="pc-role-card__meta"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Weekday mornings</div>
+      </div>
+      <div class="pc-role-card">
+        <div class="pc-role-card__icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
+        <h3>Photography &amp; Social Media</h3>
+        <p>A good photo can cut a pet's time-to-adoption dramatically. Bring your camera (or your phone) to shoot adoptable pets or help run our social accounts.</p>
+        <div class="pc-role-card__meta"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Once or twice a month</div>
+      </div>
+      <div class="pc-role-card">
+        <div class="pc-role-card__icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div>
+        <h3>Transport</h3>
+        <p>Drive pets to vet appointments, between our facility and partner clinics, or to and from off-site adoption events. A reliable vehicle and a calm hand help.</p>
+        <div class="pc-role-card__meta"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> As-needed, short notice</div>
+      </div>
+      <div class="pc-role-card">
+        <div class="pc-role-card__icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M2 12h20"/><circle cx="12" cy="12" r="9"/></svg></div>
+        <h3>Fundraising Events</h3>
+        <p>Help plan and staff our seasonal fundraisers — set-up, check-in tables, auction support, or just extra hands wherever the event needs them that day.</p>
+        <div class="pc-role-card__meta"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Seasonal</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Requirements ═══ -->
+<section class="pc-section">
+  <div class="pc-container--narrow">
+    <span class="pc-eyebrow">Getting Started</span>
+    <h2>What It Takes to Volunteer</h2>
+    <p>Most roles are open to anyone willing to learn — here's what we ask before your first shift.</p>
+    <ul class="pc-req-list">
+      <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Minimum age 16 (14–15 welcome with a parent or guardian volunteering alongside them).</li>
+      <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> A one-time orientation session (about 45 minutes) covering safety and basic animal handling.</li>
+      <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> A minimum commitment of one shift per month, so animals see familiar, consistent faces.</li>
+      <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Closed-toe shoes for any animal-handling role (dog walking, transport, adoption events).</li>
+      <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> No prior experience needed — we train on the job for every role above.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ═══ Testimonials ═══ -->
+<section class="pc-section pc-section--alt">
+  <div class="pc-container">
+    <span class="pc-eyebrow">From Our Volunteers</span>
+    <h2>Why People Keep Coming Back</h2>
+    <div class="pc-quote-grid" style="margin-top:24px;">
+      <div class="pc-quote-card">
+        <div class="pc-quote-card__mark"><svg width="28" height="20" viewBox="0 0 40 30" fill="currentColor"><path d="M0 30V18C0 8 6 1 16 0v7c-5 1-8 5-8 11h8v12H0zm22 0V18c0-10 6-17 16-18v7c-5 1-8 5-8 11h8v12H22z"/></svg></div>
+        <p>I started walking dogs on Sundays and now I run the whole adoption-event check-in table. It's the best two hours of my week.</p>
+        <div class="pc-quote-card__name">Renee A.</div>
+        <div class="pc-quote-card__role">Volunteer since 2023</div>
+      </div>
+      <div class="pc-quote-card">
+        <div class="pc-quote-card__mark"><svg width="28" height="20" viewBox="0 0 40 30" fill="currentColor"><path d="M0 30V18C0 8 6 1 16 0v7c-5 1-8 5-8 11h8v12H0zm22 0V18c0-10 6-17 16-18v7c-5 1-8 5-8 11h8v12H22z"/></svg></div>
+        <p>The orientation was quick and the staff genuinely wants you to succeed. I brought my teenage son and it's become our Saturday thing.</p>
+        <div class="pc-quote-card__name">Marcus T.</div>
+        <div class="pc-quote-card__role">Volunteer since 2024</div>
+      </div>
+      <div class="pc-quote-card">
+        <div class="pc-quote-card__mark"><svg width="28" height="20" viewBox="0 0 40 30" fill="currentColor"><path d="M0 30V18C0 8 6 1 16 0v7c-5 1-8 5-8 11h8v12H0zm22 0V18c0-10 6-17 16-18v7c-5 1-8 5-8 11h8v12H22z"/></svg></div>
+        <p>I'm not an animal person in the traditional sense — I do photography. Seeing a pet I photographed get adopted the same week never gets old.</p>
+        <div class="pc-quote-card__name">Priya D.</div>
+        <div class="pc-quote-card__role">Photography volunteer</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FAQ ═══ -->
+<section class="pc-section">
+  <div class="pc-container--narrow">
+    <span class="pc-eyebrow">Questions</span>
+    <h2>Volunteer FAQ</h2>
+    <div style="margin-top:20px;">
+      <div class="pc-faq-item">
+        <h3><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 2-3 4"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Do I need to bring anything to orientation?</h3>
+        <p>Just a photo ID and closed-toe shoes if you're signing up for a hands-on role. We provide everything else, including any handling equipment.</p>
+      </div>
+      <div class="pc-faq-item">
+        <h3><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 2-3 4"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Can I volunteer if I'm allergic to certain animals?</h3>
+        <p>Absolutely — admin, photography, fundraising, and transport roles all involve minimal or no direct animal contact if that's a better fit.</p>
+      </div>
+      <div class="pc-faq-item">
+        <h3><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 2-3 4"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Is there a background check?</h3>
+        <p>For roles that involve working alone with animals off-site (like transport), yes — a basic check is part of onboarding. Other roles don't require one.</p>
+      </div>
+      <div class="pc-faq-item">
+        <h3><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 2-3 4"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Can volunteer hours count toward school or court-ordered community service?</h3>
+        <p>Yes — we sign hour-verification forms for school programs, and separately for court-ordered service on a case-by-case basis. Ask at orientation.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Sign-up form ═══ -->
+<section class="pc-section pc-section--alt">
+  <div class="pc-container">
+    <div class="pc-contact-section" id="pcVolunteerForm">
+      <h2>Sign Up to Volunteer</h2>
+      <p>Tell us a little about yourself and which roles interest you — we'll follow up with orientation dates.</p>
+      <form id="pcVolunteerFormEl" novalidate>
+        <div class="pc-form-grid">
+          <div class="pc-field"><label for="vName">Full Name</label><input type="text" id="vName" name="name" required></div>
+          <div class="pc-field"><label for="vEmail">Email</label><input type="email" id="vEmail" name="email" required></div>
+          <div class="pc-field"><label for="vPhone">Phone <span style="text-transform:none;font-weight:400;opacity:.6;">(optional)</span></label><input type="tel" id="vPhone" name="phone"></div>
+          <div class="pc-field"><label for="vAge">Age</label><input type="number" id="vAge" name="age" min="14" max="110" required></div>
+          <div class="pc-field pc-field--full">
+            <label>Which roles interest you?</label>
+            <div class="pc-checkbox-grid">
+              <label class="pc-checkbox-item"><input type="checkbox" name="roles" value="events"> Adoption Events</label>
+              <label class="pc-checkbox-item"><input type="checkbox" name="roles" value="walking"> Dog Walking</label>
+              <label class="pc-checkbox-item"><input type="checkbox" name="roles" value="admin"> Admin/Front Desk</label>
+              <label class="pc-checkbox-item"><input type="checkbox" name="roles" value="photo"> Photography</label>
+              <label class="pc-checkbox-item"><input type="checkbox" name="roles" value="transport"> Transport</label>
+              <label class="pc-checkbox-item"><input type="checkbox" name="roles" value="fundraising"> Fundraising</label>
+            </div>
+          </div>
+          <div class="pc-field pc-field--full"><label for="vAvail">Typical Availability</label><textarea id="vAvail" name="availability" placeholder="e.g. Saturday mornings, weekday evenings after 6pm..."></textarea></div>
+        </div>
+        <div class="pc-form-footer">
+          <button type="submit" class="pc-btn pc-btn--orange" id="vSubmitBtn">Submit Application</button>
+          <span class="pc-form-note">We'll email you the next orientation date within 2–3 business days.</span>
+        </div>
+        <div class="pc-form-success" id="vFormSuccess">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <span>Thanks for signing up! For the fastest response, you can also reach our volunteer coordinator directly at <a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;">docs.petcenterco.com/contact-us</a>.</span>
+        </div>
+      </form>
+    </div>
+
+    <div class="pc-cross-callout">
+      <p><strong>Can't commit to a regular shift?</strong> Fostering might fit your schedule better.</p>
+      <a href="/foster/" class="pc-btn pc-btn--ghost">Learn About Fostering</a>
+    </div>
+  </div>
+</section>
+
+<footer class="pc-footer">
+  <div class="pc-footer__inner">
+    <div class="pc-footer__top">
+      <div class="pc-footer__brand">
+        <img src="/assets/images/logo-petcenter.png" alt="Pet Center">
+        <p>Every pet deserves a loving home. Browse our available pets and start your adoption journey today.</p>
+      </div>
+      <div class="pc-footer__col">
+        <h5>Our Pets</h5>
+        <ul>
+          <li><a href="/pets/dogs/">Dogs</a></li>
+          <li><a href="/pets/cats/">Cats</a></li>
+          <li><a href="/pets/birds/">Birds</a></li>
+          <li><a href="/pets/reptiles/">Reptiles</a></li>
+          <li><a href="/pets/small-mammals/">Small Mammals</a></li>
+          <li><a href="/pets/livestocks/">Livestocks</a></li>
+          <li><a href="/pets/aquariums/">Aquariums</a></li>
+          <li><a href="/species-guide/">Species Care Guide</a></li>
+        </ul>
+      </div>
+      <div class="pc-footer__col">
+        <h5>Information</h5>
+        <ul>
+          <li><a href="/about/">About Us</a></li>
+          <li><a href="/partners/">Partners</a></li>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/testimonials/">Testimonials</a></li>
+          <li><a href="/success-stories/">Success Stories</a></li>
+          <li><a href="https://donate.petcenterco.com" target="_blank" rel="noopener">Donate</a></li>
+          <li><a href="https://docs.petcenterco.com/health-guarantee/" target="_blank" rel="noopener">Health Guarantee</a></li>
+          <li><a href="https://docs.petcenterco.com/shipping-cancellation/" target="_blank" rel="noopener">Shipping & Cancellation</a></li>
+          <li><a href="https://docs.petcenterco.com/shipping-insurance-claims/" target="_blank" rel="noopener">Shipping Insurance</a></li>
+          <li><a href="https://docs.petcenterco.com/data-retention-security/" target="_blank" rel="noopener">Data & Security</a></li>
+        </ul>
+      </div>
+      <div class="pc-footer__col">
+        <h5>Support</h5>
+        <ul>
+          <li><a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact Us</a></li>
+          <li><a href="/signin/">Sign Up</a></li>
+          <li><a href="/volunteer/">Volunteer</a></li>
+          <li><a href="/foster/">Foster a Pet</a></li>
+          <li><a href="/events/">Events &amp; Adoption Days</a></li>
+          <li><a href="/lost-and-found/">Lost &amp; Found Pets</a></li>
+          <li><a href="/rehoming-resources/">Can't Keep Your Pet?</a></li>
+          <li><a href="/sponsor-a-pet/">Sponsor a Pet</a></li>
+          <li><a href="/gift-my-adoption/">Gift My Adoption</a></li>
+          <li><a href="https://docs.petcenterco.com/returns-refunds/" target="_blank" rel="noopener">Returns & Refunds</a></li>
+          <li><a href="https://docs.petcenterco.com/faq/" target="_blank" rel="noopener">FAQ</a></li>
+        </ul>
+      </div>
+      <div class="pc-footer__col">
+        <h5>Visit Us</h5>
+        <p style="color:rgba(255,255,255,.7);font-size:13px;line-height:1.8;margin-bottom:0;">235-269 N Beverly Dr<br>Beverly Hills, CA</p>
+        <p style="color:rgba(255,255,255,.6);font-size:12px;line-height:1.6;margin-top:4px;">Golden Triangle Shopping Center, Section #257</p>
+        <p style="color:rgba(255,255,255,.7);font-size:13px;line-height:1.8;margin-top:10px;"><strong style="color:#d7bd88;">Hours:</strong><br>Mon – Fri: 7am – 9pm<br>Sat – Sun: 10am – 6pm</p>
+      </div>
+    </div>
+    <div class="pc-footer__bottom">
+      <span class="pc-footer__copy">&copy; 2026 Pet Center. All rights reserved.</span>
+      <div class="pc-footer__links">
+        <a href="https://docs.petcenterco.com/privacy-policy/" target="_blank" rel="noopener">Privacy Policy</a>
+        <a href="https://docs.petcenterco.com/terms-of-service/" target="_blank" rel="noopener">Terms of Service</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+'use strict';
+(function() {
+  var header = document.getElementById('pcHeader');
+  if (!header) return;
+  function updateHeaderOnScroll() { if (window.scrollY > 0) { header.classList.add('scrolled'); } else { header.classList.remove('scrolled'); } }
+  window.addEventListener('scroll', updateHeaderOnScroll, { passive: true });
+  updateHeaderOnScroll();
+})();
+// Section 24 dropdown controller (click to open, outside-click/Escape to close)
+(function () {
+  var dropdowns = document.querySelectorAll('.pc-nav-dropdown');
+  function closeAll() {
+    dropdowns.forEach(function (d) {
+      var t = d.querySelector('.pc-nav-dropdown__trigger'), p = d.querySelector('.pc-nav-dropdown__panel');
+      t.classList.remove('active'); t.setAttribute('aria-expanded', 'false'); p.classList.remove('open', 'flip-up');
+    });
+  }
+  dropdowns.forEach(function (dd) {
+    var trigger = dd.querySelector('.pc-nav-dropdown__trigger'), panel = dd.querySelector('.pc-nav-dropdown__panel');
+    trigger.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var isOpen = panel.classList.contains('open');
+      closeAll();
+      if (!isOpen) {
+        var rect = trigger.getBoundingClientRect();
+        if (window.innerHeight - rect.bottom < 240 && rect.top > 240) { panel.classList.add('flip-up'); }
+        panel.classList.add('open'); trigger.classList.add('active'); trigger.setAttribute('aria-expanded', 'true');
+      }
+    });
+  });
+  document.addEventListener('click', closeAll);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeAll(); });
+  window.addEventListener('scroll', closeAll, { passive: true });
+  window.addEventListener('resize', closeAll);
+})();
+(function () {
+  var hamburger = document.getElementById('pcHamburger');
+  var mobileMenu = document.getElementById('pcMobileMenu');
+  if (!hamburger || !mobileMenu) return;
+  function openMenu() { hamburger.classList.add('active'); mobileMenu.classList.add('open'); hamburger.setAttribute('aria-expanded', 'true'); document.body.style.overflow = 'hidden'; }
+  function closeMenu() { hamburger.classList.remove('active'); mobileMenu.classList.remove('open'); hamburger.setAttribute('aria-expanded', 'false'); document.body.style.overflow = ''; }
+  hamburger.addEventListener('click', function (e) { e.stopPropagation(); mobileMenu.classList.contains('open') ? closeMenu() : openMenu(); });
+  mobileMenu.querySelectorAll('a').forEach(function (link) { link.addEventListener('click', closeMenu); });
+  document.addEventListener('click', function (e) { if (!e.target.closest('header') && !e.target.closest('.pc-mobile-menu')) { closeMenu(); } });
+})();
+// Volunteer sign-up form — client-side only; see completion notes re: no backend endpoint yet.
+(function () {
+  var form = document.getElementById('pcVolunteerFormEl');
+  var success = document.getElementById('vFormSuccess');
+  var btn = document.getElementById('vSubmitBtn');
+  if (!form) return;
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (!form.checkValidity()) { form.reportValidity(); return; }
+    btn.disabled = true; success.classList.add('show'); form.reset();
+    setTimeout(function () { btn.disabled = false; }, 600);
+  });
+})();
+</script>
+<script src="/admin/chat-widget.js"></script>
+</body>
+</html>

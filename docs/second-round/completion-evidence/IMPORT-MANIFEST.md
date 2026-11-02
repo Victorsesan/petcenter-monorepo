@@ -70,3 +70,33 @@ Each entry remains under its originating archive directory so same-named task fi
 | `unified-status-task-5` | `Task-5-Completion.md` | `docs/second-round/completion-evidence/unified-status-task-5/Task-5-Completion.md` | `3591d10d813c34d9829260c8b021c1c7aa3b074ba2cf2ac441c950b3e3acb494` |
 | `unified-status-task-6` | `Task-6-Completion.md` | `docs/second-round/completion-evidence/unified-status-task-6/Task-6-Completion.md` | `f192ff11da84e1e78fd8a558e3e6cafc14404b98d798aeba21bc6bcac5b78a92` |
 | `unified-status-task-7` | `Task-7-Completion.md` | `docs/second-round/completion-evidence/unified-status-task-7/Task-7-Completion.md` | `f9c4f0ca97311eb5eea3068d7ff6f351513f4588b99096e913ba1aad99494f9d` |
+
+## MANUS-04 source files extracted on 2026-11-02
+
+The first import intentionally copied only Markdown completion evidence. After the worker-package convention was clarified, the following new files were extracted from the nested MANUS-04 task ZIPs into their documented live paths. Completion Markdown files remain in the evidence directories above; ZIP archives were not committed.
+
+| Source ZIP | Repository path |
+|---|---|
+| `WEB-PROJECTS-3-4-5-Task-2.zip` | `adopt/about/index.html` |
+| `WEB-PROJECTS-3-4-5-Task-2.zip` | `adopt/events/index.html` |
+| `WEB-PROJECTS-3-4-5-Task-2.zip` | `adopt/events/events-data.json` |
+| `WEB-PROJECTS-3-4-5-Task-2.zip` | `adopt/foster/index.html` |
+| `WEB-PROJECTS-3-4-5-Task-2.zip` | `adopt/gift-my-adoption/index.html` |
+| `WEB-PROJECTS-3-4-5-Task-2.zip` | `adopt/lost-and-found/index.html` |
+| `WEB-PROJECTS-3-4-5-Task-2.zip` | `adopt/lost-and-found/lost-and-found-data.json` |
+| `WEB-PROJECTS-3-4-5-Task-2.zip` | `adopt/partners/index.html` |
+| `WEB-PROJECTS-3-4-5-Task-2.zip` | `adopt/rehoming-resources/index.html` |
+| `WEB-PROJECTS-3-4-5-Task-2.zip` | `adopt/species-guide/index.html` |
+| `WEB-PROJECTS-3-4-5-Task-2.zip` | `adopt/sponsor-a-pet/index.html` |
+| `WEB-PROJECTS-3-4-5-Task-2.zip` | `adopt/success-stories/index.html` |
+| `WEB-PROJECTS-3-4-5-Task-2.zip` | `adopt/success-stories/success-stories-data.json` |
+| `WEB-PROJECTS-3-4-5-Task-2.zip` | `adopt/volunteer/index.html` |
+| `WEB-PROJECTS-3-4-5-Task-3.zip` | `adopt/adoptions/pets/geo-filter.php` |
+| `WEB-PROJECTS-3-4-5-Task-4-and-4b-1.zip` | `adopt/shipping/index.html` |
+| `Project-5-Task-6a.zip` | `adopt/admin/get-pet-match-requests.php` |
+| `Project-5-Task-6b.zip` | `adopt/admin/update-pet-match-request.php` |
+| `Project-5-Task-6b.zip` | `adopt/admin/delete-pet-match-request.php` |
+| `Project-5-Task-7a.zip` | `adopt/adoptions/check-pet-match-status.php` |
+| `Project-5-Task-9.zip` | `adopt/pet-match-submit.php` |
+
+`Project-5-Task-5.zip`'s `pet-match/index.html` and `pet-center-adoption-system-task-8.zip`'s `pets/quiz/index.html` were already present and byte-identical, so they were verified and not rewritten. `Project-5-Task-5b.zip` contained only its completion document and no new source file. Shared edits to existing category/admin files remain represented by the corresponding completion documents and were not overwritten during this source-file extraction pass.

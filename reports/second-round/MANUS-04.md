@@ -33,17 +33,17 @@ Before source inspection I read the required coordination material and relevant 
 
 | Work item | Current repository evidence | Classification | Handoff |
 |---|---|---|---|
-| Task 2 content pages and nav | The completion evidence describes eleven new page folders and shared navigation edits, but those page folders are not present in the current `adopt/` tree. | **Blocked — source not integrated** | Integrator must apply the worker source, then run route and nav checks. Do not deploy the Markdown completion file as a site asset. |
-| Task 3 / 3b location filtering | `adopt/adoptions/pets/geo-filter.php` is absent. The seven current category pages do not contain the completed location-filter surface described by the worker evidence. | **Blocked — source not integrated** | Integrate the worker’s `geo-filter.php` and category-page blocks through the shared-file ownership chain. Confirm published pets persist `location` before calling this complete. |
-| Task 4 / 4b shipping calculator | `adopt/shipping/index.html` is absent. | **Blocked — source not integrated** | Integrate the new page, then perform the required desktop/mobile visual pass and review the dated compliance/pricing copy. |
+| Task 2 content pages and nav | The eleven new Task 2 page/data paths are now present from the nested worker ZIP. Shared navigation edits to existing category pages remain in the completion document and were not overwritten. | **Source integrated; shared-nav merge pending** | Run the shared-file nav merge and route checks. Do not deploy the Markdown completion file as a site asset. |
+| Task 3 / 3b location filtering | `adopt/adoptions/pets/geo-filter.php` is now present from the nested worker ZIP. The seven current category pages still do not contain the completed location-filter surface described by the worker evidence. | **New endpoint integrated; shared-page merge pending** | Apply the worker’s category-page blocks through the shared-file ownership chain. Confirm published pets persist `location` before calling this complete. |
+| Task 4 / 4b shipping calculator | `adopt/shipping/index.html` is now present from the nested worker ZIP. | **Source integrated; visual/commercial review pending** | Perform the required desktop/mobile visual pass and review the dated compliance/pricing copy. |
 | Task 5 Pet Match form | `adopt/pet-match/index.html` is present and parses successfully. All seven current category pages contain one `/pet-match/` CTA. | **Fixed/Present for public UI; backend blocked** | Keep the form UI, but do not call the feature production-ready until the submission and upload endpoints exist. |
-| Task 5b hardening | The form contains the honeypot/timestamp/Turnstile client fields, but `YOUR_TURNSTILE_SITE_KEY` remains a placeholder. Both required server endpoints are absent. | **Blocked — server enforcement absent** | Obtain the approved site key through deployment configuration and build/review server-side validation, rate limiting, Turnstile verification, and upload MIME/size enforcement. Do not commit a key. |
-| Task 6a admin listing | `adopt/admin/get-pet-match-requests.php` is absent, and no corresponding request-storage directory is present in the checkout. | **Blocked — source and storage contract not integrated** | Integrate only after the submit endpoint and storage contract are agreed. Check the documented `../adoptions/pet-match-requests/` path during PHP review. |
-| Task 6b admin actions | `adopt/admin/update-pet-match-request.php` and `delete-pet-match-request.php` are absent. | **Blocked — source not integrated** | Integrate after Task 6a and verify authorization, category/request-code validation, path traversal resistance, and status transitions. |
-| Task 7a notification/status UI | The imported evidence describes edits to several shared files and a new `adoptions/check-pet-match-status.php`, but that endpoint and the described integrated source are absent. | **Blocked — source not integrated** | Reconcile with Tasks 5, 6a, and 6b. Verify the corrected `/adoptions/pets/` and admin-relative paths after integration. |
+| Task 5b hardening | The form contains the honeypot/timestamp/Turnstile client fields, but `YOUR_TURNSTILE_SITE_KEY` remains a placeholder. The submit endpoint is now present; the upload endpoint is not supplied by the Task 5b ZIP. | **Partial; server upload enforcement pending** | Obtain the approved site key through deployment configuration and build/review the upload endpoint’s server-side MIME/size enforcement. Do not commit a key. |
+| Task 6a admin listing | `adopt/admin/get-pet-match-requests.php` is now present from the nested worker ZIP. The request-storage directory is runtime data and is not created in source control. | **Source integrated; PHP/runtime review pending** | Check the documented `../adoptions/pet-match-requests/` path and auth behavior in an environment with PHP and authorized configuration. |
+| Task 6b admin actions | `adopt/admin/update-pet-match-request.php` and `delete-pet-match-request.php` are now present from the nested worker ZIP. | **Source integrated; PHP/runtime review pending** | Verify authorization, category/request-code validation, path traversal resistance, and status transitions. |
+| Task 7a notification/status UI | `adopt/adoptions/check-pet-match-status.php` is now present from the nested worker ZIP. Shared UI edits remain in the completion document and were not overwritten. | **New endpoint integrated; shared-page merge pending** | Reconcile with Tasks 5, 6a, and 6b. Verify the corrected `/adoptions/pets/` and admin-relative paths after integration. |
 | Task 7b live-chat channel | No Task 7b completion document or matching manifest entry was found. | **Needs My Review / evidence gap** | Locate the missing worker handoff or explicitly close the task as unsubmitted before integration. Do not infer implementation from Task 7a’s UI. |
-| Task 8 quiz | `adopt/pets/quiz/index.html` is present, parses successfully, and renders in Chromium at wide and narrow viewport sizes. Only `adopt/adoptions/pets/birds/index.json` is present; the other six category `index.json` paths return 404 in the static smoke test. | **Blocked by live-data integration; UI otherwise verified** | Integrate/restore the six category data indexes through the data owner without opening protected `pet.json` files. Replicate the `/pets/quiz/` nav link across the other category pages; currently only `cats` has it. |
-| Task 9 duplicate detection | The required root `pet-match-submit.php` is absent, so duplicate detection cannot run. The admin listing and request reader it depends on are also absent. | **Blocked — dependent pipeline absent** | Integrate the submission endpoint, request reader, and admin indicator as one tested contract. Do not apply only the UI flag. |
+| Task 8 quiz | `adopt/pets/quiz/index.html` is present, parses successfully, and renders in Chromium at wide and narrow viewport sizes. The six missing category `index.json` files and shared nav links remain separate integration work. | **Quiz source present; live-data/nav integration pending** | Restore the category data indexes through the data owner without opening protected `pet.json` files. Replicate the `/pets/quiz/` nav link across the other category pages. |
+| Task 9 duplicate detection | `adopt/pet-match-submit.php` and the Task 6a reader/admin source are now present. The admin listing’s shared HTML/JS indicator and runtime storage still require the shared-file merge and authenticated end-to-end test. | **Source pipeline partially integrated; shared/runtime review pending** | Integrate the admin indicator with the existing dashboard and test duplicate flags against non-production fixtures. |
 
 ## Reproduced checks
 
@@ -52,15 +52,15 @@ Before source inspection I read the required coordination material and relevant 
 The following paths were checked against the current `adopt/` checkout:
 
 ```text
-adoptions/pets/geo-filter.php                 MISSING
-shipping/index.html                           MISSING
+adoptions/pets/geo-filter.php                 PRESENT
+shipping/index.html                           PRESENT
 pet-match/index.html                          PRESENT
-pet-match-submit.php                          MISSING
+pet-match-submit.php                          PRESENT
 pet-match-upload-temp.php                     MISSING
-admin/get-pet-match-requests.php              MISSING
-admin/update-pet-match-request.php             MISSING
-admin/delete-pet-match-request.php             MISSING
-adoptions/check-pet-match-status.php           MISSING
+admin/get-pet-match-requests.php              PRESENT
+admin/update-pet-match-request.php             PRESENT
+admin/delete-pet-match-request.php             PRESENT
+adoptions/check-pet-match-status.php           PRESENT
 pets/quiz/index.html                           PRESENT
 ```
 
@@ -69,19 +69,19 @@ The local static server returned:
 ```text
 /pets/quiz/                         HTTP 200
 /pet-match/                         HTTP 200
-/pet-match-submit.php               HTTP 404
+/pet-match-submit.php               HTTP 200 (static route; PHP execution not available)
 /pet-match-upload-temp.php          HTTP 404
 /adoptions/pets/dogs/index.json     HTTP 404
 /adoptions/pets/birds/index.json    HTTP 200
 ```
 
-This directly reproduces the Pet Match form’s backend failure and the quiz’s incomplete category-data dependency without accessing protected per-pet data.
+The static server now exposes the integrated source paths. The upload endpoint and six category indexes remain absent without accessing protected per-pet data.
 
 ### JavaScript and HTML checks
 
 Inline JavaScript extracted from `adopt/pet-match/index.html` and `adopt/pets/quiz/index.html` passed `node --check`. The quiz has four repeated imported SVG metadata IDs (`Layer_1`, `SVGRepo_bgCarrier`, `SVGRepo_iconCarrier`, `SVGRepo_tracerCarrier`); searches found no CSS `url(#...)` or `href="#..."` references to them. They are therefore a markup-validity issue with no observed rendering dependency, not a reason to rewrite the supplied icon assets during this pass.
 
-The form’s fetch references are exactly `/pet-match-submit.php` and `/pet-match-upload-temp.php`, matching the two reproduced 404s. The quiz fetches `/adoptions/pets/`, and the category index check confirmed only birds is available in this checkout.
+The form’s fetch references are exactly `/pet-match-submit.php` and `/pet-match-upload-temp.php`; the submit route now exists, while the upload route remains 404. The quiz fetches `/adoptions/pets/`; the category index check still requires the data-owner integration.
 
 ### Chromium smoke checks
 
@@ -90,7 +90,7 @@ The installed system Chromium (`/usr/bin/chromium`) rendered both pages with `--
 - 1400×1000 (wide desktop)
 - 390×844 (narrow phone-sized viewport)
 
-The quiz reached its `Searching every category` state at both sizes and retained its `Find Your Match` and `Pet Match Request` markers. The Pet Match page reached its expected error state at both sizes, with `Network error` and `Something went wrong` visible because its two endpoints are absent. Chromium emitted only the expected sandbox/D-Bus environment warning; no page JavaScript syntax failure was observed.
+The quiz reached its `Searching every category` state at both sizes and retained its `Find Your Match` and `Pet Match Request` markers. The Pet Match page was previously observed reaching its error state because both endpoints were absent; after this source integration, the submit route exists but PHP execution still cannot be tested in the static server. Chromium emitted only the expected sandbox/D-Bus environment warning; no page JavaScript syntax failure was observed.
 
 Playwright was installed but had no cached browser executable, so Playwright visual screenshots could not be run. The available Chromium headless render was used instead. PHP CLI is not installed in this sandbox (`php: command not found`), so no PHP lint claim is made for absent or present PHP files.
 
@@ -98,25 +98,23 @@ Playwright was installed but had no cached browser executable, so Playwright vis
 
 The Web Projects 3–5 issue-register entries were independently checked against the current source and completion evidence:
 
-- **WEB-PROJECTS-3-4-5-Task-2:** the worker’s note that shared navigation was only fully represented on `cats` is still visible in the checkout: `cats` contains two `/pets/quiz/` links while the other six category pages contain none. The broader new-page set described by Task 2 is absent, so the nav/page delivery is blocked rather than treated as complete.
-- **WEB-PROJECTS-3-4-5-Task-3:** the missing `geo-filter.php`, shared-file merge dependency, and location-data dependency remain unmerged. The worker’s concern about scanners was not treated as a defect because `adopt/admin/stats.php` is present and was inspected separately; no change was made without the missing location implementation.
-- **WEB-PROJECTS-3-4-5-Task-4-and-4b-1:** the calculator page is absent, so the worker’s visual-verification and commercial-review notes remain deployment handoffs, not resolved findings.
-- **Project-5-Task-5 / Task-5b:** the public form is present, but the worker’s explicitly reported missing endpoint gap is confirmed by both source inspection and HTTP 404s. The Turnstile site-key placeholder is also still present.
-- **Project-5-Task-6a / Task-6b:** the admin listing, request reader, update endpoint, and delete endpoint are absent; the dependent storage contract cannot be tested in this checkout.
-- **Project-5-Task-7a:** the status endpoint described by the evidence is absent. Task 7b remains an evidence gap because no completion file was imported.
-- **pet-center-adoption-system-task-8:** the quiz exists and renders, but its six missing category index files and incomplete shared navigation are confirmed. The repeated inert SVG IDs are noted but not silently changed because the worker evidence says they are unreferenced imported metadata.
-- **Project-5-Task-9:** the root submission endpoint and all dependent admin files are absent, so duplicate detection is blocked as a pipeline rather than partially patched.
+- **WEB-PROJECTS-3-4-5-Task-2:** the worker’s new page set is now extracted at its documented paths. Shared navigation remains a separate merge because the worker’s modified existing pages are represented in the completion document rather than included as new files.
+- **WEB-PROJECTS-3-4-5-Task-3:** `geo-filter.php` is now present. The shared-file merge and location-data dependency remain open. The scanner concern was checked against `adopt/admin/stats.php` without opening protected pet data.
+- **WEB-PROJECTS-3-4-5-Task-4-and-4b-1:** the calculator page is now present; visual verification and commercial/compliance review remain deployment handoffs.
+- **Project-5-Task-5 / Task-5b:** the public form and submit endpoint are present. The upload endpoint is not supplied by the Task 5b ZIP, and the Turnstile site-key placeholder remains.
+- **Project-5-Task-6a / Task-6b:** the admin listing, request reader, update endpoint, and delete endpoint are now present. Three confirmed `/admin/adoptions/` path bugs were fixed with `BUGFIX-MANUS-04-1/2/3` anchors so they resolve through `../adoptions/`; PHP/runtime tests remain pending because this sandbox has no PHP CLI or authorized server configuration.
+- **Project-5-Task-7a:** the status endpoint is now present. Task 7b remains an evidence gap because no completion file was imported.
+- **pet-center-adoption-system-task-8:** the quiz exists and renders; the six category data indexes and incomplete shared navigation remain open. The repeated inert SVG IDs are noted but not silently changed because the worker evidence says they are unreferenced imported metadata.
+- **Project-5-Task-9:** the root submission endpoint and dependent admin source are now present; the shared admin indicator and runtime duplicate fixtures still need integration testing.
 
 ## Changes made in this review
 
-No application source was changed. Every confirmed defect requiring a source change either depends on a missing worker deliverable, a shared-file ownership chain, a protected data contract, or a deployment secret. Applying a partial backend or inventing replacement behavior would violate the package’s scope and could silently diverge from the worker contracts.
-
-This review adds this report only. The earlier scoped evidence-import commit remains intact and contains the indexed completion Markdown documents; no ZIP archive or protected content was added to this debugging commit.
+The earlier pass imported only Markdown completion evidence. After the user clarified the worker-package convention, this pass extracted the documented new source files from the nested MANUS-04 task ZIPs into `adopt/` without overwriting already-identical `pet-match/index.html` or `pets/quiz/index.html`, without applying shared existing-file snippets, and without importing ZIP archives or protected content. I also fixed three independently confirmed admin storage-path defects in the newly extracted request endpoints: `get-pet-match-requests.php`, `update-pet-match-request.php`, and `delete-pet-match-request.php` now use `../adoptions/` from `/admin/`. The extracted source passed HTML/JavaScript/JSON/static-route checks; PHP execution remains untested because PHP is unavailable in this sandbox.
 
 ## Unresolved blockers and handoffs
 
-1. The coordinator/integrator must import and reconcile the worker source for Tasks 2, 3/3b, 4/4b, 6a, 6b, 7a, and 9 from the worker packages. The completion Markdown alone is not deployable source.
-2. The Pet Match pipeline needs an agreed end-to-end contract: public submit endpoint, upload endpoint, `/adoptions/pet-match-requests/{category}/{request_code}/request.json` storage, admin reader, admin actions, notification/status lookup, and duplicate flag fields.
+1. The coordinator/integrator must apply the completion-document snippets to shared existing files: category-page navigation/filter/CTA changes, the admin dashboard listing/detail/duplicate indicator, and Task 7a’s shared UI changes. The new source files are now in the repository.
+2. The Pet Match pipeline still needs the upload endpoint and an end-to-end contract test covering `/adoptions/pet-match-requests/{category}/{request_code}/request.json`, admin reader/actions, notification/status lookup, and duplicate flag fields.
 3. The six missing category `index.json` files must be restored by the data owner. This report deliberately does not inspect protected `pet.json` files.
 4. Task 7b’s completion evidence is missing from the archive index and needs to be located or marked unsubmitted.
 5. A real Turnstile site key must be supplied through deployment configuration; no key should be committed.
