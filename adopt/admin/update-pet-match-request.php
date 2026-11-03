@@ -66,6 +66,10 @@ if ($requestCode === '') {
     echo json_encode(['success' => false, 'message' => 'Missing request_code']);
     exit;
 }
+if (!preg_match('/^[A-Za-z0-9_-]+$/', $requestCode)) {
+    echo json_encode(['success' => false, 'message' => 'Invalid request_code']);
+    exit;
+}
 if (!in_array($status, ['FULFILLED', 'CLOSED'], true)) {
     echo json_encode(['success' => false, 'message' => 'Invalid or missing status']);
     exit;
@@ -94,6 +98,21 @@ if ($status === 'FULFILLED') {
     $data['fulfilled_by_position'] = trim($_POST['fulfilled_by_position'] ?? '');
     $data['fulfilled_pet_note'] = trim($_POST['fulfilled_pet_note'] ?? '');
     $data['fulfilled_at'] = date('c');
+    $matchedPetIdNotFound = false;
+    $matchedPetId = trim($_POST['matched_pet_id'] ?? '');
+    if ($matchedPetId !== '') {
+        // A matched pet must belong to the request's category and resolve to
+        // a real pet.json record before it is exposed to the public status UI.
+        $matchedPetFile = __DIR__ . '/../adoptions/pets/' . $category . '/' . $matchedPetId . '/pet.json';
+        if (preg_match('/^[A-Za-z0-9_-]+$/', $matchedPetId) && is_file($matchedPetFile)) {
+            $data['matched_pet_id'] = $matchedPetId;
+        } else {
+            $matchedPetIdNotFound = true;
+            unset($data['matched_pet_id']);
+        }
+    } else {
+        unset($data['matched_pet_id']);
+    }
 } elseif ($status === 'CLOSED') {
     $data['closed_notes'] = trim($_POST['closed_notes'] ?? '');
     $data['closed_at'] = date('c');
@@ -105,4 +124,8 @@ if ($written === false) {
     exit;
 }
 
-echo json_encode(['success' => true]);
+$response = ['success' => true];
+if (!empty($matchedPetIdNotFound)) {
+    $response['warning'] = 'Matched Pet ID was not found and was not saved. The request was still marked fulfilled.';
+}
+echo json_encode($response);

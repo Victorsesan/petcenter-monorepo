@@ -189,6 +189,29 @@ p { color: var(--muted); }
   box-shadow: 0 2px 8px rgba(0,0,0,0.25);
 }
 
+
+/* TASK-7a: temporary local Pet Match notification state. This is intentionally
+   replaceable when real authentication/account notifications are available. */
+.pc-pet-card__matched-badge {
+  position:absolute; top:12px; left:0; background:#d7bd88; color:#10214b;
+  font-family:'Sora',sans-serif; font-size:11px; font-weight:700;
+  letter-spacing:.08em; text-transform:uppercase; padding:6px 14px;
+  border-radius:0 4px 4px 0; box-shadow:0 2px 8px rgba(0,0,0,.25);
+}
+.pc-header__notify-stub { display:none; position:relative; align-items:center; justify-content:center;
+  width:40px; height:40px; margin-left:4px; border-radius:50%; color:#d7bd88;
+  cursor:pointer; background:transparent; border:0; }
+.pc-header__notify-stub:hover { background:rgba(215,189,136,.12); }
+.pc-header__notify-stub svg { width:20px; height:20px; }
+.pc-header__notify-stub__dot { position:absolute; top:6px; right:6px; width:9px; height:9px;
+  border-radius:50%; background:#ED7624; border:2px solid #10214b; display:none; }
+.pc-header__notify-stub__panel { display:none; position:absolute; top:48px; right:0; width:280px;
+  background:#fff; border-radius:12px; box-shadow:0 8px 40px rgba(16,33,75,.2);
+  padding:16px; z-index:1000; color:#7a6d5f; font:12px/1.5 'Sora',sans-serif; }
+.pc-header__notify-stub__panel.open { display:block; }
+.pc-header__notify-stub__panel h4 { font:700 13px 'Sora',sans-serif; color:#10214b; margin:0 0 8px; }
+@media (max-width:900px) { .pc-header__notify-stub__panel { top:68px; right:16px; left:16px; width:auto; max-width:320px; margin-left:auto; } }
+
 /* Card body */
 .pc-pet-card__body {
   padding: 16px 18px 18px;
@@ -929,6 +952,7 @@ p { color: var(--muted); }
     <!-- Path changed from /rehome/ to /signin/ per CEO's request to retire the "rehome" URL sitewide (propagated for sitewide consistency during merge) -->
     <li class="nav-signup"><a href="/signin/">Sign Up</a></li>
     <!-- TASK-1 END -->
+    <li style="display:none;" id="pcNotifyStubLi"><button class="pc-header__notify-stub" id="pcNotifyStub" type="button" aria-label="Pet match notifications" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><span class="pc-header__notify-stub__dot" id="pcNotifyStubDot"></span></button></li>
   </ul>
   <button class="pc-hamburger" id="pcHamburger" aria-label="Open menu" aria-expanded="false">
     <span></span><span></span><span></span>
@@ -951,8 +975,10 @@ p { color: var(--muted); }
     <!-- Path changed from /rehome/ to /signin/ per CEO's request to retire the "rehome" URL sitewide (propagated for sitewide consistency during merge) -->
     <a href="/signin/">Sign Up</a>
     <!-- TASK-1 END -->
+    <button type="button" id="pcNotifyStubMobile" style="display:none;width:100%;text-align:left;background:none;border:0;cursor:pointer;padding:12px 28px;font:500 15px Sora,sans-serif;color:rgba(255,255,255,.9);">Pet Match Updates <span id="pcNotifyStubMobileDot" style="display:none;float:right;width:9px;height:9px;border-radius:50%;background:#ED7624;"></span></button>
     <a href="https://donate.petcenterco.com" class="mobile-donate" target="_blank" rel="noopener">Donate</a>
   </nav>
+  <div class="pc-header__notify-stub__panel" id="pcNotifyStubPanel"><h4>Pet Match Updates</h4><p id="pcNotifyStubBody">Checking for updates on your Pet Match Request...</p></div>
 </header>
 
 <section class="pc-cat-banner">
@@ -1690,11 +1716,12 @@ document.addEventListener('DOMContentLoaded', function() {
       var adoptedBadge = p.status === 'Adopted'
         ? '<div class="pc-pet-card__adopted-badge">ADOPTED</div>'
         : '';
+      var matchedBadge = p.status === 'Matched' ? '<div class=\"pc-pet-card__matched-badge\">MATCHED</div>' : '';
       
       return '<a href="' + url + '" class="pc-pet-card">' +
         '<div class="pc-pet-card__img-wrap">' +
           '<img src="' + img + '" alt="' + petName + '" class="pc-pet-card__img" loading="lazy">' +
-          adoptedBadge +
+          adoptedBadge + matchedBadge +
         '</div>' +
         '<div class="pc-pet-card__body">' +
           '<h3 class="pc-pet-card__name">' + petName + '</h3>' +
@@ -1862,5 +1889,38 @@ document.addEventListener('DOMContentLoaded', function() {
 </div>
 <!-- ═══ Filter Bottom Sheet — end ═══ -->
 <script src="/admin/chat-widget.js"></script>
+
+<!-- TASK-7a: temporary local Pet Match notification stub; not an auth session. -->
+<script>
+(function(){
+  var emailKey='pc_stub_petmatch_email', seenKey='pc_stub_petmatch_seen_matches';
+  var btn=document.getElementById('pcNotifyStub'), panel=document.getElementById('pcNotifyStubPanel'),
+      dot=document.getElementById('pcNotifyStubDot'), body=document.getElementById('pcNotifyStubBody'),
+      mobile=document.getElementById('pcNotifyStubMobile'), mobileDot=document.getElementById('pcNotifyStubMobileDot');
+  if(!btn||!panel||!dot||!body) return;
+  var email=null; try { email=localStorage.getItem(emailKey); } catch(e) {}
+  if(!email) return;
+  var li=document.getElementById('pcNotifyStubLi'); if(li) li.style.display='flex';
+  btn.style.display='inline-flex'; if(mobile) mobile.style.display='block';
+  function esc(s){var d=document.createElement('div'); d.textContent=s==null?'':String(s); return d.innerHTML;}
+  var seen=[]; try {seen=JSON.parse(localStorage.getItem(seenKey)||'[]');} catch(e) {}
+  fetch('/adoptions/check-pet-match-status.php?email='+encodeURIComponent(email))
+    .then(function(r){return r.ok?r.json():{matches:[]};})
+    .then(function(data){
+      var matches=(data&&data.matches)||[];
+      if(!matches.length){body.textContent='No updates yet on your Pet Match Request. We will show your matched pet here as soon as one is found.'; return;}
+      if(matches.some(function(m){return seen.indexOf(m.request_code)<0;})){dot.style.display='block'; if(mobileDot) mobileDot.style.display='block';}
+      body.innerHTML=matches.map(function(m){
+        if(m.pet_name&&m.pet_url) return '<div style="margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid #f9f7f4"><strong style="color:#10214b">'+esc(m.pet_name)+'</strong> may be your match! <a href="'+esc(m.pet_url)+'">View '+esc(m.pet_name)+'</a></div>';
+        return '<div style="margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid #f9f7f4"><strong style="color:#10214b">Match found</strong><br><span>'+esc(m.fulfilled_pet_note||"We found a potential match for your request!")+'</span><br><a href="/pets/'+encodeURIComponent(m.category)+'/">Browse '+esc(m.category)+'</a></div>';
+      }).join('');
+      function open(){panel.classList.add('open');btn.setAttribute('aria-expanded','true');dot.style.display='none';if(mobileDot)mobileDot.style.display='none';try{localStorage.setItem(seenKey,JSON.stringify(matches.map(function(m){return m.request_code;})));}catch(e){}}
+      btn.addEventListener('click',function(){panel.classList.toggle('open'); if(panel.classList.contains('open')) open();});
+      if(mobile) mobile.addEventListener('click',function(){if(window.pcCloseMobileMenu)window.pcCloseMobileMenu();open();});
+      document.addEventListener('click',function(e){if(!btn.contains(e.target)&&!panel.contains(e.target)&&(!mobile||!mobile.contains(e.target)))panel.classList.remove('open');});
+    }).catch(function(){body.textContent='Could not check for updates right now — try again shortly.';});
+})();
+</script>
+
 </body>
 </html>
