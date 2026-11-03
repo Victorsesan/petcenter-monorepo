@@ -161,3 +161,32 @@ No application files, database migrations, credentials, or secrets were intentio
 
 
 **Import validation:** All 64 files in the evidence directory are Markdown (63 completion reports plus its README), and the 63 report paths match the canonical paths already used on the coordinating branch. The non-evidence staged documentation passes `git diff --cached --check`. That check reports pre-existing trailing whitespace in six imported historical completion reports and a blank line at EOF in one; these source artifacts were kept byte-identical rather than silently reformatted. No non-Markdown archive member was staged.
+
+
+## Implementation continuation — 2026-11-03
+
+This continuation supersedes the earlier statements above that the worker completion reports were unread, that no Task 3 source change was made, and that its language contract was awaiting ownership confirmation. After the evidence files were imported, the Task 1b, overlapping Admin dashboard Task 1a, and Task 3 reports were read in full. The Task 1a report was also read in full earlier. They remain historical evidence; their claims were not treated as proof that code exists on this branch.
+
+### Task 3 — language preference
+
+Implemented the current Task 3 language preference in the customer chat flow. The pre-chat form presents the supported native-language labels, resolves the default from `preferences.lang`, then the browser language, then English, and displays the two required disclosures immediately below the selector. The start-chat endpoint validates the submitted code against the supported allow-list and stores it on the thread for both new and resumed chats. The authenticated customer poll returns the field. A new `chat-update-language.php` endpoint requires the existing customer session token before changing the preference. The Options sheet has a separate language section, and the admin thread banner displays the corresponding native-language name. No pre-email data store was added because `chat-start.php` requires a valid email before creating or resuming a thread. The migration checks the schema before adding its nullable column; it was not run against any database.
+
+Files changed for Task 3: `adopt/admin/chat-widget.js`, `adopt/admin/chat-start.php`, `adopt/admin/chat-poll.php`, `adopt/admin/chat-setup.php`, `adopt/admin/chat-migrate.php`, `adopt/admin/index.html`, and the new `adopt/admin/chat-update-language.php`. This is a source implementation, not a live deployment: the SQL migration, authenticated customer flow, and admin display were not exercised against a production database/session. The existing admin thread query uses `SELECT t.*`, so its thread metadata includes the newly added field once the migration has been run.
+
+### Task 1a/1b — current provider verification and status
+
+The archived Task 1a report describes a Groq Whisper endpoint and records that live testing with a real key/database and customer audio remained outstanding. The reported implementation files are absent from this branch; no code was recovered from historical prose. Current official Groq documentation lists `whisper-large-v3-turbo` and `whisper-large-v3` as multilingual transcription models, gives the transcription endpoint and 25 MB free-plan upload limit, and lists recurring free-plan quotas of 20 requests per minute, 2,000 per day, 7,200 audio seconds per hour, and 28,800 seconds per day. Groq's deprecation page says `distil-whisper-large-v3-en` was shut down in favor of `whisper-large-v3-turbo` on August 23, 2025. [3] [4] [5]
+
+The sandbox contains no `GROQ_API_KEY`. No provider key was requested, embedded, or committed, and no transcription service or read-aloud feature was implemented in this continuation. Tasks 1a and 1b remain **blocked for deployment and end-to-end verification** until an authorized server-side provider credential and live database/audio test environment are available. The historical completion report's unverified code claims are not represented as delivered features.
+
+### Task 2 — dashboard theme direction
+
+No Task 2 theme switcher was added. The existing dashboard initializer explicitly fixes the suite theme and its comments say the former switcher was removed. A three-mode change would revise the current shared dashboard design direction and requires reconciling that explicit source direction with the assignment and unavailable Task 2 completion evidence. This remains **Needs owner review**, not an implementation claim.
+
+### Verification in this continuation
+
+`node --check adopt/admin/chat-widget.js` passed. PHP lint passed for `chat-start.php`, `chat-poll.php`, `chat-setup.php`, `chat-migrate.php`, and the new `chat-update-language.php`; the dashboard's inline JavaScript parsed successfully. A small runtime test exercised the exact language resolver for site-preference precedence, Chinese browser detection, supported browser-language fallback, unsupported-language defaulting, and malformed preferences; all cases passed. `git diff --check` passed. No database migration, authenticated endpoint request, external transcription request, browser session, protected configuration, or production test was run.
+
+[3]: https://console.groq.com/docs/speech-to-text "Groq speech-to-text API documentation"
+[4]: https://console.groq.com/docs/rate-limits "Groq API rate limits"
+[5]: https://console.groq.com/docs/deprecations "Groq model deprecations"

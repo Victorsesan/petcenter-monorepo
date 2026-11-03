@@ -65,4 +65,18 @@ foreach ($migrations as $desc => $sql) {
     }
 }
 
+// AP4-TASK-3: idempotent metadata check is portable across MySQL/MariaDB;
+// don't use ADD COLUMN IF NOT EXISTS, which isn't supported by all MySQL versions.
+try {
+    $column = $pdo->query("SHOW COLUMNS FROM chat_threads LIKE 'preferred_chat_language'")->fetch(PDO::FETCH_ASSOC);
+    if (!$column) {
+        $pdo->exec('ALTER TABLE chat_threads ADD COLUMN preferred_chat_language VARCHAR(10) NULL');
+        echo "[OK]   Add preferred_chat_language column to chat_threads\n";
+    } else {
+        echo "[SKIP] preferred_chat_language column already exists\n";
+    }
+} catch (PDOException $e) {
+    echo "[FAIL] preferred_chat_language migration — " . $e->getMessage() . "\n";
+}
+
 echo "\nDone. Delete this file now.\n";

@@ -55,6 +55,10 @@ $email     = trim($input['email'] ?? '');
 $reason    = trim($input['reason'] ?? '');
 $chatId    = trim($input['chatId'] ?? '');
 $petContext = $input['petContext'] ?? null; // { name, petId, thumbUrl, pageUrl } or null, Section 7b
+// AP4-TASK-3: exact supported language contract; never store arbitrary client text.
+$ap4Languages = ['en','es','fr','de','pt','it','zh-Hans','ja','ko','ar','hi','vi','tl','ru'];
+$preferredChatLanguage = trim($input['preferredLanguage'] ?? '');
+if (!in_array($preferredChatLanguage, $ap4Languages, true)) $preferredChatLanguage = 'en';
 
 // ── Validation ───────────────────────────────────────────────────────────
 if ($fullName === '' || mb_strlen($fullName) > 255) {
@@ -111,6 +115,9 @@ if ($chatId !== '') {
            about whether an old one is still around. */
         $sessionToken = issue_token($thread['chat_id']);
         /* TASK-1 END */
+        // AP4-TASK-3: selected language follows the chat ID/email on resume.
+        $db->prepare('UPDATE chat_threads SET preferred_chat_language = ? WHERE id = ?')
+           ->execute([$preferredChatLanguage, $thread['id']]);
 
         chatRespond([
             'success'      => true,
@@ -122,6 +129,7 @@ if ($chatId !== '') {
             /* TASK-1 START — sessionToken in the response payload */
             'sessionToken' => $sessionToken,
             /* TASK-1 END */
+            'preferredChatLanguage' => $preferredChatLanguage, // AP4-TASK-3
         ]);
     }
 
@@ -161,6 +169,9 @@ if ($existing) {
        resume (Path 2: email match). Same reasoning as Path 1 above. */
     $sessionToken = issue_token($existing['chat_id']);
     /* TASK-1 END */
+    // AP4-TASK-3: selected language follows the chat ID/email on resume.
+    $db->prepare('UPDATE chat_threads SET preferred_chat_language = ? WHERE id = ?')
+       ->execute([$preferredChatLanguage, $existing['id']]);
 
     chatRespond([
         'success'      => true,
@@ -172,6 +183,7 @@ if ($existing) {
         /* TASK-1 START — sessionToken in the response payload */
         'sessionToken' => $sessionToken,
         /* TASK-1 END */
+        'preferredChatLanguage' => $preferredChatLanguage, // AP4-TASK-3
     ]);
 }
 
@@ -179,8 +191,8 @@ if ($existing) {
 $newChatId = chatGenerateChatId();
 
 $stmt = $db->prepare(
-    "INSERT INTO chat_threads (chat_id, email, full_name, reason, pet_context, status, unread_for_admin)
-     VALUES (?, ?, ?, ?, ?, 'waiting', 0)"
+    "INSERT INTO chat_threads (chat_id, email, full_name, reason, pet_context, status, unread_for_admin, preferred_chat_language)
+     VALUES (?, ?, ?, ?, ?, 'waiting', 0, ?)"
 );
 $stmt->execute([
     $newChatId,
@@ -188,6 +200,7 @@ $stmt->execute([
     $fullName,
     $reason,
     $petContext ? json_encode($petContext) : null,
+    $preferredChatLanguage, // AP4-TASK-3
 ]);
 
 $threadId = $db->lastInsertId();
@@ -252,4 +265,5 @@ chatRespond([
     /* TASK-1 START — sessionToken in the response payload */
     'sessionToken' => $sessionToken,
     /* TASK-1 END */
+    'preferredChatLanguage' => $preferredChatLanguage, // AP4-TASK-3
 ]);

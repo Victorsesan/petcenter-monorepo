@@ -68,6 +68,7 @@
     /* TASK-1 END */
     fullName: null,
     email: null,
+    preferredChatLanguage: null, // AP4-TASK-3: value returned by the authenticated server thread
     status: null,          // waiting | active | done
     lastMessageId: 0,
     lastEventId: 0,
@@ -226,6 +227,12 @@
   .pcw-option-row { display: flex; align-items: center; gap: 12px; padding: 13px 4px; border-bottom: 1px solid rgba(255,255,255,0.07); }
   .pcw-option-row:last-of-type { border-bottom: none; }
   .pcw-option-clickable { cursor: pointer; }
+  /* AP4-TASK-3 START */
+  .ap4-language-select { width:100%; min-height:42px; padding:9px 12px; border:1px solid rgba(16,33,75,0.18); border-radius:8px; background:#fff; color:#2c2416; font:inherit; }
+  .ap4-language-options { display:none; padding:0 6px 12px 50px; }
+  .ap4-language-options.open { display:block; }
+  .ap4-language-options .pcw-field-hint { margin-top:8px; }
+  /* AP4-TASK-3 END */
   .pcw-option-clickable:hover { background: rgba(255,255,255,0.04); border-radius: 8px; }
   .pcw-option-icon {
     width: 34px; height: 34px; border-radius: 50%; background: rgba(237,118,36,0.15);
@@ -992,6 +999,44 @@
       accessibilityRow.classList.toggle('open', isOpen);
     });
 
+    // AP4-TASK-3 START — dedicated, append-only language preference section.
+    const languageRow = el('div', { class: 'pcw-option-row pcw-option-clickable ap4-language-row' }, [
+      el('div', { class: 'pcw-option-icon' }, el('i', { class: 'fas fa-language' })),
+      el('div', { class: 'pcw-option-label' }, 'Chat language'),
+    ]);
+    const languagePanel = el('div', { class: 'ap4-language-options' });
+    const optionsLanguageSelect = el('select', { class: 'ap4-language-select', 'aria-label': 'Chat language' });
+    Object.keys(AP4_CHAT_LANGUAGES).forEach(code => {
+      const option = el('option', { value: code }, AP4_CHAT_LANGUAGES[code]);
+      optionsLanguageSelect.appendChild(option);
+    });
+    optionsLanguageSelect.value = state.preferredChatLanguage || ap4ResolveChatLanguage();
+    const languageSaveStatus = el('div', { class: 'pcw-field-hint ap4-language-status', 'aria-live': 'polite' });
+    optionsLanguageSelect.addEventListener('change', async () => {
+      const selected = optionsLanguageSelect.value;
+      if (!state.chatId || !state.sessionToken) {
+        languageSaveStatus.textContent = 'Start or resume your chat to save this preference.';
+        return;
+      }
+      optionsLanguageSelect.disabled = true;
+      languageSaveStatus.textContent = 'Saving…';
+      try {
+        const result = await apiPost('chat-update-language.php', { chatId: state.chatId, preferredLanguage: selected });
+        if (!result.success) throw new Error(result.error || 'Could not save language.');
+        state.preferredChatLanguage = selected;
+        languageSaveStatus.textContent = 'Language updated. Our team will see this preference.';
+      } catch (err) {
+        languageSaveStatus.textContent = 'Could not save language. Please try again.';
+        dlog('language preference update failed: ' + err.message, 'error');
+      } finally { optionsLanguageSelect.disabled = false; }
+    });
+    languagePanel.appendChild(optionsLanguageSelect);
+    languagePanel.appendChild(languageSaveStatus);
+    languagePanel.appendChild(el('div', { class: 'pcw-field-hint' }, 'You can change your language anytime from the chat options panel, and doing so will also update what our team sees on their end.'));
+    languagePanel.appendChild(el('div', { class: 'pcw-field-hint' }, "We always try our absolute best to provide ease of communications to our user's of all nationality, however on some occasions during peak hours we might have mostly English speaking customer care on standby whom might be able to chat with your selected language only through text(via our auto-translate) and not verbally."));
+    languageRow.addEventListener('click', () => languagePanel.classList.toggle('open'));
+    // AP4-TASK-3 END
+
     const endSessionRow = el('div', { class: 'pcw-option-row pcw-option-clickable' }, [
       el('div', { class: 'pcw-option-icon', style: 'background:rgba(239,68,68,0.15);color:#ef4444;' }, el('i', { class: 'fas fa-rotate-left' })),
       el('div', { class: 'pcw-option-label' }, 'End chat session'),
@@ -999,7 +1044,9 @@
     endSessionRow.addEventListener('click', endChatSession);
 
     const body = el('div', { class: 'pcw-sheet-body' }, [
-      soundRow, transcriptRow, accessibilityRow, accessibilityPanel, endSessionRow,
+      soundRow, transcriptRow, accessibilityRow, accessibilityPanel,
+      languageRow, languagePanel, // AP4-TASK-3 — isolated options section
+      endSessionRow,
     ]);
 
     optionsSheetEl = el('div', { class: 'pcw-options-sheet', role: 'dialog', 'aria-modal': 'true', 'aria-label': 'Chat options' }, [
@@ -1017,6 +1064,9 @@
   }
 
   function openOptionsSheet() {
+    // AP4-TASK-3: the saved thread value is authoritative when opening the picker.
+    const languageSelect = optionsSheetEl.querySelector('.ap4-language-options select');
+    if (languageSelect && state.preferredChatLanguage) languageSelect.value = state.preferredChatLanguage;
     optionsSheetEl.classList.add('open');
     optionsBackdropEl.classList.add('show');
     pcwLockBodyScroll();
@@ -1272,6 +1322,27 @@
     { value: 'general', label: 'General / other' },
   ];
 
+  // AP4-TASK-3 START — customer chat-language preference.
+  // Keep codes aligned with the shared contract; names shown in the picker
+  // are native names. A selected value is persisted to the thread server-side.
+  const AP4_CHAT_LANGUAGES = {
+    en: 'English', es: 'Español', fr: 'Français', de: 'Deutsch',
+    pt: 'Português', it: 'Italiano', 'zh-Hans': '中文（简体）',
+    ja: '日本語', ko: '한국어', ar: 'العربية', hi: 'हिन्दी',
+    vi: 'Tiếng Việt', tl: 'Filipino', ru: 'Русский',
+  };
+  function ap4ResolveChatLanguage() {
+    try {
+      const prefs = JSON.parse(localStorage.getItem('preferences') || '{}');
+      if (prefs && prefs.lang && Object.prototype.hasOwnProperty.call(AP4_CHAT_LANGUAGES, prefs.lang)) return prefs.lang;
+    } catch (e) { /* malformed local preference: continue to browser detection */ }
+    const browserLang = (navigator.language || '').toLowerCase();
+    if (browserLang.startsWith('zh')) return 'zh-Hans';
+    const shortCode = browserLang.split('-')[0];
+    return Object.prototype.hasOwnProperty.call(AP4_CHAT_LANGUAGES, shortCode) ? shortCode : 'en';
+  }
+  // AP4-TASK-3 END
+
   // ============================================
   // PRE-CHAT GATE (Tier 1 items 1 & 2 — single form, no branching step)
   // ============================================
@@ -1365,6 +1436,24 @@
       el('div', { class: 'pcw-field-hint' }, "Leave blank if you're not sure — we'll also check by your email."),
     ]);
 
+    // AP4-TASK-3 START — language is selected before the chat panel opens.
+    let selectedChatLanguage = ap4ResolveChatLanguage();
+    const chatLanguageSelect = el('select', { name: 'preferredLanguage', class: 'ap4-language-select', 'aria-label': 'Preferred chat language' });
+    Object.keys(AP4_CHAT_LANGUAGES).forEach(code => {
+      const option = el('option', { value: code }, AP4_CHAT_LANGUAGES[code]);
+      option.selected = code === selectedChatLanguage;
+      chatLanguageSelect.appendChild(option);
+    });
+    chatLanguageSelect.addEventListener('change', () => {
+      selectedChatLanguage = chatLanguageSelect.value;
+    });
+    const chatLanguageField = el('div', { class: 'pcw-field ap4-language-field' }, [
+      el('label', {}, 'Preferred language'), chatLanguageSelect,
+      el('div', { class: 'pcw-field-hint' }, 'You can change your language anytime from the chat options panel, and doing so will also update what our team sees on their end.'),
+      el('div', { class: 'pcw-field-hint' }, "We always try our absolute best to provide ease of communications to our user's of all nationality, however on some occasions during peak hours we might have mostly English speaking customer care on standby whom might be able to chat with your selected language only through text(via our auto-translate) and not verbally."),
+    ]);
+    // AP4-TASK-3 END
+
     const errorMsg = el('div', { class: 'pcw-error-msg' });
     const submitBtn = el('button', { type: 'submit', class: 'pcw-primary-btn' }, 'Start Chat');
 
@@ -1377,6 +1466,7 @@
     // TASK-9 END
     form.appendChild(reasonField);
     form.appendChild(chatIdField);
+    form.appendChild(chatLanguageField); // AP4-TASK-3
     form.appendChild(errorMsg);
     form.appendChild(submitBtn);
 
@@ -1407,6 +1497,7 @@
         /* TASK-9 END */
         reason: selectedReason,  // use the tracked value directly, not fd.get (more reliable)
         chatId: fd.get('chatId').trim(),
+        preferredLanguage: selectedChatLanguage, // AP4-TASK-3
       };
 
       // Clean up the outside-click listener once form is submitted
@@ -2036,6 +2127,9 @@
   }
 
   function handlePollResult(json) {
+    if (json.preferredChatLanguage && Object.prototype.hasOwnProperty.call(AP4_CHAT_LANGUAGES, json.preferredChatLanguage)) {
+      state.preferredChatLanguage = json.preferredChatLanguage;
+    }
     let scrolledToBottom = isScrolledToBottom();
 
     // v2.0: bot messages don't have a chat_admin_profiles row to LEFT JOIN

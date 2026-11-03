@@ -5502,6 +5502,7 @@ function buildAdminBanner(chatId, thread) {
     </div>
     <div style="font-size:11px;color:#a89c8a;margin-top:4px;">
       Chat ID: ${escapeHtml(chatId)} &middot; Reason: ${escapeHtml(thread.reason || '—')}
+      &middot; Language: ${escapeHtml(({en:'English',es:'Español',fr:'Français',de:'Deutsch',pt:'Português',it:'Italiano','zh-Hans':'中文（简体）',ja:'日本語',ko:'한국어',ar:'العربية',hi:'हिन्दी',vi:'Tiếng Việt',tl:'Filipino',ru:'Русский'})[thread.preferred_chat_language] || thread.preferred_chat_language || '—')}
     </div>`;
   return header;
 }

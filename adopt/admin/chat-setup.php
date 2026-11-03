@@ -42,6 +42,7 @@ $statements = [
             unread_for_admin    TINYINT(1) DEFAULT 1,
             unread_for_user     TINYINT(1) DEFAULT 0,
             archived            TINYINT(1) NOT NULL DEFAULT 0,
+            preferred_chat_language VARCHAR(10) NULL, /* AP4-TASK-3 */
             INDEX (email), INDEX (status), INDEX (chat_id), INDEX (archived)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
     ",
