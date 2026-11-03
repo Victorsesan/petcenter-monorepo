@@ -73,7 +73,8 @@ The issue register was used as a lead list only, not as a substitute for the mis
 - Homepage Task 9 block comparison/application — passed; ambiguous repeated design-token literals were normalized to the documented CSS variables rather than patched at an arbitrary occurrence.
 - `git diff --check` — passed after removing one whitespace-only artifact from the archived worker file.
 - The 15-page rollout was structurally checked for one widget root and one real closing `</head>`/`</body>` tag per declared page.
-- No live browser or Apache redirect test was claimed: the sandbox has no translated destination tree and no confirmed production `.htaccess` context.
+- Browser RTL verification passed on the local preview for the homepage, `/pets/cats/`, and `/admin/`: no horizontal overflow was observed, logical widget placement remained in bounds, the homepage accessibility panel opened in RTL, and the admin sign-in form remained centered with an RTL token input. The detailed measurements and MANUS-08/MANUS-10 handoff are in `reports/second-round/MANUS-03-INTEGRATION-REVIEW.md`.
+- No production Apache redirect test was claimed: the sandbox has no translated destination tree and no confirmed production `.htaccess` context.
 - No PHP runtime or live deployment test was claimed.
 
 ## Changes and unresolved handoff
@@ -95,4 +96,4 @@ The archived Task 2 `.htaccess` was not activated. The current checkout has no `
 
 - **Required commit prefix:** `MANUS-03:`
 - **Branch:** `task/second-round-MANUS-03`
-- **Unresolved dependencies:** missing completion evidence; translation architecture decision; shared widget ownership; CSS/RTL ownership; live browser/deployment environment.
+- **Unresolved dependencies:** missing completion evidence; translation architecture decision; shared widget ownership; MANUS-08 semantic RTL review; MANUS-10 multi-route/mobile rollout QA; production deployment environment.
