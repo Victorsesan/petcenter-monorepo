@@ -80,6 +80,14 @@ if (!chatValidEmail($email)) {
 if (!chatValidReason($reason)) {
     chatRespond(['success' => false, 'error' => 'Please select a reason for contacting us.']);
 }
+/* TASK-3 SECURITY START — validate the optional initial secret before the
+   thread insert. This prevents a bad PIN/password from creating an orphan
+   conversation that can never complete its requested setup. */
+if ($initialTier !== '') {
+    $initialSecretError = chatAuthValidateSecret($initialTier, $initialSecret);
+    if ($initialSecretError !== null) chatRespond(['success' => false, 'error' => $initialSecretError], 422);
+}
+/* TASK-3 SECURITY END */
 
 // Basic rate limiting by IP — prevents trivial flood of new threads
 $ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';

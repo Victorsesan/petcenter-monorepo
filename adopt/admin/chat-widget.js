@@ -1143,23 +1143,38 @@
     lockBtn.addEventListener('click', async () => {
       secretForm.classList.remove('open'); lockForm.classList.toggle('open');
       if (lockForm.classList.contains('open')) {
-        const status = await apiPost('chat-lock.php', { action:'status', chatId:state.chatId });
-        if (status.success && status.lock) { delayInput.value = status.lock.delay_seconds ?? 300; aggressiveLabel.querySelector('input').checked = !!Number(status.lock.aggressive); }
+        try {
+          const status = await apiPost('chat-lock.php', { action:'status', chatId:state.chatId });
+          if (status.success && status.lock) { delayInput.value = status.lock.delay_seconds ?? 300; aggressiveLabel.querySelector('input').checked = !!Number(status.lock.aggressive); }
+          else setMessage(status.error || 'Could not load lock settings.', false);
+        } catch (e) { setMessage('Could not load lock settings. Try again.', false); }
       }
     });
     revokeBtn.addEventListener('click', async () => {
       if (!window.confirm('Revoke all remembered devices for this chat?')) return;
-      const json = await apiPost('chat-auth-gate.php', { action:'forgetDevices', chatId:state.chatId, email:state.email });
-      setMessage(json.success ? 'Remembered devices revoked.' : (json.error || 'Could not revoke devices.'), !!json.success);
+      revokeBtn.disabled = true;
+      try {
+        const json = await apiPost('chat-auth-gate.php', { action:'forgetDevices', chatId:state.chatId, email:state.email });
+        setMessage(json.success ? 'Remembered devices revoked.' : (json.error || 'Could not revoke devices.'), !!json.success);
+      } catch (e) { setMessage('Could not revoke devices. Try again.', false); }
+      revokeBtn.disabled = false;
     });
     secretSubmit.addEventListener('click', async () => {
-      const json = await apiPost('chat-auth-gate.php', { action:'set', chatId:state.chatId, email:state.email, tier:selectedTier, secret:secretInput.value });
-      if (json.success) { state.sessionToken = json.sessionToken || state.sessionToken; state.authTier = selectedTier; localStorage.setItem(CONFIG.storageKeyToken, state.sessionToken); secretForm.classList.remove('open'); setMessage(selectedTier === 'pin' ? 'PIN protection enabled.' : 'Password protection enabled.', true); }
-      else setMessage(json.error || 'Could not save protection.', false);
+      secretSubmit.disabled = true;
+      try {
+        const json = await apiPost('chat-auth-gate.php', { action:'set', chatId:state.chatId, email:state.email, tier:selectedTier, secret:secretInput.value });
+        if (json.success) { state.sessionToken = json.sessionToken || state.sessionToken; state.authTier = selectedTier; localStorage.setItem(CONFIG.storageKeyToken, state.sessionToken); secretForm.classList.remove('open'); setMessage(selectedTier === 'pin' ? 'PIN protection enabled.' : 'Password protection enabled.', true); }
+        else setMessage(json.error || 'Could not save protection.', false);
+      } catch (e) { setMessage('Could not save protection. Try again.', false); }
+      secretSubmit.disabled = false;
     });
     lockSubmit.addEventListener('click', async () => {
-      const json = await apiPost('chat-lock.php', { action:'set', chatId:state.chatId, delaySeconds:delayInput.value, aggressive:aggressiveLabel.querySelector('input').checked });
-      setMessage(json.success ? 'Lock settings saved.' : (json.error || 'Could not save lock settings.'), !!json.success);
+      lockSubmit.disabled = true;
+      try {
+        const json = await apiPost('chat-lock.php', { action:'set', chatId:state.chatId, delaySeconds:delayInput.value, aggressive:aggressiveLabel.querySelector('input').checked });
+        setMessage(json.success ? 'Lock settings saved.' : (json.error || 'Could not save lock settings.'), !!json.success);
+      } catch (e) { setMessage('Could not save lock settings. Try again.', false); }
+      lockSubmit.disabled = false;
     });
     actions.appendChild(pinBtn); actions.appendChild(passwordBtn); actions.appendChild(lockBtn); actions.appendChild(revokeBtn);
     panel.appendChild(summary); panel.appendChild(actions); panel.appendChild(secretForm); panel.appendChild(lockForm); panel.appendChild(message);

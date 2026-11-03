@@ -26,6 +26,14 @@ if ($action === 'status') {
 if ($action === 'verify') {
     $tier = trim((string)($input['tier'] ?? $auth['auth_tier'])); $secret = (string)($input['secret'] ?? '');
     if ($auth['auth_tier'] !== $tier || $tier === 'none') chatRespond(['success'=>false,'error'=>'This chat protection setting has changed.'],409);
+    /* TASK-3 SECURITY START — account throttling is supplemented by a source
+       IP ceiling so one hostile client cannot spend all server hash capacity
+       against many different chat IDs. */
+    $verifyIp = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+    if (!chatCheckRateLimit('auth_gate_ip:' . $verifyIp, 60, 600)) {
+        chatRespond(['success'=>false,'error'=>'Too many verification attempts. Please wait a few minutes.'],429);
+    }
+    /* TASK-3 SECURITY END */
     $throttle = check_pin_throttle($chatId);
     if (!$throttle['allowed']) chatRespond(['success'=>false,'error'=>'Too many attempts. Try again in '.$throttle['delay_seconds'].' seconds.','delaySeconds'=>$throttle['delay_seconds']],429);
     if (!password_verify($secret, (string)$auth['secret_hash'])) {

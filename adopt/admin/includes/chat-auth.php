@@ -277,6 +277,11 @@ function chatAuthValidateSecret($tier, $secret) {
     if ($tier === 'password') {
         if (mb_strlen($secret, 'UTF-8') < 12) return 'Password must be at least 12 characters.';
         if (mb_strlen($secret, 'UTF-8') > 1024) return 'Password is too long.';
+        /* TASK-6 SECURITY START — PASSWORD_DEFAULT is bcrypt on older PHP
+           builds, and bcrypt safely accepts only 72 bytes. Reject rather
+           than silently truncating a longer password on that fallback path. */
+        if (!defined('PASSWORD_ARGON2ID') && strlen($secret) > 72) return 'Password is too long for this server.';
+        /* TASK-6 SECURITY END */
         $blocked = [
             'password','password123','123456789012','1234567890','qwertyuiop12',
             'letmein12345','welcome12345','iloveyou1234','adminadmin12','petcenter123',
