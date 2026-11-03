@@ -290,6 +290,28 @@
   .pcw-option-chevron { color: rgba(255,255,255,0.4); font-size: 11px; transition: transform 0.2s ease; }
   .pcw-option-row.open .pcw-option-chevron { transform: rotate(180deg); }
 
+  /* TASK-3/4/5 START — explicit protection controls live inside the options
+     sheet instead of relying on browser prompts, so each setting is visible,
+     keyboard reachable, and independently actionable. */
+  .pcw-protection-panel {
+    display: none; padding: 12px 4px 14px; border-bottom: 1px solid rgba(255,255,255,0.07);
+  }
+  .pcw-protection-panel.open { display: block; }
+  .pcw-protection-summary { margin: 0 0 10px; color: rgba(255,255,255,0.66); font-size: 11px; line-height: 1.45; }
+  .pcw-protection-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .pcw-protection-btn { min-height: 36px; border: 1px solid rgba(215,189,136,0.45); border-radius: 7px; background: rgba(255,255,255,0.06); color: #fff; cursor: pointer; font: 600 11px 'Sora', system-ui, sans-serif; padding: 7px 8px; }
+  .pcw-protection-btn:hover { border-color: #ED7624; background: rgba(237,118,36,0.14); }
+  .pcw-protection-btn.danger { border-color: rgba(239,68,68,0.55); color: #fecaca; }
+  .pcw-protection-form { display: none; margin-top: 10px; }
+  .pcw-protection-form.open { display: block; }
+  .pcw-protection-form label { display: block; margin: 0 0 5px; color: rgba(255,255,255,0.72); font-size: 11px; }
+  .pcw-protection-form input[type=password], .pcw-protection-form input[type=number] { box-sizing: border-box; width: 100%; border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; background: rgba(255,255,255,0.08); color: #fff; padding: 9px; font: 12px 'Sora', system-ui, sans-serif; }
+  .pcw-protection-form input:focus { outline: 2px solid #ED7624; outline-offset: 1px; }
+  .pcw-protection-check { display: flex; align-items: center; gap: 7px; margin: 9px 0; color: rgba(255,255,255,0.72); font-size: 11px; }
+  .pcw-protection-message { min-height: 16px; margin-top: 8px; color: #fca5a5; font-size: 11px; }
+  .pcw-protection-message.ok { color: #86efac; }
+  /* TASK-3/4/5 END */
+
   .pcw-toggle-switch {
     width: 42px; height: 24px; border-radius: 999px; border: none; background: rgba(255,255,255,0.15);
     cursor: pointer; position: relative; flex-shrink: 0; transition: background 0.2s ease;
@@ -1052,9 +1074,13 @@
     const protectionRow = el('div', { class: 'pcw-option-row pcw-option-clickable' }, [
       el('div', { class: 'pcw-option-icon' }, el('i', { class: 'fas fa-shield-alt' })),
       el('div', { class: 'pcw-option-label' }, 'Chat protection'),
-      el('i', { class: 'fas fa-chevron-right pcw-option-chevron' }),
+      el('i', { class: 'fas fa-chevron-down pcw-option-chevron' }),
     ]);
-    protectionRow.addEventListener('click', manageChatProtection);
+    const protectionPanel = buildProtectionPanel();
+    protectionRow.addEventListener('click', () => {
+      const isOpen = protectionPanel.classList.toggle('open');
+      protectionRow.classList.toggle('open', isOpen);
+    });
     /* TASK-4/5 END */
 
     const endSessionRow = el('div', { class: 'pcw-option-row pcw-option-clickable' }, [
@@ -1064,7 +1090,7 @@
     endSessionRow.addEventListener('click', endChatSession);
 
     const body = el('div', { class: 'pcw-sheet-body' }, [
-      soundRow, transcriptRow, accessibilityRow, accessibilityPanel, protectionRow, endSessionRow,
+      soundRow, transcriptRow, accessibilityRow, accessibilityPanel, protectionRow, protectionPanel, endSessionRow,
     ]);
 
     optionsSheetEl = el('div', { class: 'pcw-options-sheet', role: 'dialog', 'aria-modal': 'true', 'aria-label': 'Chat options' }, [
@@ -1081,24 +1107,65 @@
     panelEl.appendChild(optionsSheetEl);
   }
 
-  // Applies protection changes through the authenticated server endpoints.
-  async function manageChatProtection() {
-    if (!state.chatId || !state.sessionToken) return;
-    const choice = window.prompt('Enter PIN, password, lock, or forget-devices:');
-    if (!choice) return;
-    if (choice === 'lock') {
-      const seconds = parseInt(window.prompt('Lock after close (seconds):', '300'), 10) || 300;
-      const aggressive = window.confirm('Lock immediately when this panel closes?');
-      await apiPost('chat-lock.php', { action:'set', chatId:state.chatId, delaySeconds:seconds, aggressive });
-    } else if (choice === 'forget-devices') {
-      await apiPost('chat-auth-gate.php', { action:'forgetDevices', chatId:state.chatId, email:state.email });
-    } else if (choice === 'pin' || choice === 'password') {
-      const secret = window.prompt(choice === 'pin' ? 'Set a 6-digit PIN:' : 'Set a password of at least 12 characters:');
-      if (!secret) return;
-      const json = await apiPost('chat-auth-gate.php', { action:'set', chatId:state.chatId, email:state.email, tier:choice, secret });
-      if (json.success && json.sessionToken) { state.sessionToken = json.sessionToken; localStorage.setItem(CONFIG.storageKeyToken, json.sessionToken); state.authTier = choice; }
+  /* TASK-3/4/5 START — build visible settings controls and route every action
+     through the authenticated endpoints. No secret is ever placed in a URL. */
+  function buildProtectionPanel() {
+    const panel = el('div', { class: 'pcw-protection-panel' });
+    const summary = el('p', { class: 'pcw-protection-summary' }, 'Protect this conversation with a PIN or password, configure automatic locking, or revoke remembered devices.');
+    const actions = el('div', { class: 'pcw-protection-actions' });
+    const message = el('div', { class: 'pcw-protection-message', role: 'status', 'aria-live': 'polite' });
+    const secretForm = el('div', { class: 'pcw-protection-form' });
+    const secretLabel = el('label', {}, 'New secret');
+    const secretInput = el('input', { type: 'password', autocomplete: 'new-password' });
+    const secretSubmit = el('button', { type: 'button', class: 'pcw-protection-btn' }, 'Save protection');
+    secretForm.appendChild(secretLabel); secretForm.appendChild(secretInput); secretForm.appendChild(secretSubmit);
+
+    const lockForm = el('div', { class: 'pcw-protection-form' });
+    const delayLabel = el('label', {}, 'Lock after closing (seconds)');
+    const delayInput = el('input', { type: 'number', min: '0', max: '3600', value: '300', inputmode: 'numeric' });
+    const aggressiveLabel = el('label', { class: 'pcw-protection-check' }, [el('input', { type: 'checkbox' }), el('span', {}, 'Lock immediately when closed')]);
+    const lockSubmit = el('button', { type: 'button', class: 'pcw-protection-btn' }, 'Save lock settings');
+    lockForm.appendChild(delayLabel); lockForm.appendChild(delayInput); lockForm.appendChild(aggressiveLabel); lockForm.appendChild(lockSubmit);
+
+    let selectedTier = null;
+    function setMessage(text, ok) { message.textContent = text; message.classList.toggle('ok', !!ok); }
+    function openSecretForm(tier) {
+      selectedTier = tier; secretInput.value = ''; secretInput.inputMode = tier === 'pin' ? 'numeric' : 'text'; secretInput.maxLength = tier === 'pin' ? 6 : 1024;
+      secretLabel.textContent = tier === 'pin' ? 'New 6-digit PIN' : 'New password (at least 12 characters)';
+      secretForm.classList.add('open'); lockForm.classList.remove('open'); secretInput.focus();
     }
+    const pinBtn = el('button', { type: 'button', class: 'pcw-protection-btn' }, 'Set PIN');
+    const passwordBtn = el('button', { type: 'button', class: 'pcw-protection-btn' }, 'Set password');
+    const lockBtn = el('button', { type: 'button', class: 'pcw-protection-btn' }, 'Lock settings');
+    const revokeBtn = el('button', { type: 'button', class: 'pcw-protection-btn danger' }, 'Revoke devices');
+    pinBtn.addEventListener('click', () => openSecretForm('pin'));
+    passwordBtn.addEventListener('click', () => openSecretForm('password'));
+    lockBtn.addEventListener('click', async () => {
+      secretForm.classList.remove('open'); lockForm.classList.toggle('open');
+      if (lockForm.classList.contains('open')) {
+        const status = await apiPost('chat-lock.php', { action:'status', chatId:state.chatId });
+        if (status.success && status.lock) { delayInput.value = status.lock.delay_seconds ?? 300; aggressiveLabel.querySelector('input').checked = !!Number(status.lock.aggressive); }
+      }
+    });
+    revokeBtn.addEventListener('click', async () => {
+      if (!window.confirm('Revoke all remembered devices for this chat?')) return;
+      const json = await apiPost('chat-auth-gate.php', { action:'forgetDevices', chatId:state.chatId, email:state.email });
+      setMessage(json.success ? 'Remembered devices revoked.' : (json.error || 'Could not revoke devices.'), !!json.success);
+    });
+    secretSubmit.addEventListener('click', async () => {
+      const json = await apiPost('chat-auth-gate.php', { action:'set', chatId:state.chatId, email:state.email, tier:selectedTier, secret:secretInput.value });
+      if (json.success) { state.sessionToken = json.sessionToken || state.sessionToken; state.authTier = selectedTier; localStorage.setItem(CONFIG.storageKeyToken, state.sessionToken); secretForm.classList.remove('open'); setMessage(selectedTier === 'pin' ? 'PIN protection enabled.' : 'Password protection enabled.', true); }
+      else setMessage(json.error || 'Could not save protection.', false);
+    });
+    lockSubmit.addEventListener('click', async () => {
+      const json = await apiPost('chat-lock.php', { action:'set', chatId:state.chatId, delaySeconds:delayInput.value, aggressive:aggressiveLabel.querySelector('input').checked });
+      setMessage(json.success ? 'Lock settings saved.' : (json.error || 'Could not save lock settings.'), !!json.success);
+    });
+    actions.appendChild(pinBtn); actions.appendChild(passwordBtn); actions.appendChild(lockBtn); actions.appendChild(revokeBtn);
+    panel.appendChild(summary); panel.appendChild(actions); panel.appendChild(secretForm); panel.appendChild(lockForm); panel.appendChild(message);
+    return panel;
   }
+  /* TASK-3/4/5 END */
 
   function openOptionsSheet() {
     optionsSheetEl.classList.add('open');
@@ -1572,7 +1639,7 @@
     apiPost('chat-start.php', { fullName: storedName || 'Customer', email: storedEmail, reason: 'general', chatId: storedChatId, deviceToken: deviceToken() }).then(json => {
       if (!json.success) { renderLauncher(); return; }
       if (json.authRequired) renderAuthGate(json.chatId, json.fullName, json.email, json.status, json.authTier);
-      else { state.sessionToken = json.sessionToken; openLiveThread(json.chatId, json.fullName, json.email, json.status, false, false, json.sessionToken); }
+      else { state.authTier = json.authTier || 'none'; state.sessionToken = json.sessionToken; openLiveThread(json.chatId, json.fullName, json.email, json.status, false, false, json.sessionToken); }
     }).catch(() => renderLauncher());
   }
 
