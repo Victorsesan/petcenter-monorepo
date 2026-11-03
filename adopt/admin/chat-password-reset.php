@@ -5,7 +5,12 @@ error_reporting(0); @ini_set('display_errors', 0);
 require_once __DIR__ . '/chat-config.php'; require_once __DIR__ . '/chat-mail.php'; require_once __DIR__ . '/includes/chat-auth.php';
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') chatRespond(['success'=>false,'error'=>'POST required'],405);
 $input=chatJsonInput(); if(!$input)$input=$_POST; $action=trim((string)($input['action']??'request')); $email=strtolower(trim((string)($input['email']??'')));
-if(!chatValidEmail($email)) chatRespond(['success'=>false,'error'=>'A valid email is required.'],400);
+/* The request and temporary-login actions identify the recovery record by
+   email. The final change action is already authenticated by chatId plus the
+   short-lived reset session token, so it must not require the email again. */
+if (($action === 'request' || $action === 'temporaryLogin') && !chatValidEmail($email)) {
+  chatRespond(['success'=>false,'error'=>'A valid email is required.'],400);
+}
 $db=chatDb(); $message='If a protected chat matches that email, a temporary password has been sent.';
 if($action==='request'){
   /* TASK-6 SECURITY START — throttle both source and target. A throttled
