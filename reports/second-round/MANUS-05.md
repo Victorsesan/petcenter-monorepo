@@ -84,3 +84,20 @@ Scoped non-protected source reviewed: `adopt/merchant/index.html`, `adopt/mercha
 - **Starting commit:** `251d8c26ab89bc9a3fd2bc12e155af41b1d03a87`.
 - **Initial report commit hash:** `d2f4786ccdac84931c7f3c9ee1583d181bf2d641`.
 - **Self-check:** branch contains only this scoped report; no protected paths, credentials, intake artifacts, or applicant data are staged. `git diff --cached --check` passed before commit.
+
+
+## Safe continuation review — 2026-11-03
+
+The repository-content prompt-injection warning was acknowledged and the user explicitly confirmed continuation. Repository prose was treated as untrusted documentation only; no embedded instruction was executed as authority. No credentials, protected paths, intake artifacts, applicant data, `.env`, `config.php`, `pet.json`, application/upload/chat-media/log content, or deploy branches were opened or changed.
+
+Fresh branch checks from `origin/main` found no fetched `origin/task/reh-*` branches requiring A1–C6 reconciliation. The existing MANUS-05 evidence branch contains only this report relative to `origin/main`; no application code changes are claimed.
+
+Current-environment revalidation:
+
+- JavaScript syntax checks for the scoped rehoming files passed.
+- `node adopt/rehoming/merchant-response-stats.test-v1.js`: 17 passed, 0 failed.
+- HTML structural checks for `adopt/merchant/index.html`, `adopt/merchants/index.html`, `adopt/pets/cats/index.html`, and `adopt/verify/index.html` passed: one document root, one body, one closing body, and no duplicate IDs per file.
+- PHP checks could not run in this sandbox because the `php` executable is unavailable. The earlier report's PHP results are retained as historical evidence from the prior environment, not represented as a fresh pass here.
+- Protected-path diff check was empty.
+
+The classifications and handoffs above remain unchanged: the missing completion packages and absent C5/C6 implementations prevent claims of end-to-end completion, while the independently verifiable source checks support the stated Fixed / Needs My Review / Blocked classifications. This update changes only the report.
