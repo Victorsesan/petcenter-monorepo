@@ -10,6 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
+/* TASK-web12-3 START: logical CSS properties for RTL */
 /* ════════════════════════════════════════════════════════════════════════════
    PET CENTER — Browse All Pets Page (pets/index.html)
    Colors: Navy #10214b | Gold #d7bd88 | Orange #ED7624
@@ -75,7 +76,7 @@ h1, h2, h3, h4, h5, h6 {
 /* ─── Preload Overlay ───────────────────────────────────────────────────────────────────────── */
 /* ─── Preloader ─── */
 #petcenter-preloader {
-  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  position: fixed; top: 0; inset-inline-start: 0; width: 100%; height: 100%;
   background: #10214b; z-index: 9999;
   display: flex; flex-direction: column;
   justify-content: center; align-items: center;
@@ -128,20 +129,20 @@ h1, h2, h3, h4, h5, h6 {
   animation-name is set separately below (direction-scoped) so the correct
   rightward/leftward-facing keyframe is used depending on walk-right/walk-left.
 */
-#petcenter-preloader.walk-right .paw:nth-child(1) { left: 0px;   top: 42px; animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 0.0s; }
-#petcenter-preloader.walk-right .paw:nth-child(2) { left: 32px;  top: 0px;  animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 0.7s; }
-#petcenter-preloader.walk-right .paw:nth-child(3) { left: 64px;  top: 42px; animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 1.4s; }
-#petcenter-preloader.walk-right .paw:nth-child(4) { left: 96px;  top: 0px;  animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 2.1s; }
-#petcenter-preloader.walk-right .paw:nth-child(5) { left: 128px; top: 42px; animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 2.8s; }
-#petcenter-preloader.walk-right .paw:nth-child(6) { left: 158px; top: 0px;  animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 3.5s; }
+#petcenter-preloader.walk-right .paw:nth-child(1) { inset-inline-start: 0px;   top: 42px; animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 0.0s; }
+#petcenter-preloader.walk-right .paw:nth-child(2) { inset-inline-start: 32px;  top: 0px;  animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 0.7s; }
+#petcenter-preloader.walk-right .paw:nth-child(3) { inset-inline-start: 64px;  top: 42px; animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 1.4s; }
+#petcenter-preloader.walk-right .paw:nth-child(4) { inset-inline-start: 96px;  top: 0px;  animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 2.1s; }
+#petcenter-preloader.walk-right .paw:nth-child(5) { inset-inline-start: 128px; top: 42px; animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 2.8s; }
+#petcenter-preloader.walk-right .paw:nth-child(6) { inset-inline-start: 158px; top: 0px;  animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 3.5s; }
 
 /* walk-left: identical two-lane shape, mirrored so it stamps right→left */
-#petcenter-preloader.walk-left .paw:nth-child(1) { left: 158px; top: 42px; animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 0.0s; }
-#petcenter-preloader.walk-left .paw:nth-child(2) { left: 128px; top: 0px;  animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 0.7s; }
-#petcenter-preloader.walk-left .paw:nth-child(3) { left: 96px;  top: 42px; animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 1.4s; }
-#petcenter-preloader.walk-left .paw:nth-child(4) { left: 64px;  top: 0px;  animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 2.1s; }
-#petcenter-preloader.walk-left .paw:nth-child(5) { left: 32px;  top: 42px; animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 2.8s; }
-#petcenter-preloader.walk-left .paw:nth-child(6) { left: 0px;   top: 0px;  animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 3.5s; }
+#petcenter-preloader.walk-left .paw:nth-child(1) { inset-inline-start: 158px; top: 42px; animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 0.0s; }
+#petcenter-preloader.walk-left .paw:nth-child(2) { inset-inline-start: 128px; top: 0px;  animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 0.7s; }
+#petcenter-preloader.walk-left .paw:nth-child(3) { inset-inline-start: 96px;  top: 42px; animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 1.4s; }
+#petcenter-preloader.walk-left .paw:nth-child(4) { inset-inline-start: 64px;  top: 0px;  animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 2.1s; }
+#petcenter-preloader.walk-left .paw:nth-child(5) { inset-inline-start: 32px;  top: 42px; animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 2.8s; }
+#petcenter-preloader.walk-left .paw:nth-child(6) { inset-inline-start: 0px;   top: 0px;  animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 3.5s; }
 
 /*
   Two stamp keyframes per direction (odd = left-foot tilt, even = right-foot tilt).
@@ -197,9 +198,9 @@ h1, h2, h3, h4, h5, h6 {
    ═══════════════════════════════════════════════════════ */
 .pc-header {
   position: fixed;
-  top: 0; left: 0; right: 0;
+  top: 0; inset-inline-start: 0; inset-inline-end: 0;
   z-index: 1000;
-  padding: 0 24px;
+  padding-block: 0; padding-inline: 24px;
   height: 68px;
   display: flex;
   align-items: center;
@@ -233,7 +234,7 @@ h1, h2, h3, h4, h5, h6 {
 .pc-header__nav li { position: relative; }
 .pc-header__nav a {
   display: block;
-  padding: 8px 11px;
+  padding-block: 8px; padding-inline: 11px;
   font-family: 'Sora', sans-serif;
   font-size: 13px;
   font-weight: 500;
@@ -244,7 +245,7 @@ h1, h2, h3, h4, h5, h6 {
   white-space: nowrap;
 }
 .pc-header__nav a:hover { color: #d7bd88; background: rgba(255,255,255,0.08); }
-.pc-header__nav .nav-donate a { background: #ED7624; color: #fff; font-weight: 600; padding: 8px 16px; }
+.pc-header__nav .nav-donate a { background: #ED7624; color: #fff; font-weight: 600; padding-block: 8px; padding-inline: 16px; }
 .pc-header__nav .nav-donate a:hover { background: #d4621a; color: #fff; }
 .pc-header__nav .nav-signup a,
 .pc-header__nav .nav-login a { border: 1px solid rgba(215,189,136,0.5); color: #d7bd88; }
@@ -256,17 +257,17 @@ h1, h2, h3, h4, h5, h6 {
   display: none;
   position: absolute;
   top: calc(100% + 4px);
-  left: 0;
+  inset-inline-start: 0;
   background: #10214b;
   border-radius: 8px;
   list-style: none;
   min-width: 168px;
   box-shadow: 0 8px 32px rgba(0,0,0,0.22);
-  padding: 6px 0;
+  padding-block: 6px; padding-inline: 0;
   z-index: 100;
 }
 .pc-header__nav .has-drop:hover > ul { display: block; }
-.pc-header__nav .has-drop > ul a { padding: 9px 18px; font-size: 13px; border-radius: 0; }
+.pc-header__nav .has-drop > ul a { padding-block: 9px; padding-inline: 18px; font-size: 13px; border-radius: 0; }
 
 /* Hamburger */
 .pc-hamburger {
@@ -293,8 +294,8 @@ h1, h2, h3, h4, h5, h6 {
   flex-direction: column;
   position: absolute;
   top: 100%;
-  left: 0;
-  right: 0;
+  inset-inline-start: 0;
+  inset-inline-end: 0;
   background: rgba(16,33,75,0.98);
   z-index: 999;
   max-height: 0;
@@ -309,13 +310,13 @@ h1, h2, h3, h4, h5, h6 {
   overflow-y: auto;
   opacity: 1;
   pointer-events: auto;
-  padding: 16px 0 calc(100vh - 68px - 56px);
+  padding-block: 16px calc(100vh - 68px - 56px); padding-inline: 0;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
 }
 .pc-mobile-menu a {
   display: block;
-  padding: 12px 28px;
+  padding-block: 12px; padding-inline: 28px;
   font-family: 'Sora', sans-serif;
   font-size: 15px;
   font-weight: 500;
@@ -325,11 +326,11 @@ h1, h2, h3, h4, h5, h6 {
 }
 .pc-mobile-menu a:hover { color: #d7bd88; background: rgba(255,255,255,0.05); }
 .pc-mobile-menu .mobile-donate {
-  margin: 12px 28px 0;
+  margin-block: 12px 0; margin-inline: 28px;
   display: inline-block;
   background: #ED7624;
   color: #fff;
-  padding: 11px 24px;
+  padding-block: 11px; padding-inline: 24px;
   border-radius: 8px;
   font-weight: 600;
   border-bottom: none;
@@ -347,7 +348,7 @@ h1, h2, h3, h4, h5, h6 {
 .pets-hero {
   background: linear-gradient(120deg, rgba(16,33,75,0.96) 0%, rgba(30,50,100,0.88) 100%),
               url('/assets/images/dogs-banner.jpg') center/cover no-repeat;
-  padding: 60px 24px 52px;
+  padding-block: 60px 52px; padding-inline: 24px;
   text-align: center;
 }
 .pets-hero__eyebrow {
@@ -371,14 +372,14 @@ h1, h2, h3, h4, h5, h6 {
   color: rgba(255,255,255,0.72);
   font-size: 15px;
   max-width: 480px;
-  margin: 0 auto;
+  margin-block: 0; margin-inline: auto;
 }
 
 /* Breadcrumb */
 .pets-breadcrumb {
   max-width: 1280px;
-  margin: 0 auto;
-  padding: 14px 24px;
+  margin-block: 0; margin-inline: auto;
+  padding-block: 14px; padding-inline: 24px;
   font-family: 'Sora', sans-serif;
   font-size: 12px;
   color: var(--muted);
@@ -396,8 +397,8 @@ h1, h2, h3, h4, h5, h6 {
    ═══════════════════════════════════════════════════════ */
 .cats-section {
   max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 24px 80px;
+  margin-block: 0; margin-inline: auto;
+  padding-block: 0 80px; padding-inline: 24px;
 }
 
 /* 5-column on large screens, 3 on tablet, 2 on mobile, 1 on small */
@@ -492,7 +493,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Card body */
 .cat-body {
-  padding: 20px 22px 24px;
+  padding-block: 20px 24px; padding-inline: 22px;
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -508,7 +509,7 @@ h1, h2, h3, h4, h5, h6 {
   display: inline-block;
   background: var(--bg);
   color: var(--navy);
-  padding: 3px 12px;
+  padding-block: 3px; padding-inline: 12px;
   border-radius: 20px;
   font-size: 12px;
   font-weight: 600;
@@ -519,7 +520,7 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 13.5px;
   line-height: 1.65;
   flex: 1;
-  margin: 4px 0 14px;
+  margin-block: 4px 14px; margin-inline: 0;
 }
 .cat-btn {
   display: inline-flex;
@@ -527,7 +528,7 @@ h1, h2, h3, h4, h5, h6 {
   gap: 8px;
   background: linear-gradient(135deg, var(--orange), #d96919);
   color: #fff;
-  padding: 11px 20px;
+  padding-block: 11px; padding-inline: 20px;
   border-radius: var(--radius-sm);
   font-family: 'Sora', sans-serif;
   font-size: 13.5px;
@@ -560,11 +561,11 @@ h1, h2, h3, h4, h5, h6 {
    ═══════════════════════════════════════════════════════ */
 .pc-footer {
   background: #0b1834;
-  padding: 60px 24px 28px;
+  padding-block: 60px 28px; padding-inline: 24px;
   color: rgba(255,255,255,0.65);
   font-family: 'Sora', sans-serif;
 }
-.pc-footer__inner { max-width: 1200px; margin: 0 auto; }
+.pc-footer__inner { max-width: 1200px; margin-block: 0; margin-inline: auto; }
 .pc-footer__top {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr 1fr 1.5fr;
@@ -762,7 +763,7 @@ h1, h2, h3, h4, h5, h6 {
   } else {
     window.addEventListener('load', hideLoader);
   }
-  
+
   // FALLBACK: Ensure preloader hides after 5 seconds even if page doesn't load
   setTimeout(function() {
     if (loader && loader.style.display !== 'none') {
@@ -1159,7 +1160,7 @@ function buildCards(counts) {
 .pc-settings-widget {
   position: fixed;
   top: 50%;
-  right: 16px;
+  inset-inline-end: 16px;
   transform: translateY(-50%);
   z-index: 6100;
   font-family: 'Sora', sans-serif;
@@ -1185,9 +1186,9 @@ function buildCards(counts) {
   position: absolute;
   top: 50%;
   /* Opens to the LEFT of the trigger now that the trigger sits on the
-     right edge (was `left: calc(100% + 12px)` opening rightward off a
+     right edge (was `inset-inline-start: calc(100% + 12px)` opening rightward off a
      left-edge trigger). */
-  right: calc(100% + 12px);
+  inset-inline-end: calc(100% + 12px);
   transform: translateY(-50%);
   width: 280px;
   max-width: calc(100vw - 32px);
@@ -1211,7 +1212,7 @@ function buildCards(counts) {
 }
 .pc-settings-panel__close {
   background: none; border: none; color: inherit; font-size: 20px; line-height: 1;
-  cursor: pointer; padding: 2px 6px;
+  cursor: pointer; padding-block: 2px; padding-inline: 6px;
 }
 
 .pc-settings-row { margin-bottom: 14px; }
@@ -1221,49 +1222,51 @@ function buildCards(counts) {
    Section 19's "Settings Widget Control Pattern -- Toggle + Description"
    rule (pair every consequential control with a plain-language line
    explaining its effect, since a user shouldn't have to guess). */
-.pc-settings-desc { font-size: 11.5px; color: #a39b91; margin: -2px 0 8px; line-height: 1.4; }
+.pc-settings-desc { font-size: 11.5px; color: #a39b91; margin-block: -2px 8px; margin-inline: 0; line-height: 1.4; }
 
 .pc-lang-dropdown { position: relative; }
 .pc-lang-dropdown__trigger {
   width: 100%; display: flex; align-items: center; justify-content: space-between;
   background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.16);
-  color: #f2f2f2; border-radius: 8px; padding: 8px 12px; font-size: 13.5px; cursor: pointer;
+  color: #f2f2f2; border-radius: 8px; padding-block: 8px; padding-inline: 12px; font-size: 13.5px; cursor: pointer;
   font-family: 'Sora', sans-serif;
 }
 .pc-lang-dropdown__panel {
-  position: absolute; top: calc(100% + 6px); left: 0; right: 0;
+  position: absolute; top: calc(100% + 6px); inset-inline-start: 0; inset-inline-end: 0;
   background: #10214b; border: 1px solid rgba(255,255,255,0.14);
   /* Sharp corner nearest the trigger (top-left here, since the trigger
      sits above this downward-opening panel) -- the "message bubble" corner
      rule from PETCENTER_DESIGN_SYSTEM_v1_0.md Section 24 (v1.25). */
-  border-radius: 0 8px 8px 8px;
+  border-start-start-radius: 0; border-start-end-radius: 8px; border-end-end-radius: 8px; border-end-start-radius: 8px;
   list-style: none; margin: 0; padding: 4px; max-height: 200px; overflow-y: auto;
   z-index: 6300;
 }
 .pc-lang-dropdown__panel[hidden] { display: none; }
-.pc-lang-dropdown__panel li { padding: 8px 10px; font-size: 13.5px; border-radius: 6px; cursor: pointer; }
+.pc-lang-dropdown__panel li { padding-block: 8px; padding-inline: 10px; font-size: 13.5px; border-radius: 6px; cursor: pointer; }
 .pc-lang-dropdown__panel li:hover,
 .pc-lang-dropdown__panel li[aria-selected="true"] { background: rgba(215,189,136,0.18); }
 
 .pc-opacity-slider { width: 100%; accent-color: #d7bd88; }
-.pc-opacity-value { font-size: 12px; color: #a39b91; float: right; margin-top: 2px; }
+.pc-opacity-value { font-size: 12px; color: #a39b91; float: inline-end; margin-top: 2px; }
 
 @media (max-width: 600px) {
   /* Below 600px, opening the panel to the right of a left-edge trigger
      would push a 280px-wide panel off the right edge of the viewport on
      most phones. Anchor the panel to open downward from the trigger
      instead, still clear of both the hero content and the bottom-right
-     contact button. Anchored via `right: 0` (not `left: 0`) since the
-     trigger itself now sits near the right edge -- `left: 0` would push
+     contact button. Anchored via `inset-inline-end: 0` (not `inset-inline-start: 0`) since the
+     trigger itself now sits near the right edge -- `inset-inline-start: 0` would push
      a near-full-width panel further right and off-screen. */
   .pc-settings-panel {
     top: calc(100% + 10px);
-    right: 0;
-    left: auto;
+    inset-inline-end: 0;
+    inset-inline-start: auto;
     transform: none;
     width: calc(100vw - 48px);
   }
 }
+
+/* TASK-web12-3 END */
 </style>
 
 <div class="pc-settings-widget" id="pcSettingsWidget">

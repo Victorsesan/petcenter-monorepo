@@ -166,7 +166,7 @@
   // ============================================
   const STYLE = `
   .pcw-launcher-btn {
-    position: fixed; bottom: 20px; right: 20px; z-index: 9998;
+    position: fixed; bottom: 20px; inset-inline-end: 20px; z-index: 9998;
     width: 56px; height: 56px; border-radius: 50%;
     background: linear-gradient(135deg, #10214b, #1a2f5c);
     border: 3px solid #d7bd88; color: #fff; cursor: pointer;
@@ -193,22 +193,22 @@
      part of this task). */
   body[data-pcw-vzone="top"] .pcw-launcher-btn { top: 84px; bottom: auto; }
   body[data-pcw-vzone="middle"] .pcw-launcher-btn { top: 50%; bottom: auto; margin-top: -30px; }
-  body[data-pcw-hside="left"] .pcw-launcher-btn { left: 20px; right: auto; }
+  body[data-pcw-hside="left"] .pcw-launcher-btn { inset-inline-start: 20px; inset-inline-end: auto; }
   @media (min-width: 481px) {
     body[data-pcw-vzone="top"] .pcw-panel { top: 160px; bottom: auto; }
     body[data-pcw-vzone="middle"] .pcw-panel { top: 50%; bottom: auto; transform: translateY(-50%); }
-    body[data-pcw-hside="left"] .pcw-panel { left: 20px; right: auto; }
+    body[data-pcw-hside="left"] .pcw-panel { inset-inline-start: 20px; inset-inline-end: auto; }
   }
   /* TASK (Widget Positioning) END */
   .pcw-launcher-btn .pcw-badge {
-    position: absolute; top: -4px; right: -4px; min-width: 20px; height: 20px;
+    position: absolute; top: -4px; inset-inline-end: -4px; min-width: 20px; height: 20px;
     border-radius: 10px; background: #ED7624; color: #fff; font-size: 11px;
     font-weight: 700; display: none; align-items: center; justify-content: center;
-    padding: 0 5px; font-family: 'Sora', system-ui, sans-serif; border: 2px solid #fff;
+    padding-block: 0; padding-inline: 5px; font-family: 'Sora', system-ui, sans-serif; border: 2px solid #fff;
   }
   .pcw-launcher-btn .pcw-badge.show { display: flex; }
   .pcw-launcher-btn .pcw-active-dot {
-    position: absolute; bottom: 2px; right: 2px; width: 12px; height: 12px;
+    position: absolute; bottom: 2px; inset-inline-end: 2px; width: 12px; height: 12px;
     border-radius: 50%; background: #10b981; border: 2px solid #fff; display: none;
   }
   .pcw-launcher-btn .pcw-active-dot.show { display: block; }
@@ -221,7 +221,7 @@
   .pcw-backdrop.show { opacity: 1; visibility: visible; }
 
   .pcw-powered-by {
-    flex-shrink: 0; text-align: center; padding: 6px 0 10px;
+    flex-shrink: 0; text-align: center; padding-block: 6px 10px; padding-inline: 0;
     font-size: 10.5px; color: #b0a69a; font-family: 'Sora', system-ui, sans-serif;
   }
 
@@ -233,22 +233,22 @@
   .pcw-sheet-backdrop.show { opacity: 1; visibility: visible; }
 
   .pcw-options-sheet {
-    position: absolute; left: 0; right: 0; bottom: 0;
-    background: #121212; border-radius: 16px 16px 0 0; z-index: 10002;
+    position: absolute; inset-inline-start: 0; inset-inline-end: 0; bottom: 0;
+    background: #121212; border-start-start-radius: 16px; border-start-end-radius: 16px; border-end-end-radius: 0; border-end-start-radius: 0; z-index: 10002;
     max-height: 82%; display: flex; flex-direction: column;
     transform: translateY(100%);
     transition: transform 0.35s cubic-bezier(.32,.72,0,1);
     box-shadow: 0 -8px 32px rgba(0,0,0,0.4);
   }
   .pcw-options-sheet.open { transform: translateY(0); }
-  .pcw-sheet-handle { width: 36px; height: 4px; background: rgba(255,255,255,0.25); border-radius: 4px; margin: 9px auto 0; flex-shrink: 0; }
-  .pcw-sheet-header { display: flex; align-items: center; justify-content: space-between; padding: 12px 18px 6px; flex-shrink: 0; }
+  .pcw-sheet-handle { width: 36px; height: 4px; background: rgba(255,255,255,0.25); border-radius: 4px; margin-block: 9px 0; margin-inline: auto; flex-shrink: 0; }
+  .pcw-sheet-header { display: flex; align-items: center; justify-content: space-between; padding-block: 12px 6px; padding-inline: 18px; flex-shrink: 0; }
   .pcw-sheet-header h3 { font-family: 'Sora', system-ui, sans-serif; font-size: 16px; color: #fff; font-weight: 700; margin: 0; }
-  .pcw-sheet-close { background: none; border: none; color: #fff; font-size: 20px; line-height: 1; cursor: pointer; padding: 4px 8px; opacity: 0.8; }
+  .pcw-sheet-close { background: none; border: none; color: #fff; font-size: 20px; line-height: 1; cursor: pointer; padding-block: 4px; padding-inline: 8px; opacity: 0.8; }
   .pcw-sheet-close:hover { opacity: 1; }
-  .pcw-sheet-body { overflow-y: auto; padding: 6px 18px 18px; flex: 1; }
+  .pcw-sheet-body { overflow-y: auto; padding-block: 6px 18px; padding-inline: 18px; flex: 1; }
 
-  .pcw-option-row { display: flex; align-items: center; gap: 12px; padding: 13px 4px; border-bottom: 1px solid rgba(255,255,255,0.07); }
+  .pcw-option-row { display: flex; align-items: center; gap: 12px; padding-block: 13px; padding-inline: 4px; border-bottom: 1px solid rgba(255,255,255,0.07); }
   .pcw-option-row:last-of-type { border-bottom: none; }
   .pcw-option-clickable { cursor: pointer; }
   .pcw-option-clickable:hover { background: rgba(255,255,255,0.04); border-radius: 8px; }
@@ -265,7 +265,7 @@
     cursor: pointer; position: relative; flex-shrink: 0; transition: background 0.2s ease;
   }
   .pcw-toggle-switch::after {
-    content: ''; position: absolute; top: 2px; left: 2px; width: 20px; height: 20px;
+    content: ''; position: absolute; top: 2px; inset-inline-start: 2px; width: 20px; height: 20px;
     border-radius: 50%; background: #fff; transition: transform 0.2s ease;
   }
   .pcw-toggle-switch.on { background: #ED7624; }
@@ -317,7 +317,7 @@
   }
 
   .pcw-panel {
-    position: fixed; bottom: 92px; right: 20px; z-index: 9999;
+    position: fixed; bottom: 92px; inset-inline-end: 20px; z-index: 9999;
     width: 380px; max-width: calc(100vw - 32px); height: 560px; max-height: calc(100vh - 120px);
     background: #fff; border-radius: 16px; box-shadow: 0 16px 48px rgba(16,33,75,0.28);
     display: none; flex-direction: column; overflow: hidden;
@@ -354,15 +354,15 @@
     animation: pcwBlobMorph 1.1s cubic-bezier(0.4,0,0.2,1) forwards;
   }
   .pcw-blob-1 {
-    top: -10%; left: -12%; background: radial-gradient(circle at 35% 35%, #1a2f5c, #10214b);
+    top: -10%; inset-inline-start: -12%; background: radial-gradient(circle at 35% 35%, #1a2f5c, #10214b);
   }
   .pcw-blob-2 {
-    bottom: -14%; right: -10%; width: 50%; padding-top: 50%;
+    bottom: -14%; inset-inline-end: -10%; width: 50%; padding-top: 50%;
     background: radial-gradient(circle at 40% 40%, #e2c99a, #d7bd88);
     animation-delay: 0.08s;
   }
   .pcw-blob-3 {
-    top: 30%; right: 8%; width: 30%; padding-top: 30%;
+    top: 30%; inset-inline-end: 8%; width: 30%; padding-top: 30%;
     background: radial-gradient(circle at 45% 45%, #ff8a3d, #ED7624);
     animation-delay: 0.16s;
   }
@@ -394,7 +394,7 @@
 
   .pcw-header {
     background: linear-gradient(135deg, #10214b, #1a2f5c); color: #fff;
-    padding: 16px 18px; display: flex; align-items: center; justify-content: space-between;
+    padding-block: 16px; padding-inline: 18px; display: flex; align-items: center; justify-content: space-between;
     flex-shrink: 0;
   }
   .pcw-header h3 { font-family: 'Cormorant Garamond', serif; font-weight: 700; font-size: 19px; margin: 0; }
@@ -412,9 +412,9 @@
   .pcw-launcher-intro { font-size: 13.5px; color: #4a4030; line-height: 1.6; margin-bottom: 18px; }
   .pcw-launcher-choices { display: flex; flex-direction: column; gap: 10px; }
   .pcw-choice-btn {
-    display: flex; align-items: center; gap: 12px; padding: 14px 16px;
+    display: flex; align-items: center; gap: 12px; padding-block: 14px; padding-inline: 16px;
     border: 1.5px solid rgba(16,33,75,0.12); border-radius: 12px; background: #fdfcfa;
-    cursor: pointer; text-align: left; transition: border-color 0.15s ease, background 0.15s ease;
+    cursor: pointer; text-align: start; transition: border-color 0.15s ease, background 0.15s ease;
     font-family: 'Sora', system-ui, sans-serif;
   }
   .pcw-choice-btn:hover { border-color: #ED7624; background: #fff8f2; }
@@ -435,7 +435,7 @@
   .pcw-field { margin-bottom: 14px; }
   .pcw-field label { display: block; font-size: 12.5px; font-weight: 600; color: #10214b; margin-bottom: 5px; }
   .pcw-field input, .pcw-field select, .pcw-field textarea {
-    width: 100%; padding: 10px 12px; border: 1.5px solid rgba(16,33,75,0.14); border-radius: 8px;
+    width: 100%; padding-block: 10px; padding-inline: 12px; border: 1.5px solid rgba(16,33,75,0.14); border-radius: 8px;
     font-family: 'Sora', system-ui, sans-serif; font-size: 13.5px; color: #2c2416; background: #fff;
   }
   .pcw-field input:focus, .pcw-field select:focus, .pcw-field textarea:focus {
@@ -460,12 +460,12 @@
 
   .pcw-chat-id-pill {
     align-self: center; font-size: 10.5px; color: #7a6d5f; background: #f4f1ea;
-    padding: 4px 10px; border-radius: 20px; margin-bottom: 10px;
+    padding-block: 4px; padding-inline: 10px; border-radius: 20px; margin-bottom: 10px;
   }
 
   .pcw-joined-banner {
     background: #fff8f2; border: 1px solid rgba(237,118,36,0.2); border-radius: 10px;
-    padding: 10px 12px; margin-bottom: 12px; font-size: 12px;
+    padding-block: 10px; padding-inline: 12px; margin-bottom: 12px; font-size: 12px;
   }
   .pcw-joined-banner .pcw-jb-line1 { font-weight: 600; color: #10214b; margin-bottom: 6px; }
   .pcw-joined-banner .pcw-jb-line2 { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
@@ -476,7 +476,7 @@
     display: flex; align-items: center; justify-content: center; flex-shrink: 0;
   }
   .pcw-jb-link-icon { color: #d7bd88; font-size: 11px; }
-  .pcw-jb-bluecheck { color: #1d9bf0; font-size: 11px; margin-left: 2px; }
+  .pcw-jb-bluecheck { color: #1d9bf0; font-size: 11px; margin-inline-start: 2px; }
   .pcw-jb-position { color: #7a6d5f; font-size: 11px; }
 
   .pcw-msg-row { display: flex; gap: 8px; max-width: 88%; margin-bottom: 2px; }
@@ -487,9 +487,9 @@
     background: #10214b; color: #d7bd88; font-size: 10px; font-weight: 700;
     display: flex; align-items: center; justify-content: center;
   }
-  .pcw-msg-bubble { border-radius: 14px; padding: 9px 13px; font-size: 13px; line-height: 1.5; }
-  .pcw-msg-row.user .pcw-msg-bubble { background: #10214b; color: #fff; border-bottom-right-radius: 4px; }
-  .pcw-msg-row.admin .pcw-msg-bubble, .pcw-msg-row.bot .pcw-msg-bubble { background: #f4f1ea; color: #2c2416; border-bottom-left-radius: 4px; }
+  .pcw-msg-bubble { border-radius: 14px; padding-block: 9px; padding-inline: 13px; font-size: 13px; line-height: 1.5; }
+  .pcw-msg-row.user .pcw-msg-bubble { background: #10214b; color: #fff; border-end-end-radius: 4px; }
+  .pcw-msg-row.admin .pcw-msg-bubble, .pcw-msg-row.bot .pcw-msg-bubble { background: #f4f1ea; color: #2c2416; border-end-start-radius: 4px; }
   .pcw-msg-row.system .pcw-msg-bubble { background: #fff8f2; color: #7a6d5f; font-style: italic; border: 1px dashed rgba(237,118,36,0.25); }
   .pcw-msg-meta-row {
     display: flex; align-items: center; gap: 6px; margin-top: 3px;
@@ -509,7 +509,7 @@
     max-height: 0; overflow: hidden; opacity: 0; transition: max-height 0.25s ease, opacity 0.2s ease, margin 0.25s ease;
     background: rgba(16,33,75,0.05); border-radius: 8px; margin-top: 0;
   }
-  .pcw-original-reveal.show { max-height: 200px; opacity: 1; margin-top: 6px; padding: 8px 10px; }
+  .pcw-original-reveal.show { max-height: 200px; opacity: 1; margin-top: 6px; padding-block: 8px; padding-inline: 10px; }
   .pcw-original-reveal-label { font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: #a89c8a; margin-bottom: 3px; }
   .pcw-original-reveal-text { font-size: 12px; color: #4a4030; font-style: italic; line-height: 1.4; }
 
@@ -528,9 +528,9 @@
   }
   .pcw-audio-bar button { width: 28px; height: 28px; border-radius: 50%; border: none; background: #ED7624; color: #fff; cursor: pointer; flex-shrink: 0; }
   .pcw-audio-bar .pcw-audio-track { flex: 1; height: 4px; background: rgba(0,0,0,0.12); border-radius: 2px; position: relative; }
-  .pcw-audio-bar .pcw-audio-fill { position: absolute; left: 0; top: 0; height: 100%; background: #ED7624; border-radius: 2px; width: 0%; }
+  .pcw-audio-bar .pcw-audio-fill { position: absolute; inset-inline-start: 0; top: 0; height: 100%; background: #ED7624; border-radius: 2px; width: 0%; }
 
-  .pcw-typing-dots { display: flex; gap: 3px; padding: 9px 13px; align-self: flex-start; }
+  .pcw-typing-dots { display: flex; gap: 3px; padding-block: 9px; padding-inline: 13px; align-self: flex-start; }
   .pcw-typing-dots span { width: 6px; height: 6px; border-radius: 50%; background: #a89c8a; animation: pcwTypingBounce 1.2s infinite ease-in-out; }
   .pcw-typing-dots span:nth-child(2) { animation-delay: 0.15s; }
   .pcw-typing-dots span:nth-child(3) { animation-delay: 0.3s; }
@@ -542,30 +542,30 @@
      reuse the same dots visually while still being distinguishable in
      JS from the real admin-typing indicator (see the :not() selector
      in handlePollResult()). */
-  .pcw-typing-dots--recording { gap: 7px; padding: 8px 13px; }
+  .pcw-typing-dots--recording { gap: 7px; padding-block: 8px; padding-inline: 13px; }
   .pcw-typing-dots--recording i { color: #ED7624; font-size: 12px; animation: pcwTypingBounce 1.2s infinite ease-in-out; }
   .pcw-typing-dots--recording span { width: auto; height: auto; border-radius: 0; background: none; animation: none; font-size: 11.5px; color: #a89c8a; font-style: italic; }
-  .pcw-bot-processing { margin: 2px 0; }
+  .pcw-bot-processing { margin-block: 2px; margin-inline: 0; }
   /* TASK-8 END */
 
   .pcw-no-answer-notice {
     text-align: center; font-size: 11.5px; color: #7a6d5f; background: #f9f7f4;
-    padding: 8px 12px; border-radius: 8px; margin: 8px 0;
+    padding-block: 8px; padding-inline: 12px; border-radius: 8px; margin-block: 8px; margin-inline: 0;
   }
 
   .pcw-history-divider {
-    display: flex; align-items: center; gap: 10px; margin: 10px 0; cursor: pointer;
+    display: flex; align-items: center; gap: 10px; margin-block: 10px; margin-inline: 0; cursor: pointer;
   }
   .pcw-history-divider hr { flex: 1; border: none; border-top: 1px solid rgba(16,33,75,0.12); }
   .pcw-history-divider span { font-size: 11px; color: #7a6d5f; white-space: nowrap; display: flex; align-items: center; gap: 5px; }
   .pcw-history-divider:hover span { color: #ED7624; }
 
   /* ── Composer ───────────────────────────────────────────────────── */
-  .pcw-composer { flex-shrink: 0; border-top: 1px solid rgba(16,33,75,0.08); padding: 10px 12px; background: #fff; }
+  .pcw-composer { flex-shrink: 0; border-top: 1px solid rgba(16,33,75,0.08); padding-block: 10px; padding-inline: 12px; background: #fff; }
   .pcw-attach-row { display: flex; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
   .pcw-attach-chip {
     display: flex; align-items: center; gap: 6px; background: #f4f1ea; border-radius: 8px;
-    padding: 5px 9px; font-size: 11px; color: #4a4030;
+    padding-block: 5px; padding-inline: 9px; font-size: 11px; color: #4a4030;
   }
   .pcw-attach-chip .pcw-chip-status { color: #7a6d5f; }
   .pcw-attach-chip.uploading .pcw-chip-status { color: #ED7624; }
@@ -584,7 +584,7 @@
   .pcw-tool-btn.recording { background: #ef4444; color: #fff; }
   .pcw-composer-input {
     flex: 1; resize: none; border: 1.5px solid rgba(16,33,75,0.14); border-radius: 18px;
-    padding: 8px 14px; font-family: 'Sora', system-ui, sans-serif; font-size: 13px; max-height: 90px;
+    padding-block: 8px; padding-inline: 14px; font-family: 'Sora', system-ui, sans-serif; font-size: 13px; max-height: 90px;
   }
   .pcw-composer-input:focus { outline: none; border-color: #ED7624; }
   .pcw-send-btn {
@@ -594,7 +594,7 @@
   .pcw-send-btn:disabled { background: #d7bd88; cursor: not-allowed; }
 
   .pcw-recording-bar {
-    display: none; align-items: center; gap: 10px; padding: 8px 4px; font-size: 13px; color: #10214b;
+    display: none; align-items: center; gap: 10px; padding-block: 8px; padding-inline: 4px; font-size: 13px; color: #10214b;
   }
   .pcw-recording-bar.active { display: flex; }
   .pcw-recording-dot { width: 9px; height: 9px; border-radius: 50%; background: #ef4444; animation: pcwPulse 1s infinite; }
@@ -602,7 +602,7 @@
   .pcw-recording-time { font-variant-numeric: tabular-nums; font-weight: 600; }
 
   .pcw-voice-preview {
-    display: none; align-items: center; gap: 10px; padding: 8px 10px; background: #f4f1ea;
+    display: none; align-items: center; gap: 10px; padding-block: 8px; padding-inline: 10px; background: #f4f1ea;
     border-radius: 10px; margin-bottom: 8px;
   }
   .pcw-voice-preview.active { display: flex; }
@@ -610,18 +610,18 @@
   .pcw-msg-bubble.pcw-msg-failed { background: #fef2f2; border: 1px solid rgba(239,68,68,0.3); }
   .pcw-msg-fail-row { display: flex; align-items: center; gap: 6px; margin-top: 6px; font-size: 11px; color: #ef4444; }
   .pcw-retry-btn {
-    border: none; background: #ef4444; color: #fff; border-radius: 6px; padding: 3px 8px;
-    font-size: 10.5px; cursor: pointer; display: flex; align-items: center; gap: 4px; margin-left: auto;
+    border: none; background: #ef4444; color: #fff; border-radius: 6px; padding-block: 3px; padding-inline: 8px;
+    font-size: 10.5px; cursor: pointer; display: flex; align-items: center; gap: 4px; margin-inline-start: auto;
   }
   .pcw-retry-btn:hover { background: #dc2626; }
 
   .pcw-msg-action-btn {
     border: none; background: none; color: #a89c8a; cursor: pointer; font-size: 10px;
-    display: flex; align-items: center; gap: 3px; padding: 2px 4px;
+    display: flex; align-items: center; gap: 3px; padding-block: 2px; padding-inline: 4px;
   }
   .pcw-msg-action-btn:hover { color: #ED7624; }
   .pcw-edit-input {
-    width: 100%; border: 1.5px solid #ED7624; border-radius: 8px; padding: 6px 9px;
+    width: 100%; border: 1.5px solid #ED7624; border-radius: 8px; padding-block: 6px; padding-inline: 9px;
     font-family: 'Sora', system-ui, sans-serif; font-size: 13px; resize: none;
   }
 
@@ -630,7 +630,7 @@
   .pcw-download-chip {
     display: inline-flex; align-items: center; gap: 8px; text-decoration: none;
     background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25);
-    border-radius: 8px; padding: 7px 10px; font-size: 12px; color: inherit;
+    border-radius: 8px; padding-block: 7px; padding-inline: 10px; font-size: 12px; color: inherit;
     max-width: 220px; transition: background 0.15s ease;
   }
   .pcw-msg-row.user .pcw-download-chip { background: rgba(255,255,255,0.1); color: #fff; }
@@ -646,10 +646,10 @@
 
   .pcw-ticket-closed {
     background: #f0fdf4; border: 1px solid rgba(16,185,129,0.2); border-radius: 12px;
-    padding: 12px 14px; margin: 10px 0; font-size: 13px;
+    padding-block: 12px; padding-inline: 14px; margin-block: 10px; margin-inline: 0; font-size: 13px;
   }
   .pcw-ticket-closed-notice { display: flex; align-items: center; margin-bottom: 10px; font-weight: 600; color: #10214b; }
-  .pcw-rating-prompt { background: #fff; border: 1.5px solid rgba(16,33,75,0.1); border-radius: 10px; padding: 12px 14px; }
+  .pcw-rating-prompt { background: #fff; border: 1.5px solid rgba(16,33,75,0.1); border-radius: 10px; padding-block: 12px; padding-inline: 14px; }
   .pcw-rating-prompt-title { font-size: 13px; font-weight: 600; color: #10214b; margin-bottom: 10px; }
   .pcw-rating-btn-row { display: flex; gap: 8px; }
   .pcw-rating-dismiss-btn {
@@ -658,17 +658,17 @@
   }
   .pcw-rating-form {
     background: #fff; border: 1.5px solid rgba(16,33,75,0.1); border-radius: 12px;
-    padding: 16px 14px; margin-top: 10px; position: relative;
+    padding-block: 16px; padding-inline: 14px; margin-top: 10px; position: relative;
   }
   .pcw-rating-form-close {
-    position: absolute; top: 10px; right: 10px; width: 26px; height: 26px; border-radius: 50%;
+    position: absolute; top: 10px; inset-inline-end: 10px; width: 26px; height: 26px; border-radius: 50%;
     border: none; background: #f4f1ea; cursor: pointer; color: #7a6d5f; font-size: 12px;
     display: flex; align-items: center; justify-content: center;
   }
   .pcw-rating-form-title { font-size: 13.5px; font-weight: 700; color: #10214b; margin-bottom: 14px; }
   .pcw-rating-faces { display: flex; gap: 4px; justify-content: space-between; margin-bottom: 12px; }
   .pcw-rating-face {
-    flex: 1; border: 1.5px solid rgba(16,33,75,0.1); border-radius: 10px; padding: 8px 2px;
+    flex: 1; border: 1.5px solid rgba(16,33,75,0.1); border-radius: 10px; padding-block: 8px; padding-inline: 2px;
     background: #fdfcfa; cursor: pointer; text-align: center; font-family: 'Sora', system-ui, sans-serif;
     transition: all 0.15s ease;
   }
@@ -677,7 +677,7 @@
   .pcw-rating-face.selected .pcw-face-icon { color: #ED7624; }
   .pcw-face-label { display: block; font-size: 9.5px; color: #7a6d5f; }
   .pcw-rating-textarea {
-    width: 100%; border: 1.5px solid rgba(16,33,75,0.14); border-radius: 8px; padding: 9px 12px;
+    width: 100%; border: 1.5px solid rgba(16,33,75,0.14); border-radius: 8px; padding-block: 9px; padding-inline: 12px;
     font-family: 'Sora', system-ui, sans-serif; font-size: 13px; resize: none; height: 80px; box-sizing: border-box;
   }
   .pcw-rating-textarea:focus { outline: none; border-color: #ED7624; }
@@ -686,9 +686,9 @@
   .pcw-dropdown { position: relative; width: 100%; }
   .pcw-dropdown-trigger {
     width: 100%; display: flex; align-items: center; justify-content: space-between;
-    padding: 10px 14px; border: 1.5px solid rgba(16,33,75,0.18); border-radius: 10px;
+    padding-block: 10px; padding-inline: 14px; border: 1.5px solid rgba(16,33,75,0.18); border-radius: 10px;
     background: #fff; cursor: pointer; font-family: 'Sora', system-ui, sans-serif;
-    font-size: 13px; color: #a89c8a; text-align: left; transition: border-color 0.2s ease;
+    font-size: 13px; color: #a89c8a; text-align: start; transition: border-color 0.2s ease;
   }
   .pcw-dropdown-trigger.has-value { color: #10214b; }
   .pcw-dropdown-trigger:hover, .pcw-dropdown-trigger.open { border-color: #ED7624; }
@@ -698,7 +698,7 @@
   }
   .pcw-dropdown-trigger.open .pcw-dropdown-chevron { transform: rotate(180deg); }
   .pcw-dropdown-list {
-    position: absolute; top: calc(100% + 6px); left: 0; right: 0; z-index: 9999;
+    position: absolute; top: calc(100% + 6px); inset-inline-start: 0; inset-inline-end: 0; z-index: 9999;
     background: #1e2d4e; border-radius: 12px;
     box-shadow: 0 8px 32px rgba(16,33,75,0.35); overflow: hidden;
     max-height: 0; opacity: 0; pointer-events: none;
@@ -707,7 +707,7 @@
   .pcw-dropdown-list.open { max-height: 320px; opacity: 1; pointer-events: auto; }
   .pcw-dropdown-item {
     display: flex; align-items: center; justify-content: space-between;
-    padding: 14px 18px; cursor: pointer; color: #e8ddd0; font-size: 14px;
+    padding-block: 14px; padding-inline: 18px; cursor: pointer; color: #e8ddd0; font-size: 14px;
     border-bottom: 1px solid rgba(255,255,255,0.07); transition: background 0.15s ease;
   }
   .pcw-dropdown-item:last-child { border-bottom: none; }
@@ -729,18 +729,21 @@
 
   @media (max-width: 480px) {
     .pcw-panel {
-      bottom: 14px; right: 14px; left: 14px; width: auto; max-width: calc(100vw - 28px);
+      bottom: 14px; inset-inline-end: 14px; inset-inline-start: 14px; width: auto; max-width: calc(100vw - 28px);
       height: 78vh; height: 78dvh; max-height: calc(100vh - 100px);
       border-radius: 16px;
     }
-    .pcw-launcher-btn { bottom: 16px; right: 16px; }
+    .pcw-launcher-btn { bottom: 16px; inset-inline-end: 16px; }
     /* TASK (Widget Positioning): the panel is already edge-to-edge
-       (left:14px;right:14px) on mobile, so hside only needs to move the
+       (inset-inline-start:14px;inset-inline-end:14px) on mobile, so hside only needs to move the
        launcher button itself -- the panel's own left/right don't need an
        hside variant here. */
-    body[data-pcw-hside="left"] .pcw-launcher-btn { left: 16px; right: auto; }
+    body[data-pcw-hside="left"] .pcw-launcher-btn { inset-inline-start: 16px; inset-inline-end: auto; }
   }
-  `;
+
+/* TASK-web12-3 START: logical CSS properties for RTL */
+/* TASK-web12-3 END */
+`;
 
   function injectStyle() {
     if (document.getElementById('pcw-style')) return;
@@ -1831,7 +1834,7 @@
       const senderRow = el('div', { class: 'pcw-msg-sender' });
       senderRow.appendChild(document.createTextNode(msg.admin_name));
       if (msg.admin_blue_check) {
-        senderRow.appendChild(el('i', { class: 'fas fa-circle-check pcw-jb-bluecheck', style: 'margin-left:4px;font-size:11px;' }));
+        senderRow.appendChild(el('i', { class: 'fas fa-circle-check pcw-jb-bluecheck', style: 'margin-inline-start:4px;font-size:11px;' }));
       }
       col.appendChild(senderRow);
     }
@@ -2318,9 +2321,9 @@
     const wrap = el('div', { class: 'pcw-ticket-closed' });
 
     const closedNotice = el('div', { class: 'pcw-ticket-closed-notice' }, [
-      el('i', { class: 'fas fa-circle-check', style: 'color:#10b981;margin-right:7px;' }),
+      el('i', { class: 'fas fa-circle-check', style: 'color:#10b981;margin-inline-end:7px;' }),
       el('strong', {}, 'Ticket Closed'),
-      el('span', { style: 'color:#7a6d5f;font-size:12px;margin-left:6px;' },
+      el('span', { style: 'color:#7a6d5f;font-size:12px;margin-inline-start:6px;' },
         'This conversation has been marked resolved, you can start a new chat below'),
     ]);
     wrap.appendChild(closedNotice);
@@ -2746,7 +2749,7 @@
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       recordedChunks = [];
       // Detect the best supported audio format — iOS Safari requires mp4,
-      // Chrome/Android use webm. Some Android browsers (e.g. Brave Beta) 
+      // Chrome/Android use webm. Some Android browsers (e.g. Brave Beta)
       // report video/webm even for audio-only recordings — we accept this
       // and handle it correctly on the server side.
       const preferredMime = [

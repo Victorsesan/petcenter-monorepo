@@ -297,7 +297,7 @@
     // for the same containing-block reason documented in the mobile panel
     // fix below -- a transform here would still hijack position:fixed
     // panel descendants the same way it did before that was fixed.
-    + '.pc-a11y-widget{position:fixed;z-index:6100;font-family:"Sora",sans-serif;transition:top .22s ease,bottom .22s ease,left .22s ease,right .22s ease;}'
+    + '.pc-a11y-widget{position:fixed;z-index:6100;font-family:"Sora",sans-serif;transition:top .22s ease,bottom .22s ease,inset-inline-start .22s ease,inset-inline-end .22s ease;}'
     + '.pc-a11y-widget.pc-a11y-dragging{transition:none;}'
     // TASK (Dark Mode / Color Filter Audit): confirmed via the page's own
     // CSS that .pc-header is `position:fixed; height:68px; z-index:1000`
@@ -307,8 +307,8 @@
     + '.pc-a11y-widget[data-vzone="top"]{top:84px;}'
     + '.pc-a11y-widget[data-vzone="middle"]{top:50%;margin-top:-28px;}'
     + '.pc-a11y-widget[data-vzone="bottom"]{bottom:16px;}'
-    + '.pc-a11y-widget[data-hside="right"]{right:16px;}'
-    + '.pc-a11y-widget[data-hside="left"]{left:16px;}'
+    + '.pc-a11y-widget[data-hside="right"]{inset-inline-end:16px;}'
+    + '.pc-a11y-widget[data-hside="left"]{inset-inline-start:16px;}'
     // TASK (Widget Positioning) END
     // Sized and styled to match the existing chat widget bubble: a gold
     // ring border around a solid navy circle, filled (not outline) icon.
@@ -344,42 +344,42 @@
     // against.
     + '.pc-a11y-widget[data-vzone="bottom"] .pc-a11y-panel,.pc-a11y-widget[data-vzone="bottom"] .pc-a11y-statement{bottom:calc(100% + 12px);top:auto;}'
     + '.pc-a11y-widget[data-vzone="top"] .pc-a11y-panel,.pc-a11y-widget[data-vzone="top"] .pc-a11y-statement{top:calc(100% + 12px);bottom:auto;}'
-    + '.pc-a11y-widget[data-vzone="bottom"][data-hside="right"] .pc-a11y-panel,.pc-a11y-widget[data-vzone="top"][data-hside="right"] .pc-a11y-panel,.pc-a11y-widget[data-vzone="bottom"][data-hside="right"] .pc-a11y-statement,.pc-a11y-widget[data-vzone="top"][data-hside="right"] .pc-a11y-statement{right:0;left:auto;}'
-    + '.pc-a11y-widget[data-vzone="bottom"][data-hside="left"] .pc-a11y-panel,.pc-a11y-widget[data-vzone="top"][data-hside="left"] .pc-a11y-panel,.pc-a11y-widget[data-vzone="bottom"][data-hside="left"] .pc-a11y-statement,.pc-a11y-widget[data-vzone="top"][data-hside="left"] .pc-a11y-statement{left:0;right:auto;}'
+    + '.pc-a11y-widget[data-vzone="bottom"][data-hside="right"] .pc-a11y-panel,.pc-a11y-widget[data-vzone="top"][data-hside="right"] .pc-a11y-panel,.pc-a11y-widget[data-vzone="bottom"][data-hside="right"] .pc-a11y-statement,.pc-a11y-widget[data-vzone="top"][data-hside="right"] .pc-a11y-statement{inset-inline-end:0;inset-inline-start:auto;}'
+    + '.pc-a11y-widget[data-vzone="bottom"][data-hside="left"] .pc-a11y-panel,.pc-a11y-widget[data-vzone="top"][data-hside="left"] .pc-a11y-panel,.pc-a11y-widget[data-vzone="bottom"][data-hside="left"] .pc-a11y-statement,.pc-a11y-widget[data-vzone="top"][data-hside="left"] .pc-a11y-statement{inset-inline-start:0;inset-inline-end:auto;}'
     // Middle zone, DESKTOP only (the mobile media query below overrides
     // this for <=600px to the centered-overlay case instead): opens to the
     // side, exactly as the previous (always-middle) build did.
-    + '.pc-a11y-widget[data-vzone="middle"][data-hside="right"] .pc-a11y-panel,.pc-a11y-widget[data-vzone="middle"][data-hside="right"] .pc-a11y-statement{right:calc(100% + 12px);left:auto;top:50%;bottom:auto;transform:translateY(-50%);}'
-    + '.pc-a11y-widget[data-vzone="middle"][data-hside="left"] .pc-a11y-panel,.pc-a11y-widget[data-vzone="middle"][data-hside="left"] .pc-a11y-statement{left:calc(100% + 12px);right:auto;top:50%;bottom:auto;transform:translateY(-50%);}'
+    + '.pc-a11y-widget[data-vzone="middle"][data-hside="right"] .pc-a11y-panel,.pc-a11y-widget[data-vzone="middle"][data-hside="right"] .pc-a11y-statement{inset-inline-end:calc(100% + 12px);inset-inline-start:auto;top:50%;bottom:auto;transform:translateY(-50%);}'
+    + '.pc-a11y-widget[data-vzone="middle"][data-hside="left"] .pc-a11y-panel,.pc-a11y-widget[data-vzone="middle"][data-hside="left"] .pc-a11y-statement{inset-inline-start:calc(100% + 12px);inset-inline-end:auto;top:50%;bottom:auto;transform:translateY(-50%);}'
     + '.pc-a11y-widget[data-vzone="middle"] .pc-a11y-panel.open,.pc-a11y-widget[data-vzone="middle"] .pc-a11y-statement.open{transform:translateY(-50%);}'
     // TASK (Widget Positioning) END
-    + '.pc-a11y-panel__header{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:14px 16px;font-weight:700;font-size:15px;border-bottom:1px solid rgba(255,255,255,0.1);}'
-    + '.pc-a11y-panel__close{background:none;border:none;color:inherit;font-size:20px;line-height:1;cursor:pointer;padding:2px 6px;}'
+    + '.pc-a11y-panel__header{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding-block: 14px; padding-inline: 16px;font-weight:700;font-size:15px;border-bottom:1px solid rgba(255,255,255,0.1);}'
+    + '.pc-a11y-panel__close{background:none;border:none;color:inherit;font-size:20px;line-height:1;cursor:pointer;padding-block: 2px; padding-inline: 6px;}'
     // "Scrollable as a whole": the statement button and Dark Mode row used
     // to sit OUTSIDE this scrolling container (siblings of it, not
     // children), so they never scrolled with everything else and ate into
     // the fixed vertical budget above the part that did scroll. Both are
     // now inside .pc-a11y-panel__body in the markup, so the entire panel
     // content below the title bar is one contiguous scroll area.
-    + '.pc-a11y-panel__body{overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:8px 10px 14px;flex:1;min-height:0;}'
+    + '.pc-a11y-panel__body{overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding-block: 8px 14px; padding-inline: 10px;flex:1;min-height:0;}'
     // statement button + dark mode row, now inside the scrollable body
-    + '.pc-a11y-statement-btn{width:100%;margin:8px 0 4px;font-size:11.5px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.16);color:#d7bd88;border-radius:8px;padding:7px 10px;cursor:pointer;text-align:left;flex-shrink:0;}'
+    + '.pc-a11y-statement-btn{width:100%;margin-block: 8px 4px; margin-inline: 0;font-size:11.5px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.16);color:#d7bd88;border-radius:8px;padding-block: 7px; padding-inline: 10px;cursor:pointer;text-align:start;flex-shrink:0;}'
     + '.pc-a11y-statement-btn:hover{background:rgba(255,255,255,0.14);}'
-    + '.pc-a11y-darkmode-row{padding:10px 6px;margin-bottom:4px;border-bottom:1px solid rgba(255,255,255,0.08);}'
+    + '.pc-a11y-darkmode-row{padding-block: 10px; padding-inline: 6px;margin-bottom:4px;border-bottom:1px solid rgba(255,255,255,0.08);}'
     // ---- Accordion sections ----
     + '.pc-a11y-section{border-bottom:1px solid rgba(255,255,255,0.08);}'
     + '.pc-a11y-section:last-child{border-bottom:none;}'
-    + '.pc-a11y-section__trigger{width:100%;display:flex;align-items:center;justify-content:space-between;background:none;border:none;color:#f2f2f2;font-size:13px;font-weight:600;padding:12px 6px;cursor:pointer;font-family:inherit;}'
+    + '.pc-a11y-section__trigger{width:100%;display:flex;align-items:center;justify-content:space-between;background:none;border:none;color:#f2f2f2;font-size:13px;font-weight:600;padding-block: 12px; padding-inline: 6px;cursor:pointer;font-family:inherit;}'
     + '.pc-a11y-section__trigger svg{transition:transform .2s ease;flex-shrink:0;}'
     + '.pc-a11y-section__trigger[aria-expanded="true"] svg{transform:rotate(180deg);}'
     + '.pc-a11y-section__body{max-height:0;overflow:hidden;transition:max-height .25s ease;}'
     + '.pc-a11y-section__body.open{max-height:600px;}'
-    + '.pc-a11y-section__inner{padding:2px 6px 14px;}'
+    + '.pc-a11y-section__inner{padding-block: 2px 14px; padding-inline: 6px;}'
     // rows/controls
     + '.pc-a11y-row{margin-bottom:12px;}'
     + '.pc-a11y-row:last-child{margin-bottom:0;}'
     + '.pc-a11y-label{display:block;font-size:12px;margin-bottom:6px;color:#d7bd88;}'
-    + '.pc-a11y-desc{font-size:11px;color:#a39b91;margin:-3px 0 8px;line-height:1.4;}'
+    + '.pc-a11y-desc{font-size:11px;color:#a39b91;margin-block: -3px 8px; margin-inline: 0;line-height:1.4;}'
     // Dropdown: was a floating position:absolute listbox overlaying page
     // content, which on a small screen with a size-constrained panel was
     // reported as "click it and nothing visibly happens" -- the floating
@@ -390,23 +390,23 @@
     // (max-height:168px @ ~42px/row) with its own internal scroll for
     // lists longer than that (Language has 6 options, Color Vision has 5).
     + '.pc-a11y-dropdown{position:relative;}'
-    + '.pc-a11y-dropdown__trigger{width:100%;display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.16);color:#f2f2f2;border-radius:8px;padding:8px 12px;font-size:13px;cursor:pointer;font-family:inherit;}'
+    + '.pc-a11y-dropdown__trigger{width:100%;display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.16);color:#f2f2f2;border-radius:8px;padding-block: 8px; padding-inline: 12px;font-size:13px;cursor:pointer;font-family:inherit;}'
     + '.pc-a11y-dropdown__trigger svg{transition:transform .2s ease;flex-shrink:0;}'
     + '.pc-a11y-dropdown__trigger[aria-expanded="true"] svg{transform:rotate(180deg);}'
     + '.pc-a11y-dropdown__panel{position:static;margin-top:6px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.14);border-radius:8px;list-style:none;padding:4px;max-height:168px;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;}'
     + '.pc-a11y-dropdown__panel[hidden]{display:none;}'
-    + '.pc-a11y-dropdown__panel li{padding:8px 10px;font-size:13px;border-radius:6px;cursor:pointer;}'
+    + '.pc-a11y-dropdown__panel li{padding-block: 8px; padding-inline: 10px;font-size:13px;border-radius:6px;cursor:pointer;}'
     + '.pc-a11y-dropdown__panel li:hover,.pc-a11y-dropdown__panel li[aria-selected="true"]{background:rgba(215,189,136,0.18);}'
     // toggle switch
     + '.pc-a11y-toggle-row{display:flex;align-items:center;justify-content:space-between;}'
     + '.pc-a11y-toggle{position:relative;width:38px;height:22px;flex-shrink:0;}'
     + '.pc-a11y-toggle input{opacity:0;width:100%;height:100%;margin:0;cursor:pointer;}'
     + '.pc-a11y-toggle__track{position:absolute;inset:0;background:rgba(255,255,255,0.2);border-radius:11px;transition:background .2s ease;pointer-events:none;}'
-    + '.pc-a11y-toggle__thumb{position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;transition:transform .2s ease;pointer-events:none;}'
+    + '.pc-a11y-toggle__thumb{position:absolute;top:2px;inset-inline-start:2px;width:18px;height:18px;border-radius:50%;background:#fff;transition:transform .2s ease;pointer-events:none;}'
     + '.pc-a11y-toggle input:checked ~ .pc-a11y-toggle__track{background:#ED7624;}'
     + '.pc-a11y-toggle input:checked ~ .pc-a11y-toggle__thumb{transform:translateX(16px);}'
     // cycle button (contrast/saturation/spacing)
-    + '.pc-a11y-cycle{width:100%;display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.16);color:#f2f2f2;border-radius:8px;padding:8px 12px;font-size:13px;cursor:pointer;font-family:inherit;}'
+    + '.pc-a11y-cycle{width:100%;display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.16);color:#f2f2f2;border-radius:8px;padding-block: 8px; padding-inline: 12px;font-size:13px;cursor:pointer;font-family:inherit;}'
     + '.pc-a11y-cycle:hover{background:rgba(255,255,255,0.14);}'
     + '.pc-a11y-cycle__dots{display:flex;gap:3px;}'
     + '.pc-a11y-cycle__dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,0.25);}'
@@ -417,15 +417,15 @@
     + '.pc-a11y-stepper__btn:hover{background:rgba(255,255,255,0.14);}'
     + '.pc-a11y-stepper__value{flex:1;text-align:center;font-size:13px;font-weight:600;}'
     // profile grid
-    + '.pc-a11y-profile-btn{width:100%;text-align:left;display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.14);color:#f2f2f2;border-radius:8px;padding:9px 12px;font-size:13px;cursor:pointer;margin-bottom:6px;font-family:inherit;}'
+    + '.pc-a11y-profile-btn{width:100%;text-align:start;display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.14);color:#f2f2f2;border-radius:8px;padding-block: 9px; padding-inline: 12px;font-size:13px;cursor:pointer;margin-bottom:6px;font-family:inherit;}'
     + '.pc-a11y-profile-btn:last-child{margin-bottom:0;}'
     + '.pc-a11y-profile-btn.active{background:rgba(237,118,36,0.22);border-color:#ED7624;color:#fff;}'
-    + '.pc-a11y-profile-summary{width:100%;display:flex;align-items:center;justify-content:space-between;background:rgba(237,118,36,0.18);border:1px solid #ED7624;color:#fff;border-radius:8px;padding:9px 12px;font-size:13px;cursor:pointer;font-family:inherit;}'
+    + '.pc-a11y-profile-summary{width:100%;display:flex;align-items:center;justify-content:space-between;background:rgba(237,118,36,0.18);border:1px solid #ED7624;color:#fff;border-radius:8px;padding-block: 9px; padding-inline: 12px;font-size:13px;cursor:pointer;font-family:inherit;}'
     + '.pc-a11y-profile-btn__check{opacity:0;}'
     + '.pc-a11y-profile-btn.active .pc-a11y-profile-btn__check{opacity:1;}'
     // slider
     + '.pc-a11y-slider{width:100%;accent-color:#d7bd88;}'
-    + '.pc-a11y-slider-value{font-size:11px;color:#a39b91;float:right;margin-top:2px;}'
+    + '.pc-a11y-slider-value{font-size:11px;color:#a39b91;float:inline-end;margin-top:2px;}'
     // position choice
     + '.pc-a11y-choice-row{display:flex;gap:8px;}'
     + '.pc-a11y-choice{flex:1;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.16);color:#f2f2f2;border-radius:8px;padding:8px;font-size:12.5px;cursor:pointer;font-family:inherit;}'
@@ -450,16 +450,16 @@
     // ---- Statement panel (slides in over the same widget shell) ----
     + '.pc-a11y-statement{position:absolute;width:300px;max-width:calc(100vw - 32px);max-height:min(70vh,640px);display:flex;flex-direction:column;background:#10214b;color:#f2f2f2;border-radius:14px;box-shadow:0 8px 30px rgba(0,0,0,0.3);z-index:6250;overflow:hidden;opacity:0;visibility:hidden;transform:translateY(8px);transition:opacity .28s ease,transform .28s ease,visibility 0s linear .28s;}'
     + '.pc-a11y-statement.open{opacity:1;visibility:visible;transform:translateY(0);transition:opacity .28s ease,transform .28s ease;}'
-    + '.pc-a11y-statement__header{flex-shrink:0;display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid rgba(255,255,255,0.1);}'
-    + '.pc-a11y-statement__back{background:rgba(255,255,255,0.1);border:none;color:#f2f2f2;border-radius:6px;padding:5px 9px;font-size:12px;cursor:pointer;}'
+    + '.pc-a11y-statement__header{flex-shrink:0;display:flex;align-items:center;gap:10px;padding-block: 14px; padding-inline: 16px;border-bottom:1px solid rgba(255,255,255,0.1);}'
+    + '.pc-a11y-statement__back{background:rgba(255,255,255,0.1);border:none;color:#f2f2f2;border-radius:6px;padding-block: 5px; padding-inline: 9px;font-size:12px;cursor:pointer;}'
     // This panel's own scroll was missing the same fix applied to the main
     // panel's body -- a second instance of the identical bug, caught by
     // checking every scrollable surface in the widget this time instead
     // of just the one that was originally reported.
-    + '.pc-a11y-statement__body{overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:14px 16px;font-size:12.5px;line-height:1.6;color:#e8e4dd;flex:1;min-height:0;}'
-    + '.pc-a11y-statement__body h4{font-size:13.5px;color:#d7bd88;margin:14px 0 6px;}'
+    + '.pc-a11y-statement__body{overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding-block: 14px; padding-inline: 16px;font-size:12.5px;line-height:1.6;color:#e8e4dd;flex:1;min-height:0;}'
+    + '.pc-a11y-statement__body h4{font-size:13.5px;color:#d7bd88;margin-block: 14px 6px; margin-inline: 0;}'
     + '.pc-a11y-statement__body h4:first-child{margin-top:0;}'
-    + '.pc-a11y-statement__body ul{margin:6px 0 0;padding-left:18px;}'
+    + '.pc-a11y-statement__body ul{margin-block: 6px 0; margin-inline: 0;padding-inline-start:18px;}'
     // Mobile: switched from trigger-relative positioning (which is what
     // put part of the panel below the visible viewport with no way to
     // scroll back up to it -- internal scrolling only reveals more of a
@@ -470,12 +470,12 @@
     // actually guarantees the panel's top and bottom both stay within the
     // visible viewport regardless of where the trigger sits on screen.
     // !important here is deliberate: the desktop rules just above
-    // (.pc-a11y-widget[data-position="right"] .pc-a11y-panel{right:...})
+    // (.pc-a11y-widget[data-position="right"] .pc-a11y-panel{inset-inline-end:...})
     // are MORE specific (attribute selector + descendant combinator) than
     // a plain .pc-a11y-panel selector would be, so without !important this
     // override would lose to them even inside the media query -- source
     // order alone doesn't beat higher specificity. Confirmed via computed-
-    // style inspection showing `right: 68px` (the desktop rule's value)
+    // style inspection showing `inset-inline-end: 68px` (the desktop rule's value)
     // still winning before this was added.
     // TASK (Widget Positioning) START: mobile per-vzone panel behavior.
     // Bottom/top zones keep the same "fixed to the real viewport,
@@ -488,9 +488,9 @@
     // rule instead of reusing the bottom/top pattern.
     + '@media (max-width:600px){'
     + '.pc-a11y-panel,.pc-a11y-statement{position:fixed!important;width:auto!important;max-width:none!important;}'
-    + '.pc-a11y-widget[data-vzone="bottom"] .pc-a11y-panel,.pc-a11y-widget[data-vzone="bottom"] .pc-a11y-statement{left:16px!important;right:16px!important;bottom:84px!important;top:auto!important;max-height:calc(100vh - 110px)!important;max-height:calc(100dvh - 110px)!important;}'
-    + '.pc-a11y-widget[data-vzone="top"] .pc-a11y-panel,.pc-a11y-widget[data-vzone="top"] .pc-a11y-statement{left:16px!important;right:16px!important;top:158px!important;bottom:auto!important;max-height:calc(100vh - 184px)!important;max-height:calc(100dvh - 184px)!important;}'
-    + '.pc-a11y-widget[data-vzone="middle"] .pc-a11y-panel,.pc-a11y-widget[data-vzone="middle"] .pc-a11y-statement{left:50%!important;right:auto!important;top:50%!important;bottom:auto!important;width:calc(100vw - 48px)!important;max-height:min(70vh,640px)!important;transform:translate(-50%,calc(-50% + 8px))!important;}'
+    + '.pc-a11y-widget[data-vzone="bottom"] .pc-a11y-panel,.pc-a11y-widget[data-vzone="bottom"] .pc-a11y-statement{inset-inline-start:16px!important;inset-inline-end:16px!important;bottom:84px!important;top:auto!important;max-height:calc(100vh - 110px)!important;max-height:calc(100dvh - 110px)!important;}'
+    + '.pc-a11y-widget[data-vzone="top"] .pc-a11y-panel,.pc-a11y-widget[data-vzone="top"] .pc-a11y-statement{inset-inline-start:16px!important;inset-inline-end:16px!important;top:158px!important;bottom:auto!important;max-height:calc(100vh - 184px)!important;max-height:calc(100dvh - 184px)!important;}'
+    + '.pc-a11y-widget[data-vzone="middle"] .pc-a11y-panel,.pc-a11y-widget[data-vzone="middle"] .pc-a11y-statement{inset-inline-start:50%!important;inset-inline-end:auto!important;top:50%!important;bottom:auto!important;width:calc(100vw - 48px)!important;max-height:min(70vh,640px)!important;transform:translate(-50%,calc(-50% + 8px))!important;}'
     + '.pc-a11y-widget[data-vzone="middle"] .pc-a11y-panel.open,.pc-a11y-widget[data-vzone="middle"] .pc-a11y-statement.open{transform:translate(-50%,-50%)!important;}'
     + '}'
     // TASK (Widget Positioning) END
@@ -544,7 +544,7 @@
     + '[data-a11y-highlight-links] a:not(.pc-a11y-widget a){outline:2px solid #ED7624!important;background:rgba(237,118,36,0.15)!important;text-decoration:underline!important;}'
     + '[data-a11y-dyslexia-font] :not(.pc-a11y-widget):not(.pc-a11y-widget *){font-family:Verdana,Tahoma,"Comic Sans MS",sans-serif!important;letter-spacing:.03em!important;}'
     + '[data-a11y-reduce-motion] :not(.pc-a11y-widget):not(.pc-a11y-widget *){animation:none!important;transition:none!important;scroll-behavior:auto!important;}'
-    + '[data-a11y-large-targets] a:not(.pc-a11y-widget a),[data-a11y-large-targets] button:not(.pc-a11y-widget button){min-height:44px!important;min-width:44px!important;padding:10px 14px!important;}'
+    + '[data-a11y-large-targets] a:not(.pc-a11y-widget a),[data-a11y-large-targets] button:not(.pc-a11y-widget button){min-height:44px!important;min-width:44px!important;padding-block: 10px; padding-inline: 14px!important;}'
     + 'b.pc-a11y-bionic{font-weight:700!important;}'
     // TASK (Dark Mode / Color Filter Audit) START: Focus Reading rebuilt as
     // a real reading MASK (matches Victor's own naming -- distinct from
@@ -570,7 +570,7 @@
     // extension, Zoho WorkDrive's Reading Mask, Readabler, and FocusRuler
     // all offer adjustable mask/ruler height as their main customization
     // beyond opacity), not invented from nothing.
-    + '#pcA11yFocusMask{position:fixed;left:0;right:0;height:var(--pc-a11y-focus-height,140px);background:transparent;box-shadow:0 0 0 9999px rgba(0,0,0,var(--pc-a11y-focus-dim,0.3));pointer-events:none;z-index:6050;display:none;}'
+    + '#pcA11yFocusMask{position:fixed;inset-inline-start:0;inset-inline-end:0;height:var(--pc-a11y-focus-height,140px);background:transparent;box-shadow:0 0 0 9999px rgba(0,0,0,var(--pc-a11y-focus-dim,0.3));pointer-events:none;z-index:6050;display:none;}'
     // TASK (Widget Positioning) START: Color Filters pill grid (replaces the
     // old single-select dropdown UI for the same colorVision field) -- see
     // the "Color Filters" reference screenshot: a 2x2 grid of pill buttons
@@ -578,7 +578,7 @@
     // half-and-half color swatch. Single-select, same as the dropdown it
     // replaces -- clicking the active pill again returns to Normal.
     + '.pc-a11y-filter-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}'
-    + '.pc-a11y-filter-pill{display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:20px;border:1px solid rgba(255,255,255,0.14);background:rgba(255,255,255,0.06);color:#f2f2f2;font-family:"Sora",sans-serif;font-size:12.5px;font-weight:600;cursor:pointer;transition:background .15s ease,border-color .15s ease;}'
+    + '.pc-a11y-filter-pill{display:flex;align-items:center;gap:8px;padding-block: 9px; padding-inline: 12px;border-radius:20px;border:1px solid rgba(255,255,255,0.14);background:rgba(255,255,255,0.06);color:#f2f2f2;font-family:"Sora",sans-serif;font-size:12.5px;font-weight:600;cursor:pointer;transition:background .15s ease,border-color .15s ease;}'
     + '.pc-a11y-filter-pill:hover{background:rgba(255,255,255,0.12);}'
     + '.pc-a11y-filter-pill.active{background:#ED7624;border-color:#ED7624;color:#fff;}'
     + '.pc-a11y-filter-swatch{width:16px;height:16px;border-radius:50%;flex-shrink:0;box-shadow:inset 0 0 0 1px rgba(0,0,0,0.25);}'
@@ -598,7 +598,10 @@
     + '[data-vision="protanopia"],[data-vision="deuteranopia"],[data-vision="protanomaly"],[data-vision="deuteranomaly"]{--success:#009E73;--success-bg:rgba(0,158,115,.12);--error:#D55E00;--error-bg:rgba(213,94,0,.12);--warning:#E69F00;--warning-bg:rgba(230,159,0,.12);--info:#0072B2;--info-bg:rgba(0,114,178,.12);--lm-ice:#0072B2;--lm-periwinkle:#E69F00;--lm-lavender:#009E73;--lm-orchid:#CC79A7;--lm-pale:#56B4E9;}'
     + '[data-vision="tritanopia"]{--info:#7c3aed;--info-bg:rgba(124,58,237,.12);--lm-ice:#D7263D;--lm-periwinkle:#2E7D32;--lm-lavender:#F77F00;--lm-orchid:#6A4C93;--lm-pale:#1B1B1B;}';
 
-  function injectCSS() {
+
+/* TASK-web12-3 START: logical CSS properties for RTL */
+/* TASK-web12-3 END */
+function injectCSS() {
     var style = document.createElement('style');
     style.id = 'pc-a11y-styles';
     style.textContent = CSS;

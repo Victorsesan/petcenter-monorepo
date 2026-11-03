@@ -17,6 +17,7 @@
   <script src="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.js"></script>
   <!-- TASK-7b END -->
   <style>
+/* TASK-web12-3 START: logical CSS properties for RTL */
     :root {
       --primary: #10214b;
       --accent: #d7bd88;
@@ -51,9 +52,9 @@
     /* ─── Global Header (pc-header) ─────────────────────────────────────────────── */
     .pc-header {
       position: fixed;
-      top: 0; left: 0; right: 0;
+      top: 0; inset-inline-start: 0; inset-inline-end: 0;
       z-index: 1000;
-      padding: 0 24px;
+      padding-block: 0; padding-inline: 24px;
       height: 68px;
       display: flex;
       align-items: center;
@@ -83,7 +84,7 @@
     .pc-header__nav li { position: relative; }
     .pc-header__nav a {
       display: block;
-      padding: 8px 11px;
+      padding-block: 8px; padding-inline: 11px;
       font-family: 'Sora', sans-serif;
       font-size: 13px;
       font-weight: 500;
@@ -94,7 +95,7 @@
       white-space: nowrap;
     }
     .pc-header__nav a:hover { color: #d7bd88; background: rgba(255,255,255,0.08); }
-    .pc-header__nav .nav-donate a { background: #ED7624; color: #fff; font-weight: 600; padding: 8px 16px; }
+    .pc-header__nav .nav-donate a { background: #ED7624; color: #fff; font-weight: 600; padding-block: 8px; padding-inline: 16px; }
     .pc-header__nav .nav-donate a:hover { background: #d4621a; color: #fff; }
     .pc-header__nav .nav-signup a,
     .pc-header__nav .nav-login a { border: 1px solid rgba(215,189,136,0.5); color: #d7bd88; }
@@ -104,17 +105,17 @@
       display: none;
       position: absolute;
       top: calc(100% + 4px);
-      left: 0;
+      inset-inline-start: 0;
       background: #10214b;
       border-radius: 8px;
       list-style: none;
       min-width: 168px;
       box-shadow: 0 8px 32px rgba(0,0,0,0.22);
-      padding: 6px 0;
+      padding-block: 6px; padding-inline: 0;
       z-index: 100;
     }
     .pc-header__nav .has-drop:hover > ul { display: block; }
-    .pc-header__nav .has-drop > ul a { padding: 9px 18px; font-size: 13px; border-radius: 0; }
+    .pc-header__nav .has-drop > ul a { padding-block: 9px; padding-inline: 18px; font-size: 13px; border-radius: 0; }
     .pc-hamburger {
       display: none;
       flex-direction: column;
@@ -149,8 +150,8 @@
       flex-direction: column;
       position: absolute;
       top: 100%;
-      left: 0;
-      right: 0;
+      inset-inline-start: 0;
+      inset-inline-end: 0;
       background: rgba(16,33,75,0.98);
       z-index: 999;
       max-height: 0;
@@ -167,11 +168,11 @@
       -webkit-overflow-scrolling: touch;
       opacity: 1;
       pointer-events: auto;
-      padding: 16px 0 calc(100vh - 68px - 56px);
+      padding-block: 16px calc(100vh - 68px - 56px); padding-inline: 0;
     }
     .pc-mobile-menu a {
       display: block;
-      padding: 12px 28px;
+      padding-block: 12px; padding-inline: 28px;
       font-family: 'Sora', sans-serif;
       font-size: 15px;
       font-weight: 500;
@@ -182,11 +183,11 @@
     }
     .pc-mobile-menu a:hover { color: #d7bd88; background: rgba(255,255,255,0.05); }
     .pc-mobile-menu .mobile-donate {
-      margin: 12px 28px 0;
+      margin-block: 12px 0; margin-inline: 28px;
       display: inline-block;
       background: #ED7624;
       color: #fff;
-      padding: 11px 24px;
+      padding-block: 11px; padding-inline: 24px;
       border-radius: 8px;
       font-weight: 600;
       border-bottom: none;
@@ -199,8 +200,8 @@
     /* ─── Container ──────────────────────────────────────────────────────────── */
     .pc-container {
       max-width: 860px;
-      margin: 0 auto;
-      padding: 40px 24px;
+      margin-block: 0; margin-inline: auto;
+      padding-block: 40px; padding-inline: 24px;
     }
 
     /* ─── Hero ───────────────────────────────────────────────────────────────── */
@@ -240,7 +241,7 @@
     .step-indicator__item {
       flex: 1;
       text-align: center;
-      padding: 14px 8px;
+      padding-block: 14px; padding-inline: 8px;
       font-size: 12px;
       font-weight: 700;
       text-transform: uppercase;
@@ -270,7 +271,7 @@
       color: var(--muted);
       font-size: 13px;
       font-weight: 700;
-      margin: 0 auto 6px;
+      margin-block: 0 6px; margin-inline: auto;
       line-height: 28px;
     }
 
@@ -340,7 +341,7 @@
     textarea,
     select {
       width: 100%;
-      padding: 11px 14px;
+      padding-block: 11px; padding-inline: 14px;
       border: 1.5px solid var(--border);
       border-radius: 9px;
       font-family: 'Sora', sans-serif;
@@ -427,7 +428,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 10px 14px;
+      padding-block: 10px; padding-inline: 14px;
       border: 1.5px solid var(--border);
       border-radius: 9px;
       background: #fff;
@@ -455,10 +456,10 @@
       content: '';
       width: 8px;
       height: 8px;
-      border-right: 2px solid #10214b;
+      border-inline-end: 2px solid #10214b;
       border-bottom: 2px solid #10214b;
       transform: rotate(45deg) translateY(-2px);
-      margin-left: 8px;
+      margin-inline-start: 8px;
       transition: transform 0.2s ease;
     }
 
@@ -469,12 +470,12 @@
     .custom-select-options {
       position: absolute;
       top: 100%;
-      left: 0;
-      right: 0;
+      inset-inline-start: 0;
+      inset-inline-end: 0;
       display: none;
       list-style: none;
-      margin: 4px 0 0 0;
-      padding: 8px 0;
+      margin-block: 4px 0; margin-inline: 0 0;
+      padding-block: 8px; padding-inline: 0;
       border: 1.5px solid var(--border);
       border-radius: 9px;
       background: #fff;
@@ -491,7 +492,7 @@
     }
 
     .custom-select-options li {
-      padding: 10px 16px;
+      padding-block: 10px; padding-inline: 16px;
       color: #10214b;
       cursor: pointer;
       transition: background 0.15s ease;
@@ -514,7 +515,7 @@
       content: '✓ ';
       color: #ED7624;
       font-weight: 700;
-      margin-right: 4px;
+      margin-inline-end: 4px;
     }
 
     /* ─── Pet Prefill Box ───────────────────────────────────────────────── */
@@ -623,7 +624,7 @@
     .pet-slide-remove {
       position: absolute;
       top: -10px;
-      right: -10px;
+      inset-inline-end: -10px;
       z-index: 10;
       width: 26px;
       height: 26px;
@@ -683,7 +684,7 @@
     /* ─── Add More Pets panel ────────────────────────────────────────────── */
     .add-more-pets-panel {
       margin-top: 20px;
-      padding: 16px 20px;
+      padding-block: 16px; padding-inline: 20px;
       background: rgba(16,33,75,0.03);
       border-radius: 9px;
       border: 1.5px dashed var(--border);
@@ -705,12 +706,12 @@
       display: none;
       position: absolute;
       bottom: calc(100% + 8px);
-      left: 50%;
+      inset-inline-start: 50%;
       transform: translateX(-50%);
       background: #10214b;
       color: #fff;
       border-radius: 8px;
-      padding: 12px 16px;
+      padding-block: 12px; padding-inline: 16px;
       font-size: 13px;
       font-weight: 400;
       line-height: 1.55;
@@ -724,7 +725,7 @@
       content: '';
       position: absolute;
       top: 100%;
-      left: 50%;
+      inset-inline-start: 50%;
       transform: translateX(-50%);
       border: 7px solid transparent;
       border-top-color: #10214b;
@@ -740,7 +741,7 @@
       height: 44px;
       border: 1.5px solid var(--border);
       border-radius: 22px;
-      padding: 0 18px;
+      padding-block: 0; padding-inline: 18px;
       font-family: 'Sora', sans-serif;
       font-size: 14px;
       color: var(--text);
@@ -752,7 +753,7 @@
     .add-pet-input-row input::placeholder { color: #b0a89c; }
     .add-pet-btn {
       height: 44px;
-      padding: 0 22px;
+      padding-block: 0; padding-inline: 22px;
       border-radius: 22px;
       background: var(--orange);
       color: #fff;
@@ -798,7 +799,7 @@
       border: 1px solid var(--border);
       padding: 10px;
       font-size: 13px;
-      text-align: left;
+      text-align: start;
     }
 
     .pets-table th {
@@ -862,7 +863,7 @@
     .small-btn {
       background: #f3f4f6;
       border-radius: 6px;
-      padding: 6px 8px;
+      padding-block: 6px; padding-inline: 8px;
       border: 1px solid #e5e7eb;
       color: #111;
       cursor: pointer;
@@ -928,7 +929,7 @@
 
     .rte-toolbar.ql-toolbar.ql-snow {
       border: none; border-bottom: 1px solid var(--border);
-      background: #faf9f7; padding: 8px 10px;
+      background: #faf9f7; padding-block: 8px; padding-inline: 10px;
     }
     .rte-toolbar .ql-stroke { stroke: var(--primary); }
     .rte-toolbar .ql-fill { fill: var(--primary); }
@@ -938,7 +939,7 @@
     .rte-editor.ql-container.ql-snow {
       border: none; font-family: 'Sora', sans-serif; font-size: 15px; min-height: 140px;
     }
-    .rte-editor .ql-editor { padding: 14px 16px; }
+    .rte-editor .ql-editor { padding-block: 14px; padding-inline: 16px; }
 
     /* Mirrors the pre-existing .field-input--large modifier (220px / 260px on mobile)
        for the one field that still carries it after conversion — additional_info.
@@ -955,7 +956,7 @@
        the rest of the approved 13-control toolbar. */
     .rte-toolbar .rte-undo,
     .rte-toolbar .rte-redo {
-      width: 28px; height: 24px; padding: 3px 5px;
+      width: 28px; height: 24px; padding-block: 3px; padding-inline: 5px;
       display: inline-flex; align-items: center; justify-content: center;
       background: none; border: none; cursor: pointer;
       color: var(--primary);
@@ -1007,7 +1008,7 @@
     }
 
     .sig-btn {
-      padding: 8px 14px;
+      padding-block: 8px; padding-inline: 14px;
       background: var(--white);
       border: 1px solid var(--border);
       border-radius: 6px;
@@ -1029,7 +1030,7 @@
       border: 1px solid var(--border);
       border-radius: 9px;
       padding: 16px;
-      margin: 24px 0;
+      margin-block: 24px; margin-inline: 0;
     }
 
     .agree-section h3 {
@@ -1042,7 +1043,7 @@
     }
 
     .agree-section ol {
-      margin-left: 20px;
+      margin-inline-start: 20px;
       color: var(--text);
       font-size: 13.5px;
       line-height: 1.7;
@@ -1091,7 +1092,7 @@
       display: grid;
       grid-template-columns: 200px 1fr;
       gap: 16px;
-      padding: 12px 0;
+      padding-block: 12px; padding-inline: 0;
       border-bottom: 1px solid var(--border);
     }
 
@@ -1117,10 +1118,10 @@
       display: inline-block;
       background: var(--orange);
       color: #fff;
-      padding: 3px 10px;
+      padding-block: 3px; padding-inline: 10px;
       border-radius: 20px;
       font-size: 12px;
-      margin: 3px 4px 3px 0;
+      margin-block: 3px 3px; margin-inline: 0 4px;
     }
 
     /* TASK-7b START */
@@ -1135,8 +1136,8 @@
     .review-value--rich ul:last-child,
     .review-value--rich ol:last-child,
     .review-value--rich blockquote:last-child { margin-bottom: 0; }
-    .review-value--rich ul, .review-value--rich ol { padding-left: 22px; }
-    .review-value--rich blockquote { margin-left: 0; padding-left: 12px; border-left: 3px solid var(--border); color: var(--muted); }
+    .review-value--rich ul, .review-value--rich ol { padding-inline-start: 22px; }
+    .review-value--rich blockquote { margin-inline-start: 0; padding-inline-start: 12px; border-inline-start: 3px solid var(--border); color: var(--muted); }
     /* TASK-7b END */
 
     /* ─── Action Buttons ───────────────────────────────────────────── */
@@ -1150,7 +1151,7 @@
     }
 
     .btn {
-      padding: 12px 28px;
+      padding-block: 12px; padding-inline: 28px;
       border: none;
       border-radius: 9px;
       font-family: 'Sora', sans-serif;
@@ -1204,11 +1205,11 @@
     .sticky-review-buttons {
       position: fixed;
       bottom: 0;
-      left: 0;
-      right: 0;
+      inset-inline-start: 0;
+      inset-inline-end: 0;
       background: linear-gradient(to top, var(--white) 80%, rgba(255,255,255,0.95) 100%);
       border-top: 1px solid var(--border);
-      padding: 16px 24px 24px;
+      padding-block: 16px 24px; padding-inline: 24px;
       display: flex;
       gap: 12px;
       justify-content: flex-end;
@@ -1248,7 +1249,7 @@
 
     @media (max-width: 600px) {
       .sticky-review-buttons {
-        padding: 12px 16px 16px;
+        padding-block: 12px 16px; padding-inline: 16px;
         justify-content: center;
       }
 
@@ -1270,7 +1271,7 @@
     #debugToggle {
       position: fixed;
       bottom: 92px;
-      right: 14px;
+      inset-inline-end: 14px;
       z-index: 2000;
       width: 44px;
       height: 44px;
@@ -1287,7 +1288,7 @@
     }
     #debugPanel {
       position: fixed;
-      bottom: 0; left: 0; right: 0;
+      bottom: 0; inset-inline-start: 0; inset-inline-end: 0;
       max-height: 60vh;
       background: #0d1117;
       color: #d1d5da;
@@ -1303,7 +1304,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 10px 14px;
+      padding-block: 10px; padding-inline: 14px;
       background: #161b22;
       border-bottom: 1px solid #30363d;
       font-size: 13px;
@@ -1315,19 +1316,19 @@
       color: #d1d5da;
       border: 1px solid #30363d;
       border-radius: 5px;
-      padding: 4px 9px;
+      padding-block: 4px; padding-inline: 9px;
       font-size: 11px;
-      margin-left: 6px;
+      margin-inline-start: 6px;
       cursor: pointer;
     }
     #debugLog {
       overflow-y: auto;
-      padding: 10px 14px 24px;
+      padding-block: 10px 24px; padding-inline: 14px;
       font-size: 11.5px;
       line-height: 1.6;
     }
     #debugLog .log-line {
-      padding: 4px 0;
+      padding-block: 4px; padding-inline: 0;
       border-bottom: 1px solid #21262d;
       white-space: pre-wrap;
       word-break: break-all;
@@ -1336,11 +1337,11 @@
     #debugLog .log-ok    { color: #56d364; }
     #debugLog .log-warn  { color: #e3b341; }
     #debugLog .log-error { color: #f85149; font-weight: 700; }
-    #debugLog .log-time  { color: #6e7681; margin-right: 6px; }
+    #debugLog .log-time  { color: #6e7681; margin-inline-end: 6px; }
 
     /* ─── Status Messages ──────────────────────────────────────────── */
     .status-msg {
-      padding: 14px 16px;
+      padding-block: 14px; padding-inline: 16px;
       border-radius: 9px;
       font-size: 13.5px;
       margin-top: 16px;
@@ -1394,7 +1395,7 @@
       align-items: center;
       justify-content: space-between;
       gap: 10px;
-      padding: 14px 18px;
+      padding-block: 14px; padding-inline: 18px;
       border-bottom: 1px solid var(--border);
       flex-shrink: 0;
       background: var(--white);
@@ -1410,13 +1411,13 @@
     .modal-scroll {
       flex: 1;
       overflow-y: auto;
-      padding: 20px 20px 24px;
+      padding-block: 20px 24px; padding-inline: 20px;
       overscroll-behavior: contain;
       -webkit-overflow-scrolling: touch;
     }
 
     .modal-close {
-      padding: 6px 12px;
+      padding-block: 6px; padding-inline: 12px;
       background: #f0ede8;
       border: 1px solid var(--border);
       border-radius: 6px;
@@ -1482,7 +1483,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      margin: 0 auto 20px;
+      margin-block: 0 20px; margin-inline: auto;
       font-size: 32px;
     }
 
@@ -1491,7 +1492,7 @@
       font-size: 28px;
       font-weight: 700;
       color: var(--primary);
-      margin: 16px 0;
+      margin-block: 16px; margin-inline: 0;
       padding: 14px;
       background: #f9f7f4;
       border-radius: 8px;
@@ -1505,11 +1506,11 @@
       border: 1.5px solid rgba(237,118,36,0.2);
       border-radius: 8px;
       padding: 16px;
-      margin: 20px 0;
+      margin-block: 20px; margin-inline: 0;
       font-size: 13.5px;
       line-height: 1.7;
       color: #6b4d2a;
-      text-align: left;
+      text-align: start;
     }
 
     .success-warning strong {
@@ -1527,12 +1528,12 @@
     /* ─── Global Footer ─────────────────────────────────────────────────────────── */
     .pc-footer {
       background: #0b1834;
-      padding: 60px 24px 28px;
+      padding-block: 60px 28px; padding-inline: 24px;
       color: rgba(255,255,255,0.65);
       font-family: 'Sora', sans-serif;
       margin-top: 80px;
     }
-    .pc-footer__inner { max-width: 1200px; margin: 0 auto; }
+    .pc-footer__inner { max-width: 1200px; margin-block: 0; margin-inline: auto; }
     .pc-footer__top {
       display: grid;
       grid-template-columns: 2fr 1fr 1.5fr 1fr 1fr;
@@ -2260,7 +2261,7 @@
                 <div class="sig-controls">
                   <button type="button" class="sig-btn" id="clearSig">Clear</button>
                   <button type="button" class="sig-btn" id="saveSig">Save Signature</button>
-                  <div id="sigSavedNote" style="margin-left:8px;font-size:13px;color:var(--muted);align-self:center;"></div>
+                  <div id="sigSavedNote" style="margin-inline-start:8px;font-size:13px;color:var(--muted);align-self:center;"></div>
                 </div>
               </div>
             </div>
@@ -2355,17 +2356,17 @@
     </div>
     <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 24px; color: var(--primary); margin-bottom: 8px;">Application Submitted!</h2>
     <p style="color: var(--muted); margin-bottom: 16px;">Your adoption application has been received.</p>
-    
+
     <div class="success-code" id="successCode">AD-00000-0000</div>
     <button type="button" class="small-btn" id="copyCodeBtn" style="margin-bottom: 4px;">Copy Code</button>
-    
-    <p style="font-size: 13px; color: var(--muted); margin: 16px 0;">Save this code to track your application status</p>
-    
+
+    <p style="font-size: 13px; color: var(--muted); margin-block: 16px; margin-inline: 0;">Save this code to track your application status</p>
+
     <div class="success-warning">
-      <strong><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c67c1a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-right:6px;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Important: Check Your Status in 1–2 Hours</strong>
+      <strong><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c67c1a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-inline-end:6px;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Important: Check Your Status in 1–2 Hours</strong>
       Other adopters may apply for the same pet at the same time. Applying doesn't guarantee ownership. Only being approved and completing your adoption process secures your new pet. Use your code above to regularly check your application status and finalize your adoption in time if approved.
     </div>
-    
+
     <button type="button" class="btn btn--primary" id="checkStatusBtn">Check Status Now</button>
   </div>
 </div>
@@ -2378,8 +2379,8 @@
     <div class="modal-top" id="modalTop">
       <div id="modalTopTitle" style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--orange);margin:0;"></div>
       <div class="modal-top__actions">
-        <button type="button" class="btn btn--primary" id="modalDownloadPdfBtn" style="padding:7px 14px;font-size:13px;display:none;">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download PDF
+        <button type="button" class="btn btn--primary" id="modalDownloadPdfBtn" style="padding-block: 7px; padding-inline: 14px;font-size:13px;display:none;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-inline-end:4px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download PDF
         </button>
         <button class="modal-close" id="modalClose">Close</button>
       </div>
@@ -3432,7 +3433,7 @@
         retry.type = 'button';
         retry.className = 'small-btn';
         retry.style.cssText = 'background:#fff3cd;border-color:#f0c300;color:#5a4200;';
-        retry.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-right:3px;"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4"/></svg>Retry';
+        retry.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-inline-end:3px;"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4"/></svg>Retry';
         retry.addEventListener('click', e => {
           e.preventDefault();
           e.stopPropagation();
@@ -3625,7 +3626,7 @@
     // Generate adoption code
     const adoptionCode = generateAdoptionCode();
     dlog('Generated adoption code: ' + adoptionCode, 'info');
-    
+
     // Add adoption code to form
     const codeField = document.createElement('input');
     codeField.type = 'hidden';
@@ -3761,10 +3762,10 @@
     const params = new URLSearchParams(window.location.search);
     const petId = params.get('pet_id');
     const category = params.get('category');
-    
+
     if (petId && category) {
       const petJsonUrl = `/adoptions/pets/${category}/${petId}/pet.json`;
-      
+
       fetch(petJsonUrl)
         .then(r => {
           if (!r.ok) throw new Error('Failed to fetch pet data');
@@ -3802,7 +3803,7 @@
             f.value = hiddenPetFields[name];
             document.getElementById('adoptionForm').appendChild(f);
           });
-          
+
           // Display pet info box
           const box = $('petPrefillBox');
           if (box) {
@@ -3845,11 +3846,11 @@
     const form = document.getElementById('adoptionForm');
     const g = name => { const el = form.querySelector('[name="' + name + '"]'); return el ? el.value.trim() : ''; };
     const checks = name => Array.from(form.querySelectorAll('[name="' + name + '"]')).filter(el => el.checked).map(el => REVIEW_CHIP_VALUES[el.value] || el.value).join(', ');
-    const row = (lbl, val) => val ? '<tr><td style="padding:5px 0;color:#7a6d5f;width:180px;font-size:13px;vertical-align:top;">' + escapeHtml(lbl) + '</td><td style="padding:5px 0;font-size:13px;">' + escapeHtml(val).replace(/\n/g, '<br>') + '</td></tr>' : '';
+    const row = (lbl, val) => val ? '<tr><td style="padding-block: 5px; padding-inline: 0;color:#7a6d5f;width:180px;font-size:13px;vertical-align:top;">' + escapeHtml(lbl) + '</td><td style="padding-block: 5px; padding-inline: 0;font-size:13px;">' + escapeHtml(val).replace(/\n/g, '<br>') + '</td></tr>' : '';
     // TASK-7b START — same row layout as row() above, but for RTE fields: renders sanitized
     // real HTML instead of escaping it (escaping would print literal "<p>" tags for every
     // Quill-powered field).
-    const rteRow = (lbl, val) => val ? '<tr><td style="padding:5px 0;color:#7a6d5f;width:180px;font-size:13px;vertical-align:top;">' + escapeHtml(lbl) + '</td><td style="padding:5px 0;font-size:13px;">' + sanitizeRteHtml(val) + '</td></tr>' : '';
+    const rteRow = (lbl, val) => val ? '<tr><td style="padding-block: 5px; padding-inline: 0;color:#7a6d5f;width:180px;font-size:13px;vertical-align:top;">' + escapeHtml(lbl) + '</td><td style="padding-block: 5px; padding-inline: 0;font-size:13px;">' + sanitizeRteHtml(val) + '</td></tr>' : '';
     // TASK-7b END
 
     const sigDataUrl = $('signatureData').value;
@@ -3861,10 +3862,10 @@
     let html = '<div style="display:flex;align-items:center;gap:14px;margin-bottom:18px">' +
       '<img src="/assets/images/logo-petcenter.png" alt="Pet Center" style="height:48px" onerror="this.style.display=\'none\'">' +
       '<div><h2 style="margin:0;color:#ED7624;font-size:20px;font-family:Cormorant Garamond,serif">Pet Center — Adoption Application</h2>' +
-      '<p style="margin:3px 0 0;color:#7a6d5f;font-size:13px">' + escapeHtml(label) + ' · ' + new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) + '</p></div></div>' +
-      '<hr style="margin:0 0 16px;border:none;border-top:1px solid #eee">';
+      '<p style="margin-block: 3px 0; margin-inline: 0;color:#7a6d5f;font-size:13px">' + escapeHtml(label) + ' · ' + new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) + '</p></div></div>' +
+      '<hr style="margin-block: 0 16px; margin-inline: 0;border:none;border-top:1px solid #eee">';
 
-    html += '<h3 style="color:#ED7624;margin:0 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:.04em">Personal Information</h3>' +
+    html += '<h3 style="color:#ED7624;margin-block: 0 8px; margin-inline: 0;font-size:13px;text-transform:uppercase;letter-spacing:.04em">Personal Information</h3>' +
       '<table style="width:100%;border-collapse:collapse;margin-bottom:14px">' +
       row('Full Name', g('name')) +
       row('Address', g('address') + ', ' + g('city') + ', ' + g('state') + ' ' + g('zip')) +
@@ -3872,7 +3873,7 @@
       row('Spouse/Partner #', g('id_number')) + row('Spouse / Partner Name', g('spouse')) +
       '</table>';
 
-    html += '<h3 style="color:#ED7624;margin:0 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:.04em">Household &amp; Living</h3>' +
+    html += '<h3 style="color:#ED7624;margin-block: 0 8px; margin-inline: 0;font-size:13px;text-transform:uppercase;letter-spacing:.04em">Household &amp; Living</h3>' +
       '<table style="width:100%;border-collapse:collapse;margin-bottom:14px">' +
       row('Employment', g('employment_status')) + row('Residence Type', g('residence_type')) + row('Landlord Allows Pets', g('landlord_allows')) +
       row('Landlord Contact', g('landlord_contact')) + row('Home Type', g('home_type')) + row('Time at Address', g('time_at_address')) +
@@ -3882,20 +3883,20 @@
       /* TASK-7b END */
       '</table>';
 
-    html += '<h3 style="color:#ED7624;margin:0 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:.04em">Veterinary &amp; Pet History</h3>' +
+    html += '<h3 style="color:#ED7624;margin-block: 0 8px; margin-inline: 0;font-size:13px;text-transform:uppercase;letter-spacing:.04em">Veterinary &amp; Pet History</h3>' +
       '<table style="width:100%;border-collapse:collapse;margin-bottom:14px">' +
       row('Can Afford Pet Care', g('can_afford')) + row('Has Veterinarian', g('have_vet')) + row('Vet Name', g('vet_name')) +
       row('Vet Address', g('vet_address')) + row('Vet Phone', g('vet_phone')) + row('Allow Vet Contact', g('allow_contact_vet')) +
       '</table>';
 
-    html += '<h3 style="color:#ED7624;margin:0 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:.04em">Current Pets</h3>' +
+    html += '<h3 style="color:#ED7624;margin-block: 0 8px; margin-inline: 0;font-size:13px;text-transform:uppercase;letter-spacing:.04em">Current Pets</h3>' +
       '<table style="width:100%;border-collapse:collapse;margin-bottom:14px">' +
       (g('pet1_name') ? row('Pet 1', g('pet1_name') + ' | ' + g('pet1_breed') + ' | ' + g('pet1_age') + ' | Spayed: ' + g('pet1_spay')) : '') +
       (g('pet2_name') ? row('Pet 2', g('pet2_name') + ' | ' + g('pet2_breed') + ' | ' + g('pet2_age') + ' | Spayed: ' + g('pet2_spay')) : '') +
       (g('pet3_name') ? row('Pet 3', g('pet3_name') + ' | ' + g('pet3_breed') + ' | ' + g('pet3_age') + ' | Spayed: ' + g('pet3_spay')) : '') +
       '</table>';
 
-    html += '<h3 style="color:#ED7624;margin:0 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:.04em">Pet Care Plans</h3>' +
+    html += '<h3 style="color:#ED7624;margin-block: 0 8px; margin-inline: 0;font-size:13px;text-transform:uppercase;letter-spacing:.04em">Pet Care Plans</h3>' +
       '<table style="width:100%;border-collapse:collapse;margin-bottom:14px">' +
       row('Where kept when away', g('where_keep')) + row('Inside arrangement', g('inside_plan')) +
       /* TASK-7b START — both fields below converted from row() to rteRow() — they're RTE fields now */
@@ -3905,7 +3906,7 @@
 
     // TASK-7b START
     // New PDF section for the 3 new lifestyle-fit questions (all RTE fields).
-    html += '<h3 style="color:#ED7624;margin:0 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:.04em">Lifestyle &amp; Long-Term Commitment</h3>' +
+    html += '<h3 style="color:#ED7624;margin-block: 0 8px; margin-inline: 0;font-size:13px;text-transform:uppercase;letter-spacing:.04em">Lifestyle &amp; Long-Term Commitment</h3>' +
       '<table style="width:100%;border-collapse:collapse;margin-bottom:14px">' +
       rteRow('Daily routine &amp; time alone', g('daily_routine')) +
       rteRow('Exercise &amp; enrichment plan', g('exercise_enrichment_plan')) +
@@ -3913,7 +3914,7 @@
       '</table>';
     // TASK-7b END
 
-    html += '<h3 style="color:#ED7624;margin:0 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:.04em">Adoption Preferences</h3>' +
+    html += '<h3 style="color:#ED7624;margin-block: 0 8px; margin-inline: 0;font-size:13px;text-transform:uppercase;letter-spacing:.04em">Adoption Preferences</h3>' +
       '<table style="width:100%;border-collapse:collapse;margin-bottom:14px">' +
       row('Confirm: I am adopting a (Cat/Dog/Bird/Other...)', g('want_adopt')) +
       row('Confirm: I am adopting (Pet name, Breed/Type, Sex, Adoption ID, Adoption Fee)', g('sex_pref')) +
@@ -3925,17 +3926,17 @@
       row('How Heard About Us', checks('hear[]')) +
       '</table>';
 
-    html += '<h3 style="color:#ED7624;margin:0 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:.04em">Submission</h3>' +
+    html += '<h3 style="color:#ED7624;margin-block: 0 8px; margin-inline: 0;font-size:13px;text-transform:uppercase;letter-spacing:.04em">Submission</h3>' +
       '<table style="width:100%;border-collapse:collapse;margin-bottom:14px">' +
       row('Submission Date', g('submission_date')) +
       '</table>';
 
     if (hasSig) {
-      html += '<h3 style="color:#ED7624;margin:0 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:.04em">Applicant Signature</h3>' +
+      html += '<h3 style="color:#ED7624;margin-block: 0 8px; margin-inline: 0;font-size:13px;text-transform:uppercase;letter-spacing:.04em">Applicant Signature</h3>' +
         '<img src="' + sigDataUrl + '" style="max-width:260px;height:auto;border:1px solid #eee;border-radius:6px;padding:6px;display:block;margin-bottom:16px">';
     }
 
-    html += '<hr style="margin:0 0 10px;border:none;border-top:1px solid #eee">' +
+    html += '<hr style="margin-block: 0 10px; margin-inline: 0;border:none;border-top:1px solid #eee">' +
       '<p style="font-size:12px;color:#9ca3af;margin:0">Submitted: ' + new Date().toLocaleString() + ' · Pet Center · adopt@petcenterco.com</p>';
 
     node.innerHTML = html;
@@ -3971,7 +3972,7 @@
     }
 
     const wrap = document.createElement('div');
-    wrap.innerHTML = '<p style="color:#7a6d5f;font-size:13px;margin:0 0 18px;">Review your filled-in information below.</p>';
+    wrap.innerHTML = '<p style="color:#7a6d5f;font-size:13px;margin-block: 0 18px; margin-inline: 0;">Review your filled-in information below.</p>';
 
     // Reuse the same comprehensive field list as the Review step
     const summaryBody = document.createElement('div');
@@ -3993,13 +3994,13 @@
     document.querySelectorAll('.custom-select-wrapper').forEach(function(wrapper) {
       if (wrapper.dataset.csInit) return;
       wrapper.dataset.csInit = '1';
-      
+
       var trigger = wrapper.querySelector('.custom-select-trigger');
       var options = wrapper.querySelector('.custom-select-options');
       var select = wrapper.querySelector('select');
-      
+
       if (!trigger || !options || !select) return;
-      
+
       trigger.addEventListener('click', function (e) {
         e.stopPropagation();
         var isOpen = wrapper.classList.contains('open');
@@ -4010,20 +4011,20 @@
           wrapper.classList.add('open');
         }
       });
-      
+
       options.querySelectorAll('li').forEach(function (li) {
         li.addEventListener('click', function (e) {
           e.stopPropagation();
           var value = li.getAttribute('data-value');
           select.value = value;
-          
+
           trigger.querySelector('.custom-select-value').textContent = li.textContent;
-          
+
           options.querySelectorAll('li').forEach(function(item) {
             item.removeAttribute('data-selected');
           });
           li.setAttribute('data-selected', '1');
-          
+
           wrapper.classList.remove('open');
           select.dispatchEvent(new Event('change', { bubbles: true }));
         });
@@ -4036,7 +4037,7 @@
   });
   // Script is at end of body, so DOM is already parsed — initialize immediately too
   initCustomSelects();
-  
+
   document.addEventListener('click', function(e) {
     if (!e.target.closest('.custom-select-wrapper')) {
       document.querySelectorAll('.custom-select-wrapper.open').forEach(function(w) {
@@ -4044,7 +4045,7 @@
       });
     }
   });
-  
+
   window.initCustomSelects = initCustomSelects;
 </script>
 <!-- TASK-10 START -->
@@ -4083,7 +4084,7 @@
 .pc-settings-widget {
   position: fixed;
   top: 50%;
-  right: 16px;
+  inset-inline-end: 16px;
   transform: translateY(-50%);
   z-index: 6100;
   font-family: 'Sora', sans-serif;
@@ -4109,9 +4110,9 @@
   position: absolute;
   top: 50%;
   /* Opens to the LEFT of the trigger now that the trigger sits on the
-     right edge (was `left: calc(100% + 12px)` opening rightward off a
+     right edge (was `inset-inline-start: calc(100% + 12px)` opening rightward off a
      left-edge trigger). */
-  right: calc(100% + 12px);
+  inset-inline-end: calc(100% + 12px);
   transform: translateY(-50%);
   width: 280px;
   max-width: calc(100vw - 32px);
@@ -4135,7 +4136,7 @@
 }
 .pc-settings-panel__close {
   background: none; border: none; color: inherit; font-size: 20px; line-height: 1;
-  cursor: pointer; padding: 2px 6px;
+  cursor: pointer; padding-block: 2px; padding-inline: 6px;
 }
 
 .pc-settings-row { margin-bottom: 14px; }
@@ -4145,49 +4146,51 @@
    Section 19's "Settings Widget Control Pattern -- Toggle + Description"
    rule (pair every consequential control with a plain-language line
    explaining its effect, since a user shouldn't have to guess). */
-.pc-settings-desc { font-size: 11.5px; color: #a39b91; margin: -2px 0 8px; line-height: 1.4; }
+.pc-settings-desc { font-size: 11.5px; color: #a39b91; margin-block: -2px 8px; margin-inline: 0; line-height: 1.4; }
 
 .pc-lang-dropdown { position: relative; }
 .pc-lang-dropdown__trigger {
   width: 100%; display: flex; align-items: center; justify-content: space-between;
   background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.16);
-  color: #f2f2f2; border-radius: 8px; padding: 8px 12px; font-size: 13.5px; cursor: pointer;
+  color: #f2f2f2; border-radius: 8px; padding-block: 8px; padding-inline: 12px; font-size: 13.5px; cursor: pointer;
   font-family: 'Sora', sans-serif;
 }
 .pc-lang-dropdown__panel {
-  position: absolute; top: calc(100% + 6px); left: 0; right: 0;
+  position: absolute; top: calc(100% + 6px); inset-inline-start: 0; inset-inline-end: 0;
   background: #10214b; border: 1px solid rgba(255,255,255,0.14);
   /* Sharp corner nearest the trigger (top-left here, since the trigger
      sits above this downward-opening panel) -- the "message bubble" corner
      rule from PETCENTER_DESIGN_SYSTEM_v1_0.md Section 24 (v1.25). */
-  border-radius: 0 8px 8px 8px;
+  border-start-start-radius: 0; border-start-end-radius: 8px; border-end-end-radius: 8px; border-end-start-radius: 8px;
   list-style: none; margin: 0; padding: 4px; max-height: 200px; overflow-y: auto;
   z-index: 6300;
 }
 .pc-lang-dropdown__panel[hidden] { display: none; }
-.pc-lang-dropdown__panel li { padding: 8px 10px; font-size: 13.5px; border-radius: 6px; cursor: pointer; }
+.pc-lang-dropdown__panel li { padding-block: 8px; padding-inline: 10px; font-size: 13.5px; border-radius: 6px; cursor: pointer; }
 .pc-lang-dropdown__panel li:hover,
 .pc-lang-dropdown__panel li[aria-selected="true"] { background: rgba(215,189,136,0.18); }
 
 .pc-opacity-slider { width: 100%; accent-color: #d7bd88; }
-.pc-opacity-value { font-size: 12px; color: #a39b91; float: right; margin-top: 2px; }
+.pc-opacity-value { font-size: 12px; color: #a39b91; float: inline-end; margin-top: 2px; }
 
 @media (max-width: 600px) {
   /* Below 600px, opening the panel to the right of a left-edge trigger
      would push a 280px-wide panel off the right edge of the viewport on
      most phones. Anchor the panel to open downward from the trigger
      instead, still clear of both the hero content and the bottom-right
-     contact button. Anchored via `right: 0` (not `left: 0`) since the
-     trigger itself now sits near the right edge -- `left: 0` would push
+     contact button. Anchored via `inset-inline-end: 0` (not `inset-inline-start: 0`) since the
+     trigger itself now sits near the right edge -- `inset-inline-start: 0` would push
      a near-full-width panel further right and off-screen. */
   .pc-settings-panel {
     top: calc(100% + 10px);
-    right: 0;
-    left: auto;
+    inset-inline-end: 0;
+    inset-inline-start: auto;
     transform: none;
     width: calc(100vw - 48px);
   }
 }
+
+/* TASK-web12-3 END */
 </style>
 
 <div class="pc-settings-widget" id="pcSettingsWidget">

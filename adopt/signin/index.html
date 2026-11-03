@@ -9,14 +9,15 @@
   <link rel="stylesheet" href="/assets/css/preload.css">
   <link rel="stylesheet" href="/assets/css/styles.css">
   <style>
+/* TASK-web12-3 START: logical CSS properties for RTL */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { background: #f9f7f4; padding-top: 68px; }
     /* ─── Global Header (pc-header) — copied verbatim from cats.html (canonical blueprint, Warning & Instructions rule 13) ─── */
     .pc-header {
       position: fixed;
-      top: 0; left: 0; right: 0;
+      top: 0; inset-inline-start: 0; inset-inline-end: 0;
       z-index: 1000;
-      padding: 0 24px;
+      padding-block: 0; padding-inline: 24px;
       height: 68px;
       display: flex;
       align-items: center;
@@ -46,7 +47,7 @@
     .pc-header__nav li { position: relative; }
     .pc-header__nav a {
       display: block;
-      padding: 8px 11px;
+      padding-block: 8px; padding-inline: 11px;
       font-family: 'Sora', sans-serif;
       font-size: 13px;
       font-weight: 500;
@@ -57,7 +58,7 @@
       white-space: nowrap;
     }
     .pc-header__nav a:hover { color: #d7bd88; background: rgba(255,255,255,0.08); }
-    .pc-header__nav .nav-donate a { background: #ED7624; color: #fff; font-weight: 600; padding: 8px 16px; }
+    .pc-header__nav .nav-donate a { background: #ED7624; color: #fff; font-weight: 600; padding-block: 8px; padding-inline: 16px; }
     .pc-header__nav .nav-donate a:hover { background: #d4621a; color: #fff; }
     .pc-header__nav .nav-signup a,
     .pc-header__nav .nav-login a { border: 1px solid rgba(215,189,136,0.5); color: #d7bd88; }
@@ -67,17 +68,17 @@
       display: none;
       position: absolute;
       top: calc(100% + 4px);
-      left: 0;
+      inset-inline-start: 0;
       background: #10214b;
       border-radius: 8px;
       list-style: none;
       min-width: 168px;
       box-shadow: 0 8px 32px rgba(0,0,0,0.22);
-      padding: 6px 0;
+      padding-block: 6px; padding-inline: 0;
       z-index: 100;
     }
     .pc-header__nav .has-drop:hover > ul { display: block; }
-    .pc-header__nav .has-drop > ul a { padding: 9px 18px; font-size: 13px; border-radius: 0; }
+    .pc-header__nav .has-drop > ul a { padding-block: 9px; padding-inline: 18px; font-size: 13px; border-radius: 0; }
     .pc-hamburger {
       display: none;
       flex-direction: column;
@@ -112,8 +113,8 @@
       flex-direction: column;
       position: absolute;
       top: 100%;
-      left: 0;
-      right: 0;
+      inset-inline-start: 0;
+      inset-inline-end: 0;
       background: rgba(16,33,75,0.98);
       z-index: 999;
       max-height: 0;
@@ -128,13 +129,13 @@
       overflow-y: auto;
       opacity: 1;
       pointer-events: auto;
-      padding: 16px 0 calc(100vh - 68px - 56px);
+      padding-block: 16px calc(100vh - 68px - 56px); padding-inline: 0;
       overscroll-behavior: contain;
       -webkit-overflow-scrolling: touch;
     }
     .pc-mobile-menu a {
       display: block;
-      padding: 12px 28px;
+      padding-block: 12px; padding-inline: 28px;
       font-family: 'Sora', sans-serif;
       font-size: 15px;
       font-weight: 500;
@@ -148,11 +149,11 @@
       background: rgba(255,255,255,0.05);
     }
     .pc-mobile-menu .mobile-donate {
-      margin: 12px 28px 0;
+      margin-block: 12px 0; margin-inline: 28px;
       display: inline-block;
       background: #ED7624;
       color: #fff;
-      padding: 11px 24px;
+      padding-block: 11px; padding-inline: 24px;
       border-radius: 8px;
       font-weight: 600;
       border-bottom: none;
@@ -164,11 +165,11 @@
     /* ─── Global Footer — copied verbatim from cats.html (canonical blueprint) ─── */
     .pc-footer {
       background: #0b1834;
-      padding: 60px 24px 28px;
+      padding-block: 60px 28px; padding-inline: 24px;
       color: rgba(255,255,255,0.65);
       font-family: 'Sora', sans-serif;
     }
-    .pc-footer__inner { max-width: 1200px; margin: 0 auto; }
+    .pc-footer__inner { max-width: 1200px; margin-block: 0; margin-inline: auto; }
     .pc-footer__top {
       display: grid;
       grid-template-columns: 2fr 1fr 1fr 1.5fr;
@@ -195,14 +196,14 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 40px 24px;
+      padding-block: 40px; padding-inline: 24px;
       text-align: center;
       background: linear-gradient(135deg, #f9f7f4 0%, #f0ebe4 100%);
     }
     .rehome-card {
       background: #fff;
       border-radius: 20px;
-      padding: 56px 48px;
+      padding-block: 56px; padding-inline: 48px;
       max-width: 560px;
       width: 100%;
       box-shadow: 0 8px 48px rgba(16,33,75,0.10);
@@ -216,7 +217,7 @@
       text-transform: uppercase;
       color: #ED7624;
       background: rgba(237,118,36,0.08);
-      padding: 5px 16px;
+      padding-block: 5px; padding-inline: 16px;
       border-radius: 20px;
       display: inline-block;
       margin-bottom: 20px;
@@ -241,7 +242,7 @@
       gap: 10px;
       background: #f9f7f4;
       border-radius: 10px;
-      padding: 6px 6px 6px 18px;
+      padding-block: 6px 6px; padding-inline: 18px 6px;
       box-shadow: 0 2px 16px rgba(16,33,75,0.07);
       margin-bottom: 28px;
     }
@@ -261,7 +262,7 @@
       color: #fff;
       border: none;
       border-radius: 8px;
-      padding: 12px 22px;
+      padding-block: 12px; padding-inline: 22px;
       font-family: 'Sora', sans-serif;
       font-size: 13px;
       font-weight: 600;
@@ -275,7 +276,7 @@
       grid-template-columns: 1fr 1fr;
       gap: 14px;
       margin-bottom: 36px;
-      text-align: left;
+      text-align: start;
     }
     .rehome-feature {
       background: #f9f7f4;
@@ -305,7 +306,7 @@
       display: none;
       background: #f0fbf6;
       border-radius: 10px;
-      padding: 16px 20px;
+      padding-block: 16px; padding-inline: 20px;
       font-family: 'Sora', sans-serif;
       font-size: 14px;
       color: #0d7c4a;
@@ -313,11 +314,13 @@
       margin-bottom: 28px;
     }
     @media (max-width: 560px) {
-      .rehome-card { padding: 40px 24px; }
+      .rehome-card { padding-block: 40px; padding-inline: 24px; }
       .rehome-features { grid-template-columns: 1fr; }
-      .rehome-notify-form { flex-direction: column; padding: 14px 16px; }
+      .rehome-notify-form { flex-direction: column; padding-block: 14px; padding-inline: 16px; }
     }
-  </style>
+
+/* TASK-web12-3 END */
+</style>
 </head>
 <body>
 

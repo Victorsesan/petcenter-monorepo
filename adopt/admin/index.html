@@ -22,8 +22,9 @@
   <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
   <!-- TASK-4 END (CEO task-list item 2, 2nd round, follow-up) -->
   <script src="./video-upload-manager.js" defer></script>
-  
+
   <style>
+/* TASK-web12-3 START: logical CSS properties for RTL */
 /* ════════════════════════════════════════════════════════════════════════════
    PET CENTER ADOPTION WEBSITE — Design System v1.0
    Colors: Navy #10214b | Gold #d7bd88 | Orange #ED7624
@@ -100,9 +101,9 @@ h4 { font-size: 1.2rem; font-weight: 600; }
 p { color: var(--muted); }
 
 /* ─── Layout Utilities ───────────────────────────────────────────────────────── */
-.pc-container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
-.pc-section { padding: 72px 0; }
-.pc-section--sm { padding: 40px 0; }
+.pc-container { max-width: 1280px; margin-block: 0; margin-inline: auto; padding-block: 0; padding-inline: 24px; }
+.pc-section { padding-block: 72px; padding-inline: 0; }
+.pc-section--sm { padding-block: 40px; padding-inline: 0; }
 .pc-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
 .pc-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
 .pc-grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
@@ -116,7 +117,7 @@ p { color: var(--muted); }
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 12px 28px;
+  padding-block: 12px; padding-inline: 28px;
   border-radius: var(--radius-sm);
   font-family: 'Sora', sans-serif;
   font-size: 14px;
@@ -157,7 +158,7 @@ p { color: var(--muted); }
   box-shadow: inset 0 0 0 2px var(--gold);
 }
 .pc-btn--ghost:hover { background: var(--orange-light); color: var(--orange); }
-.pc-btn--sm { padding: 8px 18px; font-size: 13px; min-height: 36px; }
+.pc-btn--sm { padding-block: 8px; padding-inline: 18px; font-size: 13px; min-height: 36px; }
 /* TASK-4 (CEO task-list item 7, screenshot 7): the pet-category select
    buttons (Publish Pets) were toggling the `pc-btn--primary` class on
    click WITHOUT ever removing `pc-btn--ghost` — so a selected button
@@ -183,7 +184,7 @@ p { color: var(--muted); }
   box-shadow: inset 0 0 0 2px var(--navy) !important;
 }
 .pc-cat-btn.active:hover { background: var(--gold) !important; color: var(--navy) !important; }
-.pc-btn--lg { padding: 16px 40px; font-size: 16px; }
+.pc-btn--lg { padding-block: 16px; padding-inline: 40px; font-size: 16px; }
 .pc-btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
 
 /* ─── Cards ────────────────────────────────────────────────────────────────────── */
@@ -196,7 +197,7 @@ p { color: var(--muted); }
 }
 .pc-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
 .pc-card__body { padding: 20px; }
-.pc-card__footer { padding: 16px 20px; background: var(--bg); }
+.pc-card__footer { padding-block: 16px; padding-inline: 20px; background: var(--bg); }
 
 /* ─── Pet Cards ─────────────────────────────────────────────────────────────────── */
 .pc-pet-card {
@@ -217,18 +218,18 @@ p { color: var(--muted); }
 .pc-pet-card__adopted-badge {
   position: absolute;
   top: 12px;
-  left: 12px;
+  inset-inline-start: 12px;
   background: var(--navy);
   color: #fff;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  padding: 5px 12px;
+  padding-block: 5px; padding-inline: 12px;
   border-radius: 20px;
   box-shadow: var(--shadow-sm);
 }
-.pc-pet-card__body { padding: 18px 20px; flex: 1; display: flex; flex-direction: column; gap: 6px; }
+.pc-pet-card__body { padding-block: 18px; padding-inline: 20px; flex: 1; display: flex; flex-direction: column; gap: 6px; }
 .pc-pet-card__name { font-family: 'Cormorant Garamond', serif; font-size: 1.25rem; font-weight: 700; color: var(--navy); }
 .pc-pet-card__breed { font-size: 13px; color: var(--muted); font-weight: 500; }
 .pc-pet-card__meta { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
@@ -237,7 +238,7 @@ p { color: var(--muted); }
   font-weight: 600;
   color: var(--chocolate);
   background: var(--warm-gray);
-  padding: 3px 10px;
+  padding-block: 3px; padding-inline: 10px;
   border-radius: 20px;
   letter-spacing: 0.02em;
 }
@@ -254,14 +255,14 @@ p { color: var(--muted); }
 /* ─── Status Checker ───────────────────────────────────────────────────────────── */
 .pc-status-section {
   background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
-  padding: 52px 0;
+  padding-block: 52px; padding-inline: 0;
 }
 .pc-status-box {
   background: rgba(255,255,255,0.07);
   border-radius: var(--radius-lg);
   padding: 40px;
   max-width: 680px;
-  margin: 0 auto;
+  margin-block: 0; margin-inline: auto;
   box-shadow: 0 8px 40px rgba(0,0,0,0.18);
 }
 .pc-status-title { color: #fff; font-size: 1.8rem; margin-bottom: 8px; }
@@ -270,7 +271,7 @@ p { color: var(--muted); }
 .pc-status-input {
   flex: 1;
   min-width: 220px;
-  padding: 14px 18px;
+  padding-block: 14px; padding-inline: 18px;
   border-radius: var(--radius-sm);
   border: none;
   background: rgba(255,255,255,0.12);
@@ -300,7 +301,7 @@ p { color: var(--muted); }
 .pc-payment-box {
   background: #fff;
   border-radius: var(--radius-sm);
-  padding: 20px 24px;
+  padding-block: 20px; padding-inline: 24px;
   margin-top: 16px;
   box-shadow: var(--shadow-sm);
 }
@@ -342,7 +343,7 @@ p { color: var(--muted); }
 .pc-filter-group { display: flex; flex-direction: column; gap: 6px; min-width: 160px; flex: 1; }
 .pc-filter-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
 .pc-filter-select {
-  padding: 10px 14px;
+  padding-block: 10px; padding-inline: 14px;
   border-radius: var(--radius-sm);
   border: none;
   background: var(--bg);
@@ -356,7 +357,7 @@ p { color: var(--muted); }
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%237a6d5f' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 12px center;
-  padding-right: 36px;
+  padding-inline-end: 36px;
   outline: none;
   transition: box-shadow var(--transition);
 }
@@ -367,10 +368,10 @@ p { color: var(--muted); }
 .pc-empty-state {
   grid-column: 1 / -1;
   text-align: center;
-  padding: 64px 24px;
+  padding-block: 64px; padding-inline: 24px;
   color: var(--muted);
 }
-.pc-empty-state__icon { width: 64px; height: 64px; margin: 0 auto 16px; opacity: 0.3; }
+.pc-empty-state__icon { width: 64px; height: 64px; margin-block: 0 16px; margin-inline: auto; opacity: 0.3; }
 .pc-empty-state h3 { font-size: 1.4rem; color: var(--navy); margin-bottom: 8px; }
 .pc-loading-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
 .pc-skeleton {
@@ -406,11 +407,11 @@ p { color: var(--muted); }
 .pc-modal-box { display: flex; flex-direction: column; overflow: hidden; max-height: 85vh; max-height: 85dvh; }
 .pc-modal__scroll { flex: 1; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
 @media (max-width: 600px) {
-  .pc-modal-shell { padding: 12px !important; }
+  .pc-modal-shell { padding-block: 12px; padding-inline: !important; }
   .pc-modal-box { max-height: 88vh; max-height: 88dvh; }
 }
 @media (max-width: 400px) {
-  .pc-modal-shell { padding: 8px !important; }
+  .pc-modal-shell { padding-block: 8px; padding-inline: !important; }
 }
 /* TASK-4 (CEO task-list item 6): the two-column applicant-info grid
    (Full Name/Email, Phone/Address, etc., screenshot 6) is the second half
@@ -431,7 +432,7 @@ p { color: var(--muted); }
 .pc-form-select,
 .pc-form-textarea {
   width: 100%;
-  padding: 12px 16px;
+  padding-block: 12px; padding-inline: 16px;
   border-radius: var(--radius-sm);
   border: none;
   background: var(--bg);
@@ -460,12 +461,12 @@ p { color: var(--muted); }
   width: 260px;
   background: linear-gradient(180deg, var(--navy) 0%, var(--navy-light) 100%);
   position: fixed;
-  left: 0;
+  inset-inline-start: 0;
   top: 0;
   height: 100vh;
   overflow-y: auto;
   z-index: 100;
-  padding: 24px 0;
+  padding-block: 24px; padding-inline: 0;
   display: flex;
   flex-direction: column;
 }
@@ -503,10 +504,10 @@ p { color: var(--muted); }
    using it is gone too). */
 .pc-hamburger {
   display: none; flex-direction: column; justify-content: center; gap: 5px;
-  background: none; border: none; cursor: pointer; padding: 8px 12px;
+  background: none; border: none; cursor: pointer; padding-block: 8px; padding-inline: 12px;
   min-width: 44px; min-height: 44px;
 }
-/* TASK-4 (bug fix, live-test report): margin-left:auto removed — this is
+/* TASK-4 (bug fix, live-test report): margin-inline-start:auto removed — this is
    leftover from an earlier header layout where the hamburger wasn't the
    first flex child. Now that it IS the first child of .admin-topbar
    (see the header restructure comment near .admin-topbar's HTML), that
@@ -528,7 +529,7 @@ p { color: var(--muted); }
 /* TASK-4 (CEO task-list item 6, 2nd round): the mobile-only icon-menu
    drawer, filled by renderMobileIconMenu() (JS section) from the same
    .admin-icon-rail buttons desktop already uses. Previously a FULL-WIDTH
-   (left:0;right:0) dropdown that covered nearly the whole page — the
+   (inset-inline-start:0;inset-inline-end:0) dropdown that covered nearly the whole page — the
    bug the CEO flagged from live testing ("opens and covers the WHOLE
    page"). Rebuilt as a genuine partial-width slide-in drawer per Design
    System Section 13's "Side Menu" pattern (wide vertical panel sliding
@@ -546,7 +547,7 @@ p { color: var(--muted); }
    into or intercept touches while hidden. */
 .pc-mobile-menu {
   display: flex; flex-direction: column;
-  position: fixed; left: 0; top: var(--header-h, 68px); bottom: 0;
+  position: fixed; inset-inline-start: 0; top: var(--header-h, 68px); bottom: 0;
   width: 280px; max-width: 82vw;
   background: var(--surface); box-shadow: 0 12px 32px rgba(16,33,75,0.18);
   z-index: 199;
@@ -566,7 +567,7 @@ p { color: var(--muted); }
    large tap target to close (in addition to the hamburger toggle and the
    existing outside-click handler, which still both work unchanged). */
 .pc-mobile-menu__backdrop {
-  display: none; position: fixed; left: 0; right: 0; bottom: 0; top: var(--header-h, 68px);
+  display: none; position: fixed; inset-inline-start: 0; inset-inline-end: 0; bottom: 0; top: var(--header-h, 68px);
   background: rgba(16,33,75,0.35); z-index: 198;
   opacity: 0; transition: opacity 0.28s ease;
 }
@@ -579,7 +580,7 @@ p { color: var(--muted); }
    still also close it — this is additive per the CEO's own wording). */
 .pc-mobile-menu__brand {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 18px 20px 14px; border-bottom: 1px solid rgba(16,33,75,0.08);
+  padding-block: 18px 14px; padding-inline: 20px; border-bottom: 1px solid rgba(16,33,75,0.08);
   margin-bottom: 6px;
 }
 .pc-mobile-menu__brand-left { display: flex; align-items: center; gap: 10px; font-family: 'Cormorant Garamond', serif; font-weight: 700; font-size: 17px; color: var(--navy); }
@@ -590,8 +591,8 @@ p { color: var(--muted); }
 }
 .pc-mobile-menu__close:hover { color: var(--navy); }
 .pc-mobile-menu__item {
-  display: flex; align-items: center; gap: 14px; width: 100%; text-align: left;
-  border: none; background: none; cursor: pointer; padding: 14px 24px;
+  display: flex; align-items: center; gap: 14px; width: 100%; text-align: start;
+  border: none; background: none; cursor: pointer; padding-block: 14px; padding-inline: 24px;
   color: var(--navy); font-size: 14px; font-weight: 500; font-family: 'Sora', sans-serif;
   min-height: 44px;
 }
@@ -613,12 +614,12 @@ p { color: var(--muted); }
      there for why a plain `.admin-sidebar` rule in THIS block doesn't
      work despite the matching viewport. */
   .pc-hamburger { display: flex; }
-  .admin-main { margin-left: 0; }
+  .admin-main { margin-inline-start: 0; }
 }
-.admin-main { margin-left: 260px; flex: 1; min-height: 100vh; }
+.admin-main { margin-inline-start: 260px; flex: 1; min-height: 100vh; }
 .admin-topbar {
   background: var(--surface);
-  padding: 16px 32px;
+  padding-block: 16px; padding-inline: 32px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -655,7 +656,7 @@ p { color: var(--muted); }
 
 /* ─── Table ────────────────────────────────────────────────────────────────────── */
 .pc-table { width: 100%; border-collapse: collapse; }
-.pc-table th { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); padding: 12px 16px; background: var(--bg); text-align: left; }
+.pc-table th { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); padding-block: 12px; padding-inline: 16px; background: var(--bg); text-align: start; }
 .pc-table td { padding: 16px; border-bottom: 1px solid var(--bg); vertical-align: middle; font-size: 14px; }
 .pc-table tr:last-child td { border-bottom: none; }
 .pc-table tr:hover td { background: var(--orange-light); }
@@ -717,9 +718,9 @@ p { color: var(--muted); }
 .pc-app-actions__dot.open { transform: rotate(90deg); color: var(--orange, #ED7624); }
 /* TASK-4 END (CEO task-list item 2, 2nd round, second half) */
 .pc-app-actions__panel {
-  display: none; position: absolute; top: calc(100% + 6px); right: 0; z-index: 60;
+  display: none; position: absolute; top: calc(100% + 6px); inset-inline-end: 0; z-index: 60;
   background: #fff; border: 1.5px solid rgba(16,33,75,0.10);
-  border-radius: 14px 0 14px 14px; /* sharp top-right = Section 24's message-bubble notch */
+  border-start-start-radius: 14px; border-start-end-radius: 0; border-end-end-radius: 14px; border-end-start-radius: 14px; /* sharp top-right = Section 24's message-bubble notch */
   box-shadow: 0 12px 32px rgba(16,33,75,0.18), 0 2px 8px rgba(16,33,75,0.08);
   padding: 6px; gap: 2px; flex-direction: row;
   opacity: 0; transform: translateY(-6px) scale(0.96); transform-origin: top right;
@@ -762,7 +763,7 @@ p { color: var(--muted); }
 /* Admin Profile card status pill — base styling reproduces the original
    plain-text look's colors as a pill instead, so the default theme reads
    correctly even before any dashboard theme overrides it further. */
-.pc-admin-profile-card__status { display: inline-flex; align-items: center; gap: 5px; font-size: 10px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; padding: 2px 8px; border-radius: 999px; }
+.pc-admin-profile-card__status { display: inline-flex; align-items: center; gap: 5px; font-size: 10px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; padding-block: 2px; padding-inline: 8px; border-radius: 999px; }
 .pc-admin-profile-card__status--active { background: var(--success-bg); color: var(--success); }
 .pc-admin-profile-card__status--active i { color: var(--success); }
 .pc-admin-profile-card__status--inactive { background: var(--error-bg); color: var(--error); }
@@ -771,7 +772,7 @@ p { color: var(--muted); }
 
 .pc-badge {
   display: inline-block;
-  padding: 3px 10px;
+  padding-block: 3px; padding-inline: 10px;
   border-radius: 20px;
   font-size: 11px;
   font-weight: 700;
@@ -794,7 +795,7 @@ p { color: var(--muted); }
   box-shadow: var(--shadow-sm);
 }
 .pet-form-card__number { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 700; color: var(--navy); margin-bottom: 20px; }
-.pet-form-card__delete { position: absolute; top: 16px; right: 16px; background: var(--error-bg); color: var(--error); border: none; border-radius: 6px; padding: 6px 12px; font-size: 12px; font-weight: 600; cursor: pointer; transition: background var(--transition); }
+.pet-form-card__delete { position: absolute; top: 16px; inset-inline-end: 16px; background: var(--error-bg); color: var(--error); border: none; border-radius: 6px; padding-block: 6px; padding-inline: 12px; font-size: 12px; font-weight: 600; cursor: pointer; transition: background var(--transition); }
 .pet-form-card__delete:hover { background: #fca5a5; }
 
 /* ─── File Upload ────────────────────────────────────────────────────────────── */
@@ -810,16 +811,16 @@ p { color: var(--muted); }
 }
 .pc-file-drop.dragover { box-shadow: inset 0 0 0 3px var(--gold); background: #fffbf5; }
 .pc-file-drop input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
-.pc-file-drop__icon { width: 36px; height: 36px; margin: 0 auto 10px; color: var(--muted); }
+.pc-file-drop__icon { width: 36px; height: 36px; margin-block: 0 10px; margin-inline: auto; color: var(--muted); }
 .pc-file-drop__text { font-size: 14px; color: var(--muted); }
 .pc-file-drop__text strong { color: var(--orange); }
 .pc-file-preview { display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 8px; margin-top: 12px; }
 .pc-file-preview__item { position: relative; aspect-ratio: 1; border-radius: 6px; overflow: hidden; box-shadow: var(--shadow-sm); }
 .pc-file-preview__item img { width: 100%; height: 100%; object-fit: cover; }
-.pc-file-preview__remove { position: absolute; top: 4px; right: 4px; background: rgba(0,0,0,0.6); color: #fff; border: none; width: 20px; height: 20px; border-radius: 4px; cursor: pointer; font-size: 10px; display: flex; align-items: center; justify-content: center; }
+.pc-file-preview__remove { position: absolute; top: 4px; inset-inline-end: 4px; background: rgba(0,0,0,0.6); color: #fff; border: none; width: 20px; height: 20px; border-radius: 4px; cursor: pointer; font-size: 10px; display: flex; align-items: center; justify-content: center; }
 
 /* ─── Pet Detail Page ────────────────────────────────────────────────────────── */
-.pc-pet-detail-hero { display: grid; grid-template-columns: 1fr 380px; gap: 40px; align-items: start; padding: 52px 0; }
+.pc-pet-detail-hero { display: grid; grid-template-columns: 1fr 380px; gap: 40px; align-items: start; padding-block: 52px; padding-inline: 0; }
 .pc-pet-detail-gallery { position: sticky; top: 24px; }
 .pc-gallery-main { border-radius: var(--radius-md); overflow: hidden; aspect-ratio: 4/3; background: var(--bg); box-shadow: var(--shadow-md); }
 .pc-gallery-main img { width: 100%; height: 100%; object-fit: cover; }
@@ -831,7 +832,7 @@ p { color: var(--muted); }
 .pc-pet-info-panel__name { font-family: 'Cormorant Garamond', serif; font-size: 2.2rem; font-weight: 700; color: var(--navy); }
 .pc-pet-info-panel__fee { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 700; color: var(--orange); margin-bottom: 24px; }
 .pc-pet-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
-.pc-pet-info-item { background: var(--bg); border-radius: 8px; padding: 12px 14px; }
+.pc-pet-info-item { background: var(--bg); border-radius: 8px; padding-block: 12px; padding-inline: 14px; }
 .pc-pet-info-item__label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
 .pc-pet-info-item__value { font-weight: 600; color: var(--navy); margin-top: 4px; }
 
@@ -854,7 +855,7 @@ p { color: var(--muted); }
 .pc-section-sub { color: var(--muted); max-width: 560px; }
 
 /* ─── Alert / Messages ──────────────────────────────────────────────────────── */
-.pc-alert { border-radius: var(--radius-sm); padding: 14px 18px; font-size: 14px; font-weight: 500; display: none; }
+.pc-alert { border-radius: var(--radius-sm); padding-block: 14px; padding-inline: 18px; font-size: 14px; font-weight: 500; display: none; }
 .pc-alert.show { display: block; animation: fadeInDown 0.3s ease; }
 .pc-alert--success { background: var(--success-bg); color: var(--success); }
 .pc-alert--error { background: var(--error-bg); color: var(--error); }
@@ -865,7 +866,7 @@ p { color: var(--muted); }
 .pc-pet-prefill {
   background: linear-gradient(135deg, #fffbf5, #fff);
   border-radius: var(--radius-md);
-  padding: 20px 24px;
+  padding-block: 20px; padding-inline: 24px;
   margin-bottom: 24px;
   box-shadow: var(--shadow-sm);
   display: none;
@@ -882,7 +883,7 @@ p { color: var(--muted); }
   font-family: 'Courier New', monospace;
   background: var(--navy);
   color: var(--gold);
-  padding: 14px 24px;
+  padding-block: 14px; padding-inline: 24px;
   border-radius: var(--radius-sm);
   font-size: 1.4rem;
   font-weight: 700;
@@ -892,9 +893,9 @@ p { color: var(--muted); }
 }
 .pc-warning-box {
   background: #fff8e6;
-  border-left: 4px solid #f59e0b;
-  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-  padding: 16px 20px;
+  border-inline-start: 4px solid #f59e0b;
+  border-start-start-radius: 0; border-start-end-radius: var(--radius-sm); border-end-end-radius: var(--radius-sm); border-end-start-radius: 0;
+  padding-block: 16px; padding-inline: 20px;
   color: #92400e;
   font-size: 14px;
   font-weight: 500;
@@ -913,7 +914,7 @@ p { color: var(--muted); }
 .admin-login__card {
   background: var(--surface);
   border-radius: var(--radius-lg);
-  padding: 52px 48px;
+  padding-block: 52px; padding-inline: 48px;
   width: 100%;
   max-width: 440px;
   box-shadow: var(--shadow-lg);
@@ -929,7 +930,7 @@ p { color: var(--muted); }
   .pc-pet-detail-hero { grid-template-columns: 1fr; }
   .pc-pet-detail-gallery { position: static; }
   .admin-sidebar { width: 220px; }
-  .admin-main { margin-left: 220px; }
+  .admin-main { margin-inline-start: 220px; }
 }
 @media (max-width: 768px) {
   .pc-pet-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
@@ -940,20 +941,20 @@ p { color: var(--muted); }
      rather than silently deleted so it's clear this is an intentional
      removal, not an oversight, if another task's diff touches this block
      later. */
-  .admin-main { margin-left: 0; }
-  .admin-content { padding: 20px 16px; }
+  .admin-main { margin-inline-start: 0; }
+  .admin-content { padding-block: 20px; padding-inline: 16px; }
   .pc-filters { flex-direction: column; }
-  .pc-status-box { padding: 28px 20px; }
-  .pc-modal { padding: 28px 20px; }
-  .pc-pet-info-panel { padding: 24px 20px; }
-  .admin-login__card { padding: 36px 24px; }
+  .pc-status-box { padding-block: 28px; padding-inline: 20px; }
+  .pc-modal { padding-block: 28px; padding-inline: 20px; }
+  .pc-pet-info-panel { padding-block: 24px; padding-inline: 20px; }
+  .admin-login__card { padding-block: 36px; padding-inline: 24px; }
 }
 @media (max-width: 480px) {
   .pc-pet-grid { grid-template-columns: 1fr; }
   .pc-grid-4, .pc-grid-3, .pc-grid-2 { grid-template-columns: 1fr; }
-  .pc-btn--lg { padding: 14px 28px; }
+  .pc-btn--lg { padding-block: 14px; padding-inline: 28px; }
   .pc-status-form { flex-direction: column; }
-  .pc-section { padding: 48px 0; }
+  .pc-section { padding-block: 48px; padding-inline: 0; }
   .pc-pet-prefill.show { flex-direction: column; text-align: center; }
 }
 
@@ -997,14 +998,14 @@ p { color: var(--muted); }
   width: 100%;
   height: 100%;
   top: 0;
-  left: 0;
+  inset-inline-start: 0;
   z-index: -1;
 }
 .custom-select-trigger {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 14px;
+  padding-block: 10px; padding-inline: 14px;
   background: #fff;
   border: 1.5px solid rgba(16,33,75,.14);
   border-radius: 9px;
@@ -1052,11 +1053,11 @@ p { color: var(--muted); }
   display: none;
   position: absolute;
   top: calc(100% + 6px);
-  left: 0;
-  right: 0;
+  inset-inline-start: 0;
+  inset-inline-end: 0;
   background: #fff;
   border: 1.5px solid rgba(16,33,75,0.10);
-  border-radius: 0 14px 14px 14px; /* TASK-4 (self-caught fix before shipping): sharp top-left corner — a panel that opens straight down from its trigger's top-left edge (this wrapper is left:0-anchored, not right-anchored like the header dropdowns) should have its "message bubble" notch there, nearest the trigger it emerged from, mirroring the top-right notch used on the right-anchored header dropdowns. */
+  border-start-start-radius: 0; border-start-end-radius: 14px; border-end-end-radius: 14px; border-end-start-radius: 14px; /* TASK-4 (self-caught fix before shipping): sharp top-left corner — a panel that opens straight down from its trigger's top-left edge (this wrapper is inset-inline-start:0-anchored, not right-anchored like the header dropdowns) should have its "message bubble" notch there, nearest the trigger it emerged from, mirroring the top-right notch used on the right-anchored header dropdowns. */
   box-shadow: 0 12px 32px rgba(16,33,75,0.18), 0 2px 8px rgba(16,33,75,0.08);
   z-index: 1000;
   max-height: 225px;
@@ -1072,7 +1073,7 @@ p { color: var(--muted); }
 }
 .custom-select-options.open { display: block; opacity: 1; transform: translateY(0) scale(1); }
 .custom-select-options li {
-  padding: 9px 12px;
+  padding-block: 9px; padding-inline: 12px;
   border-radius: 10px;
   cursor: pointer;
   font-family: 'Sora', sans-serif;
@@ -1242,7 +1243,7 @@ p { color: var(--muted); }
      an icon-only rail. */
   display: flex; flex-direction: column; align-items: center; gap: 6px;
   width: 62px; flex-shrink: 0; background: #ffffff; border-radius: 18px;
-  padding: 14px 0; box-shadow: 0 10px 40px rgba(16,33,75,0.10);
+  padding-block: 14px; padding-inline: 0; box-shadow: 0 10px 40px rgba(16,33,75,0.10);
 }
 [data-dash-theme="suite"] .admin-icon-rail__item {
   width: 44px; height: 44px; border-radius: 12px; border: none; background: transparent; color: var(--navy);
@@ -1298,13 +1299,13 @@ p { color: var(--muted); }
    Overridden to 0 here, scoped to the theme that's actually active, so
    .admin-main (and everything that stretches to match it) now sizes to
    its REAL content height instead. */
-[data-dash-theme="suite"] .admin-main { margin-left: 0; padding-left: 14px; min-height: 0; }
+[data-dash-theme="suite"] .admin-main { margin-inline-start: 0; padding-inline-start: 14px; min-height: 0; }
 [data-dash-theme="suite"] .admin-topbar { border-radius: 18px; margin-bottom: 14px; background: var(--surface); box-shadow: var(--shadow-sm); }
 [data-dash-theme="suite"] .admin-panel { border-radius: 18px; background: linear-gradient(180deg, #ffffff 0%, #fbfaff 100%); }
-[data-dash-theme="suite"] .admin-stat-card { border-radius: 18px !important; background: linear-gradient(155deg, #ffffff 0%, #f7f4ff 100%) !important; border-left: 4px solid var(--lm-lavender) !important; box-shadow: var(--shadow-sm); }
+[data-dash-theme="suite"] .admin-stat-card { border-start-start-radius: 18px; border-start-end-radius: !important; border-end-end-radius: 18px; border-end-start-radius: !important; background: linear-gradient(155deg, #ffffff 0%, #f7f4ff 100%) !important; border-inline-start: 4px solid var(--lm-lavender) !important; box-shadow: var(--shadow-sm); }
 [data-dash-theme="suite"] .pc-app-avatar { background: linear-gradient(135deg, var(--lm-lavender), var(--navy)); }
 [data-dash-theme="suite"] .pc-app-row--selected { background: var(--lm-pale) !important; }
-[data-dash-theme="suite"] .pc-admin-profile-card { border-radius: 18px !important; border: none !important; background: linear-gradient(155deg, #ffffff 0%, #f7f4ff 100%) !important; box-shadow: var(--shadow-sm); }
+[data-dash-theme="suite"] .pc-admin-profile-card { border-start-start-radius: 18px; border-start-end-radius: !important; border-end-end-radius: 18px; border-end-start-radius: !important; border: none !important; background: linear-gradient(155deg, #ffffff 0%, #f7f4ff 100%) !important; box-shadow: var(--shadow-sm); }
 [data-dash-theme="suite"] .pc-admin-profile-card__avatar { background: linear-gradient(135deg, var(--lm-lavender), var(--navy)) !important; color: #fff !important; }
 [data-dash-theme="suite"] .pc-card, [data-dash-theme="suite"] .pc-modal, [data-dash-theme="suite"] .pc-pet-card, [data-dash-theme="suite"] .pet-form-card, [data-dash-theme="suite"] .pc-file-drop, [data-dash-theme="suite"] .pc-filters { border-radius: 18px; }
 [data-dash-theme="suite"] .pc-btn--primary { background: linear-gradient(135deg, var(--lm-lavender), var(--navy)); }
@@ -1323,15 +1324,15 @@ p { color: var(--muted); }
    panel itself (#chatThreadList / #chatThreadDetail) keeps its fixed
    height + overflow pairing untouched; only the cards/bubbles inside it
    are restyled. */
-[data-dash-theme="suite"] .chat-thread-card { border-radius: 14px !important; }
+[data-dash-theme="suite"] .chat-thread-card { border-start-start-radius: 14px; border-start-end-radius: !important; border-end-end-radius: 14px; border-end-start-radius: !important; }
 [data-dash-theme="suite"] .chat-thread-card.selected { border-color: var(--lm-lavender) !important; background: var(--lm-pale) !important; box-shadow: 0 0 0 4px rgba(200,182,254,0.2); }
 [data-dash-theme="suite"] .chat-thread-card:hover { border-color: var(--lm-periwinkle) !important; }
-[data-dash-theme="suite"] .chat-admin-banner { background: linear-gradient(135deg, var(--lm-pale), #fff) !important; border-bottom: none !important; border-radius: 14px 14px 0 0; }
-[data-dash-theme="suite"] .cad-bubble--admin { background: linear-gradient(135deg, var(--lm-lavender), var(--navy)) !important; border-radius: 16px !important; border-bottom-right-radius: 4px !important; }
-[data-dash-theme="suite"] .cad-bubble--customer { background: #fff !important; border: 1px solid var(--lm-lavender) !important; border-radius: 16px !important; border-bottom-left-radius: 4px !important; }
-[data-dash-theme="suite"] .cad-bubble--system { background: var(--lm-pale) !important; border-color: var(--lm-orchid) !important; border-radius: 12px !important; }
+[data-dash-theme="suite"] .chat-admin-banner { background: linear-gradient(135deg, var(--lm-pale), #fff) !important; border-bottom: none !important; border-start-start-radius: 14px; border-start-end-radius: 14px; border-end-end-radius: 0; border-end-start-radius: 0; }
+[data-dash-theme="suite"] .cad-bubble--admin { background: linear-gradient(135deg, var(--lm-lavender), var(--navy)) !important; border-start-start-radius: 16px; border-start-end-radius: !important; border-end-end-radius: 16px; border-end-start-radius: !important; border-end-end-radius: 4px !important; }
+[data-dash-theme="suite"] .cad-bubble--customer { background: #fff !important; border: 1px solid var(--lm-lavender) !important; border-start-start-radius: 16px; border-start-end-radius: !important; border-end-end-radius: 16px; border-end-start-radius: !important; border-end-start-radius: 4px !important; }
+[data-dash-theme="suite"] .cad-bubble--system { background: var(--lm-pale) !important; border-color: var(--lm-orchid) !important; border-start-start-radius: 12px; border-start-end-radius: !important; border-end-end-radius: 12px; border-end-start-radius: !important; }
 [data-dash-theme="suite"] .cad-composer { border-top-color: rgba(200,182,254,0.3) !important; }
-[data-dash-theme="suite"] .cad-send-btn { background: linear-gradient(135deg, var(--lm-lavender), var(--navy)) !important; border-radius: 50% !important; }
+[data-dash-theme="suite"] .cad-send-btn { background: linear-gradient(135deg, var(--lm-lavender), var(--navy)) !important; border-start-start-radius: 50%; border-start-end-radius: !important; border-end-end-radius: 50%; border-end-start-radius: !important; }
 [data-dash-theme="suite"] .cad-tool-btn:hover { background: var(--lm-pale) !important; }
 
 /* ════════════════════════════════════════════════════════════════════════════
@@ -1341,7 +1342,7 @@ p { color: var(--muted); }
    ════════════════════════════════════════════════════════════════════════════ */
 
 /* ── Profile dropdown trigger (avatar + name + chevron) ─────────────────── */
-/* TASK-4 (mobile header reorganization, live-test report): margin-left:auto
+/* TASK-4 (mobile header reorganization, live-test report): margin-inline-start:auto
    removed — this used to shove the profile menu away from whatever
    came before it (historically useful when there were more flex
    siblings in the header). Now that hamburger + profile menu are
@@ -1351,13 +1352,13 @@ p { color: var(--muted); }
    than doing anything harmful — removed for clarity, not because it
    was actively broken. */
 .dash-profile-menu { display: block; position: relative; }
-.dash-profile-menu__trigger { display: flex; align-items: center; gap: 10px; border: none; background: none; cursor: pointer; padding: 6px 10px 6px 6px; border-radius: 999px; transition: background 0.15s ease; min-height: 44px; }
+.dash-profile-menu__trigger { display: flex; align-items: center; gap: 10px; border: none; background: none; cursor: pointer; padding-block: 6px 6px; padding-inline: 6px 10px; border-radius: 999px; transition: background 0.15s ease; min-height: 44px; }
 .dash-profile-menu__trigger:hover { background: var(--bg); }
 .dash-profile-menu__avatar { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--lm-lavender), var(--lm-orchid)); color: #fff; font-weight: 700; font-size: 13px; display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; }
 .dash-profile-menu__avatar img { width: 100%; height: 100%; object-fit: cover; }
 .dash-profile-menu__name { display: flex; flex-direction: column; align-items: flex-start; font-size: 13px; font-weight: 700; color: var(--navy); line-height: 1.3; }
 .dash-profile-menu__name small { font-weight: 500; color: var(--muted); font-size: 11px; }
-.dash-profile-menu__name .dash-profile-menu__check { color: #1d9bf0; font-size: 12px; margin-left: 4px; }
+.dash-profile-menu__name .dash-profile-menu__check { color: #1d9bf0; font-size: 12px; margin-inline-start: 4px; }
 .dash-profile-menu__chevron { font-size: 10px; color: var(--muted); transition: transform 0.2s ease; }
 .dash-profile-menu.open .dash-profile-menu__chevron { transform: rotate(180deg); }
 
@@ -1370,9 +1371,9 @@ p { color: var(--muted); }
    panel and (nested inside it) the Variant D Admins submenu below. */
 .dash-profile-menu__card {
   display: flex; flex-direction: column; gap: 2px;
-  position: absolute; top: calc(100% + 6px); right: 0; min-width: 230px;
+  position: absolute; top: calc(100% + 6px); inset-inline-end: 0; min-width: 230px;
   background: #ffffff; border: 1.5px solid rgba(16,33,75,0.10);
-  border-radius: 14px 0 14px 14px; /* sharp top-right = message-bubble notch, Section 24 */
+  border-start-start-radius: 14px; border-start-end-radius: 0; border-end-end-radius: 14px; border-end-start-radius: 14px; /* sharp top-right = message-bubble notch, Section 24 */
   box-shadow: 0 12px 32px rgba(16,33,75,0.18), 0 2px 8px rgba(16,33,75,0.08);
   padding: 8px; z-index: 500; overflow: visible;
   opacity: 0; visibility: hidden; pointer-events: none;
@@ -1381,8 +1382,8 @@ p { color: var(--muted); }
 }
 .dash-profile-menu.open .dash-profile-menu__card { opacity: 1; visibility: visible; pointer-events: auto; transform: translateY(0) scale(1); }
 .dash-profile-menu__card button, .dash-profile-menu__card .dash-profile-menu__row {
-  display: flex; align-items: center; gap: 10px; border: none; background: none; text-align: left;
-  padding: 10px 12px; border-radius: 10px; font-size: 13.5px; color: var(--text); cursor: pointer;
+  display: flex; align-items: center; gap: 10px; border: none; background: none; text-align: start;
+  padding-block: 10px; padding-inline: 12px; border-radius: 10px; font-size: 13.5px; color: var(--text); cursor: pointer;
   font-family: 'Sora', sans-serif; width: 100%; min-height: 44px;
 }
 .dash-profile-menu__card button:hover, .dash-profile-menu__card .dash-profile-menu__row:hover { background: rgba(16,33,75,0.05); }
@@ -1392,7 +1393,7 @@ p { color: var(--muted); }
 .dash-profile-menu__signout i { color: #c0392b !important; }
 /* "Admins" row's own chevron, pointing at the nested submenu */
 .dash-profile-menu__row--admins { justify-content: space-between; }
-.dash-profile-menu__row--admins .dash-profile-menu__row-chevron { margin-left: auto; font-size: 11px; color: var(--muted); }
+.dash-profile-menu__row--admins .dash-profile-menu__row-chevron { margin-inline-start: auto; font-size: 11px; color: var(--muted); }
 
 /* ── Variant D — Nested Submenu (Section 24, structurally locked) ─────────
    The "Admins" row opens a second scrollable pane BESIDE the main panel,
@@ -1404,32 +1405,32 @@ p { color: var(--muted); }
    there also isn't room on the left on a small screen, its max-width is
    clamped to the remaining viewport space instead of overflowing. */
 .dash-admins-submenu {
-  position: absolute; top: 0; right: calc(100% + 6px); width: 240px;
+  position: absolute; top: 0; inset-inline-end: calc(100% + 6px); width: 240px;
   background: var(--lm-pale); border: 1.5px solid rgba(16,33,75,0.10);
-  border-radius: 14px 14px 0 14px; /* sharp corner mirrored to the side facing the main panel */
+  border-start-start-radius: 14px; border-start-end-radius: 14px; border-end-end-radius: 0; border-end-start-radius: 14px; /* sharp corner mirrored to the side facing the main panel */
   box-shadow: 0 12px 32px rgba(16,33,75,0.18), 0 2px 8px rgba(16,33,75,0.08);
   padding: 8px; display: none; flex-direction: column; gap: 2px;
   opacity: 0; transform: translateY(-8px) scale(0.98); transform-origin: top right;
   transition: opacity 0.2s ease, transform 0.2s cubic-bezier(.4,0,.2,1);
 }
 .dash-admins-submenu.open { display: flex; opacity: 1; transform: translateY(0) scale(1); }
-.dash-admins-submenu.dash-admins-submenu--flip-right { right: auto; left: calc(100% + 6px); border-radius: 14px 14px 14px 0; transform-origin: top left; }
+.dash-admins-submenu.dash-admins-submenu--flip-right { inset-inline-end: auto; inset-inline-start: calc(100% + 6px); border-start-start-radius: 14px; border-start-end-radius: 14px; border-end-end-radius: 14px; border-end-start-radius: 0; transform-origin: top left; }
 .dash-admins-submenu__scroll { max-height: 225px; overflow-y: auto; display: flex; flex-direction: column; gap: 2px; }
 .dash-admins-submenu__row {
-  display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 10px;
-  cursor: pointer; border-left: 3px solid transparent; min-height: 44px;
+  display: flex; align-items: center; gap: 10px; padding-block: 8px; padding-inline: 10px; border-radius: 10px;
+  cursor: pointer; border-inline-start: 3px solid transparent; min-height: 44px;
   transition: background 0.15s ease, border-color 0.15s ease;
 }
 .dash-admins-submenu__row:hover { background: rgba(255,255,255,0.55); }
-.dash-admins-submenu__row.selected { background: rgba(255,255,255,0.75); border-left-color: var(--gold, #d7bd88); font-weight: 700; }
+.dash-admins-submenu__row.selected { background: rgba(255,255,255,0.75); border-inline-start-color: var(--gold, #d7bd88); font-weight: 700; }
 .dash-admins-submenu__avatar { width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0; overflow: hidden; background: #10214b; color: #d7bd88; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
 .dash-admins-submenu__avatar img { width: 100%; height: 100%; object-fit: cover; }
 .dash-admins-submenu__label { font-size: 13px; color: var(--navy); flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .dash-admins-submenu__check { color: #1d9bf0; font-size: 11px; flex-shrink: 0; }
-.dash-admins-submenu__empty { padding: 10px 12px; font-size: 12px; color: var(--muted); }
+.dash-admins-submenu__empty { padding-block: 10px; padding-inline: 12px; font-size: 12px; color: var(--muted); }
 
 /* ── Icon-only utility buttons (notification + message) ────────────────── */
-.dash-icon-utils { display: flex; align-items: center; gap: 6px; margin-left: 10px; margin-right: 6px; }
+.dash-icon-utils { display: flex; align-items: center; gap: 6px; margin-inline-start: 10px; margin-inline-end: 6px; }
 .dash-icon-util-btn { width: 40px; height: 40px; min-width: 44px; min-height: 44px; border-radius: 50%; border: 1px solid rgba(16,33,75,0.08); background: var(--surface); color: var(--navy); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 15px; transition: background 0.15s ease; }
 .dash-icon-util-btn:hover { background: var(--lm-pale); border-color: var(--lm-orchid); }
 .dash-notif-wrap { position: relative; }
@@ -1441,10 +1442,10 @@ p { color: var(--muted); }
    icon button instead of inline after text. display:none by default;
    updateNavBadge() (JS, untouched) toggles it same as before. */
 .dash-icon-util-badge {
-  display: none; position: absolute; top: -2px; right: -2px;
+  display: none; position: absolute; top: -2px; inset-inline-end: -2px;
   background: var(--orange); color: #fff; font-size: 10px; font-weight: 700;
   min-width: 16px; height: 16px; border-radius: 8px; align-items: center;
-  justify-content: center; padding: 0 4px; border: 1.5px solid var(--surface);
+  justify-content: center; padding-block: 0; padding-inline: 4px; border: 1.5px solid var(--surface);
 }
 /* TASK-4 (CEO task-list item 9): real Facebook-style notification panel.
    Built to match the CEO's dedicated reference image for this panel
@@ -1456,38 +1457,38 @@ p { color: var(--muted); }
    header's other dropdowns in this file — the reference image governs
    the panel's INTERNAL layout, Section 24 governs the shell it sits in. */
 .dash-notif-panel {
-  display: none; position: absolute; top: calc(100% + 10px); right: 0; width: 380px;
+  display: none; position: absolute; top: calc(100% + 10px); inset-inline-end: 0; width: 380px;
   background: var(--surface); border: 1.5px solid rgba(16,33,75,0.10);
-  border-radius: 14px 0 14px 14px;
+  border-start-start-radius: 14px; border-start-end-radius: 0; border-end-end-radius: 14px; border-end-start-radius: 14px;
   box-shadow: 0 12px 32px rgba(16,33,75,0.18), 0 2px 8px rgba(16,33,75,0.08);
   z-index: 500; flex-direction: column;
   opacity: 0; transform: translateY(-8px) scale(0.98); transform-origin: top right;
   transition: opacity 0.2s ease, transform 0.2s cubic-bezier(.4,0,.2,1);
 }
 .dash-notif-panel.open { display: flex; opacity: 1; transform: translateY(0) scale(1); }
-.dash-notif-panel__header { display: flex; align-items: center; justify-content: space-between; padding: 16px 16px 12px; flex-shrink: 0; }
+.dash-notif-panel__header { display: flex; align-items: center; justify-content: space-between; padding-block: 16px 12px; padding-inline: 16px; flex-shrink: 0; }
 .dash-notif-panel__title { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 700; color: var(--navy); }
 .dash-notif-panel__link { border: none; background: none; color: var(--navy); font-size: 12.5px; font-weight: 600; cursor: pointer; padding: 4px; font-family: 'Sora', sans-serif; text-decoration: underline; }
 /* Tabs row: All [count] / Archived pills, per the reference image —
    plus the settings gear sitting at the far right of this same row. */
-.dash-notif-panel__tabs { display: flex; align-items: center; gap: 8px; padding: 0 16px 12px; flex-shrink: 0; }
-.dash-notif-panel__tab { border: none; background: var(--bg); color: var(--navy); font-size: 12.5px; font-weight: 700; padding: 6px 12px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px; font-family: 'Sora', sans-serif; }
+.dash-notif-panel__tabs { display: flex; align-items: center; gap: 8px; padding-block: 0 12px; padding-inline: 16px; flex-shrink: 0; }
+.dash-notif-panel__tab { border: none; background: var(--bg); color: var(--navy); font-size: 12.5px; font-weight: 700; padding-block: 6px; padding-inline: 12px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px; font-family: 'Sora', sans-serif; }
 .dash-notif-panel__tab.active { background: var(--navy); color: #fff; }
-.dash-notif-panel__tab-count { background: rgba(255,255,255,0.25); color: inherit; font-size: 10.5px; font-weight: 700; padding: 1px 6px; border-radius: 999px; }
+.dash-notif-panel__tab-count { background: rgba(255,255,255,0.25); color: inherit; font-size: 10.5px; font-weight: 700; padding-block: 1px; padding-inline: 6px; border-radius: 999px; }
 .dash-notif-panel__tab:not(.active) .dash-notif-panel__tab-count { background: rgba(16,33,75,0.1); }
-.dash-notif-panel__icon-btn { margin-left: auto; border: none; background: none; color: var(--muted); cursor: pointer; width: 30px; height: 30px; min-width: 30px; min-height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; }
+.dash-notif-panel__icon-btn { margin-inline-start: auto; border: none; background: none; color: var(--muted); cursor: pointer; width: 30px; height: 30px; min-width: 30px; min-height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; }
 .dash-notif-panel__icon-btn:hover, .dash-notif-panel__icon-btn.active { background: var(--lm-pale, #FED5FF); color: var(--navy); }
 /* Select-mode bulk action bar — appears when the gear toggles select
    mode on (CEO spec: settings icon supports select-all/select-some then
    delete or archive). */
-.dash-notif-panel__settings { display: none; align-items: center; gap: 8px; padding: 0 16px 12px; flex-wrap: wrap; flex-shrink: 0; border-bottom: 1px solid rgba(16,33,75,0.06); }
+.dash-notif-panel__settings { display: none; align-items: center; gap: 8px; padding-block: 0 12px; padding-inline: 16px; flex-wrap: wrap; flex-shrink: 0; border-bottom: 1px solid rgba(16,33,75,0.06); }
 .dash-notif-panel__settings.open { display: flex; }
-.dash-notif-panel__settings button { border: 1px solid rgba(16,33,75,0.12); background: #fff; color: var(--navy); font-size: 11.5px; font-weight: 600; padding: 5px 10px; border-radius: 8px; cursor: pointer; font-family: 'Sora', sans-serif; }
+.dash-notif-panel__settings button { border: 1px solid rgba(16,33,75,0.12); background: #fff; color: var(--navy); font-size: 11.5px; font-weight: 600; padding-block: 5px; padding-inline: 10px; border-radius: 8px; cursor: pointer; font-family: 'Sora', sans-serif; }
 .dash-notif-panel__settings button:hover { background: var(--bg); }
 .dash-notif-panel__settings button.dash-notif-panel__settings-danger { color: #c0392b; border-color: rgba(192,57,43,0.25); }
-.dash-notif-panel__list { max-height: 440px; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; padding: 4px 0 8px; border-top: 1px solid rgba(16,33,75,0.06); }
+.dash-notif-panel__list { max-height: 440px; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; padding-block: 4px 8px; padding-inline: 0; border-top: 1px solid rgba(16,33,75,0.06); }
 .dash-notif-row {
-  display: flex; align-items: flex-start; gap: 12px; padding: 12px 16px;
+  display: flex; align-items: flex-start; gap: 12px; padding-block: 12px; padding-inline: 16px;
   cursor: pointer; position: relative; transition: background 0.15s ease;
   border-bottom: 1px solid rgba(16,33,75,0.05);
 }
@@ -1510,17 +1511,17 @@ p { color: var(--muted); }
 .dash-notif-row__meta { font-size: 12px; color: var(--muted); margin-top: 2px; }
 /* Optional secondary line (review/application snippet), per the
    reference image's small quoted-comment / item-reference rows. */
-.dash-notif-row__snippet { font-size: 12px; color: var(--text); background: var(--bg); border-radius: 8px; padding: 6px 10px; margin-top: 8px; font-style: italic; }
+.dash-notif-row__snippet { font-size: 12px; color: var(--text); background: var(--bg); border-radius: 8px; padding-block: 6px; padding-inline: 10px; margin-top: 8px; font-style: italic; }
 .dash-notif-row__chevron { align-self: center; color: var(--muted); font-size: 13px; flex-shrink: 0; }
 .dash-notif-row__actions { display: flex; gap: 6px; margin-top: 8px; }
-.dash-notif-row__actions button { border: none; border-radius: 8px; padding: 5px 10px; font-size: 11px; font-weight: 700; cursor: pointer; font-family: 'Sora', sans-serif; }
+.dash-notif-row__actions button { border: none; border-radius: 8px; padding-block: 5px; padding-inline: 10px; font-size: 11px; font-weight: 700; cursor: pointer; font-family: 'Sora', sans-serif; }
 .dash-notif-row__actions .approve { background: #e6f7ef; color: #0d7c4a; }
 .dash-notif-row__actions .reject { background: #fdecea; color: #c0392b; }
-.dash-notif-panel__empty { padding: 44px 20px; text-align: center; color: var(--muted); font-size: 13px; }
+.dash-notif-panel__empty { padding-block: 44px; padding-inline: 20px; text-align: center; color: var(--muted); font-size: 13px; }
 /* TASK-4 START (CEO task-list item 1, 2nd round): mobile notification panel overlap fix.
    DIAGNOSIS — the old rule just below this comment (now removed) only
    changed the panel's WIDTH and nudged `right` by -8px, while leaving
-   `position: absolute; right: 0` anchored to `.dash-notif-wrap` (the
+   `position: absolute; inset-inline-end: 0` anchored to `.dash-notif-wrap` (the
    bell button itself). The bell button sits well inside the header, not
    at the true right edge of the viewport (Delete/View Site/etc. share
    that header). Because the panel's mobile width is nearly the full
@@ -1537,7 +1538,7 @@ p { color: var(--muted); }
    mobile tier, not just the smallest phones) the panel switches from
    `position: absolute` (anchored to the trigger button) to
    `position: fixed`, centered horizontally in the viewport with
-   `left: 50%; transform: translateX(-50%) ...`, and anchored below the
+   `inset-inline-start: 50%; transform: translateX(-50%) ...`, and anchored below the
    sticky header using the same 68px header-height value Section 27's
    hamburger menu and `.pc-mobile-menu` already use elsewhere in this
    file (+8px gap, matching the desktop panel's own 10px trigger gap).
@@ -1548,8 +1549,8 @@ p { color: var(--muted); }
   .dash-notif-panel {
     position: fixed;
     top: 76px;
-    left: 50%;
-    right: auto;
+    inset-inline-start: 50%;
+    inset-inline-end: auto;
     width: calc(100vw - 32px);
     max-width: 400px;
     transform: translateX(-50%) translateY(-8px) scale(0.98);
@@ -1584,9 +1585,9 @@ p { color: var(--muted); }
      rounded-corner panels don't visually clip flush against the true
      screen edge, rather than dropping to 0 padding everywhere. */
   [data-dash-theme="suite"] .admin-layout { padding: 8px; }
-  [data-dash-theme="suite"] .admin-main { padding-left: 0; }
-  .admin-content { padding: 12px 8px; }
-  .admin-panel { padding: 16px 12px; }
+  [data-dash-theme="suite"] .admin-main { padding-inline-start: 0; }
+  .admin-content { padding-block: 12px; padding-inline: 8px; }
+  .admin-panel { padding-block: 16px; padding-inline: 12px; }
 
   [data-dash-theme="suite"] .admin-icon-rail { display: none; }
   /* TASK-4 (CEO task-list item 2): .admin-sidebar hidden entirely on
@@ -1606,7 +1607,7 @@ p { color: var(--muted); }
   [data-dash-theme="suite"] .admin-sidebar { display: none; }
   .dash-profile-menu__name { display: none; }
   /* TASK-4 (bug fix, caught via Playwright screenshot at 390px): the
-     dropdown card is position:absolute + right:-8px relative to its
+     dropdown card is position:absolute + inset-inline-end:-8px relative to its
      .dash-profile-menu parent. On mobile the trigger's name/position text
      is hidden (rule above), leaving only a ~44px avatar — but the parent
      doesn't sit flush against the viewport's right edge (dash-icon-utils
@@ -1614,7 +1615,7 @@ p { color: var(--muted); }
      narrow trigger ran its LEFT edge past x:0, clipping "Admins" to
      "dmins" in the screenshot. Pinned to the viewport instead, same fix
      pattern as the submenu below. */
-  .dash-profile-menu__card { position: fixed; left: 12px; right: 12px; top: 68px; width: auto; min-width: 0; }
+  .dash-profile-menu__card { position: fixed; inset-inline-start: 12px; inset-inline-end: 12px; top: 68px; width: auto; min-width: 0; }
   /* TASK-4: on mobile there isn't room for the Variant D submenu to open
      BESIDE the main card the way it does on desktop (side-by-side nesting
      needs width neither panel has at 390px) — it replaces the main card's
@@ -1631,8 +1632,8 @@ p { color: var(--muted); }
      constant used by the hamburger drawer in Design System Section 27) —
      same slot the main card now uses, since it replaces rather than
      stacks on mobile (see .admins-open rule above). */
-  .dash-admins-submenu { position: fixed; left: 12px; right: 12px; top: 68px; width: auto; max-width: none; }
-  .dash-admins-submenu.dash-admins-submenu--flip-right { left: 12px; right: 12px; }
+  .dash-admins-submenu { position: fixed; inset-inline-start: 12px; inset-inline-end: 12px; top: 68px; width: auto; max-width: none; }
+  .dash-admins-submenu.dash-admins-submenu--flip-right { inset-inline-start: 12px; inset-inline-end: 12px; }
 
   /* Live Chat's two-column layout (#chatThreadList fixed at 300px beside
      #chatThreadDetail) had NO responsive handling at all in the original,
@@ -1652,7 +1653,7 @@ p { color: var(--muted); }
      comments where they used to sit) — the mobile-specific sizing rules
      that used to apply to them are removed here too rather than left as
      dead selectors targeting elements that no longer exist. */
-  .admin-topbar { padding: 12px 16px; gap: 8px; }
+  .admin-topbar { padding-block: 12px; padding-inline: 16px; gap: 8px; }
   .pc-hamburger { flex-shrink: 0; }
 
   /* Applications "table" (a CSS Grid, not a real <table> — see .pc-apps-scroll
@@ -1720,7 +1721,7 @@ p { color: var(--muted); }
      will dropdown". The chevron sits at its side, per that same
      instruction, and rotates to show open/closed state. */
   .pc-app-applicant { cursor: pointer; }
-  .pc-app-applicant__chevron { display: inline-block; margin-left: auto; font-size: 11px; color: var(--muted); transition: transform 0.2s ease; flex-shrink: 0; }
+  .pc-app-applicant__chevron { display: inline-block; margin-inline-start: auto; font-size: 11px; color: var(--muted); transition: transform 0.2s ease; flex-shrink: 0; }
   .pc-app-row--expanded .pc-app-applicant__chevron { transform: rotate(180deg); }
 
   /* The dropdown itself: Pet Requested / Applied Date / Status, each
@@ -1766,7 +1767,7 @@ p { color: var(--muted); }
 <div class="admin-login" id="loginScreen" style="display:flex;">
   <div class="admin-login__card">
     <div class="admin-login__logo">
-      <div style="width:56px;height:56px;background:linear-gradient(135deg,#10214b,#1a2f5c);border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:24px;font-weight:700;color:#d7bd88;">PC</div>
+      <div style="width:56px;height:56px;background:linear-gradient(135deg,#10214b,#1a2f5c);border-radius:14px;display:flex;align-items:center;justify-content:center;margin-block: 0 16px; margin-inline: auto;font-size:24px;font-weight:700;color:#d7bd88;">PC</div>
       <h1>Pet Center Admin</h1>
       <p>Secure dashboard — authorized staff only</p>
     </div>
@@ -2000,19 +2001,19 @@ p { color: var(--muted); }
              this is purely additive and does not change any existing
              behavior. No other line in this panel was touched by Task 4. -->
         <div class="admin-stat-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;margin-bottom:40px;">
-          <div class="admin-stat-card" style="background:#f9f7f2;padding:20px;border-radius:8px;border-left:4px solid #d7bd88;">
+          <div class="admin-stat-card" style="background:#f9f7f2;padding:20px;border-radius:8px;border-inline-start:4px solid #d7bd88;">
             <div style="font-size:12px;color:#999;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.05em;">Available Pets</div>
             <div id="statAvailable" style="font-size:32px;font-weight:700;color:#10214b;">0</div>
           </div>
-          <div class="admin-stat-card" style="background:#f9f7f2;padding:20px;border-radius:8px;border-left:4px solid #d7bd88;">
+          <div class="admin-stat-card" style="background:#f9f7f2;padding:20px;border-radius:8px;border-inline-start:4px solid #d7bd88;">
             <div style="font-size:12px;color:#999;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.05em;">Pending Applications</div>
             <div id="statPending" style="font-size:32px;font-weight:700;color:#d7bd88;">0</div>
           </div>
-          <div class="admin-stat-card" style="background:#f9f7f2;padding:20px;border-radius:8px;border-left:4px solid #d7bd88;">
+          <div class="admin-stat-card" style="background:#f9f7f2;padding:20px;border-radius:8px;border-inline-start:4px solid #d7bd88;">
             <div style="font-size:12px;color:#999;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.05em;">Approved Applications</div>
             <div id="statApproved" style="font-size:32px;font-weight:700;color:#0d7c4a;">0</div>
           </div>
-          <div class="admin-stat-card" style="background:#f9f7f2;padding:20px;border-radius:8px;border-left:4px solid #d7bd88;">
+          <div class="admin-stat-card" style="background:#f9f7f2;padding:20px;border-radius:8px;border-inline-start:4px solid #d7bd88;">
             <div style="font-size:12px;color:#999;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.05em;">Total Adopted</div>
             <div id="statAdopted" style="font-size:32px;font-weight:700;color:#10214b;">0</div>
           </div>
@@ -2022,7 +2023,7 @@ p { color: var(--muted); }
       <!-- PUBLISH PETS PANEL -->
       <div id="publishPanel" class="admin-panel" style="display:none;">
         <h2 style="font-family:'Cormorant Garamond',serif;color:#10214b;margin-bottom:24px;">Publish Adoptable Pets</h2>
-        
+
         <!-- Category Selection Buttons -->
         <!-- TASK-4 (CEO task-list item 7, screenshot 7): hand-drawn SVG
              icon paths replaced with real Font Awesome icons (Design
@@ -2085,7 +2086,7 @@ p { color: var(--muted); }
       <div id="editPanel" class="admin-panel" style="display:none;">
         <h2>Edit Published Pets</h2>
         <p style="color:#888;margin-bottom:20px;">Manage existing pets in your catalog</p>
-        
+
         <!-- TASK-4 (CEO task-list item 3, 2nd round): this panel used to
              build its category picker via the site-wide native-<select>
              auto-upgrade system (upgradeNativeSelectsToCustom(), see its
@@ -2203,13 +2204,13 @@ p { color: var(--muted); }
             </select>
           </div>
           <div style="flex:0 0 auto;">
-            <div id="appCount" style="font-size:13px;color:#8b7d6b;padding:12px 0;"></div>
+            <div id="appCount" style="font-size:13px;color:#8b7d6b;padding-block: 12px; padding-inline: 0;"></div>
           </div>
         </div>
 
-        <div id="appBulkActionBar" style="display:none;align-items:center;gap:10px;margin-bottom:12px;padding:8px 12px;background:#fff8f2;border:1px solid rgba(237,118,36,0.25);border-radius:8px;">
+        <div id="appBulkActionBar" style="display:none;align-items:center;gap:10px;margin-bottom:12px;padding-block: 8px; padding-inline: 12px;background:#fff8f2;border:1px solid rgba(237,118,36,0.25);border-radius:8px;">
           <span id="appBulkSelectedCount" style="font-size:12px;color:#7a6d5f;font-weight:600;"></span>
-          <button onclick="deleteApplicationsBulk()" class="pc-btn" style="margin-left:auto;padding:6px 12px;font-size:12px;background:linear-gradient(135deg,#c0392b,#a93226);">Delete Permanently</button>
+          <button onclick="deleteApplicationsBulk()" class="pc-btn" style="margin-inline-start:auto;padding-block: 6px; padding-inline: 12px;font-size:12px;background:linear-gradient(135deg,#c0392b,#a93226);">Delete Permanently</button>
         </div>
 
         <!-- TASK-4 (attribute-only edit): wrapped the header row + list + empty
@@ -2241,7 +2242,7 @@ p { color: var(--muted); }
              screenshot showed all 5 header labels crammed onto 2 grid
              columns, unreadable, even though the ROWS beneath had
              correctly collapsed to 2 columns already. -->
-        <div id="applicationsHeaderRow" style="display:grid;grid-template-columns:32px 2fr 2fr 1.2fr 1fr 56px;gap:0;background:#f0ece7;border-radius:8px 8px 0 0;padding:10px 16px;border-bottom:2px solid #d7bd88;">
+        <div id="applicationsHeaderRow" style="display:grid;grid-template-columns:32px 2fr 2fr 1.2fr 1fr 56px;gap:0;background:#f0ece7;border-start-start-radius: 8px; border-start-end-radius: 8px; border-end-end-radius: 0; border-end-start-radius: 0;padding-block: 10px; padding-inline: 16px;border-bottom:2px solid #d7bd88;">
           <div><input type="checkbox" id="appSelectAllCheckbox" style="width:16px;height:16px;cursor:pointer;" onchange="toggleSelectAllApplications(this.checked)"></div>
           <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#7a6d5f;">Applicant</div>
           <div class="pc-app-row__desktop-col" style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#7a6d5f;">Pet Requested</div>
@@ -2250,7 +2251,7 @@ p { color: var(--muted); }
           <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#7a6d5f;">Actions</div>
         </div>
         <div id="applicationsList"></div>
-        <div id="applicationsEmpty" style="display:none;padding:48px 24px;text-align:center;background:#fff;border-radius:0 0 8px 8px;border:1px solid #eee;border-top:none;">
+        <div id="applicationsEmpty" style="display:none;padding-block: 48px; padding-inline: 24px;text-align:center;background:#fff;border-start-start-radius: 0; border-start-end-radius: 0; border-end-end-radius: 8px; border-end-start-radius: 8px;border:1px solid #eee;border-top:none;">
           <p style="color:#aaa;font-size:14px;">No applications match the current filters.</p>
         </div>
         </div>
@@ -2278,14 +2279,14 @@ p { color: var(--muted); }
         <!-- Reused .pc-apps-scroll wrapper from Applications (TASK-4's mobile
              horizontal-scroll fallback applies here too, same column-collapse need). -->
         <div class="pc-apps-scroll">
-          <div id="verifRequestsHeaderRow" style="display:grid;grid-template-columns:2fr 1.4fr 1fr 100px;gap:0;background:#f0ece7;border-radius:8px 8px 0 0;padding:10px 16px;border-bottom:2px solid #d7bd88;">
+          <div id="verifRequestsHeaderRow" style="display:grid;grid-template-columns:2fr 1.4fr 1fr 100px;gap:0;background:#f0ece7;border-start-start-radius: 8px; border-start-end-radius: 8px; border-end-end-radius: 0; border-end-start-radius: 0;padding-block: 10px; padding-inline: 16px;border-bottom:2px solid #d7bd88;">
             <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#7a6d5f;">Merchant Username</div>
             <div class="pc-verif-row__desktop-col" style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#7a6d5f;">Submitted</div>
             <div class="pc-verif-row__desktop-col" style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#7a6d5f;">Country</div>
             <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#7a6d5f;">Actions</div>
           </div>
           <div id="verifRequestsList"></div>
-          <div id="verifRequestsEmpty" style="display:none;padding:48px 24px;text-align:center;background:#fff;border-radius:0 0 8px 8px;border:1px solid #eee;border-top:none;">
+          <div id="verifRequestsEmpty" style="display:none;padding-block: 48px; padding-inline: 24px;text-align:center;background:#fff;border-start-start-radius: 0; border-start-end-radius: 0; border-end-end-radius: 8px; border-end-start-radius: 8px;border:1px solid #eee;border-top:none;">
             <p style="color:#aaa;font-size:14px;">No pending verification requests.</p>
           </div>
         </div>
@@ -2311,7 +2312,7 @@ p { color: var(--muted); }
         </div>
       </div>
 
-      <div style="display:flex;gap:10px;margin:18px 0;flex-wrap:wrap;align-items:center;">
+      <div style="display:flex;gap:10px;margin-block: 18px; margin-inline: 0;flex-wrap:wrap;align-items:center;">
         <input type="text" id="chatLookupInput" class="pc-form-input" style="flex:1;min-width:220px;" placeholder="Jump to a chat — exact chat ID or email">
         <button onclick="chatAdminLookup()" class="pc-btn pc-btn--ghost">Find</button>
       </div>
@@ -2324,12 +2325,12 @@ p { color: var(--muted); }
         <button class="chat-tab-btn" data-tab="archived" onclick="switchChatTab('archived')">Archived</button>
       </div>
 
-      <div id="chatBulkActionBar" style="display:none;align-items:center;gap:10px;margin-bottom:12px;padding:8px 12px;background:#fff8f2;border:1px solid rgba(237,118,36,0.25);border-radius:8px;">
+      <div id="chatBulkActionBar" style="display:none;align-items:center;gap:10px;margin-bottom:12px;padding-block: 8px; padding-inline: 12px;background:#fff8f2;border:1px solid rgba(237,118,36,0.25);border-radius:8px;">
         <span id="chatBulkSelectedCount" style="font-size:12px;color:#7a6d5f;font-weight:600;"></span>
-        <div style="margin-left:auto;display:flex;gap:8px;">
-          <button id="chatBulkUnarchiveBtn" onclick="chatBulkAction('unarchive')" class="pc-btn pc-btn--ghost" style="display:none;padding:6px 12px;font-size:12px;">Unarchive</button>
-          <button id="chatBulkArchiveBtn" onclick="chatBulkAction('archive')" class="pc-btn pc-btn--ghost" style="padding:6px 12px;font-size:12px;">Archive</button>
-          <button onclick="chatBulkAction('delete')" class="pc-btn" style="padding:6px 12px;font-size:12px;background:linear-gradient(135deg,#c0392b,#a93226);">Delete Permanently</button>
+        <div style="margin-inline-start:auto;display:flex;gap:8px;">
+          <button id="chatBulkUnarchiveBtn" onclick="chatBulkAction('unarchive')" class="pc-btn pc-btn--ghost" style="display:none;padding-block: 6px; padding-inline: 12px;font-size:12px;">Unarchive</button>
+          <button id="chatBulkArchiveBtn" onclick="chatBulkAction('archive')" class="pc-btn pc-btn--ghost" style="padding-block: 6px; padding-inline: 12px;font-size:12px;">Archive</button>
+          <button onclick="chatBulkAction('delete')" class="pc-btn" style="padding-block: 6px; padding-inline: 12px;font-size:12px;background:linear-gradient(135deg,#c0392b,#a93226);">Delete Permanently</button>
         </div>
       </div>
 
@@ -2345,7 +2346,7 @@ p { color: var(--muted); }
       <div class="cad-two-col" style="display:flex;gap:18px;align-items:flex-start;">
         <div id="chatThreadList" style="width:300px;flex-shrink:0;height:640px;max-height:calc(100vh - 280px);overflow-y:auto;display:flex;flex-direction:column;gap:8px;"></div>
         <div id="chatThreadDetail" style="flex:1;height:640px;max-height:calc(100vh - 280px);background:#f9f7f2;border-radius:14px;padding:0;overflow:hidden;display:flex;flex-direction:column;">
-          <div style="padding:60px 20px;text-align:center;color:#a89c8a;font-size:13px;">Select a conversation from the list to view it here.</div>
+          <div style="padding-block: 60px; padding-inline: 20px;text-align:center;color:#a89c8a;font-size:13px;">Select a conversation from the list to view it here.</div>
         </div>
       </div>
     </div>
@@ -2382,9 +2383,9 @@ p { color: var(--muted); }
         <p style="color:#888;font-size:14px;">A single automated identity that sends pre-written responses when a chat starts or when a closed ticket is re-opened. It never replies live — only these structured messages.</p>
       </div>
 
-      <div style="background:#fff8f2;border:1px solid rgba(237,118,36,0.2);border-radius:10px;padding:12px 16px;margin-bottom:24px;font-size:13px;color:#7a6d5f;">
-        <i class="fas fa-circle-info" style="color:#ED7624;margin-right:6px;"></i>
-        In any message below, type <code style="background:#fff;border:1px solid rgba(237,118,36,0.25);border-radius:4px;padding:1px 6px;color:#ED7624;font-weight:600;">{name}</code> anywhere you'd say the customer's name — it's automatically replaced with the real first name they entered before the message is sent. Example: <em>"Hi {name}, welcome to the live chat!"</em> becomes <em>"Hi Sarah, welcome to the live chat!"</em> for a customer named Sarah.
+      <div style="background:#fff8f2;border:1px solid rgba(237,118,36,0.2);border-radius:10px;padding-block: 12px; padding-inline: 16px;margin-bottom:24px;font-size:13px;color:#7a6d5f;">
+        <i class="fas fa-circle-info" style="color:#ED7624;margin-inline-end:6px;"></i>
+        In any message below, type <code style="background:#fff;border:1px solid rgba(237,118,36,0.25);border-radius:4px;padding-block: 1px; padding-inline: 6px;color:#ED7624;font-weight:600;">{name}</code> anywhere you'd say the customer's name — it's automatically replaced with the real first name they entered before the message is sent. Example: <em>"Hi {name}, welcome to the live chat!"</em> becomes <em>"Hi Sarah, welcome to the live chat!"</em> for a customer named Sarah.
       </div>
 
       <form id="chatBotForm" enctype="multipart/form-data">
@@ -2393,7 +2394,7 @@ p { color: var(--muted); }
             <img id="chatBotPhotoPreview" src="" style="width:76px;height:76px;border-radius:50%;object-fit:cover;border:2px solid #d7bd88;display:none;">
             <div id="chatBotPhotoPlaceholder" style="width:76px;height:76px;border-radius:50%;background:#10214b;color:#d7bd88;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;">PB</div>
             <label style="display:block;margin-top:8px;font-size:11px;color:#ED7624;cursor:pointer;">
-              <i class="fas fa-camera" style="margin-right:4px;"></i>Change photo
+              <i class="fas fa-camera" style="margin-inline-end:4px;"></i>Change photo
               <input type="file" id="chatBotPhotoInput" accept="image/jpeg,image/png" style="display:none;">
             </label>
           </div>
@@ -2452,13 +2453,13 @@ p { color: var(--muted); }
 
 <style>
 .chat-tab-btn {
-  border: none; background: none; cursor: pointer; padding: 10px 16px; font-size: 13px;
+  border: none; background: none; cursor: pointer; padding-block: 10px; padding-inline: 16px; font-size: 13px;
   font-weight: 600; color: #888; border-bottom: 2px solid transparent; font-family: 'Sora', system-ui, sans-serif;
 }
 .chat-tab-btn.active { color: #10214b; border-bottom-color: #ED7624; }
 .chat-tab-count {
   display: inline-block; background: #f4f1ea; color: #7a6d5f; font-size: 10.5px; font-weight: 700;
-  border-radius: 9px; padding: 1px 7px; margin-left: 4px;
+  border-radius: 9px; padding-block: 1px; padding-inline: 7px; margin-inline-start: 4px;
 }
 .chat-thread-card {
   background: #fff; border: 1.5px solid rgba(16,33,75,0.1); border-radius: 10px; padding: 12px;
@@ -2466,17 +2467,17 @@ p { color: var(--muted); }
 }
 .chat-thread-card:hover { border-color: #ED7624; }
 .chat-thread-card.selected { border-color: #ED7624; background: #fff8f2; }
-.chat-thread-card.stale { border-left: 3px solid #ED7624; }
+.chat-thread-card.stale { border-inline-start: 3px solid #ED7624; }
 .chat-thread-name { font-weight: 600; font-size: 13px; color: #10214b; }
 .chat-thread-preview { font-size: 11.5px; color: #888; margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .chat-thread-meta { font-size: 10px; color: #a89c8a; margin-top: 5px; display: flex; align-items: center; gap: 5px; }
 
 /* Admin composer — exact visual match to the customer widget's composer */
-.cad-composer { flex-shrink: 0; border-top: 1px solid rgba(16,33,75,0.08); padding: 10px 12px; background: #fff; }
+.cad-composer { flex-shrink: 0; border-top: 1px solid rgba(16,33,75,0.08); padding-block: 10px; padding-inline: 12px; background: #fff; }
 .cad-attach-row { display: flex; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
 .cad-attach-chip {
   display: flex; align-items: center; gap: 6px; background: #f4f1ea; border-radius: 8px;
-  padding: 5px 9px; font-size: 11px; color: #4a4030;
+  padding-block: 5px; padding-inline: 9px; font-size: 11px; color: #4a4030;
 }
 .cad-attach-chip .cad-chip-status { color: #7a6d5f; }
 .cad-attach-chip.uploading .cad-chip-status { color: #ED7624; }
@@ -2496,7 +2497,7 @@ p { color: var(--muted); }
 .cad-tool-btn.recording { background: #ef4444; color: #fff; }
 .cad-composer-input {
   flex: 1; resize: none; border: 1.5px solid rgba(16,33,75,0.14); border-radius: 18px;
-  padding: 8px 14px; font-family: 'Sora', system-ui, sans-serif; font-size: 13px; max-height: 90px;
+  padding-block: 8px; padding-inline: 14px; font-family: 'Sora', system-ui, sans-serif; font-size: 13px; max-height: 90px;
   min-width: 0; box-sizing: border-box;
 }
 .cad-composer-input:focus { outline: none; border-color: #ED7624; }
@@ -2507,7 +2508,7 @@ p { color: var(--muted); }
 .cad-send-btn:disabled { background: #d7bd88; cursor: not-allowed; }
 
 .cad-recording-bar {
-  display: none; align-items: center; gap: 10px; padding: 8px 4px; font-size: 13px; color: #10214b;
+  display: none; align-items: center; gap: 10px; padding-block: 8px; padding-inline: 4px; font-size: 13px; color: #10214b;
 }
 .cad-recording-bar.active { display: flex; }
 .cad-recording-dot { width: 9px; height: 9px; border-radius: 50%; background: #ef4444; animation: cadPulse 1s infinite; flex-shrink: 0; }
@@ -2515,7 +2516,7 @@ p { color: var(--muted); }
 .cad-recording-time { font-variant-numeric: tabular-nums; font-weight: 600; }
 
 .cad-voice-preview {
-  display: none; align-items: center; gap: 10px; padding: 8px 10px; background: #f4f1ea;
+  display: none; align-items: center; gap: 10px; padding-block: 8px; padding-inline: 10px; background: #f4f1ea;
   border-radius: 10px; margin-bottom: 8px;
 }
 .cad-voice-preview.active { display: flex; }
@@ -2523,8 +2524,8 @@ p { color: var(--muted); }
 .cad-msg-bubble-failed { background: #fef2f2; border: 1px solid rgba(239,68,68,0.3); }
 .cad-msg-fail-row { display: flex; align-items: center; gap: 6px; margin-top: 6px; font-size: 11px; color: #ef4444; }
 .cad-retry-btn {
-  border: none; background: #ef4444; color: #fff; border-radius: 6px; padding: 3px 8px;
-  font-size: 10.5px; cursor: pointer; display: flex; align-items: center; gap: 4px; margin-left: auto;
+  border: none; background: #ef4444; color: #fff; border-radius: 6px; padding-block: 3px; padding-inline: 8px;
+  font-size: 10.5px; cursor: pointer; display: flex; align-items: center; gap: 4px; margin-inline-start: auto;
 }
 .cad-retry-btn:hover { background: #dc2626; }
 
@@ -2533,16 +2534,16 @@ p { color: var(--muted); }
 .cad-msg-actions.tapped { display: flex; }
 .cad-msg-action-btn {
   border: none; background: none; color: #a89c8a; cursor: pointer; font-size: 10px;
-  display: flex; align-items: center; gap: 3px; padding: 2px 4px;
+  display: flex; align-items: center; gap: 3px; padding-block: 2px; padding-inline: 4px;
 }
 .cad-msg-action-btn:hover { color: #ED7624; }
 .cad-edit-input {
-  width: 100%; border: 1.5px solid #ED7624; border-radius: 8px; padding: 6px 9px;
+  width: 100%; border: 1.5px solid #ED7624; border-radius: 8px; padding-block: 6px; padding-inline: 9px;
   font-family: 'Sora', system-ui, sans-serif; font-size: 13px; resize: none; box-sizing: border-box;
 }
 .cad-media-delete-btn {
   border: none; background: rgba(239,68,68,0.1); color: #ef4444; cursor: pointer; font-size: 10px;
-  border-radius: 6px; padding: 3px 8px; margin-top: 4px; display: inline-flex; align-items: center; gap: 4px;
+  border-radius: 6px; padding-block: 3px; padding-inline: 8px; margin-top: 4px; display: inline-flex; align-items: center; gap: 4px;
 }
 .cad-media-delete-btn:hover { background: rgba(239,68,68,0.2); }
 
@@ -2558,7 +2559,7 @@ p { color: var(--muted); }
   transition: max-height 0.25s ease, opacity 0.2s ease, margin 0.25s ease;
   background: rgba(16,33,75,0.05); border-radius: 8px; margin-top: 0;
 }
-.cad-original-reveal.show { max-height: 200px; opacity: 1; margin-top: 6px; padding: 8px 10px; }
+.cad-original-reveal.show { max-height: 200px; opacity: 1; margin-top: 6px; padding-block: 8px; padding-inline: 10px; }
 .cad-original-reveal-label { font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: #a89c8a; margin-bottom: 3px; }
 .cad-original-reveal-text { font-size: 12px; color: #4a4030; font-style: italic; line-height: 1.4; }
 
@@ -2591,6 +2592,8 @@ p { color: var(--muted); }
   .cad-send-btn { width: 34px; height: 34px; }
   .cad-composer-input { font-size: 13px; }
 }
+
+/* TASK-web12-3 END */
 </style>
 
 <!-- MODALS -->
@@ -2605,16 +2608,16 @@ p { color: var(--muted); }
      .pc-modal__scroll zone so only that scrolls. closeViewApplicationModal()
      is untouched — still just toggles style.display, nothing about how
      it opens/closes was changed, only the box's internal structure. -->
-<div id="viewApplicationModal" class="pc-modal-shell" style="position:fixed;left:0;top:0;width:100%;height:100%;background:rgba(16,33,75,0.65);display:none;align-items:center;justify-content:center;z-index:9999;padding:20px;">
+<div id="viewApplicationModal" class="pc-modal-shell" style="position:fixed;inset-inline-start:0;top:0;width:100%;height:100%;background:rgba(16,33,75,0.65);display:none;align-items:center;justify-content:center;z-index:9999;padding:20px;">
   <div class="pc-modal-box" style="width:100%;max-width:680px;background:#fff;border-radius:14px;box-shadow:0 20px 60px rgba(16,33,75,0.25);">
-    <div style="display:flex;justify-content:space-between;align-items:center;padding:20px 26px;background:#fff;border-bottom:2px solid #d7bd88;flex-shrink:0;">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding-block: 20px; padding-inline: 26px;background:#fff;border-bottom:2px solid #d7bd88;flex-shrink:0;">
       <h2 style="font-family:'Cormorant Garamond',serif;font-size:22px;color:#10214b;margin:0;">Application Details</h2>
       <button onclick="closeViewApplicationModal()" style="background:#f0ece8;border:none;width:34px;height:34px;border-radius:8px;cursor:pointer;font-size:20px;color:#7a6d5f;display:flex;align-items:center;justify-content:center;">×</button>
     </div>
     <div class="pc-modal__scroll">
       <div id="applicationViewContent" style="padding:26px;"></div>
       <!-- Approve/Reject action area within modal -->
-      <div id="appActionArea" style="padding:0 26px 26px;display:none;"></div>
+      <div id="appActionArea" style="padding-block: 0 26px; padding-inline: 26px;display:none;"></div>
     </div>
   </div>
 </div>
@@ -2626,7 +2629,7 @@ p { color: var(--muted); }
      still needs its OWN overflow-y:auto + max-height directly on the box
      as a safety net for a genuinely short mobile viewport, which this box
      previously had neither of. */ -->
-<div id="approveModal" class="pc-modal-shell" style="position:fixed;left:0;top:0;width:100%;height:100%;background:rgba(16,33,75,0.65);display:none;align-items:center;justify-content:center;z-index:10000;padding:20px;">
+<div id="approveModal" class="pc-modal-shell" style="position:fixed;inset-inline-start:0;top:0;width:100%;height:100%;background:rgba(16,33,75,0.65);display:none;align-items:center;justify-content:center;z-index:10000;padding:20px;">
   <div style="width:100%;max-width:520px;max-height:85vh;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;background:#fff;border-radius:14px;padding:32px;box-shadow:0 20px 60px rgba(16,33,75,0.25);">
     <h3 style="font-family:'Cormorant Garamond',serif;font-size:22px;color:#10214b;margin:0 0 8px;">Approve this application?</h3>
     <p style="color:#7a6d5f;font-size:14px;margin-bottom:20px;">The applicant will be marked as approved and a checkout link can be sent to them.</p>
@@ -2660,7 +2663,7 @@ p { color: var(--muted); }
 <!-- REJECT MODAL -->
 <!-- TASK-4 (CEO task-list item 6): same Use A safety-net fix as
      approveModal above. -->
-<div id="rejectModal" class="pc-modal-shell" style="position:fixed;left:0;top:0;width:100%;height:100%;background:rgba(16,33,75,0.65);display:none;align-items:center;justify-content:center;z-index:10000;padding:20px;">
+<div id="rejectModal" class="pc-modal-shell" style="position:fixed;inset-inline-start:0;top:0;width:100%;height:100%;background:rgba(16,33,75,0.65);display:none;align-items:center;justify-content:center;z-index:10000;padding:20px;">
   <div style="width:100%;max-width:520px;max-height:85vh;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;background:#fff;border-radius:14px;padding:32px;box-shadow:0 20px 60px rgba(16,33,75,0.25);">
     <h3 style="font-family:'Cormorant Garamond',serif;font-size:22px;color:#10214b;margin:0 0 8px;">Reject this application?</h3>
     <p style="color:#7a6d5f;font-size:14px;margin-bottom:20px;">This application will be marked as rejected. You can add an optional note explaining the decision.</p>
@@ -2683,10 +2686,10 @@ p { color: var(--muted); }
      is enforced both here via the `required` attribute and again in submitVerifReject()
      below, since HTML `required` alone doesn't fire on a programmatic button click
      the way it does on a real form submit). -->
-<div id="verifApproveModal" class="pc-modal-shell" style="position:fixed;left:0;top:0;width:100%;height:100%;background:rgba(16,33,75,0.65);display:none;align-items:center;justify-content:center;z-index:10000;padding:20px;">
+<div id="verifApproveModal" class="pc-modal-shell" style="position:fixed;inset-inline-start:0;top:0;width:100%;height:100%;background:rgba(16,33,75,0.65);display:none;align-items:center;justify-content:center;z-index:10000;padding:20px;">
   <div style="width:100%;max-width:480px;max-height:85vh;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;background:#fff;border-radius:14px;padding:32px;box-shadow:0 20px 60px rgba(16,33,75,0.25);">
     <h3 style="font-family:'Cormorant Garamond',serif;font-size:22px;color:#10214b;margin:0 0 8px;">Approve this merchant?</h3>
-    <p style="color:#7a6d5f;font-size:14px;margin-bottom:22px;">Their <code style="background:#f0ece7;padding:1px 5px;border-radius:4px;">verification_status</code> will be set to <strong>verified</strong>, the Verified badge (Task B3) will apply immediately, and a confirmation email will be sent to them.</p>
+    <p style="color:#7a6d5f;font-size:14px;margin-bottom:22px;">Their <code style="background:#f0ece7;padding-block: 1px; padding-inline: 5px;border-radius:4px;">verification_status</code> will be set to <strong>verified</strong>, the Verified badge (Task B3) will apply immediately, and a confirmation email will be sent to them.</p>
     <div style="display:flex;gap:10px;">
       <button onclick="submitVerifApprove()" class="pc-btn pc-btn--primary" style="flex:1;background:linear-gradient(135deg,#0d7c4a,#0a6340);">Approve</button>
       <button onclick="closeVerifApproveModal()" class="pc-btn pc-btn--ghost">Cancel</button>
@@ -2694,10 +2697,10 @@ p { color: var(--muted); }
   </div>
 </div>
 
-<div id="verifRejectModal" class="pc-modal-shell" style="position:fixed;left:0;top:0;width:100%;height:100%;background:rgba(16,33,75,0.65);display:none;align-items:center;justify-content:center;z-index:10000;padding:20px;">
+<div id="verifRejectModal" class="pc-modal-shell" style="position:fixed;inset-inline-start:0;top:0;width:100%;height:100%;background:rgba(16,33,75,0.65);display:none;align-items:center;justify-content:center;z-index:10000;padding:20px;">
   <div style="width:100%;max-width:480px;max-height:85vh;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;background:#fff;border-radius:14px;padding:32px;box-shadow:0 20px 60px rgba(16,33,75,0.25);">
     <h3 style="font-family:'Cormorant Garamond',serif;font-size:22px;color:#10214b;margin:0 0 8px;">Reject this verification?</h3>
-    <p style="color:#7a6d5f;font-size:14px;margin-bottom:20px;">Their <code style="background:#f0ece7;padding:1px 5px;border-radius:4px;">verification_status</code> will be set to <strong>rejected</strong>. They keep the ability to resubmit — this reason is included in their email so they know what to fix.</p>
+    <p style="color:#7a6d5f;font-size:14px;margin-bottom:20px;">Their <code style="background:#f0ece7;padding-block: 1px; padding-inline: 5px;border-radius:4px;">verification_status</code> will be set to <strong>rejected</strong>. They keep the ability to resubmit — this reason is included in their email so they know what to fix.</p>
     <label class="pc-form-label" style="margin-bottom:6px;">Reason for rejection <span style="font-weight:400;text-transform:none;color:#c0392b;">(required)</span></label>
     <textarea id="verifRejectReason" class="pc-form-input" required placeholder="e.g., ID images unclear, video did not complete the liveness challenge, name on ID doesn't match account..." style="min-height:90px;resize:vertical;margin-bottom:6px;"></textarea>
     <div id="verifRejectReasonError" style="display:none;color:#c0392b;font-size:12px;margin-bottom:12px;">Please enter a reason — the merchant needs to know why, and how to fix it before resubmitting.</div>
@@ -2716,13 +2719,13 @@ p { color: var(--muted); }
      could scroll the Close button out of reach — the same bug class as
      viewApplicationModal, just less visible on typical short previews.
      Rebuilt with the same real sticky-header split for consistency. -->
-<div id="uploadPreviewModal" class="pc-modal-shell" style="position:fixed;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;z-index:9999;padding:20px;">
+<div id="uploadPreviewModal" class="pc-modal-shell" style="position:fixed;inset-inline-start:0;top:0;width:100%;height:100%;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;z-index:9999;padding:20px;">
   <div class="pc-modal-box" style="width:100%;max-width:600px;background:#fff;border-radius:10px;">
-    <div style="display:flex;justify-content:flex-end;padding:10px 14px 0;flex-shrink:0;">
+    <div style="display:flex;justify-content:flex-end;padding-block: 10px 0; padding-inline: 14px;flex-shrink:0;">
       <button onclick="PC.modal.close('uploadPreviewModal')" style="background:none;border:none;font-size:24px;cursor:pointer;line-height:1;">×</button>
     </div>
     <div class="pc-modal__scroll">
-      <div id="uploadPreviewContent" style="padding:6px 30px 30px;"></div>
+      <div id="uploadPreviewContent" style="padding-block: 6px 30px; padding-inline: 30px;"></div>
     </div>
   </div>
 </div>
@@ -2738,19 +2741,19 @@ p { color: var(--muted); }
      inside one shared .pc-modal__scroll zone (only one of the two is ever
      visible at a time, per the existing display:none/block toggle in the
      JS below — untouched). -->
-<div id="editPetModal" class="pc-modal-shell" style="position:fixed;left:0;top:0;width:100%;height:100%;background:rgba(16,33,75,0.65);display:none;align-items:center;justify-content:center;z-index:9999;padding:20px;">
+<div id="editPetModal" class="pc-modal-shell" style="position:fixed;inset-inline-start:0;top:0;width:100%;height:100%;background:rgba(16,33,75,0.65);display:none;align-items:center;justify-content:center;z-index:9999;padding:20px;">
   <div class="pc-modal-box" style="width:100%;max-width:780px;background:#f9f7f2;border-radius:14px;box-shadow:0 20px 60px rgba(16,33,75,0.25);">
 
     <!-- Modal header -->
-    <div style="display:flex;justify-content:space-between;align-items:center;padding:22px 28px;border-bottom:2px solid #d7bd88;background:#fff;border-radius:14px 14px 0 0;flex-shrink:0;">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding-block: 22px; padding-inline: 28px;border-bottom:2px solid #d7bd88;background:#fff;border-start-start-radius: 14px; border-start-end-radius: 14px; border-end-end-radius: 0; border-end-start-radius: 0;flex-shrink:0;">
       <h2 style="font-family:'Cormorant Garamond',serif;font-size:24px;color:#10214b;margin:0;">Edit Pet</h2>
       <button onclick="closeEditPetModal()" style="background:#f0ece8;border:none;width:36px;height:36px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#7a6d5f;font-size:20px;line-height:1;">×</button>
     </div>
 
     <div class="pc-modal__scroll">
     <!-- Loading state -->
-    <div id="editModalLoading" style="text-align:center;padding:60px 20px;display:none;">
-      <div class="pc-spinner" style="margin:0 auto 16px;"></div>
+    <div id="editModalLoading" style="text-align:center;padding-block: 60px; padding-inline: 20px;display:none;">
+      <div class="pc-spinner" style="margin-block: 0 16px; margin-inline: auto;"></div>
       <p style="color:#888;">Loading pet data...</p>
     </div>
 
@@ -2758,7 +2761,7 @@ p { color: var(--muted); }
     <div id="editModalBody" style="padding:28px;display:none;">
 
       <!-- Section: Basic Info -->
-      <div style="background:#fff;border-radius:10px;padding:20px 22px;margin-bottom:18px;box-shadow:0 2px 8px rgba(16,33,75,0.06);">
+      <div style="background:#fff;border-radius:10px;padding-block: 20px; padding-inline: 22px;margin-bottom:18px;box-shadow:0 2px 8px rgba(16,33,75,0.06);">
         <div style="font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:700;color:#10214b;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid #ece7e0;">Basic Information</div>
         <div class="pc-form-row" style="margin-bottom:14px;">
           <div class="pc-form-group" style="margin-bottom:0;">
@@ -2800,7 +2803,7 @@ p { color: var(--muted); }
       </div>
 
       <!-- Section: Descriptions -->
-      <div style="background:#fff;border-radius:10px;padding:20px 22px;margin-bottom:18px;box-shadow:0 2px 8px rgba(16,33,75,0.06);">
+      <div style="background:#fff;border-radius:10px;padding-block: 20px; padding-inline: 22px;margin-bottom:18px;box-shadow:0 2px 8px rgba(16,33,75,0.06);">
         <div style="font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:700;color:#10214b;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid #ece7e0;">Descriptions &amp; Health</div>
         <div class="pc-form-group" style="margin-bottom:14px;">
           <label class="pc-form-label">Short Description</label>
@@ -2821,7 +2824,7 @@ p { color: var(--muted); }
       </div>
 
       <!-- Section: Compatibility & Traits -->
-      <div style="background:#fff;border-radius:10px;padding:20px 22px;margin-bottom:18px;box-shadow:0 2px 8px rgba(16,33,75,0.06);">
+      <div style="background:#fff;border-radius:10px;padding-block: 20px; padding-inline: 22px;margin-bottom:18px;box-shadow:0 2px 8px rgba(16,33,75,0.06);">
         <div style="font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:700;color:#10214b;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid #ece7e0;">Compatibility &amp; Traits</div>
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:14px;">
           <div class="pc-form-group" style="margin-bottom:0;">
@@ -2883,7 +2886,7 @@ p { color: var(--muted); }
       </div>
 
       <!-- Section: Video -->
-      <div style="background:#fff;border-radius:10px;padding:20px 22px;margin-bottom:18px;box-shadow:0 2px 8px rgba(16,33,75,0.06);">
+      <div style="background:#fff;border-radius:10px;padding-block: 20px; padding-inline: 22px;margin-bottom:18px;box-shadow:0 2px 8px rgba(16,33,75,0.06);">
         <div style="font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:700;color:#10214b;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid #ece7e0;">Video</div>
         <div class="pc-form-group" style="margin-bottom:0;">
           <label class="pc-form-label">Pet Video (optional) — upload to replace</label>
@@ -2904,9 +2907,9 @@ p { color: var(--muted); }
       </div>
 
       <!-- Section: Images -->
-      <div style="background:#fff;border-radius:10px;padding:20px 22px;margin-bottom:18px;box-shadow:0 2px 8px rgba(16,33,75,0.06);">
+      <div style="background:#fff;border-radius:10px;padding-block: 20px; padding-inline: 22px;margin-bottom:18px;box-shadow:0 2px 8px rgba(16,33,75,0.06);">
         <div style="font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:700;color:#10214b;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid #ece7e0;">Images</div>
-        
+
         <!-- Single image -->
         <div class="pc-form-group" style="margin-bottom:18px;">
           <label class="pc-form-label">Single Image (grid card) — upload to replace</label>
@@ -3591,17 +3594,17 @@ initDashboardTheme();
   const DEBUG_Z = 999999; // must stay above every modal in this dashboard (highest existing is 99999)
 
   const html = `
-    <button type="button" id="debugToggle" title="Tap to turn debugger on/off" style="position:fixed;bottom:90px;right:14px;z-index:${DEBUG_Z};width:46px;height:46px;border-radius:50%;background:#10214b;color:#fff;border:2px solid #444;font-size:11px;font-weight:700;box-shadow:0 4px 14px rgba(0,0,0,0.3);cursor:pointer;display:flex;align-items:center;justify-content:center;letter-spacing:0.3px;">DBG</button>
-    <div id="debugPanel" style="position:fixed;bottom:0;left:0;right:0;max-height:55vh;background:#0d1117;color:#d1d5da;z-index:${DEBUG_Z};display:none;flex-direction:column;font-family:monospace;box-shadow:0 -4px 24px rgba(0,0,0,0.4);border-top:2px solid #ED7624;">
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:#161b22;border-bottom:1px solid #30363d;font-size:13px;font-weight:700;color:#fff;">
+    <button type="button" id="debugToggle" title="Tap to turn debugger on/off" style="position:fixed;bottom:90px;inset-inline-end:14px;z-index:${DEBUG_Z};width:46px;height:46px;border-radius:50%;background:#10214b;color:#fff;border:2px solid #444;font-size:11px;font-weight:700;box-shadow:0 4px 14px rgba(0,0,0,0.3);cursor:pointer;display:flex;align-items:center;justify-content:center;letter-spacing:0.3px;">DBG</button>
+    <div id="debugPanel" style="position:fixed;bottom:0;inset-inline-start:0;inset-inline-end:0;max-height:55vh;background:#0d1117;color:#d1d5da;z-index:${DEBUG_Z};display:none;flex-direction:column;font-family:monospace;box-shadow:0 -4px 24px rgba(0,0,0,0.4);border-top:2px solid #ED7624;">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding-block: 10px; padding-inline: 14px;background:#161b22;border-bottom:1px solid #30363d;font-size:13px;font-weight:700;color:#fff;">
         <span>DASHBOARD DEBUGGER</span>
         <div style="display:flex;gap:6px;align-items:center;">
-          <button id="debugClear" style="background:#21262d;color:#d1d5da;border:1px solid #30363d;border-radius:5px;padding:4px 9px;font-size:11px;cursor:pointer;">Clear</button>
-          <button id="debugCopy" style="background:#21262d;color:#d1d5da;border:1px solid #30363d;border-radius:5px;padding:4px 9px;font-size:11px;cursor:pointer;">Copy</button>
-          <button id="debugClose" style="background:#21262d;color:#d1d5da;border:1px solid #30363d;border-radius:5px;padding:4px 9px;font-size:11px;cursor:pointer;">Close</button>
+          <button id="debugClear" style="background:#21262d;color:#d1d5da;border:1px solid #30363d;border-radius:5px;padding-block: 4px; padding-inline: 9px;font-size:11px;cursor:pointer;">Clear</button>
+          <button id="debugCopy" style="background:#21262d;color:#d1d5da;border:1px solid #30363d;border-radius:5px;padding-block: 4px; padding-inline: 9px;font-size:11px;cursor:pointer;">Copy</button>
+          <button id="debugClose" style="background:#21262d;color:#d1d5da;border:1px solid #30363d;border-radius:5px;padding-block: 4px; padding-inline: 9px;font-size:11px;cursor:pointer;">Close</button>
         </div>
       </div>
-      <div id="debugLog" style="overflow-y:auto;padding:10px 14px 24px;font-size:11.5px;line-height:1.6;"></div>
+      <div id="debugLog" style="overflow-y:auto;padding-block: 10px 24px; padding-inline: 14px;font-size:11.5px;line-height:1.6;"></div>
     </div>`;
   document.addEventListener('DOMContentLoaded', () => document.body.insertAdjacentHTML('beforeend', html), { once: true });
   if (document.readyState !== 'loading') document.body.insertAdjacentHTML('beforeend', html);
@@ -3634,7 +3637,7 @@ initDashboardTheme();
       const colors = { info: '#79c0ff', ok: '#56d364', warn: '#e3b341', error: '#f85149' };
       line.style.color = colors[level] || colors.info;
       if (level === 'error') line.style.fontWeight = '700';
-      line.innerHTML = `<span style="color:#6e7681;margin-right:6px;">[${time}]</span>${typeof msg === 'string' ? msg : JSON.stringify(msg)}`;
+      line.innerHTML = `<span style="color:#6e7681;margin-inline-end:6px;">[${time}]</span>${typeof msg === 'string' ? msg : JSON.stringify(msg)}`;
       logEl.appendChild(line);
       logEl.scrollTop = logEl.scrollHeight;
     };
@@ -3710,7 +3713,7 @@ const PC = window.PC = {
   fmt: n => '$' + Number(n || 0).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }),
   toast: (msg, type = 'success') => {
     const div = document.createElement('div');
-    div.style.cssText = `position:fixed;bottom:20px;right:20px;z-index:9999;background:${type === 'success' ? '#0d7c4a' : '#c0392b'};color:#fff;padding:15px 20px;border-radius:8px;font-size:14px;font-weight:500;max-width:320px;word-wrap:break-word;`;
+    div.style.cssText = `position:fixed;bottom:20px;inset-inline-end:20px;z-index:9999;background:${type === 'success' ? '#0d7c4a' : '#c0392b'};color:#fff;padding:15px 20px;border-radius:8px;font-size:14px;font-weight:500;max-width:320px;word-wrap:break-word;`;
     div.textContent = msg;
     document.body.appendChild(div);
     setTimeout(() => { div.style.opacity = '0'; div.style.transition = 'opacity 0.3s'; setTimeout(() => div.remove(), 300); }, 3500);
@@ -3831,7 +3834,7 @@ function initCustomSelects() {
     // Skip re-attaching listeners if already initialized
     if (wrap.dataset.initialized) return;
     wrap.dataset.initialized = '1';
-    
+
     const select = wrap.querySelector('.hidden-select');
     const trigger = wrap.querySelector('.custom-select-trigger');
     const optList = wrap.querySelector('.custom-select-options');
@@ -3843,16 +3846,16 @@ function initCustomSelects() {
       e.stopPropagation();
       // Close other dropdowns
       document.querySelectorAll('.custom-select-options.open').forEach(m => {
-        if (m !== optList) { 
-          m.classList.remove('open'); 
-          m.closest('.custom-select-wrapper')?.querySelector('.custom-select-trigger')?.classList.remove('active'); 
+        if (m !== optList) {
+          m.classList.remove('open');
+          m.closest('.custom-select-wrapper')?.querySelector('.custom-select-trigger')?.classList.remove('active');
         }
       });
       // Toggle this dropdown
       optList.classList.toggle('open');
       trigger.classList.toggle('active');
     });
-    
+
     opts.forEach(opt => {
       opt.addEventListener('click', e => {
         e.stopPropagation();
@@ -3866,14 +3869,14 @@ function initCustomSelects() {
       });
     });
   });
-  
+
   // Global click handler to close dropdowns (add only once)
   if (!document.body.dataset.dropdownListenerAdded) {
     document.body.dataset.dropdownListenerAdded = '1';
     document.addEventListener('click', () => {
-      document.querySelectorAll('.custom-select-options.open').forEach(m => { 
-        m.classList.remove('open'); 
-        m.closest('.custom-select-wrapper')?.querySelector('.custom-select-trigger')?.classList.remove('active'); 
+      document.querySelectorAll('.custom-select-options.open').forEach(m => {
+        m.classList.remove('open');
+        m.closest('.custom-select-wrapper')?.querySelector('.custom-select-trigger')?.classList.remove('active');
       });
     });
   }
@@ -3893,7 +3896,7 @@ function initUploadField(key, dropElem, listElem, singleOnly) {
   inp.type = 'file';
   inp.accept = 'image/jpeg,image/jpg,image/png';
   inp.multiple = !singleOnly;
-  inp.style.cssText = 'position:fixed;left:-9999px;top:-9999px;opacity:0;width:1px;height:1px;';
+  inp.style.cssText = 'position:fixed;inset-inline-start:-9999px;top:-9999px;opacity:0;width:1px;height:1px;';
   document.body.appendChild(inp);
   field.input = inp;
 
@@ -4018,7 +4021,7 @@ function initVideoField(dropElem, listElem, key = 'edit_video') {
   inp.type = 'file';
   inp.accept = 'video/*,.mp4,.webm,.mov,.avi,.mkv,.flv,.wmv,.m4v,.3gp,.ogv,.ts,.m2ts,.mts,.vob,.f4v';
   inp.multiple = false;
-  inp.style.cssText = 'position:fixed;left:-9999px;top:-9999px;opacity:0;width:1px;height:1px;';
+  inp.style.cssText = 'position:fixed;inset-inline-start:-9999px;top:-9999px;opacity:0;width:1px;height:1px;';
   document.body.appendChild(inp);
   field.input = inp;
 
@@ -4162,7 +4165,7 @@ function renderVideoField(key = 'edit_video') {
 
 function showVideoPreview(item) {
   const modal = document.createElement('div');
-  modal.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);display:flex;align-items:center;justify-content:center;z-index:99999;';
+  modal.style.cssText = 'position:fixed;top:0;inset-inline-start:0;width:100%;height:100%;background:rgba(0,0,0,0.8);display:flex;align-items:center;justify-content:center;z-index:99999;';
   const video = document.createElement('video');
   video.src = item.url;
   video.controls = true;
@@ -4196,16 +4199,16 @@ async function validateToken() {
     fd.append('action', 'validate');
     const res = await fetch('./security.php', { method: 'POST', body: fd });
     const json = await res.json();
-    
+
     if (!json.valid) {
       // TOKEN IS INVALID - AGGRESSIVE LOGOUT
       if (json.code === 'SESSION_EXPIRED' || json.action === 'logout') {
         // Show warning and force logout immediately
         const warning = document.createElement('div');
-        warning.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#c0392b;color:#fff;padding:30px;border-radius:12px;z-index:99999;text-align:center;font-size:16px;box-shadow:0 10px 40px rgba(0,0,0,0.3);';
+        warning.style.cssText = 'position:fixed;top:50%;inset-inline-start:50%;transform:translate(-50%,-50%);background:#c0392b;color:#fff;padding:30px;border-radius:12px;z-index:99999;text-align:center;font-size:16px;box-shadow:0 10px 40px rgba(0,0,0,0.3);';
         warning.innerHTML = '<strong>Session Expired</strong><br>Admin token has been invalidated.<br>Please login again.<br><br><small>Page will refresh in 2 seconds...</small>';
         document.body.appendChild(warning);
-        
+
         // Force logout after showing warning
         setTimeout(() => {
           handleLogout();
@@ -4499,16 +4502,16 @@ function switchPanel(panel) {
   document.querySelectorAll('.admin-nav__item').forEach(btn => btn.classList.remove('active'));
   event?.target?.classList?.add('active');
   closeSidebar(); // Close sidebar on mobile after switching panel
-  if (panel === 'edit') { 
+  if (panel === 'edit') {
     upgradeNativeSelectsToCustom();
     initCustomSelects();
     // Load initial pets for first category
     setTimeout(() => loadPetsForCategory(), 100);
   }
-  if (panel === 'applications') { 
+  if (panel === 'applications') {
     upgradeNativeSelectsToCustom();
     initCustomSelects();
-    loadApplications(); 
+    loadApplications();
   }
   if (panel === 'liveChat') {
     initChatPanel();
@@ -4586,7 +4589,7 @@ function addPetForm() {
   const container = document.getElementById('petFormsList');
   const form = document.createElement('div');
   form.id = key;
-  form.style.cssText = 'background:#f9f7f2;padding:22px;border-radius:10px;border-left:4px solid #d7bd88;margin-bottom:20px;';
+  form.style.cssText = 'background:#f9f7f2;padding:22px;border-radius:10px;border-inline-start:4px solid #d7bd88;margin-bottom:20px;';
   form.innerHTML = `
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;">
       <h3 style="margin:0;font-family:'Cormorant Garamond',serif;color:#10214b;">Pet ${petFormCount}</h3>
@@ -4776,22 +4779,22 @@ async function loadPetsForCategory(bustCache) {
     const list = document.getElementById('petsList');
     list.innerHTML = '';
     if (!data || !Array.isArray(data) || data.length === 0) { list.innerHTML = '<p style="color:#888;">No pets found in this category</p>'; return; }
-    
+
     data.forEach(pet => {
       const card = document.createElement('div');
-      card.style.cssText = 'padding:16px;background:#f9f7f2;border-radius:8px;border-left:4px solid #d7bd88;display:flex;gap:16px;align-items:flex-start;margin-bottom:12px;';
-      
-      const imageHTML = pet.single_image_url ? 
-        `<img src="${pet.single_image_url}" style="width:80px;height:80px;object-fit:cover;border-radius:6px;">` : 
+      card.style.cssText = 'padding:16px;background:#f9f7f2;border-radius:8px;border-inline-start:4px solid #d7bd88;display:flex;gap:16px;align-items:flex-start;margin-bottom:12px;';
+
+      const imageHTML = pet.single_image_url ?
+        `<img src="${pet.single_image_url}" style="width:80px;height:80px;object-fit:cover;border-radius:6px;">` :
         '<div style="width:80px;height:80px;background:#ddd;border-radius:6px;display:flex;align-items:center;justify-content:center;color:#999;font-size:12px;">No image</div>';
-      
+
       const petName = pet.name || 'Unnamed Pet';
       const petBreed = pet.breed || 'Unknown Breed';
       const petAge = pet.age_years || '?';
       const petSize = pet.size || '?';
       const petFee = pet.adoption_fee || 0;
       const petId = pet.pet_id || '';
-      
+
       card.innerHTML = `
         <div>${imageHTML}</div>
         <div style="flex:1;">
@@ -5306,7 +5309,7 @@ function renderThreadList() {
     // wrong default.
     const authCfg = t.auth_badge ? chatAuthBadgeConfig(t.auth_badge) : null;
     const authBadgeHtml = authCfg
-      ? `<span title="${escapeHtml(authCfg.label)}" style="margin-left:6px;background:${authCfg.color};color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:8px;"><i class="fas ${authCfg.icon}"></i> ${escapeHtml(authCfg.label)}</span>`
+      ? `<span title="${escapeHtml(authCfg.label)}" style="margin-inline-start:6px;background:${authCfg.color};color:#fff;font-size:9px;font-weight:700;padding-block: 1px; padding-inline: 6px;border-radius:8px;"><i class="fas ${authCfg.icon}"></i> ${escapeHtml(authCfg.label)}</span>`
       : '';
     // <!-- TASK-7 END -->
 
@@ -5321,7 +5324,7 @@ function renderThreadList() {
         ${authBadgeHtml}
       </div>`;
     body.style.paddingLeft = '26px';
-    checkbox.style.cssText = 'position:absolute;top:12px;left:10px;width:16px;height:16px;cursor:pointer;';
+    checkbox.style.cssText = 'position:absolute;top:12px;inset-inline-start:10px;width:16px;height:16px;cursor:pointer;';
 
     card.appendChild(checkbox);
     card.appendChild(body);
@@ -5376,7 +5379,7 @@ async function chatBulkAction(action) {
     if (chatIds.includes(chatAdmin.activeThreadId)) {
       chatAdmin.activeThreadId = null;
       document.getElementById('chatThreadDetail').innerHTML =
-        '<div style="padding:60px 20px;text-align:center;color:#a89c8a;font-size:13px;">Select a conversation from the list to view it here.</div>';
+        '<div style="padding-block: 60px; padding-inline: 20px;text-align:center;color:#a89c8a;font-size:13px;">Select a conversation from the list to view it here.</div>';
     }
   } catch (e) {
     alert('Bulk action failed: ' + e.message);
@@ -5478,26 +5481,26 @@ function buildAdminBanner(chatId, thread) {
   // graceful-degradation approach as the list card badge above.
   const authCfg = thread.auth_badge ? chatAuthBadgeConfig(thread.auth_badge) : null;
   const authBadgeHtml = authCfg
-    ? `<span style="margin-left:6px;background:${authCfg.color};color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;"><i class="fas ${authCfg.icon}"></i> ${escapeHtml(authCfg.label)}</span>`
+    ? `<span style="margin-inline-start:6px;background:${authCfg.color};color:#fff;font-size:10px;font-weight:700;padding-block: 2px; padding-inline: 8px;border-radius:10px;"><i class="fas ${authCfg.icon}"></i> ${escapeHtml(authCfg.label)}</span>`
     : '';
   // <!-- TASK-7 END -->
   header.innerHTML = `
     <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
       <div>
         <strong style="color:#10214b;font-size:14px;">${escapeHtml(thread.full_name)}</strong>
-        <span style="font-size:11px;color:#7a6d5f;margin-left:8px;">${escapeHtml(thread.email)}</span>
-        <span style="margin-left:8px;background:${statusBadge};color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;">${thread.status}</span>
+        <span style="font-size:11px;color:#7a6d5f;margin-inline-start:8px;">${escapeHtml(thread.email)}</span>
+        <span style="margin-inline-start:8px;background:${statusBadge};color:#fff;font-size:10px;font-weight:700;padding-block: 2px; padding-inline: 8px;border-radius:10px;">${thread.status}</span>
         ${authBadgeHtml}
       </div>
       <div style="display:flex;gap:8px;align-items:center;">
         ${thread.pet_context ? `<span title="Asking about: ${escapeHtml(thread.pet_context?.name || '')}" style="font-size:11px;color:#7a6d5f;"><i class="fas fa-paw"></i> ${escapeHtml(thread.pet_context?.name || '')}</span>` : ''}
-        ${thread.status !== 'done' ? `<button onclick="claimOrDone('${chatId}','${thread.status}')" class="pc-btn" style="padding:5px 12px;font-size:12px;">${thread.status === 'waiting' ? 'Claim' : 'Mark Done'}</button>` : ''}
+        ${thread.status !== 'done' ? `<button onclick="claimOrDone('${chatId}','${thread.status}')" class="pc-btn" style="padding-block: 5px; padding-inline: 12px;font-size:12px;">${thread.status === 'waiting' ? 'Claim' : 'Mark Done'}</button>` : ''}
         ${thread.archived
-          ? `<button onclick="chatBulkActionSingle('${chatId}','unarchive')" class="pc-btn pc-btn--ghost" style="padding:5px 10px;font-size:12px;" title="Unarchive"><i class="fas fa-box-open"></i></button>`
-          : `<button onclick="chatBulkActionSingle('${chatId}','archive')" class="pc-btn pc-btn--ghost" style="padding:5px 10px;font-size:12px;" title="Archive"><i class="fas fa-box-archive"></i></button>`
+          ? `<button onclick="chatBulkActionSingle('${chatId}','unarchive')" class="pc-btn pc-btn--ghost" style="padding-block: 5px; padding-inline: 10px;font-size:12px;" title="Unarchive"><i class="fas fa-box-open"></i></button>`
+          : `<button onclick="chatBulkActionSingle('${chatId}','archive')" class="pc-btn pc-btn--ghost" style="padding-block: 5px; padding-inline: 10px;font-size:12px;" title="Archive"><i class="fas fa-box-archive"></i></button>`
         }
-        <button onclick="chatBulkActionSingle('${chatId}','delete')" class="pc-btn pc-btn--ghost" style="padding:5px 10px;font-size:12px;color:#c0392b;border-color:rgba(192,57,43,0.3);" title="Delete permanently"><i class="fas fa-trash"></i></button>
-        <button onclick="loadChatThreads()" class="pc-btn pc-btn--ghost" style="padding:5px 10px;font-size:12px;"><i class="fas fa-rotate-right"></i></button>
+        <button onclick="chatBulkActionSingle('${chatId}','delete')" class="pc-btn pc-btn--ghost" style="padding-block: 5px; padding-inline: 10px;font-size:12px;color:#c0392b;border-color:rgba(192,57,43,0.3);" title="Delete permanently"><i class="fas fa-trash"></i></button>
+        <button onclick="loadChatThreads()" class="pc-btn pc-btn--ghost" style="padding-block: 5px; padding-inline: 10px;font-size:12px;"><i class="fas fa-rotate-right"></i></button>
       </div>
     </div>
     <div style="font-size:11px;color:#a89c8a;margin-top:4px;">
@@ -5705,7 +5708,7 @@ function renderAdminMessage(msg) {
     nameEl.style.cssText = 'font-size:10.5px;font-weight:600;color:#10214b;margin-bottom:2px;';
     nameEl.textContent = msg.admin_name;
     if (msg.admin_blue_check) {
-      nameEl.appendChild(Object.assign(document.createElement('i'), { className: 'fas fa-circle-check', style: 'color:#1d9bf0;font-size:10px;margin-left:4px;' }));
+      nameEl.appendChild(Object.assign(document.createElement('i'), { className: 'fas fa-circle-check', style: 'color:#1d9bf0;font-size:10px;margin-inline-start:4px;' }));
     }
     col.appendChild(nameEl);
   }
@@ -5722,7 +5725,7 @@ function renderAdminMessage(msg) {
      chat panel — without touching any of the send/receive/edit/delete logic
      in this function. */
   bubble.classList.add('cad-bubble', isSystem ? 'cad-bubble--system' : (isAdmin ? 'cad-bubble--admin' : 'cad-bubble--customer'));
-  bubble.style.cssText = `border-radius:14px;padding:9px 13px;font-size:13px;line-height:1.5;${bubbleStyle}${isAdmin ? 'border-bottom-right-radius:4px;' : 'border-bottom-left-radius:4px;'}`;
+  bubble.style.cssText = `border-radius:14px;padding:9px 13px;font-size:13px;line-height:1.5;${bubbleStyle}${isAdmin ? 'border-end-end-radius:4px;' : 'border-end-start-radius:4px;'}`;
 
   const bodyTextEl = document.createElement('span');
 
@@ -6513,11 +6516,11 @@ function showAdminFailedBubble(payload, errorText, chatId) {
   const row = document.createElement('div');
   row.style.cssText = 'align-self:flex-end;max-width:88%;';
   row.innerHTML = `
-    <div style="background:#fef2f2;border:1px solid rgba(239,68,68,0.3);border-radius:14px;padding:9px 13px;font-size:13px;">
+    <div style="background:#fef2f2;border:1px solid rgba(239,68,68,0.3);border-radius:14px;padding-block: 9px; padding-inline: 13px;font-size:13px;">
       ${escapeHtml(payload.text || '(attachment)')}
       <div style="display:flex;align-items:center;gap:6px;margin-top:5px;font-size:11px;color:#ef4444;">
         <i class="fas fa-triangle-exclamation"></i> Not sent — ${escapeHtml(errorText)}
-        <button style="border:none;background:#ef4444;color:#fff;border-radius:6px;padding:2px 8px;font-size:10.5px;cursor:pointer;margin-left:auto;">
+        <button style="border:none;background:#ef4444;color:#fff;border-radius:6px;padding-block: 2px; padding-inline: 8px;font-size:10.5px;cursor:pointer;margin-inline-start:auto;">
           <i class="fas fa-rotate-right"></i> Retry
         </button>
       </div>
@@ -6576,8 +6579,8 @@ function renderAdminProfileCards(profiles) {
         </div>
       </div>
       <div style="display:flex;gap:8px;">
-        <button onclick="openAdminProfileForm(${p.id})" class="pc-btn pc-btn--ghost" style="flex:1;font-size:12px;padding:6px;"><i class="fas fa-pen" style="font-size:10px;margin-right:5px;"></i>Edit</button>
-        <button onclick="deleteAdminProfile(${p.id},'${escapeHtml(p.name)}')" class="pc-btn" style="flex:1;font-size:12px;padding:6px;background:linear-gradient(135deg,#c0392b,#a93226);"><i class="fas fa-trash" style="font-size:10px;margin-right:5px;"></i>Delete</button>
+        <button onclick="openAdminProfileForm(${p.id})" class="pc-btn pc-btn--ghost" style="flex:1;font-size:12px;padding:6px;"><i class="fas fa-pen" style="font-size:10px;margin-inline-end:5px;"></i>Edit</button>
+        <button onclick="deleteAdminProfile(${p.id},'${escapeHtml(p.name)}')" class="pc-btn" style="flex:1;font-size:12px;padding:6px;background:linear-gradient(135deg,#c0392b,#a93226);"><i class="fas fa-trash" style="font-size:10px;margin-inline-end:5px;"></i>Delete</button>
       </div>`;
     list.appendChild(card);
   });
@@ -6750,16 +6753,16 @@ async function loadChatReviews() {
         <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:8px;">
           <div>
             <i class="fas ${face.icon}" style="font-size:20px;color:${face.color};"></i>
-            <strong style="color:#10214b;margin-left:6px;">${escapeHtml(labelMap[rev.rating] || String(rev.rating))}</strong>
-            ${rev.adminName ? `<span style="color:#7a6d5f;font-size:12px;margin-left:8px;">for ${escapeHtml(rev.adminName)}</span>` : ''}
+            <strong style="color:#10214b;margin-inline-start:6px;">${escapeHtml(labelMap[rev.rating] || String(rev.rating))}</strong>
+            ${rev.adminName ? `<span style="color:#7a6d5f;font-size:12px;margin-inline-start:8px;">for ${escapeHtml(rev.adminName)}</span>` : ''}
           </div>
           <div style="display:flex;gap:8px;align-items:center;">
             <span style="font-size:11px;color:#a89c8a;">${escapeHtml(rev.createdAt || '')}</span>
-            <button onclick="deleteChatReview('${escapeHtml(rev.chatId)}')" style="border:none;background:#ef4444;color:#fff;border-radius:6px;padding:4px 10px;cursor:pointer;font-size:11px;">Delete</button>
+            <button onclick="deleteChatReview('${escapeHtml(rev.chatId)}')" style="border:none;background:#ef4444;color:#fff;border-radius:6px;padding-block: 4px; padding-inline: 10px;cursor:pointer;font-size:11px;">Delete</button>
           </div>
         </div>
         <div style="font-size:12px;color:#7a6d5f;margin-bottom:6px;">${escapeHtml(rev.email)} &middot; Chat: ${escapeHtml(rev.chatId)}</div>
-        ${rev.comment ? `<div style="font-size:13px;color:#2c2416;background:#f9f7f2;border-radius:8px;padding:9px 12px;">"${escapeHtml(rev.comment)}"</div>` : ''}`;
+        ${rev.comment ? `<div style="font-size:13px;color:#2c2416;background:#f9f7f2;border-radius:8px;padding-block: 9px; padding-inline: 12px;">"${escapeHtml(rev.comment)}"</div>` : ''}`;
       list.appendChild(card);
     });
   } catch (e) {
@@ -7077,7 +7080,7 @@ function renderApplications() {
       <div class="pc-app-row__desktop-col" style="font-size:14px;color:#2c2416;">${petLabel}</div>
       <div class="pc-app-row__desktop-col" style="font-size:13px;color:#7a6d5f;">${dateLabel}</div>
       <div class="pc-app-row__desktop-col">
-        <span style="display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:.04em;background:${ss.bg};color:${ss.text};border:1px solid ${ss.border};"><i class="fas ${ss.icon}" style="font-size:10px;"></i>${status}</span>
+        <span style="display:inline-flex;align-items:center;gap:5px;padding-block: 3px; padding-inline: 10px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:.04em;background:${ss.bg};color:${ss.text};border:1px solid ${ss.border};"><i class="fas ${ss.icon}" style="font-size:10px;"></i>${status}</span>
       </div>
       <div class="pc-app-actions" data-code="${PC.esc(appCode)}">
         <button type="button" class="pc-app-actions__dot" onclick="toggleAppActionsPanel(event, '${appCodeEsc}')" title="Actions"><i class="fas fa-ellipsis-vertical"></i></button>
@@ -7094,7 +7097,7 @@ function renderApplications() {
         </div>
         <div class="pc-app-row__detail-item">
           <span class="pc-app-row__detail-label">Status</span>
-          <span class="pc-app-row__detail-value"><span style="display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:.04em;background:${ss.bg};color:${ss.text};border:1px solid ${ss.border};"><i class="fas ${ss.icon}" style="font-size:10px;"></i>${status}</span></span>
+          <span class="pc-app-row__detail-value"><span style="display:inline-flex;align-items:center;gap:5px;padding-block: 3px; padding-inline: 10px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:.04em;background:${ss.bg};color:${ss.text};border:1px solid ${ss.border};"><i class="fas ${ss.icon}" style="font-size:10px;"></i>${status}</span></span>
         </div>
       </div>
     `;
@@ -7228,7 +7231,7 @@ async function viewApplication(code) {
   const modal = document.getElementById('viewApplicationModal');
   const content = document.getElementById('applicationViewContent');
   modal.style.display = 'flex';
-  content.innerHTML = '<div style="text-align:center;padding:40px;"><div class="pc-spinner" style="margin:0 auto;"></div><p style="margin-top:16px;color:#888;font-size:14px;">Loading...</p></div>';
+  content.innerHTML = '<div style="text-align:center;padding:40px;"><div class="pc-spinner" style="margin-block: 0; margin-inline: auto;"></div><p style="margin-top:16px;color:#888;font-size:14px;">Loading...</p></div>';
   document.getElementById('appActionArea').style.display = 'none';
 
   try {
@@ -7282,12 +7285,12 @@ async function viewApplication(code) {
           <div style="font-size:13px;color:#8b7d6b;margin-bottom:4px;">Adoption Code: <strong>${PC.esc(app.adoption_code || code || '—')}</strong></div>
           <div style="font-size:13px;color:#8b7d6b;">Applied: <strong>${dateLabel}</strong></div>
         </div>
-        <span style="padding:4px 14px;border-radius:20px;font-size:12px;font-weight:700;letter-spacing:.04em;background:${ss.bg};color:${ss.text};border:1px solid ${ss.border};">${status}</span>
+        <span style="padding-block: 4px; padding-inline: 14px;border-radius:20px;font-size:12px;font-weight:700;letter-spacing:.04em;background:${ss.bg};color:${ss.text};border:1px solid ${ss.border};">${status}</span>
       </div>
 
       <!-- Pet info -->
       ${app.pet_name ? `
-      <div style="display:flex;align-items:center;gap:14px;padding:14px;background:#f9f7f2;border-radius:10px;border-left:4px solid #d7bd88;margin-bottom:20px;">
+      <div style="display:flex;align-items:center;gap:14px;padding:14px;background:#f9f7f2;border-radius:10px;border-inline-start:4px solid #d7bd88;margin-bottom:20px;">
         ${petImgHtml}
         <div>
           <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#8b7d6b;margin-bottom:4px;">Pet Requested</div>
@@ -7330,7 +7333,7 @@ async function viewApplication(code) {
 
       <!-- Checkout link if approved -->
       ${status === 'APPROVED' && app.checkout_url ? `
-      <div style="background:#e6f7ef;border:1px solid #0d7c4a;border-radius:10px;padding:14px 16px;margin-bottom:16px;">
+      <div style="background:#e6f7ef;border:1px solid #0d7c4a;border-radius:10px;padding-block: 14px; padding-inline: 16px;margin-bottom:16px;">
         <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#0d7c4a;margin-bottom:4px;">Checkout Link Sent</div>
         <a href="${PC.esc(app.checkout_url)}" target="_blank" style="font-size:13px;color:#0d7c4a;word-break:break-all;">${PC.esc(app.checkout_url)}</a>
       </div>` : ''}
@@ -7340,7 +7343,7 @@ async function viewApplication(code) {
            pattern exactly (font-weight:700/14px navy name, 12px muted position underneath) —
            reused rather than inventing new styling, per Warning & Instructions rule 7. -->
       ${status === 'APPROVED' && app.approved_by ? `
-      <div style="background:#f9f7f2;border:1px solid #ece7e0;border-radius:10px;padding:14px 16px;margin-bottom:16px;">
+      <div style="background:#f9f7f2;border:1px solid #ece7e0;border-radius:10px;padding-block: 14px; padding-inline: 16px;margin-bottom:16px;">
         <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#8b7d6b;margin-bottom:4px;">Approved By</div>
         <div style="font-weight:700;font-size:14px;color:#10214b;">${PC.esc(app.approved_by)}</div>
         ${app.approved_position ? `<div style="font-size:12px;color:#7a6d5f;margin-top:2px;">${PC.esc(app.approved_position)}</div>` : ''}
@@ -7349,7 +7352,7 @@ async function viewApplication(code) {
 
       <!-- Rejection notes if rejected -->
       ${status === 'REJECTED' && app.rejection_notes ? `
-      <div style="background:#fdecea;border:1px solid #c0392b;border-radius:10px;padding:14px 16px;margin-bottom:16px;">
+      <div style="background:#fdecea;border:1px solid #c0392b;border-radius:10px;padding-block: 14px; padding-inline: 16px;margin-bottom:16px;">
         <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#c0392b;margin-bottom:4px;">Rejection Note</div>
         <p style="font-size:13px;color:#c0392b;margin:0;">${PC.esc(app.rejection_notes)}</p>
       </div>` : ''}
@@ -7693,11 +7696,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // This is for security - no persistent sessions
   localStorage.removeItem('adminToken');
   sessionStorage.clear();
-  
+
   // Always show login screen on page load
   document.getElementById('loginScreen').style.display = 'flex';
   document.getElementById('dashboardScreen').style.display = 'none';
-  
+
   // Real-time token validation every 1 second - immediate detection of .env changes
   setInterval(() => {
     if (adminToken && document.getElementById('dashboardScreen').style.display !== 'none') {
