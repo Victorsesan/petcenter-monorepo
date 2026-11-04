@@ -29,6 +29,8 @@ Unavailable completion files/evidence gaps:
 
 Task 11 has no completion package listed in the inventory. Its research/proposal deliverable is therefore also an evidence gap.
 
+The specifically named `docs/second-round/CORE-DOCUMENT-READING-GATE.md` path is also absent from this checkout; the available `docs/second-round/README.md` and `WORKER-PACKAGE-INVENTORY.md` were used to reconcile the required core-document set.
+
 ## Documents read
 
 - `INTEGRATION-PROGRESS.md`
