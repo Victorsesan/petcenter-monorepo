@@ -196,8 +196,8 @@ No account branch was merged, rebased, cherry-picked, or deployed by MANUS-11. T
 
 - Independently verified the 64 import-manifest SHA-256 values against the mapped blobs; all matched. Reviewed named refs, reports, diffs, and package/path mappings using read-only operations.
 - No repository code, SQL, shell snippet, HTML script, or other embedded content was executed. Protected paths were not accessed. No application/browser/PHP/runtime test was run by MANUS-11 in this continuation.
-- Any PHP, JavaScript, Chromium/Playwright, unit, or browser results cited above are attributed to the named worker reports and were **not rerun or certified by MANUS-11**. MANUS-10 supplied no QA result.
-- Unresolved: obtain MANUS-08 and MANUS-10 reports or authorize/assign their remaining work; locate or disposition MANUS-04 Task 1 and Task 7b, MANUS-05 C4–C6, and MANUS-07 Task 11; resolve owner/design/business decisions; review/merge selected branch patches in dependency order; then rerun tests against the exact merged commit and complete the 145-row register classification.
+- Any PHP, JavaScript, Chromium/Playwright, unit, or browser results cited above are attributed to the named worker reports and were **not rerun or certified by MANUS-11**. MANUS-10 now has a branch and QA report; its results remain worker-attributed.
+- Unresolved: obtain MANUS-08's report/branch or disposition its remaining work; review MANUS-10's source changes and rerun relevant QA against an approved merged commit; locate or disposition MANUS-04 Task 1 and Task 7b, MANUS-05 C4–C6, and MANUS-07 Task 11; resolve owner/design/business decisions; review/merge selected branch patches in dependency order; then complete the 145-row register classification.
 - The shared `ACCOUNT-REPORT-INDEX.md` remains unchanged on `main`; only the coordinator may mark reports reconciled, and this review is not a complete final reconciliation. No mainline documents or application files were edited in this continuation.
 
 
