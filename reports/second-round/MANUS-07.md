@@ -6,7 +6,7 @@
 - **Scope:** Unified Status Dashboard — Tasks 1–12
 - **Branch:** `task/second-round-MANUS-07`
 - **Starting commit:** `251d8c26ab89bc9a3fd2bc12e155af41b1d03a87`
-- **Ending commit:** documented after commit below
+- **Report commit:** `f54defdcb0a9cd69549e758e5c2f2714a542ad6c` (the report was subsequently updated only to complete this metadata line; the final branch commit is recorded in the delivery message).
 
 ## Evidence boundary
 
