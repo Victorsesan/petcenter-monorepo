@@ -10,7 +10,9 @@
 
 ## Evidence boundary
 
-The repository-wide correction in `docs/second-round/ACCOUNT-WIDE-CORRECTION.md` states that completion files from the original intake were not copied into GitHub. I checked every Unified Status completion path listed by the inventory; none is present in this checkout. I did not claim to read or compare any unavailable completion file.
+The initial local-only inspection was incomplete. After fetching every remote branch, the Unified Status completion documents were found on `origin/task/second-round-MANUS-02` (and repeated on MANUS-03/MANUS-04). I extracted and read the Task 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, and SHIPPING-TIER1 completion documents from that remote evidence branch.
+
+The completion documents describe ZIP payloads, but those ZIP files and most of the described new-file source are not stored in any Git ref or reachable Git object. Therefore the documents are valid implementation evidence and pending-work evidence, but they do not by themselves prove that the described files are deployable in this checkout. I recovered the exact Task 3 change contract from its completion document and implemented that concrete fix against the current `adopt/` source tree.
 
 Unavailable completion files/evidence gaps:
 
@@ -57,7 +59,7 @@ The specifically named `docs/second-round/CORE-DOCUMENT-READING-GATE.md` path is
 |---|---|---|
 | 1 | No `status.petcenterco.com` shell or status root implementation exists. Completion unavailable. | **Blocked** |
 | 2 | Existing `adopt/adoptions/status/index.html` remains a direct static-JSON checker; no status-subdomain proxy is present. Completion unavailable. | **Needs My Review** |
-| 3 | Existing page fetches `/adoptions/applications/{code}/application.json` directly; no second-identifier gate, rate-limit endpoint, or new endpoint is present. Live write-permission/path behavior cannot be tested. | **Needs My Review** |
+| 3 | Remote completion evidence was found and its change contract was applied locally: the page now requires code + last name, uses a server-side endpoint, and no longer fetches raw `application.json`; the endpoint adds IP rate limiting, path containment, generic failures, an allow-listed response, and protected runtime storage. Live deployment permissions remain unverified. | **Implemented locally; deployment check pending** |
 | 4 | No BNPL status backend or installment source files are present. Completion unavailable; required runtime data is not available and protected files may not be opened. | **Blocked** |
 | 5 | No BNPL admin panel source or completion is present. The required Task 4 dependency is also absent. | **Blocked** |
 | 6 | No reusable email helper or BNPL trigger source is present. Completion unavailable and the Task 4 dependency is absent. | **Blocked** |
@@ -71,7 +73,7 @@ The specifically named `docs/second-round/CORE-DOCUMENT-READING-GATE.md` path is
 ## Independently verified issue-register findings
 
 - The register’s Task 2 “resolved” claim about `data/status-categories.json` cannot be confirmed: the referenced completion is missing and the expected status-subdomain data file is absent. **Needs My Review.**
-- The Task 3 live path-prefix and writable-rate-limit-directory questions cannot be verified without the live environment. **Blocked.**
+- The Task 3 completion evidence’s path-prefix concern was resolved locally by using the repository’s actual `adopt/adoptions/status/` path and a realpath containment check. The runtime directory is protected by `.htaccess`; live ownership/write permission remains a deployment check. **Implemented locally; deployment check pending.**
 - The Task 8/9 claims about the status-subdomain folder structure cannot be reconciled with current `main`: the expected status-subdomain folders and files are absent. **Needs My Review / Blocked by missing completion evidence.**
 - The Task 9 `STATUS_NOTIFY_KEY` activation item is evidence-limited and cannot be checked because the relevant implementation and protected environment files are absent. **Blocked.**
 - The Task 10 UptimeRobot API-key and scheduling items are evidence-limited because the integration source is absent. **Blocked.**
@@ -84,34 +86,42 @@ The specifically named `docs/second-round/CORE-DOCUMENT-READING-GATE.md` path is
 - `adopt/adoptions/status/index.html`
 - `adopt/assets/js/status.js`
 - `adopt/admin/update-adoption.php`
+- `adopt/apply/adoption-application.php` field contract (read-only inspection)
+- Remote completion evidence extracted from `origin/task/second-round-MANUS-02` into `/tmp/manus07-evidence/`
 - Status-related paths searched across `adopt/`, `status/`, `petpay/`, and the repository root
 - Git history and fetched refs for status, uptime, BNPL, installment, and current adoption-status paths
 
-No protected file or directory was opened, copied, modified, or committed.
+No protected file or directory was opened, copied, modified, or committed. The new runtime rate-limit directory is intentionally non-protected application storage, with direct HTTP access denied by `.htaccess`.
 
 ## Tests and checks
 
 - `node --check adopt/assets/js/status.js` — passed.
 - `php -l adopt/admin/update-adoption.php` — passed.
+- `php -l adopt/adoptions/status/adoption-status-check.php` — passed.
 - HTML structural probe on `adopt/adoptions/status/index.html` — no duplicate IDs; script opening/closing counts balanced.
+- `node --check /tmp/status-inline.js` (extracted inline script from the changed status page) — passed.
+- Task 3 assertions — passed: raw `application.json` is absent from the page script, the new endpoint is called by POST, exactly one `lastNameInput` exists, and the protected rate-limit path is present.
 - `git diff --check` — passed.
 - Chromium browser smoke screenshots of the existing adoption status page — passed at **1280×900** and **390×844**; screenshots were temporary files outside the repository.
 - Playwright CLI was present, but its bundled browser executable was unavailable. Direct installed Chromium was used instead; no claim is made that Playwright console/network instrumentation ran.
-- No implementation change was made, so no changed-file PHP/JS lint set or BUGFIX anchor was applicable.
+- Live PHP execution and deployed write-permission checks remain outstanding because this sandbox has no application fixture/live host; the code path is syntax-checked and uses fail-open logging only if runtime storage cannot be opened.
 
 ## Files changed and commit
 
-Only this report is added:
+The report and Task 3 implementation are changed:
 
 - `reports/second-round/MANUS-07.md` — this evidence and handoff report; no protected paths.
+- `adopt/adoptions/status/index.html` — requires the second identifier and calls the hardened endpoint.
+- `adopt/adoptions/status/adoption-status-check.php` — new server-side lookup, rate limiter, path containment, and allow-list.
+- `adopt/adoptions/status/rate-limit-data/.htaccess` — denies direct access to runtime counters.
 
-The report commit message begins `MANUS-07:`. The branch contains no code changes and no credentials.
+The implementation contains no credentials. The report and implementation commit messages begin `MANUS-07:`.
 
 ## Unresolved dependencies and handoff
 
-1. The unavailable completion files listed above are required evidence gaps for the coordinator to retain in the final reconciliation.
-2. A future implementation pass needs the missing Task 1–12 completion source or an explicit CEO-approved replacement specification before creating the status-subdomain, BNPL, uptime, email, or research deliverables.
-3. Task 3 needs a decision on the intended live path and a deployable writable rate-limit storage location.
+1. The fetched completion documents are now available as remote evidence, but their ZIP payloads are not in Git; the coordinator should retain that distinction in the final reconciliation.
+2. Task 3 needs a deployed writable `adopt/adoptions/status/rate-limit-data/` directory (or confirmation that PHP can create it) and a live smoke test.
+3. The remaining status-subdomain, BNPL, uptime, email, and research implementations still need their described ZIP/source payloads or an explicit replacement implementation pass; the current repository does not contain those new files.
 4. Task 4 must establish the BNPL status contract before Tasks 5–7 and Task 6 can be safely implemented.
 5. Task 6 must exist before Task 9 and Task 12 can wire email notifications.
 6. Task 10 requires CEO-owned UptimeRobot account/API-key and scheduling decisions.
