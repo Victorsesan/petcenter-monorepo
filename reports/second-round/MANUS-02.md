@@ -190,3 +190,46 @@ No Task 2 theme switcher was added. The existing dashboard initializer explicitl
 [3]: https://console.groq.com/docs/speech-to-text "Groq speech-to-text API documentation"
 [4]: https://console.groq.com/docs/rate-limits "Groq API rate limits"
 [5]: https://console.groq.com/docs/deprecations "Groq model deprecations"
+
+
+## SECOND VERIFICATION ROUND — branch review and Tasks 1a/1b — 2026-11-03
+
+### Branch and previous continuation review
+
+Verified `task/second-round-MANUS-02` against `origin/task/second-round-MANUS-02` at starting commit `3e2a1585e44dbdb7c4c7ccf36f72a0c0bf705c5c`; the branch was synchronized and clean before this review. Reviewed the prior continuation and compared its Task 3 code against the required Shared Data Contract. The database column was correctly named `preferred_chat_language`, but the start and polling JSON responses and language-update request/response used camelCase names. Corrected the API to expose and accept the canonical `preferred_chat_language` field throughout. This supersedes the earlier claim that Task 3's API already met the exact field-name contract.
+
+### Task 1a/1b implementation
+
+The historical completion evidence describes an on-demand transcript cache shared by both directions, with Task 1a's English admin-audio path using Groq `whisper-large-v3-turbo` and Task 1b's multilingual customer-audio path using `whisper-large-v3`. The feature code itself was absent from the verified branch. Implemented it in the MANUS-02 branch, limited to its assigned chat widget/admin-chat areas and their chat-message schema:
+
+- Added `adopt/admin/chat-transcribe.php`. It requires a customer session token for customer-side reads and admin authentication for admin-side reads, checks message ownership/direction, validates the stored audio path and file size, applies a 40-request/10-minute per-IP flood guard to all requests and account-wide provider quotas to new uncached work, atomically claims per-message transcription work, caches transcript/status/confidence/detected language, and retries failed or stale claims. Groq credentials are read only from the server environment variable `GROQ_API_KEY`; no secret or placeholder key is committed. The endpoint calls Groq transcription only and does not call a translation API.
+- Added transcript cache columns to fresh-install `chat_messages` schema and additive migrations for existing databases. The migration is not run by this change.
+- Added an on-demand customer control for admin-origin audio and admin-side controls for both customer-origin and admin-origin audio. Transcript text remains selectable, with copy controls, low-confidence warnings, and the customer's preferred-language code alongside admin-origin transcripts.
+- Added browser-native `SpeechSynthesis` read-aloud for the transcript in both views. The detected language is persisted with the cached transcript so read-aloud retains the appropriate language on subsequent views. No cloud TTS or translation service was added.
+
+Changed source paths for this round are `adopt/admin/chat-transcribe.php` (new), `adopt/admin/chat-widget.js`, `adopt/admin/index.html`, `adopt/admin/chat-setup.php`, `adopt/admin/chat-migrate.php`, `adopt/admin/chat-start.php`, `adopt/admin/chat-poll.php`, and `adopt/admin/chat-update-language.php`. The last three carry the Task 3 canonical-field correction; no other project's files, credential/config contents, customer data, or production database were modified.
+
+### Provider choice and remaining operational work
+
+Current Groq documentation lists the multilingual transcription models and the transcription endpoint. It lists the free-plan recurring rate limits as 20 requests/minute, 2,000/day, 7,200 audio seconds/hour, and 28,800/day, and caps free-tier direct uploads at 25 MB. Groq's deprecation notice identifies `whisper-large-v3-turbo` as the replacement for the retired English-only `distil-whisper-large-v3-en`; the customer path uses current multilingual `whisper-large-v3`. [3] [4] [5]
+
+The transcription code is implemented but is **not operationally verified or live-deployed**: this environment has no `GROQ_API_KEY`, no chat database connection/session, and no customer audio corpus. Before deployment, an authorized operator must provision `GROQ_API_KEY` in the server environment, apply the chat migration once, and perform authenticated audio tests in both directions, including non-English customer samples and a read-aloud check on supported browsers. Do not put the provider key in Git or expose it to browser JavaScript.
+
+### Checks performed
+
+`php -l` passed for the changed PHP files, including the new transcription endpoint. `node --check` passed for `chat-widget.js`; extracted inline JavaScript from `index.html` parsed successfully. A structural check confirmed all applicable Task 1a/1b anchors balance across the task-owned source files, and `git diff --check` passed. A Playwright/Chromium harness exercised the actual extracted customer/admin transcript controls with mocked API, clipboard, and speech APIs: pending-to-success, low-confidence warning, customer preferred-language display, copy, native read-aloud and detected-language mapping, hide/show without another API call, correct omission of target-language text for incoming customer audio, admin-sent transcript language metadata, and fail-then-retry in one output container all passed. This caught a customer-panel bug (success/error output remained hidden), which was fixed before the passing run. No production DB migration, live Groq call, authenticated browser test, or real-audio quality test was performed.
+
+[3]: https://console.groq.com/docs/speech-to-text "Groq speech-to-text documentation"
+[4]: https://console.groq.com/docs/rate-limits "Groq API rate limits"
+[5]: https://console.groq.com/docs/deprecations "Groq model deprecations"
+
+
+## MANUS-02 follow-up verification — 2026-11-04
+
+This addendum supersedes the earlier statements in this report that Tasks 1a/1b lacked implementation or remained blocked for code. Their source implementation is now on `task/second-round-MANUS-02`; only deployment and real-service/audio validation remain outstanding. The task completion records' separate pending MySQL issue for the pre-existing `archived` migration has also been corrected in commit `8c7f5e176825744e7f3bda2495eba1c233eb7d61` (`MANUS-02-EXTRA: fix MySQL archived migration`): the statement uses portable `ADD COLUMN`, and the migration runner's existing duplicate-column handling keeps reruns safe. The migration was not executed against a database.
+
+Exact source ranges at this revision: `adopt/admin/chat-transcribe.php:1–142` (new authenticated transcription endpoint); `adopt/admin/chat-widget.js:485–508` (customer transcript styles), `1848–1897` (customer transcript control and native speech), `1953–1955` (message-render hook), `1530–1565` and `2210–2225` (Task 3 canonical language contract); `adopt/admin/index.html:5666–5721` (admin transcript/read-aloud controls) and `5808–5810` (render hook); `adopt/admin/chat-setup.php:66–74` and `adopt/admin/chat-migrate.php:61–74` (transcript cache schema); `adopt/admin/chat-migrate.php:25–29` (separate EXTRA fix); `adopt/admin/chat-start.php:60,132,186,268`, `adopt/admin/chat-poll.php:133`, and `adopt/admin/chat-update-language.php:11–25` (Task 3 canonical `preferred_chat_language` input/output).
+
+The final Playwright/Chromium run used the actual widget CSS and extracted production UI functions with mocked network, clipboard, and speech APIs. It passed pending-to-success behavior, visible transcript and error output, confidence warning, preferred-language placement by direction, copy, native TTS language selection, hide/show without another request, retry without stacked error panels, and computed style checks for the Navy text/white panel and 32px read-aloud touch target. The hidden-output defect was fixed before that passing run; the stylesheet audit also found and filled the missing widget rules. PHP/JavaScript syntax checks, task-anchor balance, canonical-field checks, and `git diff --check` passed.
+
+For repository coordination, current origin refs were fetched and only relevant overlapping branches/files were inspected. No remote worker branch contains the transcription endpoint. MANUS-01 adds auth in adjacent `chat-start.php`/`chat-setup.php` zones, while MANUS-03/04 change other parts of the admin UI; none was merged. Preserve the canonical `preferred_chat_language` field when combining MANUS-01's auth changes. The working branch started synchronized with its origin counterpart. No credential/configuration file, customer data, unrelated task file, or production database was changed. A server-side `GROQ_API_KEY`, database migration, authenticated live calls, and real multilingual customer recordings are still needed before live operational sign-off.

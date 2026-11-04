@@ -57,7 +57,7 @@ $chatId    = trim($input['chatId'] ?? '');
 $petContext = $input['petContext'] ?? null; // { name, petId, thumbUrl, pageUrl } or null, Section 7b
 // AP4-TASK-3: exact supported language contract; never store arbitrary client text.
 $ap4Languages = ['en','es','fr','de','pt','it','zh-Hans','ja','ko','ar','hi','vi','tl','ru'];
-$preferredChatLanguage = trim($input['preferredLanguage'] ?? '');
+$preferredChatLanguage = trim($input['preferred_chat_language'] ?? '');
 if (!in_array($preferredChatLanguage, $ap4Languages, true)) $preferredChatLanguage = 'en';
 
 // ── Validation ───────────────────────────────────────────────────────────
@@ -129,7 +129,7 @@ if ($chatId !== '') {
             /* TASK-1 START — sessionToken in the response payload */
             'sessionToken' => $sessionToken,
             /* TASK-1 END */
-            'preferredChatLanguage' => $preferredChatLanguage, // AP4-TASK-3
+            'preferred_chat_language' => $preferredChatLanguage, // AP4-TASK-3
         ]);
     }
 
@@ -183,7 +183,7 @@ if ($existing) {
         /* TASK-1 START — sessionToken in the response payload */
         'sessionToken' => $sessionToken,
         /* TASK-1 END */
-        'preferredChatLanguage' => $preferredChatLanguage, // AP4-TASK-3
+        'preferred_chat_language' => $preferredChatLanguage, // AP4-TASK-3
     ]);
 }
 
@@ -265,5 +265,5 @@ chatRespond([
     /* TASK-1 START — sessionToken in the response payload */
     'sessionToken' => $sessionToken,
     /* TASK-1 END */
-    'preferredChatLanguage' => $preferredChatLanguage, // AP4-TASK-3
+    'preferred_chat_language' => $preferredChatLanguage, // AP4-TASK-3
 ]);

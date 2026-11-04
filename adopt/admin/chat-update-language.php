@@ -8,7 +8,7 @@ require_once __DIR__ . '/includes/chat-auth.php';
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') chatRespond(['success' => false, 'error' => 'POST required'], 405);
 $input = chatJsonInput();
 $chatId = trim($input['chatId'] ?? '');
-$language = trim($input['preferredLanguage'] ?? '');
+$language = trim($input['preferred_chat_language'] ?? '');
 $sessionToken = trim($input['sessionToken'] ?? '');
 $allowed = ['en','es','fr','de','pt','it','zh-Hans','ja','ko','ar','hi','vi','tl','ru'];
 if ($chatId === '' || !in_array($language, $allowed, true)) {
@@ -22,4 +22,4 @@ $stmt->execute([$chatId]);
 $threadId = $stmt->fetchColumn();
 if (!$threadId) chatRespond(['success' => false, 'error' => 'Chat not found'], 404);
 $db->prepare('UPDATE chat_threads SET preferred_chat_language = ? WHERE id = ?')->execute([$language, $threadId]);
-chatRespond(['success' => true, 'preferredChatLanguage' => $language]);
+chatRespond(['success' => true, 'preferred_chat_language' => $language]);

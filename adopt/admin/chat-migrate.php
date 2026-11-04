@@ -57,6 +57,21 @@ $migrations = [
     "Widen chat_typing.who ENUM to include recording-ping values (Task 8b)" =>
         "ALTER TABLE chat_typing MODIFY who ENUM('user','admin','user_recording','admin_recording') NOT NULL",
     // BUGFIX-1 END
+
+    /* TASK-admin234-1a START — MySQL/MariaDB-compatible transcript cache columns. */
+    "Add transcript column to chat_messages (Admin Project 2 Tasks 1a/1b)" =>
+        "ALTER TABLE chat_messages ADD COLUMN transcript TEXT NULL",
+    "Add transcript_status column to chat_messages (Admin Project 2 Tasks 1a/1b)" =>
+        "ALTER TABLE chat_messages ADD COLUMN transcript_status ENUM('none','pending','done','failed') NOT NULL DEFAULT 'none'",
+    "Add transcript_confidence column to chat_messages (Admin Project 2 Tasks 1a/1b)" =>
+        "ALTER TABLE chat_messages ADD COLUMN transcript_confidence DECIMAL(4,3) NULL",
+    /* TASK-admin234-1b START — persist detected source language for read-aloud. */
+    "Add transcript_language column to chat_messages (Admin Project 2 Task 1b)" =>
+        "ALTER TABLE chat_messages ADD COLUMN transcript_language VARCHAR(16) NULL",
+    /* TASK-admin234-1b END */
+    "Add transcript_started_at column to chat_messages (Admin Project 2 Tasks 1a/1b)" =>
+        "ALTER TABLE chat_messages ADD COLUMN transcript_started_at TIMESTAMP NULL",
+    /* TASK-admin234-1a END */
 ];
 
 foreach ($migrations as $desc => $sql) {

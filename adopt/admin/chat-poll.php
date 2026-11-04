@@ -130,7 +130,7 @@ $botPublicInfo = [
 chatRespond([
     'success'        => true,
     'status'         => $thread['status'],
-    'preferredChatLanguage' => $thread['preferred_chat_language'] ?? null, // AP4-TASK-3
+    'preferred_chat_language' => $thread['preferred_chat_language'] ?? null, // AP4-TASK-3
     'messages'       => $messages,
     'events'         => $events,
     'adminTyping'    => $adminTyping,

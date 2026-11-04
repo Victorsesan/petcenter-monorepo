@@ -63,6 +63,15 @@ $statements = [
             edited_at     TIMESTAMP NULL,
             original_body TEXT NULL,
             deleted_at    TIMESTAMP NULL,
+            /* TASK-admin234-1a START — on-demand cached speech transcript fields. */
+            transcript TEXT NULL,
+            transcript_status ENUM('none','pending','done','failed') NOT NULL DEFAULT 'none',
+            transcript_confidence DECIMAL(4,3) NULL,
+            /* TASK-admin234-1b START — cache detected source language for native read-aloud. */
+            transcript_language VARCHAR(16) NULL,
+            /* TASK-admin234-1b END */
+            transcript_started_at TIMESTAMP NULL,
+            /* TASK-admin234-1a END */
             created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (thread_id) REFERENCES chat_threads(id) ON DELETE CASCADE,
             INDEX (thread_id, created_at),
