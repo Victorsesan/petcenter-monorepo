@@ -150,3 +150,52 @@ This is an explicitly partial classification, not the complete register closeout
 - **Starting commit:** `251d8c26ab89bc9a3fd2bc12e155af41b1d03a87`.
 - **Branch:** `task/second-round-MANUS-11`.
 - **Report commit:** this report-only branch tip; the exact commit hash is supplied in the final handoff.
+
+
+## Coordinator continuation — 2026-11-04 (supersedes stale evidence/branch statements above)
+
+This continuation corrects the earlier evidence-gap and account-availability sections. Those sections reflected an earlier snapshot of `origin/main` and must not be read as a claim that completion documents are absent from every fetched branch.
+
+### Repository and completion-evidence reconciliation
+
+- Audited against `origin/main` at `251d8c26ab89bc9a3fd2bc12e155af41b1d03a87`; account work remains unmerged unless explicitly identified below as already present on main.
+- The worker completion documents are present on `origin/task/second-round-MANUS-04`, not on `origin/main`. The branch's `docs/second-round/completion-evidence/IMPORT-MANIFEST.md` has 64 SHA-256 entries; a byte-level SHA-256 check against all 64 mapped paths passed. The 64 entries comprise 62 worker-package completion/handoff files plus two outer-archive reference documents. The inventory's 64 packages include two packages without completion files: Rehoming C5 and C6.
+- Therefore the earlier assertion that all 62 files were unavailable “in this Git repository” is superseded and was too broad. Correct wording: they were absent from the audited `main` snapshot but are available in a fetched account-branch evidence bundle. Evidence branch/path and commit must be cited; branch presence is not mainline integration or task acceptance.
+- Scope reviewers read the completion documents mapped to their assigned packages where noted below. MANUS-09 verified selected paths but did not review document bodies after a safety interlock; MANUS-10 checked the manifest/tree but did not read the 62 bodies individually. I do not claim that every completion document body has now been read end to end.
+
+### Current account/report matrix
+
+| Account | Branch/report at reviewed refs | Coordinator result (all source changes remain unmerged unless noted) |
+|---|---|---|
+| MANUS-01 | `origin/task/second-round-MANUS-01` `784a7ff`; report present. | 10-path delta, including chat auth/setup/rate/widget/lock/reset code. Task 1 rating-email ownership fix is branch-only; Task 2 missing-auth concern is reported False Alarm/Already Resolved after static review; Task 3 PIN and Task 5a/b remain blocked; Task 4 lock and Task 6 reset code are branch-only with runtime gaps; Task 7 badge/producers need review. All seven assigned completion files exist on MANUS-04's evidence ref; the earlier report's unavailable-file list is stale. Shared chat contracts require ordered reconciliation. |
+| MANUS-02 | `origin/task/second-round-MANUS-02` `3e2a158`; report present. | Task 3 language-preference changes are branch-only; Tasks 1a/1b transcription/read-aloud are blocked (no implementation in that branch delta); Task 2 theme request conflicts with main's explicit single-theme direction and needs owner decision. Three assigned completion docs exist on MANUS-04's evidence ref. |
+| MANUS-03 | `origin/task/second-round-MANUS-03` `29c5d83`; report and integration-review report present. | Branch-only logical-CSS/widget/page changes; Tasks 1 and 4–8 blocked; Task 2 server redirect needs review; Tasks 3, 9 and 10 need merge, route, interaction and QA review. Completion packages for Tasks 2, 9 and 10 exist on MANUS-04's evidence ref. Resolve the signin-page report/diff discrepancy and shared MANUS-08/10 handoffs. |
+| MANUS-04 | `origin/task/second-round-MANUS-04` `151d46b`; report present. | 102-path delta. Most new pages/endpoints and shared-page changes are branch-only. Pet Match form and quiz pages are already identical on main; the submit endpoint exists on this branch but not main, and upload endpoint remains absent. Task 7b evidence is absent; Task 1 handoff was not located. Shared navigation, filter, form/storage/admin/status contracts, runtime/security and business/compliance checks remain open. |
+| MANUS-05 | `origin/task/second-round-MANUS-05` `5dcae04`; report present. | Branch delta adds `adopt/assets/js/show-auth-prompt.js` (A4) plus report; A4 is branch-only, and distinct sign-up/log-in destinations need confirmation. B2 lost-update correction is already present on main per the report/source check. C4–C6 remain blocked; C5/C6 completion evidence is absent. The earlier MANUS-11 description of this branch as report-only predates its later A4 commit. |
+| MANUS-06 | `origin/task/second-round-MANUS-06` `0fc5c8a`; report present. | Nine-path delta includes a local-first rehoming engine/hub and detail/dashboard edits, all branch-only. The report's original status table conflicts with its later implementation-completion pass. Do not treat broad local/mock functionality as closing server-backed support, account, persistence, email/scheduler, upload, ownership, currency, or payment requirements. D1/F5 fixes are branch-only; E1 edit-modal concern is already resolved on main, but integration remains open; G1 does not create a live Stripe object. |
+| MANUS-07 | `origin/task/second-round-MANUS-07` `72dafe8`; report present. | Report-only branch; no dashboard implementation changes. The Task 1–10, 12 and Shipping Tier 1 completion files are present on MANUS-04's evidence ref; Task 11 completion is absent. Dashboard implementation and live/API/config checks are not established on main. Earlier missing-evidence assertions are stale for that ref. |
+| MANUS-08 | No fetched branch/report. | No account implementation or QA result to accept. Current main has an accessibility widget, but six-zone positioning, sitewide rollout, rebrand consistency, contrast/keyboard/reduced-motion checks and chat scroll behavior still need review. |
+| MANUS-09 | `origin/task/second-round-MANUS-09` `9922055`; report present. | Report-only branch; no fixes in its branch diff. Selected issue classifications remain report-attributed. Mapped evidence paths exist on MANUS-04, but the reviewer did not read their content after a safety interlock; do not represent those packages as audited by MANUS-09. |
+| MANUS-10 | No fetched branch/report. | Assigned browser/integration QA was not performed. No merged application baseline or desktop/phone route/form/console/network results are supplied. Explicitly Blocked, not passed. |
+
+### Issue-register disposition and cross-account merge risks
+
+The register contains 145 extracted issue-bearing rows. The earlier “partial classification” statement remains in force: the account reviews now correct multiple stale evidence claims and classify their assigned rows, but they do **not** close every register row. Use each owning account's row-level classifications together with this report; leave any row not directly verified as **Needs My Review** or **Blocked**, never silently omit it or infer “Fixed” from a completion narrative. Fixed status must distinguish mainline from unmerged-branch fixes.
+
+Priority shared-file/contract order for the integrator:
+
+1. Reconcile MANUS-01/02 shared chat files (`chat-widget.js`, `chat-start.php`, `chat-poll.php`, `chat-setup.php`, `chat-migrate.php`, auth/audit/lock/reset files). Align principal IDs, language field, audit event vocabulary and Task 7 badge producers; MANUS-02 Task 3 is branch-only and transcription consumers remain absent.
+2. Reconcile MANUS-04 category/admin page zones (navigation, filters, CTAs, status/notification UI) and one Pet Match request/storage schema across Tasks 5/5b/6a/6b/7a/9. Do not treat its branch-only submit endpoint as main; upload endpoint and approved Turnstile configuration remain unresolved.
+3. Reconcile MANUS-03 page/CSS/widget rollout with MANUS-08 ownership and MANUS-10 QA. MANUS-03 branch changes overlap MANUS-04 route/category pages; confirm the exact signin scope and chat-scroll behavior before merge.
+4. Reconcile MANUS-05/06 merchant/listing/status/account contracts. Pet-detail changes span A1/F5/F7/G1; E1 shell and account links must target real routes; C4 depends on C5 upload/messaging; G1/A1/B1/B6 require shared opt-in, ownership and payment contracts.
+5. Assign one owner for MANUS-07/09 findings in shared `adopt/admin/update-adoption.php` (metadata mismatch, raw POST path handling, unlocked writes). MANUS-07/09 branches contain reports only; neither repaired the code.
+
+No account branch was merged, rebased, cherry-picked, or deployed by MANUS-11. The SHA and diff inventory above is evidence of branch content only, not approval.
+
+### MANUS-11 checks and remaining handoffs
+
+- Independently verified the 64 import-manifest SHA-256 values against the mapped blobs; all matched. Reviewed named refs, reports, diffs, and package/path mappings using read-only operations.
+- No repository code, SQL, shell snippet, HTML script, or other embedded content was executed. Protected paths were not accessed. No application/browser/PHP/runtime test was run by MANUS-11 in this continuation.
+- Any PHP, JavaScript, Chromium/Playwright, unit, or browser results cited above are attributed to the named worker reports and were **not rerun or certified by MANUS-11**. MANUS-10 supplied no QA result.
+- Unresolved: obtain MANUS-08 and MANUS-10 reports or authorize/assign their remaining work; locate or disposition MANUS-04 Task 1 and Task 7b, MANUS-05 C4–C6, and MANUS-07 Task 11; resolve owner/design/business decisions; review/merge selected branch patches in dependency order; then rerun tests against the exact merged commit and complete the 145-row register classification.
+- The shared `ACCOUNT-REPORT-INDEX.md` remains unchanged on `main`; only the coordinator may mark reports reconciled, and this review is not a complete final reconciliation. No mainline documents or application files were edited in this continuation.
