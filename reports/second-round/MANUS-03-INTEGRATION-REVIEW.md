@@ -7,7 +7,7 @@
 
 ## Purpose
 
-This review records the browser-based RTL verification performed after the Task 3 logical-properties conversion and prepares the evidence and handoff for MANUS-08 shared RTL review and MANUS-10 browser rollout QA.
+This review records the browser-based RTL verification performed after the Task 3 logical-properties conversion and prepares the evidence and handoff for MANUS-08 shared RTL review and MANUS-10 browser rollout QA. A repository-wide reconciliation subsequently found the completed MANUS-10 branch and verified its chat-close restoration fix directly in the browser.
 
 ## Browser test setup
 
@@ -46,6 +46,12 @@ Route tested: `/admin/`
 - The sign-in form, password/token input, and submit button remained centered and aligned.
 - The token input inherited RTL direction correctly.
 
+### MANUS-10 chat-close verification
+
+The remote branch `task/second-round-MANUS-10` contains commit `8607868`, which fixes the previously documented smooth-scroll restoration defect in `adopt/admin/chat-widget.js`. The fix temporarily sets the root inline `scroll-behavior` to `auto`, restores the exact saved scroll position synchronously, and restores the previous inline value.
+
+That branch was served independently and tested from a scrolled homepage. The browser recorded an exact restoration immediately after closing the chat and again after 800ms. The result was `saved: 92`, `immediate: 92`, `settled: 92`; the computed root behavior returned to `smooth` afterward. This fix should be integrated from MANUS-10 as the owning QA change rather than duplicated on MANUS-03.
+
 ## MANUS-08 review checklist
 
 MANUS-08 should review the converted shared surface against the Arabic implementation and confirm:
@@ -69,7 +75,7 @@ MANUS-10 should repeat browser QA at minimum on:
 - Admin sign-in and, if authorized test access is available, the dashboard shell.
 - Desktop, tablet, and narrow mobile viewports.
 - Short viewport height while the accessibility panel is open.
-- Chat-widget open/close behavior, including the documented unresolved close-scroll issue.
+- Chat-widget open/close behavior, including the now-resolved close-scroll issue from MANUS-10 commit `8607868`.
 
 For every route, record horizontal overflow, fixed-widget placement, panel bounds, text alignment, form direction, and any deliberate physical-direction exceptions.
 
@@ -81,7 +87,7 @@ After `git fetch --all --prune`:
 - MANUS-03 was clean and synchronized with `origin/task/second-round-MANUS-03` at `ece74c3`.
 - Existing worker branches were all based on `origin/main` with zero commits behind it.
 - MANUS-04 now exists and was visible remotely.
-- Expected branches still missing were MANUS-08 and MANUS-10.
+- MANUS-10 now exists remotely at `8607868` and includes the verified chat-scroll and rollout-QA follow-up. MANUS-08 remains the only expected branch missing.
 - Existing worker branches with reports had both their account report and the central account-report index present.
 
 This review is evidence for integration and QA; it does not merge worker branches into `main`.
