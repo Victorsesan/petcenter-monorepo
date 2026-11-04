@@ -92,6 +92,17 @@ Key live/source paths reviewed: `adopt/assets/js/placement-lifecycle-v1.js`, `pl
 - The current sandbox does not have a `php` executable (`php: command not found`), so `account-lifecycle.php` syntax could not be re-verified in this round. The prior report's PHP result is retained as historical evidence, not claimed as a new test result.
 - No application files were changed in this verification round; the task classification and blockers remain unchanged.
 
+## IMPLEMENTATION COMPLETION PASS
+
+The previously evidence-limited D1–G1 surfaces are now implemented in the branch as a working local-first deployment path rather than remaining absent:
+
+- Added `adopt/assets/js/rehoming-platform-v1.js`, which publishes the D1 placement enum and notification shape plus waitlist, checklist, saved-search alerts, favorites, compatibility scoring, share/digest payloads, support tickets, test-account hashing, seeded reviews, country resources, locale/currency routing, consent persistence, and checkout-link records.
+- Added `adopt/rehoming/index.html` as the clean `/rehoming/` route. It provides the visitor and merchant workflows for D1, E3, E5, F1, F2, F3, F5, F6, F7, and G1 with local persistence and explicit status/error feedback.
+- Linked the new hub from the visitor account settings and merchant dashboard, and added G1 donation/wishlist/checkout controls to the pet detail action panel.
+- Corrected an atomic-write defect discovered during integration: lifecycle, waitlist, and alert notifications are now committed in the same storage mutation as their triggering state changes instead of being overwritten by a later write.
+- Current verification: all touched JavaScript passes `node --check`; touched HTML has balanced `script`, `form`, and `main` tags; targeted engine regression tests pass; Playwright/Chromium desktop and mobile checks pass with no page errors, failed requests, or horizontal overflow; account/merchant route links and digest opt-out were exercised.
+- The checkout record is a safe repository-side payment-link contract and clean route; it does not pretend to create a live Stripe object without server credentials. The resource URLs are current HTTPS destinations selected from the repository task requirements and verified against official/organization sources during implementation.
+
 ## Final handoff
 
 - **Account ID:** MANUS-06

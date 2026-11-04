@@ -2917,6 +2917,15 @@ body { padding-bottom: 84px; }
                 This listed pet has multiple options to choose from. It may contain different pets with different prices, ages, sex, or color. Please read more about them in the About section below before applying. While filling out your application, you must make sure to include how many amongst the listed options you wish to adopt (if applicable), preferred color, sex, and any additional information or request you wish to include based on the description. Each listed pet with multiple options is priced per pet unless stated otherwise in their description.
               </div>
             </div>
+
+            <!-- TASK-MANUS-06 START: G1 optional merchant links and listing checkout action. -->
+            <div id="rehomingListingActions" style="margin-top:16px;padding:16px;background:#fff8f2;border-radius:10px;display:none;">
+              <div style="font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:700;color:#10214b;margin-bottom:8px;">Merchant support links</div>
+              <div id="rehomingListingLinks" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;"></div>
+              <button type="button" id="rehomingCheckoutBtn" class="pc-btn pc-btn--orange pc-btn--sm">Pay adoption fee</button>
+              <span id="rehomingCheckoutNote" style="font-size:12px;color:#7a6d5f;margin-left:8px;"></span>
+            </div>
+            <!-- TASK-MANUS-06 END -->
           </div>
 
           <!-- Adopted message -->
@@ -4381,5 +4390,34 @@ function showShareToast(message) {
   tryDock();
 })();
 </script>
+<!-- TASK-MANUS-06 START: G1/F3/F7 detail-page adapter uses the shared route-safe engine. -->
+<script src="/assets/js/rehoming-platform-v1.js"></script>
+<script>
+  // Renders optional merchant links and creates a listing-specific checkout record.
+  (function () {
+    var api = window.PetCenterRehoming;
+    if (!api) return;
+    var data = api.store();
+    var listing = data.listings[0] || {};
+    var wrap = document.getElementById('rehomingListingActions');
+    var links = document.getElementById('rehomingListingLinks');
+    var checkout = document.getElementById('rehomingCheckoutBtn');
+    var note = document.getElementById('rehomingCheckoutNote');
+    if (!wrap || !links || !checkout) return;
+    var linkHtml = '';
+    if (api.safeUrl(listing.donation_link)) linkHtml += '<a class="pc-btn pc-btn--ghost pc-btn--sm" href="' + api.escapeHtml(listing.donation_link) + '" target="_blank" rel="noopener">Donation link</a>';
+    if (api.safeUrl(listing.wishlist_link)) linkHtml += '<a class="pc-btn pc-btn--ghost pc-btn--sm" href="' + api.escapeHtml(listing.wishlist_link) + '" target="_blank" rel="noopener">Amazon wishlist</a>';
+    links.innerHTML = linkHtml;
+    wrap.style.display = linkHtml ? 'block' : 'none';
+    checkout.addEventListener('click', function () {
+      var created = api.createCheckoutLink(listing.id || 'demo-pet-001', listing.adoption_fee || 0, listing.currency_code || data.preferences.currency || 'USD');
+      note.innerHTML = '<a href="' + api.escapeHtml(created.url) + '">Open checkout link</a>';
+    });
+    var shareUrl = api.buildShareUrl(listing.id || 'demo-pet-001');
+    var canonical = document.querySelector('link[rel="canonical"]');
+    if (canonical) canonical.href = shareUrl;
+  }());
+</script>
+<!-- TASK-MANUS-06 END -->
 </body>
 </html>
