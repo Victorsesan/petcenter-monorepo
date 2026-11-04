@@ -128,3 +128,22 @@ Files changed in this follow-up:
 
 - `adopt/assets/js/show-auth-prompt.js`
 - `reports/second-round/MANUS-05.md`
+
+
+## Follow-up implementation — 2026-11-04 (repository-wide reconciliation)
+The earlier report was based on the absence of completion files in the current checkout and understated the implementation already present on `main`. I inspected all fetched refs and the discovered MANUS-04 completion records, then reconciled them against current source. A2 and A3 browse/profile integrations are present in `adopt/merchants/index.html` and the category pages; B1–B4, B5 account settings, B6, C2, and C3 source are also present on `main`. The remaining true gaps for this MANUS-05 scope are the A1 merchant posting form/publish endpoints and the absent C1/C5/C6 feature stacks; C4 remains contract-gated on C5.
+
+This follow-up closes one concrete A2 gap by adding `adopt/admin/needs-extra-love-check.php`. The job:
+- scans the existing flat-file `pet.json` layout without following symlinks;
+- marks only sufficiently old active listings with no recent inquiry as `needs_extra_love`;
+- ignores closed/non-active listings and recent listings;
+- preserves existing flags and writes atomically with a temporary file plus rename;
+- supports both the documented adoption and rehoming listing roots when run from cron; and
+- accepts an injected root/time in `a2MarkNeedsExtraLove()` so the behavior is independently testable without touching runtime data.
+
+Validation completed after installing PHP CLI in the sandbox:
+- `php -l adopt/admin/needs-extra-love-check.php`: passed.
+- Isolated fixture run: 4 records scanned, 1 marked, 2 unchanged, 1 skipped, 0 errors; the stale record was marked and recent/inquired/adopted records were not.
+- `git diff --check`: passed.
+
+The job is source-complete but still requires the hosting operator to schedule the documented cron command in the deployment environment. No runtime listing data, credentials, protected logs, or `.env` files were opened or modified.
