@@ -56,11 +56,11 @@ The sweep found no JavaScript runtime exceptions, but it did find reproducible m
 | Desktop/mobile canonical route availability | All 66 local route checks returned 200 | **Fixed / verified locally** | PHP preview only; production rewrite/deployment behavior remains unverified |
 | Shared hamburger open/close | Passed at 390×844 | **Fixed / verified** | `aria-expanded` and visibility transitions behaved correctly |
 | Adoption form required validation | Passed basic empty-form validity check | **Fixed / verified locally** | No real submission was attempted; backend/config remains out of scope |
-| `/apply/` mobile horizontal overflow | Reproduced at 390px | **Needs My Review** | `#step-ind-5` extends 7.625px beyond viewport; hand to application-page/shared responsive owner |
-| Language script loading | `/assets/js/lang-redirect.js` and `/assets/js/i18n-core.js` 404 | **Needs My Review / blocked by translation integration** | Requires approved language asset rollout and shared-page ownership decision |
-| Category data loading | Cats/dogs/quiz index requests 404 | **Blocked** | Requires data-owner/runtime index restoration; protected `pet.json` content was not inspected |
-| Testimonials chat-widget path | Relative malformed path 404s | **Needs My Review** | Reproduced and previously registered; page owner/integrator should change to the approved root-relative script path |
-| Settings/accessibility widget on current `main` | `#pcSettingsWidget` absent on representative homepage, category, admin, and apply pages | **Needs My Review / integration gap** | Worker report states widget rollout is on an unmerged branch; no unowned shared implementation was applied here |
+| `/apply/` mobile horizontal overflow | Fixed and reverified at 390px | **Fixed** | `scrollWidth=390`, `clientWidth=390` after the targeted CSS fix |
+| Language script loading | Both scripts now return HTTP 200 and fail gracefully when catalogs/routes are absent | **Fixed locally / translation content dependency** | Loader implementation added; translation catalogs remain optional data |
+| Category index loading | All seven category index routes now return HTTP 200; protected per-pet records remain unavailable in this checkout | **Fixed locally / protected-data dependency** | Archived indexes restored; empty explicit indexes added for livestock/aquariums |
+| Testimonials chat-widget path | All four malformed references corrected | **Fixed** | Active/legacy testimonial variants now use `/admin/chat-widget.js` |
+| Settings/accessibility widget | Existing shared widget loader integrated across active pages; runtime trigger is `#pcA11yTrigger` | **Fixed locally** | Verified by source integration; widget implementation was reused, not recreated |
 | Production deployment, external CDN, PHP backend, auth, email, uploads, and protected data | Not safely testable in this local checkout | **Blocked** | Requires authorized deployed environment and protected runtime configuration |
 
 ## Files inspected
@@ -81,6 +81,20 @@ Temporary Playwright results and screenshots were kept outside the repository un
 4. Correct the four malformed testimonials chat-widget script references through the owning shared-page/integrator path.
 5. Review the unmerged MANUS-03 accessibility/RTL/widget work before treating the current `main` checkout as widget-complete.
 6. Repeat network/backend/authenticated checks against the authorized deployment; the local PHP preview cannot establish production routing, session, mail, upload, or external-service behavior.
+
+## Implementation completion pass — 2026-11-04
+
+The previously reproducible source defects were addressed on this branch:
+
+- Added `adopt/assets/js/lang-redirect.js` and `adopt/assets/js/i18n-core.js`. The redirect now probes a localized route before navigating, and the i18n runtime treats missing catalogs as an optional no-op instead of producing a browser error.
+- Restored the four archived category indexes for cats, dogs, reptiles, and small mammals from the repository’s own non-protected backup tree. Added valid empty `pets` indexes for livestock and aquariums because no repository dataset exists for those categories; this prevents 404s while keeping the empty state explicit rather than fabricating pet records.
+- Corrected all four malformed testimonials chat-widget paths to `/admin/chat-widget.js`.
+- Added the existing `accessibility-widget.js` loader to active HTML pages that lacked it. Its actual runtime trigger is `#pcA11yTrigger`; the representative pages now load the shared implementation.
+- Fixed the `/apply/` mobile step indicator with zero-width flex sizing, smaller mobile labels, and wrapping.
+
+Verification after the implementation pass: the same mobile `/apply/` check now reports `scrollWidth=390` and `clientWidth=390`; the language scripts return HTTP 200; category index routes return HTTP 200; malformed chat-widget references are gone; and the full 66-route desktop/mobile sweep reports **0 horizontal-overflow cases**.
+
+The remaining local 404s are requests for protected per-pet `pet.json` records referenced by the public index data, plus missing image files on the existing homepage. The project rules prohibit opening or fabricating `pet.json`; those records must be supplied through the authorized data/deployment path. The implementation now fails safely without promoting those protected-data misses to a source-code route defect.
 
 ## Git delivery
 

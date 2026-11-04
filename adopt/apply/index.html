@@ -238,7 +238,8 @@
     }
 
     .step-indicator__item {
-      flex: 1;
+      min-width: 0;
+      flex: 1 1 0;
       text-align: center;
       padding: 14px 8px;
       font-size: 12px;
@@ -284,6 +285,14 @@
       color: var(--white);
     }
 
+    @media (max-width: 600px) {
+      .step-indicator__item {
+        padding-inline: 2px;
+        font-size: 10px;
+        letter-spacing: 0.02em;
+        overflow-wrap: anywhere;
+      }
+    }
     /* ─── Form ──────────────────────────────────────────────────────────────── */
     .form-step {
       display: none;
@@ -4032,5 +4041,6 @@
   window.initCustomSelects = initCustomSelects;
 </script>
 
+<script src="/assets/js/accessibility-widget.js" defer></script>
 </body>
 </html>
