@@ -22,8 +22,11 @@ $migrations = [
     "Add ticket_closed to chat_events ENUM" =>
         "ALTER TABLE chat_events MODIFY event_type ENUM('admin_joined','admin_left_done','ticket_closed') NOT NULL",
 
+    /* TASK-admin234-1a-EXTRA START — MySQL does not support ADD COLUMN IF NOT EXISTS.
+       The existing migration catch makes a plain ADD safe to rerun after duplicate-column errors. */
     "Add archived column to chat_threads" =>
-        "ALTER TABLE chat_threads ADD COLUMN IF NOT EXISTS archived TINYINT(1) NOT NULL DEFAULT 0",
+        "ALTER TABLE chat_threads ADD COLUMN archived TINYINT(1) NOT NULL DEFAULT 0",
+    /* TASK-admin234-1a-EXTRA END */
 
     "Add 'bot' to chat_messages from_type ENUM" =>
         "ALTER TABLE chat_messages MODIFY from_type ENUM('user','admin','system','bot') NOT NULL",
