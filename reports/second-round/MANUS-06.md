@@ -84,6 +84,14 @@ Key live/source paths reviewed: `adopt/assets/js/placement-lifecycle-v1.js`, `pl
 4. Confirm which testimonial variants are live before correcting their repeated chat-widget source path, and route the shared footer-grid mismatch to the design/layout owner.
 5. The account-specific prompt requires publishing only the MANUS-06 branch; therefore `TODO.md` was not changed on this task branch. The coordinator can decide whether to add the two out-of-scope layout/script handoffs to the shared inbox on `main`.
 
+## SECOND VERIFICATION ROUND
+
+- Synced `task/second-round-MANUS-06` with `origin/main`; no merge was required.
+- Re-ran `node --check` for all six D1 JavaScript modules, targeted unsafe-URL/rendering/delivery assertions, and `git diff --check`; all passed.
+- Confirmed the E1 posting-form route gap remains real: `adopt/merchant/index.html` points to `pet-posting-form.html`, but no tracked posting-form source exists. This remains an A1 integration dependency and was not changed under Scope Lock.
+- The current sandbox does not have a `php` executable (`php: command not found`), so `account-lifecycle.php` syntax could not be re-verified in this round. The prior report's PHP result is retained as historical evidence, not claimed as a new test result.
+- No application files were changed in this verification round; the task classification and blockers remain unchanged.
+
 ## Final handoff
 
 - **Account ID:** MANUS-06
