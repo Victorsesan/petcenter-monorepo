@@ -50,6 +50,17 @@ if ($action === 'submit' && $_SERVER['REQUEST_METHOD'] === 'POST') {
        Outside Task Scope" in Task-1-Completion.md. */
     $sessionToken = trim($input['sessionToken'] ?? '');
     chatRequireSessionToken($chatId, $sessionToken);
+    /* BUGFIX-MANUS-09-1-START — a valid session token must not be paired
+       with an unrelated syntactically valid email address. */
+    $threadEmailStmt = chatDb()->prepare(
+        "SELECT email FROM chat_threads WHERE chat_id = ? LIMIT 1"
+    );
+    $threadEmailStmt->execute([$chatId]);
+    $storedEmail = $threadEmailStmt->fetchColumn();
+    if ($storedEmail === false || strcasecmp(trim((string)$storedEmail), $email) !== 0) {
+        chatRespond(['success' => false, 'error' => 'Email does not match this chat'], 403);
+    }
+    /* BUGFIX-MANUS-09-1-END */
     /* TASK-1 END */
 
     $file = $reviewsDir . preg_replace('/[^A-Za-z0-9\-]/', '', $chatId) . '.json';

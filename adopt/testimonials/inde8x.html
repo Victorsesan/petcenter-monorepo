@@ -486,7 +486,9 @@
   </style>
 </head>
 <body>
-<script src="adopt.petcenterco.com/admin/chat-widget.js"></script>
+<!-- BUGFIX-MANUS-09-5-START: use the site-root widget path so nested pages do not resolve it relatively. -->
+<script src="/admin/chat-widget.js"></script>
+<!-- BUGFIX-MANUS-09-5-END -->
 <!-- Header -->
 <header class="pc-header">
   <a href="../index.html" class="pc-header__logo">

@@ -33,6 +33,12 @@ if (!$code || !$status) {
     die(json_encode(['success' => false, 'message' => 'code and status are required']));
 }
 
+$code = strtoupper(trim((string)$code));
+if (!preg_match('/^AD-\d{5}-\d{4}$/', $code)) {
+    http_response_code(400);
+    die(json_encode(['success' => false, 'message' => 'Invalid adoption code']));
+}
+
 $app_file = __DIR__ . "/../adoptions/applications/{$code}/application.json";
 if (!file_exists($app_file)) {
     http_response_code(404);
@@ -78,7 +84,7 @@ if ($status === 'APPROVED') {
         if (file_exists($pet_file)) {
             $pet = json_decode(file_get_contents($pet_file), true);
             $pet['status'] = 'Adopted';
-            file_put_contents($pet_file, json_encode($pet, JSON_PRETTY_PRINT));
+            file_put_contents($pet_file, json_encode($pet, JSON_PRETTY_PRINT), LOCK_EX);
         }
     }
 } elseif ($status === 'REJECTED') {
@@ -90,7 +96,7 @@ if ($status === 'APPROVED') {
 }
 
 $application['updated_date'] = date('Y-m-d H:i:s');
-file_put_contents($app_file, json_encode($application, JSON_PRETTY_PRINT));
+file_put_contents($app_file, json_encode($application, JSON_PRETTY_PRINT), LOCK_EX);
 
 echo json_encode(['success' => true, 'message' => 'Application updated successfully']);
 ?>
