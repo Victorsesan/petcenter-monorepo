@@ -144,3 +144,29 @@ The following classifications refer to the 18 MANUS-01 register rows (register l
 - **Implementation commit:** `73f6b98`.
 - **Final report update:** this continuation verification and comment-only documentation cleanup are included in the current branch tip.
 - **Branch:** `task/second-round-MANUS-01`
+
+
+## Repository-wide continuation review (2026-11-04)
+
+The historical Task 1–7 completion evidence was recovered from Git history for review; it is not present in the current working-tree checkout. The earlier status matrix above is therefore a historical snapshot and is superseded by this section. The current branch does contain the consolidated Task 3–6 implementation: `chat-auth-gate.php`, `chat-lock.php`, `chat-password-reset.php`, the shared `includes/chat-auth.php` helpers, and the `chat_auth`, `chat_remember_device`, `chat_lock_settings`, and `chat_password_resets` schema entries in both setup paths. `chat-start.php` and `chat-widget.js` are wired to the consolidated contract, and Task 7 reads the current `chat_auth_audit_log` vocabulary while excluding `verify_token` polling noise.
+
+This review also compared the current branch with the other fetched MANUS task branches for the shared chat files. No later origin branch contained a competing fix for the two confirmed gaps below.
+
+### Fixes made in this continuation
+
+1. **Lock-without-credential dead end closed.** `chat-lock.php` now rejects `action=set` with HTTP 422 unless the chat has a non-`none` auth tier and a stored secret hash. This prevents aggressive or delayed close-lock from invalidating the only session token when no PIN/password exists to unlock the chat.
+2. **Permanent-delete security cleanup closed.** `chat-manage.php` now removes `chat_auth`, `chat_remember_device`, `chat_lock_settings`, `chat_password_resets`, `chat_session_token`, and `chat_auth_audit_log` rows for the principal inside the same transaction before deleting the thread. This closes the orphaned-credential/device/token/audit-row gap documented in the historical Task 5 evidence.
+
+The audit-log retention issue remains an operational policy decision: successful `verify_token` polling is intentionally recorded by the current contract, so production retention/pruning should be decided separately rather than silently changing audit semantics here.
+
+### Final validation
+
+- Full isolated HTTP/MariaDB integration suite — **passed**: protected creation, authenticated lock status, lock settings, PIN replacement, aggressive close invalidation, protected resume/AuthGate, PIN verification, password replacement, uniform reset response, captured reset email, single-use temporary login, and forced password change.
+- Dedicated unprotected-chat lock guard test — **passed**: lock configuration returns HTTP 422 and does not create a lock state without a PIN/password.
+- Dedicated permanent-delete cleanup test — **passed**: the deleted chat ID returned zero rows in `chat_threads`, `chat_auth`, `chat_remember_device`, `chat_lock_settings`, `chat_password_resets`, `chat_session_token`, and `chat_auth_audit_log`.
+- PHP lint for all changed security endpoints, setup files, auth helpers, admin list, and chat-start — **passed**.
+- `node --check adopt/admin/chat-widget.js` — **passed**.
+- Security-contract assertions for throttle, hashing, token verification, reset timing, audit vocabulary, and cleanup tables — **passed**.
+- `git diff --check` — **passed**.
+
+The temporary local database, PHP server, SMTP sink, and test harness were kept outside the repository; no test credentials or generated runtime data were added to Git.

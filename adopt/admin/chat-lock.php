@@ -9,6 +9,15 @@ if (!preg_match('/^PC-[A-Z0-9]{8}$/',$chatId) || !verify_token($token,$chatId)) 
 $db=chatDb(); $action=trim((string)($input['action']??'status'));
 if($action==='status'){ chatRespond(['success'=>true,'lock'=>chatAuthLockStatus($chatId)]); }
 if($action==='set'){
+  /* BUGFIX-MANUS-01-2 START — a lock without a credential creates a dead-end:
+     closing the panel invalidates the token, while no PIN/password exists to
+     satisfy the next AuthGate. Refuse the preference change until the chat has
+     an actual protection tier. */
+  $auth = chatAuthGet($chatId);
+  if (!$auth || $auth['auth_tier'] === 'none' || empty($auth['secret_hash'])) {
+    chatRespond(['success'=>false,'error'=>'Set a PIN or password before enabling chat lock.'],422);
+  }
+  /* BUGFIX-MANUS-01-2 END */
   $delay=max(0,min(3600,(int)($input['delaySeconds']??300))); $aggressive=!empty($input['aggressive'])?1:0;
   $db->prepare("INSERT INTO chat_lock_settings(principal_id,delay_seconds,aggressive,locked_at) VALUES(?,?,?,NULL) ON DUPLICATE KEY UPDATE delay_seconds=VALUES(delay_seconds),aggressive=VALUES(aggressive),locked_at=NULL,updated_at=CURRENT_TIMESTAMP")->execute([$chatId,$delay,$aggressive]);
   log_audit($chatId,'chat-lock.php','settings_updated'); chatRespond(['success'=>true,'lock'=>chatAuthLockStatus($chatId)]);
