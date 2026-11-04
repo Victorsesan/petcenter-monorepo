@@ -64,4 +64,4 @@ Each malformed `adopt.petcenterco.com/admin/chat-widget.js` reference was replac
 
 ## Scope and safety confirmation
 
-Only the following application files and this report were changed. No credentials, tokens, passwords, keys, ZIPs, applicant data, or protected payloads were added. No direct push to `main` was made. The next step is a scoped commit and branch push after final diff review.
+Only the following application files and this report were changed. No credentials, tokens, passwords, keys, ZIPs, applicant data, or protected payloads were added. No direct push to `main` was made. The scoped commit was pushed to `origin/task/second-round-MANUS-09` after final diff review.
