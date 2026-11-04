@@ -96,6 +96,14 @@ Verification after the implementation pass: the same mobile `/apply/` check now 
 
 The remaining local 404s are requests for protected per-pet `pet.json` records referenced by the public index data, plus missing image files on the existing homepage. The project rules prohibit opening or fabricating `pet.json`; those records must be supplied through the authorized data/deployment path. The implementation now fails safely without promoting those protected-data misses to a source-code route defect.
 
+## Repository-wide completion-document reconciliation — 2026-11-04
+
+I synchronized all remote worker refs and ranked the available completion evidence against the MANUS-10 scope. The highest-signal documents were the accessibility-widget rebuild, widget-positioning follow-up, Web Projects Task 9/10 rollout completions, and the language/category integration completions. This review surfaced one real unresolved defect that was not in the first QA implementation pass: the shared chat widget's close action restored scroll with a normal `window.scrollTo(0, y)` call while public pages can set global `scroll-behavior: smooth`.
+
+Live instrumentation reproduced the documented symptom at both 1440×900 and 390×844: opening the chat from a scrolled page applied the body lock, and closing it restored toward the saved position as an animation, leaving an intermediate position during the close transition. The fix is anchored `MANUS-10 START/END` in `adopt/admin/chat-widget.js`: it temporarily sets the root scroll behavior to `auto`, restores the exact saved position synchronously, then restores the host page's prior inline value. Verification now shows the saved position is restored immediately and remains unchanged after 800ms at both viewport sizes.
+
+The same reconciliation checked the documented Task 10 page list. `signin/index.html` and all listed category, services, detail, testimonials, application, status, and blog pages now carry the shared accessibility-widget rollout; the remaining application/blog pages were given the missing `/admin/chat-widget.js` include as part of this pass.
+
 ## Git delivery
 
 - **Branch:** `task/second-round-MANUS-10`

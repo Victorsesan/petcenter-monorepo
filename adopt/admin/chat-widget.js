@@ -810,7 +810,17 @@
     document.body.style.left = '';
     document.body.style.right = '';
     document.body.style.width = '';
+    /* MANUS-10 START — restore without honoring host-page smooth scrolling. */
+    // Public pages may set `scroll-behavior: smooth` globally. The ordinary
+    // two-argument scrollTo call then animates this restoration and can leave
+    // the page visibly stranded at an intermediate position when the panel
+    // closes. Restore the exact pre-open position without an animation.
+    const root = document.documentElement;
+    const previousScrollBehavior = root.style.scrollBehavior;
+    root.style.scrollBehavior = 'auto';
     window.scrollTo(0, _pcwScrollLockY);
+    root.style.scrollBehavior = previousScrollBehavior;
+    /* MANUS-10 END */
   }
 
   function pcwEnableDragToClose(sheetEl, handleEl, onClose) {
