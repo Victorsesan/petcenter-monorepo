@@ -56,6 +56,8 @@ Each malformed `adopt.petcenterco.com/admin/chat-widget.js` reference was replac
 ## Validation
 
 - `php -l` was run on all changed PHP files: `chat-rate.php` and `update-adoption.php` passed.
+- Final recheck: every non-protected PHP file under `adopt/admin/` passed `php -l` (48 files, 0 syntax failures).
+- Automated tests passed: `adopt/rehoming/merchant-response-stats.test.php` — 14 passed, 0 failed; `adopt/rehoming/merchant-response-stats.test-v1.js` — 17 passed, 0 failed.
 - `git diff --check` passed.
 - A repository scan confirmed no malformed testimonial widget URL remains in the current `adopt/` HTML source.
 - A repository scan confirmed the four changed testimonial files contain the root-relative `/admin/chat-widget.js` path.
