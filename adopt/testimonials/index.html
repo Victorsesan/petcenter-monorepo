@@ -669,7 +669,10 @@
       </div>
       <div class="fg">
         <label for="tEmail">Email Address *</label>
-        <input type="email" id="tEmail" name="email" placeholder="you@example.com" required>
+        <!-- BUGFIX-MANUS-03-1 START: email and telephone controls stay LTR under document RTL. -->
+<input type="email" id="tEmail" name="email" placeholder="you@example.com" required dir="ltr">
+<!-- BUGFIX-MANUS-03-1 END -->
+
       </div>
       <div class="fg">
         <label>Rate Your Experience *</label>

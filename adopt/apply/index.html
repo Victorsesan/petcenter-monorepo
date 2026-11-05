@@ -239,7 +239,10 @@
     }
 
     .step-indicator__item {
-      flex: 1;
+      /* BUGFIX-MANUS-03-2 START: zero-width flex sizing prevents the
+         five-step indicator from widening narrow RTL viewports. */
+      min-width: 0;
+      flex: 1 1 0;
       text-align: center;
       padding-block: 14px; padding-inline: 8px;
       font-size: 12px;
@@ -251,6 +254,17 @@
       cursor: default;
       position: relative;
     }
+
+    @media (max-width: 600px) {
+      /* BUGFIX-MANUS-03-2: keep step labels inside their equal-width cells. */
+      .step-indicator__item {
+        padding-inline: 2px;
+        font-size: 10px;
+        letter-spacing: 0.02em;
+        overflow-wrap: anywhere;
+      }
+    }
+    /* BUGFIX-MANUS-03-2 END */
 
     .step-indicator__item.active {
       color: var(--primary);
@@ -1815,7 +1829,10 @@
         </div>
         <div class="form-group">
           <label for="user_email">Email *</label>
-          <input type="email" id="user_email" name="user_email" class="field-input" required>
+          <!-- BUGFIX-MANUS-03-1 START: email and telephone controls stay LTR under document RTL. -->
+<input type="email" id="user_email" name="user_email" class="field-input" required dir="ltr">
+<!-- BUGFIX-MANUS-03-1 END -->
+
         </div>
       </div>
 
@@ -4586,6 +4603,8 @@
 })();
 // TASK-9 END
 </script>
+<script src="/admin/chat-widget.js"></script>
+<script src="/assets/js/accessibility-widget.js" defer></script>
 </body>
 <!-- TASK-10 END -->
 

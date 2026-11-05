@@ -91,10 +91,21 @@ The following changes are now present on this branch:
 
 The archived Task 2 `.htaccess` was not activated. The current checkout has no `/es/`, `/pt/`, `/fr/`, `/ar/`, or `/zh/` translated destination trees, so enabling those redirects now would create broken first visits. The Task 2 completion package is available in the coordinator's original intake archive but is not present in GitHub; once the language trees are present, its block can be merged into the actual live site-root `.htaccess` after checking for existing server rules.
 
-`signin/index.html` remains the one Task 10 exception because the worker package explicitly said its source was not supplied. The remaining translation architecture and five language surfaces still require the missing Task 1 and Tasks 4–8 deliverables or an explicit fresh implementation decision; I did not fabricate those translations from the issue register. MANUS-08 should review the converted shared logical-properties/RTL boundary in the integration pass. MANUS-10 has now completed the chat-scroll fix and broad rollout QA on its own branch; the integrator should merge that branch's shared-file changes sequentially rather than reimplementing them here.
+`signin/index.html` remains the one Task 10 exception because the worker package explicitly said its source was not supplied. The remaining translation architecture and five language surfaces still require the missing Task 1 and Tasks 4–8 deliverables or an explicit fresh implementation decision; I did not fabricate those translations from the issue register. MANUS-08 has now independently verified the seven category pages and fixed their CTA contrast, mobile status-row wrapping, and footer-track defects. MANUS-10 has completed the chat-close fix, language-loader rollout, category-index restoration, testimonials path repairs, and application mobile-overflow fix on its own branch; the integrator should merge those shared-file changes sequentially rather than reimplementing them here.
+
+## Continuation implementation — 2026-11-05
+
+The repository was re-fetched and the complete current worker set was inspected, including the newly available MANUS-08 branch and the latest MANUS-10 report. Two concrete RTL gaps identified in the prior audit were fixed in this MANUS-03 candidate without opening protected content:
+
+- `adopt/apply/index.html` now carries the verified zero-width five-step flex sizing, narrow-label wrapping, and shared chat/accessibility loaders. The exact MANUS-10 browser fix was integrated inside `BUGFIX-MANUS-03-2` anchors rather than recreated from guesswork.
+- Active email and telephone controls in the application, contact, pet-match, sign-in, and testimonial pages now declare `dir="ltr"` inside `BUGFIX-MANUS-03-1` anchors. This preserves readable Western email addresses and phone numbers when the document root becomes RTL.
+
+Focused Playwright checks at 390×844 passed for `/apply/`, `/contact-us/`, `/pet-match/`, `/signin/`, and `/testimonials/`: all returned HTTP 200, had no page errors, had no horizontal overflow, and reported computed `direction: ltr` for every email/telephone control. The application route measured `scrollWidth=390` and `clientWidth=390` after the step-indicator fix. HTML structure checks passed for all nine edited files; JavaScript syntax checks passed for the shared runtime files; and `git diff --check` passed.
+
+The current branch still does not claim to be the final multi-worker integration artifact. MANUS-08 owns the category-page UI fixes, MANUS-09 owns testimonial URL corrections, and MANUS-10 owns the broader loader/data/QA rollout. Those changes are verified on their respective branches and must be reconciled by the integrator while preserving the MANUS-03 logical-property and position-sync anchors plus the MANUS-10 chat-scroll anchors.
 
 ## Commit metadata
 
 - **Required commit prefix:** `MANUS-03:`
 - **Branch:** `task/second-round-MANUS-03`
-- **Unresolved dependencies:** missing completion evidence; translation architecture decision; shared widget ownership; MANUS-08 semantic RTL review; sequential integration of MANUS-10 shared-file changes; production deployment environment.
+- **Unresolved dependencies:** translation architecture decision; final sequential integration of MANUS-08/MANUS-09/MANUS-10 shared-file changes; production deployment environment. The previously reported form-direction and `/apply/` mobile-overflow gaps are fixed on this candidate and independently verified.

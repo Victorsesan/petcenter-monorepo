@@ -138,7 +138,10 @@ textarea{min-height:84px;resize:vertical}
 
           <div class="row" style="margin-top:10px">
             <div class="col"><label class="label">Phone number</label><input class="input" id="phone" name="phone" required></div>
-            <div class="col"><label class="label">Email</label><input class="input" id="user_email" name="user_email" type="email" required></div>
+            <div class="col"><label class="label">Email</label><!-- BUGFIX-MANUS-03-1 START: email and telephone controls stay LTR under document RTL. -->
+<input class="input" id="user_email" name="user_email" type="email" required dir="ltr">
+<!-- BUGFIX-MANUS-03-1 END -->
+</div>
           </div>
 
           <div style="margin-top:10px">

@@ -953,12 +953,15 @@ button { font-family: inherit; }
       </div>
       <div class="pm-field">
         <label for="pmEmail">Email *</label>
-        <input type="email" id="pmEmail" name="email" required placeholder="you@example.com">
+        <!-- BUGFIX-MANUS-03-1 START: email and telephone controls stay LTR under document RTL. -->
+<input type="email" id="pmEmail" name="email" required placeholder="you@example.com" dir="ltr">
+<!-- BUGFIX-MANUS-03-1 END -->
+
         <div class="pm-error-msg" id="err-pmEmail">Please enter a valid email — this is how we'll reach you about a match.</div>
       </div>
       <div class="pm-field">
         <label for="pmPhone">Phone <span style="text-transform:none;font-weight:400;">(optional)</span></label>
-        <input type="tel" id="pmPhone" name="phone" placeholder="(555) 555-5555">
+        <input type="tel" id="pmPhone" name="phone" placeholder="(555) 555-5555" dir="ltr">
       </div>
     </div>
     <!-- STEP 1 END -->

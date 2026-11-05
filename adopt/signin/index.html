@@ -390,7 +390,10 @@
     <p>We're building a self-service portal so you can list pets directly on Pet Center. Be the first to know when it launches.</p>
 
     <div class="rehome-notify-form" id="notifyForm">
-      <input type="email" id="notifyEmail" placeholder="Enter your email address" autocomplete="email">
+      <!-- BUGFIX-MANUS-03-1 START: email and telephone controls stay LTR under document RTL. -->
+<input type="email" id="notifyEmail" placeholder="Enter your email address" autocomplete="email" dir="ltr">
+<!-- BUGFIX-MANUS-03-1 END -->
+
       <button onclick="submitNotify()">Notify Me</button>
     </div>
     <div class="notify-success" id="notifySuccess">
