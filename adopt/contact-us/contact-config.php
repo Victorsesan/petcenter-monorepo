@@ -23,7 +23,7 @@ use PHPMailer\PHPMailer\Exception;
 define('SMTP_HOST', 'smtp.hostinger.com');
 define('SMTP_PORT', 465);
 define('SMTP_USERNAME', 'noreply@petcenterco.com');
-define('SMTP_PASSWORD', 'Godisgood8z$');
+define('SMTP_PASSWORD', getenv('SMTP_PASSWORD') ?: '');
 define('SMTP_FROM_EMAIL', 'noreply@petcenterco.com');
 define('SMTP_FROM_NAME', 'PetCenter Support');
 define('SMTP_ENCRYPTION', 'ssl');
