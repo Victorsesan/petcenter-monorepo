@@ -115,17 +115,19 @@ p { color: var(--muted); }
   transform: translateY(-1px);
   box-shadow: 0 6px 20px rgba(16,33,75,0.32);
 }
+/* BUGFIX-MANUS-08-1-CTA-START: darker orange gradient stops keep the required white CTA label at or above 4.5:1 contrast. */
 .pc-btn--orange {
-  background: linear-gradient(135deg, var(--orange), #d96919);
+  background: linear-gradient(135deg, #b9550e, #b6500c);
   color: #fff;
   box-shadow: 0 4px 14px rgba(237,118,36,0.30);
 }
 .pc-btn--orange:hover {
-  background: linear-gradient(135deg, #d96919, #c45e10);
+  background: linear-gradient(135deg, #b6500c, #b14e0b);
   color: #fff;
   transform: translateY(-1px);
   box-shadow: 0 6px 20px rgba(237,118,36,0.38);
 }
+/* BUGFIX-MANUS-08-1-CTA-END */
 .pc-btn--ghost {
   background: transparent;
   color: var(--navy);
@@ -808,13 +810,15 @@ p { color: var(--muted); }
   font-family: 'Sora', sans-serif;
 }
 .pc-footer__inner { max-width: 1200px; margin: 0 auto; }
+/* BUGFIX-MANUS-08-4-FOOTER-START: restore the canonical five-track grid for the five adoption footer columns. */
 .pc-footer__top {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1.5fr;
+  grid-template-columns: 2fr 1fr 1.2fr 1fr 1.3fr;
   gap: 40px;
   padding-bottom: 40px;
   border-bottom: 1px solid rgba(255,255,255,0.07);
 }
+/* BUGFIX-MANUS-08-4-FOOTER-END */
 .pc-footer__brand img { height: 40px; margin-bottom: 16px; display: block; }
 .pc-footer__brand p { font-size: 13.5px; line-height: 1.7; max-width: 280px; }
 .pc-footer__col h5 { font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; font-weight: 700; color: #d7bd88; margin-bottom: 16px; }
@@ -894,7 +898,13 @@ p { color: var(--muted); }
 
 
 
-  </style>
+
+/* BUGFIX-MANUS-08-3-RESPONSIVE-START: keep the category status and CTA inside narrow phone viewports. */
+@media (max-width: 640px) {
+  .pc-results-summary-row { flex-wrap: wrap; justify-content: flex-start !important; gap: 12px; }
+}
+/* BUGFIX-MANUS-08-3-RESPONSIVE-END */
+</style>
   </head>
 <body>
 
@@ -1027,7 +1037,9 @@ p { color: var(--muted); }
       <option value="untamed">Untamed</option>
     </select>
 
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;">
+    <!-- BUGFIX-MANUS-08-2-ROW-START: identify the results row for narrow-screen wrapping. -->
+<div class="pc-results-summary-row" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;">
+<!-- BUGFIX-MANUS-08-2-ROW-END -->
       <div>
         <h2 style="margin:0;font-size:1.6rem;" id="categoryTitle">Loading…</h2>
         <p style="margin:4px 0 0;font-size:13px;"><span id="petCount">—</span> <span id="categoryCount"></span> available</p>
