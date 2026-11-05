@@ -7,7 +7,7 @@
 - **Starting commit:** `251d8c2` (`main`)
 - **Branch:** `task/second-round-MANUS-10`
 - **QA date:** 2026-11-04
-- **Application state tested:** current `main` checkout, served locally from `adopt/` with PHP's built-in server at `127.0.0.1:8000`
+- **Application state tested:** final `task/second-round-MANUS-10` checkout, served locally from `adopt/` with PHP's built-in server at `127.0.0.1:8000`
 
 The required core-document gate was completed before source inspection. The named `docs/second-round/completion-evidence/` directory and MANUS-10-specific completion handoff are not present on this branch; this is recorded as an evidence gap rather than inferred away. Available worker branches and reports were reviewed before testing. They are unmerged evidence, not acceptance of their changes.
 
@@ -69,7 +69,7 @@ Representative and route-sweep sources included `adopt/index.html`, `adopt/about
 
 ## Exact changes and anchors
 
-No application source was changed. There are therefore no `BUGFIX-MANUS-10-*` anchors. The only intended change on this branch is this QA report.
+The final implementation pass changed `adopt/admin/chat-widget.js` and added the shared `/admin/chat-widget.js` include to `adopt/apply/index.html`, `adopt/blog/index.html`, and `adopt/blog/post/index.html`. The chat restoration fix is bounded by `MANUS-10 START/END` anchors. Earlier implementation commits on this branch also contain the language-loader, category-index, malformed-widget-path, accessibility-widget rollout, and mobile-overflow fixes documented above.
 
 Temporary Playwright results and screenshots were kept outside the repository under `/home/ubuntu/qa-tools/` and `/tmp/`; no applicant or protected data was included in the report.
 
@@ -102,11 +102,12 @@ I synchronized all remote worker refs and ranked the available completion eviden
 
 Live instrumentation reproduced the documented symptom at both 1440×900 and 390×844: opening the chat from a scrolled page applied the body lock, and closing it restored toward the saved position as an animation, leaving an intermediate position during the close transition. The fix is anchored `MANUS-10 START/END` in `adopt/admin/chat-widget.js`: it temporarily sets the root scroll behavior to `auto`, restores the exact saved position synchronously, then restores the host page's prior inline value. Verification now shows the saved position is restored immediately and remains unchanged after 800ms at both viewport sizes.
 
-The same reconciliation checked the documented Task 10 page list. `signin/index.html` and all listed category, services, detail, testimonials, application, status, and blog pages now carry the shared accessibility-widget rollout; the remaining application/blog pages were given the missing `/admin/chat-widget.js` include as part of this pass.
+The same reconciliation checked the documented Task 10 page list. `signin/index.html` and all listed category, services, detail, testimonials, application, status, and blog pages now carry the shared accessibility-widget rollout; the remaining application/blog pages were given the missing `/admin/chat-widget.js` include as part of this pass. A fresh targeted regression then found that `pets/detail/index.html` had the chat include but lacked the accessibility-widget include; that final rollout gap was repaired and reverified.
 
 ## Git delivery
 
 - **Branch:** `task/second-round-MANUS-10`
 - **Report path:** `reports/second-round/MANUS-10.md`
-- **Application code changes:** none
-- **Commit:** final branch tip is supplied in the coordinator handoff; the report was amended after metadata validation
+- **Application code changes:** verified and delivered
+- **Final commit:** updated after final pets-detail rollout repair
+- **Report status:** re-verified on 2026-11-05 after a fresh 66-check regression sweep plus 16-route targeted rollout regression
