@@ -87,7 +87,8 @@ function normalizedLastName(string $name): string
         return '';
     }
     $parts = preg_split('/\s+/u', $name);
-    return mb_strtolower((string)end($parts), 'UTF-8');
+    $last = (string)end($parts);
+    return function_exists('mb_strtolower') ? mb_strtolower($last, 'UTF-8') : strtolower($last);
 }
 
 function applicationLastName(string $applicantName): string
@@ -136,7 +137,8 @@ $notFound = static function (): never {
     ], 404);
 };
 
-if (!preg_match('/^AD-\d{5}-\d{4}$/', $code) || $lastName === '' || mb_strlen($lastName, 'UTF-8') > 80) {
+$lastNameLength = function_exists('mb_strlen') ? mb_strlen($lastName, 'UTF-8') : strlen($lastName);
+if (!preg_match('/^AD-\d{5}-\d{4}$/', $code) || $lastName === '' || $lastNameLength > 80) {
     $notFound();
 }
 

@@ -6,7 +6,7 @@
 - **Scope:** Unified Status Dashboard — Tasks 1–12
 - **Branch:** `task/second-round-MANUS-07`
 - **Starting commit:** `251d8c26ab89bc9a3fd2bc12e155af41b1d03a87`
-- **Report commit:** `f54defdcb0a9cd69549e758e5c2f2714a542ad6c` (the report was subsequently updated only to complete this metadata line; the final branch commit is recorded in the delivery message).
+- **Report/implementation history:** report and implementation updates are on `task/second-round-MANUS-07`; the final commit is recorded below and in the delivery message.
 
 ## Evidence boundary
 
@@ -103,8 +103,11 @@ No protected file or directory was opened, copied, modified, or committed. The n
 - Task 3 assertions — passed: raw `application.json` is absent from the page script, the new endpoint is called by POST, exactly one `lastNameInput` exists, and the protected rate-limit path is present.
 - `git diff --check` — passed.
 - Chromium browser smoke screenshots of the existing adoption status page — passed at **1280×900** and **390×844**; screenshots were temporary files outside the repository.
-- Playwright CLI was present, but its bundled browser executable was unavailable. Direct installed Chromium was used instead; no claim is made that Playwright console/network instrumentation ran.
-- Live PHP execution and deployed write-permission checks remain outstanding because this sandbox has no application fixture/live host; the code path is syntax-checked and uses fail-open logging only if runtime storage cannot be opened.
+- PHP built-in server live test — passed against an isolated synthetic fixture: valid code + `Lovelace` returned HTTP 200 and rendered the Pending dashboard; `Turing` returned the generic HTTP 404 response; malformed code returned the same generic response; the response did not include the fixture’s `home_address`.
+- Browser automation live test — passed through the forwarded PHP server: the visible form accepted both fields, rendered the synthetic application on success, and displayed the generic mismatch message for the wrong last name.
+- Rate-limit live test — passed: the configured `10` requests per `600` seconds produced HTTP 429 after the tenth accepted request, including failed lookups in the count; `flock()`-protected counter state was observed in the isolated runtime directory.
+- Portability fix discovered by live execution — removed the unconditional `mbstring` dependency with `function_exists()` fallbacks after PHP 8.3 initially returned a 500 on `mb_strlen()`.
+- Apache caveat — PHP’s built-in server does not process `.htaccess`; a direct request to the synthetic counter file returned HTTP 200 there. Apache/cPanel deployment must still verify that `rate-limit-data/.htaccess` returns 403/404 in the real web server.
 
 ## Files changed and commit
 
@@ -120,7 +123,7 @@ The implementation contains no credentials. The report and implementation commit
 ## Unresolved dependencies and handoff
 
 1. The fetched completion documents are now available as remote evidence, but their ZIP payloads are not in Git; the coordinator should retain that distinction in the final reconciliation.
-2. Task 3 needs a deployed writable `adopt/adoptions/status/rate-limit-data/` directory (or confirmation that PHP can create it) and a live smoke test.
+2. Task 3 needs only the production deployment check remaining: confirm PHP write ownership and confirm Apache/cPanel blocks direct counter access via `.htaccess`. The endpoint and browser flow have now been live-tested in the isolated PHP built-in server.
 3. The remaining status-subdomain, BNPL, uptime, email, and research implementations still need their described ZIP/source payloads or an explicit replacement implementation pass; the current repository does not contain those new files.
 4. Task 4 must establish the BNPL status contract before Tasks 5–7 and Task 6 can be safely implemented.
 5. Task 6 must exist before Task 9 and Task 12 can wire email notifications.
