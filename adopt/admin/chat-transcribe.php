@@ -98,14 +98,20 @@ if (filesize($audioPath) > 25 * 1024 * 1024) {
     chatRespond(['success' => false, 'error' => 'Voice file exceeds the transcription service free-plan size limit'], 413);
 }
 
+// TASK-admin234-1a START — send only a sanitized filename, never the server's absolute path.
+$uploadName = preg_replace('/[^A-Za-z0-9._-]/', '_', basename($audioPath));
+$uploadMime = function_exists('mime_content_type') ? mime_content_type($audioPath) : false;
+$uploadFile = new CURLFile($audioPath, $uploadMime ?: 'application/octet-stream', $uploadName ?: 'voice-message.audio');
+// TASK-admin234-1a END
+
 // TASK-admin234-1a START — English-only speech direction (admin → customer).
 if ($message['from_type'] === 'admin') {
     $model = 'whisper-large-v3-turbo';
-    $post = ['file' => new CURLFile($audioPath), 'model' => $model, 'response_format' => 'verbose_json', 'language' => 'en'];
+    $post = ['file' => $uploadFile, 'model' => $model, 'response_format' => 'verbose_json', 'language' => 'en'];
 } else {
     /* TASK-admin234-1b START — multilingual customer → admin; let Whisper auto-detect. */
     $model = 'whisper-large-v3';
-    $post = ['file' => new CURLFile($audioPath), 'model' => $model, 'response_format' => 'verbose_json'];
+    $post = ['file' => $uploadFile, 'model' => $model, 'response_format' => 'verbose_json'];
     /* TASK-admin234-1b END */
 }
 $curl = curl_init('https://api.groq.com/openai/v1/audio/transcriptions');
