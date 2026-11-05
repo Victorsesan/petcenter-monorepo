@@ -64,6 +64,23 @@ Each malformed `adopt.petcenterco.com/admin/chat-widget.js` reference was replac
 - Adoption-code validation was checked against the documented UI format `AD-47293-2026` and the existing status-page contract.
 - Chromium is available at `/usr/bin/chromium`; Node Playwright/Puppeteer packages are not installed. Static route checks were performed with the available local tooling; PHP endpoint execution against live credentials, sessions, database records, and protected payloads was not performed.
 
+## Final live-test and security-audit pass — 2026-11-05
+
+### Live deployment smoke test
+
+No approved staging smoke-test script, staging URL, or staging credential variable is present in the repository, all repository refs, the configured environment-variable names, or the local Manus configuration metadata. Therefore no live request was sent: inventing a hostname or probing arbitrary deployment endpoints would not be a valid smoke test and could affect an unknown environment. The live smoke test remains an environment handoff item requiring the staging URL and approved credential mechanism from the deployment owner.
+
+### Modified PHP and direct JavaScript integration audit
+
+- `adopt/admin/chat-rate.php`: session-token authentication and parameterized stored-thread-email matching are present; rating, comment, and email inputs are bounded/validated; admin-only list/get/delete actions use the shared admin guard; no shell execution, eval, unserialize, or remote URL execution was found. **Pre-existing integrity note:** the JSON review read-modify-write uses `file_put_contents()` without an exclusive lock, so simultaneous ratings can lose an append. The database insert is also written, but the JSON dashboard source should be made atomic by the chat endpoint owner.
+- `adopt/admin/update-adoption.php`: POST token authentication occurs before file access; adoption codes are normalized and constrained to `AD-#####-####`; status is allowlisted; application and pet writes use `LOCK_EX`; no shell execution, eval, unserialize, or untrusted include was found. The endpoint still relies on the deployment’s private `.env` and protected storage permissions, which require live smoke verification.
+- `adopt/admin/chat-widget.js`: `node --check` passes; the API base is site-relative; session tokens are explicitly attached to chat requests; `escapeHtml()` is used for dynamic text; no shell execution, eval, or hard-coded remote endpoint was found. The widget stores the chat session token and email in browser `localStorage` by design, so deployment should confirm HTTPS and appropriate same-origin policy. No JavaScript file was modified by the MANUS-09 commit; this was a direct-integration audit of the shared widget used by the changed PHP endpoint.
+- Direct HTML integration: all four affected testimonial pages now use `/admin/chat-widget.js`; no malformed absolute-relative widget reference remains.
+
+### Final status
+
+Static and local automated validation is complete. Live staging verification is **not executed**, solely because the approved staging target and credential mechanism are absent from this execution environment; no arbitrary endpoint or credential source was used.
+
 ## Scope and safety confirmation
 
 Only the following application files and this report were changed. No credentials, tokens, passwords, keys, ZIPs, applicant data, or protected payloads were added. No direct push to `main` was made. The scoped commit was pushed to `origin/task/second-round-MANUS-09` after final diff review.
