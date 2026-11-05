@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="Foster a pet with Pet Center in Beverly Hills — short-term homes for neonatal litters, medical recovery, and overflow animals. Everything's provided; you provide the couch.">
+<title>Foster a Pet — Pet Center</title>
+
+<meta property="og:title" content="Foster a Pet — Pet Center">
+<meta property="og:description" content="Short-term homes for neonatal litters, medical recovery, and overflow animals. Everything's provided.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://adopt.petcenterco.com/foster/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Foster a Pet — Pet Center">
+<meta name="twitter:description" content="Short-term homes for neonatal litters, medical recovery, and overflow animals.">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://adopt.petcenterco.com/" },
+    { "@type": "ListItem", "position": 2, "name": "Foster a Pet", "item": "https://adopt.petcenterco.com/foster/" }
+  ]
+}
+</script>
+
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<style>
+/* ════════════════════════════════════════════════════════════════════════════
+   PET CENTER — Foster a Pet (/foster/)
+   Colors: Navy #10214b | Gold #d7bd88 | Orange #ED7624
+   Base reset/typography/header/footer copied verbatim from cats.html (Rule 13).
+   Rule: NO borders on cards — shadows only | NO emojis — SVG icons only
+   ════════════════════════════════════════════════════════════════════════════ */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Sora:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --navy: #10214b; --navy-light: #1a2f5c; --gold: #d7bd88; --gold-dark: #b89968;
+  --orange: #ED7624; --orange-light: #fef0e6; --warm-gray: #d0c3ba; --chocolate: #3d2817;
+  --bg: #f9f7f4; --surface: #ffffff; --text: #2c2416; --muted: #7a6d5f;
+  --success: #0d7c4a; --success-bg: #e6f7ef; --error: #c0392b; --error-bg: #fdecea;
+  --shadow-sm: 0 2px 8px rgba(16,33,75,0.06); --shadow-md: 0 4px 20px rgba(16,33,75,0.10);
+  --shadow-lg: 0 8px 40px rgba(16,33,75,0.14);
+  --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px; --transition: 0.25s ease;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; overflow-x: hidden; width: 100%; }
+body { font-family: 'Sora', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.65; -webkit-font-smoothing: antialiased; padding-top: 68px; overflow-x: hidden; width: 100%; position: relative; }
+img { max-width: 100%; height: auto; display: block; }
+a { color: var(--orange); text-decoration: none; transition: color var(--transition); }
+a:hover { color: var(--navy); }
+h1, h2, h3, h4 { font-family: 'Cormorant Garamond', Georgia, serif; color: var(--navy); line-height: 1.25; }
+h1 { font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 700; }
+h2 { font-size: clamp(1.6rem, 3vw, 2.3rem); font-weight: 700; margin-bottom: 12px; }
+h3 { font-size: 1.2rem; font-weight: 600; margin-bottom: 8px; }
+p { color: var(--muted); }
+.pc-container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+.pc-container--narrow { max-width: 880px; margin: 0 auto; padding: 0 24px; }
+.pc-section { padding: 68px 0; }
+.pc-section--sm { padding: 40px 0; }
+.pc-section--alt { background: var(--surface); }
+.pc-eyebrow { display: inline-block; font-family: 'Sora', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--orange); margin-bottom: 10px; }
+@media (max-width: 640px) { .pc-section { padding: 44px 0; } }
+
+.pc-btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 28px; border-radius: var(--radius-sm); font-family: 'Sora', sans-serif; font-size: 14px; font-weight: 600; letter-spacing: 0.02em; cursor: pointer; border: none; transition: all var(--transition); text-decoration: none; white-space: nowrap; min-height: 44px; }
+.pc-btn--primary { background: linear-gradient(135deg, var(--navy), var(--navy-light)); color: #fff; box-shadow: 0 4px 14px rgba(16,33,75,0.25); }
+.pc-btn--primary:hover { background: linear-gradient(135deg, var(--navy-light), #243970); color: #fff; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(16,33,75,0.32); }
+.pc-btn--orange { background: linear-gradient(135deg, var(--orange), #d96919); color: #fff; box-shadow: 0 4px 14px rgba(237,118,36,0.30); }
+.pc-btn--orange:hover { background: linear-gradient(135deg, #d96919, #c45e10); color: #fff; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(237,118,36,0.38); }
+.pc-btn--ghost { background: transparent; color: var(--navy); box-shadow: inset 0 0 0 2px var(--gold); }
+.pc-btn--ghost:hover { background: var(--orange-light); color: var(--orange); }
+.pc-btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+
+.pc-header { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; display: flex; align-items: center; justify-content: space-between; padding: 12px 32px; transition: background 0.35s ease, box-shadow 0.35s ease; overflow: visible; }
+.pc-header.scrolled, .pc-header--solid { background: rgba(16,33,75,0.97); box-shadow: 0 2px 20px rgba(0,0,0,0.18); }
+.pc-header__logo img { height: 44px; width: auto; display: block; }
+.pc-header__logo--desktop { display: block; }
+.pc-header__logo--mobile { display: none; }
+@media (max-width: 900px) { .pc-header__logo--desktop { display: none; } .pc-header__logo--mobile { display: block; } }
+.pc-header__nav { display: flex; align-items: center; gap: 4px; list-style: none; }
+.pc-header__nav li { position: relative; }
+.pc-header__nav a { display: block; padding: 8px 11px; font-family: 'Sora', sans-serif; font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.9); text-decoration: none; border-radius: 6px; transition: color 0.2s, background 0.2s; white-space: nowrap; }
+.pc-header__nav a:hover { color: #d7bd88; background: rgba(255,255,255,0.08); }
+.pc-header__nav .nav-donate a { background: #ED7624; color: #fff; font-weight: 600; padding: 8px 16px; }
+.pc-header__nav .nav-donate a:hover { background: #d4621a; color: #fff; }
+.pc-header__nav .nav-signup a { border: 1px solid rgba(215,189,136,0.5); color: #d7bd88; }
+.pc-header__nav .nav-signup a:hover { background: rgba(215,189,136,0.12); }
+/* Section 24 — Custom Dropdown System ("Message Bubble" locked shell), applied to header nav */
+.pc-nav-dropdown { position: relative; }
+.pc-nav-dropdown__trigger { display: flex; align-items: center; gap: 6px; background: none; border: none; cursor: pointer; padding: 8px 11px; font-family: 'Sora', sans-serif; font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.9); border-radius: 6px; transition: color 0.2s, background 0.2s; }
+.pc-nav-dropdown__trigger:hover, .pc-nav-dropdown__trigger.active { color: #d7bd88; background: rgba(255,255,255,0.08); }
+.pc-nav-dropdown__chevron { transition: transform 0.2s cubic-bezier(.4,0,.2,1); flex-shrink: 0; }
+.pc-nav-dropdown__trigger.active .pc-nav-dropdown__chevron { transform: rotate(180deg); }
+.pc-nav-dropdown__panel { position: absolute; top: 100%; left: 0; margin-top: 6px; min-width: 190px; background: #ffffff; border: 1.5px solid rgba(16,33,75,0.10); border-radius: 14px 0 14px 14px; box-shadow: 0 12px 32px rgba(16,33,75,0.18), 0 2px 8px rgba(16,33,75,0.08); overflow: hidden; z-index: 999; opacity: 0; visibility: hidden; transform: translateY(-8px) scale(0.98); transform-origin: top left; transition: opacity 0.2s ease, transform 0.2s cubic-bezier(.4,0,.2,1), visibility 0.2s; pointer-events: none; }
+.pc-nav-dropdown__panel.open { opacity: 1; visibility: visible; transform: translateY(0) scale(1); pointer-events: auto; }
+.pc-nav-dropdown__panel.flip-up { top: auto; bottom: 100%; margin-top: 0; margin-bottom: 6px; transform-origin: bottom left; border-radius: 14px 14px 14px 0; }
+.pc-nav-dropdown__scroll { max-height: 225px; overflow-y: auto; padding: 6px 0; }
+.pc-nav-dropdown__row { display: flex; align-items: center; padding: 11px 16px; border-left: 3px solid transparent; border-bottom: 1px solid rgba(16,33,75,0.06); font-family: 'Sora', sans-serif; font-size: 13.5px; color: var(--navy); text-decoration: none; transition: background 0.15s ease, border-color 0.15s ease; }
+.pc-nav-dropdown__row:last-child { border-bottom: none; }
+.pc-nav-dropdown__row:hover { background: rgba(16,33,75,0.05); color: var(--navy); border-left-color: var(--gold); }
+.pc-hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 8px; background: none; border: none; width: 32px; height: auto; justify-content: center; }
+.pc-hamburger span { display: block; width: 24px; height: 2px; background: #fff; border-radius: 2px; transition: all 0.3s ease; }
+.pc-hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(8px, 8px); }
+.pc-hamburger.active span:nth-child(2) { opacity: 0; }
+.pc-hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -7px); }
+.pc-mobile-menu { display: flex; flex-direction: column; position: absolute; top: 100%; left: 0; right: 0; background: rgba(16,33,75,0.98); z-index: 999; max-height: 0; overflow: hidden; opacity: 0; pointer-events: none; transition: all 0.3s ease; box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
+.pc-mobile-menu.open { max-height: calc(100vh - 68px); overflow-y: auto; opacity: 1; pointer-events: auto; padding: 16px 0 calc(100vh - 68px - 56px); overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+.pc-mobile-menu a { display: block; padding: 12px 28px; font-family: 'Sora', sans-serif; font-size: 15px; font-weight: 500; color: rgba(255,255,255,0.9); text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.06); transition: all 0.2s ease; }
+.pc-mobile-menu a:hover { color: #d7bd88; background: rgba(255,255,255,0.05); }
+.pc-mobile-menu .mobile-donate { margin: 12px 28px 0; display: inline-block; background: #ED7624; color: #fff; padding: 11px 24px; border-radius: 8px; font-weight: 600; border-bottom: none; }
+@media (max-width: 900px) { .pc-header__nav { display: none; } .pc-hamburger { display: flex; } }
+
+.pc-page-banner { background: linear-gradient(120deg, #10214b 0%, #1a3070 60%, #2a4080 100%); padding: 100px 0 64px; text-align: center; }
+.pc-page-banner__eyebrow { display: inline-block; font-family: 'Sora', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #d7bd88; background: rgba(215,189,136,0.12); border: 1px solid rgba(215,189,136,0.3); padding: 5px 16px; border-radius: 20px; margin-bottom: 18px; }
+.pc-page-banner h1 { color: #fff; margin-bottom: 14px; }
+.pc-page-banner p { color: rgba(255,255,255,0.78); max-width: 620px; margin: 0 auto 26px; font-size: 16px; }
+
+.pc-stat-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+@media (max-width: 760px) { .pc-stat-strip { grid-template-columns: 1fr 1fr; } }
+.pc-stat { text-align: center; }
+.pc-stat__num { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 700; color: var(--navy); line-height: 1; }
+.pc-stat__label { font-family: 'Sora', sans-serif; font-size: 12.5px; color: var(--muted); margin-top: 6px; }
+
+.pc-role-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+@media (max-width: 900px) { .pc-role-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 600px) { .pc-role-grid { grid-template-columns: 1fr; } }
+.pc-role-card { background: var(--surface); border-radius: var(--radius-md); box-shadow: var(--shadow-sm); padding: 26px; transition: box-shadow var(--transition), transform var(--transition); }
+.pc-role-card:hover { box-shadow: var(--shadow-md); transform: translateY(-3px); }
+.pc-role-card__icon { color: var(--orange); margin-bottom: 14px; }
+.pc-role-card p { font-size: 13.5px; line-height: 1.6; }
+
+.pc-provide-list { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 14px 24px; margin-top: 18px; }
+@media (max-width: 640px) { .pc-provide-list { grid-template-columns: 1fr; } }
+.pc-provide-list li { display: flex; gap: 12px; align-items: flex-start; font-size: 14px; color: var(--text); }
+.pc-provide-list svg { flex-shrink: 0; color: var(--success); margin-top: 2px; }
+
+.pc-intake-steps { display: flex; flex-direction: column; gap: 0; margin-top: 8px; }
+.pc-intake-step { display: flex; gap: 18px; padding: 20px 0; border-bottom: 1px solid var(--warm-gray); }
+.pc-intake-step:last-child { border-bottom: none; }
+.pc-intake-step__num { flex-shrink: 0; width: 36px; height: 36px; border-radius: 50%; background: var(--navy); color: var(--gold); display: flex; align-items: center; justify-content: center; font-family: 'Sora', sans-serif; font-weight: 700; font-size: 15px; }
+.pc-intake-step__body h3 { margin-bottom: 4px; }
+.pc-intake-step__body p { font-size: 13.5px; }
+
+.pc-faq-item { border-bottom: 1px solid var(--warm-gray); padding: 18px 0; }
+.pc-faq-item:first-child { padding-top: 0; }
+.pc-faq-item h3 { font-size: 15px; margin-bottom: 6px; display: flex; gap: 10px; align-items: flex-start; }
+.pc-faq-item h3 svg { flex-shrink: 0; color: var(--orange); margin-top: 3px; }
+.pc-faq-item p { font-size: 13.5px; padding-left: 26px; }
+
+.pc-contact-section { background: #F0EDE9; border-radius: var(--radius-lg); padding: 44px; }
+@media (max-width: 640px) { .pc-contact-section { padding: 28px 20px; } }
+.pc-contact-section h2 { color: #776B75; }
+.pc-contact-section > p { color: #776B75; opacity: 0.75; margin-bottom: 26px; max-width: 560px; }
+.pc-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 20px; }
+@media (max-width: 540px) { .pc-form-grid { grid-template-columns: 1fr; } }
+.pc-field { display: flex; flex-direction: column; gap: 6px; }
+.pc-field.pc-field--full { grid-column: 1 / -1; }
+.pc-field label { font-family: 'Sora', sans-serif; font-size: 13px; font-weight: 600; color: #776B75; text-transform: uppercase; letter-spacing: 0.04em; }
+.pc-field input, .pc-field select, .pc-field textarea { background: #ffffff; border: 1.5px solid rgba(119,107,117,0.3); border-radius: 9px; padding: 11px 14px; font-size: 14px; color: var(--text); font-family: inherit; outline: none; transition: all 0.3s cubic-bezier(0.4,0,0.2,1); }
+.pc-field input:focus, .pc-field select:focus, .pc-field textarea:focus { border-color: var(--gold); background: #fafaf8; box-shadow: 0 0 0 3px rgba(215,189,136,0.15); }
+.pc-field textarea { resize: vertical; min-height: 90px; }
+.pc-checkbox-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+@media (max-width: 640px) { .pc-checkbox-grid { grid-template-columns: 1fr 1fr; } }
+.pc-checkbox-item { display: flex; align-items: center; gap: 8px; background: #ffffff; border: 1.5px solid rgba(119,107,117,0.25); border-radius: 9px; padding: 10px 12px; font-size: 13px; color: var(--text); cursor: pointer; }
+.pc-checkbox-item input { width: 16px; height: 16px; accent-color: var(--orange); flex-shrink: 0; }
+.pc-form-footer { margin-top: 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.pc-form-note { font-size: 12.5px; color: #776B75; opacity: 0.7; }
+.pc-form-success { display: none; align-items: center; gap: 10px; background: var(--success-bg); color: var(--success); border-radius: var(--radius-sm); padding: 14px 18px; font-size: 13.5px; font-weight: 600; margin-top: 20px; }
+.pc-form-success.show { display: flex; }
+.pc-form-success svg { flex-shrink: 0; }
+
+.pc-cross-callout { background: var(--orange-light); border-radius: var(--radius-md); padding: 24px 28px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; justify-content: space-between; margin-top: 8px; }
+.pc-cross-callout p { color: var(--text); font-size: 14px; max-width: 480px; }
+.pc-cross-callout strong { color: var(--navy); }
+
+.pc-footer { background: #0b1834; padding: 60px 24px 28px; color: rgba(255,255,255,0.65); font-family: 'Sora', sans-serif; }
+.pc-footer__inner { max-width: 1200px; margin: 0 auto; }
+.pc-footer__top { display: grid; grid-template-columns: 2fr 1fr 1.2fr 1fr 1.3fr; gap: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(255,255,255,0.07); }
+.pc-footer__brand img { height: 40px; margin-bottom: 16px; display: block; }
+.pc-footer__brand p { font-size: 13.5px; line-height: 1.7; max-width: 280px; }
+.pc-footer__col h5 { font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; font-weight: 700; color: #d7bd88; margin-bottom: 16px; }
+.pc-footer__col ul { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+.pc-footer__col ul a { font-size: 13px; color: rgba(255,255,255,0.6); text-decoration: none; transition: color 0.2s; }
+.pc-footer__col ul a:hover { color: #d7bd88; }
+.pc-footer__bottom { padding-top: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+.pc-footer__copy { font-size: 12.5px; }
+.pc-footer__links { display: flex; gap: 20px; }
+.pc-footer__links a { font-size: 12.5px; color: rgba(255,255,255,0.5); text-decoration: none; }
+.pc-footer__links a:hover { color: #d7bd88; }
+@media (max-width: 900px) { .pc-footer__top { grid-template-columns: 1fr 1fr; gap: 28px; } }
+@media (max-width: 560px) { .pc-footer__top { grid-template-columns: 1fr; gap: 24px; } }
+</style>
+</head>
+<body>
+
+<header class="pc-header pc-header--solid" id="pcHeader">
+  <a href="/" class="pc-header__logo pc-header__logo--desktop"><img src="/assets/images/logo-petcenter.png" alt="Pet Center"></a>
+  <a href="/" class="pc-header__logo pc-header__logo--mobile"><img src="/assets/images/logo-petcenter-icon.png" alt="Pet Center"></a>
+  <ul class="pc-header__nav">
+    <li><a href="/">Home</a></li>
+    <li><a href="/about/">About Us</a></li>
+    <li><a href="/partners/">Partners</a></li>
+    <li class="pc-nav-dropdown">
+    <button class="pc-nav-dropdown__trigger" aria-expanded="false" aria-haspopup="true">Our Pets
+      <svg class="pc-nav-dropdown__chevron" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <div class="pc-nav-dropdown__panel">
+      <div class="pc-nav-dropdown__scroll">
+      <a class="pc-nav-dropdown__row" href="/pets/dogs/">Dogs</a>
+      <a class="pc-nav-dropdown__row" href="/pets/cats/">Cats</a>
+      <a class="pc-nav-dropdown__row" href="/pets/birds/">Birds</a>
+      <a class="pc-nav-dropdown__row" href="/pets/reptiles/">Reptiles</a>
+      <a class="pc-nav-dropdown__row" href="/pets/small-mammals/">Small Mammals</a>
+      <a class="pc-nav-dropdown__row" href="/pets/livestocks/">Livestocks</a>
+      <a class="pc-nav-dropdown__row" href="/pets/aquariums/">Aquariums</a>
+      </div>
+    </div>
+  </li>
+    <li class="pc-nav-dropdown">
+    <button class="pc-nav-dropdown__trigger" aria-expanded="false" aria-haspopup="true">Get Involved
+      <svg class="pc-nav-dropdown__chevron" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <div class="pc-nav-dropdown__panel">
+      <div class="pc-nav-dropdown__scroll">
+      <a class="pc-nav-dropdown__row" href="/volunteer/">Volunteer</a>
+      <a class="pc-nav-dropdown__row" href="/foster/">Foster a Pet</a>
+      <a class="pc-nav-dropdown__row" href="/events/">Events &amp; Adoption Days</a>
+      <a class="pc-nav-dropdown__row" href="/lost-and-found/">Lost &amp; Found Pets</a>
+      <a class="pc-nav-dropdown__row" href="/sponsor-a-pet/">Sponsor a Pet</a>
+      </div>
+    </div>
+  </li>
+    <li><a href="/blog/">Blog</a></li>
+    <li><a href="/testimonials/">Testimonials</a></li>
+    <li><a href="/success-stories/">Success Stories</a></li>
+    <li class="nav-donate"><a href="https://donate.petcenterco.com" target="_blank" rel="noopener">Donate</a></li>
+    <li><a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact</a></li>
+    <li class="nav-signup"><a href="/signin/">Sign Up</a></li>
+  </ul>
+  <button class="pc-hamburger" id="pcHamburger" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
+  <nav class="pc-mobile-menu" id="pcMobileMenu" aria-label="Mobile navigation">
+    <a href="/">Home</a>
+    <a href="/about/">About Us</a>
+    <a href="/partners/">Partners</a>
+    <a href="/pets/dogs/">Dogs</a>
+    <a href="/pets/cats/">Cats</a>
+    <a href="/pets/birds/">Birds</a>
+    <a href="/pets/reptiles/">Reptiles</a>
+    <a href="/pets/small-mammals/">Small Mammals</a>
+    <a href="/pets/livestocks/">Livestocks</a>
+    <a href="/pets/aquariums/">Aquariums</a>
+    <a href="/volunteer/">Volunteer</a>
+    <a href="/foster/">Foster a Pet</a>
+    <a href="/events/">Events &amp; Adoption Days</a>
+    <a href="/lost-and-found/">Lost &amp; Found Pets</a>
+    <a href="/sponsor-a-pet/">Sponsor a Pet</a>
+    <a href="/blog/">Blog</a>
+    <a href="/testimonials/">Testimonials</a>
+    <a href="/success-stories/">Success Stories</a>
+    <a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact</a>
+    <a href="/signin/">Sign Up</a>
+    <a href="https://donate.petcenterco.com" class="mobile-donate" target="_blank" rel="noopener">Donate</a>
+  </nav>
+</header>
+
+<section class="pc-page-banner">
+  <div class="pc-container">
+    <span class="pc-page-banner__eyebrow">Open Your Home, Temporarily</span>
+    <h1>Foster a Pet</h1>
+    <p>Some animals just need a couch, a quiet room, and a few weeks before they're ready for adoption. We cover the food, supplies, and vet visits — you provide the home.</p>
+    <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
+      <a href="#pcFosterForm" class="pc-btn pc-btn--orange">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        Apply to Foster
+      </a>
+      <a href="/volunteer/" class="pc-btn pc-btn--ghost" style="background:rgba(255,255,255,0.08);box-shadow:inset 0 0 0 2px rgba(215,189,136,0.6);color:#d7bd88;">Prefer Volunteering Instead?</a>
+    </div>
+  </div>
+</section>
+
+<section class="pc-section pc-section--sm">
+  <div class="pc-container">
+    <div class="pc-stat-strip">
+      <div class="pc-stat"><div class="pc-stat__num">95</div><div class="pc-stat__label">Active foster homes</div></div>
+      <div class="pc-stat"><div class="pc-stat__num">340</div><div class="pc-stat__label">Pets fostered last year</div></div>
+      <div class="pc-stat"><div class="pc-stat__num">3–6</div><div class="pc-stat__label">Typical foster length (weeks)</div></div>
+      <div class="pc-stat"><div class="pc-stat__num">$0</div><div class="pc-stat__label">Out-of-pocket cost to you</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Who needs foster homes ═══ -->
+<section class="pc-section pc-section--alt">
+  <div class="pc-container">
+    <span class="pc-eyebrow">Who Needs You</span>
+    <h2>Who We Need Foster Homes For</h2>
+    <p style="max-width:640px;margin-bottom:30px;">Not every animal that comes through our doors is ready to be listed for adoption right away. Fostering bridges that gap.</p>
+    <div class="pc-role-grid">
+      <div class="pc-role-card">
+        <div class="pc-role-card__icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21c-4-3-8-6.5-8-10.5A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 8 4.5C20 14.5 16 18 12 21z"/></svg></div>
+        <h3>Neonatal Kittens &amp; Puppies</h3>
+        <p>Bottle-fed litters too young for the shelter environment need round-the-clock care until they're weaned and old enough to be spayed/neutered.</p>
+      </div>
+      <div class="pc-role-card">
+        <div class="pc-role-card__icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
+        <h3>Medical Recovery</h3>
+        <p>Post-surgery pets, or animals recovering from injury or illness, heal faster in a quiet home than in a busy shelter — we handle the medical side, you handle the couch time.</p>
+      </div>
+      <div class="pc-role-card">
+        <div class="pc-role-card__icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 15s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg></div>
+        <h3>Behavioral Rehab</h3>
+        <p>Shy, fearful, or reactive animals often just need a calm one-on-one environment to decompress before they can be safely shown to adopters.</p>
+      </div>
+      <div class="pc-role-card">
+        <div class="pc-role-card__icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 9h1m4 0h1m-6 4h1m4 0h1m-6 4h1m4 0h1"/></svg></div>
+        <h3>Overflow &amp; Space Relief</h3>
+        <p>When intake spikes, fosters free up shelter space for the next animal in need — sometimes for as little as one or two weeks.</p>
+      </div>
+      <div class="pc-role-card">
+        <div class="pc-role-card__icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+        <h3>Hospice &amp; Senior Care</h3>
+        <p>Older or terminally ill animals deserve a comfortable home for whatever time they have left, rather than living out that time in a shelter kennel.</p>
+      </div>
+      <div class="pc-role-card">
+        <div class="pc-role-card__icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+        <h3>Weekend &amp; Event Fostering</h3>
+        <p>Can't commit to weeks? Some pets just need a break from the shelter for a weekend — great for a first-time foster trial run.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ What we provide ═══ -->
+<section class="pc-section">
+  <div class="pc-container--narrow">
+    <span class="pc-eyebrow">Our End of the Deal</span>
+    <h2>What Pet Center Provides</h2>
+    <p>Fostering shouldn't cost you anything but time and a little space. Here's everything we cover.</p>
+    <ul class="pc-provide-list">
+      <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Food, litter, and basic supplies for the full foster period.</li>
+      <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> All veterinary care, including emergency visits, at no cost to you.</li>
+      <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> A crate, bedding, and starter supplies if you don't already have them.</li>
+      <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> A dedicated foster support line for questions, day or night.</li>
+      <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Training for medical or behavioral fosters (bottle-feeding, medication schedules, etc.).</li>
+      <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> First right of refusal to adopt your foster pet, if you fall for them.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ═══ Foster process ═══ -->
+<section class="pc-section pc-section--alt">
+  <div class="pc-container--narrow">
+    <span class="pc-eyebrow">How It Works</span>
+    <h2>The Foster Process</h2>
+    <div class="pc-intake-steps">
+      <div class="pc-intake-step">
+        <div class="pc-intake-step__num">1</div>
+        <div class="pc-intake-step__body"><h3>Apply</h3><p>Fill out the interest form below with your home setup, experience, and availability.</p></div>
+      </div>
+      <div class="pc-intake-step">
+        <div class="pc-intake-step__num">2</div>
+        <div class="pc-intake-step__body"><h3>Orientation Call</h3><p>A short call with our foster coordinator to talk through expectations and answer questions.</p></div>
+      </div>
+      <div class="pc-intake-step">
+        <div class="pc-intake-step__num">3</div>
+        <div class="pc-intake-step__body"><h3>Matched With a Pet</h3><p>We match you with a pet whose needs fit your home, schedule, and experience level.</p></div>
+      </div>
+      <div class="pc-intake-step">
+        <div class="pc-intake-step__num">4</div>
+        <div class="pc-intake-step__body"><h3>Foster Period</h3><p>Typically 3–6 weeks, with regular check-ins and full support from our team throughout.</p></div>
+      </div>
+      <div class="pc-intake-step">
+        <div class="pc-intake-step__num">5</div>
+        <div class="pc-intake-step__body"><h3>Return, Adopt, or Foster Again</h3><p>When your foster is ready, they're listed for adoption — or you can choose to adopt them yourself first.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FAQ ═══ -->
+<section class="pc-section">
+  <div class="pc-container--narrow">
+    <span class="pc-eyebrow">Questions</span>
+    <h2>Foster FAQ</h2>
+    <div style="margin-top:20px;">
+      <div class="pc-faq-item">
+        <h3><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 2-3 4"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Do I need a fenced yard or a specific type of home?</h3>
+        <p>No — apartments work fine for most foster pets. Some medical or behavioral cases have specific space needs, which we'll discuss during matching.</p>
+      </div>
+      <div class="pc-faq-item">
+        <h3><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 2-3 4"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Can I foster if I already have pets?</h3>
+        <p>Usually yes. We ask about your current pets' temperament and vaccination status during the application to make sure it's a safe match.</p>
+      </div>
+      <div class="pc-faq-item">
+        <h3><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 2-3 4"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> What if I fall in love and can't give them back?</h3>
+        <p>It happens more than you'd think — fosters get first right of refusal to adopt. We'll just ask you to let us know as early as possible.</p>
+      </div>
+      <div class="pc-faq-item">
+        <h3><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 2-3 4"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> What if I need to end the foster early?</h3>
+        <p>Life happens — just call our foster support line and we'll arrange pickup or a transfer to another foster as quickly as we can.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Interest form ═══ -->
+<section class="pc-section pc-section--alt">
+  <div class="pc-container">
+    <div class="pc-contact-section" id="pcFosterForm">
+      <h2>Apply to Foster</h2>
+      <p>Tell us about your home and what kind of foster situation you're open to — we'll follow up to schedule your orientation call.</p>
+      <form id="pcFosterFormEl" novalidate>
+        <div class="pc-form-grid">
+          <div class="pc-field"><label for="fName">Full Name</label><input type="text" id="fName" name="name" required></div>
+          <div class="pc-field"><label for="fEmail">Email</label><input type="email" id="fEmail" name="email" required></div>
+          <div class="pc-field"><label for="fPhone">Phone <span style="text-transform:none;font-weight:400;opacity:.6;">(optional)</span></label><input type="tel" id="fPhone" name="phone"></div>
+          <div class="pc-field"><label for="fHome">Home Type</label>
+            <select id="fHome" name="homeType" required>
+              <option value="" disabled selected>Select one</option>
+              <option>Apartment</option><option>House with yard</option><option>House without yard</option><option>Other</option>
+            </select>
+          </div>
+          <div class="pc-field pc-field--full">
+            <label>What kind of fostering interests you?</label>
+            <div class="pc-checkbox-grid">
+              <label class="pc-checkbox-item"><input type="checkbox" name="interest" value="neonatal"> Neonatal Litters</label>
+              <label class="pc-checkbox-item"><input type="checkbox" name="interest" value="medical"> Medical Recovery</label>
+              <label class="pc-checkbox-item"><input type="checkbox" name="interest" value="behavioral"> Behavioral Rehab</label>
+              <label class="pc-checkbox-item"><input type="checkbox" name="interest" value="overflow"> Overflow / Short-Term</label>
+              <label class="pc-checkbox-item"><input type="checkbox" name="interest" value="hospice"> Hospice / Senior</label>
+              <label class="pc-checkbox-item"><input type="checkbox" name="interest" value="weekend"> Weekend Only</label>
+            </div>
+          </div>
+          <div class="pc-field pc-field--full"><label for="fExperience">Current or Past Pets</label><textarea id="fExperience" name="experience" placeholder="Tell us about any pets currently in your home, and any past fostering or pet-care experience..."></textarea></div>
+        </div>
+        <div class="pc-form-footer">
+          <button type="submit" class="pc-btn pc-btn--orange" id="fSubmitBtn">Submit Application</button>
+          <span class="pc-form-note">We'll email you to schedule an orientation call within 2–3 business days.</span>
+        </div>
+        <div class="pc-form-success" id="fFormSuccess">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <span>Thanks for applying! For the fastest response, you can also reach our foster coordinator directly at <a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;">docs.petcenterco.com/contact-us</a>.</span>
+        </div>
+      </form>
+    </div>
+
+    <div class="pc-cross-callout">
+      <p><strong>More interested in one-off shifts than a foster commitment?</strong> Volunteering might suit you better.</p>
+      <a href="/volunteer/" class="pc-btn pc-btn--ghost">See Volunteer Roles</a>
+    </div>
+  </div>
+</section>
+
+<footer class="pc-footer">
+  <div class="pc-footer__inner">
+    <div class="pc-footer__top">
+      <div class="pc-footer__brand">
+        <img src="/assets/images/logo-petcenter.png" alt="Pet Center">
+        <p>Every pet deserves a loving home. Browse our available pets and start your adoption journey today.</p>
+      </div>
+      <div class="pc-footer__col">
+        <h5>Our Pets</h5>
+        <ul>
+          <li><a href="/pets/dogs/">Dogs</a></li>
+          <li><a href="/pets/cats/">Cats</a></li>
+          <li><a href="/pets/birds/">Birds</a></li>
+          <li><a href="/pets/reptiles/">Reptiles</a></li>
+          <li><a href="/pets/small-mammals/">Small Mammals</a></li>
+          <li><a href="/pets/livestocks/">Livestocks</a></li>
+          <li><a href="/pets/aquariums/">Aquariums</a></li>
+          <li><a href="/species-guide/">Species Care Guide</a></li>
+        </ul>
+      </div>
+      <div class="pc-footer__col">
+        <h5>Information</h5>
+        <ul>
+          <li><a href="/about/">About Us</a></li>
+          <li><a href="/partners/">Partners</a></li>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/testimonials/">Testimonials</a></li>
+          <li><a href="/success-stories/">Success Stories</a></li>
+          <li><a href="https://donate.petcenterco.com" target="_blank" rel="noopener">Donate</a></li>
+          <li><a href="https://docs.petcenterco.com/health-guarantee/" target="_blank" rel="noopener">Health Guarantee</a></li>
+          <li><a href="https://docs.petcenterco.com/shipping-cancellation/" target="_blank" rel="noopener">Shipping & Cancellation</a></li>
+          <li><a href="https://docs.petcenterco.com/shipping-insurance-claims/" target="_blank" rel="noopener">Shipping Insurance</a></li>
+          <li><a href="https://docs.petcenterco.com/data-retention-security/" target="_blank" rel="noopener">Data & Security</a></li>
+        </ul>
+      </div>
+      <div class="pc-footer__col">
+        <h5>Support</h5>
+        <ul>
+          <li><a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact Us</a></li>
+          <li><a href="/signin/">Sign Up</a></li>
+          <li><a href="/volunteer/">Volunteer</a></li>
+          <li><a href="/foster/">Foster a Pet</a></li>
+          <li><a href="/events/">Events &amp; Adoption Days</a></li>
+          <li><a href="/lost-and-found/">Lost &amp; Found Pets</a></li>
+          <li><a href="/rehoming-resources/">Can't Keep Your Pet?</a></li>
+          <li><a href="/sponsor-a-pet/">Sponsor a Pet</a></li>
+          <li><a href="/gift-my-adoption/">Gift My Adoption</a></li>
+          <li><a href="https://docs.petcenterco.com/returns-refunds/" target="_blank" rel="noopener">Returns & Refunds</a></li>
+          <li><a href="https://docs.petcenterco.com/faq/" target="_blank" rel="noopener">FAQ</a></li>
+        </ul>
+      </div>
+      <div class="pc-footer__col">
+        <h5>Visit Us</h5>
+        <p style="color:rgba(255,255,255,.7);font-size:13px;line-height:1.8;margin-bottom:0;">235-269 N Beverly Dr<br>Beverly Hills, CA</p>
+        <p style="color:rgba(255,255,255,.6);font-size:12px;line-height:1.6;margin-top:4px;">Golden Triangle Shopping Center, Section #257</p>
+        <p style="color:rgba(255,255,255,.7);font-size:13px;line-height:1.8;margin-top:10px;"><strong style="color:#d7bd88;">Hours:</strong><br>Mon – Fri: 7am – 9pm<br>Sat – Sun: 10am – 6pm</p>
+      </div>
+    </div>
+    <div class="pc-footer__bottom">
+      <span class="pc-footer__copy">&copy; 2026 Pet Center. All rights reserved.</span>
+      <div class="pc-footer__links">
+        <a href="https://docs.petcenterco.com/privacy-policy/" target="_blank" rel="noopener">Privacy Policy</a>
+        <a href="https://docs.petcenterco.com/terms-of-service/" target="_blank" rel="noopener">Terms of Service</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+'use strict';
+(function() {
+  var header = document.getElementById('pcHeader');
+  if (!header) return;
+  function updateHeaderOnScroll() { if (window.scrollY > 0) { header.classList.add('scrolled'); } else { header.classList.remove('scrolled'); } }
+  window.addEventListener('scroll', updateHeaderOnScroll, { passive: true });
+  updateHeaderOnScroll();
+})();
+// Section 24 dropdown controller (click to open, outside-click/Escape to close)
+(function () {
+  var dropdowns = document.querySelectorAll('.pc-nav-dropdown');
+  function closeAll() {
+    dropdowns.forEach(function (d) {
+      var t = d.querySelector('.pc-nav-dropdown__trigger'), p = d.querySelector('.pc-nav-dropdown__panel');
+      t.classList.remove('active'); t.setAttribute('aria-expanded', 'false'); p.classList.remove('open', 'flip-up');
+    });
+  }
+  dropdowns.forEach(function (dd) {
+    var trigger = dd.querySelector('.pc-nav-dropdown__trigger'), panel = dd.querySelector('.pc-nav-dropdown__panel');
+    trigger.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var isOpen = panel.classList.contains('open');
+      closeAll();
+      if (!isOpen) {
+        var rect = trigger.getBoundingClientRect();
+        if (window.innerHeight - rect.bottom < 240 && rect.top > 240) { panel.classList.add('flip-up'); }
+        panel.classList.add('open'); trigger.classList.add('active'); trigger.setAttribute('aria-expanded', 'true');
+      }
+    });
+  });
+  document.addEventListener('click', closeAll);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeAll(); });
+  window.addEventListener('scroll', closeAll, { passive: true });
+  window.addEventListener('resize', closeAll);
+})();
+(function () {
+  var hamburger = document.getElementById('pcHamburger');
+  var mobileMenu = document.getElementById('pcMobileMenu');
+  if (!hamburger || !mobileMenu) return;
+  function openMenu() { hamburger.classList.add('active'); mobileMenu.classList.add('open'); hamburger.setAttribute('aria-expanded', 'true'); document.body.style.overflow = 'hidden'; }
+  function closeMenu() { hamburger.classList.remove('active'); mobileMenu.classList.remove('open'); hamburger.setAttribute('aria-expanded', 'false'); document.body.style.overflow = ''; }
+  hamburger.addEventListener('click', function (e) { e.stopPropagation(); mobileMenu.classList.contains('open') ? closeMenu() : openMenu(); });
+  mobileMenu.querySelectorAll('a').forEach(function (link) { link.addEventListener('click', closeMenu); });
+  document.addEventListener('click', function (e) { if (!e.target.closest('header') && !e.target.closest('.pc-mobile-menu')) { closeMenu(); } });
+})();
+// Foster interest form — client-side only; see completion notes re: no backend endpoint yet.
+(function () {
+  var form = document.getElementById('pcFosterFormEl');
+  var success = document.getElementById('fFormSuccess');
+  var btn = document.getElementById('fSubmitBtn');
+  if (!form) return;
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (!form.checkValidity()) { form.reportValidity(); return; }
+    btn.disabled = true; success.classList.add('show'); form.reset();
+    setTimeout(function () { btn.disabled = false; }, 600);
+  });
+})();
+</script>
+<script src="/admin/chat-widget.js"></script>
+</body>
+</html>

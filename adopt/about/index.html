@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="Pet Center is a Beverly Hills pet store, adoption center, and full rehoming platform in one place — dogs, cats, birds, reptiles, small mammals, livestock, and aquarium pets, adoption, fostering, lost & found, and more.">
+<title>About Us — Pet Center</title>
+
+<meta property="og:title" content="About Us — Pet Center">
+<meta property="og:description" content="A Beverly Hills pet store, adoption center, and full rehoming platform in one place.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://adopt.petcenterco.com/about/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="About Us — Pet Center">
+<meta name="twitter:description" content="A Beverly Hills pet store, adoption center, and full rehoming platform in one place.">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://adopt.petcenterco.com/" },
+    { "@type": "ListItem", "position": 2, "name": "About Us", "item": "https://adopt.petcenterco.com/about/" }
+  ]
+}
+</script>
+
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<style>
+/* ════════════════════════════════════════════════════════════════════════════
+   PET CENTER — About Us (/about/)
+   Colors: Navy #10214b | Gold #d7bd88 | Orange #ED7624
+   Base reset/typography/header/footer copied verbatim from cats.html (Rule 13).
+   Rule: NO borders on cards — shadows only | NO emojis — SVG icons only.
+   ════════════════════════════════════════════════════════════════════════════ */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Sora:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --navy: #10214b; --navy-light: #1a2f5c; --gold: #d7bd88; --gold-dark: #b89968;
+  --orange: #ED7624; --orange-light: #fef0e6; --warm-gray: #d0c3ba; --chocolate: #3d2817;
+  --bg: #f9f7f4; --surface: #ffffff; --text: #2c2416; --muted: #7a6d5f;
+  --success: #0d7c4a; --success-bg: #e6f7ef; --error: #c0392b; --error-bg: #fdecea;
+  --shadow-sm: 0 2px 8px rgba(16,33,75,0.06); --shadow-md: 0 4px 20px rgba(16,33,75,0.10);
+  --shadow-lg: 0 8px 40px rgba(16,33,75,0.14);
+  --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px; --transition: 0.25s ease;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; overflow-x: hidden; width: 100%; }
+body { font-family: 'Sora', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.65; -webkit-font-smoothing: antialiased; padding-top: 68px; overflow-x: hidden; width: 100%; position: relative; }
+img { max-width: 100%; height: auto; display: block; }
+a { color: var(--orange); text-decoration: none; transition: color var(--transition); }
+a:hover { color: var(--navy); }
+h1, h2, h3, h4 { font-family: 'Cormorant Garamond', Georgia, serif; color: var(--navy); line-height: 1.25; }
+h1 { font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 700; }
+h2 { font-size: clamp(1.6rem, 3vw, 2.3rem); font-weight: 700; margin-bottom: 12px; }
+h3 { font-size: 1.2rem; font-weight: 600; margin-bottom: 8px; }
+p { color: var(--muted); }
+.pc-container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+.pc-container--narrow { max-width: 880px; margin: 0 auto; padding: 0 24px; }
+.pc-section { padding: 68px 0; }
+.pc-section--sm { padding: 40px 0; }
+.pc-section--alt { background: var(--surface); }
+.pc-eyebrow { display: inline-block; font-family: 'Sora', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--orange); margin-bottom: 10px; }
+@media (max-width: 640px) { .pc-section { padding: 44px 0; } }
+
+.pc-btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 28px; border-radius: var(--radius-sm); font-family: 'Sora', sans-serif; font-size: 14px; font-weight: 600; letter-spacing: 0.02em; cursor: pointer; border: none; transition: all var(--transition); text-decoration: none; white-space: nowrap; min-height: 44px; }
+.pc-btn--primary { background: linear-gradient(135deg, var(--navy), var(--navy-light)); color: #fff; box-shadow: 0 4px 14px rgba(16,33,75,0.25); }
+.pc-btn--primary:hover { background: linear-gradient(135deg, var(--navy-light), #243970); color: #fff; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(16,33,75,0.32); }
+.pc-btn--orange { background: linear-gradient(135deg, var(--orange), #d96919); color: #fff; box-shadow: 0 4px 14px rgba(237,118,36,0.30); }
+.pc-btn--orange:hover { background: linear-gradient(135deg, #d96919, #c45e10); color: #fff; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(237,118,36,0.38); }
+.pc-btn--ghost { background: transparent; color: var(--navy); box-shadow: inset 0 0 0 2px var(--gold); }
+.pc-btn--ghost:hover { background: var(--orange-light); color: var(--orange); }
+.pc-btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+
+.pc-header { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; display: flex; align-items: center; justify-content: space-between; padding: 12px 32px; transition: background 0.35s ease, box-shadow 0.35s ease; overflow: visible; }
+.pc-header.scrolled, .pc-header--solid { background: rgba(16,33,75,0.97); box-shadow: 0 2px 20px rgba(0,0,0,0.18); }
+.pc-header__logo img { height: 44px; width: auto; display: block; }
+.pc-header__logo--desktop { display: block; }
+.pc-header__logo--mobile { display: none; }
+@media (max-width: 900px) { .pc-header__logo--desktop { display: none; } .pc-header__logo--mobile { display: block; } }
+.pc-header__nav { display: flex; align-items: center; gap: 4px; list-style: none; }
+.pc-header__nav li { position: relative; }
+.pc-header__nav a { display: block; padding: 8px 11px; font-family: 'Sora', sans-serif; font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.9); text-decoration: none; border-radius: 6px; transition: color 0.2s, background 0.2s; white-space: nowrap; }
+.pc-header__nav a:hover { color: #d7bd88; background: rgba(255,255,255,0.08); }
+.pc-header__nav .nav-donate a { background: #ED7624; color: #fff; font-weight: 600; padding: 8px 16px; }
+.pc-header__nav .nav-donate a:hover { background: #d4621a; color: #fff; }
+.pc-header__nav .nav-signup a { border: 1px solid rgba(215,189,136,0.5); color: #d7bd88; }
+.pc-header__nav .nav-signup a:hover { background: rgba(215,189,136,0.12); }
+/* Section 24 — Custom Dropdown System ("Message Bubble" locked shell), applied to header nav */
+.pc-nav-dropdown { position: relative; }
+.pc-nav-dropdown__trigger { display: flex; align-items: center; gap: 6px; background: none; border: none; cursor: pointer; padding: 8px 11px; font-family: 'Sora', sans-serif; font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.9); border-radius: 6px; transition: color 0.2s, background 0.2s; }
+.pc-nav-dropdown__trigger:hover, .pc-nav-dropdown__trigger.active { color: #d7bd88; background: rgba(255,255,255,0.08); }
+.pc-nav-dropdown__chevron { transition: transform 0.2s cubic-bezier(.4,0,.2,1); flex-shrink: 0; }
+.pc-nav-dropdown__trigger.active .pc-nav-dropdown__chevron { transform: rotate(180deg); }
+.pc-nav-dropdown__panel { position: absolute; top: 100%; left: 0; margin-top: 6px; min-width: 190px; background: #ffffff; border: 1.5px solid rgba(16,33,75,0.10); border-radius: 14px 0 14px 14px; box-shadow: 0 12px 32px rgba(16,33,75,0.18), 0 2px 8px rgba(16,33,75,0.08); overflow: hidden; z-index: 999; opacity: 0; visibility: hidden; transform: translateY(-8px) scale(0.98); transform-origin: top left; transition: opacity 0.2s ease, transform 0.2s cubic-bezier(.4,0,.2,1), visibility 0.2s; pointer-events: none; }
+.pc-nav-dropdown__panel.open { opacity: 1; visibility: visible; transform: translateY(0) scale(1); pointer-events: auto; }
+.pc-nav-dropdown__panel.flip-up { top: auto; bottom: 100%; margin-top: 0; margin-bottom: 6px; transform-origin: bottom left; border-radius: 14px 14px 14px 0; }
+.pc-nav-dropdown__scroll { max-height: 225px; overflow-y: auto; padding: 6px 0; }
+.pc-nav-dropdown__row { display: flex; align-items: center; padding: 11px 16px; border-left: 3px solid transparent; border-bottom: 1px solid rgba(16,33,75,0.06); font-family: 'Sora', sans-serif; font-size: 13.5px; color: var(--navy); text-decoration: none; transition: background 0.15s ease, border-color 0.15s ease; }
+.pc-nav-dropdown__row:last-child { border-bottom: none; }
+.pc-nav-dropdown__row:hover { background: rgba(16,33,75,0.05); color: var(--navy); border-left-color: var(--gold); }
+.pc-hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 8px; background: none; border: none; width: 32px; height: auto; justify-content: center; }
+.pc-hamburger span { display: block; width: 24px; height: 2px; background: #fff; border-radius: 2px; transition: all 0.3s ease; }
+.pc-hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(8px, 8px); }
+.pc-hamburger.active span:nth-child(2) { opacity: 0; }
+.pc-hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -7px); }
+.pc-mobile-menu { display: flex; flex-direction: column; position: absolute; top: 100%; left: 0; right: 0; background: rgba(16,33,75,0.98); z-index: 999; max-height: 0; overflow: hidden; opacity: 0; pointer-events: none; transition: all 0.3s ease; box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
+.pc-mobile-menu.open { max-height: calc(100vh - 68px); overflow-y: auto; opacity: 1; pointer-events: auto; padding: 16px 0 calc(100vh - 68px - 56px); overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+.pc-mobile-menu a { display: block; padding: 12px 28px; font-family: 'Sora', sans-serif; font-size: 15px; font-weight: 500; color: rgba(255,255,255,0.9); text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.06); transition: all 0.2s ease; }
+.pc-mobile-menu a:hover { color: #d7bd88; background: rgba(255,255,255,0.05); }
+.pc-mobile-menu .mobile-donate { margin: 12px 28px 0; display: inline-block; background: #ED7624; color: #fff; padding: 11px 24px; border-radius: 8px; font-weight: 600; border-bottom: none; }
+@media (max-width: 900px) { .pc-header__nav { display: none; } .pc-hamburger { display: flex; } }
+
+.pc-page-banner { background: linear-gradient(120deg, #10214b 0%, #1a3070 60%, #2a4080 100%); padding: 100px 0 60px; text-align: center; position: relative; overflow: hidden; }
+.pc-page-banner__eyebrow { display: inline-block; font-family: 'Sora', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #d7bd88; background: rgba(215,189,136,0.12); border: 1px solid rgba(215,189,136,0.3); padding: 5px 16px; border-radius: 20px; margin-bottom: 18px; }
+.pc-page-banner h1 { color: #fff; margin-bottom: 14px; }
+.pc-page-banner p { color: rgba(255,255,255,0.78); max-width: 660px; margin: 0 auto; font-size: 16px; }
+.pc-paw-trail { position: absolute; opacity: 0.08; color: #fff; pointer-events: none; }
+
+/* ─── Three pillars (pet store / adoption / rehoming platform) ──────────── */
+.pc-pillar-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+@media (max-width: 900px) { .pc-pillar-grid { grid-template-columns: 1fr; } }
+.pc-pillar-card { background: var(--surface); border-radius: var(--radius-lg); box-shadow: var(--shadow-md); padding: 32px; position: relative; overflow: hidden; }
+.pc-pillar-card__num { position: absolute; top: -10px; right: 4px; font-family: 'Cormorant Garamond', serif; font-size: 5.5rem; font-weight: 700; color: var(--bg); z-index: 0; line-height: 1; }
+.pc-pillar-card__inner { position: relative; z-index: 1; }
+.pc-pillar-card__icon { color: var(--orange); margin-bottom: 16px; }
+.pc-pillar-card h3 { font-size: 1.35rem; margin-bottom: 10px; }
+.pc-pillar-card p { font-size: 13.5px; line-height: 1.65; }
+
+/* ─── Stats ─────────────────────────────────────────────────────────────── */
+.pc-stat-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+@media (max-width: 760px) { .pc-stat-strip { grid-template-columns: 1fr 1fr; } }
+.pc-stat { text-align: center; }
+.pc-stat__num { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 700; color: var(--navy); line-height: 1; }
+.pc-stat__label { font-family: 'Sora', sans-serif; font-size: 12.5px; color: var(--muted); margin-top: 6px; }
+
+/* ─── Category showcase ──────────────────────────────────────────────────── */
+.pc-cat-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 14px; }
+@media (max-width: 1000px) { .pc-cat-grid { grid-template-columns: repeat(4, 1fr); } }
+@media (max-width: 620px) { .pc-cat-grid { grid-template-columns: repeat(3, 1fr); } }
+.pc-cat-tile { background: var(--surface); border-radius: var(--radius-md); box-shadow: var(--shadow-sm); padding: 20px 10px; text-align: center; transition: box-shadow var(--transition), transform var(--transition); }
+.pc-cat-tile:hover { box-shadow: var(--shadow-md); transform: translateY(-3px); }
+.pc-cat-tile svg, .pc-cat-tile i { color: var(--orange); margin-bottom: 8px; display: inline-block; font-size: 28px; }
+.pc-cat-tile__label { font-family: 'Sora', sans-serif; font-size: 12px; font-weight: 600; color: var(--navy); }
+
+/* ─── Values ──────────────────────────────────────────────────────────────── */
+.pc-value-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+@media (max-width: 900px) { .pc-value-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) { .pc-value-grid { grid-template-columns: 1fr; } }
+.pc-value-card { text-align: center; padding: 8px; }
+.pc-value-card__icon { width: 60px; height: 60px; border-radius: 50%; background: var(--orange-light); color: var(--orange); display: flex; align-items: center; justify-content: center; margin: 0 auto 14px; }
+.pc-value-card h3 { font-size: 1.05rem; }
+.pc-value-card p { font-size: 13px; }
+
+/* ─── Fun facts strip ─────────────────────────────────────────────────────── */
+.pc-fact-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+@media (max-width: 860px) { .pc-fact-strip { grid-template-columns: 1fr; } }
+.pc-fact-card { background: var(--navy); border-radius: var(--radius-md); padding: 24px; color: rgba(255,255,255,0.9); display: flex; gap: 14px; align-items: flex-start; }
+.pc-fact-card svg { flex-shrink: 0; color: var(--gold); margin-top: 2px; }
+.pc-fact-card__label { font-family: 'Sora', sans-serif; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--gold); margin-bottom: 4px; }
+.pc-fact-card p { color: rgba(255,255,255,0.85); font-size: 13.5px; line-height: 1.55; }
+
+/* ─── Visit / location ─────────────────────────────────────────────────────── */
+.pc-visit-box { background: var(--surface); border-radius: var(--radius-lg); box-shadow: var(--shadow-md); padding: 36px; display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+@media (max-width: 700px) { .pc-visit-box { grid-template-columns: 1fr; } }
+.pc-visit-box__item { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 18px; }
+.pc-visit-box__item:last-child { margin-bottom: 0; }
+.pc-visit-box__item svg { flex-shrink: 0; color: var(--orange); margin-top: 3px; }
+.pc-visit-box__item h3 { font-size: 1rem; margin-bottom: 3px; }
+.pc-visit-box__item p { font-size: 13.5px; margin: 0; }
+
+/* ─── Cross-link grid ─────────────────────────────────────────────────────── */
+.pc-cross-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+@media (max-width: 860px) { .pc-cross-grid { grid-template-columns: 1fr; } }
+.pc-cross-callout { background: var(--orange-light); border-radius: var(--radius-md); padding: 22px 24px; }
+.pc-cross-callout p { color: var(--text); font-size: 13.5px; margin-bottom: 12px; }
+.pc-cross-callout strong { color: var(--navy); display: block; font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; margin-bottom: 4px; }
+
+.pc-footer { background: #0b1834; padding: 60px 24px 28px; color: rgba(255,255,255,0.65); font-family: 'Sora', sans-serif; }
+.pc-footer__inner { max-width: 1200px; margin: 0 auto; }
+.pc-footer__top { display: grid; grid-template-columns: 2fr 1fr 1.2fr 1fr 1.3fr; gap: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(255,255,255,0.07); }
+.pc-footer__brand img { height: 40px; margin-bottom: 16px; display: block; }
+.pc-footer__brand p { font-size: 13.5px; line-height: 1.7; max-width: 280px; }
+.pc-footer__col h5 { font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; font-weight: 700; color: #d7bd88; margin-bottom: 16px; }
+.pc-footer__col ul { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+.pc-footer__col ul a { font-size: 13px; color: rgba(255,255,255,0.6); text-decoration: none; transition: color 0.2s; }
+.pc-footer__col ul a:hover { color: #d7bd88; }
+.pc-footer__bottom { padding-top: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+.pc-footer__copy { font-size: 12.5px; }
+.pc-footer__links { display: flex; gap: 20px; }
+.pc-footer__links a { font-size: 12.5px; color: rgba(255,255,255,0.5); text-decoration: none; }
+.pc-footer__links a:hover { color: #d7bd88; }
+@media (max-width: 900px) { .pc-footer__top { grid-template-columns: 1fr 1fr; gap: 28px; } }
+@media (max-width: 560px) { .pc-footer__top { grid-template-columns: 1fr; gap: 24px; } }
+</style>
+</head>
+<body>
+
+<header class="pc-header pc-header--solid" id="pcHeader">
+  <a href="/" class="pc-header__logo pc-header__logo--desktop"><img src="/assets/images/logo-petcenter.png" alt="Pet Center"></a>
+  <a href="/" class="pc-header__logo pc-header__logo--mobile"><img src="/assets/images/logo-petcenter-icon.png" alt="Pet Center"></a>
+  <ul class="pc-header__nav">
+    <li><a href="/">Home</a></li>
+    <li><a href="/about/">About Us</a></li>
+    <li><a href="/partners/">Partners</a></li>
+    <li class="pc-nav-dropdown">
+    <button class="pc-nav-dropdown__trigger" aria-expanded="false" aria-haspopup="true">Our Pets
+      <svg class="pc-nav-dropdown__chevron" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <div class="pc-nav-dropdown__panel">
+      <div class="pc-nav-dropdown__scroll">
+      <a class="pc-nav-dropdown__row" href="/pets/dogs/">Dogs</a>
+      <a class="pc-nav-dropdown__row" href="/pets/cats/">Cats</a>
+      <a class="pc-nav-dropdown__row" href="/pets/birds/">Birds</a>
+      <a class="pc-nav-dropdown__row" href="/pets/reptiles/">Reptiles</a>
+      <a class="pc-nav-dropdown__row" href="/pets/small-mammals/">Small Mammals</a>
+      <a class="pc-nav-dropdown__row" href="/pets/livestocks/">Livestocks</a>
+      <a class="pc-nav-dropdown__row" href="/pets/aquariums/">Aquariums</a>
+      </div>
+    </div>
+  </li>
+    <li class="pc-nav-dropdown">
+    <button class="pc-nav-dropdown__trigger" aria-expanded="false" aria-haspopup="true">Get Involved
+      <svg class="pc-nav-dropdown__chevron" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <div class="pc-nav-dropdown__panel">
+      <div class="pc-nav-dropdown__scroll">
+      <a class="pc-nav-dropdown__row" href="/volunteer/">Volunteer</a>
+      <a class="pc-nav-dropdown__row" href="/foster/">Foster a Pet</a>
+      <a class="pc-nav-dropdown__row" href="/events/">Events &amp; Adoption Days</a>
+      <a class="pc-nav-dropdown__row" href="/lost-and-found/">Lost &amp; Found Pets</a>
+      <a class="pc-nav-dropdown__row" href="/sponsor-a-pet/">Sponsor a Pet</a>
+      </div>
+    </div>
+  </li>
+    <li><a href="/blog/">Blog</a></li>
+    <li><a href="/testimonials/">Testimonials</a></li>
+    <li><a href="/success-stories/">Success Stories</a></li>
+    <li class="nav-donate"><a href="https://donate.petcenterco.com" target="_blank" rel="noopener">Donate</a></li>
+    <li><a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact</a></li>
+    <li class="nav-signup"><a href="/signin/">Sign Up</a></li>
+  </ul>
+  <button class="pc-hamburger" id="pcHamburger" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
+  <nav class="pc-mobile-menu" id="pcMobileMenu" aria-label="Mobile navigation">
+    <a href="/">Home</a>
+    <a href="/about/">About Us</a>
+    <a href="/partners/">Partners</a>
+    <a href="/pets/dogs/">Dogs</a>
+    <a href="/pets/cats/">Cats</a>
+    <a href="/pets/birds/">Birds</a>
+    <a href="/pets/reptiles/">Reptiles</a>
+    <a href="/pets/small-mammals/">Small Mammals</a>
+    <a href="/pets/livestocks/">Livestocks</a>
+    <a href="/pets/aquariums/">Aquariums</a>
+    <a href="/volunteer/">Volunteer</a>
+    <a href="/foster/">Foster a Pet</a>
+    <a href="/events/">Events &amp; Adoption Days</a>
+    <a href="/lost-and-found/">Lost &amp; Found Pets</a>
+    <a href="/sponsor-a-pet/">Sponsor a Pet</a>
+    <a href="/blog/">Blog</a>
+    <a href="/testimonials/">Testimonials</a>
+    <a href="/success-stories/">Success Stories</a>
+    <a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact</a>
+    <a href="/signin/">Sign Up</a>
+    <a href="https://donate.petcenterco.com" class="mobile-donate" target="_blank" rel="noopener">Donate</a>
+  </nav>
+</header>
+
+<section class="pc-page-banner">
+  <i class="fa-solid fa-paw pc-paw-trail" style="top:28px;left:7%;font-size:50px;" aria-hidden="true"></i>
+  <i class="fa-solid fa-paw pc-paw-trail" style="bottom:20px;right:9%;font-size:64px;" aria-hidden="true"></i>
+  <div class="pc-container">
+    <span class="pc-page-banner__eyebrow">About Pet Center</span>
+    <h1>More Than an Adoption Site</h1>
+    <p>Pet Center is a pet store, an adoption center, and a full rehoming platform, built as one connected place instead of three separate ones — so wherever you are in a pet's life, from finding them to keeping them, we're built for that part too.</p>
+  </div>
+</section>
+
+<!-- ═══ Three pillars ═══ -->
+<section class="pc-section pc-section--alt">
+  <div class="pc-container">
+    <span class="pc-eyebrow">What We Are</span>
+    <h2>Three Things at Once, On Purpose</h2>
+    <p style="max-width:680px;margin-bottom:34px;">Most sites make you pick a lane — a pet store, a shelter, or a listings board. We built Pet Center to be all three, because that's really what finding, keeping, and caring for a pet requires.</p>
+    <div class="pc-pillar-grid">
+      <div class="pc-pillar-card">
+        <div class="pc-pillar-card__num">01</div>
+        <div class="pc-pillar-card__inner">
+          <div class="pc-pillar-card__icon"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h18l-1.5 9h-15z"/><path d="M3 3l-1 5"/><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/></svg></div>
+          <h3>A Full Pet Store</h3>
+          <p>Dogs, cats, birds, reptiles, small mammals, livestock, and aquarium pets — every pet we place comes with a health guarantee, and we ship nationwide with shipping insurance and a clear cancellation policy, the way a real retailer should operate.</p>
+        </div>
+      </div>
+      <div class="pc-pillar-card">
+        <div class="pc-pillar-card__num">02</div>
+        <div class="pc-pillar-card__inner">
+          <div class="pc-pillar-card__icon"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+          <h3>An Adoption Center</h3>
+          <p>A real application process, a status dashboard you can track, and a team that follows up — not just a listing you inquire about and hope for the best on.</p>
+        </div>
+      </div>
+      <div class="pc-pillar-card">
+        <div class="pc-pillar-card__num">03</div>
+        <div class="pc-pillar-card__inner">
+          <div class="pc-pillar-card__icon"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+          <h3>A Full Rehoming Platform</h3>
+          <p>Lost &amp; Found, help for owners who can't keep a pet anymore, fostering, and volunteering all live under the same roof as adoption — a more complete, more personal alternative to the single-purpose listing boards most people default to.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Stats ═══ -->
+<section class="pc-section pc-section--sm">
+  <div class="pc-container">
+    <div class="pc-stat-strip">
+      <div class="pc-stat"><div class="pc-stat__num">7</div><div class="pc-stat__label">Pet categories we place</div></div>
+      <div class="pc-stat"><div class="pc-stat__num">180+</div><div class="pc-stat__label">Active volunteers</div></div>
+      <div class="pc-stat"><div class="pc-stat__num">95</div><div class="pc-stat__label">Active foster homes</div></div>
+      <div class="pc-stat"><div class="pc-stat__num">50</div><div class="pc-stat__label">States we ship to</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Category showcase ═══ -->
+<section class="pc-section pc-section--alt">
+  <div class="pc-container">
+    <span class="pc-eyebrow">Our Range</span>
+    <h2>Every Kind of Pet, One Place</h2>
+    <p style="max-width:600px;margin-bottom:26px;">From the classics to the more particular, we place — and take back into our rehoming network — a wider range of pets than most single-species shelters or stores.</p>
+    <div class="pc-cat-grid">
+      <a href="/pets/dogs/" class="pc-cat-tile">
+        <i class="fa-solid fa-dog" aria-hidden="true"></i>
+        <div class="pc-cat-tile__label">Dogs</div>
+      </a>
+      <a href="/pets/cats/" class="pc-cat-tile">
+        <i class="fa-solid fa-cat" aria-hidden="true"></i>
+        <div class="pc-cat-tile__label">Cats</div>
+      </a>
+      <a href="/pets/birds/" class="pc-cat-tile">
+        <i class="fa-solid fa-dove" aria-hidden="true"></i>
+        <div class="pc-cat-tile__label">Birds</div>
+      </a>
+      <a href="/pets/reptiles/" class="pc-cat-tile">
+        <i class="fa-solid fa-dragon" aria-hidden="true"></i>
+        <div class="pc-cat-tile__label">Reptiles</div>
+      </a>
+      <a href="/pets/small-mammals/" class="pc-cat-tile">
+        <i class="fa-solid fa-paw" aria-hidden="true"></i>
+        <div class="pc-cat-tile__label">Small Mammals</div>
+      </a>
+      <a href="/pets/livestocks/" class="pc-cat-tile">
+        <i class="fa-solid fa-horse" aria-hidden="true"></i>
+        <div class="pc-cat-tile__label">Livestocks</div>
+      </a>
+      <a href="/pets/aquariums/" class="pc-cat-tile">
+        <i class="fa-solid fa-fish" aria-hidden="true"></i>
+        <div class="pc-cat-tile__label">Aquariums</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Values ═══ -->
+<section class="pc-section">
+  <div class="pc-container">
+    <span class="pc-eyebrow">What We Stand For</span>
+    <h2>Our Values</h2>
+    <div class="pc-value-grid" style="margin-top:24px;">
+      <div class="pc-value-card">
+        <div class="pc-value-card__icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+        <h3>Compassion First</h3>
+        <p>Every decision starts with what's actually best for the animal, not what's fastest or easiest for us.</p>
+      </div>
+      <div class="pc-value-card">
+        <div class="pc-value-card__icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg></div>
+        <h3>Real Transparency</h3>
+        <p>Health guarantees, honest histories, and a status dashboard you can actually check — no vague "inquire for details."</p>
+      </div>
+      <div class="pc-value-card">
+        <div class="pc-value-card__icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+        <h3>Community-Built</h3>
+        <p>Volunteers, fosters, and local partners aren't an add-on — they're most of how this place actually runs day to day.</p>
+      </div>
+      <div class="pc-value-card">
+        <div class="pc-value-card__icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+        <h3>Support For Life</h3>
+        <p>Our relationship with an adopter doesn't end at pickup — from rehoming help to lost pet support, we're built to stick around.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Fun facts ═══ -->
+<section class="pc-section pc-section--alt">
+  <div class="pc-container">
+    <span class="pc-eyebrow">Fun Facts</span>
+    <h2>A Few Things About Us</h2>
+    <div class="pc-fact-strip" style="margin-top:20px;">
+      <div class="pc-fact-card">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 2v20M2 12h20"/><circle cx="12" cy="12" r="9"/></svg>
+        <div><div class="pc-fact-card__label">Location</div><p>We're right in the Golden Triangle Shopping Center in Beverly Hills — come say hello during any of our weekend adoption days.</p></div>
+      </div>
+      <div class="pc-fact-card">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        <div><div class="pc-fact-card__label">Nationwide Reach</div><p>Because we're a pet store as well as an adoption center, we can safely ship pets across the country — not just place them locally.</p></div>
+      </div>
+      <div class="pc-fact-card">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <div><div class="pc-fact-card__label">One Ecosystem</div><p>Adopt, foster, volunteer, report a lost pet, or get rehoming help — it's all one account, one team, one place.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Visit us ═══ -->
+<section class="pc-section">
+  <div class="pc-container--narrow">
+    <span class="pc-eyebrow">Come By</span>
+    <h2>Visit Pet Center</h2>
+    <div class="pc-visit-box" style="margin-top:20px;">
+      <div>
+        <div class="pc-visit-box__item">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <div><h3>Address</h3><p>235-269 N Beverly Dr, Beverly Hills, CA<br>Golden Triangle Shopping Center, Section #257</p></div>
+        </div>
+        <div class="pc-visit-box__item">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          <div><h3>Hours</h3><p>Mon – Fri: 7am – 9pm<br>Sat – Sun: 10am – 6pm</p></div>
+        </div>
+      </div>
+      <div>
+        <div class="pc-visit-box__item">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3h18l-1.5 9h-15z"/><path d="M3 3l-1 5"/><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/></svg>
+          <div><h3>Nationwide Shipping</h3><p>Every adoption or purchase includes a health guarantee and shipping insurance — details on our <a href="https://docs.petcenterco.com/shipping-cancellation/" target="_blank" rel="noopener">Shipping &amp; Cancellation</a> page.</p></div>
+        </div>
+        <div class="pc-visit-box__item">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16v16H4z"/><path d="M4 4l8 8 8-8"/></svg>
+          <div><h3>Get in Touch</h3><p>Questions about a pet, an order, or an adoption? <a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact our team</a> any time.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Cross-links ═══ -->
+<section class="pc-section pc-section--alt">
+  <div class="pc-container">
+    <div class="pc-cross-grid">
+      <div class="pc-cross-callout">
+        <strong>Ready to adopt?</strong>
+        <p>Browse every pet category we currently have available.</p>
+        <a href="/pets/dogs/" class="pc-btn pc-btn--ghost" style="padding:8px 18px;font-size:13px;min-height:36px;">Browse Pets</a>
+      </div>
+      <div class="pc-cross-callout">
+        <strong>Want to get involved?</strong>
+        <p>Volunteer, foster, or come to our next adoption event.</p>
+        <a href="/volunteer/" class="pc-btn pc-btn--ghost" style="padding:8px 18px;font-size:13px;min-height:36px;">Get Involved</a>
+      </div>
+      <div class="pc-cross-callout">
+        <strong>Already have a pet?</strong>
+        <p>Lost &amp; Found and rehoming support are here if you ever need them.</p>
+        <a href="/lost-and-found/" class="pc-btn pc-btn--ghost" style="padding:8px 18px;font-size:13px;min-height:36px;">See Support Options</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="pc-footer">
+  <div class="pc-footer__inner">
+    <div class="pc-footer__top">
+      <div class="pc-footer__brand">
+        <img src="/assets/images/logo-petcenter.png" alt="Pet Center">
+        <p>Every pet deserves a loving home. Browse our available pets and start your adoption journey today.</p>
+      </div>
+      <div class="pc-footer__col">
+        <h5>Our Pets</h5>
+        <ul>
+          <li><a href="/pets/dogs/">Dogs</a></li>
+          <li><a href="/pets/cats/">Cats</a></li>
+          <li><a href="/pets/birds/">Birds</a></li>
+          <li><a href="/pets/reptiles/">Reptiles</a></li>
+          <li><a href="/pets/small-mammals/">Small Mammals</a></li>
+          <li><a href="/pets/livestocks/">Livestocks</a></li>
+          <li><a href="/pets/aquariums/">Aquariums</a></li>
+          <li><a href="/species-guide/">Species Care Guide</a></li>
+        </ul>
+      </div>
+      <div class="pc-footer__col">
+        <h5>Information</h5>
+        <ul>
+          <li><a href="/about/">About Us</a></li>
+          <li><a href="/partners/">Partners</a></li>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/testimonials/">Testimonials</a></li>
+          <li><a href="/success-stories/">Success Stories</a></li>
+          <li><a href="https://donate.petcenterco.com" target="_blank" rel="noopener">Donate</a></li>
+          <li><a href="https://docs.petcenterco.com/health-guarantee/" target="_blank" rel="noopener">Health Guarantee</a></li>
+          <li><a href="https://docs.petcenterco.com/shipping-cancellation/" target="_blank" rel="noopener">Shipping & Cancellation</a></li>
+          <li><a href="https://docs.petcenterco.com/shipping-insurance-claims/" target="_blank" rel="noopener">Shipping Insurance</a></li>
+          <li><a href="https://docs.petcenterco.com/data-retention-security/" target="_blank" rel="noopener">Data & Security</a></li>
+        </ul>
+      </div>
+      <div class="pc-footer__col">
+        <h5>Support</h5>
+        <ul>
+          <li><a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact Us</a></li>
+          <li><a href="/signin/">Sign Up</a></li>
+          <li><a href="/volunteer/">Volunteer</a></li>
+          <li><a href="/foster/">Foster a Pet</a></li>
+          <li><a href="/events/">Events &amp; Adoption Days</a></li>
+          <li><a href="/lost-and-found/">Lost &amp; Found Pets</a></li>
+          <li><a href="/rehoming-resources/">Can't Keep Your Pet?</a></li>
+          <li><a href="/sponsor-a-pet/">Sponsor a Pet</a></li>
+          <li><a href="/gift-my-adoption/">Gift My Adoption</a></li>
+          <li><a href="https://docs.petcenterco.com/returns-refunds/" target="_blank" rel="noopener">Returns & Refunds</a></li>
+          <li><a href="https://docs.petcenterco.com/faq/" target="_blank" rel="noopener">FAQ</a></li>
+        </ul>
+      </div>
+      <div class="pc-footer__col">
+        <h5>Visit Us</h5>
+        <p style="color:rgba(255,255,255,.7);font-size:13px;line-height:1.8;margin-bottom:0;">235-269 N Beverly Dr<br>Beverly Hills, CA</p>
+        <p style="color:rgba(255,255,255,.6);font-size:12px;line-height:1.6;margin-top:4px;">Golden Triangle Shopping Center, Section #257</p>
+        <p style="color:rgba(255,255,255,.7);font-size:13px;line-height:1.8;margin-top:10px;"><strong style="color:#d7bd88;">Hours:</strong><br>Mon – Fri: 7am – 9pm<br>Sat – Sun: 10am – 6pm</p>
+      </div>
+    </div>
+    <div class="pc-footer__bottom">
+      <span class="pc-footer__copy">&copy; 2026 Pet Center. All rights reserved.</span>
+      <div class="pc-footer__links">
+        <a href="https://docs.petcenterco.com/privacy-policy/" target="_blank" rel="noopener">Privacy Policy</a>
+        <a href="https://docs.petcenterco.com/terms-of-service/" target="_blank" rel="noopener">Terms of Service</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+'use strict';
+(function() {
+  var header = document.getElementById('pcHeader');
+  if (!header) return;
+  function updateHeaderOnScroll() { if (window.scrollY > 0) { header.classList.add('scrolled'); } else { header.classList.remove('scrolled'); } }
+  window.addEventListener('scroll', updateHeaderOnScroll, { passive: true });
+  updateHeaderOnScroll();
+})();
+// Section 24 dropdown controller (click to open, outside-click/Escape to close)
+(function () {
+  var dropdowns = document.querySelectorAll('.pc-nav-dropdown');
+  function closeAll() {
+    dropdowns.forEach(function (d) {
+      var t = d.querySelector('.pc-nav-dropdown__trigger'), p = d.querySelector('.pc-nav-dropdown__panel');
+      t.classList.remove('active'); t.setAttribute('aria-expanded', 'false'); p.classList.remove('open', 'flip-up');
+    });
+  }
+  dropdowns.forEach(function (dd) {
+    var trigger = dd.querySelector('.pc-nav-dropdown__trigger'), panel = dd.querySelector('.pc-nav-dropdown__panel');
+    trigger.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var isOpen = panel.classList.contains('open');
+      closeAll();
+      if (!isOpen) {
+        var rect = trigger.getBoundingClientRect();
+        if (window.innerHeight - rect.bottom < 240 && rect.top > 240) { panel.classList.add('flip-up'); }
+        panel.classList.add('open'); trigger.classList.add('active'); trigger.setAttribute('aria-expanded', 'true');
+      }
+    });
+  });
+  document.addEventListener('click', closeAll);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeAll(); });
+  window.addEventListener('scroll', closeAll, { passive: true });
+  window.addEventListener('resize', closeAll);
+})();
+(function () {
+  var hamburger = document.getElementById('pcHamburger');
+  var mobileMenu = document.getElementById('pcMobileMenu');
+  if (!hamburger || !mobileMenu) return;
+  function openMenu() { hamburger.classList.add('active'); mobileMenu.classList.add('open'); hamburger.setAttribute('aria-expanded', 'true'); document.body.style.overflow = 'hidden'; }
+  function closeMenu() { hamburger.classList.remove('active'); mobileMenu.classList.remove('open'); hamburger.setAttribute('aria-expanded', 'false'); document.body.style.overflow = ''; }
+  hamburger.addEventListener('click', function (e) { e.stopPropagation(); mobileMenu.classList.contains('open') ? closeMenu() : openMenu(); });
+  mobileMenu.querySelectorAll('a').forEach(function (link) { link.addEventListener('click', closeMenu); });
+  document.addEventListener('click', function (e) { if (!e.target.closest('header') && !e.target.closest('.pc-mobile-menu')) { closeMenu(); } });
+})();
+</script>
+<script src="/admin/chat-widget.js"></script>
+</body>
+</html>
