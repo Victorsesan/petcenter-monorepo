@@ -94,7 +94,7 @@ The previously reproducible source defects were addressed on this branch:
 
 Verification after the implementation pass: the same mobile `/apply/` check now reports `scrollWidth=390` and `clientWidth=390`; the language scripts return HTTP 200; category index routes return HTTP 200; malformed chat-widget references are gone; and the full 66-route desktop/mobile sweep reports **0 horizontal-overflow cases**.
 
-The remaining local 404s are requests for protected per-pet `pet.json` records referenced by the public index data, plus missing image files on the existing homepage. The project rules prohibit opening or fabricating `pet.json`; those records must be supplied through the authorized data/deployment path. The implementation now fails safely without promoting those protected-data misses to a source-code route defect.
+The final deployment-readiness pass restored every repository-owned public image path that was returning 404 by copying existing repository-backed assets into the expected public names. A fresh 33-route response capture now reports 52 unique 404 URLs, and every one is an explicitly protected per-pet `pet.json` path. The project rules prohibit opening or fabricating those records; they must be supplied through the authorized deployment data path. No public HTML, JavaScript, CSS, or image asset remains missing in the local preview.
 
 ## Repository-wide completion-document reconciliation — 2026-11-04
 
@@ -104,10 +104,17 @@ Live instrumentation reproduced the documented symptom at both 1440×900 and 390
 
 The same reconciliation checked the documented Task 10 page list. `signin/index.html` and all listed category, services, detail, testimonials, application, status, and blog pages now carry the shared accessibility-widget rollout; the remaining application/blog pages were given the missing `/admin/chat-widget.js` include as part of this pass. A fresh targeted regression then found that `pets/detail/index.html` had the chat include but lacked the accessibility-widget include; that final rollout gap was repaired and reverified.
 
+## Final deployment-readiness pass — 2026-11-05
+
+- Added repository-backed public fallback assets for the missing blog card images, favicon, blog banner, pet-detail banner, category cards, dogs banner, and legacy testimonials3 photo slots.
+- Re-ran exact response capture across all 33 canonical routes: all non-protected asset requests now resolve; the only 404s are protected `adoptions/pets/*/pet.json` records.
+- Re-ran static syntax checks and the 66-check desktop/mobile smoke suite: all routes return HTTP 200, page errors remain at zero, and horizontal overflow remains at zero.
+- The checkout is ready for deployment and live-page testing. The only deployment input not contained in this repository is the authorized protected pet-data/runtime configuration; no placeholder records were fabricated.
+
 ## Git delivery
 
 - **Branch:** `task/second-round-MANUS-10`
 - **Report path:** `reports/second-round/MANUS-10.md`
 - **Application code changes:** verified and delivered
 - **Final commit:** updated after final pets-detail rollout repair
-- **Report status:** re-verified on 2026-11-05 after a fresh 66-check regression sweep plus 16-route targeted rollout regression
+- **Report status:** re-verified on 2026-11-05 after public-asset repair, exact 404 capture, a fresh 66-check regression sweep, and 16-route targeted rollout regression
