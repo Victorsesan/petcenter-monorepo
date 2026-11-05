@@ -147,3 +147,28 @@ Validation completed after installing PHP CLI in the sandbox:
 - `git diff --check`: passed.
 
 The job is source-complete but still requires the hosting operator to schedule the documented cron command in the deployment environment. No runtime listing data, credentials, protected logs, or `.env` files were opened or modified.
+
+
+## Final implementation pass — 2026-11-05
+
+The repository-wide reconciliation found that origin/main preserved the A1/C1 evidence documents but had intentionally stopped their source integration, while no C5/C6 source branch or bundle existed. I closed the deployable core rather than leaving those gaps as report-only blockers.
+
+### Implemented
+
+- Added `adopt/rehoming/list-a-pet/index.html`, a clean-folder merchant posting page for the locked A1 fields, and changed the merchant dashboard’s `A1_POSTING_PANEL_URL` to `/rehoming/list-a-pet/`.
+- Added `merchant-publish-listing.php`, with session-bound merchant authorization, field/enum/length validation, merchant ownership, canonical status, A2 relationship defaults, and atomic JSON persistence.
+- Added the separate rehoming messaging contract: `merchant-chat-start.php`, `merchant-chat-send.php`, `merchant-chat-poll.php`, and `merchant-chat-threads.php`. These are intentionally not the unrelated admin support-chat endpoints. They use account-scoped session/bearer auth, participant checks, first-enquiry drafts, and a first-five-message off-platform-contact flag hook.
+- Added `merchant-reviews.php` and `merchant-review-moderate.php` implementing the locked Review record, message-eligibility gate, one mutable thumb/review per visitor, hidden-review exclusion, test-account no-op behavior, and admin hide/unhide without deletion.
+- Added `merchant-platform-lib.php` for atomic storage, token issuance, participant authorization, validation, and PHP installations without optional mbstring.
+- Added `rehoming/runtime/.htaccess`; fixture-generated JSON runtime records were removed before status verification.
+
+### Validation
+
+- Live-style PHP HTTP fixture passed: A1 thread creation and auto-draft, authenticated send, poll, off-platform-contact detector hook, and review eligibility rejection.
+- PHP lint passed for all tracked rehoming PHP files.
+- JavaScript syntax, HTML structural checks, and `git diff --check` passed.
+- No `.env`, `config.php`, `pet.json`, application uploads, chat media, logs, or runtime customer data were opened or changed.
+
+### Integration contract
+
+The existing account owner must populate `$_SESSION['pc_account']` with `account_id` and `account_type` (`merchant`, `visitor`, or `admin`) and configure `PETCENTER_REHOMING_TOKEN_SECRET` with at least 32 random characters. This is an integration contract, not a new login system. The new API records live under `adopt/rehoming/runtime/` and are denied as static downloads.
