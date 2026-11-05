@@ -116,5 +116,5 @@ The same reconciliation checked the documented Task 10 page list. `signin/index.
 - **Branch:** `task/second-round-MANUS-10`
 - **Report path:** `reports/second-round/MANUS-10.md`
 - **Application code changes:** verified and delivered
-- **Final commit:** updated after final pets-detail rollout repair
+- **Final commit:** `561d0b1ec5676590943ea6c5c68dcd970fef5815`
 - **Report status:** re-verified on 2026-11-05 after public-asset repair, exact 404 capture, a fresh 66-check regression sweep, and 16-route targeted rollout regression
