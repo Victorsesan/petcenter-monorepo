@@ -61,7 +61,7 @@
     const data = store();
     const listing = data.listings.find((item) => item.id === listingId);
     if (!listing) throw new Error('Listing not found.');
-    const allowed = { active: ['pending_placement'], pending_placement: ['placement_complete', 'placement_fell_through'], placement_fell_through: ['pending_placement'], placement_complete: [] };
+    const allowed = { active: ['pending_placement'], pending_placement: ['placement_complete', 'placement_fell_through'], placement_fell_through: ['active'], placement_complete: [] };
     if (!allowed[listing.status] || !allowed[listing.status].includes(nextStatus)) throw new Error(`Cannot move ${listing.status} to ${nextStatus}.`);
     listing.status = nextStatus; listing.updated_at = new Date().toISOString();
     if (nextStatus === STATUS.COMPLETE) makeNotification(data, 'visitor-demo', 'placement_complete', 'Placement complete', `${listing.name} has been marked as safely placed.`, `/account/settings/`, listing.id);
@@ -77,12 +77,16 @@
   // Waitlist records remain private to the visitor and merchant.
   function joinWaitlist(listingId, visitorId) {
     const data = store();
+    const listing = data.listings.find((item) => item.id === listingId);
+    if (!listing || listing.status !== STATUS.PENDING) return { joined: false, reason: 'not_pending' };
     if (!data.waitlist.some((item) => item.listing_id === listingId && item.visitor_id === visitorId)) data.waitlist.push({ id: uid('wait'), listing_id: listingId, visitor_id: visitorId, created_at: new Date().toISOString(), notified_at: null });
     writeStore(data); return data.waitlist;
   }
   function notifyNextWaitlisted(listingId) {
     const data = store(); const next = data.waitlist.find((item) => item.listing_id === listingId && !item.notified_at);
-    if (!next) return null; next.notified_at = new Date().toISOString(); makeNotification(data, next.visitor_id, 'waitlist_spot_open', 'A waitlist spot opened', 'The merchant has reopened this placement opportunity.', `/pets/detail/?pet_id=${encodeURIComponent(listingId)}`, listingId); writeStore(data); return next;
+    const listing = data.listings.find((item) => item.id === listingId);
+    if (!listing || listing.status !== STATUS.FELL_THROUGH) return null;
+    if (!next) return null; next.notified_at = new Date().toISOString(); makeNotification(data, next.visitor_id, 'waitlist_spot_open', 'A waitlist spot opened', 'The earlier placement did not go ahead. You can now message the merchant about this pet.', `/pets/detail/?pet_id=${encodeURIComponent(listingId)}`, listingId); writeStore(data); return next;
   }
 
   // F1 saves the exact filter object and produces a deterministic daily digest.
