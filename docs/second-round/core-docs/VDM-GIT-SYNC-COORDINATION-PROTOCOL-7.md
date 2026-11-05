@@ -106,12 +106,12 @@ Everything else about how you write a sub-task — what and where, never how, re
 
 ## SETTING UP YOUR COPY OF THE REPO (ONCE, TESTED)
 
-**A session with no GitHub login is not a blocker. Use the token route in step 2.**
+**A session with no GitHub login should use the approved token route in step 2, subject to the credential-handling rules below.**
 
-**How to get the repository — follow these in order, and do not stop at the first failure:**
+**How to get the repository — follow these in order, moving to the next approved method when a method fails:**
 
 1. **Claude Code session (tested, no token needed).** If you are working in a Claude Code session (claude.ai/code), attach `Victorsesan/petcenter-monorepo` with push access; it clones and pushes through its own GitHub connection. Clone in one go with a generous timeout (the repo is large; up to 10 minutes; do not interrupt it).
-2. **The CEO's access token (the standard fallback; use it whenever step 1 is not available).** If you are in an ordinary chat, or your session says it has no GitHub credentials, use the access token the CEO gave you. It is in the CEO's handover message to you and starts with `github_pat_`. The CEO created it for exactly this purpose and authorized every department to use it for this repository, so using it is part of your job, not something to ask permission for. Having no GitHub login in your session is **not** a reason to stop: this step exists for that case. Write the token only in the clone command; never put it in any file in the repo, in `TODO.md`, or in a report. If you cannot find a token in your handover message, ask the CEO for it once and carry on with whatever else you can do meanwhile. First turn on **Code execution and file creation** and **Allow network egress**, then (replace `[TOKEN]` with the token):
+2. **The CEO's access token (the standard fallback; use it whenever step 1 is not available).** If you are in an ordinary chat, or your session says it has no GitHub credentials, use the access token the CEO gave you. It is in the CEO's handover message to you and starts with `github_pat_`. The CEO created it for exactly this purpose and authorized every department to use it for this repository, so using it is part of your job, not something to ask permission for. Having no GitHub login in your session activates this approved fallback: this step exists for that case. Write the token only in the clone command; never put it in any file in the repo, in `TODO.md`, or in a report. If you cannot find a token in your handover message, ask the CEO for it once and continue with any independently verifiable work available meanwhile. First turn on **Code execution and file creation** and **Allow network egress**, then (replace `[TOKEN]` with the token):
 ```
 git clone --filter=blob:limit=1m --no-checkout https://Victorsesan:[TOKEN]@github.com/Victorsesan/petcenter-monorepo.git
 cd petcenter-monorepo
