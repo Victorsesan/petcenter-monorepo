@@ -125,8 +125,10 @@ if (!rateLimitAllows(clientIp())) {
 }
 
 $data = requestData();
-$code = strtoupper(trim((string)($data['code'] ?? '')));
-$lastName = trim((string)($data['last_name'] ?? ''));
+$rawCode = $data['code'] ?? null;
+$rawLastName = $data['last_name'] ?? null;
+$code = is_scalar($rawCode) ? strtoupper(trim((string)$rawCode)) : '';
+$lastName = is_scalar($rawLastName) ? trim((string)$rawLastName) : '';
 
 // The generic failure intentionally covers malformed, missing, nonexistent,
 // and wrong-last-name cases so the endpoint cannot be used as an oracle.

@@ -44,7 +44,7 @@ $MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB per individual file
 if (!is_dir($TEMP_DIR)) {
     if (!mkdir($TEMP_DIR, 0755, true)) out(false, 'Server error: cannot create temp folder.');
     // Protect temp dir from direct web access
-    file_put_contents($TEMP_DIR . '/.htaccess', "Deny from all\n");
+    file_put_contents($TEMP_DIR . '/.htaccess', "<IfModule mod_authz_core.c>\n    Require all denied\n</IfModule>\n<IfModule !mod_authz_core.c>\n    Deny from all\n</IfModule>\n");
 }
 
 // Clean up expired temp files (older than 2 hours) — runs probabilistically, 1 in 10 requests
@@ -67,7 +67,8 @@ if (!isset($_FILES['file']) || $_FILES['file']['error'] !== UPLOAD_ERR_OK) {
 }
 
 $f    = $_FILES['file'];
-$field = isset($_POST['field']) ? preg_replace('/[^a-z_]/', '', $_POST['field']) : 'unknown';
+$rawField = $_POST['field'] ?? null;
+$field = is_scalar($rawField) ? preg_replace('/[^a-z_]/', '', (string)$rawField) : 'unknown';
 
 if ($f['size'] > $MAX_FILE_SIZE) out(false, 'File too large. Max 10MB per file.');
 
@@ -81,7 +82,11 @@ if (!in_array($mime, $ALLOWED_MIME)) out(false, 'Invalid file content.');
 try   { $token = bin2hex(random_bytes(16)); }
 catch (Exception $e) { $token = md5(uniqid('', true) . rand()); }
 
-$safe_name = preg_replace('/[^A-Za-z0-9_\-\.]/', '_', mb_substr(pathinfo($f['name'], PATHINFO_FILENAME), 0, 100));
+$originalBaseName = pathinfo($f['name'], PATHINFO_FILENAME);
+$shortBaseName = function_exists('mb_substr')
+    ? mb_substr($originalBaseName, 0, 100, 'UTF-8')
+    : substr($originalBaseName, 0, 100);
+$safe_name = preg_replace('/[^A-Za-z0-9_\-\.]/', '_', $shortBaseName);
 $filename  = $token . '_' . $safe_name . '.' . $ext;
 $dest      = $TEMP_DIR . DIRECTORY_SEPARATOR . $filename;
 

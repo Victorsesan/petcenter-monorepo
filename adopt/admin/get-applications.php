@@ -20,15 +20,40 @@ if (!isAuthenticated()) {
 
 $code     = $_POST['code'] ?? $_GET['code'] ?? null;
 $apps_base = __DIR__ . '/../adoptions/applications';
+$apps_real = realpath($apps_base);
+
+if ($apps_real === false) {
+    http_response_code(500);
+    die(json_encode(['success' => false, 'message' => 'Applications directory unavailable']));
+}
 
 // Return single application
 if ($code) {
-    $app_file = $apps_base . "/{$code}/application.json";
-    if (!file_exists($app_file)) {
+    if (!is_scalar($code)) {
+        http_response_code(404);
+        die(json_encode(['success' => false, 'message' => 'Application not found']));
+    }
+    $code = trim((string)$code);
+    if (!preg_match('/^AD-\d{5}-\d{4}$/', $code)) {
+        http_response_code(404);
+        die(json_encode(['success' => false, 'message' => 'Application not found']));
+    }
+    $app_dir = realpath($apps_real . DIRECTORY_SEPARATOR . $code);
+    $apps_prefix = rtrim($apps_real, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+    if ($app_dir === false || strpos($app_dir, $apps_prefix) !== 0) {
+        http_response_code(404);
+        die(json_encode(['success' => false, 'message' => 'Application not found']));
+    }
+    $app_file = $app_dir . DIRECTORY_SEPARATOR . 'application.json';
+    if (!is_file($app_file) || !is_readable($app_file)) {
         http_response_code(404);
         die(json_encode(['success' => false, 'message' => 'Application not found']));
     }
     $application = json_decode(file_get_contents($app_file), true);
+    if (!is_array($application)) {
+        http_response_code(500);
+        die(json_encode(['success' => false, 'message' => 'Application data is invalid']));
+    }
     echo json_encode(['success' => true, 'application' => $application]);
     exit;
 }
@@ -38,9 +63,13 @@ $applications = [];
 if (is_dir($apps_base)) {
     foreach (scandir($apps_base) as $dir) {
         if ($dir === '.' || $dir === '..') continue;
-        $app_file = $apps_base . '/' . $dir . '/application.json';
-        if (!file_exists($app_file)) continue;
+        $app_dir = realpath($apps_real . DIRECTORY_SEPARATOR . $dir);
+        $apps_prefix = rtrim($apps_real, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        if ($app_dir === false || strpos($app_dir, $apps_prefix) !== 0) continue;
+        $app_file = $app_dir . DIRECTORY_SEPARATOR . 'application.json';
+        if (!is_file($app_file) || !is_readable($app_file)) continue;
         $app = json_decode(file_get_contents($app_file), true);
+        if (!is_array($app)) continue;
         // Build summary record
         $applications[] = [
             'adoption_code'   => $app['adoption_code'] ?? $dir,

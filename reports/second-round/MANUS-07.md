@@ -101,13 +101,15 @@ No protected file or directory was opened, copied, modified, or committed. The n
 - HTML structural probe on `adopt/adoptions/status/index.html` — no duplicate IDs; script opening/closing counts balanced.
 - `node --check /tmp/status-inline.js` (extracted inline script from the changed status page) — passed.
 - Task 3 assertions — passed: raw `application.json` is absent from the page script, the new endpoint is called by POST, exactly one `lastNameInput` exists, and the protected rate-limit path is present.
+- Complete first-party PHP lint suite — passed for **64** PHP files, excluding vendored libraries and archived `Old/` copies.
+- Isolated HTTP endpoint suite — passed for status lookup, public submission validation, upload staging, authenticated application reads, traversal rejection, approval/pet synchronization, deletion validation, and array-shaped hostile inputs.
 - `git diff --check` — passed.
 - Chromium browser smoke screenshots of the existing adoption status page — passed at **1280×900** and **390×844**; screenshots were temporary files outside the repository.
 - PHP built-in server live test — passed against an isolated synthetic fixture: valid code + `Lovelace` returned HTTP 200 and rendered the Pending dashboard; `Turing` returned the generic HTTP 404 response; malformed code returned the same generic response; the response did not include the fixture’s `home_address`.
 - Browser automation live test — passed through the forwarded PHP server: the visible form accepted both fields, rendered the synthetic application on success, and displayed the generic mismatch message for the wrong last name.
 - Rate-limit live test — passed: the configured `10` requests per `600` seconds produced HTTP 429 after the tenth accepted request, including failed lookups in the count; `flock()`-protected counter state was observed in the isolated runtime directory.
-- Portability fix discovered by live execution — removed the unconditional `mbstring` dependency with `function_exists()` fallbacks after PHP 8.3 initially returned a 500 on `mb_strlen()`.
-- Apache caveat — PHP’s built-in server does not process `.htaccess`; a direct request to the synthetic counter file returned HTTP 200 there. Apache/cPanel deployment must still verify that `rate-limit-data/.htaccess` returns 403/404 in the real web server.
+- Portability fixes — added `function_exists()` fallbacks for `mb_strlen()`, `mb_strtolower()`, and `mb_substr()` across status, public adoption submission, public upload staging, admin image upload, and admin video finalization. The original PHP 8.3 live 500 from missing `mbstring` is resolved.
+- Apache 2.4 configuration test — passed with `apache2 -t`; a real Apache request to a synthetic counter file under `rate-limit-data/` returned HTTP 403. The `.htaccess` rule supports both Apache 2.4 (`Require all denied`) and legacy 2.2 (`Deny from all`).
 
 ## Files changed and commit
 
@@ -117,17 +119,19 @@ The report and Task 3 implementation are changed:
 - `adopt/adoptions/status/index.html` — requires the second identifier and calls the hardened endpoint.
 - `adopt/adoptions/status/adoption-status-check.php` — new server-side lookup, rate limiter, path containment, and allow-list.
 - `adopt/adoptions/status/rate-limit-data/.htaccess` — denies direct access to runtime counters.
+- `adopt/apply/adoption-application.php` and `adopt/apply/upload-temp.php` — scalar-input and mbstring portability hardening.
+- `adopt/admin/get-applications.php`, `update-adoption.php`, `update-adoption8.php`, `delete-application.php`, `admin-upload-temp.php`, and `upload-video-chunk.php` — application path containment, scalar-input validation, corrupt-JSON handling, locked writes, and mbstring portability hardening.
 
 The implementation contains no credentials. The report and implementation commit messages begin `MANUS-07:`.
 
 ## Unresolved dependencies and handoff
 
 1. The fetched completion documents are now available as remote evidence, but their ZIP payloads are not in Git; the coordinator should retain that distinction in the final reconciliation.
-2. Task 3 needs only the production deployment check remaining: confirm PHP write ownership and confirm Apache/cPanel blocks direct counter access via `.htaccess`. The endpoint and browser flow have now been live-tested in the isolated PHP built-in server.
+2. Task 3 needs only the production deployment check remaining: confirm PHP write ownership on the live rate-limit directory. Apache denial and the endpoint/browser flows are verified in isolated live tests.
 3. The remaining status-subdomain, BNPL, uptime, email, and research implementations still need their described ZIP/source payloads or an explicit replacement implementation pass; the current repository does not contain those new files.
 4. Task 4 must establish the BNPL status contract before Tasks 5–7 and Task 6 can be safely implemented.
 5. Task 6 must exist before Task 9 and Task 12 can wire email notifications.
 6. Task 10 requires CEO-owned UptimeRobot account/API-key and scheduling decisions.
-7. The independently confirmed `update-adoption.php` security/concurrency findings should be reviewed by the cross-cutting security/quality account, not silently fixed in this report branch.
+7. The remaining cross-cutting approval-file findings outside the endpoint scope should still be reviewed by the security/quality account; the application endpoint path/concurrency findings covered by this pass are now fixed and tested.
 
 **Next handoff:** MANUS-11 final coordinator, with MANUS-09 for the independently verified shared approval-file findings.
