@@ -116,7 +116,7 @@ The same reconciliation checked the documented Task 10 page list. `signin/index.
 - **Branch:** `task/second-round-MANUS-10`
 - **Report path:** `reports/second-round/MANUS-10.md`
 - **Application code changes:** verified and delivered
-- **Final commit:** `6ccf0ab5ef7c2c5f89270411c98b990d98dadd04`
+- **Final application/integration commit:** `990cccfde8a5a52d4db4f99f3ac0d17a519816f2`
 - **Report status:** re-verified on 2026-11-05 after public-asset repair, exact 404 capture, a fresh 66-check regression sweep, and 16-route targeted rollout regression
 
 ## Current-main integration pass — 2026-11-05
@@ -126,4 +126,3 @@ After `origin/main` advanced through the MANUS-04 integration merge (`5814eab`),
 The expanded route inventory now covers **52 active HTML routes** from the merged tree. Playwright regression at 1440×900 and 390×844 completed **104 checks** with **0 HTTP failures, 0 uncaught page errors, 0 horizontal-overflow failures, and 0 non-protected failed requests**. The only 404s are the 52 protected per-pet `adoptions/pets/*/pet.json` records. The intentional legacy `/about.html` external adoption-policy redirect was tested with commit-level navigation handling and is not a local route failure.
 
 The pass also repaired current-main-only defects found during the expanded sweep: missing livestock/aquarium banner paths, the legacy application root logo path, an unavailable Cloudflare-only email decoder reference, the legacy application mobile column overflow, and the legacy apply variant step-indicator overflow. All active non-vendor public pages now carry both shared `/admin/chat-widget.js` and `/assets/js/accessibility-widget.js` loaders; admin/vendor/archived package content remains excluded where appropriate. JavaScript, PHP, HTML structure, diff hygiene, and protected-path staging checks all pass.
-
