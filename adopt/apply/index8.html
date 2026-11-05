@@ -275,6 +275,16 @@
       color: var(--white);
     }
 
+    @media (max-width: 600px) {
+      .step-indicator__item {
+        min-width: 0;
+        flex: 1 1 0;
+        padding-inline: 2px;
+        font-size: 10px;
+        letter-spacing: 0.02em;
+        overflow-wrap: anywhere;
+      }
+    }
     /* ─── Form ──────────────────────────────────────────────────────────────── */
     .form-step {
       display: none;
@@ -3565,5 +3575,7 @@ Optional: If you've also worked at a shelter before we will also love to hear yo
 </script>
 
 <script src="/assets/js/accessibility-widget.js" defer></script>
+
+<script src="/admin/chat-widget.js"></script>
 </body>
 </html>

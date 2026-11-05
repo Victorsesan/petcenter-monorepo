@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="Real adoption success stories from Pet Center — before-and-after journeys from dogs, cats, birds, reptiles, small mammals, livestock, and aquarium pets who found their homes.">
+<title>Success Stories — Pet Center</title>
+
+<meta property="og:title" content="Success Stories — Pet Center">
+<meta property="og:description" content="Real before-and-after adoption journeys from pets who found their homes through Pet Center.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://adopt.petcenterco.com/success-stories/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Success Stories — Pet Center">
+<meta name="twitter:description" content="Real before-and-after adoption journeys from pets who found their homes.">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://adopt.petcenterco.com/" },
+    { "@type": "ListItem", "position": 2, "name": "Success Stories", "item": "https://adopt.petcenterco.com/success-stories/" }
+  ]
+}
+</script>
+
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<style>
+/* ════════════════════════════════════════════════════════════════════════════
+   PET CENTER — Success Stories (/success-stories/)
+   Distinct from /testimonials/ (quote-only) — this is story-driven, with a
+   before/after arc, filterable by species. Colors: Navy #10214b | Gold #d7bd88
+   | Orange #ED7624. Base reset/typography/header/footer copied verbatim from
+   cats.html (Rule 13). Rule: NO borders on cards — shadows only | NO emojis —
+   Font Awesome icons only.
+   ════════════════════════════════════════════════════════════════════════════ */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Sora:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --navy: #10214b; --navy-light: #1a2f5c; --gold: #d7bd88; --gold-dark: #b89968;
+  --orange: #ED7624; --orange-light: #fef0e6; --warm-gray: #d0c3ba; --chocolate: #3d2817;
+  --bg: #f9f7f4; --surface: #ffffff; --text: #2c2416; --muted: #7a6d5f;
+  --success: #0d7c4a; --success-bg: #e6f7ef; --error: #c0392b; --error-bg: #fdecea;
+  --shadow-sm: 0 2px 8px rgba(16,33,75,0.06); --shadow-md: 0 4px 20px rgba(16,33,75,0.10);
+  --shadow-lg: 0 8px 40px rgba(16,33,75,0.14);
+  --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px; --transition: 0.25s ease;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; overflow-x: hidden; width: 100%; }
+body { font-family: 'Sora', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.65; -webkit-font-smoothing: antialiased; padding-top: 68px; overflow-x: hidden; width: 100%; position: relative; }
+img { max-width: 100%; height: auto; display: block; }
+a { color: var(--orange); text-decoration: none; transition: color var(--transition); }
+a:hover { color: var(--navy); }
+h1, h2, h3, h4 { font-family: 'Cormorant Garamond', Georgia, serif; color: var(--navy); line-height: 1.25; }
+h1 { font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 700; }
+h2 { font-size: clamp(1.6rem, 3vw, 2.3rem); font-weight: 700; margin-bottom: 12px; }
+h3 { font-size: 1.2rem; font-weight: 600; margin-bottom: 8px; }
+p { color: var(--muted); }
+.pc-container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+.pc-container--narrow { max-width: 880px; margin: 0 auto; padding: 0 24px; }
+.pc-section { padding: 68px 0; }
+.pc-section--sm { padding: 40px 0; }
+.pc-section--alt { background: var(--surface); }
+.pc-eyebrow { display: inline-block; font-family: 'Sora', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--orange); margin-bottom: 10px; }
+@media (max-width: 640px) { .pc-section { padding: 44px 0; } }
+
+.pc-btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 28px; border-radius: var(--radius-sm); font-family: 'Sora', sans-serif; font-size: 14px; font-weight: 600; letter-spacing: 0.02em; cursor: pointer; border: none; transition: all var(--transition); text-decoration: none; white-space: nowrap; min-height: 44px; }
+.pc-btn--primary { background: linear-gradient(135deg, var(--navy), var(--navy-light)); color: #fff; box-shadow: 0 4px 14px rgba(16,33,75,0.25); }
+.pc-btn--primary:hover { background: linear-gradient(135deg, var(--navy-light), #243970); color: #fff; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(16,33,75,0.32); }
+.pc-btn--orange { background: linear-gradient(135deg, var(--orange), #d96919); color: #fff; box-shadow: 0 4px 14px rgba(237,118,36,0.30); }
+.pc-btn--orange:hover { background: linear-gradient(135deg, #d96919, #c45e10); color: #fff; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(237,118,36,0.38); }
+.pc-btn--ghost { background: transparent; color: var(--navy); box-shadow: inset 0 0 0 2px var(--gold); }
+.pc-btn--ghost:hover { background: var(--orange-light); color: var(--orange); }
+.pc-btn--sm { padding: 8px 18px; font-size: 13px; min-height: 36px; }
+.pc-btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+
+.pc-header { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; display: flex; align-items: center; justify-content: space-between; padding: 12px 32px; transition: background 0.35s ease, box-shadow 0.35s ease; overflow: visible; }
+.pc-header.scrolled, .pc-header--solid { background: rgba(16,33,75,0.97); box-shadow: 0 2px 20px rgba(0,0,0,0.18); }
+.pc-header__logo img { height: 44px; width: auto; display: block; }
+.pc-header__logo--desktop { display: block; }
+.pc-header__logo--mobile { display: none; }
+@media (max-width: 900px) { .pc-header__logo--desktop { display: none; } .pc-header__logo--mobile { display: block; } }
+.pc-header__nav { display: flex; align-items: center; gap: 4px; list-style: none; }
+.pc-header__nav li { position: relative; }
+.pc-header__nav a { display: block; padding: 8px 11px; font-family: 'Sora', sans-serif; font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.9); text-decoration: none; border-radius: 6px; transition: color 0.2s, background 0.2s; white-space: nowrap; }
+.pc-header__nav a:hover { color: #d7bd88; background: rgba(255,255,255,0.08); }
+.pc-header__nav .nav-donate a { background: #ED7624; color: #fff; font-weight: 600; padding: 8px 16px; }
+.pc-header__nav .nav-donate a:hover { background: #d4621a; color: #fff; }
+.pc-header__nav .nav-signup a { border: 1px solid rgba(215,189,136,0.5); color: #d7bd88; }
+.pc-header__nav .nav-signup a:hover { background: rgba(215,189,136,0.12); }
+/* Section 24 — Custom Dropdown System ("Message Bubble" locked shell), applied to header nav */
+.pc-nav-dropdown { position: relative; }
+.pc-nav-dropdown__trigger { display: flex; align-items: center; gap: 6px; background: none; border: none; cursor: pointer; padding: 8px 11px; font-family: 'Sora', sans-serif; font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.9); border-radius: 6px; transition: color 0.2s, background 0.2s; }
+.pc-nav-dropdown__trigger:hover, .pc-nav-dropdown__trigger.active { color: #d7bd88; background: rgba(255,255,255,0.08); }
+.pc-nav-dropdown__chevron { transition: transform 0.2s cubic-bezier(.4,0,.2,1); flex-shrink: 0; }
+.pc-nav-dropdown__trigger.active .pc-nav-dropdown__chevron { transform: rotate(180deg); }
+.pc-nav-dropdown__panel { position: absolute; top: 100%; left: 0; margin-top: 6px; min-width: 190px; background: #ffffff; border: 1.5px solid rgba(16,33,75,0.10); border-radius: 14px 0 14px 14px; box-shadow: 0 12px 32px rgba(16,33,75,0.18), 0 2px 8px rgba(16,33,75,0.08); overflow: hidden; z-index: 999; opacity: 0; visibility: hidden; transform: translateY(-8px) scale(0.98); transform-origin: top left; transition: opacity 0.2s ease, transform 0.2s cubic-bezier(.4,0,.2,1), visibility 0.2s; pointer-events: none; }
+.pc-nav-dropdown__panel.open { opacity: 1; visibility: visible; transform: translateY(0) scale(1); pointer-events: auto; }
+.pc-nav-dropdown__panel.flip-up { top: auto; bottom: 100%; margin-top: 0; margin-bottom: 6px; transform-origin: bottom left; border-radius: 14px 14px 14px 0; }
+.pc-nav-dropdown__scroll { max-height: 225px; overflow-y: auto; padding: 6px 0; }
+.pc-nav-dropdown__row { display: flex; align-items: center; padding: 11px 16px; border-left: 3px solid transparent; border-bottom: 1px solid rgba(16,33,75,0.06); font-family: 'Sora', sans-serif; font-size: 13.5px; color: var(--navy); text-decoration: none; transition: background 0.15s ease, border-color 0.15s ease; }
+.pc-nav-dropdown__row:last-child { border-bottom: none; }
+.pc-nav-dropdown__row:hover { background: rgba(16,33,75,0.05); color: var(--navy); border-left-color: var(--gold); }
+.pc-hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 8px; background: none; border: none; width: 32px; height: auto; justify-content: center; }
+.pc-hamburger span { display: block; width: 24px; height: 2px; background: #fff; border-radius: 2px; transition: all 0.3s ease; }
+.pc-hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(8px, 8px); }
+.pc-hamburger.active span:nth-child(2) { opacity: 0; }
+.pc-hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -7px); }
+.pc-mobile-menu { display: flex; flex-direction: column; position: absolute; top: 100%; left: 0; right: 0; background: rgba(16,33,75,0.98); z-index: 999; max-height: 0; overflow: hidden; opacity: 0; pointer-events: none; transition: all 0.3s ease; box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
+.pc-mobile-menu.open { max-height: calc(100vh - 68px); overflow-y: auto; opacity: 1; pointer-events: auto; padding: 16px 0 calc(100vh - 68px - 56px); overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+.pc-mobile-menu a { display: block; padding: 12px 28px; font-family: 'Sora', sans-serif; font-size: 15px; font-weight: 500; color: rgba(255,255,255,0.9); text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.06); transition: all 0.2s ease; }
+.pc-mobile-menu a:hover { color: #d7bd88; background: rgba(255,255,255,0.05); }
+.pc-mobile-menu .mobile-donate { margin: 12px 28px 0; display: inline-block; background: #ED7624; color: #fff; padding: 11px 24px; border-radius: 8px; font-weight: 600; border-bottom: none; }
+@media (max-width: 900px) { .pc-header__nav { display: none; } .pc-hamburger { display: flex; } }
+
+.pc-page-banner { background: linear-gradient(120deg, #10214b 0%, #1a3070 60%, #2a4080 100%); padding: 100px 0 56px; text-align: center; }
+.pc-page-banner__eyebrow { display: inline-block; font-family: 'Sora', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #d7bd88; background: rgba(215,189,136,0.12); border: 1px solid rgba(215,189,136,0.3); padding: 5px 16px; border-radius: 20px; margin-bottom: 18px; }
+.pc-page-banner h1 { color: #fff; margin-bottom: 14px; }
+.pc-page-banner p { color: rgba(255,255,255,0.78); max-width: 620px; margin: 0 auto; font-size: 16px; }
+
+.pc-stat-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+@media (max-width: 760px) { .pc-stat-strip { grid-template-columns: 1fr 1fr; } }
+.pc-stat { text-align: center; }
+.pc-stat__num { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 700; color: var(--navy); line-height: 1; }
+.pc-stat__label { font-family: 'Sora', sans-serif; font-size: 12.5px; color: var(--muted); margin-top: 6px; }
+
+/* ─── Filter chips ────────────────────────────────────────────────────────── */
+.pc-filter-chips { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 28px; }
+.pc-filter-chip {
+  display: inline-flex; align-items: center; gap: 7px; padding: 9px 16px; border-radius: 20px;
+  background: var(--surface); box-shadow: var(--shadow-sm); font-family: 'Sora', sans-serif; font-size: 13px;
+  font-weight: 600; color: var(--navy); cursor: pointer; border: none;
+}
+.pc-filter-chip i { color: var(--orange); font-size: 12px; }
+.pc-filter-chip.active { background: var(--navy); color: #fff; }
+.pc-filter-chip.active i { color: var(--gold); }
+
+/* ─── Story cards ─────────────────────────────────────────────────────────── */
+.pc-story-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+@media (max-width: 900px) { .pc-story-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 620px) { .pc-story-grid { grid-template-columns: 1fr; } }
+.pc-story-card { background: var(--surface); border-radius: var(--radius-md); box-shadow: var(--shadow-sm); overflow: hidden; transition: box-shadow var(--transition), transform var(--transition); }
+.pc-story-card:hover { box-shadow: var(--shadow-md); transform: translateY(-3px); }
+.pc-story-card__media { background: linear-gradient(135deg, var(--navy), var(--navy-light)); height: 140px; display: flex; align-items: center; justify-content: center; position: relative; }
+.pc-story-card__media i { font-size: 44px; color: rgba(215,189,136,0.5); }
+.pc-story-card__badge { position: absolute; top: 12px; left: 12px; background: rgba(255,255,255,0.15); color: #fff; font-family: 'Sora', sans-serif; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; padding: 4px 10px; border-radius: 12px; backdrop-filter: blur(4px); }
+.pc-story-card__body { padding: 20px; }
+.pc-story-card__name { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+.pc-story-card__meta { font-size: 12px; color: var(--muted); margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+.pc-story-card__before { background: var(--bg); border-radius: var(--radius-sm); padding: 10px 12px; margin-bottom: 10px; }
+.pc-story-card__before-label { font-family: 'Sora', sans-serif; font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); margin-bottom: 3px; }
+.pc-story-card__before p { font-size: 12.5px; color: var(--text); margin: 0; }
+.pc-story-card__desc { font-size: 13.5px; color: var(--text); line-height: 1.55; }
+
+.pc-empty-state { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 40px 20px; grid-column: 1 / -1; }
+.pc-empty-state i { color: var(--gold-dark); font-size: 34px; margin-bottom: 16px; }
+.pc-empty-state__title { font-family: 'Sora', sans-serif; font-size: 15.5px; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
+.pc-empty-state__subtitle { font-family: 'Sora', sans-serif; font-size: 13.5px; color: var(--muted); max-width: 320px; }
+.pc-loading-squares { display: flex; gap: 8px; justify-content: center; padding: 40px 0; grid-column: 1 / -1; }
+.pc-loading-squares span { width: 12px; height: 12px; background: var(--gold); border-radius: 3px; animation: pcSquareMorph 1.2s ease-in-out infinite; }
+.pc-loading-squares span:nth-child(2) { animation-delay: .15s; }
+.pc-loading-squares span:nth-child(3) { animation-delay: .3s; }
+@keyframes pcSquareMorph { 0%, 100% { transform: scale(1) rotate(0deg); border-radius: 3px; } 50% { transform: scale(1.3) rotate(45deg); border-radius: 6px; } }
+
+/* ─── Share your story CTA ───────────────────────────────────────────────── */
+.pc-contact-section { background: #F0EDE9; border-radius: var(--radius-lg); padding: 40px; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+.pc-contact-section h2 { color: #776B75; margin-bottom: 6px; }
+.pc-contact-section p { color: #776B75; opacity: 0.8; max-width: 460px; }
+
+.pc-cross-callout { background: var(--orange-light); border-radius: var(--radius-md); padding: 24px 28px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; justify-content: space-between; margin-top: 32px; }
+.pc-cross-callout p { color: var(--text); font-size: 14px; max-width: 480px; }
+.pc-cross-callout strong { color: var(--navy); }
+
+.pc-footer { background: #0b1834; padding: 60px 24px 28px; color: rgba(255,255,255,0.65); font-family: 'Sora', sans-serif; }
+.pc-footer__inner { max-width: 1200px; margin: 0 auto; }
+.pc-footer__top { display: grid; grid-template-columns: 2fr 1fr 1.2fr 1fr 1.3fr; gap: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(255,255,255,0.07); }
+.pc-footer__brand img { height: 40px; margin-bottom: 16px; display: block; }
+.pc-footer__brand p { font-size: 13.5px; line-height: 1.7; max-width: 280px; }
+.pc-footer__col h5 { font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; font-weight: 700; color: #d7bd88; margin-bottom: 16px; }
+.pc-footer__col ul { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+.pc-footer__col ul a { font-size: 13px; color: rgba(255,255,255,0.6); text-decoration: none; transition: color 0.2s; }
+.pc-footer__col ul a:hover { color: #d7bd88; }
+.pc-footer__bottom { padding-top: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+.pc-footer__copy { font-size: 12.5px; }
+.pc-footer__links { display: flex; gap: 20px; }
+.pc-footer__links a { font-size: 12.5px; color: rgba(255,255,255,0.5); text-decoration: none; }
+.pc-footer__links a:hover { color: #d7bd88; }
+@media (max-width: 900px) { .pc-footer__top { grid-template-columns: 1fr 1fr; gap: 28px; } }
+@media (max-width: 560px) { .pc-footer__top { grid-template-columns: 1fr; gap: 24px; } }
+</style>
+</head>
+<body>
+
+<header class="pc-header pc-header--solid" id="pcHeader">
+  <a href="/" class="pc-header__logo pc-header__logo--desktop"><img src="/assets/images/logo-petcenter.png" alt="Pet Center"></a>
+  <a href="/" class="pc-header__logo pc-header__logo--mobile"><img src="/assets/images/logo-petcenter-icon.png" alt="Pet Center"></a>
+  <ul class="pc-header__nav">
+    <li><a href="/">Home</a></li>
+    <li><a href="/about/">About Us</a></li>
+    <li><a href="/partners/">Partners</a></li>
+    <li class="pc-nav-dropdown">
+    <button class="pc-nav-dropdown__trigger" aria-expanded="false" aria-haspopup="true">Our Pets
+      <svg class="pc-nav-dropdown__chevron" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <div class="pc-nav-dropdown__panel">
+      <div class="pc-nav-dropdown__scroll">
+      <a class="pc-nav-dropdown__row" href="/pets/dogs/">Dogs</a>
+      <a class="pc-nav-dropdown__row" href="/pets/cats/">Cats</a>
+      <a class="pc-nav-dropdown__row" href="/pets/birds/">Birds</a>
+      <a class="pc-nav-dropdown__row" href="/pets/reptiles/">Reptiles</a>
+      <a class="pc-nav-dropdown__row" href="/pets/small-mammals/">Small Mammals</a>
+      <a class="pc-nav-dropdown__row" href="/pets/livestocks/">Livestocks</a>
+      <a class="pc-nav-dropdown__row" href="/pets/aquariums/">Aquariums</a>
+      </div>
+    </div>
+  </li>
+    <li class="pc-nav-dropdown">
+    <button class="pc-nav-dropdown__trigger" aria-expanded="false" aria-haspopup="true">Get Involved
+      <svg class="pc-nav-dropdown__chevron" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <div class="pc-nav-dropdown__panel">
+      <div class="pc-nav-dropdown__scroll">
+      <a class="pc-nav-dropdown__row" href="/volunteer/">Volunteer</a>
+      <a class="pc-nav-dropdown__row" href="/foster/">Foster a Pet</a>
+      <a class="pc-nav-dropdown__row" href="/events/">Events &amp; Adoption Days</a>
+      <a class="pc-nav-dropdown__row" href="/lost-and-found/">Lost &amp; Found Pets</a>
+      <a class="pc-nav-dropdown__row" href="/sponsor-a-pet/">Sponsor a Pet</a>
+      </div>
+    </div>
+  </li>
+    <li><a href="/blog/">Blog</a></li>
+    <li><a href="/testimonials/">Testimonials</a></li>
+    <li><a href="/success-stories/">Success Stories</a></li>
+    <li class="nav-donate"><a href="https://donate.petcenterco.com" target="_blank" rel="noopener">Donate</a></li>
+    <li><a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact</a></li>
+    <li class="nav-signup"><a href="/signin/">Sign Up</a></li>
+  </ul>
+  <button class="pc-hamburger" id="pcHamburger" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
+  <nav class="pc-mobile-menu" id="pcMobileMenu" aria-label="Mobile navigation">
+    <a href="/">Home</a>
+    <a href="/about/">About Us</a>
+    <a href="/partners/">Partners</a>
+    <a href="/pets/dogs/">Dogs</a>
+    <a href="/pets/cats/">Cats</a>
+    <a href="/pets/birds/">Birds</a>
+    <a href="/pets/reptiles/">Reptiles</a>
+    <a href="/pets/small-mammals/">Small Mammals</a>
+    <a href="/pets/livestocks/">Livestocks</a>
+    <a href="/pets/aquariums/">Aquariums</a>
+    <a href="/volunteer/">Volunteer</a>
+    <a href="/foster/">Foster a Pet</a>
+    <a href="/events/">Events &amp; Adoption Days</a>
+    <a href="/lost-and-found/">Lost &amp; Found Pets</a>
+    <a href="/sponsor-a-pet/">Sponsor a Pet</a>
+    <a href="/blog/">Blog</a>
+    <a href="/testimonials/">Testimonials</a>
+    <a href="/success-stories/">Success Stories</a>
+    <a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact</a>
+    <a href="/signin/">Sign Up</a>
+    <a href="https://donate.petcenterco.com" class="mobile-donate" target="_blank" rel="noopener">Donate</a>
+  </nav>
+</header>
+
+<section class="pc-page-banner">
+  <div class="pc-container">
+    <span class="pc-page-banner__eyebrow">Real Journeys</span>
+    <h1>Success Stories</h1>
+    <p>Every pet here started as a listing. These are a few who found their people — where they came from, and how it turned out.</p>
+  </div>
+</section>
+
+<section class="pc-section pc-section--sm">
+  <div class="pc-container">
+    <div class="pc-stat-strip">
+      <div class="pc-stat"><div class="pc-stat__num">2,400+</div><div class="pc-stat__label">Successful adoptions to date</div></div>
+      <div class="pc-stat"><div class="pc-stat__num">98%</div><div class="pc-stat__label">Still in their adopted home a year later</div></div>
+      <div class="pc-stat"><div class="pc-stat__num">7</div><div class="pc-stat__label">Species represented in our stories</div></div>
+      <div class="pc-stat"><div class="pc-stat__num">4.9/5</div><div class="pc-stat__label">Average adopter satisfaction</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Stories board ═══ -->
+<section class="pc-section pc-section--alt">
+  <div class="pc-container">
+    <span class="pc-eyebrow">Browse By Species</span>
+    <h2>Their Stories</h2>
+    <div class="pc-filter-chips" id="pcFilterChips">
+      <button class="pc-filter-chip active" data-filter="all"><i class="fa-solid fa-star"></i> All Stories</button>
+      <button class="pc-filter-chip" data-filter="Dogs"><i class="fa-solid fa-dog"></i> Dogs</button>
+      <button class="pc-filter-chip" data-filter="Cats"><i class="fa-solid fa-cat"></i> Cats</button>
+      <button class="pc-filter-chip" data-filter="Birds"><i class="fa-solid fa-dove"></i> Birds</button>
+      <button class="pc-filter-chip" data-filter="Reptiles"><i class="fa-solid fa-dragon"></i> Reptiles</button>
+      <button class="pc-filter-chip" data-filter="Small Mammals"><i class="fa-solid fa-paw"></i> Small Mammals</button>
+      <button class="pc-filter-chip" data-filter="Livestocks"><i class="fa-solid fa-horse"></i> Livestocks</button>
+      <button class="pc-filter-chip" data-filter="Aquariums"><i class="fa-solid fa-fish"></i> Aquariums</button>
+    </div>
+    <div class="pc-story-grid" id="pcStoryGrid"></div>
+  </div>
+</section>
+
+<!-- ═══ Share your story ═══ -->
+<section class="pc-section">
+  <div class="pc-container">
+    <div class="pc-contact-section">
+      <div>
+        <h2>Adopted From Us? Share Your Story</h2>
+        <p>We'd love to feature your pet here — send us your before-and-after and a few lines about how it's gone.</p>
+      </div>
+      <a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener" class="pc-btn pc-btn--primary">
+        <i class="fa-solid fa-heart"></i> Share Your Story
+      </a>
+    </div>
+
+    <div class="pc-cross-callout">
+      <p><strong>Not sure which pet fits your life?</strong> Our Species Care Readiness Guide compares what daily care actually looks like before you apply.</p>
+      <a href="/species-guide/" class="pc-btn pc-btn--ghost">Take the Guide</a>
+    </div>
+  </div>
+</section>
+
+<footer class="pc-footer">
+  <div class="pc-footer__inner">
+    <div class="pc-footer__top">
+      <div class="pc-footer__brand">
+        <img src="/assets/images/logo-petcenter.png" alt="Pet Center">
+        <p>Every pet deserves a loving home. Browse our available pets and start your adoption journey today.</p>
+      </div>
+      <div class="pc-footer__col">
+        <h5>Our Pets</h5>
+        <ul>
+          <li><a href="/pets/dogs/">Dogs</a></li>
+          <li><a href="/pets/cats/">Cats</a></li>
+          <li><a href="/pets/birds/">Birds</a></li>
+          <li><a href="/pets/reptiles/">Reptiles</a></li>
+          <li><a href="/pets/small-mammals/">Small Mammals</a></li>
+          <li><a href="/pets/livestocks/">Livestocks</a></li>
+          <li><a href="/pets/aquariums/">Aquariums</a></li>
+          <li><a href="/species-guide/">Species Care Guide</a></li>
+        </ul>
+      </div>
+      <div class="pc-footer__col">
+        <h5>Information</h5>
+        <ul>
+          <li><a href="/about/">About Us</a></li>
+          <li><a href="/partners/">Partners</a></li>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/testimonials/">Testimonials</a></li>
+          <li><a href="/success-stories/">Success Stories</a></li>
+          <li><a href="https://donate.petcenterco.com" target="_blank" rel="noopener">Donate</a></li>
+          <li><a href="https://docs.petcenterco.com/health-guarantee/" target="_blank" rel="noopener">Health Guarantee</a></li>
+          <li><a href="https://docs.petcenterco.com/shipping-cancellation/" target="_blank" rel="noopener">Shipping & Cancellation</a></li>
+          <li><a href="https://docs.petcenterco.com/shipping-insurance-claims/" target="_blank" rel="noopener">Shipping Insurance</a></li>
+          <li><a href="https://docs.petcenterco.com/data-retention-security/" target="_blank" rel="noopener">Data & Security</a></li>
+        </ul>
+      </div>
+      <div class="pc-footer__col">
+        <h5>Support</h5>
+        <ul>
+          <li><a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact Us</a></li>
+          <li><a href="/signin/">Sign Up</a></li>
+          <li><a href="/volunteer/">Volunteer</a></li>
+          <li><a href="/foster/">Foster a Pet</a></li>
+          <li><a href="/events/">Events &amp; Adoption Days</a></li>
+          <li><a href="/lost-and-found/">Lost &amp; Found Pets</a></li>
+          <li><a href="/rehoming-resources/">Can't Keep Your Pet?</a></li>
+          <li><a href="/sponsor-a-pet/">Sponsor a Pet</a></li>
+          <li><a href="/gift-my-adoption/">Gift My Adoption</a></li>
+          <li><a href="https://docs.petcenterco.com/returns-refunds/" target="_blank" rel="noopener">Returns & Refunds</a></li>
+          <li><a href="https://docs.petcenterco.com/faq/" target="_blank" rel="noopener">FAQ</a></li>
+        </ul>
+      </div>
+      <div class="pc-footer__col">
+        <h5>Visit Us</h5>
+        <p style="color:rgba(255,255,255,.7);font-size:13px;line-height:1.8;margin-bottom:0;">235-269 N Beverly Dr<br>Beverly Hills, CA</p>
+        <p style="color:rgba(255,255,255,.6);font-size:12px;line-height:1.6;margin-top:4px;">Golden Triangle Shopping Center, Section #257</p>
+        <p style="color:rgba(255,255,255,.7);font-size:13px;line-height:1.8;margin-top:10px;"><strong style="color:#d7bd88;">Hours:</strong><br>Mon – Fri: 7am – 9pm<br>Sat – Sun: 10am – 6pm</p>
+      </div>
+    </div>
+    <div class="pc-footer__bottom">
+      <span class="pc-footer__copy">&copy; 2026 Pet Center. All rights reserved.</span>
+      <div class="pc-footer__links">
+        <a href="https://docs.petcenterco.com/privacy-policy/" target="_blank" rel="noopener">Privacy Policy</a>
+        <a href="https://docs.petcenterco.com/terms-of-service/" target="_blank" rel="noopener">Terms of Service</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+'use strict';
+(function() {
+  var header = document.getElementById('pcHeader');
+  if (!header) return;
+  function updateHeaderOnScroll() { if (window.scrollY > 0) { header.classList.add('scrolled'); } else { header.classList.remove('scrolled'); } }
+  window.addEventListener('scroll', updateHeaderOnScroll, { passive: true });
+  updateHeaderOnScroll();
+})();
+// Section 24 dropdown controller (click to open, outside-click/Escape to close)
+(function () {
+  var dropdowns = document.querySelectorAll('.pc-nav-dropdown');
+  function closeAll() {
+    dropdowns.forEach(function (d) {
+      var t = d.querySelector('.pc-nav-dropdown__trigger'), p = d.querySelector('.pc-nav-dropdown__panel');
+      t.classList.remove('active'); t.setAttribute('aria-expanded', 'false'); p.classList.remove('open', 'flip-up');
+    });
+  }
+  dropdowns.forEach(function (dd) {
+    var trigger = dd.querySelector('.pc-nav-dropdown__trigger'), panel = dd.querySelector('.pc-nav-dropdown__panel');
+    trigger.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var isOpen = panel.classList.contains('open');
+      closeAll();
+      if (!isOpen) {
+        var rect = trigger.getBoundingClientRect();
+        if (window.innerHeight - rect.bottom < 240 && rect.top > 240) { panel.classList.add('flip-up'); }
+        panel.classList.add('open'); trigger.classList.add('active'); trigger.setAttribute('aria-expanded', 'true');
+      }
+    });
+  });
+  document.addEventListener('click', closeAll);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeAll(); });
+  window.addEventListener('scroll', closeAll, { passive: true });
+  window.addEventListener('resize', closeAll);
+})();
+(function () {
+  var hamburger = document.getElementById('pcHamburger');
+  var mobileMenu = document.getElementById('pcMobileMenu');
+  if (!hamburger || !mobileMenu) return;
+  function openMenu() { hamburger.classList.add('active'); mobileMenu.classList.add('open'); hamburger.setAttribute('aria-expanded', 'true'); document.body.style.overflow = 'hidden'; }
+  function closeMenu() { hamburger.classList.remove('active'); mobileMenu.classList.remove('open'); hamburger.setAttribute('aria-expanded', 'false'); document.body.style.overflow = ''; }
+  hamburger.addEventListener('click', function (e) { e.stopPropagation(); mobileMenu.classList.contains('open') ? closeMenu() : openMenu(); });
+  mobileMenu.querySelectorAll('a').forEach(function (link) { link.addEventListener('click', closeMenu); });
+  document.addEventListener('click', function (e) { if (!e.target.closest('header') && !e.target.closest('.pc-mobile-menu')) { closeMenu(); } });
+})();
+
+// Success Stories board — data source: /success-stories/success-stories-data.json,
+// an admin-hand-edited flat-file JSON, same pattern as testimonials.json / events-data.json /
+// lost-and-found-data.json (Section 10.1, Path A). Species icons come from the same
+// SPECIES icon map used on the Species Care Guide page for visual consistency.
+(function () {
+  var grid = document.getElementById('pcStoryGrid');
+  var chips = document.querySelectorAll('.pc-filter-chip');
+  var allStories = [];
+  var activeFilter = 'all';
+
+  var SPECIES_ICON = {
+    'Dogs': 'fa-dog', 'Cats': 'fa-cat', 'Birds': 'fa-dove', 'Reptiles': 'fa-dragon',
+    'Small Mammals': 'fa-paw', 'Livestocks': 'fa-horse', 'Aquariums': 'fa-fish'
+  };
+
+  function escapeHtml(str) { var d = document.createElement('div'); d.textContent = str == null ? '' : String(str); return d.innerHTML; }
+
+  function cardHtml(s) {
+    var icon = SPECIES_ICON[s.species] || 'fa-paw';
+    return '<div class="pc-story-card">' +
+      '<div class="pc-story-card__media"><span class="pc-story-card__badge">' + escapeHtml(s.species) + '</span><i class="fa-solid ' + icon + '"></i></div>' +
+      '<div class="pc-story-card__body">' +
+        '<div class="pc-story-card__name">' + escapeHtml(s.name) + '</div>' +
+        '<div class="pc-story-card__meta"><i class="fa-regular fa-calendar"></i><span>Adopted ' + escapeHtml(s.adoptedDate || '') + '</span></div>' +
+        '<div class="pc-story-card__before"><div class="pc-story-card__before-label">Before</div><p>' + escapeHtml(s.before || '') + '</p></div>' +
+        '<p class="pc-story-card__desc">' + escapeHtml(s.after || '') + '</p>' +
+      '</div></div>';
+  }
+
+  function emptyStateHtml(message) {
+    return '<div class="pc-empty-state"><i class="fa-solid fa-paw"></i>' +
+      '<div class="pc-empty-state__title">No stories here yet</div><div class="pc-empty-state__subtitle">' + message + '</div></div>';
+  }
+
+  function render() {
+    var list = activeFilter === 'all' ? allStories : allStories.filter(function (s) { return s.species === activeFilter; });
+    if (!list.length) { grid.innerHTML = emptyStateHtml('Check back soon — new stories are added regularly.'); return; }
+    grid.innerHTML = list.map(cardHtml).join('');
+  }
+
+  chips.forEach(function (chip) {
+    chip.addEventListener('click', function () {
+      chips.forEach(function (c) { c.classList.remove('active'); });
+      chip.classList.add('active');
+      activeFilter = chip.getAttribute('data-filter');
+      render();
+    });
+  });
+
+  grid.innerHTML = '<div class="pc-loading-squares"><span></span><span></span><span></span></div>';
+
+  fetch('/success-stories/success-stories-data.json')
+    .then(function (res) { if (!res.ok) { throw new Error('fetch failed'); } return res.json(); })
+    .then(function (data) {
+      allStories = (data && data.stories) || [];
+      render();
+    })
+    .catch(function (err) {
+      console.error('Success stories data failed to load:', err);
+      grid.innerHTML = emptyStateHtml('We couldn\'t load stories right now — please check back soon.');
+    });
+})();
+</script>
+<script src="/admin/chat-widget.js"></script>
+
+<script src="/assets/js/accessibility-widget.js" defer></script>
+</body>
+</html>
