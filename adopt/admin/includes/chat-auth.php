@@ -267,6 +267,41 @@ function chatAuthEnsure($principalId) {
     return chatAuthGet($principalId);
 }
 
+/* TASK-5 SECURITY START — HIBP k-anonymity screening. Only the first five
+   SHA-1 characters leave this server; an unavailable breach service fails
+   open, while the local common-password list and length policy fail closed. */
+function chatAuthPasswordBreached($secret) {
+    $digest = strtoupper(sha1((string)$secret));
+    $prefix = substr($digest, 0, 5);
+    $suffix = substr($digest, 5);
+    if (function_exists('curl_init')) {
+        $ch = curl_init('https://api.pwnedpasswords.com/range/' . $prefix);
+        curl_setopt_array($ch, [
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_CONNECTTIMEOUT => 2,
+            CURLOPT_TIMEOUT => 3,
+            CURLOPT_HTTPHEADER => ['Add-Padding: true', 'User-Agent: PetCenter-Chat-Password-Check'],
+        ]);
+        $body = curl_exec($ch);
+        $status = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+        if ($status !== 200 || !is_string($body)) return false;
+    } else {
+        $context = stream_context_create(['http' => [
+            'method' => 'GET', 'timeout' => 3,
+            'header' => "Add-Padding: true\r\nUser-Agent: PetCenter-Chat-Password-Check\r\n",
+        ]]);
+        $body = @file_get_contents('https://api.pwnedpasswords.com/range/' . $prefix, false, $context);
+        if (!is_string($body)) return false;
+    }
+    foreach (preg_split('/\r?\n/', $body) as $line) {
+        [$remoteSuffix] = array_pad(explode(':', trim($line), 2), 1, '');
+        if (hash_equals(strtoupper(trim($remoteSuffix)), $suffix)) return true;
+    }
+    return false;
+}
+/* TASK-5 SECURITY END */
+
 // Applies the settled password/PIN policy without imposing composition rules.
 function chatAuthValidateSecret($tier, $secret) {
     $secret = (string)$secret;
@@ -288,6 +323,9 @@ function chatAuthValidateSecret($tier, $secret) {
         ];
         if (in_array(mb_strtolower($secret, 'UTF-8'), $blocked, true)) {
             return 'Choose a password that is not common or previously exposed.';
+        }
+        if (chatAuthPasswordBreached($secret)) {
+            return 'Choose a password that has not appeared in a known breach.';
         }
         return null;
     }

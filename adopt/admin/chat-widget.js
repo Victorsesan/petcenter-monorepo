@@ -166,6 +166,23 @@
   }
   /* TASK-5 END */
 
+  /* TASK-5 SECURITY START — informational meter uses length and character
+     diversity, never composition requirements. The server remains
+     authoritative and performs the breach-range check on save. */
+  function passwordStrengthScore(value) {
+    const text = String(value || '');
+    const common = ['password','password123','123456789012','1234567890','qwertyuiop12','letmein12345','welcome12345','iloveyou1234','adminadmin12','petcenter123'];
+    if (!text) return { score: 0, label: '' };
+    if (common.includes(text.toLowerCase())) return { score: 1, label: 'Common password — choose a different one.' };
+    let score = text.length >= 12 ? 2 : 1;
+    if (text.length >= 16) score++;
+    if (/[A-Z]/.test(text) && /[a-z]/.test(text)) score++;
+    if (/\d/.test(text) || /[^A-Za-z0-9]/.test(text)) score++;
+    score = Math.min(4, score);
+    return { score, label: ['Too short', 'Weak', 'Fair', 'Good', 'Strong'][score] };
+  }
+  /* TASK-5 SECURITY END */
+
   /* TASK-3 START — shared PIN/password gate contract. */
   function AuthGate({ tier, principalId, email, onVerifySuccess, onVerifyFail }) {
     const wrap = el('div', { class: 'pcw-auth-gate' });
@@ -307,6 +324,15 @@
   .pcw-protection-form label { display: block; margin: 0 0 5px; color: rgba(255,255,255,0.72); font-size: 11px; }
   .pcw-protection-form input[type=password], .pcw-protection-form input[type=number] { box-sizing: border-box; width: 100%; border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; background: rgba(255,255,255,0.08); color: #fff; padding: 9px; font: 12px 'Sora', system-ui, sans-serif; }
   .pcw-protection-form input:focus { outline: 2px solid #ED7624; outline-offset: 1px; }
+  .pcw-password-strength-track { height: 5px; border-radius: 3px; background: rgba(255,255,255,0.12); overflow: hidden; margin: 6px 0 3px; }
+  .pcw-password-strength-fill { height: 100%; width: 0; border-radius: 3px; transition: width 0.25s ease, background-color 0.25s ease; }
+  .pcw-password-strength-fill.score-0, .pcw-password-strength-fill.score-1 { width: 25%; background: #ef4444; }
+  .pcw-password-strength-fill.score-2 { width: 50%; background: #ED7624; }
+  .pcw-password-strength-fill.score-3 { width: 75%; background: #d7bd88; }
+  .pcw-password-strength-fill.score-4 { width: 100%; background: #10b981; }
+  .pcw-password-strength-label { display: block; min-height: 14px; color: rgba(255,255,255,0.58); font-size: 10px; }
+  .pcw-protection-warning { margin: 7px 0 0; padding: 7px 8px; border-left: 2px solid #ED7624; color: #7a6d5f; background: #fff8f2; font-size: 11px; line-height: 1.4; }
+  .pcw-protection-warning[hidden] { display: none; }
   .pcw-protection-check { display: flex; align-items: center; gap: 7px; margin: 9px 0; color: rgba(255,255,255,0.72); font-size: 11px; }
   .pcw-protection-message { min-height: 16px; margin-top: 8px; color: #fca5a5; font-size: 11px; }
   .pcw-protection-message.ok { color: #86efac; }
@@ -1117,8 +1143,15 @@
     const secretForm = el('div', { class: 'pcw-protection-form' });
     const secretLabel = el('label', {}, 'New secret');
     const secretInput = el('input', { type: 'password', autocomplete: 'new-password' });
+    const strengthTrack = el('div', { class: 'pcw-password-strength-track' }, el('div', { class: 'pcw-password-strength-fill' }));
+    const strengthLabel = el('span', { class: 'pcw-password-strength-label' });
+    secretInput.addEventListener('input', () => {
+      const result = selectedTier === 'password' ? passwordStrengthScore(secretInput.value) : { score: 0, label: '' };
+      strengthTrack.firstChild.className = 'pcw-password-strength-fill' + (result.label ? ' score-' + result.score : '');
+      strengthLabel.textContent = result.label;
+    });
     const secretSubmit = el('button', { type: 'button', class: 'pcw-protection-btn' }, 'Save protection');
-    secretForm.appendChild(secretLabel); secretForm.appendChild(secretInput); secretForm.appendChild(secretSubmit);
+    secretForm.appendChild(secretLabel); secretForm.appendChild(secretInput); secretForm.appendChild(strengthTrack); secretForm.appendChild(strengthLabel); secretForm.appendChild(secretSubmit);
 
     const lockForm = el('div', { class: 'pcw-protection-form' });
     const delayLabel = el('label', {}, 'Lock after closing (seconds)');
@@ -1131,6 +1164,7 @@
     function setMessage(text, ok) { message.textContent = text; message.classList.toggle('ok', !!ok); }
     function openSecretForm(tier) {
       selectedTier = tier; secretInput.value = ''; secretInput.inputMode = tier === 'pin' ? 'numeric' : 'text'; secretInput.maxLength = tier === 'pin' ? 6 : 1024;
+      strengthTrack.firstChild.className = 'pcw-password-strength-fill'; strengthLabel.textContent = '';
       secretLabel.textContent = tier === 'pin' ? 'New 6-digit PIN' : 'New password (at least 12 characters)';
       secretForm.classList.add('open'); lockForm.classList.remove('open'); secretInput.focus();
     }
@@ -1475,7 +1509,25 @@
       el('option', { value: 'password' }, 'Protect with a password'),
     ]);
     const authSecretInput = el('input', { type: 'password', name: 'authSecret', minlength: '6', maxlength: '1024', placeholder: 'Set a PIN or password (optional)' });
-    const protectionField = el('div', { class: 'pcw-field' }, [el('label', {}, 'Protect this chat (optional)'), authTierInput, authSecretInput]);
+    const prechatStrengthTrack = el('div', { class: 'pcw-password-strength-track' }, el('div', { class: 'pcw-password-strength-fill' }));
+    const prechatStrengthLabel = el('span', { class: 'pcw-password-strength-label' });
+    authSecretInput.addEventListener('input', () => {
+      const result = authTierInput.value === 'password' ? passwordStrengthScore(authSecretInput.value) : { score: 0, label: '' };
+      prechatStrengthTrack.firstChild.className = 'pcw-password-strength-fill' + (result.label ? ' score-' + result.score : '');
+      prechatStrengthLabel.textContent = result.label;
+    });
+    const noProtectionAck = el('input', { type: 'checkbox', name: 'noProtectionAck' });
+    const noProtectionLabel = el('label', { class: 'pcw-check-row' }, [noProtectionAck, el('span', {}, 'I understand this chat may be reopened with the email or chat ID.')]);
+    const noProtectionWarning = el('div', { class: 'pcw-protection-warning' }, 'If this chat does not already have a PIN or password, anyone who has your email or chat ID could reopen it.');
+    const protectionField = el('div', { class: 'pcw-field' }, [el('label', {}, 'Protect this chat (optional)'), authTierInput, authSecretInput, prechatStrengthTrack, prechatStrengthLabel, noProtectionWarning, noProtectionLabel]);
+    function updateProtectionWarning() {
+      const unprotected = authTierInput.value === '';
+      noProtectionWarning.hidden = !unprotected;
+      noProtectionLabel.hidden = !unprotected;
+      if (!unprotected) noProtectionAck.checked = false;
+    }
+    authTierInput.addEventListener('change', updateProtectionWarning);
+    updateProtectionWarning();
     /* TASK-3 END */
     // TASK-9 START
     // TASK-9b: phone number field, optional, added to the pre-chat gate.
@@ -1578,6 +1630,11 @@
         return;
       }
       dropdownTrigger.classList.remove('pcw-field-error');
+      if (authTierInput.value === '' && !noProtectionAck.checked) {
+        errorMsg.textContent = 'Please acknowledge the risk of leaving this chat without a PIN or password.';
+        errorMsg.classList.add('show');
+        return;
+      }
 
       submitBtn.disabled = true;
       submitBtn.textContent = 'Starting...';

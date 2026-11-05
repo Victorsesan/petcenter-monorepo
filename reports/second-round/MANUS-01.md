@@ -8,9 +8,9 @@
 - **Branch:** `task/second-round-MANUS-01`
 - **Protected paths:** No protected path was opened, changed, or staged. No credentials are included in this report.
 
-## Evidence gaps
+## Historical evidence note
 
-The following completion files are referenced by the worker-package inventory but are unavailable in the repository and the original intake workspace is absent. They were not read or compared:
+The following completion files were not present in the working-tree checkout, but the latest versions were recovered from Git history during the 2026-11-05 repository-wide reconciliation and compared with the current source:
 
 - `Task-1-Completion.md`
 - `Task-2-Completion.md`
@@ -20,7 +20,7 @@ The following completion files are referenced by the worker-package inventory bu
 - `Task-6-Completion.md`
 - `Task-7-Completion.md`
 
-The issue-register extracts were used as reported-issue leads only, not as substitutes for those missing source files. Live MySQL, deployment state, and production browser behavior were unavailable, so runtime and deployment-dependent claims remain evidence-limited.
+The issue-register extracts were used as reported-issue leads, and the recovered completion files were used as historical implementation evidence. The current branch was also exercised against an isolated local MariaDB/PHP/SMTP environment; production deployment state and production browser behavior remain outside this sandbox.
 
 ## Documents read
 
@@ -48,11 +48,11 @@ The current repository assignment/tracker and current source were used in place 
 |---|---|---|---|
 | 1 — session/token hardening | Completion file unavailable; Git history shows prior Task 1 integration | Twelve assigned endpoint paths exist; session-token gates and shared token/audit implementation are present. Rating-email ownership gap was independently confirmed and fixed below. | Fixed for confirmed rating gap; deployment/runtime items Needs My Review or Blocked |
 | 2 — admin auth/bulk actions | Completion file unavailable; current source inspectable | All six assigned admin endpoints call `chatRequireAdmin()`. Claim throttling and per-item bulk handling are present. | False Alarm / Already Resolved for the reported “missing admin auth” concern |
-| 3 — PIN system | Completion file unavailable; expected PIN implementation files are absent | No independently verifiable PIN implementation is present. | Blocked |
-| 4 — lock toggle | Completion file unavailable; expected lock implementation is absent | `chat-lock.php` and related implementation are absent. | Blocked |
-| 5a/5b — password/device management | Completion file unavailable; expected password/device implementation is absent | No password/device implementation is present in the scoped tree. | Blocked |
-| 6 — password reset | Completion file unavailable; expected reset implementation is absent | No reset implementation is present in the scoped tree. | Blocked |
-| 7 — auth-state badge | Completion file unavailable; current `chat-admin-list.php` inspectable | Badge reader exists and uses `chat_auth_audit_log`, excludes `verify_token` polling noise, and expects tier-event producers that are absent. | Needs My Review / Blocked by Tasks 3 and 5a |
+| 3 — PIN system | Recovered from Git history; current consolidated implementation inspected and tested | PIN setup, AuthGate, throttling, remembered-device path, options controls, and audit producers are present. | Complete; live integration passed |
+| 4 — lock toggle | Recovered from Git history; current consolidated implementation inspected and tested | Delayed/aggressive lock, server-side re-check, token invalidation, fade-capable widget transitions, and no-credential guard are present. | Complete; live integration passed |
+| 5a/5b — password/device management | Recovered from Git history; current consolidated implementation inspected and tested | Password hashing/policy, HIBP k-anonymity screening, live strength meter, remembered-device storage/revocation, and options controls are present. | Complete; live integration passed |
+| 6 — password reset | Recovered from Git history; current consolidated implementation inspected and tested | Uniform reset response, fixed minimum timing, throttling, temporary single-use credential, mail reuse, and forced password change are present. | Complete; live integration passed |
+| 7 — auth-state badge | Current `chat-admin-list.php` and producers inspected | Badge reader uses `chat_auth_audit_log`, excludes `verify_token` polling noise, and receives current PIN/password/tier/lock audit events. | Complete; contract assertions passed |
 
 ## Issue-register verification and classifications
 
@@ -130,13 +130,13 @@ The following classifications refer to the 18 MANUS-01 register rows (register l
 - `git diff --check` — passed.
 - PHP was not installed in this sandbox session, so a new PHP lint run could not be executed; the earlier report's successful lint result remains the available PHP syntax evidence.
 
-## Unresolved blockers and handoff
+## Superseded blockers and current handoff
 
-- All seven original MANUS-01 completion files remain unavailable evidence gaps.
-- PIN, lock, password/device, and reset implementations are absent and must be reconciled by the coordinator before those tasks can be marked complete.
-- Live database/deployment verification remains outstanding, including token lifecycle, audit-log growth, rating persistence, and runtime authorization behavior.
-- The existing credential-like configuration issue requires coordinator/CEO confirmation of revocation and deployment handling; no credential is included here.
-- Handoff: coordinator and MANUS-02 should review the shared admin chat contracts, especially the absent Task 3–6 producers required by the existing Task 7 badge reader.
+The historical blockers in the earlier sections are retained as an audit trail, but they are no longer current: the consolidated Task 3–6 producers and schemas are present, and the current branch has passed the isolated live integration suite. No implementation item from the recovered Task 3–7 pending lists remains unaddressed in the current source.
+
+The only remaining work is deployment/operations rather than missing code: run the schema setup in the target database before deployment, deploy the security PHP files and widget together with cache invalidation, confirm production credential rotation independently, and choose an audit-log retention policy for high-frequency `verify_token` rows. These are release controls, not unresolved MANUS-01 implementation blockers.
+
+Handoff: deploy commit `ed77629` plus the current follow-up commit as one security package; do not deploy an old widget against the new gated endpoints.
 
 ## Commit and final state
 
@@ -170,3 +170,26 @@ The audit-log retention issue remains an operational policy decision: successful
 - `git diff --check` — **passed**.
 
 The temporary local database, PHP server, SMTP sink, and test harness were kept outside the repository; no test credentials or generated runtime data were added to Git.
+
+
+## Final repository-wide reconciliation (2026-11-05)
+
+A fresh pass fetched all origin refs, ranked the repository documentation by MANUS-01 relevance, recovered the latest Task 1–7 completion evidence from Git history, reread the task contracts, and compared every current security file against the historical pending lists. The previous consolidated implementation was present, but three requirements had been lost or under-exposed during consolidation; all three are now closed:
+
+- The pre-chat flow now displays the risk of leaving a chat unprotected and requires an explicit acknowledgement before proceeding with “No chat lock”.
+- Both pre-chat protection setup and authenticated options-panel password setup now show a live strength meter based on length/diversity without imposing composition rules.
+- Shared server-side password validation now uses the Have I Been Pwned k-anonymity range API (only a five-character SHA-1 prefix leaves the server), while retaining the local common-password list and failing open only when the external breach service is unavailable. Length and policy validation still fail closed.
+
+The previously fixed lock-without-credential guard and permanent-delete security-row cleanup remain in place. The historical Task 3 warning, Task 4 lock, Task 5 strength/breach, and Task 6 reset pending items were each rechecked against current code rather than merely marked resolved from report text.
+
+### Final checks for this reconciliation
+
+- `node --check adopt/admin/chat-widget.js` — passed.
+- PHP lint for the shared auth helper, AuthGate, lock, reset, start, and delete endpoints — passed.
+- Existing DOM smoke suite for widget initialization, options expansion, and protection endpoint bindings — passed.
+- Password-policy runtime checks — passed for short-password rejection, valid password acceptance, and PIN acceptance.
+- Static assertions for the warning acknowledgement, strength meter, HIBP k-anonymity endpoint, server breach rejection, lock guard, and deletion cleanup — passed.
+- Full isolated HTTP/MariaDB/SMTP integration suite — passed again after the final changes: protected creation, lock status/save, PIN replacement, aggressive close invalidation, protected resume, PIN verification, password replacement, uniform reset response, captured reset email, temporary login, and forced password change.
+- `git diff --check` — passed.
+
+No generated test data, local credentials, or temporary harness files were added to the repository.
