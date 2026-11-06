@@ -55,6 +55,20 @@ $email     = trim($input['email'] ?? '');
 $reason    = trim($input['reason'] ?? '');
 $chatId    = trim($input['chatId'] ?? '');
 $petContext = $input['petContext'] ?? null; // { name, petId, thumbUrl, pageUrl } or null, Section 7b
+$initialTier = trim((string)($input['authTier'] ?? ''));
+$initialSecret = (string)($input['authSecret'] ?? '');
+$deviceToken = (string)($input['deviceToken'] ?? '');
+
+/* TASK-3 START — centralize the resume decision so both lookup paths have the
+   same PIN/password gate, remembered-device behavior, and fresh-token rule. */
+function chatStartAuthPayload($thread, $deviceToken) {
+    $auth = chatAuthEnsure($thread['chat_id']);
+    if ($auth['auth_tier'] !== 'none' && !chatAuthTrustedDevice($thread['chat_id'], $deviceToken)) {
+        return ['authRequired'=>true, 'authTier'=>$auth['auth_tier'], 'sessionToken'=>null];
+    }
+    return ['authRequired'=>false, 'authTier'=>$auth['auth_tier'], 'sessionToken'=>issue_token($thread['chat_id'])];
+}
+/* TASK-3 END */
 
 // ── Validation ───────────────────────────────────────────────────────────
 if ($fullName === '' || mb_strlen($fullName) > 255) {
@@ -66,6 +80,14 @@ if (!chatValidEmail($email)) {
 if (!chatValidReason($reason)) {
     chatRespond(['success' => false, 'error' => 'Please select a reason for contacting us.']);
 }
+/* TASK-3 SECURITY START — validate the optional initial secret before the
+   thread insert. This prevents a bad PIN/password from creating an orphan
+   conversation that can never complete its requested setup. */
+if ($initialTier !== '') {
+    $initialSecretError = chatAuthValidateSecret($initialTier, $initialSecret);
+    if ($initialSecretError !== null) chatRespond(['success' => false, 'error' => $initialSecretError], 422);
+}
+/* TASK-3 SECURITY END */
 
 // Basic rate limiting by IP — prevents trivial flood of new threads
 $ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
@@ -103,14 +125,11 @@ if ($chatId !== '') {
             }
         }
 
-        /* TASK-1 START — issue a fresh session token on every successful
-           resume (Path 1: explicit chat ID). A fresh token is issued on
-           each resume rather than trying to reuse/return a prior one —
-           simpler, and it means a customer resuming on a new device/browser
-           naturally gets their own valid token without needing to reason
-           about whether an old one is still around. */
-        $sessionToken = issue_token($thread['chat_id']);
-        /* TASK-1 END */
+        /* TASK-3 START — existing protected threads must complete AuthGate
+           before any readable session token is issued. */
+        $authPayload = chatStartAuthPayload($thread, $deviceToken);
+        $sessionToken = $authPayload['sessionToken'];
+        /* TASK-3 END */
 
         chatRespond([
             'success'      => true,
@@ -119,6 +138,8 @@ if ($chatId !== '') {
             'status'       => $thread['status'],
             'fullName'     => $thread['full_name'],
             'email'        => $thread['email'],
+            'authRequired' => $authPayload['authRequired'],
+            'authTier'     => $authPayload['authTier'],
             /* TASK-1 START — sessionToken in the response payload */
             'sessionToken' => $sessionToken,
             /* TASK-1 END */
@@ -157,10 +178,10 @@ if ($existing) {
         }
     }
 
-    /* TASK-1 START — issue a fresh session token on every successful
-       resume (Path 2: email match). Same reasoning as Path 1 above. */
-    $sessionToken = issue_token($existing['chat_id']);
-    /* TASK-1 END */
+    /* TASK-3 START — apply the same gate to email-based resume. */
+    $authPayload = chatStartAuthPayload($existing, $deviceToken);
+    $sessionToken = $authPayload['sessionToken'];
+    /* TASK-3 END */
 
     chatRespond([
         'success'      => true,
@@ -169,6 +190,8 @@ if ($existing) {
         'status'       => $existing['status'],
         'fullName'     => $existing['full_name'],
         'email'        => $existing['email'],
+        'authRequired' => $authPayload['authRequired'],
+        'authTier'     => $authPayload['authTier'],
         /* TASK-1 START — sessionToken in the response payload */
         'sessionToken' => $sessionToken,
         /* TASK-1 END */
@@ -191,6 +214,15 @@ $stmt->execute([
 ]);
 
 $threadId = $db->lastInsertId();
+
+/* TASK-3 START — a customer may opt into protection at the pre-chat gate;
+   otherwise the chat receives a stable unprotected auth row. */
+$authSetup = chatAuthEnsure($newChatId);
+if ($initialTier !== '') {
+    $authSetupResult = chatAuthSetSecret($newChatId, $initialTier, $initialSecret);
+    if (!$authSetupResult['success']) chatRespond($authSetupResult, 422);
+}
+/* TASK-3 END */
 
 // Insert the reason-aware automated first response as real thread history
 // (Section 8 — content-aware per reason, not generic).
@@ -249,6 +281,8 @@ chatRespond([
     'status'       => 'waiting',
     'fullName'     => $fullName,
     'email'        => $email,
+    'authRequired' => false,
+    'authTier'     => $initialTier ?: 'none',
     /* TASK-1 START — sessionToken in the response payload */
     'sessionToken' => $sessionToken,
     /* TASK-1 END */

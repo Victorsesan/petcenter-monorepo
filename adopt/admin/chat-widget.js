@@ -39,6 +39,10 @@
     /* TASK-1 START — session-token persistence key, same localStorage
        pattern as the other pc_chat_* keys above. */
     storageKeyToken: 'pc_chat_session_token',
+    /* TASK-5 START — random browser-held device secret; only its server hash
+       is persisted remotely. */
+    storageKeyDevice: 'pc_chat_device_token',
+    /* TASK-5 END */
     /* TASK-1 END */
     storageKeyDraftUuid: 'pc_chat_draft_uuid', // pre-thread temporary draft key, Section 4
     contactFormUrl: '/contact-us/contact-us.html', // absolute path — contact-us.html lives at /contact-us/ not site root
@@ -65,6 +69,9 @@
        below, so individual call sites below don't each need to remember
        to attach it by hand. */
     sessionToken: null,
+    /* TASK-3 START — current protection tier for the open conversation. */
+    authTier: 'none',
+    /* TASK-3 END */
     /* TASK-1 END */
     fullName: null,
     email: null,
@@ -146,6 +153,71 @@
     });
     return res.json();
   }
+
+  /* TASK-5 START — create one random browser-held device secret; the server
+     stores only its SHA-256 verifier and never the raw value. */
+  function deviceToken() {
+    let token = localStorage.getItem(CONFIG.storageKeyDevice);
+    if (!token) {
+      token = uuid().replace(/-/g, '') + uuid().replace(/-/g, '');
+      localStorage.setItem(CONFIG.storageKeyDevice, token);
+    }
+    return token;
+  }
+  /* TASK-5 END */
+
+  /* TASK-5 SECURITY START — informational meter uses length and character
+     diversity, never composition requirements. The server remains
+     authoritative and performs the breach-range check on save. */
+  function passwordStrengthScore(value) {
+    const text = String(value || '');
+    const common = ['password','password123','123456789012','1234567890','qwertyuiop12','letmein12345','welcome12345','iloveyou1234','adminadmin12','petcenter123'];
+    if (!text) return { score: 0, label: '' };
+    if (common.includes(text.toLowerCase())) return { score: 1, label: 'Common password — choose a different one.' };
+    let score = text.length >= 12 ? 2 : 1;
+    if (text.length >= 16) score++;
+    if (/[A-Z]/.test(text) && /[a-z]/.test(text)) score++;
+    if (/\d/.test(text) || /[^A-Za-z0-9]/.test(text)) score++;
+    score = Math.min(4, score);
+    return { score, label: ['Too short', 'Weak', 'Fair', 'Good', 'Strong'][score] };
+  }
+  /* TASK-5 SECURITY END */
+
+  /* TASK-3 START — shared PIN/password gate contract. */
+  function AuthGate({ tier, principalId, email, onVerifySuccess, onVerifyFail }) {
+    const wrap = el('div', { class: 'pcw-auth-gate' });
+    const input = el('input', { type: tier === 'pin' ? 'tel' : 'password', inputmode: tier === 'pin' ? 'numeric' : 'text', maxlength: tier === 'pin' ? '6' : '1024', placeholder: tier === 'pin' ? 'Enter your 6-digit PIN' : 'Enter your chat password' });
+    const remember = el('label', { class: 'pcw-check-row' }, [el('input', { type: 'checkbox' }), el('span', {}, 'Remember this device')]);
+    const error = el('div', { class: 'pcw-error-msg' });
+    const submit = el('button', { type: 'button', class: 'pcw-primary-btn' }, 'Unlock chat');
+    wrap.appendChild(el('h3', {}, tier === 'pin' ? 'This chat is PIN protected' : 'This chat is password protected'));
+    wrap.appendChild(input); wrap.appendChild(remember); wrap.appendChild(error); wrap.appendChild(submit);
+    submit.addEventListener('click', async () => {
+      submit.disabled = true; error.classList.remove('show');
+      try {
+        const json = await apiPost('chat-auth-gate.php', { action:'verify', chatId:principalId, email, tier, secret:input.value, rememberDevice:remember.querySelector('input').checked, deviceToken:deviceToken() });
+        if (!json.success) throw new Error(json.error || 'Could not unlock chat.');
+        onVerifySuccess(json);
+      } catch (e) { error.textContent = e.message; error.classList.add('show'); if (onVerifyFail) onVerifyFail(e); submit.disabled = false; }
+    });
+    if (tier === 'password') {
+      const forgot = el('button', { type: 'button', class: 'pcw-link-btn' }, 'Forgot password?');
+      forgot.addEventListener('click', async () => {
+        const reset = await apiPost('chat-password-reset.php', { action:'request', email });
+        const temp = window.prompt(reset.message || 'Check your email, then enter the temporary password:');
+        if (!temp) return;
+        const logged = await apiPost('chat-password-reset.php', { action:'temporaryLogin', email, temporaryPassword:temp });
+        if (!logged.success) { error.textContent = logged.error || 'Temporary password rejected.'; error.classList.add('show'); return; }
+        const next = window.prompt('Choose a new password of at least 12 characters:');
+        if (!next) return;
+        const changed = await apiPost('chat-password-reset.php', { action:'change', email, chatId:logged.chatId, sessionToken:logged.sessionToken, newPassword:next });
+        error.textContent = changed.message || changed.error || 'Password reset complete. Enter the new password above.'; error.classList.add('show');
+      });
+      wrap.appendChild(forgot);
+    }
+    return wrap;
+  }
+  /* TASK-3 END */
 
   function initials(name) {
     if (!name) return '?';
@@ -234,6 +306,37 @@
   .pcw-option-label { flex: 1; color: #e5e5e5; font-family: 'Sora', system-ui, sans-serif; font-size: 13.5px; }
   .pcw-option-chevron { color: rgba(255,255,255,0.4); font-size: 11px; transition: transform 0.2s ease; }
   .pcw-option-row.open .pcw-option-chevron { transform: rotate(180deg); }
+
+  /* TASK-3/4/5 START — explicit protection controls live inside the options
+     sheet instead of relying on browser prompts, so each setting is visible,
+     keyboard reachable, and independently actionable. */
+  .pcw-protection-panel {
+    display: none; padding: 12px 4px 14px; border-bottom: 1px solid rgba(255,255,255,0.07);
+  }
+  .pcw-protection-panel.open { display: block; }
+  .pcw-protection-summary { margin: 0 0 10px; color: rgba(255,255,255,0.66); font-size: 11px; line-height: 1.45; }
+  .pcw-protection-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .pcw-protection-btn { min-height: 36px; border: 1px solid rgba(215,189,136,0.45); border-radius: 7px; background: rgba(255,255,255,0.06); color: #fff; cursor: pointer; font: 600 11px 'Sora', system-ui, sans-serif; padding: 7px 8px; }
+  .pcw-protection-btn:hover { border-color: #ED7624; background: rgba(237,118,36,0.14); }
+  .pcw-protection-btn.danger { border-color: rgba(239,68,68,0.55); color: #fecaca; }
+  .pcw-protection-form { display: none; margin-top: 10px; }
+  .pcw-protection-form.open { display: block; }
+  .pcw-protection-form label { display: block; margin: 0 0 5px; color: rgba(255,255,255,0.72); font-size: 11px; }
+  .pcw-protection-form input[type=password], .pcw-protection-form input[type=number] { box-sizing: border-box; width: 100%; border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; background: rgba(255,255,255,0.08); color: #fff; padding: 9px; font: 12px 'Sora', system-ui, sans-serif; }
+  .pcw-protection-form input:focus { outline: 2px solid #ED7624; outline-offset: 1px; }
+  .pcw-password-strength-track { height: 5px; border-radius: 3px; background: rgba(255,255,255,0.12); overflow: hidden; margin: 6px 0 3px; }
+  .pcw-password-strength-fill { height: 100%; width: 0; border-radius: 3px; transition: width 0.25s ease, background-color 0.25s ease; }
+  .pcw-password-strength-fill.score-0, .pcw-password-strength-fill.score-1 { width: 25%; background: #ef4444; }
+  .pcw-password-strength-fill.score-2 { width: 50%; background: #ED7624; }
+  .pcw-password-strength-fill.score-3 { width: 75%; background: #d7bd88; }
+  .pcw-password-strength-fill.score-4 { width: 100%; background: #10b981; }
+  .pcw-password-strength-label { display: block; min-height: 14px; color: rgba(255,255,255,0.58); font-size: 10px; }
+  .pcw-protection-warning { margin: 7px 0 0; padding: 7px 8px; border-left: 2px solid #ED7624; color: #7a6d5f; background: #fff8f2; font-size: 11px; line-height: 1.4; }
+  .pcw-protection-warning[hidden] { display: none; }
+  .pcw-protection-check { display: flex; align-items: center; gap: 7px; margin: 9px 0; color: rgba(255,255,255,0.72); font-size: 11px; }
+  .pcw-protection-message { min-height: 16px; margin-top: 8px; color: #fca5a5; font-size: 11px; }
+  .pcw-protection-message.ok { color: #86efac; }
+  /* TASK-3/4/5 END */
 
   .pcw-toggle-switch {
     width: 42px; height: 24px; border-radius: 999px; border: none; background: rgba(255,255,255,0.15);
@@ -992,6 +1095,20 @@
       accessibilityRow.classList.toggle('open', isOpen);
     });
 
+    /* TASK-4/5 START — self-contained protection section appended after
+       accessibility so other workers can merge their own section unchanged. */
+    const protectionRow = el('div', { class: 'pcw-option-row pcw-option-clickable' }, [
+      el('div', { class: 'pcw-option-icon' }, el('i', { class: 'fas fa-shield-alt' })),
+      el('div', { class: 'pcw-option-label' }, 'Chat protection'),
+      el('i', { class: 'fas fa-chevron-down pcw-option-chevron' }),
+    ]);
+    const protectionPanel = buildProtectionPanel();
+    protectionRow.addEventListener('click', () => {
+      const isOpen = protectionPanel.classList.toggle('open');
+      protectionRow.classList.toggle('open', isOpen);
+    });
+    /* TASK-4/5 END */
+
     const endSessionRow = el('div', { class: 'pcw-option-row pcw-option-clickable' }, [
       el('div', { class: 'pcw-option-icon', style: 'background:rgba(239,68,68,0.15);color:#ef4444;' }, el('i', { class: 'fas fa-rotate-left' })),
       el('div', { class: 'pcw-option-label' }, 'End chat session'),
@@ -999,7 +1116,7 @@
     endSessionRow.addEventListener('click', endChatSession);
 
     const body = el('div', { class: 'pcw-sheet-body' }, [
-      soundRow, transcriptRow, accessibilityRow, accessibilityPanel, endSessionRow,
+      soundRow, transcriptRow, accessibilityRow, accessibilityPanel, protectionRow, protectionPanel, endSessionRow,
     ]);
 
     optionsSheetEl = el('div', { class: 'pcw-options-sheet', role: 'dialog', 'aria-modal': 'true', 'aria-label': 'Chat options' }, [
@@ -1015,6 +1132,89 @@
     panelEl.appendChild(optionsBackdropEl);
     panelEl.appendChild(optionsSheetEl);
   }
+
+  /* TASK-3/4/5 START — build visible settings controls and route every action
+     through the authenticated endpoints. No secret is ever placed in a URL. */
+  function buildProtectionPanel() {
+    const panel = el('div', { class: 'pcw-protection-panel' });
+    const summary = el('p', { class: 'pcw-protection-summary' }, 'Protect this conversation with a PIN or password, configure automatic locking, or revoke remembered devices.');
+    const actions = el('div', { class: 'pcw-protection-actions' });
+    const message = el('div', { class: 'pcw-protection-message', role: 'status', 'aria-live': 'polite' });
+    const secretForm = el('div', { class: 'pcw-protection-form' });
+    const secretLabel = el('label', {}, 'New secret');
+    const secretInput = el('input', { type: 'password', autocomplete: 'new-password' });
+    const strengthTrack = el('div', { class: 'pcw-password-strength-track' }, el('div', { class: 'pcw-password-strength-fill' }));
+    const strengthLabel = el('span', { class: 'pcw-password-strength-label' });
+    secretInput.addEventListener('input', () => {
+      const result = selectedTier === 'password' ? passwordStrengthScore(secretInput.value) : { score: 0, label: '' };
+      strengthTrack.firstChild.className = 'pcw-password-strength-fill' + (result.label ? ' score-' + result.score : '');
+      strengthLabel.textContent = result.label;
+    });
+    const secretSubmit = el('button', { type: 'button', class: 'pcw-protection-btn' }, 'Save protection');
+    secretForm.appendChild(secretLabel); secretForm.appendChild(secretInput); secretForm.appendChild(strengthTrack); secretForm.appendChild(strengthLabel); secretForm.appendChild(secretSubmit);
+
+    const lockForm = el('div', { class: 'pcw-protection-form' });
+    const delayLabel = el('label', {}, 'Lock after closing (seconds)');
+    const delayInput = el('input', { type: 'number', min: '0', max: '3600', value: '300', inputmode: 'numeric' });
+    const aggressiveLabel = el('label', { class: 'pcw-protection-check' }, [el('input', { type: 'checkbox' }), el('span', {}, 'Lock immediately when closed')]);
+    const lockSubmit = el('button', { type: 'button', class: 'pcw-protection-btn' }, 'Save lock settings');
+    lockForm.appendChild(delayLabel); lockForm.appendChild(delayInput); lockForm.appendChild(aggressiveLabel); lockForm.appendChild(lockSubmit);
+
+    let selectedTier = null;
+    function setMessage(text, ok) { message.textContent = text; message.classList.toggle('ok', !!ok); }
+    function openSecretForm(tier) {
+      selectedTier = tier; secretInput.value = ''; secretInput.inputMode = tier === 'pin' ? 'numeric' : 'text'; secretInput.maxLength = tier === 'pin' ? 6 : 1024;
+      strengthTrack.firstChild.className = 'pcw-password-strength-fill'; strengthLabel.textContent = '';
+      secretLabel.textContent = tier === 'pin' ? 'New 6-digit PIN' : 'New password (at least 12 characters)';
+      secretForm.classList.add('open'); lockForm.classList.remove('open'); secretInput.focus();
+    }
+    const pinBtn = el('button', { type: 'button', class: 'pcw-protection-btn' }, 'Set PIN');
+    const passwordBtn = el('button', { type: 'button', class: 'pcw-protection-btn' }, 'Set password');
+    const lockBtn = el('button', { type: 'button', class: 'pcw-protection-btn' }, 'Lock settings');
+    const revokeBtn = el('button', { type: 'button', class: 'pcw-protection-btn danger' }, 'Revoke devices');
+    pinBtn.addEventListener('click', () => openSecretForm('pin'));
+    passwordBtn.addEventListener('click', () => openSecretForm('password'));
+    lockBtn.addEventListener('click', async () => {
+      secretForm.classList.remove('open'); lockForm.classList.toggle('open');
+      if (lockForm.classList.contains('open')) {
+        try {
+          const status = await apiPost('chat-lock.php', { action:'status', chatId:state.chatId });
+          if (status.success && status.lock) { delayInput.value = status.lock.delay_seconds ?? 300; aggressiveLabel.querySelector('input').checked = !!Number(status.lock.aggressive); }
+          else setMessage(status.error || 'Could not load lock settings.', false);
+        } catch (e) { setMessage('Could not load lock settings. Try again.', false); }
+      }
+    });
+    revokeBtn.addEventListener('click', async () => {
+      if (!window.confirm('Revoke all remembered devices for this chat?')) return;
+      revokeBtn.disabled = true;
+      try {
+        const json = await apiPost('chat-auth-gate.php', { action:'forgetDevices', chatId:state.chatId, email:state.email });
+        setMessage(json.success ? 'Remembered devices revoked.' : (json.error || 'Could not revoke devices.'), !!json.success);
+      } catch (e) { setMessage('Could not revoke devices. Try again.', false); }
+      revokeBtn.disabled = false;
+    });
+    secretSubmit.addEventListener('click', async () => {
+      secretSubmit.disabled = true;
+      try {
+        const json = await apiPost('chat-auth-gate.php', { action:'set', chatId:state.chatId, email:state.email, tier:selectedTier, secret:secretInput.value });
+        if (json.success) { state.sessionToken = json.sessionToken || state.sessionToken; state.authTier = selectedTier; localStorage.setItem(CONFIG.storageKeyToken, state.sessionToken); secretForm.classList.remove('open'); setMessage(selectedTier === 'pin' ? 'PIN protection enabled.' : 'Password protection enabled.', true); }
+        else setMessage(json.error || 'Could not save protection.', false);
+      } catch (e) { setMessage('Could not save protection. Try again.', false); }
+      secretSubmit.disabled = false;
+    });
+    lockSubmit.addEventListener('click', async () => {
+      lockSubmit.disabled = true;
+      try {
+        const json = await apiPost('chat-lock.php', { action:'set', chatId:state.chatId, delaySeconds:delayInput.value, aggressive:aggressiveLabel.querySelector('input').checked });
+        setMessage(json.success ? 'Lock settings saved.' : (json.error || 'Could not save lock settings.'), !!json.success);
+      } catch (e) { setMessage('Could not save lock settings. Try again.', false); }
+      lockSubmit.disabled = false;
+    });
+    actions.appendChild(pinBtn); actions.appendChild(passwordBtn); actions.appendChild(lockBtn); actions.appendChild(revokeBtn);
+    panel.appendChild(summary); panel.appendChild(actions); panel.appendChild(secretForm); panel.appendChild(lockForm); panel.appendChild(message);
+    return panel;
+  }
+  /* TASK-3/4/5 END */
 
   function openOptionsSheet() {
     optionsSheetEl.classList.add('open');
@@ -1110,7 +1310,10 @@
       // closed — rebuild the message view from scratch so anything that
       // arrived while closed (and was never appended to messagesEl) is
       // actually shown, rather than silently missing.
-      rebuildLiveView();
+      apiPost('chat-lock.php', { action: 'status', chatId: state.chatId }).then(lockCheck => {
+        if (lockCheck.success) rebuildLiveView();
+        else { state.sessionToken = null; localStorage.removeItem(CONFIG.storageKeyToken); renderAuthGate(state.chatId, state.fullName, state.email, state.status, state.authTier); }
+      }).catch(() => renderAuthGate(state.chatId, state.fullName, state.email, state.status, state.authTier));
       return;
     }
 
@@ -1150,6 +1353,12 @@
   }
 
   function closePanel() {
+    /* TASK-4 START — the browser timer is advisory; the server timestamps the
+       close and re-checks it on every later token verification. */
+    if (state.mode === 'live' && state.chatId && state.sessionToken) {
+      apiPost('chat-lock.php', { action: 'closed', chatId: state.chatId }).catch(() => {});
+    }
+    /* TASK-4 END */
     state.panelOpen = false;
     panelEl.classList.remove('open');
     if (backdropEl) backdropEl.classList.remove('show');
@@ -1292,6 +1501,34 @@
       el('label', {}, 'Email'),
       el('input', { type: 'email', name: 'email', required: 'required' }),
     ]);
+    /* TASK-3 START — optional protection is collected directly after email so
+       a new chat can be born protected without a second unguarded session. */
+    const authTierInput = el('select', { name: 'authTier' }, [
+      el('option', { value: '' }, 'No chat lock'),
+      el('option', { value: 'pin' }, 'Protect with a 6-digit PIN'),
+      el('option', { value: 'password' }, 'Protect with a password'),
+    ]);
+    const authSecretInput = el('input', { type: 'password', name: 'authSecret', minlength: '6', maxlength: '1024', placeholder: 'Set a PIN or password (optional)' });
+    const prechatStrengthTrack = el('div', { class: 'pcw-password-strength-track' }, el('div', { class: 'pcw-password-strength-fill' }));
+    const prechatStrengthLabel = el('span', { class: 'pcw-password-strength-label' });
+    authSecretInput.addEventListener('input', () => {
+      const result = authTierInput.value === 'password' ? passwordStrengthScore(authSecretInput.value) : { score: 0, label: '' };
+      prechatStrengthTrack.firstChild.className = 'pcw-password-strength-fill' + (result.label ? ' score-' + result.score : '');
+      prechatStrengthLabel.textContent = result.label;
+    });
+    const noProtectionAck = el('input', { type: 'checkbox', name: 'noProtectionAck' });
+    const noProtectionLabel = el('label', { class: 'pcw-check-row' }, [noProtectionAck, el('span', {}, 'I understand this chat may be reopened with the email or chat ID.')]);
+    const noProtectionWarning = el('div', { class: 'pcw-protection-warning' }, 'If this chat does not already have a PIN or password, anyone who has your email or chat ID could reopen it.');
+    const protectionField = el('div', { class: 'pcw-field' }, [el('label', {}, 'Protect this chat (optional)'), authTierInput, authSecretInput, prechatStrengthTrack, prechatStrengthLabel, noProtectionWarning, noProtectionLabel]);
+    function updateProtectionWarning() {
+      const unprotected = authTierInput.value === '';
+      noProtectionWarning.hidden = !unprotected;
+      noProtectionLabel.hidden = !unprotected;
+      if (!unprotected) noProtectionAck.checked = false;
+    }
+    authTierInput.addEventListener('change', updateProtectionWarning);
+    updateProtectionWarning();
+    /* TASK-3 END */
     // TASK-9 START
     // TASK-9b: phone number field, optional, added to the pre-chat gate.
     // Follows the exact same .pcw-field / label+input pattern as
@@ -1370,6 +1607,7 @@
 
     form.appendChild(nameField);
     form.appendChild(emailField);
+    form.appendChild(protectionField);
     // TASK-9 START
     // TASK-9b: mount the new phone field directly after email, before the
     // reason dropdown — grouping it with the other plain text-style fields.
@@ -1392,6 +1630,11 @@
         return;
       }
       dropdownTrigger.classList.remove('pcw-field-error');
+      if (authTierInput.value === '' && !noProtectionAck.checked) {
+        errorMsg.textContent = 'Please acknowledge the risk of leaving this chat without a PIN or password.';
+        errorMsg.classList.add('show');
+        return;
+      }
 
       submitBtn.disabled = true;
       submitBtn.textContent = 'Starting...';
@@ -1407,6 +1650,9 @@
         /* TASK-9 END */
         reason: selectedReason,  // use the tracked value directly, not fd.get (more reliable)
         chatId: fd.get('chatId').trim(),
+        authTier: fd.get('authTier'),
+        authSecret: fd.get('authSecret'),
+        deviceToken: deviceToken(),
       };
 
       // Clean up the outside-click listener once form is submitted
@@ -1422,7 +1668,12 @@
           // path, the one moment the entrance animation should play.
           /* TASK-1 START — pass through the sessionToken chat-start.php's
              response now includes on every success path. */
-          openLiveThread(json.chatId, json.fullName, json.email, json.status, undefined, true, json.sessionToken);
+          if (json.authRequired) {
+            renderAuthGate(json.chatId, json.fullName, json.email, json.status, json.authTier);
+          } else {
+            state.authTier = json.authTier || 'none';
+            openLiveThread(json.chatId, json.fullName, json.email, json.status, undefined, true, json.sessionToken);
+          }
           /* TASK-1 END */
           // TASK-9 END
         } else {
@@ -1446,48 +1697,21 @@
   // ============================================
   // RESUME A STORED SESSION (Tier 1 item 22 — persistence across navigation)
   // ============================================
+  // Renders the shared gate after chat-start has identified a protected thread.
+  function renderAuthGate(chatId, fullName, email, status, tier) {
+    state.mode = 'auth-gate'; state.chatId = chatId; state.fullName = fullName; state.email = email; state.status = status; state.authTier = tier;
+    headerTitleEl.textContent = 'Unlock Chat'; headerSubEl.textContent = chatId; bodyEl.innerHTML = ''; bodyEl.appendChild(renderBackToLauncher());
+    bodyEl.appendChild(AuthGate({ tier, principalId: chatId, email, onVerifySuccess: (json) => { state.sessionToken = json.sessionToken; localStorage.setItem(CONFIG.storageKeyToken, json.sessionToken); openLiveThread(chatId, fullName, email, status, false, false, json.sessionToken); } }));
+  }
+
   function resumeStoredChat(storedChatId) {
     dlog('resuming stored chat: ' + storedChatId);
-    /* TASK-1 START — load the token stored by a prior openLiveThread()
-       call BEFORE polling, since apiGet() (see its own TASK-1 comment
-       above) only attaches whatever's already in state.sessionToken. This
-       endpoint no longer works on storedChatId alone — see chat-poll.php's
-       own TASK-1 hardening — so a resume with no stored token, or an
-       expired one, now correctly falls into the same "no longer resolves"
-       branch below as a deleted thread would, sending the customer back
-       through the pre-chat gate rather than silently failing. Using the
-       SAME email there resumes this exact thread and issues a fresh
-       token (chat-start.php Path 2), so no history is actually lost —
-       only a rare, safe extra step. */
-    state.sessionToken = localStorage.getItem(CONFIG.storageKeyToken) || null;
-    /* TASK-1 END */
-    // Always fetch from message 0 on resume so the full history loads —
-    // using the stored lastMessageId would skip all existing messages and
-    // show an empty panel, which is the bug that was reported.
-    apiGet('chat-poll.php', { chatId: storedChatId, lastMessageId: 0, lastEventId: 0 }).then(json => {
-      if (json.success) {
-        const storedName = localStorage.getItem('pc_chat_name') || '';
-        const storedEmail = localStorage.getItem('pc_chat_email') || '';
-        // Pass skipRestore=false so openLiveThread also starts from 0.
-        // No sessionToken arg needed here — state.sessionToken was already
-        // set above, and openLiveThread() only overwrites it when a real
-        // one is passed (see that function's own TASK-1 comment).
-        openLiveThread(storedChatId, storedName, storedEmail, json.status, false);
-      } else {
-        // Stored chat no longer resolves — either genuinely deleted by an
-        // admin, or (TASK-1) the stored session token was missing/expired.
-        // Same safe fallback either way: clear the stale pointers and
-        // return to the launcher.
-        localStorage.removeItem(CONFIG.storageKeyChatId);
-        localStorage.removeItem(CONFIG.storageKeyLastMsg);
-        localStorage.removeItem('pc_chat_name');
-        localStorage.removeItem('pc_chat_email');
-        /* TASK-1 START */
-        localStorage.removeItem(CONFIG.storageKeyToken);
-        state.sessionToken = null;
-        /* TASK-1 END */
-        renderLauncher();
-      }
+    const storedName = localStorage.getItem('pc_chat_name') || '';
+    const storedEmail = localStorage.getItem('pc_chat_email') || '';
+    apiPost('chat-start.php', { fullName: storedName || 'Customer', email: storedEmail, reason: 'general', chatId: storedChatId, deviceToken: deviceToken() }).then(json => {
+      if (!json.success) { renderLauncher(); return; }
+      if (json.authRequired) renderAuthGate(json.chatId, json.fullName, json.email, json.status, json.authTier);
+      else { state.authTier = json.authTier || 'none'; state.sessionToken = json.sessionToken; openLiveThread(json.chatId, json.fullName, json.email, json.status, false, false, json.sessionToken); }
     }).catch(() => renderLauncher());
   }
 

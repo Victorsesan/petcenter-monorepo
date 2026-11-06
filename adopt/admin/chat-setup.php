@@ -140,6 +140,60 @@ $statements = [
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
     ",
 
+    /* TASK-3 START — shared PIN/password protection record. Passwords and
+       PINs use the same adaptive-hash columns and only the tier changes. */
+    'chat_auth' => "
+        CREATE TABLE IF NOT EXISTS chat_auth (
+            principal_id    VARCHAR(20) PRIMARY KEY,
+            auth_tier       ENUM('none','pin','password') NOT NULL DEFAULT 'none',
+            secret_hash     VARCHAR(255) NULL,
+            salt            VARCHAR(64) NULL,
+            failed_attempts INT NOT NULL DEFAULT 0,
+            locked_until    DATETIME NULL,
+            created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            INDEX (auth_tier), INDEX (locked_until)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+    ",
+    /* TASK-5 START — one-way remembered-device verifiers only. */
+    'chat_remember_device' => "
+        CREATE TABLE IF NOT EXISTS chat_remember_device (
+            id                 INT AUTO_INCREMENT PRIMARY KEY,
+            principal_id       VARCHAR(20) NOT NULL,
+            device_fingerprint CHAR(64) NOT NULL,
+            label              VARCHAR(120) NOT NULL,
+            last_used_at       TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            created_at         TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            UNIQUE KEY uq_chat_device (principal_id, device_fingerprint),
+            INDEX (principal_id)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+    ",
+    /* TASK-4 START — authoritative server-side lock timestamps. */
+    'chat_lock_settings' => "
+        CREATE TABLE IF NOT EXISTS chat_lock_settings (
+            principal_id   VARCHAR(20) PRIMARY KEY,
+            delay_seconds  INT NOT NULL DEFAULT 300,
+            aggressive     TINYINT(1) NOT NULL DEFAULT 0,
+            last_closed_at DATETIME NULL,
+            locked_at      DATETIME NULL,
+            updated_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            INDEX (locked_at)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+    ",
+    /* TASK-6 START — single-use temporary password records. */
+    'chat_password_resets' => "
+        CREATE TABLE IF NOT EXISTS chat_password_resets (
+            id           INT AUTO_INCREMENT PRIMARY KEY,
+            principal_id VARCHAR(20) NOT NULL,
+            contact_email VARCHAR(255) NOT NULL,
+            temp_hash    VARCHAR(255) NOT NULL,
+            expires_at   DATETIME NOT NULL,
+            used_at      DATETIME NULL,
+            created_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            INDEX (principal_id), INDEX (contact_email), INDEX (expires_at)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+    ",
+
 ];
 
 echo "Live Chat Widget — Database Setup\n";
