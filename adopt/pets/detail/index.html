@@ -1327,7 +1327,8 @@ body { padding-bottom: 84px; }
 
 /* ─── Dock chat widget launcher into the bottom bar (in place of old #messageBtn) ───
    chat-widget.js normally renders its launcher as position:fixed, bottom-right of
-   the viewport. Here it's re-parented (see script near </body>) into
+   the viewport. Here it's re-parented (see script near <script src="/assets/js/accessibility-widget.js" defer></script>
+</body>) into
    .pc-bottom-bar__icons, so these rules take it out of fixed positioning and let
    it flow as a normal flex item sized to match the other bottom-bar icon buttons —
    it never floats free or extends outside the page. */
@@ -4421,6 +4422,7 @@ function showShareToast(message) {
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/plyr/3.8.4/plyr.polyfilled.min.js"></script>
 <script src="/admin/chat-widget.js"></script>
+<script src="/assets/js/accessibility-widget.js" defer></script>
 <script>
 /* ─── Dock chat widget launcher into the bottom bar ───────────────────────────
    chat-widget.js builds its launcher button and appends it directly to
