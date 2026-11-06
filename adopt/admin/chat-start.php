@@ -55,6 +55,10 @@ $email     = trim($input['email'] ?? '');
 $reason    = trim($input['reason'] ?? '');
 $chatId    = trim($input['chatId'] ?? '');
 $petContext = $input['petContext'] ?? null; // { name, petId, thumbUrl, pageUrl } or null, Section 7b
+// AP4-TASK-3: exact supported language contract; never store arbitrary client text.
+$ap4Languages = ['en','es','fr','de','pt','it','zh-Hans','ja','ko','ar','hi','vi','tl','ru'];
+$preferredChatLanguage = trim((string)($input['preferred_chat_language'] ?? ''));
+if (!in_array($preferredChatLanguage, $ap4Languages, true)) $preferredChatLanguage = 'en';
 $initialTier = trim((string)($input['authTier'] ?? ''));
 $initialSecret = (string)($input['authSecret'] ?? '');
 $deviceToken = (string)($input['deviceToken'] ?? '');
@@ -142,7 +146,8 @@ if ($chatId !== '') {
             'authTier'     => $authPayload['authTier'],
             /* TASK-1 START — sessionToken in the response payload */
             'sessionToken' => $sessionToken,
-            /* TASK-1 END */
+            /* TASK-1 END */            'preferred_chat_language' => $preferredChatLanguage, // AP4-TASK-3
+
         ]);
     }
 
@@ -182,6 +187,8 @@ if ($existing) {
     $authPayload = chatStartAuthPayload($existing, $deviceToken);
     $sessionToken = $authPayload['sessionToken'];
     /* TASK-3 END */
+    $db->prepare('UPDATE chat_threads SET preferred_chat_language = ? WHERE id = ?')->execute([$preferredChatLanguage, $existing['id']]);
+    $db->prepare('UPDATE chat_threads SET preferred_chat_language = ? WHERE id = ?')->execute([$preferredChatLanguage, $thread['id']]);
 
     chatRespond([
         'success'      => true,
@@ -202,8 +209,8 @@ if ($existing) {
 $newChatId = chatGenerateChatId();
 
 $stmt = $db->prepare(
-    "INSERT INTO chat_threads (chat_id, email, full_name, reason, pet_context, status, unread_for_admin)
-     VALUES (?, ?, ?, ?, ?, 'waiting', 0)"
+    "INSERT INTO chat_threads (chat_id, email, full_name, reason, pet_context, status, unread_for_admin, preferred_chat_language)
+     VALUES (?, ?, ?, ?, ?, 'waiting', 0, ?)"
 );
 $stmt->execute([
     $newChatId,
@@ -211,6 +218,7 @@ $stmt->execute([
     $fullName,
     $reason,
     $petContext ? json_encode($petContext) : null,
+    $preferredChatLanguage, // AP4-TASK-3
 ]);
 
 $threadId = $db->lastInsertId();

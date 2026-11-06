@@ -2,7 +2,7 @@
 
 Generated from the extracted worker packages under `/home/ubuntu/workspace/intake/tmp/`. This is an inventory for review, not a claim that every package is correct or complete.
 
-**Repository availability notice:** The uploaded worker archive has now been imported as Markdown evidence under `docs/second-round/completion-evidence/`, with per-archive subdirectories and an `IMPORT-MANIFEST.md`. The inventory below remains the source index; accounts should read the matching evidence file from that folder when it is present, then compare it with the assignment and current repository source. If a specific file is absent from the manifest, record that exact evidence gap.
+**Repository availability notice:** The uploaded worker archive has been imported as read-only Markdown evidence under `docs/second-round/completion-evidence/`, grouped by worker-package name, with an `IMPORT-MANIFEST.md`. The 62 listed completion reports and the standalone `Task-1-Completion-14.md` are preserved where present; the two packages marked `False` remain evidence gaps. Historical evidence is not proof that current source matches the claim. Accounts must read the matching evidence when present, compare it with the assignment and current branches, and record any remaining gap.
 
 | Worker package | Files | Completion/handoff present | Completion files |
 |---|---:|---|---|

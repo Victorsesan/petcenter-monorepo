@@ -5524,6 +5524,7 @@ function buildAdminBanner(chatId, thread) {
     </div>
     <div style="font-size:11px;color:#a89c8a;margin-top:4px;">
       Chat ID: ${escapeHtml(chatId)} &middot; Reason: ${escapeHtml(thread.reason || '—')}
+      &middot; Language: ${escapeHtml(({en:'English',es:'Español',fr:'Français',de:'Deutsch',pt:'Português',it:'Italiano','zh-Hans':'中文（简体）',ja:'日本語',ko:'한국어',ar:'العربية',hi:'हिन्दी',vi:'Tiếng Việt',tl:'Filipino',ru:'Русский'})[thread.preferred_chat_language] || thread.preferred_chat_language || '—')}
     </div>`;
   return header;
 }
@@ -5684,6 +5685,63 @@ function buildJoinedBannerAdmin(evt) {
   return banner;
 }
 
+/* TASK-admin234-1b START — admin-side transcript display and native speech. */
+async function buildAdminTranscriptControl(msg, chatId) {
+  const wrap = document.createElement('div');
+  wrap.style.cssText = 'margin-top:6px;';
+  const toggle = document.createElement('button');
+  toggle.type = 'button'; toggle.className = 'pc-btn pc-btn--ghost';
+  toggle.style.cssText = 'font-size:11px;padding:4px 8px;'; toggle.textContent = 'View transcription';
+  const output = document.createElement('div');
+  output.hidden = true;
+  output.style.cssText = 'margin-top:6px;padding:9px;border-radius:8px;background:#fff;color:#2c2416;font-size:12px;white-space:pre-wrap;overflow-wrap:anywhere;user-select:text;';
+  let loaded = false, busy = false;
+  const speakText = (text, language) => {
+    if (!('speechSynthesis' in window) || !window.SpeechSynthesisUtterance) return;
+    window.speechSynthesis.cancel();
+    const aliases = { english:'en-US', spanish:'es-ES', french:'fr-FR', german:'de-DE', portuguese:'pt-BR', italian:'it-IT', chinese:'zh-CN', japanese:'ja-JP', korean:'ko-KR', arabic:'ar-SA', hindi:'hi-IN', vietnamese:'vi-VN', russian:'ru-RU', filipino:'fil-PH', tagalog:'fil-PH' };
+    const utterance = new SpeechSynthesisUtterance(text);
+    if (language) utterance.lang = aliases[String(language).toLowerCase()] || language;
+    window.speechSynthesis.speak(utterance);
+  };
+  toggle.addEventListener('click', async () => {
+    if (loaded) { output.hidden = !output.hidden; toggle.textContent = output.hidden ? 'View transcription' : 'Hide transcription'; return; }
+    if (busy) return;
+    busy = true; toggle.disabled = true; toggle.textContent = 'Loading transcription…';
+    try {
+      let result;
+      do {
+        const token = getAdminToken();
+        const response = await fetch('chat-transcribe.php', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Admin-Token': token }, body: JSON.stringify({ chatId, messageId: msg.id, side: 'admin' }) });
+        result = await response.json();
+        if (result.status === 'pending') await new Promise(resolve => setTimeout(resolve, 6000));
+      } while (result.status === 'pending');
+      if (!result.success || !result.transcript) throw new Error(result.error || 'Transcription unavailable.');
+      output.innerHTML = '';
+      const text = document.createElement('div'); text.textContent = result.transcript; output.appendChild(text);
+      if (msg.from_type === 'admin') {
+        const lang = document.createElement('div'); lang.style.cssText = 'margin-top:6px;color:#665;font-size:11px;';
+        lang.textContent = 'Customer preferred language: ' + (result.preferred_chat_language || 'en'); output.appendChild(lang);
+      }
+      if (result.confidence !== null && result.confidence < 0.5) {
+        const warning = document.createElement('div'); warning.style.cssText = 'margin-top:6px;color:#9a4b00;font-weight:600;';
+        warning.textContent = 'This transcription may be inaccurate. Check the audio before relying on it.'; output.appendChild(warning);
+      }
+      const actions = document.createElement('div'); actions.style.cssText = 'display:flex;gap:6px;margin-top:8px;';
+      const copy = document.createElement('button'); copy.type='button'; copy.className='pc-btn pc-btn--ghost'; copy.style.cssText='font-size:11px;padding:4px 8px;'; copy.textContent='Copy transcript';
+      copy.addEventListener('click', async () => { try { await navigator.clipboard.writeText(result.transcript); copy.textContent='Copied'; } catch (e) { copy.textContent='Select and copy the text above'; } });
+      actions.appendChild(copy);
+      const read = document.createElement('button'); read.type='button'; read.className='pc-btn pc-btn--ghost'; read.style.cssText='font-size:11px;padding:4px 8px;'; read.textContent='Read aloud';
+      read.addEventListener('click', () => speakText(result.transcript, result.language || (msg.from_type === 'admin' ? 'en' : undefined)));
+      actions.appendChild(read); output.appendChild(actions); output.hidden=false; loaded=true;
+      toggle.textContent='Hide transcription';
+    } catch (error) { output.textContent = error.message || 'Transcription unavailable.'; output.hidden=false; toggle.textContent='Try transcription again'; }
+    finally { busy=false; toggle.disabled=false; }
+  });
+  wrap.appendChild(toggle); wrap.appendChild(output); return wrap;
+}
+/* TASK-admin234-1b END */
+
 function renderAdminMessage(msg) {
   const isAdmin = msg.from_type === 'admin';
   const isSystem = msg.from_type === 'system';
@@ -5769,6 +5827,9 @@ function renderAdminMessage(msg) {
       const aud = document.createElement('audio');
       aud.src = p; aud.controls = true; aud.style.cssText = 'max-width:220px;height:36px;';
       bubble.appendChild(aud);
+      // TASK-admin234-1b START — admin may inspect either direction's transcript.
+      buildAdminTranscriptControl(msg, chatAdmin.activeThreadId || '').then(control => bubble.appendChild(control));
+      // TASK-admin234-1b END
     }
 
     // Admin-only: delete button under their own sent media
