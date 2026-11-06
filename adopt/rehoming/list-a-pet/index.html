@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Post a pet | Pet Center</title>
+  <style>body{font-family:system-ui,sans-serif;background:#f8f5ef;color:#10214b;margin:0;padding:32px}.card{max-width:760px;margin:auto;background:#fff;padding:28px;border-radius:16px;box-shadow:0 8px 30px #10214b18}label{display:block;font-weight:600;margin-top:14px}input,textarea,select{width:100%;box-sizing:border-box;padding:11px;margin-top:6px;border:1px solid #d8cfbf;border-radius:8px;font:inherit}button{margin-top:22px;padding:12px 18px;border:0;border-radius:8px;background:#ed7624;color:#fff;font-weight:700;cursor:pointer}.error{color:#a52626}.success{color:#0d7c4a}</style>
+</head>
+<body>
+<!-- TASK-MANUS-05 START — Minimal deployable A1 merchant posting form. The page is intentionally
+     server-backed through merchant-publish-listing.php and does not pretend to replace account auth. -->
+<main class="card">
+  <h1>Post a pet for rehoming</h1><p>Share accurate information so potential adopters can make an informed decision.</p>
+  <form id="listingForm">
+    <label>Name<input name="name" required maxlength="120"></label>
+    <label>Category<select name="category" required><option value="dogs">Dog</option><option value="cats">Cat</option><option value="birds">Bird</option><option value="reptiles">Reptile</option><option value="small-mammals">Small mammal</option><option value="livestocks">Livestock</option><option value="aquariums">Aquarium</option></select></label>
+    <label>Breed/species<input name="breed" required maxlength="120"></label>
+    <label>Health &amp; medical history — vaccinations, known conditions, medications.<textarea name="health_status" required minlength="20" maxlength="2000"></textarea></label>
+    <label>Temperament<textarea name="temperament" required minlength="20" maxlength="2000"></textarea></label>
+    <label>Reason for rehoming<textarea name="reason_for_rehoming" required minlength="15" maxlength="2000"></textarea></label>
+    <label>Spay/neuter status<select name="spay_neuter_status"><option value="unknown">Unknown</option><option value="spayed_neutered">Spayed/neutered</option><option value="not_yet">Not yet</option></select></label>
+    <label>Listing type<select name="listing_type"><option value="permanent">Permanent</option><option value="foster">Foster</option></select></label>
+    <label>Currency<select name="currency_code"><option>USD</option><option>CAD</option><option>GBP</option><option>AUD</option></select></label>
+    <label><input type="checkbox" name="is_urgent" value="1" style="width:auto"> This is an urgent rehoming situation.</label>
+    <label>Additional details<textarea name="description" maxlength="4000"></textarea></label>
+    <button type="submit">Publish listing</button><p id="result" role="status"></p>
+  </form>
+</main>
+<script>
+// TASK-MANUS-05 ENDPOINT CLIENT — JSON submit with server-side validation as the authority.
+document.getElementById('listingForm').addEventListener('submit', async function (event) {
+  event.preventDefault(); const result=document.getElementById('result'); result.className=''; result.textContent='Publishing…';
+  const data=Object.fromEntries(new FormData(event.currentTarget)); data.is_urgent=event.currentTarget.is_urgent.checked;
+  try { const response=await fetch('/rehoming/merchant-publish-listing.php',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)}); const json=await response.json(); if(!response.ok) throw new Error(json.error||'Unable to publish'); result.className='success'; result.textContent='Listing published: '+json.listing.pet_id; event.currentTarget.reset(); } catch(error) { result.className='error'; result.textContent=error.message; }
+});
+</script>
+</body>
+</html>

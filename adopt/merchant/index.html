@@ -857,11 +857,10 @@ function loadListings() {
   }).join('');
 }
 
-// A1_POSTING_PANEL_URL: A1's real output file, confirmed from Task-A1-Completion.md,
-// which delivers it as `pet-posting-form-v2.html`. Digits in filenames are
-// not significant on this project, so the source filename used here is
-// `pet-posting-form.html`. Kept as one constant so any rename is a one-line change.
-const A1_POSTING_PANEL_URL = 'pet-posting-form.html';
+// TASK-MANUS-05 START — A1 posting route now points to the deployed folder page,
+// not the unavailable historical source filename.
+const A1_POSTING_PANEL_URL = '/rehoming/list-a-pet/';
+// TASK-MANUS-05 END
 
 // TASK-E1 START (E1c — merchant listing edit modal logic)
 // Revision note 5: A1's form is create-only (its submit path builds new
