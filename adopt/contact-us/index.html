@@ -7,6 +7,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
   <style>
+/* TASK-web12-3 START: logical CSS properties for RTL */
     :root {
       --primary: #10214b;
       --primary-light: #1a2f5c;
@@ -41,7 +42,7 @@
     .hero {
       background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
       border-radius: 12px;
-      padding: 28px 28px;
+      padding-block: 28px; padding-inline: 28px;
       color: white;
       margin-bottom: 24px;
       position: relative;
@@ -50,7 +51,7 @@
     .hero::before {
       content: '';
       position: absolute;
-      right: -60px; top: -60px;
+      inset-inline-end: -60px; top: -60px;
       width: 280px; height: 280px;
       border-radius: 50%;
       background: radial-gradient(circle, rgba(215,189,136,0.1) 0%, transparent 65%);
@@ -117,7 +118,7 @@
       background: white;
       border: 1.5px solid var(--border);
       border-radius: 9px;
-      padding: 10px 13px;
+      padding-block: 10px; padding-inline: 13px;
       font-size: 13.5px;
       color: var(--text);
       font-family: inherit;
@@ -145,7 +146,7 @@
     .dept-option input { display: none; }
     .dept-option label {
       display: block;
-      padding: 9px 12px;
+      padding-block: 9px; padding-inline: 12px;
       background: white;
       border: 1.5px solid var(--border);
       border-radius: 8px;
@@ -199,7 +200,7 @@
     .uploaded-item-btns { display: flex; flex-direction: column; gap: 4px; }
     .small-btn {
       background: white; border: 1px solid var(--border); border-radius: 5px;
-      padding: 4px 8px; font-size: 11px; font-weight: 600; color: var(--primary);
+      padding-block: 4px; padding-inline: 8px; font-size: 11px; font-weight: 600; color: var(--primary);
       cursor: pointer; font-family: inherit; transition: all 0.2s ease;
     }
     .small-btn:hover { border-color: var(--gold); background: rgba(215,189,136,0.08); }
@@ -209,7 +210,7 @@
     .submit-btn {
       background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
       color: white; border: none; border-radius: 10px;
-      padding: 13px 40px; font-size: 15px; font-weight: 700;
+      padding-block: 13px; padding-inline: 40px; font-size: 15px; font-weight: 700;
       cursor: pointer; font-family: inherit;
       transition: all 0.25s ease;
       box-shadow: 0 6px 20px rgba(16,33,75,0.25);
@@ -219,7 +220,7 @@
     .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
     /* Status messages */
-    .status-msg { padding: 12px 14px; border-radius: 8px; margin-bottom: 16px; font-size: 13px; display: none; }
+    .status-msg { padding-block: 12px; padding-inline: 14px; border-radius: 8px; margin-bottom: 16px; font-size: 13px; display: none; }
     .status-msg.show { display: block; animation: slideUp 0.3s ease; }
     .status-msg.success { background: #ecfdf5; border: 1px solid #d1fae5; color: #065f46; }
     .status-msg.error   { background: #fef2f2; border: 1px solid #fee2e2; color: #7f1d1d; }
@@ -260,11 +261,13 @@
     .modal-close {
       background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
       color: white; border: none; border-radius: 8px;
-      padding: 9px 20px; font-weight: 600; cursor: pointer; width: 100%;
+      padding-block: 9px; padding-inline: 20px; font-weight: 600; cursor: pointer; width: 100%;
       transition: all 0.25s ease; font-family: inherit;
     }
     .modal-close:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(16,33,75,0.25); }
-  </style>
+
+/* TASK-web12-3 END */
+</style>
 </head>
 <body>
 
@@ -287,14 +290,17 @@
         </div>
         <div class="field">
           <label for="email">Email Address *</label>
-          <input type="email" id="email" name="email" required placeholder="your@email.com">
+          <!-- BUGFIX-MANUS-03-1 START: email and telephone controls stay LTR under document RTL. -->
+<input type="email" id="email" name="email" required placeholder="your@email.com" dir="ltr">
+<!-- BUGFIX-MANUS-03-1 END -->
+
         </div>
       </div>
 
       <div class="form-grid">
         <div class="field">
           <label for="phone">Phone Number <span style="font-size:11px;color:var(--muted);">(optional)</span></label>
-          <input type="tel" id="phone" name="phone" placeholder="+1 (555) 000-0000">
+          <input type="tel" id="phone" name="phone" placeholder="+1 (555) 000-0000" dir="ltr">
         </div>
         <div class="field">
           <label for="subject">Subject *</label>

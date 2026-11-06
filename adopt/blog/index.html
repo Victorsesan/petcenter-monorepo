@@ -10,6 +10,7 @@
   <title>Blog — Pet Center Adoption</title>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
+/* TASK-web12-3 START: logical CSS properties for RTL */
 /* ════════════════════════════════════════════════════════════════════════════
    PET CENTER ADOPTION WEBSITE — Design System v1.0
    Colors: Navy #10214b | Gold #d7bd88 | Orange #ED7624
@@ -72,9 +73,9 @@ h4 { font-size: 1.2rem; font-weight: 600; }
 p { color: var(--muted); }
 
 /* ─── Layout Utilities ───────────────────────────────────────────────────────── */
-.pc-container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
-.pc-section { padding: 72px 0; }
-.pc-section--sm { padding: 40px 0; }
+.pc-container { max-width: 1280px; margin-block: 0; margin-inline: auto; padding-block: 0; padding-inline: 24px; }
+.pc-section { padding-block: 72px; padding-inline: 0; }
+.pc-section--sm { padding-block: 40px; padding-inline: 0; }
 .pc-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
 .pc-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
 .pc-grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
@@ -88,7 +89,7 @@ p { color: var(--muted); }
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 12px 28px;
+  padding-block: 12px; padding-inline: 28px;
   border-radius: var(--radius-sm);
   font-family: 'Sora', sans-serif;
   font-size: 14px;
@@ -129,8 +130,8 @@ p { color: var(--muted); }
   box-shadow: inset 0 0 0 2px var(--gold);
 }
 .pc-btn--ghost:hover { background: var(--orange-light); color: var(--orange); }
-.pc-btn--sm { padding: 8px 18px; font-size: 13px; min-height: 36px; }
-.pc-btn--lg { padding: 16px 40px; font-size: 16px; }
+.pc-btn--sm { padding-block: 8px; padding-inline: 18px; font-size: 13px; min-height: 36px; }
+.pc-btn--lg { padding-block: 16px; padding-inline: 40px; font-size: 16px; }
 .pc-btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
 
 /* ─── Cards ────────────────────────────────────────────────────────────────────── */
@@ -143,7 +144,7 @@ p { color: var(--muted); }
 }
 .pc-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
 .pc-card__body { padding: 20px; }
-.pc-card__footer { padding: 16px 20px; background: var(--bg); }
+.pc-card__footer { padding-block: 16px; padding-inline: 20px; background: var(--bg); }
 
 /* ─── Section Headings ──────────────────────────────────────────────────────── */
 .pc-section-eyebrow { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--orange); margin-bottom: 8px; }
@@ -151,7 +152,7 @@ p { color: var(--muted); }
 .pc-section-sub { color: var(--muted); max-width: 560px; }
 
 /* ─── Alert / Messages ──────────────────────────────────────────────────────── */
-.pc-alert { border-radius: var(--radius-sm); padding: 14px 18px; font-size: 14px; font-weight: 500; display: none; }
+.pc-alert { border-radius: var(--radius-sm); padding-block: 14px; padding-inline: 18px; font-size: 14px; font-weight: 500; display: none; }
 .pc-alert.show { display: block; animation: fadeInDown 0.3s ease; }
 .pc-alert--success { background: var(--success-bg); color: var(--success); }
 .pc-alert--error { background: var(--error-bg); color: var(--error); }
@@ -185,7 +186,7 @@ p { color: var(--muted); }
 /* ─── Preload Overlay ───────────────────────────────────────────────────────────────────────── */
 /* ─── Preloader ─── */
 #petcenter-preloader {
-  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  position: fixed; top: 0; inset-inline-start: 0; width: 100%; height: 100%;
   background: #10214b; z-index: 9999;
   display: flex; flex-direction: column;
   justify-content: center; align-items: center;
@@ -238,20 +239,20 @@ p { color: var(--muted); }
   animation-name is set separately below (direction-scoped) so the correct
   rightward/leftward-facing keyframe is used depending on walk-right/walk-left.
 */
-#petcenter-preloader.walk-right .paw:nth-child(1) { left: 0px;   top: 42px; animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 0.0s; }
-#petcenter-preloader.walk-right .paw:nth-child(2) { left: 32px;  top: 0px;  animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 0.7s; }
-#petcenter-preloader.walk-right .paw:nth-child(3) { left: 64px;  top: 42px; animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 1.4s; }
-#petcenter-preloader.walk-right .paw:nth-child(4) { left: 96px;  top: 0px;  animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 2.1s; }
-#petcenter-preloader.walk-right .paw:nth-child(5) { left: 128px; top: 42px; animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 2.8s; }
-#petcenter-preloader.walk-right .paw:nth-child(6) { left: 158px; top: 0px;  animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 3.5s; }
+#petcenter-preloader.walk-right .paw:nth-child(1) { inset-inline-start: 0px;   top: 42px; animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 0.0s; }
+#petcenter-preloader.walk-right .paw:nth-child(2) { inset-inline-start: 32px;  top: 0px;  animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 0.7s; }
+#petcenter-preloader.walk-right .paw:nth-child(3) { inset-inline-start: 64px;  top: 42px; animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 1.4s; }
+#petcenter-preloader.walk-right .paw:nth-child(4) { inset-inline-start: 96px;  top: 0px;  animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 2.1s; }
+#petcenter-preloader.walk-right .paw:nth-child(5) { inset-inline-start: 128px; top: 42px; animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 2.8s; }
+#petcenter-preloader.walk-right .paw:nth-child(6) { inset-inline-start: 158px; top: 0px;  animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 3.5s; }
 
 /* walk-left: identical two-lane shape, mirrored so it stamps right→left */
-#petcenter-preloader.walk-left .paw:nth-child(1) { left: 158px; top: 42px; animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 0.0s; }
-#petcenter-preloader.walk-left .paw:nth-child(2) { left: 128px; top: 0px;  animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 0.7s; }
-#petcenter-preloader.walk-left .paw:nth-child(3) { left: 96px;  top: 42px; animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 1.4s; }
-#petcenter-preloader.walk-left .paw:nth-child(4) { left: 64px;  top: 0px;  animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 2.1s; }
-#petcenter-preloader.walk-left .paw:nth-child(5) { left: 32px;  top: 42px; animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 2.8s; }
-#petcenter-preloader.walk-left .paw:nth-child(6) { left: 0px;   top: 0px;  animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 3.5s; }
+#petcenter-preloader.walk-left .paw:nth-child(1) { inset-inline-start: 158px; top: 42px; animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 0.0s; }
+#petcenter-preloader.walk-left .paw:nth-child(2) { inset-inline-start: 128px; top: 0px;  animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 0.7s; }
+#petcenter-preloader.walk-left .paw:nth-child(3) { inset-inline-start: 96px;  top: 42px; animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 1.4s; }
+#petcenter-preloader.walk-left .paw:nth-child(4) { inset-inline-start: 64px;  top: 0px;  animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 2.1s; }
+#petcenter-preloader.walk-left .paw:nth-child(5) { inset-inline-start: 32px;  top: 42px; animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 2.8s; }
+#petcenter-preloader.walk-left .paw:nth-child(6) { inset-inline-start: 0px;   top: 0px;  animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 3.5s; }
 
 /*
   Two stamp keyframes per direction (odd = left-foot tilt, even = right-foot tilt).
@@ -304,9 +305,9 @@ p { color: var(--muted); }
 /* ─── Global Header (pc-header) ─────────────────────────────────────────────── */
 .pc-header {
   position: fixed;
-  top: 0; left: 0; right: 0;
+  top: 0; inset-inline-start: 0; inset-inline-end: 0;
   z-index: 1000;
-  padding: 0 24px;
+  padding-block: 0; padding-inline: 24px;
   height: 68px;
   display: flex;
   align-items: center;
@@ -337,7 +338,7 @@ p { color: var(--muted); }
 .pc-header__nav li { position: relative; }
 .pc-header__nav a {
   display: block;
-  padding: 8px 11px;
+  padding-block: 8px; padding-inline: 11px;
   font-family: 'Sora', sans-serif;
   font-size: 13px;
   font-weight: 500;
@@ -348,7 +349,7 @@ p { color: var(--muted); }
   white-space: nowrap;
 }
 .pc-header__nav a:hover { color: #d7bd88; background: rgba(255,255,255,0.08); }
-.pc-header__nav .nav-donate a { background: #ED7624; color: #fff; font-weight: 600; padding: 8px 16px; }
+.pc-header__nav .nav-donate a { background: #ED7624; color: #fff; font-weight: 600; padding-block: 8px; padding-inline: 16px; }
 .pc-header__nav .nav-donate a:hover { background: #d4621a; color: #fff; }
 .pc-header__nav .nav-signup a,
 .pc-header__nav .nav-login a { border: 1px solid rgba(215,189,136,0.5); color: #d7bd88; }
@@ -358,17 +359,17 @@ p { color: var(--muted); }
   display: none;
   position: absolute;
   top: calc(100% + 4px);
-  left: 0;
+  inset-inline-start: 0;
   background: #10214b;
   border-radius: 8px;
   list-style: none;
   min-width: 168px;
   box-shadow: 0 8px 32px rgba(0,0,0,0.22);
-  padding: 6px 0;
+  padding-block: 6px; padding-inline: 0;
   z-index: 100;
 }
 .pc-header__nav .has-drop:hover > ul { display: block; }
-.pc-header__nav .has-drop > ul a { padding: 9px 18px; font-size: 13px; border-radius: 0; }
+.pc-header__nav .has-drop > ul a { padding-block: 9px; padding-inline: 18px; font-size: 13px; border-radius: 0; }
 .pc-hamburger {
   display: none;
   flex-direction: column;
@@ -386,11 +387,11 @@ p { color: var(--muted); }
 .pc-mobile-menu {
   position: fixed;
   top: 68px;
-  left: 0;
-  right: 0;
+  inset-inline-start: 0;
+  inset-inline-end: 0;
   background: rgba(16,33,75,0.98);
   z-index: 999;
-  padding: 16px 0 24px;
+  padding-block: 16px 24px; padding-inline: 0;
   box-shadow: 0 8px 32px rgba(0,0,0,0.3);
   max-height: 0;
   opacity: 0;
@@ -408,14 +409,14 @@ p { color: var(--muted); }
   overflow-y: auto;
   opacity: 1;
   pointer-events: auto;
-  padding: 16px 0 calc(100vh - 68px - 56px);
+  padding-block: 16px calc(100vh - 68px - 56px); padding-inline: 0;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
 }
 /* TASK-6 END */
 .pc-mobile-menu a {
   display: block;
-  padding: 12px 28px;
+  padding-block: 12px; padding-inline: 28px;
   font-family: 'Sora', sans-serif;
   font-size: 15px;
   font-weight: 500;
@@ -425,11 +426,11 @@ p { color: var(--muted); }
 }
 .pc-mobile-menu a:hover { color: #d7bd88; background: rgba(255,255,255,0.05); }
 .pc-mobile-menu .mobile-donate {
-  margin: 12px 28px 0;
+  margin-block: 12px 0; margin-inline: 28px;
   display: inline-block;
   background: #ED7624;
   color: #fff;
-  padding: 11px 24px;
+  padding-block: 11px; padding-inline: 24px;
   border-radius: 8px;
   font-weight: 600;
   border-bottom: none;
@@ -442,11 +443,11 @@ p { color: var(--muted); }
 /* ─── Global Footer ─────────────────────────────────────────────────────────── */
 .pc-footer {
   background: #0b1834;
-  padding: 60px 24px 28px;
+  padding-block: 60px 28px; padding-inline: 24px;
   color: rgba(255,255,255,0.65);
   font-family: 'Sora', sans-serif;
 }
-.pc-footer__inner { max-width: 1200px; margin: 0 auto; }
+.pc-footer__inner { max-width: 1200px; margin-block: 0; margin-inline: auto; }
 /* TASK-6 START — footer column-count bug fixed (Section 8 of
    adoption-website-project-summary.md documents this exact recurring bug:
    a 4-track grid-template-columns paired with 5 actual grid children —
@@ -454,7 +455,7 @@ p { color: var(--muted); }
    column ("Visit Us") to wrap back onto the grid's first track and render
    stacked on top of .pc-footer__brand instead of appearing after "Support".
    Confirmed via rendered bounding-box measurement before this fix: both the
-   brand column and the Visit Us column had left:40 — i.e. literally
+   brand column and the Visit Us column had inset-inline-start:40 — i.e. literally
    overlapping. Corrected to the canonical 5-track ratio from Section 8,
    already in use on index.html's own footer. */
 .pc-footer__top {
@@ -481,7 +482,7 @@ p { color: var(--muted); }
 
 /* ─── Responsive ─────────────────────────────────────────────────────────────── */
 @media (max-width: 1280px) {
-  .pc-container { padding: 0 20px; }
+  .pc-container { padding-block: 0; padding-inline: 20px; }
 }
 @media (max-width: 1024px) {
   .pc-grid-4 { grid-template-columns: repeat(2, 1fr); }
@@ -489,10 +490,10 @@ p { color: var(--muted); }
 @media (max-width: 768px) {
   .pc-grid-4, .pc-grid-3 { grid-template-columns: 1fr 1fr; }
   .pc-blog-featured { grid-template-columns: 1fr; }
-  .pc-section { padding: 48px 0; }
+  .pc-section { padding-block: 48px; padding-inline: 0; }
 }
 @media (max-width: 640px) {
-  .pc-section { padding: 48px 0; }
+  .pc-section { padding-block: 48px; padding-inline: 0; }
   .pc-post-nav { grid-template-columns: 1fr; }
 }
 @media (max-width: 560px) {
@@ -517,7 +518,7 @@ p { color: var(--muted); }
 /* Blog hero */
 .pc-blog-hero {
   background: linear-gradient(120deg, #10214b 0%, #1a3070 60%, #2a4080 100%);
-  padding: 100px 0 60px;
+  padding-block: 100px 60px; padding-inline: 0;
   position: relative;
   overflow: hidden;
 }
@@ -539,7 +540,7 @@ p { color: var(--muted); }
   color: #d7bd88;
   background: rgba(215,189,136,0.12);
   border: 1px solid rgba(215,189,136,0.3);
-  padding: 5px 16px;
+  padding-block: 5px; padding-inline: 16px;
   border-radius: 20px;
   margin-bottom: 20px;
 }
@@ -556,7 +557,7 @@ p { color: var(--muted); }
   font-family: 'Sora', sans-serif;
   font-size: 16px;
   max-width: 520px;
-  margin: 0 auto;
+  margin-block: 0; margin-inline: auto;
 }
 
 /* Category pills */
@@ -568,7 +569,7 @@ p { color: var(--muted); }
   font-family: 'Sora', sans-serif;
   font-size: 12px; font-weight: 600;
   letter-spacing: .06em; text-transform: uppercase;
-  padding: 6px 18px;
+  padding-block: 6px; padding-inline: 18px;
   border-radius: 20px;
   border: 1px solid rgba(255,255,255,0.25);
   color: rgba(255,255,255,0.8);
@@ -588,13 +589,13 @@ p { color: var(--muted); }
   color: rgba(255,255,255,0.5);
   align-self: center;
   white-space: nowrap;
-  margin-right: 4px;
+  margin-inline-end: 4px;
 }
 .pc-blog-tag-pill {
   font-family: 'Sora', sans-serif;
   font-size: 11px; font-weight: 600;
   letter-spacing: .05em; text-transform: lowercase;
-  padding: 4px 14px;
+  padding-block: 4px; padding-inline: 14px;
   border-radius: 20px;
   border: 1px solid rgba(215,189,136,0.35);
   color: rgba(215,189,136,0.85);
@@ -626,7 +627,7 @@ p { color: var(--muted); }
 .pc-blog-featured__img img {
   width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0;
 }
-.pc-blog-featured__body { padding: 48px 40px; display: flex; flex-direction: column; justify-content: center; }
+.pc-blog-featured__body { padding-block: 48px; padding-inline: 40px; display: flex; flex-direction: column; justify-content: center; }
 .pc-blog-tag {
   display: inline-block;
   font-family: 'Sora', sans-serif;
@@ -725,7 +726,7 @@ p { color: var(--muted); }
 }
 .pc-sidebar-link-list { list-style: none; margin: 0; padding: 0; }
 .pc-sidebar-link-list li {
-  padding: 9px 0;
+  padding-block: 9px; padding-inline: 0;
   border-bottom: 1px solid #f0ebe4;
   font-family: 'Sora', sans-serif;
   font-size: 13.5px;
@@ -767,7 +768,7 @@ p { color: var(--muted); }
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 14px;
+  padding-block: 10px; padding-inline: 14px;
   border: 1px solid #d7bd88;
   border-radius: 6px;
   background: #fff;
@@ -790,10 +791,10 @@ p { color: var(--muted); }
   content: '';
   width: 8px;
   height: 8px;
-  border-right: 2px solid #10214b;
+  border-inline-end: 2px solid #10214b;
   border-bottom: 2px solid #10214b;
   transform: rotate(45deg) translateY(-2px);
-  margin-left: 8px;
+  margin-inline-start: 8px;
 }
 
 .custom-select-wrapper.open .custom-select-trigger {
@@ -808,12 +809,12 @@ p { color: var(--muted); }
 .custom-select-options {
   position: absolute;
   top: 100%;
-  left: 0;
-  right: 0;
+  inset-inline-start: 0;
+  inset-inline-end: 0;
   display: none;
   list-style: none;
-  margin: 4px 0 0 0;
-  padding: 8px 0;
+  margin-block: 4px 0; margin-inline: 0 0;
+  padding-block: 8px; padding-inline: 0;
   border: 1px solid #d7bd88;
   border-radius: 6px;
   background: #fff;
@@ -830,7 +831,7 @@ p { color: var(--muted); }
 }
 
 .custom-select-options li {
-  padding: 10px 16px;
+  padding-block: 10px; padding-inline: 16px;
   color: #10214b;
   cursor: pointer;
   transition: background 0.15s ease;
@@ -859,7 +860,23 @@ p { color: var(--muted); }
 
   <!-- Blog Database - Load in HEAD so functions are available to filters -->
   <script src="blogs-data.js"></script>
-</head>
+<!-- TASK-10 START -->
+<!-- TASK-9 START: cross-document View Transitions API, enabled sitewide.
+     Animates same-origin full-page navigations (e.g. the Settings Widget's
+     language switcher navigating between /, /es/, /pt/, /fr/, /ar/, /zh/)
+     in browsers that support the cross-document View Transitions API
+     (Chromium 126+). Browsers without support ignore this at-rule and
+     navigate normally with no error -- this is a progressive enhancement,
+     not a dependency. -->
+<style>
+@view-transition {
+  navigation: auto;
+}
+</style>
+<!-- TASK-9 END -->
+  </head>
+<!-- TASK-10 END -->
+
 <body>
 
 <div id="petcenter-preloader" class="walk-right" role="status" aria-label="Loading Pet Center">
@@ -990,7 +1007,7 @@ p { color: var(--muted); }
   } else {
     window.addEventListener('load', hideLoader);
   }
-  
+
   // FALLBACK: Ensure preloader hides after 5 seconds even if page doesn't load
   setTimeout(function() {
     if (loader && loader.style.display !== 'none') {
@@ -1342,16 +1359,16 @@ p { color: var(--muted); }
         <nav aria-label="Blog pagination" style="margin-bottom:48px;">
           <ul class="pagination justify-content-center" style="gap:8px;list-style:none;display:flex;flex-wrap:wrap;padding:0;margin:0;">
             <li class="page-item disabled">
-              <span class="page-link" style="border-radius:8px;border:none;box-shadow:0 2px 8px rgba(16,33,75,0.08);color:#9a8e82;padding:8px 16px;background:#fff;font-family:'Sora',sans-serif;font-size:14px;">&larr; Previous</span>
+              <span class="page-link" style="border-radius:8px;border:none;box-shadow:0 2px 8px rgba(16,33,75,0.08);color:#9a8e82;padding-block: 8px; padding-inline: 16px;background:#fff;font-family:'Sora',sans-serif;font-size:14px;">&larr; Previous</span>
             </li>
             <li class="page-item active">
-              <span class="page-link" style="border-radius:8px;background:#10214b;border:none;color:#fff;padding:8px 16px;font-family:'Sora',sans-serif;font-size:14px;">1</span>
+              <span class="page-link" style="border-radius:8px;background:#10214b;border:none;color:#fff;padding-block: 8px; padding-inline: 16px;font-family:'Sora',sans-serif;font-size:14px;">1</span>
             </li>
             <li class="page-item">
-              <a class="page-link" href="#" style="border-radius:8px;border:none;box-shadow:0 2px 8px rgba(16,33,75,0.08);color:#10214b;padding:8px 16px;background:#fff;font-family:'Sora',sans-serif;font-size:14px;">2</a>
+              <a class="page-link" href="#" style="border-radius:8px;border:none;box-shadow:0 2px 8px rgba(16,33,75,0.08);color:#10214b;padding-block: 8px; padding-inline: 16px;background:#fff;font-family:'Sora',sans-serif;font-size:14px;">2</a>
             </li>
             <li class="page-item">
-              <a class="page-link" href="#" style="border-radius:8px;border:none;box-shadow:0 2px 8px rgba(16,33,75,0.08);color:#10214b;padding:8px 16px;background:#fff;font-family:'Sora',sans-serif;font-size:14px;">Next &rarr;</a>
+              <a class="page-link" href="#" style="border-radius:8px;border:none;box-shadow:0 2px 8px rgba(16,33,75,0.08);color:#10214b;padding-block: 8px; padding-inline: 16px;background:#fff;font-family:'Sora',sans-serif;font-size:14px;">Next &rarr;</a>
             </li>
           </ul>
         </nav>
@@ -1377,11 +1394,11 @@ p { color: var(--muted); }
         <div class="pc-sidebar-widget">
           <h5>Categories</h5>
           <ul class="pc-sidebar-link-list">
-            <li><a href="#">Adoption Guides <span style="float:right;color:#9a8e82;">4</span></a></li>
-            <li><a href="#">Pet Care <span style="float:right;color:#9a8e82;">3</span></a></li>
-            <li><a href="#">Training <span style="float:right;color:#9a8e82;">2</span></a></li>
-            <li><a href="#">Success Stories <span style="float:right;color:#9a8e82;">2</span></a></li>
-            <li><a href="#">Health &amp; Wellness <span style="float:right;color:#9a8e82;">2</span></a></li>
+            <li><a href="#">Adoption Guides <span style="float:inline-end;color:#9a8e82;">4</span></a></li>
+            <li><a href="#">Pet Care <span style="float:inline-end;color:#9a8e82;">3</span></a></li>
+            <li><a href="#">Training <span style="float:inline-end;color:#9a8e82;">2</span></a></li>
+            <li><a href="#">Success Stories <span style="float:inline-end;color:#9a8e82;">2</span></a></li>
+            <li><a href="#">Health &amp; Wellness <span style="float:inline-end;color:#9a8e82;">2</span></a></li>
           </ul>
         </div>
 
@@ -1665,7 +1682,7 @@ p { color: var(--muted); }
       if (tagsContainer) {
         var allTags = getAllTags();
         var tagsHTML = '<a href="#" class="pc-blog-tag-pill active" data-tag="all" onclick="filterByTag(\'all\'); return false;">All Tags</a>';
-        
+
         allTags.forEach(function(tag) {
           tagsHTML += '<a href="#" class="pc-blog-tag-pill" data-tag="' + tag + '" onclick="filterByTag(\'' + tag + '\'); return false;">' + tag + '</a>';
         });
@@ -1683,8 +1700,548 @@ p { color: var(--muted); }
 
 })();
 </script>
+<!-- TASK-10 START -->
+<!-- TASK-9 START: Settings Widget -- gear-icon trigger + panel housing the
+     sitewide language switcher and the personal widget-background-opacity
+     slider. Defines the shared `preferences` object (localStorage key
+     "preferences", fields {lang, opacity}) that this page's own
+     lang-redirect.js / i18n-core.js (Task 1) already read `preferences.lang`
+     from, and that Admin-Project #4's `preferred_chat_language` field also
+     reads independently -- the exact field name/shape/values documented in
+     this task must not change without notifying that project first.
+     Z-INDEX NOTE: the site's real, documented highest z-index anywhere is
+     6001 (the filter/form bottom-sheet system), not the floating contact
+     button's 4000 -- this widget's trigger/panel/dropdown are placed at
+     6100/6200/6300 so they always sit above every existing floating
+     element, including both of those. -->
+<style>
+/* Renamed from --pc-widget-opacity (added in this task's first pass) to
+   --pc-widget-bg-opacity, and a second, distinct --pc-widget-opacity
+   variable added for the whole widget's own opacity -- per user follow-up,
+   "Widget Background Opacity" (panel's rgba background only, children
+   stay fully legible) and "Widget Opacity" (the entire trigger + panel,
+   via real CSS `opacity` on the container) are two separate controls. */
+:root { --pc-widget-bg-opacity: 0.90; --pc-widget-opacity: 1; }
+
 
 <script src="/admin/chat-widget.js"></script>
 <script src="/assets/js/accessibility-widget.js" defer></script>
+/* "Central position" = vertically centered on the viewport's right edge.
+   User follow-up moved this from the left edge (this task's original
+   build) to the right edge -- everything else about the placement logic
+   from that first pass still applies: vertically centered avoids the
+   hero's own CTA buttons (the collision found and fixed when this was
+   briefly bottom-center), and vertical centering keeps clear of the
+   bottom-right floating contact button (z-index 4000), re-confirmed by
+   Playwright screenshot below since moving to the same edge as that
+   button is exactly the kind of collision worth re-checking, not
+   assuming safe by reasoning alone. */
+.pc-settings-widget {
+  position: fixed;
+  top: 50%;
+  inset-inline-end: 16px;
+  transform: translateY(-50%);
+  z-index: 6100;
+  font-family: 'Sora', sans-serif;
+  /* Whole-widget opacity (trigger + panel together), separate from the
+     panel-only rgba background opacity below. Real CSS `opacity`, by
+     design, fades everything inside -- that's the intended effect of this
+     specific control, unlike the background one. */
+  opacity: var(--pc-widget-opacity);
+  transition: opacity 0.2s ease;
+}
+
+.pc-settings-trigger {
+  width: 52px; height: 52px; border-radius: 50%; border: none; cursor: pointer;
+  background: #10214b; color: #d7bd88;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 16px rgba(16,33,75,0.35);
+  transition: transform 0.3s cubic-bezier(.4,0,.2,1), background 0.3s cubic-bezier(.4,0,.2,1);
+}
+.pc-settings-trigger:hover { transform: rotate(35deg); background: #1a2f5c; }
+.pc-settings-trigger[aria-expanded="true"] { background: #ED7624; color: #fff; }
+
+.pc-settings-panel {
+  position: absolute;
+  top: 50%;
+  /* Opens to the LEFT of the trigger now that the trigger sits on the
+     right edge (was `inset-inline-start: calc(100% + 12px)` opening rightward off a
+     left-edge trigger). */
+  inset-inline-end: calc(100% + 12px);
+  transform: translateY(-50%);
+  width: 280px;
+  max-width: calc(100vw - 32px);
+  /* rgba() background driven by the Widget Background Opacity slider --
+     never container `opacity`, which would also fade the panel's
+     text/children (Task 9's explicit requirement: "rgba() backgrounds,
+     not container opacity"). The separate whole-widget opacity control
+     lives on .pc-settings-widget above. */
+  background: rgba(16, 33, 75, var(--pc-widget-bg-opacity));
+  color: #f2f2f2;
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+  z-index: 6200;
+}
+.pc-settings-panel[hidden] { display: none; }
+
+.pc-settings-panel__header {
+  display: flex; align-items: center; justify-content: space-between;
+  font-weight: 700; margin-bottom: 12px; font-size: 15px;
+}
+.pc-settings-panel__close {
+  background: none; border: none; color: inherit; font-size: 20px; line-height: 1;
+  cursor: pointer; padding-block: 2px; padding-inline: 6px;
+}
+
+.pc-settings-row { margin-bottom: 14px; }
+.pc-settings-row:last-child { margin-bottom: 0; }
+.pc-settings-label { display: block; font-size: 12.5px; margin-bottom: 6px; color: #d7bd88; }
+/* One-line description under a consequential setting, per Design System
+   Section 19's "Settings Widget Control Pattern -- Toggle + Description"
+   rule (pair every consequential control with a plain-language line
+   explaining its effect, since a user shouldn't have to guess). */
+.pc-settings-desc { font-size: 11.5px; color: #a39b91; margin-block: -2px 8px; margin-inline: 0; line-height: 1.4; }
+
+.pc-lang-dropdown { position: relative; }
+.pc-lang-dropdown__trigger {
+  width: 100%; display: flex; align-items: center; justify-content: space-between;
+  background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.16);
+  color: #f2f2f2; border-radius: 8px; padding-block: 8px; padding-inline: 12px; font-size: 13.5px; cursor: pointer;
+  font-family: 'Sora', sans-serif;
+}
+.pc-lang-dropdown__panel {
+  position: absolute; top: calc(100% + 6px); inset-inline-start: 0; inset-inline-end: 0;
+  background: #10214b; border: 1px solid rgba(255,255,255,0.14);
+  /* Sharp corner nearest the trigger (top-left here, since the trigger
+     sits above this downward-opening panel) -- the "message bubble" corner
+     rule from PETCENTER_DESIGN_SYSTEM_v1_0.md Section 24 (v1.25). */
+  border-start-start-radius: 0; border-start-end-radius: 8px; border-end-end-radius: 8px; border-end-start-radius: 8px;
+  list-style: none; margin: 0; padding: 4px; max-height: 200px; overflow-y: auto;
+  z-index: 6300;
+}
+.pc-lang-dropdown__panel[hidden] { display: none; }
+.pc-lang-dropdown__panel li { padding-block: 8px; padding-inline: 10px; font-size: 13.5px; border-radius: 6px; cursor: pointer; }
+.pc-lang-dropdown__panel li:hover,
+.pc-lang-dropdown__panel li[aria-selected="true"] { background: rgba(215,189,136,0.18); }
+
+.pc-opacity-slider { width: 100%; accent-color: #d7bd88; }
+.pc-opacity-value { font-size: 12px; color: #a39b91; float: inline-end; margin-top: 2px; }
+
+@media (max-width: 600px) {
+  /* Below 600px, opening the panel to the right of a left-edge trigger
+     would push a 280px-wide panel off the right edge of the viewport on
+     most phones. Anchor the panel to open downward from the trigger
+     instead, still clear of both the hero content and the bottom-right
+     contact button. Anchored via `inset-inline-end: 0` (not `inset-inline-start: 0`) since the
+     trigger itself now sits near the right edge -- `inset-inline-start: 0` would push
+     a near-full-width panel further right and off-screen. */
+  .pc-settings-panel {
+    top: calc(100% + 10px);
+    inset-inline-end: 0;
+    inset-inline-start: auto;
+    transform: none;
+    width: calc(100vw - 48px);
+  }
+}
+
+/* TASK-web12-3 END */
+</style>
+
+<div class="pc-settings-widget" id="pcSettingsWidget">
+  <button type="button" class="pc-settings-trigger" id="pcSettingsTrigger"
+          aria-haspopup="true" aria-expanded="false" aria-controls="pcSettingsPanel"
+          aria-label="Open site settings">
+    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <circle cx="12" cy="12" r="3"></circle>
+      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+    </svg>
+  </button>
+
+  <div class="pc-settings-panel" id="pcSettingsPanel" role="dialog" aria-modal="false"
+       aria-label="Site settings" hidden="">
+    <div class="pc-settings-panel__header">
+      <span data-i18n="common.settingsWidget.1">Settings</span>
+      <button type="button" class="pc-settings-panel__close" id="pcSettingsClose"
+              aria-label="Close settings">&times;</button>
+    </div>
+
+    <div class="pc-settings-row">
+      <label class="pc-settings-label" id="pcLangLabel" data-i18n="common.settingsWidget.2">Language</label>
+      <div class="pc-lang-dropdown" id="pcLangDropdown">
+        <button type="button" class="pc-lang-dropdown__trigger" id="pcLangTrigger"
+                aria-haspopup="listbox" aria-expanded="false" aria-labelledby="pcLangLabel"
+                aria-controls="pcLangListbox">
+          <span id="pcLangCurrentLabel">English</span>
+          <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </button>
+        <ul class="pc-lang-dropdown__panel" id="pcLangListbox" role="listbox"
+            aria-labelledby="pcLangLabel" tabindex="-1" hidden="">
+          <li role="option" data-lang="en" aria-selected="true" tabindex="0">English</li>
+          <li role="option" data-lang="es" aria-selected="false" tabindex="0">Español</li>
+          <li role="option" data-lang="pt" aria-selected="false" tabindex="0">Português</li>
+          <li role="option" data-lang="fr" aria-selected="false" tabindex="0">Français</li>
+          <li role="option" data-lang="ar" aria-selected="false" tabindex="0">العربية</li>
+          <li role="option" data-lang="zh-Hans" aria-selected="false" tabindex="0">简体中文</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="pc-settings-row">
+      <label class="pc-settings-label" for="pcOpacitySlider" id="pcOpacityLabel" data-i18n="common.settingsWidget.3">Widget Background Opacity</label>
+      <input type="range" id="pcOpacitySlider" class="pc-opacity-slider"
+             min="20" max="100" step="5" value="90"
+             role="slider" aria-labelledby="pcOpacityLabel"
+             aria-valuemin="20" aria-valuemax="100" aria-valuenow="90" aria-valuetext="90%">
+      <span class="pc-opacity-value" id="pcOpacityValue" aria-hidden="true">90%</span>
+    </div>
+
+    <div class="pc-settings-row">
+      <label class="pc-settings-label" for="pcWidgetOpacitySlider" id="pcWidgetOpacityLabel" data-i18n="common.settingsWidget.4">Widget Opacity</label>
+      <input type="range" id="pcWidgetOpacitySlider" class="pc-opacity-slider"
+             min="20" max="100" step="5" value="100"
+             role="slider" aria-labelledby="pcWidgetOpacityLabel"
+             aria-valuemin="20" aria-valuemax="100" aria-valuenow="100" aria-valuetext="100%">
+      <span class="pc-opacity-value" id="pcWidgetOpacityValue" aria-hidden="true">100%</span>
+    </div>
+
+    <!-- TASK (Color Vision Accessibility) START: brief calls for this
+         control to sit "alongside the existing dark mode toggle" -- no dark
+         mode toggle exists anywhere in this codebase yet (Design System
+         Section 19 documents its intended look/behavior but confirms it
+         is not yet built; searched before assuming otherwise). Not adding
+         a placeholder/stub toggle for a feature that hasn't been
+         specified as buildable here -- flagging the gap in this task's
+         completion file instead, per "flag it rather than inventing." -->
+    <div class="pc-settings-row">
+      <label class="pc-settings-label" id="pcVisionLabel" data-i18n="common.settingsWidget.5">Color Vision</label>
+      <p class="pc-settings-desc" id="pcVisionDesc" data-i18n="common.settingsWidget.6">Adjusts status colors, alerts, and charts sitewide for your selected vision type.</p>
+      <div class="pc-lang-dropdown" id="pcVisionDropdown">
+        <button type="button" class="pc-lang-dropdown__trigger" id="pcVisionTrigger"
+                aria-haspopup="listbox" aria-expanded="false" aria-labelledby="pcVisionLabel"
+                aria-controls="pcVisionListbox">
+          <span id="pcVisionCurrentLabel">Normal Vision</span>
+          <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </button>
+        <ul class="pc-lang-dropdown__panel" id="pcVisionListbox" role="listbox"
+            aria-labelledby="pcVisionLabel" tabindex="-1" hidden="">
+          <li role="option" data-vision="normal" aria-selected="true" tabindex="0">Normal Vision</li>
+          <li role="option" data-vision="deuteranopia" aria-selected="false" tabindex="0">Deuteranopia</li>
+          <li role="option" data-vision="protanopia" aria-selected="false" tabindex="0">Protanopia</li>
+          <li role="option" data-vision="tritanopia" aria-selected="false" tabindex="0">Tritanopia</li>
+        </ul>
+      </div>
+    </div>
+    <!-- TASK (Color Vision Accessibility) END -->
+  </div>
+</div>
+
+<script>
+// TASK-9 START: Settings Widget logic + `preferences` schema owner.
+(function () {
+  'use strict';
+
+  var PREFS_KEY = 'preferences';
+  // Written by admin-dashboard.html's "Default Widget Background Opacity"
+  // and "Default Widget Opacity" controls (this task's admin-side
+  // deliverable). Read here only as a fallback default for a visitor with
+  // no personal preference saved yet -- a visitor's own saved choice in
+  // `preferences.opacity` / `preferences.widgetOpacity` always wins.
+  var ADMIN_DEFAULTS_KEY = 'pc_admin_settings_defaults';
+
+  // LANG_FOLDER_MAP mirrors Task 1's /en/-/zh/ folder scaffolding -- English
+  // is the un-prefixed root (never a redirect target), the rest are their
+  // own language-code folders. 'zh-Hans' (tagged, not bare 'zh') is the
+  // CEO-confirmed value for Chinese everywhere this schema is used.
+  var LANG_FOLDER_MAP = { en: '/', es: '/es/', pt: '/pt/', fr: '/fr/', ar: '/ar/', 'zh-Hans': '/zh/' };
+  var LANG_LABELS = { en: 'English', es: 'Español', pt: 'Português', fr: 'Français', ar: 'العربية', 'zh-Hans': '简体中文' };
+  var VISION_LABELS = { normal: 'Normal Vision', deuteranopia: 'Deuteranopia', protanopia: 'Protanopia', tritanopia: 'Tritanopia' };
+
+  function readAdminDefaultOpacity() {
+    try {
+      var raw = localStorage.getItem(ADMIN_DEFAULTS_KEY);
+      if (!raw) return 90;
+      var parsed = JSON.parse(raw);
+      var val = Number(parsed && parsed.opacity);
+      return (val >= 20 && val <= 100) ? val : 90;
+    } catch (e) { return 90; }
+  }
+
+  function readAdminDefaultWidgetOpacity() {
+    try {
+      var raw = localStorage.getItem(ADMIN_DEFAULTS_KEY);
+      if (!raw) return 100;
+      var parsed = JSON.parse(raw);
+      var val = Number(parsed && parsed.widgetOpacity);
+      return (val >= 20 && val <= 100) ? val : 100;
+    } catch (e) { return 100; }
+  }
+
+  function getPreferences() {
+    try {
+      var raw = localStorage.getItem(PREFS_KEY);
+      var parsed = raw ? JSON.parse(raw) : {};
+      return {
+        lang: (typeof parsed.lang === 'string' && parsed.lang) ? parsed.lang : 'en',
+        opacity: (typeof parsed.opacity === 'number') ? parsed.opacity : readAdminDefaultOpacity(),
+        widgetOpacity: (typeof parsed.widgetOpacity === 'number') ? parsed.widgetOpacity : readAdminDefaultWidgetOpacity(),
+        colorVision: (typeof parsed.colorVision === 'string' && VISION_LABELS[parsed.colorVision]) ? parsed.colorVision : 'normal'
+      };
+    } catch (e) {
+      return { lang: 'en', opacity: readAdminDefaultOpacity(), widgetOpacity: readAdminDefaultWidgetOpacity(), colorVision: 'normal' };
+    }
+  }
+
+  function setPreferences(partial) {
+    var current = getPreferences();
+    var next = { lang: current.lang, opacity: current.opacity, widgetOpacity: current.widgetOpacity, colorVision: current.colorVision };
+    for (var k in partial) { if (Object.prototype.hasOwnProperty.call(partial, k)) next[k] = partial[k]; }
+    try { localStorage.setItem(PREFS_KEY, JSON.stringify(next)); } catch (e) { /* storage unavailable -- fail silently, in-memory state still applies for this tab */ }
+    return next;
+  }
+
+  // Panel-only rgba() background opacity -- children stay fully legible
+  // regardless of this value.
+  function applyBackgroundOpacity(value) {
+    document.documentElement.style.setProperty('--pc-widget-bg-opacity', (value / 100).toFixed(2));
+    var sliderEl = document.getElementById('pcOpacitySlider');
+    var valueEl = document.getElementById('pcOpacityValue');
+    if (sliderEl) {
+      sliderEl.value = value;
+      sliderEl.setAttribute('aria-valuenow', value);
+      sliderEl.setAttribute('aria-valuetext', value + '%');
+    }
+    if (valueEl) valueEl.textContent = value + '%';
+  }
+
+  // Whole-widget opacity -- real CSS `opacity` on .pc-settings-widget,
+  // fades the trigger button and everything inside the panel together.
+  function applyWidgetOpacity(value) {
+    document.documentElement.style.setProperty('--pc-widget-opacity', (value / 100).toFixed(2));
+    var sliderEl = document.getElementById('pcWidgetOpacitySlider');
+    var valueEl = document.getElementById('pcWidgetOpacityValue');
+    if (sliderEl) {
+      sliderEl.value = value;
+      sliderEl.setAttribute('aria-valuenow', value);
+      sliderEl.setAttribute('aria-valuetext', value + '%');
+    }
+    if (valueEl) valueEl.textContent = value + '%';
+  }
+
+  function applyLangSelection(code) {
+    var currentLabelEl = document.getElementById('pcLangCurrentLabel');
+    if (currentLabelEl) currentLabelEl.textContent = LANG_LABELS[code] || 'English';
+    var options = document.querySelectorAll('#pcLangListbox li');
+    options.forEach(function (opt) {
+      opt.setAttribute('aria-selected', opt.getAttribute('data-lang') === code ? 'true' : 'false');
+    });
+  }
+
+  // Sets the `data-vision` attribute on <html>, which every
+  // [data-vision="..."] CSS override block above (and in admin-dashboard.html)
+  // keys off of. "normal" matches no override rule, so it's a no-op that
+  // simply leaves the default colors in place -- no separate "clear" branch
+  // needed.
+  function applyVisionSelection(vision) {
+    document.documentElement.setAttribute('data-vision', vision);
+    var currentLabelEl = document.getElementById('pcVisionCurrentLabel');
+    if (currentLabelEl) currentLabelEl.textContent = VISION_LABELS[vision] || 'Normal Vision';
+    var options = document.querySelectorAll('#pcVisionListbox li');
+    options.forEach(function (opt) {
+      opt.setAttribute('aria-selected', opt.getAttribute('data-vision') === vision ? 'true' : 'false');
+    });
+  }
+
+  function navigateToLang(code) {
+    var target = LANG_FOLDER_MAP[code] || '/';
+    // Cross-document View Transitions (enabled sitewide via the
+    // `@view-transition { navigation: auto; }` at-rule in <head>) animate
+    // this navigation automatically in supporting browsers -- a plain
+    // same-origin navigation is all that's needed to trigger it.
+    window.location.href = target;
+  }
+
+  // Apply stored/default preferences immediately (before DOMContentLoaded)
+  // so both CSS variables are correct before first paint -- avoids a flash
+  // of the defaults on a return visitor with different saved values. The
+  // `data-vision` attribute is likewise set here, before first paint, so
+  // there's no flash of un-adjusted colors either.
+  (function initFromStoredPreferencesEarly() {
+    var prefs = getPreferences();
+    document.documentElement.style.setProperty('--pc-widget-bg-opacity', (prefs.opacity / 100).toFixed(2));
+    document.documentElement.style.setProperty('--pc-widget-opacity', (prefs.widgetOpacity / 100).toFixed(2));
+    document.documentElement.setAttribute('data-vision', prefs.colorVision);
+  })();
+
+  document.addEventListener('DOMContentLoaded', function () {
+    var trigger = document.getElementById('pcSettingsTrigger');
+    var panel = document.getElementById('pcSettingsPanel');
+    var closeBtn = document.getElementById('pcSettingsClose');
+    var langTrigger = document.getElementById('pcLangTrigger');
+    var langListbox = document.getElementById('pcLangListbox');
+    var opacitySlider = document.getElementById('pcOpacitySlider');
+    var widgetOpacitySlider = document.getElementById('pcWidgetOpacitySlider');
+    var visionTrigger = document.getElementById('pcVisionTrigger');
+    var visionListbox = document.getElementById('pcVisionListbox');
+
+    if (!trigger || !panel) return;
+
+    var prefs = getPreferences();
+    applyBackgroundOpacity(prefs.opacity);
+    applyWidgetOpacity(prefs.widgetOpacity);
+    applyLangSelection(prefs.lang);
+    applyVisionSelection(prefs.colorVision);
+
+    function openPanel() {
+      panel.hidden = false;
+      trigger.setAttribute('aria-expanded', 'true');
+    }
+    function closeAllDropdowns() {
+      if (langListbox && !langListbox.hidden) {
+        langListbox.hidden = true;
+        langTrigger.setAttribute('aria-expanded', 'false');
+      }
+      if (visionListbox && !visionListbox.hidden) {
+        visionListbox.hidden = true;
+        visionTrigger.setAttribute('aria-expanded', 'false');
+      }
+    }
+    function closePanel() {
+      panel.hidden = true;
+      trigger.setAttribute('aria-expanded', 'false');
+      closeAllDropdowns();
+    }
+
+    trigger.addEventListener('click', function () {
+      panel.hidden ? openPanel() : closePanel();
+    });
+    if (closeBtn) closeBtn.addEventListener('click', closePanel);
+
+    document.addEventListener('click', function (e) {
+      if (!e.target.closest('#pcSettingsWidget')) closePanel();
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') closePanel();
+    });
+
+    // Language dropdown: open/close + selection.
+    if (langTrigger && langListbox) {
+      langTrigger.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var isOpen = !langListbox.hidden;
+        langListbox.hidden = isOpen;
+        langTrigger.setAttribute('aria-expanded', String(!isOpen));
+      });
+      langListbox.addEventListener('click', function (e) {
+        var opt = e.target.closest('li[role="option"]');
+        if (!opt) return;
+        var code = opt.getAttribute('data-lang');
+        setPreferences({ lang: code });
+        applyLangSelection(code);
+        closeAllDropdowns();
+        navigateToLang(code);
+      });
+      // Keyboard support: ArrowUp/ArrowDown move focus between options,
+      // Enter/Space activates the focused option.
+      langListbox.addEventListener('keydown', function (e) {
+        var opts = Array.prototype.slice.call(langListbox.querySelectorAll('li[role="option"]'));
+        var idx = opts.indexOf(document.activeElement);
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          idx = Math.min(opts.length - 1, idx + 1);
+          opts[idx].focus();
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          idx = Math.max(0, idx - 1);
+          opts[idx].focus();
+        } else if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          if (document.activeElement && document.activeElement.click) document.activeElement.click();
+        } else if (e.key === 'Escape') {
+          closeAllDropdowns();
+          langTrigger.focus();
+        }
+      });
+    }
+
+    // Color Vision dropdown: same open/close/selection/keyboard pattern as
+    // the language dropdown above -- unlike language, selecting an option
+    // here does NOT navigate anywhere, it just applies immediately.
+    if (visionTrigger && visionListbox) {
+      visionTrigger.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var isOpen = !visionListbox.hidden;
+        visionListbox.hidden = isOpen;
+        visionTrigger.setAttribute('aria-expanded', String(!isOpen));
+      });
+      visionListbox.addEventListener('click', function (e) {
+        var opt = e.target.closest('li[role="option"]');
+        if (!opt) return;
+        var vision = opt.getAttribute('data-vision');
+        setPreferences({ colorVision: vision });
+        applyVisionSelection(vision);
+        closeAllDropdowns();
+      });
+      visionListbox.addEventListener('keydown', function (e) {
+        var opts = Array.prototype.slice.call(visionListbox.querySelectorAll('li[role="option"]'));
+        var idx = opts.indexOf(document.activeElement);
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          idx = Math.min(opts.length - 1, idx + 1);
+          opts[idx].focus();
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          idx = Math.max(0, idx - 1);
+          opts[idx].focus();
+        } else if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          if (document.activeElement && document.activeElement.click) document.activeElement.click();
+        } else if (e.key === 'Escape') {
+          closeAllDropdowns();
+          visionTrigger.focus();
+        }
+      });
+    }
+
+    // Both opacity sliders -- native <input type="range"> already provides
+    // full keyboard support (Arrow keys, Home/End, PageUp/PageDown); role
+    // and aria-value* attributes are set explicitly per this task's spec.
+    if (opacitySlider) {
+      opacitySlider.addEventListener('input', function () {
+        var value = Number(opacitySlider.value);
+        applyBackgroundOpacity(value);
+        setPreferences({ opacity: value });
+      });
+    }
+    if (widgetOpacitySlider) {
+      widgetOpacitySlider.addEventListener('input', function () {
+        var value = Number(widgetOpacitySlider.value);
+        applyWidgetOpacity(value);
+        setPreferences({ widgetOpacity: value });
+      });
+    }
+
+    // Native `storage` event -- fires in OTHER tabs/windows on this origin
+    // when `preferences` changes there, and vice versa. This is the
+    // cross-tab sync mechanism this task requires; no polling needed.
+    window.addEventListener('storage', function (e) {
+      if (e.key !== PREFS_KEY) return;
+      var updated = getPreferences();
+      applyBackgroundOpacity(updated.opacity);
+      applyWidgetOpacity(updated.widgetOpacity);
+      applyLangSelection(updated.lang);
+      applyVisionSelection(updated.colorVision);
+    });
+  });
+})();
+// TASK-9 END
+</script>
 </body>
+<!-- TASK-10 END -->
+
 </html>

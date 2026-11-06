@@ -7,6 +7,7 @@
   <title>Pet Match Request — Pet Center</title>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
+/* TASK-web12-3 START: logical CSS properties for RTL */
 /* ════════════════════════════════════════════════════════════════════════════
    PET CENTER — PET MATCH REQUEST — Design System v1.0
    Colors: Navy #10214b | Gold #d7bd88 | Orange #ED7624
@@ -76,9 +77,9 @@ button { font-family: inherit; }
    this task's scope and is flagged separately rather than fixed here. ──────── */
 .pc-header {
   position: fixed;
-  top: 0; left: 0; right: 0;
+  top: 0; inset-inline-start: 0; inset-inline-end: 0;
   z-index: 1000;
-  padding: 0 24px;
+  padding-block: 0; padding-inline: 24px;
   height: 68px;
   display: flex;
   align-items: center;
@@ -108,7 +109,7 @@ button { font-family: inherit; }
 .pc-header__nav li { position: relative; }
 .pc-header__nav a {
   display: block;
-  padding: 8px 11px;
+  padding-block: 8px; padding-inline: 11px;
   font-family: 'Sora', sans-serif;
   font-size: 13px;
   font-weight: 500;
@@ -119,7 +120,7 @@ button { font-family: inherit; }
   white-space: nowrap;
 }
 .pc-header__nav a:hover { color: #d7bd88; background: rgba(255,255,255,0.08); }
-.pc-header__nav .nav-donate a { background: #ED7624; color: #fff; font-weight: 600; padding: 8px 16px; }
+.pc-header__nav .nav-donate a { background: #ED7624; color: #fff; font-weight: 600; padding-block: 8px; padding-inline: 16px; }
 .pc-header__nav .nav-donate a:hover { background: #d4621a; color: #fff; }
 .pc-header__nav .nav-signup a,
 .pc-header__nav .nav-login a { border: 1px solid rgba(215,189,136,0.5); color: #d7bd88; }
@@ -129,17 +130,17 @@ button { font-family: inherit; }
   display: none;
   position: absolute;
   top: calc(100% + 4px);
-  left: 0;
+  inset-inline-start: 0;
   background: #10214b;
   border-radius: 8px;
   list-style: none;
   min-width: 168px;
   box-shadow: 0 8px 32px rgba(0,0,0,0.22);
-  padding: 6px 0;
+  padding-block: 6px; padding-inline: 0;
   z-index: 100;
 }
 .pc-header__nav .has-drop:hover > ul { display: block; }
-.pc-header__nav .has-drop > ul a { padding: 9px 18px; font-size: 13px; border-radius: 0; }
+.pc-header__nav .has-drop > ul a { padding-block: 9px; padding-inline: 18px; font-size: 13px; border-radius: 0; }
 .pc-hamburger {
   display: none;
   flex-direction: column;
@@ -174,8 +175,8 @@ button { font-family: inherit; }
   flex-direction: column;
   position: absolute;
   top: 100%;
-  left: 0;
-  right: 0;
+  inset-inline-start: 0;
+  inset-inline-end: 0;
   background: rgba(16,33,75,0.98);
   z-index: 999;
   max-height: 0;
@@ -190,13 +191,13 @@ button { font-family: inherit; }
   overflow-y: auto;
   opacity: 1;
   pointer-events: auto;
-  padding: 16px 0 calc(100vh - 68px - 56px);
+  padding-block: 16px calc(100vh - 68px - 56px); padding-inline: 0;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
 }
 .pc-mobile-menu a {
   display: block;
-  padding: 12px 28px;
+  padding-block: 12px; padding-inline: 28px;
   font-family: 'Sora', sans-serif;
   font-size: 15px;
   font-weight: 500;
@@ -210,11 +211,11 @@ button { font-family: inherit; }
   background: rgba(255,255,255,0.05);
 }
 .pc-mobile-menu .mobile-donate {
-  margin: 12px 28px 0;
+  margin-block: 12px 0; margin-inline: 28px;
   display: inline-block;
   background: #ED7624;
   color: #fff;
-  padding: 11px 24px;
+  padding-block: 11px; padding-inline: 24px;
   border-radius: 8px;
   font-weight: 600;
   border-bottom: none;
@@ -227,11 +228,11 @@ button { font-family: inherit; }
 /* ─── Global Footer (pc-footer) ──────────────────────────────────────────────── */
 .pc-footer {
   background: #0b1834;
-  padding: 60px 24px 28px;
+  padding-block: 60px 28px; padding-inline: 24px;
   color: rgba(255,255,255,0.65);
   font-family: 'Sora', sans-serif;
 }
-.pc-footer__inner { max-width: 1200px; margin: 0 auto; }
+.pc-footer__inner { max-width: 1200px; margin-block: 0; margin-inline: auto; }
 .pc-footer__top {
   display: grid;
   /* FIX (see note above this block): 5 real columns (.pc-footer__brand +
@@ -266,7 +267,7 @@ button { font-family: inherit; }
    flow on a page a stranger has never seen before. ────────────────────────── */
 .pm-wizard {
   max-width: 600px;
-  margin: 0 auto;
+  margin-block: 0; margin-inline: auto;
   min-height: 100vh;
   min-height: 100dvh;
   background: var(--surface);
@@ -276,14 +277,14 @@ button { font-family: inherit; }
   box-shadow: var(--shadow-lg);
 }
 @media (min-width: 640px) {
-  .pm-wizard { margin: 32px auto; min-height: 720px; border-radius: var(--radius-lg); overflow: hidden; }
+  .pm-wizard { margin-block: 32px; margin-inline: auto; min-height: 720px; border-radius: var(--radius-lg); overflow: hidden; }
 }
 
 .pm-topbar {
   display: flex;
   align-items: center;
   gap: 16px;
-  padding: 20px 24px 0;
+  padding-block: 20px 0; padding-inline: 24px;
 }
 .pm-topbar__close {
   width: 28px; height: 28px;
@@ -304,7 +305,7 @@ button { font-family: inherit; }
 }
 
 .pm-progress-label {
-  padding: 22px 24px 8px;
+  padding-block: 22px 8px; padding-inline: 24px;
   font-size: 13px;
   font-weight: 700;
   color: var(--text);
@@ -312,7 +313,7 @@ button { font-family: inherit; }
 .pm-progress-track {
   display: flex;
   gap: 6px;
-  padding: 0 24px;
+  padding-block: 0; padding-inline: 24px;
 }
 .pm-progress-seg {
   flex: 1;
@@ -325,7 +326,7 @@ button { font-family: inherit; }
 
 .pm-step-body {
   flex: 1;
-  padding: 28px 24px 24px;
+  padding-block: 28px 24px; padding-inline: 24px;
   overflow-y: auto;
 }
 .pm-step { display: none; }
@@ -348,7 +349,7 @@ button { font-family: inherit; }
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 18px 24px 28px;
+  padding-block: 18px 28px; padding-inline: 24px;
 }
 .pm-back-link {
   background: none; border: none; cursor: pointer;
@@ -356,7 +357,7 @@ button { font-family: inherit; }
   font-family: 'Sora', sans-serif;
   font-size: 14px;
   font-weight: 500;
-  padding: 8px 4px;
+  padding-block: 8px; padding-inline: 4px;
   visibility: hidden;
 }
 .pm-back-link.visible { visibility: visible; }
@@ -388,7 +389,7 @@ button { font-family: inherit; }
   font-size: 30px;
   font-weight: 700;
   color: var(--text);
-  padding: 4px 2px 10px;
+  padding-block: 4px 10px; padding-inline: 2px;
   outline: none;
   transition: border-color 0.2s ease;
 }
@@ -402,7 +403,7 @@ button { font-family: inherit; }
   align-items: baseline;
   gap: 10px;
   border-bottom: 2px solid var(--border);
-  padding: 4px 2px 10px;
+  padding-block: 4px 10px; padding-inline: 2px;
   transition: border-color 0.2s ease;
 }
 .pm-inline-num:focus-within { border-color: var(--orange); }
@@ -425,7 +426,7 @@ button { font-family: inherit; }
   width: 100%;
   border: 1.5px solid var(--border);
   border-radius: 10px;
-  padding: 14px 16px;
+  padding-block: 14px; padding-inline: 16px;
   font-family: 'Sora', sans-serif;
   font-size: 15px;
   color: var(--text);
@@ -458,7 +459,7 @@ button { font-family: inherit; }
   background: var(--surface);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
-  padding: 20px 10px 16px;
+  padding-block: 20px 16px; padding-inline: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -570,7 +571,7 @@ button { font-family: inherit; }
 
 .dropdown-trigger {
   display: flex; align-items: center; justify-content: space-between; gap: 10px;
-  width: 100%; padding: 11px 14px;
+  width: 100%; padding-block: 11px; padding-inline: 14px;
   background: #ffffff;
   border: 1.5px solid rgba(16,33,75,0.12);
   border-radius: 9px;
@@ -606,7 +607,7 @@ button { font-family: inherit; }
   position: fixed; margin-top: 6px;
   background: #ffffff;
   border: 1.5px solid rgba(16,33,75,0.10);
-  border-radius: 14px 0 14px 14px;   /* sharp top-right corner — the "message bubble" notch, not a mistake */
+  border-start-start-radius: 14px; border-start-end-radius: 0; border-end-end-radius: 14px; border-end-start-radius: 14px;   /* sharp top-right corner — the "message bubble" notch, not a mistake */
   box-shadow: 0 12px 32px rgba(16,33,75,0.18), 0 2px 8px rgba(16,33,75,0.08);
   overflow: hidden;
   z-index: 2000;                     /* raised from 999 to sit above this wizard's own fixed topbar/nav elements, still below Modal's 9999 per Section 24 note 5 — matches quiz.html's tuned value */
@@ -620,24 +621,24 @@ button { font-family: inherit; }
   opacity: 1; visibility: visible; transform: translateY(0) scale(1); pointer-events: auto;
 }
 .dropdown-panel__search {
-  padding: 10px 12px;
+  padding-block: 10px; padding-inline: 12px;
   border-bottom: 1px solid rgba(16,33,75,0.08);
 }
 .dropdown-panel__search input {
   width: 100%;
   border: 1px solid var(--border);
   border-radius: 7px;
-  padding: 8px 10px;
+  padding-block: 8px; padding-inline: 10px;
   font-family: 'Sora', sans-serif;
   font-size: 13.5px;
   outline: none;
 }
 .dropdown-panel__search input:focus { border-color: var(--gold); }
-.dropdown-panel__scroll { max-height: 225px; overflow-y: auto; padding: 6px 0; }
+.dropdown-panel__scroll { max-height: 225px; overflow-y: auto; padding-block: 6px; padding-inline: 0; }
 
 .dropdown-panel__row {
-  display: flex; align-items: center; gap: 10px; padding: 11px 16px;
-  border-left: 3px solid transparent;
+  display: flex; align-items: center; gap: 10px; padding-block: 11px; padding-inline: 16px;
+  border-inline-start: 3px solid transparent;
   border-bottom: 1px solid rgba(16,33,75,0.06);
   cursor: pointer;
   font-size: 14.5px;
@@ -648,7 +649,7 @@ button { font-family: inherit; }
 .dropdown-panel__row:hover { background: rgba(16,33,75,0.05); }
 .dropdown-panel__row.is-active {
   background: rgba(215,189,136,0.12);
-  border-left-color: var(--gold);
+  border-inline-start-color: var(--gold);
   font-weight: 600;
 }
 .dropdown-panel__row--empty { color: var(--muted); cursor: default; }
@@ -656,7 +657,7 @@ button { font-family: inherit; }
 
 /* ─── File Upload Component — Design System Section 7, copied verbatim ──────── */
 .file-drop {
-  padding: 22px 12px;
+  padding-block: 22px; padding-inline: 12px;
   border-radius: 10px;
   border: 2px dashed var(--border);
   background: linear-gradient(180deg, #fff, #fffaf6);
@@ -670,7 +671,7 @@ button { font-family: inherit; }
 .uploaded-list { margin-top: 10px; display: flex; flex-direction: column; gap: 8px; }
 .uploaded-item { display: flex; align-items: center; gap: 12px; padding: 8px; background: #fff; border-radius: 8px; border: 1px solid #f1f5f9; }
 .uploaded-item img { width: 56px; height: 56px; object-fit: cover; border-radius: 6px; border: 1px solid #ddd; }
-.small-btn { background: #f3f4f6; border-radius: 6px; padding: 6px 8px; border: 1px solid #e5e7eb; color: #111; cursor: pointer; font-size: 12.5px; font-family: 'Sora', sans-serif; transition: background 0.2s; }
+.small-btn { background: #f3f4f6; border-radius: 6px; padding-block: 6px; padding-inline: 8px; border: 1px solid #e5e7eb; color: #111; cursor: pointer; font-size: 12.5px; font-family: 'Sora', sans-serif; transition: background 0.2s; }
 .small-btn:hover { background: #e5e7eb; }
 
 /* Reference-image step icon tiles (matches reference Step 7's "Profile
@@ -693,7 +694,7 @@ button { font-family: inherit; }
 .pm-photo-tile.has-image { border-style: solid; padding: 0; overflow: hidden; }
 .pm-photo-tile.has-image img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .pm-photo-tile__remove {
-  position: absolute; top: -8px; right: -8px;
+  position: absolute; top: -8px; inset-inline-end: -8px;
   width: 24px; height: 24px; border-radius: 50%;
   background: #fff; box-shadow: var(--shadow-sm);
   display: flex; align-items: center; justify-content: center;
@@ -706,16 +707,16 @@ button { font-family: inherit; }
   line-height: 1.7;
   color: var(--muted);
   background: var(--bg);
-  border-left: 3px solid var(--gold);
-  border-radius: 0 8px 8px 0;
-  padding: 14px 16px;
+  border-inline-start: 3px solid var(--gold);
+  border-start-start-radius: 0; border-start-end-radius: 8px; border-end-end-radius: 8px; border-end-start-radius: 0;
+  padding-block: 14px; padding-inline: 16px;
   margin-bottom: 18px;
 }
 .pm-img-copy strong { color: var(--text); }
 
 .pm-check-row {
   display: flex; align-items: flex-start; gap: 10px;
-  padding: 14px 16px; background: var(--bg); border-radius: var(--radius-sm); border: 1px solid var(--border);
+  padding-block: 14px; padding-inline: 16px; background: var(--bg); border-radius: var(--radius-sm); border: 1px solid var(--border);
   margin-top: 18px;
 }
 .pm-check-row input[type="checkbox"] { margin-top: 2px; width: 18px; height: 18px; accent-color: var(--navy); flex-shrink: 0; cursor: pointer; }
@@ -726,7 +727,7 @@ button { font-family: inherit; }
 .pm-field { margin-bottom: 20px; }
 .pm-field label { display: block; font-size: 13px; font-weight: 600; color: var(--text); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 8px; }
 .pm-field input[type="text"], .pm-field input[type="email"], .pm-field input[type="tel"] {
-  width: 100%; border: 1.5px solid var(--border); border-radius: 9px; padding: 11px 14px;
+  width: 100%; border: 1.5px solid var(--border); border-radius: 9px; padding-block: 11px; padding-inline: 14px;
   font-family: 'Sora', sans-serif; font-size: 15px; color: var(--text); outline: none;
   transition: all 0.2s cubic-bezier(.4,0,.2,1);
 }
@@ -747,18 +748,18 @@ button { font-family: inherit; }
   box-shadow: 0 20px 60px rgba(0,0,0,0.3);
   display: flex; flex-direction: column;
 }
-.modal-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 14px 18px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
-.modal-scroll { flex: 1; overflow-y: auto; padding: 20px 20px 24px; }
-.modal-close { padding: 6px 12px; background: #f0ede8; border: 1px solid var(--border); border-radius: 6px; cursor: pointer; font-size: 13px; font-family: 'Sora', sans-serif; font-weight: 500; color: var(--text); }
+.modal-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding-block: 14px; padding-inline: 18px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+.modal-scroll { flex: 1; overflow-y: auto; padding-block: 20px 24px; padding-inline: 20px; }
+.modal-close { padding-block: 6px; padding-inline: 12px; background: #f0ede8; border: 1px solid var(--border); border-radius: 6px; cursor: pointer; font-size: 13px; font-family: 'Sora', sans-serif; font-weight: 500; color: var(--text); }
 .modal-content img { max-width: 100%; height: auto; border-radius: 8px; }
 
-.success-modal { text-align: center; padding: 28px 24px; }
-.success-icon { width: 64px; height: 64px; background: rgba(13,124,74,0.12); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; }
-.success-code { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 700; color: var(--primary); margin: 16px 0; padding: 14px; background: #f9f7f4; border-radius: 8px; letter-spacing: 1px; }
-.success-warning { background: #fff8e7; border: 1.5px solid rgba(237,118,36,0.2); border-radius: 8px; padding: 16px; margin: 20px 0; font-size: 13px; line-height: 1.7; color: #6b4d2a; text-align: left; }
+.success-modal { text-align: center; padding-block: 28px; padding-inline: 24px; }
+.success-icon { width: 64px; height: 64px; background: rgba(13,124,74,0.12); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-block: 0 20px; margin-inline: auto; }
+.success-code { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 700; color: var(--primary); margin-block: 16px; margin-inline: 0; padding: 14px; background: #f9f7f4; border-radius: 8px; letter-spacing: 1px; }
+.success-warning { background: #fff8e7; border: 1.5px solid rgba(237,118,36,0.2); border-radius: 8px; padding: 16px; margin-block: 20px; margin-inline: 0; font-size: 13px; line-height: 1.7; color: #6b4d2a; text-align: start; }
 .success-warning strong { display: block; color: #c67c1a; margin-bottom: 8px; font-size: 14px; font-weight: 700; }
 
-.pc-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 24px; border-radius: 9px; font-family: 'Sora', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; border: none; transition: all 0.2s ease; text-decoration: none; }
+.pc-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding-block: 12px; padding-inline: 24px; border-radius: 9px; font-family: 'Sora', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; border: none; transition: all 0.2s ease; text-decoration: none; }
 .pc-btn--primary { background: linear-gradient(135deg, var(--navy), var(--navy-light)); color: #fff; }
 .pc-btn--primary:hover { transform: translateY(-1px); }
 
@@ -788,7 +789,7 @@ button { font-family: inherit; }
 
 .rte-toolbar.ql-toolbar.ql-snow {
   border: none; border-bottom: 1px solid var(--border);
-  background: #faf9f7; padding: 8px 10px;
+  background: #faf9f7; padding-block: 8px; padding-inline: 10px;
 }
 .rte-toolbar .ql-stroke { stroke: var(--primary); }
 .rte-toolbar .ql-fill { fill: var(--primary); }
@@ -798,20 +799,20 @@ button { font-family: inherit; }
 .rte-editor.ql-container.ql-snow {
   border: none; font-family: 'Sora', sans-serif; font-size: 15px; min-height: 140px;
 }
-.rte-editor .ql-editor { padding: 14px 16px; }
+.rte-editor .ql-editor { padding-block: 14px; padding-inline: 16px; }
 /* Custom Undo/Redo toolbar buttons — Quill's History module runs internally
    but ships no default toolbar button, per Section 25's note; styled to sit
    flush with Quill's own generated buttons rather than looking bolted-on. */
 .ql-toolbar .ql-undo, .ql-toolbar .ql-redo {
   width: 28px; height: 24px; display: inline-flex; align-items: center; justify-content: center;
-  background: none; border: none; cursor: pointer; padding: 3px 5px; vertical-align: middle;
+  background: none; border: none; cursor: pointer; padding-block: 3px; padding-inline: 5px; vertical-align: middle;
 }
 .ql-toolbar .ql-undo:hover svg, .ql-toolbar .ql-redo:hover svg { stroke: var(--orange); }
 .ql-toolbar .ql-undo svg, .ql-toolbar .ql-redo svg { stroke: var(--primary); }
 
 /* Honeypot (TASK-5b) — off-screen, not display:none, so bots that specifically
    skip display:none fields still get caught */
-.pm-hp-field { position: absolute; left: -9999px; top: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.pm-hp-field { position: absolute; inset-inline-start: -9999px; top: -9999px; width: 1px; height: 1px; overflow: hidden; }
 
   </style>
 </head>
@@ -926,7 +927,9 @@ button { font-family: inherit; }
         <label class="pm-icon-card" data-cat="small-mammals">
           <input type="radio" name="category" value="small-mammals">
           <!-- Small Mammals icon — real sourced SVG from quiz.html (Task 8), copied byte-for-byte; uses fill="#000000" internally, recolored via CSS filter on the wrapper (see .pm-icon-card svg rules), never by editing the SVG markup itself -->
-          <svg height="800px" width="800px" version="1.1" id="_x32__pm6" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xml:space="preserve" fill="#000000" transform="matrix(-1, 0, 0, 1, 0, 0)"> <g id="SVGRepo_bgCarrier_pm6" stroke-width="0"/> <g id="SVGRepo_tracerCarrier_pm6" stroke-linecap="round" stroke-linejoin="round"/> <g id="SVGRepo_iconCarrier_pm6"> <style type="text/css"> .st0{fill:#000000;} </style> <g> <path class="st0" d="M146.278,198.82c-7.586,0-13.725,6.14-13.725,13.725c0,7.587,6.14,13.726,13.725,13.726 c7.578,0,13.725-6.139,13.725-13.726C160.003,204.959,153.855,198.82,146.278,198.82z"/> <path class="st0" d="M197.147,119.686c0.886,18.03,33.907-37.134,32.297-61.366C227.817,34.106,195.52,87.389,197.147,119.686z"/> <path class="st0" d="M47.704,274.96l-0.036-0.108c-0.009-0.018-0.018-0.063-0.027-0.072c0-0.018-0.009-0.018-0.009-0.018 L47.704,274.96z"/> <path class="st0" d="M91.973,21.61l0.126-0.163c0,0,0.019-0.019,0.037-0.036c0,0,0.008-0.028,0.018-0.036L91.973,21.61z"/> <path class="st0" d="M376.237,508.98l-0.66,0.417c-0.018,0-0.027,0.027-0.036,0.027L376.237,508.98z"/> <polygon class="st0" points="265.557,16.564 265.665,16.782 265.684,16.791 "/> <path class="st0" d="M253.983,4.575c0,0,0,0-0.009,0l0.028,0.018L253.983,4.575z"/> <path class="st0" d="M443.246,392.214c0.108-2.007,0.362-3.888,0.362-5.995c0.009-18.408-3.916-38.255-13.274-58.816 c-17.912-39.802-47.922-62.199-77.904-76.457l-0.099-0.055l-2.233-1.066l2.017,0.977c-29.865-14.214-60.228-21.872-82.579-32.677 l-0.036-0.028c-14.25-6.988-22.261-16.329-27.578-30.055l-0.018-0.045l-0.036-0.109l-0.154-0.416l-0.063-0.171 c-0.886-2.216-4.919-15.091-4.802-24.287v-0.054v-0.109c-0.008-2.613,0.299-4.945,0.715-6.428l0.018-0.072 c1.375-5.452,6.168-14.169,11.9-24.196l0.018-0.027c5.678-10.172,12.334-22.243,16.113-36.755 c4.539-17.568,6.954-33.238,6.962-46.908c-0.054-11.602-1.609-22.289-6.872-31.62l-0.036-0.063 c-2.712-4.711-6.546-9.078-11.682-12.188c-5.054-3.075-10.796-4.53-16.546-4.566V0.018L237.22,0v0.018 c-0.036,0-0.127,0.009-0.163,0.009V0.018c-0.045,0-0.082,0.009-0.118,0.009c-0.28,0-0.651,0.063-1.292,0.154 c-11.683,0.552-22.532,5.814-33.762,13.816l-0.054,0.036c-13.924,10.154-24.051,23.454-31.628,37.252 c-1.609-3.788-3.12-7.694-5.018-11.112l-0.009-0.018c-5.18-9.25-11.248-17.134-18.427-23.183h-0.009 c-7.016-5.895-15.796-10.389-25.923-10.56V6.366l-0.67-0.019c-11.31,0.009-21.411,6.094-28.01,15.064 c-6.564,8.77-10.634,19.956-13.247,33.834v0.027c-1.14,6.176-1.637,12.351-1.637,18.4v0.046c0.218,29.847,11.284,56.9,19.006,72.57 c-10.209,7.921-24.486,20.787-35.987,38.617l0.561-0.868l-0.57,0.878c-14.675,22.884-20.57,41.23-20.57,57.297 c-0.018,14.313,4.792,25.19,7.948,32.569c5.072,12.279,14.096,20.272,23.174,24.359v0.018c6.447,2.884,12.179,4.521,17.134,6.058 l-0.37,2.496l10.47,1.41c0.778,0.362,1.375,0.642,1.61,0.795l0.018,0.028c3.472,2.169,6.781,4.945,10.461,10.28 c3.644,5.326,7.514,13.31,11.13,25.426l0.019,0.045c3.643,12.27,11.049,32.415,17.595,52.976v0.027 c3.237,10.082,6.221,20.299,8.354,29.232c2.152,8.879,3.39,16.673,3.346,20.815v0.199v0.054l-0.073,1.565 c-3.552,3.825-6.329,8.02-7.866,12.26c-1.953,5.335-2.577,10.551-2.586,15.144l0.01,0.299v-0.064 c0.027,6.474,1.14,12.071,2.233,16.203c0.561,2.062,1.121,3.77,1.555,5.009l0.552,1.456h0.008l0.136,0.406l1.808,4.368l2.649,6.356 h64.36h4.982h153.077l4.087-2.559l0.063-0.044c6.312-4.014,16.438-12.433,27.415-24.621c5.732,2.324,11.98,3.743,18.607,3.743 c28.03-0.009,50.698-22.704,50.707-50.698C472.288,417.532,460.353,400.244,443.246,392.214z M421.6,465.272 c-6.853,0-13.02-2.604-17.939-6.863l-5.216-4.548l-4.178,5.506c-11.41,15.1-23.826,25.408-29.621,29.377H226.162 c0.353-2.053,0.94-4.394,1.971-6.709c2.143-4.693,5.524-9.069,12.776-11.772l-4.412-12.134 c-10.805,3.861-17.126,11.592-20.182,18.699c-1.963,4.466-2.776,8.59-3.147,11.917h-48.265c-0.778-2.812-1.609-6.646-1.591-10.579 c0.036-5.29,1.32-9.801,4.973-12.93l0.985-0.85l-0.968,0.832c2.442-2.116,3.762-4.855,4.512-7.559 c0.76-2.731,1.022-5.588,1.022-8.662c-0.091-14.81-6.103-36.167-12.803-57.379c-6.709-21.059-14.25-41.664-17.451-52.524 c-5.009-16.972-11.175-28.545-18.102-36.872c8.843,1.004,14.512,1.537,14.558,1.537l1.167-12.867 c-0.009,0-4.367-0.406-11.583-1.202c-6.348-0.696-14.937-1.745-24.54-3.066c-5.678-2.523-11.122-3.996-15.751-5.398 c-4.91-1.465-8.952-2.929-12.134-5.1c-3.192-2.206-5.806-5.036-8.156-10.416c-3.218-7.523-6.085-14.35-6.094-23.5 c0-10.19,3.653-24.041,16.899-44.756c8.056-12.605,18.508-22.84,26.917-29.821c4.214-3.499,7.902-6.184,10.525-7.992 c1.302-0.905,2.332-1.574,3.038-2.026l0.778-0.488l0.226-0.136l5.651-3.363l-3.472-5.597l-0.216-0.362 c-2.442-3.888-22.912-39.766-22.785-73.998c0-4.792,0.388-9.548,1.248-14.177c2.152-11.7,5.515-19.603,8.951-24.106 c3.544-4.52,6.474-5.705,9.638-5.777c3.047-0.027,7.052,1.492,11.456,5.172c13.292,10.896,27.108,40.064,28.165,76.25 c-2.387,11.456-3.129,19.168-3.156,19.34l12.858,1.239c0,0,0.099-1.013,0.361-2.992c0.905-6.935,3.807-25.065,10.824-44.359 c6.971-19.322,18.138-39.594,34.594-51.384c9.674-7.026,17.225-9.675,21.692-9.602c2.089,0,3.526,0.442,4.8,1.202 c1.854,1.121,3.69,3.301,5.118,7.352c1.419,4.005,2.279,9.665,2.269,16.637c0.01,10.868-2.026,24.883-6.221,41.067 c-2.839,11.022-8.3,21.303-13.888,31.203c-5.551,9.928-11.275,19.404-14.087,29.548c-1.121,4.132-1.528,8.391-1.528,12.568 c0.063,16.737,6.366,32.777,6.564,33.392h-0.009c6.908,18.599,19.982,33.662,39.332,42.858 c25.643,12.198,55.679,19.711,82.886,32.812c27.216,13.147,51.394,31.294,66.783,65.101c8.047,17.74,11.184,34.115,11.194,49.205 c0,5.878-0.489,11.556-1.356,17.053l-1.066,6.673l6.726,0.76c13.734,1.537,24.413,13.029,24.404,27.116 C449.033,452.966,436.772,465.245,421.6,465.272z"/> <polygon class="st0" points="430.335,327.403 430.335,327.403 430.344,327.421 "/> </g> </g> </svg>
+          <svg height="800px" width="800px" version="1.1" id="_x32__pm6" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xml:space="preserve" fill="#000000" transform="matrix(-1, 0, 0, 1, 0, 0)"> <g id="SVGRepo_bgCarrier_pm6" stroke-width="0"/> <g id="SVGRepo_tracerCarrier_pm6" stroke-linecap="round" stroke-linejoin="round"/> <g id="SVGRepo_iconCarrier_pm6"> <style type="text/css"> .st0{fill:#000000;}
+/* TASK-web12-3 END */
+</style> <g> <path class="st0" d="M146.278,198.82c-7.586,0-13.725,6.14-13.725,13.725c0,7.587,6.14,13.726,13.725,13.726 c7.578,0,13.725-6.139,13.725-13.726C160.003,204.959,153.855,198.82,146.278,198.82z"/> <path class="st0" d="M197.147,119.686c0.886,18.03,33.907-37.134,32.297-61.366C227.817,34.106,195.52,87.389,197.147,119.686z"/> <path class="st0" d="M47.704,274.96l-0.036-0.108c-0.009-0.018-0.018-0.063-0.027-0.072c0-0.018-0.009-0.018-0.009-0.018 L47.704,274.96z"/> <path class="st0" d="M91.973,21.61l0.126-0.163c0,0,0.019-0.019,0.037-0.036c0,0,0.008-0.028,0.018-0.036L91.973,21.61z"/> <path class="st0" d="M376.237,508.98l-0.66,0.417c-0.018,0-0.027,0.027-0.036,0.027L376.237,508.98z"/> <polygon class="st0" points="265.557,16.564 265.665,16.782 265.684,16.791 "/> <path class="st0" d="M253.983,4.575c0,0,0,0-0.009,0l0.028,0.018L253.983,4.575z"/> <path class="st0" d="M443.246,392.214c0.108-2.007,0.362-3.888,0.362-5.995c0.009-18.408-3.916-38.255-13.274-58.816 c-17.912-39.802-47.922-62.199-77.904-76.457l-0.099-0.055l-2.233-1.066l2.017,0.977c-29.865-14.214-60.228-21.872-82.579-32.677 l-0.036-0.028c-14.25-6.988-22.261-16.329-27.578-30.055l-0.018-0.045l-0.036-0.109l-0.154-0.416l-0.063-0.171 c-0.886-2.216-4.919-15.091-4.802-24.287v-0.054v-0.109c-0.008-2.613,0.299-4.945,0.715-6.428l0.018-0.072 c1.375-5.452,6.168-14.169,11.9-24.196l0.018-0.027c5.678-10.172,12.334-22.243,16.113-36.755 c4.539-17.568,6.954-33.238,6.962-46.908c-0.054-11.602-1.609-22.289-6.872-31.62l-0.036-0.063 c-2.712-4.711-6.546-9.078-11.682-12.188c-5.054-3.075-10.796-4.53-16.546-4.566V0.018L237.22,0v0.018 c-0.036,0-0.127,0.009-0.163,0.009V0.018c-0.045,0-0.082,0.009-0.118,0.009c-0.28,0-0.651,0.063-1.292,0.154 c-11.683,0.552-22.532,5.814-33.762,13.816l-0.054,0.036c-13.924,10.154-24.051,23.454-31.628,37.252 c-1.609-3.788-3.12-7.694-5.018-11.112l-0.009-0.018c-5.18-9.25-11.248-17.134-18.427-23.183h-0.009 c-7.016-5.895-15.796-10.389-25.923-10.56V6.366l-0.67-0.019c-11.31,0.009-21.411,6.094-28.01,15.064 c-6.564,8.77-10.634,19.956-13.247,33.834v0.027c-1.14,6.176-1.637,12.351-1.637,18.4v0.046c0.218,29.847,11.284,56.9,19.006,72.57 c-10.209,7.921-24.486,20.787-35.987,38.617l0.561-0.868l-0.57,0.878c-14.675,22.884-20.57,41.23-20.57,57.297 c-0.018,14.313,4.792,25.19,7.948,32.569c5.072,12.279,14.096,20.272,23.174,24.359v0.018c6.447,2.884,12.179,4.521,17.134,6.058 l-0.37,2.496l10.47,1.41c0.778,0.362,1.375,0.642,1.61,0.795l0.018,0.028c3.472,2.169,6.781,4.945,10.461,10.28 c3.644,5.326,7.514,13.31,11.13,25.426l0.019,0.045c3.643,12.27,11.049,32.415,17.595,52.976v0.027 c3.237,10.082,6.221,20.299,8.354,29.232c2.152,8.879,3.39,16.673,3.346,20.815v0.199v0.054l-0.073,1.565 c-3.552,3.825-6.329,8.02-7.866,12.26c-1.953,5.335-2.577,10.551-2.586,15.144l0.01,0.299v-0.064 c0.027,6.474,1.14,12.071,2.233,16.203c0.561,2.062,1.121,3.77,1.555,5.009l0.552,1.456h0.008l0.136,0.406l1.808,4.368l2.649,6.356 h64.36h4.982h153.077l4.087-2.559l0.063-0.044c6.312-4.014,16.438-12.433,27.415-24.621c5.732,2.324,11.98,3.743,18.607,3.743 c28.03-0.009,50.698-22.704,50.707-50.698C472.288,417.532,460.353,400.244,443.246,392.214z M421.6,465.272 c-6.853,0-13.02-2.604-17.939-6.863l-5.216-4.548l-4.178,5.506c-11.41,15.1-23.826,25.408-29.621,29.377H226.162 c0.353-2.053,0.94-4.394,1.971-6.709c2.143-4.693,5.524-9.069,12.776-11.772l-4.412-12.134 c-10.805,3.861-17.126,11.592-20.182,18.699c-1.963,4.466-2.776,8.59-3.147,11.917h-48.265c-0.778-2.812-1.609-6.646-1.591-10.579 c0.036-5.29,1.32-9.801,4.973-12.93l0.985-0.85l-0.968,0.832c2.442-2.116,3.762-4.855,4.512-7.559 c0.76-2.731,1.022-5.588,1.022-8.662c-0.091-14.81-6.103-36.167-12.803-57.379c-6.709-21.059-14.25-41.664-17.451-52.524 c-5.009-16.972-11.175-28.545-18.102-36.872c8.843,1.004,14.512,1.537,14.558,1.537l1.167-12.867 c-0.009,0-4.367-0.406-11.583-1.202c-6.348-0.696-14.937-1.745-24.54-3.066c-5.678-2.523-11.122-3.996-15.751-5.398 c-4.91-1.465-8.952-2.929-12.134-5.1c-3.192-2.206-5.806-5.036-8.156-10.416c-3.218-7.523-6.085-14.35-6.094-23.5 c0-10.19,3.653-24.041,16.899-44.756c8.056-12.605,18.508-22.84,26.917-29.821c4.214-3.499,7.902-6.184,10.525-7.992 c1.302-0.905,2.332-1.574,3.038-2.026l0.778-0.488l0.226-0.136l5.651-3.363l-3.472-5.597l-0.216-0.362 c-2.442-3.888-22.912-39.766-22.785-73.998c0-4.792,0.388-9.548,1.248-14.177c2.152-11.7,5.515-19.603,8.951-24.106 c3.544-4.52,6.474-5.705,9.638-5.777c3.047-0.027,7.052,1.492,11.456,5.172c13.292,10.896,27.108,40.064,28.165,76.25 c-2.387,11.456-3.129,19.168-3.156,19.34l12.858,1.239c0,0,0.099-1.013,0.361-2.992c0.905-6.935,3.807-25.065,10.824-44.359 c6.971-19.322,18.138-39.594,34.594-51.384c9.674-7.026,17.225-9.675,21.692-9.602c2.089,0,3.526,0.442,4.8,1.202 c1.854,1.121,3.69,3.301,5.118,7.352c1.419,4.005,2.279,9.665,2.269,16.637c0.01,10.868-2.026,24.883-6.221,41.067 c-2.839,11.022-8.3,21.303-13.888,31.203c-5.551,9.928-11.275,19.404-14.087,29.548c-1.121,4.132-1.528,8.391-1.528,12.568 c0.063,16.737,6.366,32.777,6.564,33.392h-0.009c6.908,18.599,19.982,33.662,39.332,42.858 c25.643,12.198,55.679,19.711,82.886,32.812c27.216,13.147,51.394,31.294,66.783,65.101c8.047,17.74,11.184,34.115,11.194,49.205 c0,5.878-0.489,11.556-1.356,17.053l-1.066,6.673l6.726,0.76c13.734,1.537,24.413,13.029,24.404,27.116 C449.033,452.966,436.772,465.245,421.6,465.272z"/> <polygon class="st0" points="430.335,327.403 430.335,327.403 430.344,327.421 "/> </g> </g> </svg>
           <span>Small Mammals</span>
         </label>
         <label class="pm-icon-card" data-cat="livestocks">
@@ -950,12 +953,15 @@ button { font-family: inherit; }
       </div>
       <div class="pm-field">
         <label for="pmEmail">Email *</label>
-        <input type="email" id="pmEmail" name="email" required placeholder="you@example.com">
+        <!-- BUGFIX-MANUS-03-1 START: email and telephone controls stay LTR under document RTL. -->
+<input type="email" id="pmEmail" name="email" required placeholder="you@example.com" dir="ltr">
+<!-- BUGFIX-MANUS-03-1 END -->
+
         <div class="pm-error-msg" id="err-pmEmail">Please enter a valid email — this is how we'll reach you about a match.</div>
       </div>
       <div class="pm-field">
         <label for="pmPhone">Phone <span style="text-transform:none;font-weight:400;">(optional)</span></label>
-        <input type="tel" id="pmPhone" name="phone" placeholder="(555) 555-5555">
+        <input type="tel" id="pmPhone" name="phone" placeholder="(555) 555-5555" dir="ltr">
       </div>
     </div>
     <!-- STEP 1 END -->
@@ -1119,7 +1125,7 @@ button { font-family: inherit; }
          single-line location-with-clear-button pattern -->
     <div class="pm-step" data-step="6">
       <div class="pm-q">Your location?</div>
-      <div style="display:flex;align-items:center;gap:10px;border-bottom:2px solid var(--border);padding:4px 2px 10px;" id="pmLocationRow">
+      <div style="display:flex;align-items:center;gap:10px;border-bottom:2px solid var(--border);padding-block: 4px 10px; padding-inline: 2px;" id="pmLocationRow">
         <input type="text" id="pmLocation" name="visitor_location" placeholder="City, State" style="flex:1;border:none;outline:none;background:transparent;font-family:'Sora',sans-serif;font-size:17px;color:var(--text);">
         <button type="button" id="pmLocationClear" aria-label="Clear location" style="background:none;border:none;cursor:pointer;color:var(--muted);display:none;">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
@@ -1154,7 +1160,7 @@ button { font-family: inherit; }
            match the project doc's own troubleshooting guidance ("check that
            rte-source textarea is what's actually being submitted") for
            anyone debugging this field later. Converted to match. -->
-      <textarea id="pmDetail" name="additional_detail" class="rte-source" style="position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;overflow:hidden;"></textarea>
+      <textarea id="pmDetail" name="additional_detail" class="rte-source" style="position:absolute;inset-inline-start:-9999px;top:-9999px;width:1px;height:1px;overflow:hidden;"></textarea>
 
       <!-- Notification-preference hook point for Task 7a. Task 7a's radios
            live INSIDE this container, per Task 5's own coordination note —
@@ -1280,7 +1286,7 @@ button { font-family: inherit; }
       <div id="modalTopTitle" style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--orange);margin:0;"></div>
       <div class="modal-top__actions">
         <!-- Only shown for Use C — not used on this page (Use B only), kept for structural parity with Section 5's canonical shared shell -->
-        <button type="button" class="pc-btn pc-btn--primary" id="modalActionBtn" style="padding:7px 14px;font-size:13px;display:none;">Action</button>
+        <button type="button" class="pc-btn pc-btn--primary" id="modalActionBtn" style="padding-block: 7px; padding-inline: 14px;font-size:13px;display:none;">Action</button>
         <button class="modal-close" id="modalClose">Close</button>
       </div>
     </div>
@@ -1905,7 +1911,7 @@ function escapeHtml(str) {
       if (it.uploadError && !it.uploading) {
         var retry = document.createElement('button');
         retry.type = 'button'; retry.className = 'small-btn'; retry.textContent = 'Retry';
-        retry.style.cssText = 'margin-left:6px;background:#fff3cd;border-color:#f0c300;color:#5a4200;';
+        retry.style.cssText = 'margin-inline-start:6px;background:#fff3cd;border-color:#f0c300;color:#5a4200;';
         retry.addEventListener('click', function (e) { e.preventDefault(); e.stopPropagation(); it.uploadError = null; preUploadFile(fld, it); });
         div.appendChild(retry);
       }

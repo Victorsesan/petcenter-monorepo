@@ -29,7 +29,9 @@ const PC = window.PC = {
   // Show toast notification
   toast: (msg, type = 'success') => {
     const t = document.createElement('div');
-    t.style.cssText = `position:fixed;bottom:24px;right:24px;z-index:9999;background:${type === 'success' ? '#0d7c4a' : '#c0392b'};color:#fff;padding:14px 20px;border-radius:10px;font-family:Sora,sans-serif;font-size:14px;font-weight:500;box-shadow:0 8px 24px rgba(0,0,0,0.2);animation:slideUp 0.3s ease;max-width:340px;`;
+    /* TASK-web12-3 START: logical inline positioning for RTL */
+    t.style.cssText = `position:fixed;bottom:24px;inset-inline-end:24px;z-index:9999;background:${type === 'success' ? '#0d7c4a' : '#c0392b'};color:#fff;padding:14px 20px;border-radius:10px;font-family:Sora,sans-serif;font-size:14px;font-weight:500;box-shadow:0 8px 24px rgba(0,0,0,0.2);animation:slideUp 0.3s ease;max-width:340px;`;
+    /* TASK-web12-3 END */
     t.textContent = msg;
     document.body.appendChild(t);
     setTimeout(() => { t.style.opacity = '0'; t.style.transition = 'opacity 0.3s'; setTimeout(() => t.remove(), 300); }, 3500);
