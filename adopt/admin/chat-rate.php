@@ -16,6 +16,36 @@ require_once __DIR__ . '/includes/chat-auth.php';
 $reviewsDir = __DIR__ . '/reviews/';
 if (!is_dir($reviewsDir)) @mkdir($reviewsDir, 0755, true);
 
+/**
+ * Append one review while holding an exclusive file lock across the full
+ * read/modify/write cycle. A write-only LOCK_EX is not enough here: two
+ * simultaneous requests could both read the same old array and lose one
+ * review when they subsequently write it.
+ */
+function chatAppendReviewAtomically(string $file, array $entry): bool {
+    $handle = @fopen($file, 'c+');
+    if ($handle === false || !@flock($handle, LOCK_EX)) {
+        if (is_resource($handle)) @fclose($handle);
+        return false;
+    }
+
+    rewind($handle);
+    $raw = stream_get_contents($handle);
+    $reviews = json_decode($raw ?: '', true);
+    if (!is_array($reviews)) $reviews = [];
+    $reviews[] = $entry;
+    $json = json_encode($reviews, JSON_PRETTY_PRINT);
+    $ok = $json !== false
+        && ftruncate($handle, 0)
+        && rewind($handle)
+        && fwrite($handle, $json) === strlen($json)
+        && fflush($handle);
+
+    @flock($handle, LOCK_UN);
+    @fclose($handle);
+    return $ok;
+}
+
 $action = $_REQUEST['action'] ?? 'submit';
 
 // ── Submit a rating ─────────────────────────────────────────────────────
@@ -44,6 +74,17 @@ if ($action === 'submit' && $_SERVER['REQUEST_METHOD'] === 'POST') {
        with a different syntactically valid email address. */
     $sessionToken = trim($input['sessionToken'] ?? '');
     chatRequireSessionToken($chatId, $sessionToken);
+    /* BUGFIX-MANUS-09-1-START — a valid session token must not be paired
+       with an unrelated syntactically valid email address. */
+    $threadEmailStmt = chatDb()->prepare(
+        "SELECT email FROM chat_threads WHERE chat_id = ? LIMIT 1"
+    );
+    $threadEmailStmt->execute([$chatId]);
+    $storedEmail = $threadEmailStmt->fetchColumn();
+    if ($storedEmail === false || strcasecmp(trim((string)$storedEmail), $email) !== 0) {
+        chatRespond(['success' => false, 'error' => 'Email does not match this chat'], 403);
+    }
+    /* BUGFIX-MANUS-09-1-END */
     /* TASK-1 END */
 
     /* BUGFIX-MANUS-01-1-START — keep a valid session token from being paired
@@ -59,11 +100,6 @@ if ($action === 'submit' && $_SERVER['REQUEST_METHOD'] === 'POST') {
     /* BUGFIX-MANUS-01-1-END */
 
     $file = $reviewsDir . preg_replace('/[^A-Za-z0-9\-]/', '', $chatId) . '.json';
-    $reviews = [];
-    if (file_exists($file)) {
-        $reviews = json_decode(file_get_contents($file), true) ?: [];
-    }
-
     $entry = [
         'chatId'    => $chatId,
         'email'     => $email,
@@ -73,9 +109,7 @@ if ($action === 'submit' && $_SERVER['REQUEST_METHOD'] === 'POST') {
         'comment'   => $comment,
         'createdAt' => date('Y-m-d H:i:s'),
     ];
-    $reviews[] = $entry;
-
-    if (file_put_contents($file, json_encode($reviews, JSON_PRETTY_PRINT)) === false) {
+    if (!chatAppendReviewAtomically($file, $entry)) {
         chatRespond(['success' => false, 'error' => 'Failed to save review'], 500);
     }
 
