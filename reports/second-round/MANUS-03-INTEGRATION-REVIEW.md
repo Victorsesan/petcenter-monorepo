@@ -1,97 +1,31 @@
-# MANUS-03 Integration Review — RTL and Branch Handoff
 
-**Prepared by:** MANUS-03  
-**Branch:** `task/second-round-MANUS-03`  
-**Implementation checkpoint:** `ece74c3` — `MANUS-03: complete logical CSS properties audit`  
-**Review date:** 2026-11-03
 
-## Purpose
+## Current integration pass — 2026-11-06
 
-This review records the browser-based RTL verification performed after the Task 3 logical-properties conversion and prepares the evidence and handoff for MANUS-08 shared RTL review and MANUS-10 browser rollout QA. A repository-wide reconciliation subsequently found the completed MANUS-10 branch and verified its chat-close restoration fix directly in the browser.
+### Branch synchronization
 
-## Browser test setup
+A fresh `git fetch --all --prune` found all eleven worker refs. Current tips were recorded as follows: MANUS-01 `22594e4`, MANUS-02 `5833edc`, MANUS-03 `ff4db2f`, MANUS-04 `151d46b`, MANUS-05 `c177938`, MANUS-06 `ea021c3`, MANUS-07 `b961a0b`, MANUS-08 `9c49ce4`, MANUS-09 `bd41d5b`, MANUS-10 `0f0d459`, and MANUS-11 `30fe102`. `origin/main` remains `5814eab` and the MANUS-03 worktree is clean and synchronized with its remote branch.
 
-A local HTTP preview was served from the current MANUS-03 branch at the adoption-site root. Verification used the stateful browser at desktop viewport width. The browser console was used only to set `document.documentElement.dir = 'rtl'`, set `document.body.dir = 'rtl'`, and read computed styles and bounding rectangles. No admin token or protected dashboard data was entered.
+The merge rehearsal deliberately used a disposable worktree and never modified `main`. MANUS-01, MANUS-04, MANUS-05, MANUS-06, MANUS-07, MANUS-08, MANUS-09, MANUS-10, and MANUS-11 each merge cleanly against current `origin/main`. MANUS-02 conflicts in `docs/second-round/WORKER-PACKAGE-INVENTORY.md` and `reports/second-round/README.md`. MANUS-03 conflicts in the seven category HTML files plus `docs/second-round/WORKER-PACKAGE-INVENTORY.md` and the two Git-sync protocol copies. These are expected ownership/documentation hotspots and require an integrator merge decision; the rehearsal did not auto-resolve them.
 
-## Results
+A cumulative disposable candidate based on current `origin/main`, followed by MANUS-08 and then MANUS-10, merged cleanly. Candidate merge commits were `e400a96` for MANUS-08 and `c68d30d` for MANUS-10. No changes were pushed from this candidate.
 
-### Homepage
+### Browser-based RTL and responsive verification
 
-- `dir="rtl"` was applied successfully.
-- `document.documentElement.scrollWidth` equaled `clientWidth`; no horizontal overflow was detected.
-- The fixed accessibility trigger moved to the physical left edge, as expected when its logical inline-end is the left side in RTL.
-- The trigger measured approximately `left: 16`, `right: 68`, `width: 52`.
-- The accessibility panel opened in RTL with no horizontal overflow. The panel measured approximately `left: 80`, `right: 380`, `width: 300`.
-- The panel remained within the horizontal viewport. Its vertical lower edge was approximately at the viewport boundary during the test, so MANUS-10 should repeat the check at mobile and short-height viewports.
+The cumulative MANUS-08 + MANUS-10 candidate was served locally and tested with Playwright against all seven category routes (`cats`, `dogs`, `birds`, `reptiles`, `small-mammals`, `livestocks`, and `aquariums`) at 1440×900, 390×844, and 360×800: **21/21 cases passed**. Each route returned HTTP 200, produced no uncaught page errors, had no document/body horizontal overflow, kept the Request-One CTA within the viewport, retained the accessibility trigger, and loaded the shared accessibility widget. There were zero failed network requests in this isolated candidate run.
 
-### Cats category page
+The category CTA/footer geometry remained in bounds under RTL. The MANUS-08 fixes therefore remain clean when combined with MANUS-10's current application and loader changes. The MANUS-08 category-page matrix and contrast evidence remain valid: its report records 42/42 route/viewport checks and 28/28 sampled CTA contrast checks.
 
-Route tested: `/pets/cats/`
+The exact MANUS-10 chat widget selectors were exercised on `/pets/cats/` at 1440×900, 390×844, and 360×800. Opening the widget locked the page at scroll position 0 while closing restored the saved 420px position exactly at all three viewports. This confirms the MANUS-10 close-scroll fix in the cumulative candidate, rather than only on its isolated branch.
 
-- `dir="rtl"` was applied successfully.
-- No horizontal overflow was detected: `scrollWidth: 1265`, viewport client width `1265`.
-- The full-width header retained both logical inline edges at `0px` and preserved its `24px` inline padding.
-- The search field remained within the content frame: approximately `left: 159`, `right: 1198`, `width: 1039`.
-- The filter control and settings trigger remained visible and in-bounds.
-- The settings trigger measured approximately `left: 16`, `right: 68`, confirming RTL inline-end placement.
-- The footer switched to RTL direction and retained in-bounds full-width geometry.
+### Integration decision and handoff
 
-### Admin sign-in surface
+- **MANUS-08:** safe to merge after the normal integrator review; its category-page hunks are disjoint from the MANUS-10 changes in the cumulative candidate.
+- **MANUS-10:** safe to merge after the normal integrator review; its shared chat-widget and loader changes pass the cumulative browser checks.
+- **MANUS-03:** do not blindly merge the complete branch after MANUS-08/10. Preserve the MANUS-03 logical-property, RTL form-direction, and widget-position work, but resolve the seven category-page overlaps against MANUS-08 rather than choosing one branch wholesale.
+- **MANUS-02:** resolve the documentation-only conflicts manually and preserve the newest inventory/report guidance.
+- No worker branch was force-pushed or merged into `main` during this review. The disposable integration candidate and all test artifacts remain outside the repository except for this report update.
 
-Route tested: `/admin/`
+### Evidence and limitations
 
-- Only the sign-in surface was tested; no credentials were entered and the protected dashboard was not opened.
-- `dir="rtl"` was applied successfully.
-- No horizontal overflow was detected: `scrollWidth: 1280`, viewport width `1280`.
-- The sign-in form, password/token input, and submit button remained centered and aligned.
-- The token input inherited RTL direction correctly.
-
-### MANUS-10 chat-close verification
-
-The remote branch `task/second-round-MANUS-10` contains commit `8607868`, which fixes the previously documented smooth-scroll restoration defect in `adopt/admin/chat-widget.js`. The fix temporarily sets the root inline `scroll-behavior` to `auto`, restores the exact saved scroll position synchronously, and restores the previous inline value.
-
-That branch was served independently and tested from a scrolled homepage. The browser recorded an exact restoration immediately after closing the chat and again after 800ms. The result was `saved: 92`, `immediate: 92`, `settled: 92`; the computed root behavior returned to `smooth` afterward. This fix should be integrated from MANUS-10 as the owning QA change rather than duplicated on MANUS-03.
-
-## MANUS-08 review checklist
-
-MANUS-08 should review the converted shared surface against the Arabic implementation and confirm:
-
-1. Logical properties remain intact when Arabic pages add `dir="rtl"` at the document root.
-2. Carousel/gallery/filter controls that represent directional movement are mirrored intentionally rather than blindly converted.
-3. Star ratings, signature-pad canvas, email fields, phone fields, and other explicitly physical or `dir="ltr"` controls retain their required behavior.
-4. The accessibility and chat widgets use the same logical positioning contract on every page that loads them.
-5. No translated-page CSS reintroduces physical `left`, `right`, `margin-left`, `margin-right`, `padding-left`, or `padding-right` declarations without an explicit exception comment.
-
-## MANUS-10 rollout checklist
-
-MANUS-10 should repeat browser QA at minimum on:
-
-- Homepage in LTR and RTL.
-- One category page, including `/pets/cats/`.
-- Pet detail page.
-- Application page.
-- Blog page and blog post page.
-- Testimonials page.
-- Admin sign-in and, if authorized test access is available, the dashboard shell.
-- Desktop, tablet, and narrow mobile viewports.
-- Short viewport height while the accessibility panel is open.
-- Chat-widget open/close behavior, including the now-resolved close-scroll issue from MANUS-10 commit `8607868`.
-
-For every route, record horizontal overflow, fixed-widget placement, panel bounds, text alignment, form direction, and any deliberate physical-direction exceptions.
-
-## Branch synchronization state at review time
-
-After `git fetch --all --prune`:
-
-- `origin/main` was `251d8c2`.
-- MANUS-03 was clean and synchronized with `origin/task/second-round-MANUS-03` at `ece74c3`.
-- Existing worker branches were all based on `origin/main` with zero commits behind it.
-- MANUS-04 now exists and was visible remotely.
-- MANUS-10 now exists remotely at `8607868` and includes the verified chat-scroll and rollout-QA follow-up. MANUS-08 remains the only expected branch missing.
-- Existing worker branches with reports had both their account report and the central account-report index present.
-
-This review is evidence for integration and QA; it does not merge worker branches into `main`.
-
-## Limitations
-
-The preview did not contain translated language trees, so this verifies RTL behavior by applying document direction to the English source. It does not certify Arabic translation quality, Arabic font loading, mirrored icon semantics, production Apache behavior, or deployment-host differences. Those remain MANUS-08 and MANUS-10 responsibilities.
+The RTL checks apply `dir="rtl"` to the English source; they do not certify Arabic translations, production Apache rewrites, protected backend data, authenticated admin-dashboard behavior, or live deployment infrastructure. The isolated browser candidate also does not replace the final integrator run after resolving MANUS-02/MANUS-03 conflicts.
