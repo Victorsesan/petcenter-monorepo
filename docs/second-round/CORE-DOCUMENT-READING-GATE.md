@@ -1,6 +1,15 @@
 # Second-Round Core-Document and Evidence Reading Gate
 
-This document is mandatory process guidance for every `MANUS-01` through `MANUS-11` account. It is a hard gate, not optional background reading. An account must finish the complete reading sequence below before inspecting application source, comparing code, making a branch, or editing any implementation file.
+> **CURRENT-WAVE PRECEDENCE — 2026-11-07:** The active operational wave is no longer the historical `MANUS-01` through `MANUS-11` round. It now uses seven accounts: `WEB-01` through `WEB-05` for web-project QA/integration and `DESIGN-01` through `DESIGN-02` for redesign. The canonical instructions are [`WEB-ACCOUNTS-OPERATIONAL-BRIEF.md`](WEB-ACCOUNTS-OPERATIONAL-BRIEF.md) and [`REDESIGN-ACCOUNTS-OPERATIONAL-BRIEF.md`](REDESIGN-ACCOUNTS-OPERATIONAL-BRIEF.md). Read the applicable brief first and follow it when it conflicts with this preserved historical gate.
+
+The material below is retained as historical second-round evidence and reading context. It must not be used to assign current accounts, branches, report paths, or work packages. In particular, the old 11-account assignments, old token fallback wording, old completion-file delivery rules, and historical round-one “push to main” examples do not govern the current wave.
+
+For the current wave, the two structural summaries are mandatory for every account:
+
+- `adoption-website-project-summary.md`
+- `ADMIN_DASHBOARD_PROJECT_SUMMARY.md`
+
+The applicable current brief is a hard gate: an account must finish its reading sequence before inspecting application source, comparing code, or editing implementation files.
 
 ## Required reading order
 
@@ -101,4 +110,4 @@ Before any role advances, the account must verify that it has read all documents
 
 ## Scope lock for the current coordinator
 
-This gate and evidence-documentation pass is complete before starting MANUS-03 Task 3. Do not begin Task 3 CSS logical-property implementation until this gate is committed and the account prompt has been updated to require it for all 11 accounts.
+The historical gate and evidence-documentation pass above was completed for the prior MANUS round. It is not a task gate for the current seven-account wave. Current work must follow the applicable operational brief and its account-specific scope.

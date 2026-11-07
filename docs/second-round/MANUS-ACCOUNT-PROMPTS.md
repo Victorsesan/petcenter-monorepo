@@ -1,5 +1,7 @@
 # Pre-filled Manus Account Prompts
 
+> **ARCHIVED ACCOUNT APPENDIX — DO NOT USE FOR THE CURRENT WAVE:** These pre-filled prompts belong to the completed historical 11-account MANUS round. Current web accounts must use [`WEB-ACCOUNTS-OPERATIONAL-BRIEF.md`](WEB-ACCOUNTS-OPERATIONAL-BRIEF.md); current redesign accounts must use [`REDESIGN-ACCOUNTS-OPERATIONAL-BRIEF.md`](REDESIGN-ACCOUNTS-OPERATIONAL-BRIEF.md).
+
 The canonical and only copy-paste launcher is [`UNIFIED-MANUS-WORKER-PROMPT.md`](UNIFIED-MANUS-WORKER-PROMPT.md). Use that prompt first, replacing `[ACCOUNT ID]` with the assigned account. This file is an internal reference appendix; do not paste this entire file into an account. After cloning, an account reads only its own `Prompt for MANUS-XX` section below for the account-specific work package, reading order, protected paths, tests, branch, report, and commit requirements.
 
 Before opening any application source, every account must complete [`CORE-DOCUMENT-READING-GATE.md`](CORE-DOCUMENT-READING-GATE.md), read both structural project summaries in full, read every listed core document including Worker, VDM, Admin Integrator, and Web Integrator protocols, and then read every matching historical completion/handoff file under [`completion-evidence/`](completion-evidence/). The completion evidence is historical input to reconcile against the current repository, not a replacement for the original tracker. The account must perform Worker implementation, VDM review, and Integrator reconciliation in that order.

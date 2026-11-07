@@ -1,6 +1,8 @@
 # Second-Round Account Report Index
 
-This is the central register for reports from all 11 Manus accounts. Each account owns the report path shown below. Accounts must update their own report on their branch; the coordinator updates status here after reviewing the branch and evidence. No credentials belong in this file.
+> **HISTORICAL INDEX:** This register records the completed historical 11-account MANUS round. It is preserved for evidence and reconciliation. It is not the current account roster. Current accounts and branches are defined by [`docs/second-round/WEB-ACCOUNTS-OPERATIONAL-BRIEF.md`](../../docs/second-round/WEB-ACCOUNTS-OPERATIONAL-BRIEF.md) and [`docs/second-round/REDESIGN-ACCOUNTS-OPERATIONAL-BRIEF.md`](../../docs/second-round/REDESIGN-ACCOUNTS-OPERATIONAL-BRIEF.md).
+
+The current wave has five web accounts (`WEB-01`–`WEB-05`) and two redesign accounts (`DESIGN-01`–`DESIGN-02`). A new current-wave report index should be created by the coordinator when those accounts begin reporting. No credentials belong in this file.
 
 | Account ID | Assigned work package | Required report path | Status | Branch | Commit | Coordinator notes |
 |---|---|---|---|---|---|---|

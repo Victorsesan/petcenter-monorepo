@@ -1,5 +1,7 @@
 # Unified Manus Worker Prompt
 
+> **ARCHIVED LAUNCHER — DO NOT USE FOR THE CURRENT WAVE:** This file describes the completed historical 11-account MANUS round. For the current seven-account operation, use [`WEB-ACCOUNTS-OPERATIONAL-BRIEF.md`](WEB-ACCOUNTS-OPERATIONAL-BRIEF.md) or [`REDESIGN-ACCOUNTS-OPERATIONAL-BRIEF.md`](REDESIGN-ACCOUNTS-OPERATIONAL-BRIEF.md), depending on the account assignment.
+
 Copy this entire prompt to one Manus account at a time. Replace only `[ACCOUNT ID]` with one of `MANUS-01` through `MANUS-11`. Do not attach project documents; they are already in the private repository.
 
 ```text
