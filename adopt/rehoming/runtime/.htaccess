@@ -1,0 +1,3 @@
+# TASK-MANUS-05 START — JSON runtime records are API-owned, never static downloads.
+Deny from all
+# TASK-MANUS-05 END

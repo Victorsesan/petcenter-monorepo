@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="See Pet Center's upcoming adoption days, off-site pop-ups, and community events in Beverly Hills. Meet adoptable pets in person, no appointment needed.">
+<title>Events &amp; Adoption Days — Pet Center</title>
+
+<meta property="og:title" content="Events & Adoption Days — Pet Center">
+<meta property="og:description" content="Meet adoptable pets in person at our weekend adoption days and community pop-ups.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://adopt.petcenterco.com/events/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Events & Adoption Days — Pet Center">
+<meta name="twitter:description" content="Meet adoptable pets in person at our weekend adoption days and community pop-ups.">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://adopt.petcenterco.com/" },
+    { "@type": "ListItem", "position": 2, "name": "Events & Adoption Days", "item": "https://adopt.petcenterco.com/events/" }
+  ]
+}
+</script>
+
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<style>
+/* ════════════════════════════════════════════════════════════════════════════
+   PET CENTER — Events & Adoption Days (/events/)
+   Colors: Navy #10214b | Gold #d7bd88 | Orange #ED7624
+   Base reset/typography/header/footer copied verbatim from cats.html (Rule 13).
+   Rule: NO borders on cards — shadows only | NO emojis — SVG icons only.
+   "Fun" elements below are delivered as playful SVG motifs/illustration and
+   copy, not emoji — consistent with the design system's hard rule.
+   ════════════════════════════════════════════════════════════════════════════ */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Sora:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --navy: #10214b; --navy-light: #1a2f5c; --gold: #d7bd88; --gold-dark: #b89968;
+  --orange: #ED7624; --orange-light: #fef0e6; --warm-gray: #d0c3ba; --chocolate: #3d2817;
+  --bg: #f9f7f4; --surface: #ffffff; --text: #2c2416; --muted: #7a6d5f;
+  --success: #0d7c4a; --success-bg: #e6f7ef; --error: #c0392b; --error-bg: #fdecea;
+  --shadow-sm: 0 2px 8px rgba(16,33,75,0.06); --shadow-md: 0 4px 20px rgba(16,33,75,0.10);
+  --shadow-lg: 0 8px 40px rgba(16,33,75,0.14);
+  --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px; --transition: 0.25s ease;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; overflow-x: hidden; width: 100%; }
+body { font-family: 'Sora', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.65; -webkit-font-smoothing: antialiased; padding-top: 68px; overflow-x: hidden; width: 100%; position: relative; }
+img { max-width: 100%; height: auto; display: block; }
+a { color: var(--orange); text-decoration: none; transition: color var(--transition); }
+a:hover { color: var(--navy); }
+h1, h2, h3, h4 { font-family: 'Cormorant Garamond', Georgia, serif; color: var(--navy); line-height: 1.25; }
+h1 { font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 700; }
+h2 { font-size: clamp(1.6rem, 3vw, 2.3rem); font-weight: 700; margin-bottom: 12px; }
+h3 { font-size: 1.2rem; font-weight: 600; margin-bottom: 8px; }
+p { color: var(--muted); }
+.pc-container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+.pc-container--narrow { max-width: 880px; margin: 0 auto; padding: 0 24px; }
+.pc-section { padding: 68px 0; }
+.pc-section--sm { padding: 40px 0; }
+.pc-section--alt { background: var(--surface); }
+.pc-eyebrow { display: inline-block; font-family: 'Sora', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--orange); margin-bottom: 10px; }
+@media (max-width: 640px) { .pc-section { padding: 44px 0; } }
+
+.pc-btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 28px; border-radius: var(--radius-sm); font-family: 'Sora', sans-serif; font-size: 14px; font-weight: 600; letter-spacing: 0.02em; cursor: pointer; border: none; transition: all var(--transition); text-decoration: none; white-space: nowrap; min-height: 44px; }
+.pc-btn--primary { background: linear-gradient(135deg, var(--navy), var(--navy-light)); color: #fff; box-shadow: 0 4px 14px rgba(16,33,75,0.25); }
+.pc-btn--primary:hover { background: linear-gradient(135deg, var(--navy-light), #243970); color: #fff; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(16,33,75,0.32); }
+.pc-btn--orange { background: linear-gradient(135deg, var(--orange), #d96919); color: #fff; box-shadow: 0 4px 14px rgba(237,118,36,0.30); }
+.pc-btn--orange:hover { background: linear-gradient(135deg, #d96919, #c45e10); color: #fff; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(237,118,36,0.38); }
+.pc-btn--ghost { background: transparent; color: var(--navy); box-shadow: inset 0 0 0 2px var(--gold); }
+.pc-btn--ghost:hover { background: var(--orange-light); color: var(--orange); }
+.pc-btn--sm { padding: 8px 18px; font-size: 13px; min-height: 36px; }
+.pc-btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+
+.pc-header { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; display: flex; align-items: center; justify-content: space-between; padding: 12px 32px; transition: background 0.35s ease, box-shadow 0.35s ease; overflow: visible; }
+.pc-header.scrolled, .pc-header--solid { background: rgba(16,33,75,0.97); box-shadow: 0 2px 20px rgba(0,0,0,0.18); }
+.pc-header__logo img { height: 44px; width: auto; display: block; }
+.pc-header__logo--desktop { display: block; }
+.pc-header__logo--mobile { display: none; }
+@media (max-width: 900px) { .pc-header__logo--desktop { display: none; } .pc-header__logo--mobile { display: block; } }
+.pc-header__nav { display: flex; align-items: center; gap: 4px; list-style: none; }
+.pc-header__nav li { position: relative; }
+.pc-header__nav a { display: block; padding: 8px 11px; font-family: 'Sora', sans-serif; font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.9); text-decoration: none; border-radius: 6px; transition: color 0.2s, background 0.2s; white-space: nowrap; }
+.pc-header__nav a:hover { color: #d7bd88; background: rgba(255,255,255,0.08); }
+.pc-header__nav .nav-donate a { background: #ED7624; color: #fff; font-weight: 600; padding: 8px 16px; }
+.pc-header__nav .nav-donate a:hover { background: #d4621a; color: #fff; }
+.pc-header__nav .nav-signup a { border: 1px solid rgba(215,189,136,0.5); color: #d7bd88; }
+.pc-header__nav .nav-signup a:hover { background: rgba(215,189,136,0.12); }
+/* Section 24 — Custom Dropdown System ("Message Bubble" locked shell), applied to header nav */
+.pc-nav-dropdown { position: relative; }
+.pc-nav-dropdown__trigger { display: flex; align-items: center; gap: 6px; background: none; border: none; cursor: pointer; padding: 8px 11px; font-family: 'Sora', sans-serif; font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.9); border-radius: 6px; transition: color 0.2s, background 0.2s; }
+.pc-nav-dropdown__trigger:hover, .pc-nav-dropdown__trigger.active { color: #d7bd88; background: rgba(255,255,255,0.08); }
+.pc-nav-dropdown__chevron { transition: transform 0.2s cubic-bezier(.4,0,.2,1); flex-shrink: 0; }
+.pc-nav-dropdown__trigger.active .pc-nav-dropdown__chevron { transform: rotate(180deg); }
+.pc-nav-dropdown__panel { position: absolute; top: 100%; left: 0; margin-top: 6px; min-width: 190px; background: #ffffff; border: 1.5px solid rgba(16,33,75,0.10); border-radius: 14px 0 14px 14px; box-shadow: 0 12px 32px rgba(16,33,75,0.18), 0 2px 8px rgba(16,33,75,0.08); overflow: hidden; z-index: 999; opacity: 0; visibility: hidden; transform: translateY(-8px) scale(0.98); transform-origin: top left; transition: opacity 0.2s ease, transform 0.2s cubic-bezier(.4,0,.2,1), visibility 0.2s; pointer-events: none; }
+.pc-nav-dropdown__panel.open { opacity: 1; visibility: visible; transform: translateY(0) scale(1); pointer-events: auto; }
+.pc-nav-dropdown__panel.flip-up { top: auto; bottom: 100%; margin-top: 0; margin-bottom: 6px; transform-origin: bottom left; border-radius: 14px 14px 14px 0; }
+.pc-nav-dropdown__scroll { max-height: 225px; overflow-y: auto; padding: 6px 0; }
+.pc-nav-dropdown__row { display: flex; align-items: center; padding: 11px 16px; border-left: 3px solid transparent; border-bottom: 1px solid rgba(16,33,75,0.06); font-family: 'Sora', sans-serif; font-size: 13.5px; color: var(--navy); text-decoration: none; transition: background 0.15s ease, border-color 0.15s ease; }
+.pc-nav-dropdown__row:last-child { border-bottom: none; }
+.pc-nav-dropdown__row:hover { background: rgba(16,33,75,0.05); color: var(--navy); border-left-color: var(--gold); }
+.pc-hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 8px; background: none; border: none; width: 32px; height: auto; justify-content: center; }
+.pc-hamburger span { display: block; width: 24px; height: 2px; background: #fff; border-radius: 2px; transition: all 0.3s ease; }
+.pc-hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(8px, 8px); }
+.pc-hamburger.active span:nth-child(2) { opacity: 0; }
+.pc-hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -7px); }
+.pc-mobile-menu { display: flex; flex-direction: column; position: absolute; top: 100%; left: 0; right: 0; background: rgba(16,33,75,0.98); z-index: 999; max-height: 0; overflow: hidden; opacity: 0; pointer-events: none; transition: all 0.3s ease; box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
+.pc-mobile-menu.open { max-height: calc(100vh - 68px); overflow-y: auto; opacity: 1; pointer-events: auto; padding: 16px 0 calc(100vh - 68px - 56px); overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+.pc-mobile-menu a { display: block; padding: 12px 28px; font-family: 'Sora', sans-serif; font-size: 15px; font-weight: 500; color: rgba(255,255,255,0.9); text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.06); transition: all 0.2s ease; }
+.pc-mobile-menu a:hover { color: #d7bd88; background: rgba(255,255,255,0.05); }
+.pc-mobile-menu .mobile-donate { margin: 12px 28px 0; display: inline-block; background: #ED7624; color: #fff; padding: 11px 24px; border-radius: 8px; font-weight: 600; border-bottom: none; }
+@media (max-width: 900px) { .pc-header__nav { display: none; } .pc-hamburger { display: flex; } }
+
+.pc-page-banner { background: linear-gradient(120deg, #10214b 0%, #1a3070 60%, #2a4080 100%); padding: 100px 0 56px; text-align: center; position: relative; overflow: hidden; }
+.pc-page-banner__eyebrow { display: inline-block; font-family: 'Sora', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #d7bd88; background: rgba(215,189,136,0.12); border: 1px solid rgba(215,189,136,0.3); padding: 5px 16px; border-radius: 20px; margin-bottom: 18px; }
+.pc-page-banner h1 { color: #fff; margin-bottom: 14px; }
+.pc-page-banner p { color: rgba(255,255,255,0.78); max-width: 620px; margin: 0 auto 8px; font-size: 16px; }
+.pc-paw-trail { position: absolute; opacity: 0.08; color: #fff; pointer-events: none; }
+
+.pc-stat-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+@media (max-width: 760px) { .pc-stat-strip { grid-template-columns: 1fr 1fr; } }
+.pc-stat { text-align: center; }
+.pc-stat__num { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 700; color: var(--navy); line-height: 1; }
+.pc-stat__label { font-family: 'Sora', sans-serif; font-size: 12.5px; color: var(--muted); margin-top: 6px; }
+
+/* ─── Upcoming events board ───────────────────────────────────────────────── */
+.pc-event-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+@media (max-width: 900px) { .pc-event-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 620px) { .pc-event-grid { grid-template-columns: 1fr; } }
+.pc-event-card { background: var(--surface); border-radius: var(--radius-md); box-shadow: var(--shadow-sm); overflow: hidden; transition: box-shadow var(--transition), transform var(--transition); display: flex; flex-direction: column; }
+.pc-event-card:hover { box-shadow: var(--shadow-md); transform: translateY(-3px); }
+.pc-event-card__date { background: var(--navy); color: #fff; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; }
+.pc-event-card__date-num { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 700; color: var(--gold); }
+.pc-event-card__date-month { font-family: 'Sora', sans-serif; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.7); }
+.pc-event-card__tag { font-family: 'Sora', sans-serif; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; background: rgba(215,189,136,0.16); color: var(--gold); padding: 4px 10px; border-radius: 12px; }
+.pc-event-card__body { padding: 18px; flex: 1; display: flex; flex-direction: column; }
+.pc-event-card__title { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+.pc-event-card__meta { font-size: 12.5px; color: var(--muted); display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
+.pc-event-card__meta svg { flex-shrink: 0; color: var(--gold-dark); }
+.pc-event-card__desc { font-size: 13.5px; color: var(--text); margin: 10px 0 14px; line-height: 1.55; }
+.pc-event-card__cta { margin-top: auto; font-size: 13px; font-weight: 600; color: var(--gold-dark); text-decoration: underline; text-underline-offset: 3px; }
+.pc-event-card__cta:hover { color: var(--orange); }
+
+.pc-empty-state { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 40px 20px; grid-column: 1 / -1; }
+.pc-empty-state__icon { color: var(--gold-dark); margin-bottom: 16px; }
+.pc-empty-state__title { font-family: 'Sora', sans-serif; font-size: 15.5px; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
+.pc-empty-state__subtitle { font-family: 'Sora', sans-serif; font-size: 13.5px; color: var(--muted); max-width: 320px; }
+.pc-loading-squares { display: flex; gap: 8px; justify-content: center; padding: 40px 0; grid-column: 1 / -1; }
+.pc-loading-squares span { width: 12px; height: 12px; background: var(--gold); border-radius: 3px; animation: pcSquareMorph 1.2s ease-in-out infinite; }
+.pc-loading-squares span:nth-child(2) { animation-delay: .15s; }
+.pc-loading-squares span:nth-child(3) { animation-delay: .3s; }
+@keyframes pcSquareMorph { 0%, 100% { transform: scale(1) rotate(0deg); border-radius: 3px; } 50% { transform: scale(1.3) rotate(45deg); border-radius: 6px; } }
+
+/* ─── Types of events ─────────────────────────────────────────────────────── */
+.pc-type-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+@media (max-width: 900px) { .pc-type-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) { .pc-type-grid { grid-template-columns: 1fr; } }
+.pc-type-card { background: var(--bg); border-radius: var(--radius-md); padding: 22px; text-align: center; }
+.pc-type-card__icon { color: var(--orange); margin-bottom: 12px; }
+.pc-type-card p { font-size: 13px; }
+
+/* ─── What to expect steps ───────────────────────────────────────────────── */
+.pc-intake-steps { display: flex; flex-direction: column; gap: 0; margin-top: 8px; }
+.pc-intake-step { display: flex; gap: 18px; padding: 20px 0; border-bottom: 1px solid var(--warm-gray); }
+.pc-intake-step:last-child { border-bottom: none; }
+.pc-intake-step__num { flex-shrink: 0; width: 36px; height: 36px; border-radius: 50%; background: var(--navy); color: var(--gold); display: flex; align-items: center; justify-content: center; font-family: 'Sora', sans-serif; font-weight: 700; font-size: 15px; }
+.pc-intake-step__body h3 { margin-bottom: 4px; }
+.pc-intake-step__body p { font-size: 13.5px; }
+
+/* ─── Did You Know / fun facts ──────────────────────────────────────────── */
+.pc-fact-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+@media (max-width: 860px) { .pc-fact-strip { grid-template-columns: 1fr; } }
+.pc-fact-card { background: var(--navy); border-radius: var(--radius-md); padding: 24px; color: rgba(255,255,255,0.9); display: flex; gap: 14px; align-items: flex-start; }
+.pc-fact-card svg { flex-shrink: 0; color: var(--gold); margin-top: 2px; }
+.pc-fact-card__label { font-family: 'Sora', sans-serif; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--gold); margin-bottom: 4px; }
+.pc-fact-card p { color: rgba(255,255,255,0.85); font-size: 13.5px; line-height: 1.55; }
+
+/* ─── Newsletter / reminder CTA ──────────────────────────────────────────── */
+.pc-contact-section { background: #EAF1EF; border-radius: var(--radius-lg); padding: 40px; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+.pc-contact-section h2 { color: #3F5D53; margin-bottom: 6px; }
+.pc-contact-section p { color: #3F5D53; opacity: 0.8; max-width: 460px; }
+
+/* ─── FAQ ─────────────────────────────────────────────────────────────────── */
+.pc-faq-item { border-bottom: 1px solid var(--warm-gray); padding: 18px 0; }
+.pc-faq-item:first-child { padding-top: 0; }
+.pc-faq-item h3 { font-size: 15px; margin-bottom: 6px; display: flex; gap: 10px; align-items: flex-start; }
+.pc-faq-item h3 svg { flex-shrink: 0; color: var(--orange); margin-top: 3px; }
+.pc-faq-item p { font-size: 13.5px; padding-left: 26px; }
+
+/* ─── Cross-link ─────────────────────────────────────────────────────────── */
+.pc-cross-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+@media (max-width: 700px) { .pc-cross-grid { grid-template-columns: 1fr; } }
+.pc-cross-callout { background: var(--orange-light); border-radius: var(--radius-md); padding: 22px 24px; }
+.pc-cross-callout p { color: var(--text); font-size: 13.5px; margin-bottom: 12px; }
+.pc-cross-callout strong { color: var(--navy); display: block; font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; margin-bottom: 4px; }
+
+.pc-footer { background: #0b1834; padding: 60px 24px 28px; color: rgba(255,255,255,0.65); font-family: 'Sora', sans-serif; }
+.pc-footer__inner { max-width: 1200px; margin: 0 auto; }
+.pc-footer__top { display: grid; grid-template-columns: 2fr 1fr 1.2fr 1fr 1.3fr; gap: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(255,255,255,0.07); }
+.pc-footer__brand img { height: 40px; margin-bottom: 16px; display: block; }
+.pc-footer__brand p { font-size: 13.5px; line-height: 1.7; max-width: 280px; }
+.pc-footer__col h5 { font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; font-weight: 700; color: #d7bd88; margin-bottom: 16px; }
+.pc-footer__col ul { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+.pc-footer__col ul a { font-size: 13px; color: rgba(255,255,255,0.6); text-decoration: none; transition: color 0.2s; }
+.pc-footer__col ul a:hover { color: #d7bd88; }
+.pc-footer__bottom { padding-top: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+.pc-footer__copy { font-size: 12.5px; }
+.pc-footer__links { display: flex; gap: 20px; }
+.pc-footer__links a { font-size: 12.5px; color: rgba(255,255,255,0.5); text-decoration: none; }
+.pc-footer__links a:hover { color: #d7bd88; }
+@media (max-width: 900px) { .pc-footer__top { grid-template-columns: 1fr 1fr; gap: 28px; } }
+@media (max-width: 560px) { .pc-footer__top { grid-template-columns: 1fr; gap: 24px; } }
+</style>
+</head>
+<body>
+
+<header class="pc-header pc-header--solid" id="pcHeader">
+  <a href="/" class="pc-header__logo pc-header__logo--desktop"><img src="/assets/images/logo-petcenter.png" alt="Pet Center"></a>
+  <a href="/" class="pc-header__logo pc-header__logo--mobile"><img src="/assets/images/logo-petcenter-icon.png" alt="Pet Center"></a>
+  <ul class="pc-header__nav">
+    <li><a href="/">Home</a></li>
+    <li><a href="/about/">About Us</a></li>
+    <li><a href="/partners/">Partners</a></li>
+    <li class="pc-nav-dropdown">
+    <button class="pc-nav-dropdown__trigger" aria-expanded="false" aria-haspopup="true">Our Pets
+      <svg class="pc-nav-dropdown__chevron" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <div class="pc-nav-dropdown__panel">
+      <div class="pc-nav-dropdown__scroll">
+      <a class="pc-nav-dropdown__row" href="/pets/dogs/">Dogs</a>
+      <a class="pc-nav-dropdown__row" href="/pets/cats/">Cats</a>
+      <a class="pc-nav-dropdown__row" href="/pets/birds/">Birds</a>
+      <a class="pc-nav-dropdown__row" href="/pets/reptiles/">Reptiles</a>
+      <a class="pc-nav-dropdown__row" href="/pets/small-mammals/">Small Mammals</a>
+      <a class="pc-nav-dropdown__row" href="/pets/livestocks/">Livestocks</a>
+      <a class="pc-nav-dropdown__row" href="/pets/aquariums/">Aquariums</a>
+      </div>
+    </div>
+  </li>
+    <li class="pc-nav-dropdown">
+    <button class="pc-nav-dropdown__trigger" aria-expanded="false" aria-haspopup="true">Get Involved
+      <svg class="pc-nav-dropdown__chevron" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <div class="pc-nav-dropdown__panel">
+      <div class="pc-nav-dropdown__scroll">
+      <a class="pc-nav-dropdown__row" href="/volunteer/">Volunteer</a>
+      <a class="pc-nav-dropdown__row" href="/foster/">Foster a Pet</a>
+      <a class="pc-nav-dropdown__row" href="/events/">Events &amp; Adoption Days</a>
+      <a class="pc-nav-dropdown__row" href="/lost-and-found/">Lost &amp; Found Pets</a>
+      <a class="pc-nav-dropdown__row" href="/sponsor-a-pet/">Sponsor a Pet</a>
+      </div>
+    </div>
+  </li>
+    <li><a href="/blog/">Blog</a></li>
+    <li><a href="/testimonials/">Testimonials</a></li>
+    <li><a href="/success-stories/">Success Stories</a></li>
+    <li class="nav-donate"><a href="https://donate.petcenterco.com" target="_blank" rel="noopener">Donate</a></li>
+    <li><a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact</a></li>
+    <li class="nav-signup"><a href="/signin/">Sign Up</a></li>
+  </ul>
+  <button class="pc-hamburger" id="pcHamburger" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
+  <nav class="pc-mobile-menu" id="pcMobileMenu" aria-label="Mobile navigation">
+    <a href="/">Home</a>
+    <a href="/about/">About Us</a>
+    <a href="/partners/">Partners</a>
+    <a href="/pets/dogs/">Dogs</a>
+    <a href="/pets/cats/">Cats</a>
+    <a href="/pets/birds/">Birds</a>
+    <a href="/pets/reptiles/">Reptiles</a>
+    <a href="/pets/small-mammals/">Small Mammals</a>
+    <a href="/pets/livestocks/">Livestocks</a>
+    <a href="/pets/aquariums/">Aquariums</a>
+    <a href="/volunteer/">Volunteer</a>
+    <a href="/foster/">Foster a Pet</a>
+    <a href="/events/">Events &amp; Adoption Days</a>
+    <a href="/lost-and-found/">Lost &amp; Found Pets</a>
+    <a href="/sponsor-a-pet/">Sponsor a Pet</a>
+    <a href="/blog/">Blog</a>
+    <a href="/testimonials/">Testimonials</a>
+    <a href="/success-stories/">Success Stories</a>
+    <a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact</a>
+    <a href="/signin/">Sign Up</a>
+    <a href="https://donate.petcenterco.com" class="mobile-donate" target="_blank" rel="noopener">Donate</a>
+  </nav>
+</header>
+
+<section class="pc-page-banner">
+  <i class="fa-solid fa-paw pc-paw-trail" style="top:24px;left:6%;font-size:46px;" aria-hidden="true"></i>
+  <i class="fa-solid fa-paw pc-paw-trail" style="bottom:16px;right:8%;font-size:60px;" aria-hidden="true"></i>
+  <div class="pc-container">
+    <span class="pc-page-banner__eyebrow">Meet Them In Person</span>
+    <h1>Events &amp; Adoption Days</h1>
+    <p>No appointment, no pressure — just come say hello. Our weekend adoption days and pop-up events are the easiest way to meet multiple pets face-to-face before you apply.</p>
+  </div>
+</section>
+
+<section class="pc-section pc-section--sm">
+  <div class="pc-container">
+    <div class="pc-stat-strip">
+      <div class="pc-stat"><div class="pc-stat__num">40+</div><div class="pc-stat__label">Events hosted per year</div></div>
+      <div class="pc-stat"><div class="pc-stat__num">1,900+</div><div class="pc-stat__label">Pets met at events last year</div></div>
+      <div class="pc-stat"><div class="pc-stat__num">12</div><div class="pc-stat__label">Community partner locations</div></div>
+      <div class="pc-stat"><div class="pc-stat__num">Free</div><div class="pc-stat__label">Always, to attend</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Upcoming events board ═══ -->
+<section class="pc-section pc-section--alt">
+  <div class="pc-container">
+    <span class="pc-eyebrow">What's Coming Up</span>
+    <h2>Upcoming Events</h2>
+    <p style="max-width:600px;margin-bottom:28px;">Times and locations occasionally shift — always worth a quick check the morning of.</p>
+    <div class="pc-event-grid" id="pcEventGrid"></div>
+  </div>
+</section>
+
+<!-- ═══ Types of events ═══ -->
+<section class="pc-section">
+  <div class="pc-container">
+    <span class="pc-eyebrow">Formats</span>
+    <h2>Types of Events We Run</h2>
+    <div class="pc-type-grid" style="margin-top:22px;">
+      <div class="pc-type-card">
+        <div class="pc-type-card__icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg></div>
+        <h3 style="font-size:1.05rem;">Weekend Adoption Days</h3>
+        <p>Our biggest, most regular events — right here on-site every Saturday and Sunday.</p>
+      </div>
+      <div class="pc-type-card">
+        <div class="pc-type-card__icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+        <h3 style="font-size:1.05rem;">Off-Site Pop-Ups</h3>
+        <p>We bring a small group of adoptable pets to parks, markets, and partner storefronts around town.</p>
+      </div>
+      <div class="pc-type-card">
+        <div class="pc-type-card__icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M2 12h20"/><circle cx="12" cy="12" r="9"/></svg></div>
+        <h3 style="font-size:1.05rem;">Meet &amp; Greet Nights</h3>
+        <p>Smaller, quieter evening sessions — good for shy pets and for visitors who prefer less crowd noise.</p>
+      </div>
+      <div class="pc-type-card">
+        <div class="pc-type-card__icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+        <h3 style="font-size:1.05rem;">Community Partner Days</h3>
+        <p>Joint events with local vets, trainers, and pet-supply stores — extra resources on-site for new owners.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Did you know ═══ -->
+<section class="pc-section pc-section--alt">
+  <div class="pc-container">
+    <span class="pc-eyebrow">While You're Here</span>
+    <h2>Did You Know?</h2>
+    <div class="pc-fact-strip" style="margin-top:20px;">
+      <div class="pc-fact-card">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 2-3 4"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <div><div class="pc-fact-card__label">Fun Fact</div><p>Pets meet more adopters in the first hour of an event than in a typical week of regular walk-in visits — first impressions really do move fast.</p></div>
+      </div>
+      <div class="pc-fact-card">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        <div><div class="pc-fact-card__label">Good to Know</div><p>Every pet at an event is already vaccinated, microchipped, and spayed/neutered — no extra vet trip required before you take them home.</p></div>
+      </div>
+      <div class="pc-fact-card">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        <div><div class="pc-fact-card__label">Handy Tip</div><p>Bring a leash and carrier if you already have one at home — it's not required, but it makes a same-day adoption a lot smoother.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ What to expect ═══ -->
+<section class="pc-section">
+  <div class="pc-container--narrow">
+    <span class="pc-eyebrow">Before You Go</span>
+    <h2>What to Expect at an Adoption Day</h2>
+    <div class="pc-intake-steps">
+      <div class="pc-intake-step">
+        <div class="pc-intake-step__num">1</div>
+        <div class="pc-intake-step__body"><h3>Walk in, no RSVP needed</h3><p>Just show up during the listed hours — there's no sign-up required to browse and meet pets.</p></div>
+      </div>
+      <div class="pc-intake-step">
+        <div class="pc-intake-step__num">2</div>
+        <div class="pc-intake-step__body"><h3>Meet as many pets as you'd like</h3><p>Our staff and volunteers are on hand to introduce you and answer questions about temperament and care.</p></div>
+      </div>
+      <div class="pc-intake-step">
+        <div class="pc-intake-step__num">3</div>
+        <div class="pc-intake-step__body"><h3>Found a match? Start the application on the spot</h3><p>We can help you begin your adoption application right there at the event, on a tablet or your own phone.</p></div>
+      </div>
+      <div class="pc-intake-step">
+        <div class="pc-intake-step__num">4</div>
+        <div class="pc-intake-step__body"><h3>Same-day adoptions are common</h3><p>If everything checks out, plenty of visitors leave the event with their new pet the same day.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FAQ ═══ -->
+<section class="pc-section pc-section--alt">
+  <div class="pc-container--narrow">
+    <span class="pc-eyebrow">Questions</span>
+    <h2>Events FAQ</h2>
+    <div style="margin-top:20px;">
+      <div class="pc-faq-item">
+        <h3><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 2-3 4"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Can I bring my current dog to meet a potential new pet?</h3>
+        <p>Yes, at most events — leashed, well-socialized dogs are welcome. Off-site pop-ups may vary depending on the venue, so check the listing for that event.</p>
+      </div>
+      <div class="pc-faq-item">
+        <h3><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 2-3 4"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Do I need to bring anything?</h3>
+        <p>Just a valid photo ID if you're hoping to adopt same-day. Everything else — paperwork, carriers for small pets — we can provide on-site.</p>
+      </div>
+      <div class="pc-faq-item">
+        <h3><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 2-3 4"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> What if it's cancelled due to weather?</h3>
+        <p>Off-site outdoor pop-ups occasionally get rescheduled for weather — we'll note that on the event listing as early as possible.</p>
+      </div>
+      <div class="pc-faq-item">
+        <h3><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 2-3 4"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Can I host an event with you at my business or venue?</h3>
+        <p>We're always open to new community partners — reach out through our contact page and we'll follow up.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Reminder CTA + cross-links ═══ -->
+<section class="pc-section">
+  <div class="pc-container">
+    <div class="pc-contact-section">
+      <div>
+        <h2>Never Miss an Event</h2>
+        <p>Reach out and ask to be added to our events list — we'll let you know before the next one near you.</p>
+      </div>
+      <a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener" class="pc-btn pc-btn--primary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M4 4l8 8 8-8"/></svg>
+        Get Event Reminders
+      </a>
+    </div>
+
+    <div class="pc-cross-grid" style="margin-top:32px;">
+      <div class="pc-cross-callout">
+        <strong>Want to help run these events?</strong>
+        <p>Volunteers are what make our adoption days possible — check-in, greeting, and handling all need hands on deck.</p>
+        <a href="/volunteer/" class="pc-btn pc-btn--ghost pc-btn--sm">See Volunteer Roles</a>
+      </div>
+      <div class="pc-cross-callout">
+        <strong>Not ready to adopt yet?</strong>
+        <p>Fostering a pet is a great low-commitment way to get to know one before events even start.</p>
+        <a href="/foster/" class="pc-btn pc-btn--ghost pc-btn--sm">Learn About Fostering</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="pc-footer">
+  <div class="pc-footer__inner">
+    <div class="pc-footer__top">
+      <div class="pc-footer__brand">
+        <img src="/assets/images/logo-petcenter.png" alt="Pet Center">
+        <p>Every pet deserves a loving home. Browse our available pets and start your adoption journey today.</p>
+      </div>
+      <div class="pc-footer__col">
+        <h5>Our Pets</h5>
+        <ul>
+          <li><a href="/pets/dogs/">Dogs</a></li>
+          <li><a href="/pets/cats/">Cats</a></li>
+          <li><a href="/pets/birds/">Birds</a></li>
+          <li><a href="/pets/reptiles/">Reptiles</a></li>
+          <li><a href="/pets/small-mammals/">Small Mammals</a></li>
+          <li><a href="/pets/livestocks/">Livestocks</a></li>
+          <li><a href="/pets/aquariums/">Aquariums</a></li>
+          <li><a href="/species-guide/">Species Care Guide</a></li>
+        </ul>
+      </div>
+      <div class="pc-footer__col">
+        <h5>Information</h5>
+        <ul>
+          <li><a href="/about/">About Us</a></li>
+          <li><a href="/partners/">Partners</a></li>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/testimonials/">Testimonials</a></li>
+          <li><a href="/success-stories/">Success Stories</a></li>
+          <li><a href="https://donate.petcenterco.com" target="_blank" rel="noopener">Donate</a></li>
+          <li><a href="https://docs.petcenterco.com/health-guarantee/" target="_blank" rel="noopener">Health Guarantee</a></li>
+          <li><a href="https://docs.petcenterco.com/shipping-cancellation/" target="_blank" rel="noopener">Shipping & Cancellation</a></li>
+          <li><a href="https://docs.petcenterco.com/shipping-insurance-claims/" target="_blank" rel="noopener">Shipping Insurance</a></li>
+          <li><a href="https://docs.petcenterco.com/data-retention-security/" target="_blank" rel="noopener">Data & Security</a></li>
+        </ul>
+      </div>
+      <div class="pc-footer__col">
+        <h5>Support</h5>
+        <ul>
+          <li><a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact Us</a></li>
+          <li><a href="/signin/">Sign Up</a></li>
+          <li><a href="/volunteer/">Volunteer</a></li>
+          <li><a href="/foster/">Foster a Pet</a></li>
+          <li><a href="/events/">Events &amp; Adoption Days</a></li>
+          <li><a href="/lost-and-found/">Lost &amp; Found Pets</a></li>
+          <li><a href="/rehoming-resources/">Can't Keep Your Pet?</a></li>
+          <li><a href="/sponsor-a-pet/">Sponsor a Pet</a></li>
+          <li><a href="/gift-my-adoption/">Gift My Adoption</a></li>
+          <li><a href="https://docs.petcenterco.com/returns-refunds/" target="_blank" rel="noopener">Returns & Refunds</a></li>
+          <li><a href="https://docs.petcenterco.com/faq/" target="_blank" rel="noopener">FAQ</a></li>
+        </ul>
+      </div>
+      <div class="pc-footer__col">
+        <h5>Visit Us</h5>
+        <p style="color:rgba(255,255,255,.7);font-size:13px;line-height:1.8;margin-bottom:0;">235-269 N Beverly Dr<br>Beverly Hills, CA</p>
+        <p style="color:rgba(255,255,255,.6);font-size:12px;line-height:1.6;margin-top:4px;">Golden Triangle Shopping Center, Section #257</p>
+        <p style="color:rgba(255,255,255,.7);font-size:13px;line-height:1.8;margin-top:10px;"><strong style="color:#d7bd88;">Hours:</strong><br>Mon – Fri: 7am – 9pm<br>Sat – Sun: 10am – 6pm</p>
+      </div>
+    </div>
+    <div class="pc-footer__bottom">
+      <span class="pc-footer__copy">&copy; 2026 Pet Center. All rights reserved.</span>
+      <div class="pc-footer__links">
+        <a href="https://docs.petcenterco.com/privacy-policy/" target="_blank" rel="noopener">Privacy Policy</a>
+        <a href="https://docs.petcenterco.com/terms-of-service/" target="_blank" rel="noopener">Terms of Service</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+'use strict';
+(function() {
+  var header = document.getElementById('pcHeader');
+  if (!header) return;
+  function updateHeaderOnScroll() { if (window.scrollY > 0) { header.classList.add('scrolled'); } else { header.classList.remove('scrolled'); } }
+  window.addEventListener('scroll', updateHeaderOnScroll, { passive: true });
+  updateHeaderOnScroll();
+})();
+// Section 24 dropdown controller (click to open, outside-click/Escape to close)
+(function () {
+  var dropdowns = document.querySelectorAll('.pc-nav-dropdown');
+  function closeAll() {
+    dropdowns.forEach(function (d) {
+      var t = d.querySelector('.pc-nav-dropdown__trigger'), p = d.querySelector('.pc-nav-dropdown__panel');
+      t.classList.remove('active'); t.setAttribute('aria-expanded', 'false'); p.classList.remove('open', 'flip-up');
+    });
+  }
+  dropdowns.forEach(function (dd) {
+    var trigger = dd.querySelector('.pc-nav-dropdown__trigger'), panel = dd.querySelector('.pc-nav-dropdown__panel');
+    trigger.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var isOpen = panel.classList.contains('open');
+      closeAll();
+      if (!isOpen) {
+        var rect = trigger.getBoundingClientRect();
+        if (window.innerHeight - rect.bottom < 240 && rect.top > 240) { panel.classList.add('flip-up'); }
+        panel.classList.add('open'); trigger.classList.add('active'); trigger.setAttribute('aria-expanded', 'true');
+      }
+    });
+  });
+  document.addEventListener('click', closeAll);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeAll(); });
+  window.addEventListener('scroll', closeAll, { passive: true });
+  window.addEventListener('resize', closeAll);
+})();
+(function () {
+  var hamburger = document.getElementById('pcHamburger');
+  var mobileMenu = document.getElementById('pcMobileMenu');
+  if (!hamburger || !mobileMenu) return;
+  function openMenu() { hamburger.classList.add('active'); mobileMenu.classList.add('open'); hamburger.setAttribute('aria-expanded', 'true'); document.body.style.overflow = 'hidden'; }
+  function closeMenu() { hamburger.classList.remove('active'); mobileMenu.classList.remove('open'); hamburger.setAttribute('aria-expanded', 'false'); document.body.style.overflow = ''; }
+  hamburger.addEventListener('click', function (e) { e.stopPropagation(); mobileMenu.classList.contains('open') ? closeMenu() : openMenu(); });
+  mobileMenu.querySelectorAll('a').forEach(function (link) { link.addEventListener('click', closeMenu); });
+  document.addEventListener('click', function (e) { if (!e.target.closest('header') && !e.target.closest('.pc-mobile-menu')) { closeMenu(); } });
+})();
+
+// Events board — data source: /events/events-data.json, an admin-hand-edited flat-file JSON,
+// same pattern as testimonials.json / lost-found-data.json (Section 10.1, Path A). Any fetch
+// failure or genuinely empty list renders the same friendly empty state (Section 15.3 pattern).
+(function () {
+  var grid = document.getElementById('pcEventGrid');
+  var monthShort = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+
+  function escapeHtml(str) { var d = document.createElement('div'); d.textContent = str == null ? '' : String(str); return d.innerHTML; }
+
+  function cardHtml(ev) {
+    return '<div class="pc-event-card">' +
+      '<div class="pc-event-card__date"><div><div class="pc-event-card__date-num">' + escapeHtml(ev.day) + '</div>' +
+        '<div class="pc-event-card__date-month">' + escapeHtml(ev.month) + '</div></div>' +
+        '<span class="pc-event-card__tag">' + escapeHtml(ev.type || 'Event') + '</span></div>' +
+      '<div class="pc-event-card__body">' +
+        '<div class="pc-event-card__title">' + escapeHtml(ev.title) + '</div>' +
+        '<div class="pc-event-card__meta"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span>' + escapeHtml(ev.time || '') + '</span></div>' +
+        '<div class="pc-event-card__meta"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><span>' + escapeHtml(ev.location || '') + '</span></div>' +
+        '<p class="pc-event-card__desc">' + escapeHtml(ev.description || '') + '</p>' +
+        '<a class="pc-event-card__cta" href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Ask about this event</a>' +
+      '</div></div>';
+  }
+
+  function emptyStateHtml(message) {
+    return '<div class="pc-empty-state"><div class="pc-empty-state__icon"><i class="fa-solid fa-paw" style="font-size:24px;line-height:1;" aria-hidden="true"></i></div>' +
+      '<div class="pc-empty-state__title">No events scheduled right now</div><div class="pc-empty-state__subtitle">' + message + '</div></div>';
+  }
+
+  grid.innerHTML = '<div class="pc-loading-squares"><span></span><span></span><span></span></div>';
+
+  fetch('/events/events-data.json')
+    .then(function (res) { if (!res.ok) { throw new Error('fetch failed'); } return res.json(); })
+    .then(function (data) {
+      var list = (data && data.events) || [];
+      if (!list.length) { grid.innerHTML = emptyStateHtml('Check back soon — new events are added regularly.'); return; }
+      grid.innerHTML = list.map(cardHtml).join('');
+    })
+    .catch(function (err) {
+      console.error('Events data failed to load:', err);
+      grid.innerHTML = emptyStateHtml('We couldn\'t load the events list right now — please check back soon.');
+    });
+})();
+</script>
+<script src="/admin/chat-widget.js"></script>
+</body>
+</html>

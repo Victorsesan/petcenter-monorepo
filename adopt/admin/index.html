@@ -1971,6 +1971,7 @@ p { color: var(--muted); }
       <button class="admin-icon-rail__item" data-panel="publish" onclick="switchPanel('publish')" title="Publish Pets"><i class="fas fa-plus"></i></button>
       <button class="admin-icon-rail__item" data-panel="edit" onclick="switchPanel('edit')" title="Edit Pets"><i class="fas fa-pen"></i></button>
       <button class="admin-icon-rail__item" data-panel="applications" onclick="switchPanel('applications')" title="Applications"><i class="fas fa-file-lines"></i></button>
+      <button class="admin-icon-rail__item" data-panel="petMatch" onclick="switchPanel('petMatch')" title="Pet Match Requests"><i class="fas fa-paw"></i></button>
       <!-- TASK-B2 START: nav icon for the new Verification Requests panel, added
            directly after Applications since both are review/approve/reject
            queues — same icon-rail pattern as every other item here (Rule 7). -->
@@ -2267,6 +2268,26 @@ p { color: var(--muted); }
            received those by email per Task B1's flow, and no filter/bulk-delete
            controls since the spec doesn't call for them here. No dropdown/select
            elements are built in this panel (Directive 9a n/a to this panel). -->
+      <!-- TASK-6a/6b/7a: Pet Match Requests review panel. Reuses the Applications
+           list conventions while keeping the request-specific status/actions. -->
+      <div id="petMatchPanel" class="admin-panel" style="display:none;">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:20px;">
+          <div><h2 style="font-family:'Cormorant Garamond',serif;color:#10214b;margin-bottom:6px;">Pet Match Requests</h2>
+            <p style="color:#888;font-size:14px;margin:0;">Review visitor preferences and link fulfilled requests to a catalog pet.</p></div>
+          <button type="button" class="pc-btn pc-btn--ghost" onclick="loadPetMatchRequests()"><i class="fas fa-rotate-right"></i> Refresh</button>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;">
+          <select id="pmCategoryFilter" class="pc-form-input" style="min-width:180px;" onchange="loadPetMatchRequests()">
+            <option value="dogs">Dogs</option><option value="cats">Cats</option><option value="birds">Birds</option><option value="reptiles">Reptiles</option><option value="small-mammals">Small Mammals</option><option value="livestocks">Livestocks</option><option value="aquariums">Aquariums</option>
+          </select>
+          <select id="pmStatusFilter" class="pc-form-input" style="min-width:150px;" onchange="renderPetMatchRequests()"><option value="all">All statuses</option><option value="new">New</option><option value="FULFILLED">Fulfilled</option><option value="CLOSED">Closed</option></select>
+          <input id="pmSearch" class="pc-form-input" style="flex:1;min-width:220px;" placeholder="Search name, email, request code" oninput="renderPetMatchRequests()">
+        </div>
+        <div id="pmMessage" style="display:none;margin-bottom:12px;padding:10px 12px;border-radius:8px;background:#fff8f2;color:#7a6d5f;font-size:13px;"></div>
+        <div class="pc-apps-scroll"><div id="pmList"></div><div id="pmEmpty" style="display:none;padding:42px 24px;text-align:center;color:#aaa;background:#fff;border:1px solid #eee;">No Pet Match Requests match these filters.</div></div>
+        <div id="pmDetail" style="display:none;margin-top:18px;padding:18px;background:#f9f7f2;border-radius:12px;border:1px solid #eee;"></div>
+      </div>
+
       <div id="verifRequestsPanel" class="admin-panel" style="display:none;">
         <h2 style="font-family:'Cormorant Garamond',serif;color:#10214b;margin-bottom:6px;">Verification Requests</h2>
         <p style="color:#888;margin-bottom:24px;font-size:14px;">Review pending merchant identity verifications — approve or reject based on the video + ID images already sent to your verification inbox by email</p>
@@ -4510,6 +4531,7 @@ function switchPanel(panel) {
     initCustomSelects();
     loadApplications(); 
   }
+  if (panel === 'petMatch') { loadPetMatchRequests(); }
   if (panel === 'liveChat') {
     initChatPanel();
   }
@@ -7495,6 +7517,50 @@ async function submitReject() {
     window.dlog('Reject Application: network error — ' + e.message, 'error');
   }
 }
+
+
+// TASK-6a/6b/7a — Pet Match Requests admin UI.
+let allPetMatchRequests = [];
+let selectedPetMatch = null;
+function pmText(value) { const d=document.createElement('div'); d.textContent=value==null?'':String(value); return d.innerHTML; }
+function pmNotice(message, error) { const el=document.getElementById('pmMessage'); if (!el) return; el.textContent=message; el.style.display='block'; el.style.color=error?'#9d2b20':'#7a6d5f'; }
+async function loadPetMatchRequests() {
+  if (!await checkTokenBeforeAction('loadPetMatchRequests')) return;
+  const category=document.getElementById('pmCategoryFilter').value;
+  try {
+    const fd=new FormData(); fd.append('token',adminToken); fd.append('category',category);
+    const res=await fetch('./get-pet-match-requests.php',{method:'POST',body:fd});
+    const json=await res.json(); allPetMatchRequests=Array.isArray(json.requests)?json.requests:[]; selectedPetMatch=null;
+    document.getElementById('pmDetail').style.display='none'; renderPetMatchRequests();
+  } catch(e) { pmNotice('Could not load Pet Match Requests: '+e.message,true); }
+}
+function renderPetMatchRequests() {
+  const list=document.getElementById('pmList'), empty=document.getElementById('pmEmpty'); if(!list)return;
+  const status=(document.getElementById('pmStatusFilter')||{}).value||'all', q=((document.getElementById('pmSearch')||{}).value||'').toLowerCase();
+  const rows=allPetMatchRequests.filter(r=>(status==='all'||String(r.status||'new').toUpperCase()===status.toUpperCase()) && (!q||[r.request_code,r.full_name,r.email].some(v=>String(v||'').toLowerCase().includes(q))));
+  list.innerHTML=''; empty.style.display=rows.length?'none':'block';
+  rows.sort((a,b)=>String(b.submitted_at||'').localeCompare(String(a.submitted_at||''))).forEach((r,i)=>{
+    const row=document.createElement('div'); row.style.cssText='display:grid;grid-template-columns:1.5fr 1.5fr 1fr 110px;gap:12px;padding:14px 16px;background:'+(i%2?'#faf8f5':'#fff')+';border-bottom:1px solid #ece7e0;align-items:center;';
+    const st=String(r.status||'new').toUpperCase();
+    row.innerHTML='<div><strong style="color:#10214b">'+pmText(r.full_name||'Unnamed')+'</strong><div style="font-size:12px;color:#888">'+pmText(r.request_code||'')+'</div></div><div style="font-size:13px;color:#7a6d5f;overflow-wrap:anywhere">'+pmText(r.email||'')+'</div><div style="font-size:13px;color:#7a6d5f">'+pmText(st)+'</div><button type="button" class="pc-btn pc-btn--ghost" style="padding:6px 10px;font-size:12px" onclick="showPetMatchDetail('+i+')">View</button>';
+    row.dataset.requestCode=r.request_code||''; row._request=r; list.appendChild(row);
+  });
+}
+function showPetMatchDetail(index) {
+  const status=(document.getElementById('pmStatusFilter')||{}).value||'all', q=((document.getElementById('pmSearch')||{}).value||'').toLowerCase();
+  const rows=allPetMatchRequests.filter(r=>(status==='all'||String(r.status||'new').toUpperCase()===status.toUpperCase()) && (!q||[r.request_code,r.full_name,r.email].some(v=>String(v||'').toLowerCase().includes(q)))).sort((a,b)=>String(b.submitted_at||'').localeCompare(String(a.submitted_at||'')));
+  const r=rows[index]; if(!r)return; selectedPetMatch=r; const box=document.getElementById('pmDetail'); box.style.display='block';
+  box.innerHTML='<div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start"><div><h3 style="margin:0 0 6px;color:#10214b">'+pmText(r.full_name||'Pet Match Request')+'</h3><div style="font-size:12px;color:#888">'+pmText(r.request_code||'')+' · '+pmText(r.email||'')+'</div></div><button type="button" class="pc-btn pc-btn--ghost" onclick="document.getElementById(\'pmDetail\').style.display=\'none\'">Close</button></div><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin:16px 0;font-size:13px;color:#4d4439"><div><b>Category</b><br>'+pmText(r.category||document.getElementById('pmCategoryFilter').value)+'</div><div><b>Breed</b><br>'+pmText(r.breed||'Any')+'</div><div><b>Age</b><br>'+pmText((r.age_min_years??'Any')+'–'+(r.age_max_years??'Any'))+'</div><div><b>Budget</b><br>'+pmText(r.budget_max||'Not specified')+'</div><div><b>Location</b><br>'+pmText(r.visitor_location||'Not specified')+'</div><div><b>Compatibility</b><br>'+pmText('Kids: '+(r.compatible_kids||'unknown')+' · Dogs: '+(r.compatible_dogs||'unknown')+' · Cats: '+(r.compatible_cats||'unknown'))+'</div></div><div style="padding:12px;background:#fff;border-radius:8px;font-size:13px;color:#4d4439"><b>Additional detail</b><br>'+pmText(r.additional_detail||'None provided')+'</div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:16px"><button type="button" class="pc-btn pc-btn--primary" onclick="fulfillPetMatch()">Mark fulfilled</button><button type="button" class="pc-btn pc-btn--ghost" onclick="closePetMatch()">Close request</button></div>';
+}
+async function updatePetMatch(status) {
+  if(!selectedPetMatch||!await checkTokenBeforeAction('updatePetMatchRequest'))return;
+  const note=status==='FULFILLED'?prompt('Optional note for the visitor:',''):prompt('Optional closing note:',''); if(note===null)return;
+  let matched=''; if(status==='FULFILLED') matched=prompt('Optional catalog Pet ID to link (must be in this category):','')||'';
+  const fd=new FormData(); fd.append('token',adminToken); fd.append('category',selectedPetMatch.category||document.getElementById('pmCategoryFilter').value); fd.append('request_code',selectedPetMatch.request_code||''); fd.append('status',status);
+  if(status==='FULFILLED'){fd.append('fulfilled_by','Admin');fd.append('fulfilled_by_position','Pet Center staff');fd.append('fulfilled_pet_note',note);fd.append('matched_pet_id',matched);}else fd.append('closed_notes',note);
+  try{const res=await fetch('./update-pet-match-request.php',{method:'POST',body:fd}),json=await res.json(); if(!json.success){pmNotice(json.message||'Update failed',true);return;} pmNotice(json.warning||('Request marked '+status.toLowerCase()+'.')); loadPetMatchRequests();}catch(e){pmNotice('Update failed: '+e.message,true);}
+}
+function fulfillPetMatch(){updatePetMatch('FULFILLED');} function closePetMatch(){updatePetMatch('CLOSED');}
 
 // TASK-B2 START ═══════════════════════════════════════════════════════════════
 // Verification Requests panel (Task B2). Load/render/approve/reject functions,

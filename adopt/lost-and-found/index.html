@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="Report or search for a lost or found pet near Beverly Hills. Pet Center's community Lost & Found board connects displaced pets with their owners.">
+<title>Lost &amp; Found Pets — Pet Center</title>
+
+<!-- Open Graph / Twitter Card meta (TASK-2c) -->
+<meta property="og:title" content="Lost & Found Pets — Pet Center">
+<meta property="og:description" content="Report or search for a lost or found pet near Beverly Hills.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://adopt.petcenterco.com/lost-and-found/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Lost & Found Pets — Pet Center">
+<meta name="twitter:description" content="Report or search for a lost or found pet near Beverly Hills.">
+
+<!-- Breadcrumb structured data (TASK-2c, per Task 1/Task 2 structured-data recommendation) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://adopt.petcenterco.com/" },
+    { "@type": "ListItem", "position": 2, "name": "Lost & Found Pets", "item": "https://adopt.petcenterco.com/lost-and-found/" }
+  ]
+}
+</script>
+
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<style>
+/* ════════════════════════════════════════════════════════════════════════════
+   PET CENTER — Lost & Found Pets (/lost-and-found/)
+   Colors: Navy #10214b | Gold #d7bd88 | Orange #ED7624
+   Base reset/typography/header/footer copied verbatim from cats.html
+   (Warning & Instructions Rule 13 — canonical blueprint), per Task 2.
+   Rule: NO borders on cards — shadows only | NO emojis — SVG icons only
+   ════════════════════════════════════════════════════════════════════════════ */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Sora:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --navy: #10214b; --navy-light: #1a2f5c; --gold: #d7bd88; --gold-dark: #b89968;
+  --orange: #ED7624; --orange-light: #fef0e6; --warm-gray: #d0c3ba; --chocolate: #3d2817;
+  --bg: #f9f7f4; --surface: #ffffff; --text: #2c2416; --muted: #7a6d5f;
+  --success: #0d7c4a; --success-bg: #e6f7ef; --error: #c0392b; --error-bg: #fdecea;
+  --shadow-sm: 0 2px 8px rgba(16,33,75,0.06); --shadow-md: 0 4px 20px rgba(16,33,75,0.10);
+  --shadow-lg: 0 8px 40px rgba(16,33,75,0.14);
+  --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px; --transition: 0.25s ease;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; overflow-x: hidden; width: 100%; }
+body {
+  font-family: 'Sora', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.65;
+  -webkit-font-smoothing: antialiased; padding-top: 68px; overflow-x: hidden; width: 100%; position: relative;
+}
+img { max-width: 100%; height: auto; display: block; }
+a { color: var(--orange); text-decoration: none; transition: color var(--transition); }
+a:hover { color: var(--navy); }
+h1, h2, h3, h4 { font-family: 'Cormorant Garamond', Georgia, serif; color: var(--navy); line-height: 1.25; }
+h1 { font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 700; }
+h2 { font-size: clamp(1.5rem, 2.8vw, 2.1rem); font-weight: 700; }
+h3 { font-size: 1.2rem; font-weight: 600; }
+p { color: var(--muted); }
+.pc-container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+.pc-section { padding: 72px 0; }
+.pc-section--sm { padding: 40px 0; }
+@media (max-width: 640px) { .pc-section { padding: 48px 0; } }
+
+/* ─── Buttons (copied from cats.html) ───────────────────────────────────── */
+.pc-btn {
+  display: inline-flex; align-items: center; gap: 8px; padding: 12px 28px;
+  border-radius: var(--radius-sm); font-family: 'Sora', sans-serif; font-size: 14px; font-weight: 600;
+  letter-spacing: 0.02em; cursor: pointer; border: none; transition: all var(--transition);
+  text-decoration: none; white-space: nowrap; min-height: 44px;
+}
+.pc-btn--primary { background: linear-gradient(135deg, var(--navy), var(--navy-light)); color: #fff; box-shadow: 0 4px 14px rgba(16,33,75,0.25); }
+.pc-btn--primary:hover { background: linear-gradient(135deg, var(--navy-light), #243970); color: #fff; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(16,33,75,0.32); }
+.pc-btn--orange { background: linear-gradient(135deg, var(--orange), #d96919); color: #fff; box-shadow: 0 4px 14px rgba(237,118,36,0.30); }
+.pc-btn--orange:hover { background: linear-gradient(135deg, #d96919, #c45e10); color: #fff; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(237,118,36,0.38); }
+.pc-btn--ghost { background: transparent; color: var(--navy); box-shadow: inset 0 0 0 2px var(--gold); }
+.pc-btn--ghost:hover { background: var(--orange-light); color: var(--orange); }
+.pc-btn--sm { padding: 8px 18px; font-size: 13px; min-height: 36px; }
+.pc-btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+
+/* ─── Header (verbatim from cats.html — Section 2.6 canonical) ─────────── */
+.pc-header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 32px; transition: background 0.35s ease, box-shadow 0.35s ease; overflow: visible;
+}
+.pc-header.scrolled, .pc-header--solid { background: rgba(16,33,75,0.97); box-shadow: 0 2px 20px rgba(0,0,0,0.18); }
+.pc-header__logo img { height: 44px; width: auto; display: block; }
+.pc-header__logo--desktop { display: block; }
+.pc-header__logo--mobile { display: none; }
+@media (max-width: 900px) { .pc-header__logo--desktop { display: none; } .pc-header__logo--mobile { display: block; } }
+.pc-header__nav { display: flex; align-items: center; gap: 4px; list-style: none; }
+.pc-header__nav li { position: relative; }
+.pc-header__nav a {
+  display: block; padding: 8px 11px; font-family: 'Sora', sans-serif; font-size: 13px; font-weight: 500;
+  color: rgba(255,255,255,0.9); text-decoration: none; border-radius: 6px; transition: color 0.2s, background 0.2s; white-space: nowrap;
+}
+.pc-header__nav a:hover { color: #d7bd88; background: rgba(255,255,255,0.08); }
+.pc-header__nav .nav-donate a { background: #ED7624; color: #fff; font-weight: 600; padding: 8px 16px; }
+.pc-header__nav .nav-donate a:hover { background: #d4621a; color: #fff; }
+.pc-header__nav .nav-signup a { border: 1px solid rgba(215,189,136,0.5); color: #d7bd88; }
+.pc-header__nav .nav-signup a:hover { background: rgba(215,189,136,0.12); }
+/* Section 24 — Custom Dropdown System ("Message Bubble" locked shell), applied to header nav */
+.pc-nav-dropdown { position: relative; }
+.pc-nav-dropdown__trigger { display: flex; align-items: center; gap: 6px; background: none; border: none; cursor: pointer; padding: 8px 11px; font-family: 'Sora', sans-serif; font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.9); border-radius: 6px; transition: color 0.2s, background 0.2s; }
+.pc-nav-dropdown__trigger:hover, .pc-nav-dropdown__trigger.active { color: #d7bd88; background: rgba(255,255,255,0.08); }
+.pc-nav-dropdown__chevron { transition: transform 0.2s cubic-bezier(.4,0,.2,1); flex-shrink: 0; }
+.pc-nav-dropdown__trigger.active .pc-nav-dropdown__chevron { transform: rotate(180deg); }
+.pc-nav-dropdown__panel { position: absolute; top: 100%; left: 0; margin-top: 6px; min-width: 190px; background: #ffffff; border: 1.5px solid rgba(16,33,75,0.10); border-radius: 14px 0 14px 14px; box-shadow: 0 12px 32px rgba(16,33,75,0.18), 0 2px 8px rgba(16,33,75,0.08); overflow: hidden; z-index: 999; opacity: 0; visibility: hidden; transform: translateY(-8px) scale(0.98); transform-origin: top left; transition: opacity 0.2s ease, transform 0.2s cubic-bezier(.4,0,.2,1), visibility 0.2s; pointer-events: none; }
+.pc-nav-dropdown__panel.open { opacity: 1; visibility: visible; transform: translateY(0) scale(1); pointer-events: auto; }
+.pc-nav-dropdown__panel.flip-up { top: auto; bottom: 100%; margin-top: 0; margin-bottom: 6px; transform-origin: bottom left; border-radius: 14px 14px 14px 0; }
+.pc-nav-dropdown__scroll { max-height: 225px; overflow-y: auto; padding: 6px 0; }
+.pc-nav-dropdown__row { display: flex; align-items: center; padding: 11px 16px; border-left: 3px solid transparent; border-bottom: 1px solid rgba(16,33,75,0.06); font-family: 'Sora', sans-serif; font-size: 13.5px; color: var(--navy); text-decoration: none; transition: background 0.15s ease, border-color 0.15s ease; }
+.pc-nav-dropdown__row:last-child { border-bottom: none; }
+.pc-nav-dropdown__row:hover { background: rgba(16,33,75,0.05); color: var(--navy); border-left-color: var(--gold); }
+.pc-hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 8px; background: none; border: none; width: 32px; height: auto; justify-content: center; }
+.pc-hamburger span { display: block; width: 24px; height: 2px; background: #fff; border-radius: 2px; transition: all 0.3s ease; }
+.pc-hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(8px, 8px); }
+.pc-hamburger.active span:nth-child(2) { opacity: 0; }
+.pc-hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -7px); }
+.pc-mobile-menu {
+  display: flex; flex-direction: column; position: absolute; top: 100%; left: 0; right: 0;
+  background: rgba(16,33,75,0.98); z-index: 999; max-height: 0; overflow: hidden; opacity: 0;
+  pointer-events: none; transition: all 0.3s ease; box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+}
+.pc-mobile-menu.open {
+  max-height: calc(100vh - 68px); overflow-y: auto; opacity: 1; pointer-events: auto;
+  padding: 16px 0 calc(100vh - 68px - 56px); overscroll-behavior: contain; -webkit-overflow-scrolling: touch;
+}
+.pc-mobile-menu a {
+  display: block; padding: 12px 28px; font-family: 'Sora', sans-serif; font-size: 15px; font-weight: 500;
+  color: rgba(255,255,255,0.9); text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.06); transition: all 0.2s ease;
+}
+.pc-mobile-menu a:hover { color: #d7bd88; background: rgba(255,255,255,0.05); }
+.pc-mobile-menu .mobile-donate { margin: 12px 28px 0; display: inline-block; background: #ED7624; color: #fff; padding: 11px 24px; border-radius: 8px; font-weight: 600; border-bottom: none; }
+@media (max-width: 900px) { .pc-header__nav { display: none; } .pc-hamburger { display: flex; } }
+
+/* ─── Page banner (free-choice visual treatment, matches site's navy-hero pattern) ─── */
+.pc-page-banner {
+  background: linear-gradient(120deg, #10214b 0%, #1a3070 60%, #2a4080 100%);
+  padding: 100px 0 56px; text-align: center;
+}
+.pc-page-banner__eyebrow {
+  display: inline-block; font-family: 'Sora', sans-serif; font-size: 11px; font-weight: 700;
+  letter-spacing: .14em; text-transform: uppercase; color: #d7bd88; background: rgba(215,189,136,0.12);
+  border: 1px solid rgba(215,189,136,0.3); padding: 5px 16px; border-radius: 20px; margin-bottom: 18px;
+}
+.pc-page-banner h1 { color: #fff; margin-bottom: 14px; }
+.pc-page-banner p { color: rgba(255,255,255,0.75); max-width: 560px; margin: 0 auto 28px; font-size: 16px; }
+.pc-page-banner__actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+/* ─── Report panels (reveal cards for Lost/Found reporting) ─────────────── */
+.pc-report-panel {
+  display: none; background: var(--surface); border-radius: var(--radius-md); box-shadow: var(--shadow-md);
+  padding: 28px; margin-top: 28px; text-align: left; max-width: 640px; margin-left: auto; margin-right: auto;
+}
+.pc-report-panel.open { display: block; }
+.pc-report-panel h3 { margin-bottom: 8px; }
+.pc-report-panel p { font-size: 14px; margin-bottom: 18px; }
+.pc-report-panel__steps { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+.pc-report-panel__steps li { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; color: var(--text); }
+.pc-report-panel__steps svg { flex-shrink: 0; color: var(--gold-dark); margin-top: 2px; }
+
+/* ─── Board layout: two columns, Lost / Found ────────────────────────────── */
+.pc-lf-board { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+@media (max-width: 860px) { .pc-lf-board { grid-template-columns: 1fr; gap: 48px; } }
+.pc-lf-col__header { display: flex; align-items: center; gap: 10px; margin-bottom: 22px; padding-bottom: 14px; border-bottom: 2px solid var(--warm-gray); }
+.pc-lf-col__header svg { color: var(--orange); flex-shrink: 0; }
+.pc-lf-col__header h2 { margin: 0; font-size: 1.5rem; }
+.pc-lf-col__count { font-family: 'Sora', sans-serif; font-size: 13px; color: var(--muted); margin-left: auto; }
+.pc-lf-grid { display: grid; grid-template-columns: 1fr; gap: 18px; }
+
+.pc-lf-card {
+  display: flex; gap: 16px; background: var(--surface); border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm); padding: 16px; transition: box-shadow var(--transition), transform var(--transition);
+}
+.pc-lf-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+.pc-lf-card__img { width: 96px; height: 96px; border-radius: var(--radius-sm); object-fit: cover; flex-shrink: 0; background: var(--bg); }
+.pc-lf-card__img-placeholder {
+  width: 96px; height: 96px; border-radius: var(--radius-sm); flex-shrink: 0; background: var(--bg);
+  display: flex; align-items: center; justify-content: center; color: var(--warm-gray);
+}
+.pc-lf-card__body { flex: 1; min-width: 0; }
+.pc-lf-card__name { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; font-weight: 700; color: var(--navy); margin-bottom: 3px; }
+.pc-lf-card__meta { font-size: 12.5px; color: var(--muted); margin-bottom: 6px; display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
+.pc-lf-card__meta svg { flex-shrink: 0; color: var(--gold-dark); }
+.pc-lf-card__desc { font-size: 13.5px; color: var(--text); line-height: 1.5; margin-bottom: 10px; }
+.pc-lf-card__contact { font-size: 13px; font-weight: 600; color: var(--gold-dark); text-decoration: underline; text-underline-offset: 3px; }
+.pc-lf-card__contact:hover { color: var(--orange); }
+
+/* ─── Empty / error state (per Section 15.3 pattern — no raw errors shown) ── */
+.pc-empty-state { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 40px 20px; }
+.pc-empty-state__icon { color: var(--gold-dark); margin-bottom: 16px; }
+.pc-empty-state__title { font-family: 'Sora', sans-serif; font-size: 15.5px; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
+.pc-empty-state__subtitle { font-family: 'Sora', sans-serif; font-size: 13.5px; color: var(--muted); max-width: 300px; }
+.pc-loading-squares { display: flex; gap: 8px; justify-content: center; padding: 40px 0; }
+.pc-loading-squares span { width: 12px; height: 12px; background: var(--gold); border-radius: 3px; animation: pcSquareMorph 1.2s ease-in-out infinite; }
+.pc-loading-squares span:nth-child(2) { animation-delay: .15s; }
+.pc-loading-squares span:nth-child(3) { animation-delay: .3s; }
+@keyframes pcSquareMorph { 0%, 100% { transform: scale(1) rotate(0deg); border-radius: 3px; } 50% { transform: scale(1.3) rotate(45deg); border-radius: 6px; } }
+
+/* ─── Cross-link callout to Can't Keep Your Pet? ────────────────────────── */
+.pc-cross-callout {
+  background: var(--orange-light); border-radius: var(--radius-md); padding: 24px 28px;
+  display: flex; align-items: center; gap: 20px; flex-wrap: wrap; justify-content: space-between; margin-top: 56px;
+}
+.pc-cross-callout p { color: var(--text); font-size: 14px; max-width: 480px; }
+.pc-cross-callout strong { color: var(--navy); }
+
+/* ─── Global Footer (verbatim structure from cats.html, corrected grid — see Section 8) ── */
+.pc-footer { background: #0b1834; padding: 60px 24px 28px; color: rgba(255,255,255,0.65); font-family: 'Sora', sans-serif; }
+.pc-footer__inner { max-width: 1200px; margin: 0 auto; }
+/* TASK-2c NOTE: grid-template-columns corrected to 5 values (2fr 1fr 1.2fr 1fr 1.3fr) to match
+   the 5 actual .pc-footer__col/.pc-footer__brand divs below — the 4-value template still present
+   in cats.html is the documented recurring bug (adoption-website-project-summary.md Section 8);
+   fixed here in this new, wholly-owned file per that section's canonical value. cats.html itself
+   was left untouched since it is outside this task's file scope (see completion file). */
+.pc-footer__top { display: grid; grid-template-columns: 2fr 1fr 1.2fr 1fr 1.3fr; gap: 40px; padding-bottom: 40px; border-bottom: 1px solid rgba(255,255,255,0.07); }
+.pc-footer__brand img { height: 40px; margin-bottom: 16px; display: block; }
+.pc-footer__brand p { font-size: 13.5px; line-height: 1.7; max-width: 280px; }
+.pc-footer__col h5 { font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; font-weight: 700; color: #d7bd88; margin-bottom: 16px; }
+.pc-footer__col ul { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+.pc-footer__col ul a { font-size: 13px; color: rgba(255,255,255,0.6); text-decoration: none; transition: color 0.2s; }
+.pc-footer__col ul a:hover { color: #d7bd88; }
+.pc-footer__bottom { padding-top: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+.pc-footer__copy { font-size: 12.5px; }
+.pc-footer__links { display: flex; gap: 20px; }
+.pc-footer__links a { font-size: 12.5px; color: rgba(255,255,255,0.5); text-decoration: none; }
+.pc-footer__links a:hover { color: #d7bd88; }
+@media (max-width: 900px) { .pc-footer__top { grid-template-columns: 1fr 1fr; gap: 28px; } }
+@media (max-width: 560px) { .pc-footer__top { grid-template-columns: 1fr; gap: 24px; } }
+</style>
+</head>
+<body>
+
+<!-- ═══ Header (verbatim from cats.html, Section 2.6) — Lost & Found is a footer/CTA-reached
+     utility page per Task 1's Navigation Integration Plan, so no header/mobile-menu changes here ═══ -->
+<header class="pc-header pc-header--solid" id="pcHeader">
+  <a href="/" class="pc-header__logo pc-header__logo--desktop">
+    <img src="/assets/images/logo-petcenter.png" alt="Pet Center">
+  </a>
+  <a href="/" class="pc-header__logo pc-header__logo--mobile">
+    <img src="/assets/images/logo-petcenter-icon.png" alt="Pet Center">
+  </a>
+  <ul class="pc-header__nav">
+    <li><a href="/">Home</a></li>
+    <li><a href="/about/">About Us</a></li>
+    <li><a href="/partners/">Partners</a></li>
+    <li class="pc-nav-dropdown">
+    <button class="pc-nav-dropdown__trigger" aria-expanded="false" aria-haspopup="true">Our Pets
+      <svg class="pc-nav-dropdown__chevron" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <div class="pc-nav-dropdown__panel">
+      <div class="pc-nav-dropdown__scroll">
+      <a class="pc-nav-dropdown__row" href="/pets/dogs/">Dogs</a>
+      <a class="pc-nav-dropdown__row" href="/pets/cats/">Cats</a>
+      <a class="pc-nav-dropdown__row" href="/pets/birds/">Birds</a>
+      <a class="pc-nav-dropdown__row" href="/pets/reptiles/">Reptiles</a>
+      <a class="pc-nav-dropdown__row" href="/pets/small-mammals/">Small Mammals</a>
+      <a class="pc-nav-dropdown__row" href="/pets/livestocks/">Livestocks</a>
+      <a class="pc-nav-dropdown__row" href="/pets/aquariums/">Aquariums</a>
+      </div>
+    </div>
+  </li>
+    <!-- TASK-2c START — "Get Involved" dropdown added per Task 1's Navigation Integration Plan.
+         Only lists pages that exist so far (Volunteer, Foster); Events & Adoption Days and
+         Sponsor a Pet join this same dropdown once those sub-tasks build their pages. -->
+    <li class="pc-nav-dropdown">
+    <button class="pc-nav-dropdown__trigger" aria-expanded="false" aria-haspopup="true">Get Involved
+      <svg class="pc-nav-dropdown__chevron" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <div class="pc-nav-dropdown__panel">
+      <div class="pc-nav-dropdown__scroll">
+      <a class="pc-nav-dropdown__row" href="/volunteer/">Volunteer</a>
+      <a class="pc-nav-dropdown__row" href="/foster/">Foster a Pet</a>
+      <a class="pc-nav-dropdown__row" href="/events/">Events &amp; Adoption Days</a>
+      <a class="pc-nav-dropdown__row" href="/lost-and-found/">Lost &amp; Found Pets</a>
+      <a class="pc-nav-dropdown__row" href="/sponsor-a-pet/">Sponsor a Pet</a>
+      </div>
+    </div>
+  </li>
+    <!-- TASK-2c END -->
+    <li><a href="/blog/">Blog</a></li>
+    <li><a href="/testimonials/">Testimonials</a></li>
+    <li><a href="/success-stories/">Success Stories</a></li>
+    <li class="nav-donate"><a href="https://donate.petcenterco.com" target="_blank" rel="noopener">Donate</a></li>
+    <li><a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact</a></li>
+    <li class="nav-signup"><a href="/signin/">Sign Up</a></li>
+  </ul>
+  <button class="pc-hamburger" id="pcHamburger" aria-label="Open menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+  <nav class="pc-mobile-menu" id="pcMobileMenu" aria-label="Mobile navigation">
+    <a href="/">Home</a>
+    <a href="/about/">About Us</a>
+    <a href="/partners/">Partners</a>
+    <a href="/pets/dogs/">Dogs</a>
+    <a href="/pets/cats/">Cats</a>
+    <a href="/pets/birds/">Birds</a>
+    <a href="/pets/reptiles/">Reptiles</a>
+    <a href="/pets/small-mammals/">Small Mammals</a>
+    <a href="/pets/livestocks/">Livestocks</a>
+    <a href="/pets/aquariums/">Aquariums</a>
+    <!-- TASK-2c START — Get Involved links in mobile menu -->
+    <a href="/volunteer/">Volunteer</a>
+    <a href="/foster/">Foster a Pet</a>
+    <a href="/events/">Events &amp; Adoption Days</a>
+    <a href="/lost-and-found/">Lost &amp; Found Pets</a>
+    <a href="/sponsor-a-pet/">Sponsor a Pet</a>
+    <!-- TASK-2c END -->
+    <a href="/blog/">Blog</a>
+    <a href="/testimonials/">Testimonials</a>
+    <a href="/success-stories/">Success Stories</a>
+    <a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact</a>
+    <a href="/signin/">Sign Up</a>
+    <a href="https://donate.petcenterco.com" class="mobile-donate" target="_blank" rel="noopener">Donate</a>
+  </nav>
+</header>
+
+<!-- ═══ Page banner ═══ -->
+<section class="pc-page-banner">
+  <div class="pc-container">
+    <span class="pc-page-banner__eyebrow">Community Board</span>
+    <h1>Lost &amp; Found Pets</h1>
+    <p>A place to report a missing pet or a stray you've found — separate from our adoption listings, since these animals already have (or are looking for) a home.</p>
+    <div class="pc-page-banner__actions">
+      <button class="pc-btn pc-btn--orange" id="pcReportLostBtn" type="button" aria-expanded="false" aria-controls="pcReportLostPanel">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Report a Lost Pet
+      </button>
+      <button class="pc-btn pc-btn--ghost" id="pcReportFoundBtn" type="button" aria-expanded="false" aria-controls="pcReportFoundPanel" style="background:rgba(255,255,255,0.08);box-shadow:inset 0 0 0 2px rgba(215,189,136,0.6);color:#d7bd88;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+        Report a Found Pet
+      </button>
+    </div>
+
+    <div class="pc-report-panel" id="pcReportLostPanel">
+      <h3>Reporting a lost pet</h3>
+      <p>There's no automatic listing form yet — for now, get your pet in front of our team and community as fast as possible:</p>
+      <ul class="pc-report-panel__steps">
+        <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/></svg> Contact our team with your pet's name, description, last-seen location and date, and a recent photo.</li>
+        <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/></svg> We'll help post it here on the board and check it against anything reported found.</li>
+        <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/></svg> Keep checking the "Recently Found" column below in the meantime.</li>
+      </ul>
+      <a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener" class="pc-btn pc-btn--primary pc-btn--sm">Contact Our Team</a>
+    </div>
+
+    <div class="pc-report-panel" id="pcReportFoundPanel">
+      <h3>Reporting a found pet</h3>
+      <p>Thank you for helping a displaced pet get home. Here's how to list what you found:</p>
+      <ul class="pc-report-panel__steps">
+        <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/></svg> Contact our team with where and when you found the animal, a description, and a photo if you have one.</li>
+        <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/></svg> We'll post it here and check it against current lost-pet reports.</li>
+        <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/></svg> If the animal needs immediate shelter, let us know — we can advise on safe short-term care.</li>
+      </ul>
+      <a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener" class="pc-btn pc-btn--primary pc-btn--sm">Contact Our Team</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Board ═══ -->
+<section class="pc-section">
+  <div class="pc-container">
+    <div class="pc-lf-board">
+      <div>
+        <div class="pc-lf-col__header">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <h2>Recently Lost</h2>
+          <span class="pc-lf-col__count" id="pcLostCount"></span>
+        </div>
+        <div class="pc-lf-grid" id="pcLostGrid"></div>
+      </div>
+      <div>
+        <div class="pc-lf-col__header">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+          <h2>Recently Found</h2>
+          <span class="pc-lf-col__count" id="pcFoundCount"></span>
+        </div>
+        <div class="pc-lf-grid" id="pcFoundGrid"></div>
+      </div>
+    </div>
+
+    <div class="pc-cross-callout">
+      <p><strong>Thinking about surrendering a pet instead?</strong> Take a look at alternatives to consider first.</p>
+      <a href="/rehoming-resources/" class="pc-btn pc-btn--ghost">Can't Keep Your Pet?</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Footer (structure verbatim from cats.html, Support column extended — TASK-2c, NAV-LINKS zone) ═══ -->
+<footer class="pc-footer">
+  <div class="pc-footer__inner">
+    <div class="pc-footer__top">
+      <div class="pc-footer__brand">
+        <img src="/assets/images/logo-petcenter.png" alt="Pet Center">
+        <p>Every pet deserves a loving home. Browse our available pets and start your adoption journey today.</p>
+      </div>
+      <div class="pc-footer__col">
+        <h5>Our Pets</h5>
+        <ul>
+          <li><a href="/pets/dogs/">Dogs</a></li>
+          <li><a href="/pets/cats/">Cats</a></li>
+          <li><a href="/pets/birds/">Birds</a></li>
+          <li><a href="/pets/reptiles/">Reptiles</a></li>
+          <li><a href="/pets/small-mammals/">Small Mammals</a></li>
+          <li><a href="/pets/livestocks/">Livestocks</a></li>
+          <li><a href="/pets/aquariums/">Aquariums</a></li>
+          <li><a href="/species-guide/">Species Care Guide</a></li>
+        </ul>
+      </div>
+      <div class="pc-footer__col">
+        <h5>Information</h5>
+        <ul>
+          <li><a href="/about/">About Us</a></li>
+          <li><a href="/partners/">Partners</a></li>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/testimonials/">Testimonials</a></li>
+          <li><a href="/success-stories/">Success Stories</a></li>
+          <li><a href="https://donate.petcenterco.com" target="_blank" rel="noopener">Donate</a></li>
+          <li><a href="https://docs.petcenterco.com/health-guarantee/" target="_blank" rel="noopener">Health Guarantee</a></li>
+          <li><a href="https://docs.petcenterco.com/shipping-cancellation/" target="_blank" rel="noopener">Shipping & Cancellation</a></li>
+          <li><a href="https://docs.petcenterco.com/shipping-insurance-claims/" target="_blank" rel="noopener">Shipping Insurance</a></li>
+          <li><a href="https://docs.petcenterco.com/data-retention-security/" target="_blank" rel="noopener">Data & Security</a></li>
+        </ul>
+      </div>
+      <div class="pc-footer__col">
+        <h5>Support</h5>
+        <ul>
+          <li><a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact Us</a></li>
+          <li><a href="/signin/">Sign Up</a></li>
+          <li><a href="/volunteer/">Volunteer</a></li>
+          <li><a href="/foster/">Foster a Pet</a></li>
+          <li><a href="/events/">Events &amp; Adoption Days</a></li>
+          <li><a href="/lost-and-found/">Lost &amp; Found Pets</a></li>
+          <li><a href="/rehoming-resources/">Can't Keep Your Pet?</a></li>
+          <li><a href="/sponsor-a-pet/">Sponsor a Pet</a></li>
+          <li><a href="/gift-my-adoption/">Gift My Adoption</a></li>
+          <li><a href="https://docs.petcenterco.com/returns-refunds/" target="_blank" rel="noopener">Returns & Refunds</a></li>
+          <li><a href="https://docs.petcenterco.com/faq/" target="_blank" rel="noopener">FAQ</a></li>
+        </ul>
+      </div>
+      <div class="pc-footer__col">
+        <h5>Visit Us</h5>
+        <p style="color:rgba(255,255,255,.7);font-size:13px;line-height:1.8;margin-bottom:0;">235-269 N Beverly Dr<br>Beverly Hills, CA</p>
+        <p style="color:rgba(255,255,255,.6);font-size:12px;line-height:1.6;margin-top:4px;">Golden Triangle Shopping Center, Section #257</p>
+        <p style="color:rgba(255,255,255,.7);font-size:13px;line-height:1.8;margin-top:10px;"><strong style="color:#d7bd88;">Hours:</strong><br>Mon – Fri: 7am – 9pm<br>Sat – Sun: 10am – 6pm</p>
+      </div>
+    </div>
+    <div class="pc-footer__bottom">
+      <span class="pc-footer__copy">&copy; 2026 Pet Center. All rights reserved.</span>
+      <div class="pc-footer__links">
+        <a href="https://docs.petcenterco.com/privacy-policy/" target="_blank" rel="noopener">Privacy Policy</a>
+        <a href="https://docs.petcenterco.com/terms-of-service/" target="_blank" rel="noopener">Terms of Service</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+'use strict';
+
+// Header scroll effect (verbatim behavior from cats.html)
+(function() {
+  var header = document.getElementById('pcHeader');
+  if (!header) return;
+  function updateHeaderOnScroll() {
+    if (window.scrollY > 0) { header.classList.add('scrolled'); } else { header.classList.remove('scrolled'); }
+  }
+  window.addEventListener('scroll', updateHeaderOnScroll, { passive: true });
+  updateHeaderOnScroll();
+})();
+
+// Mobile Menu Toggle — canonical implementation (Section 2.4), verbatim from cats.html
+// Section 24 dropdown controller (click to open, outside-click/Escape to close)
+(function () {
+  var dropdowns = document.querySelectorAll('.pc-nav-dropdown');
+  function closeAll() {
+    dropdowns.forEach(function (d) {
+      var t = d.querySelector('.pc-nav-dropdown__trigger'), p = d.querySelector('.pc-nav-dropdown__panel');
+      t.classList.remove('active'); t.setAttribute('aria-expanded', 'false'); p.classList.remove('open', 'flip-up');
+    });
+  }
+  dropdowns.forEach(function (dd) {
+    var trigger = dd.querySelector('.pc-nav-dropdown__trigger'), panel = dd.querySelector('.pc-nav-dropdown__panel');
+    trigger.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var isOpen = panel.classList.contains('open');
+      closeAll();
+      if (!isOpen) {
+        var rect = trigger.getBoundingClientRect();
+        if (window.innerHeight - rect.bottom < 240 && rect.top > 240) { panel.classList.add('flip-up'); }
+        panel.classList.add('open'); trigger.classList.add('active'); trigger.setAttribute('aria-expanded', 'true');
+      }
+    });
+  });
+  document.addEventListener('click', closeAll);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeAll(); });
+  window.addEventListener('scroll', closeAll, { passive: true });
+  window.addEventListener('resize', closeAll);
+})();
+(function () {
+  var hamburger = document.getElementById('pcHamburger');
+  var mobileMenu = document.getElementById('pcMobileMenu');
+  if (!hamburger || !mobileMenu) return;
+  function openMenu() {
+    hamburger.classList.add('active'); mobileMenu.classList.add('open');
+    hamburger.setAttribute('aria-expanded', 'true'); document.body.style.overflow = 'hidden';
+  }
+  function closeMenu() {
+    hamburger.classList.remove('active'); mobileMenu.classList.remove('open');
+    hamburger.setAttribute('aria-expanded', 'false'); document.body.style.overflow = '';
+  }
+  hamburger.addEventListener('click', function (e) {
+    e.stopPropagation();
+    mobileMenu.classList.contains('open') ? closeMenu() : openMenu();
+  });
+  mobileMenu.querySelectorAll('a').forEach(function (link) { link.addEventListener('click', closeMenu); });
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest('header') && !e.target.closest('.pc-mobile-menu')) { closeMenu(); }
+  });
+})();
+
+// Report panel toggles (Lost / Found) — new for this page
+(function () {
+  function wireToggle(btnId, panelId) {
+    var btn = document.getElementById(btnId);
+    var panel = document.getElementById(panelId);
+    if (!btn || !panel) return;
+    btn.addEventListener('click', function () {
+      var isOpen = panel.classList.toggle('open');
+      btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+  }
+  wireToggle('pcReportLostBtn', 'pcReportLostPanel');
+  wireToggle('pcReportFoundBtn', 'pcReportFoundPanel');
+})();
+
+// Lost & Found board — new for this page.
+// Data source: /lost-and-found/lost-found-data.json, an admin-hand-edited flat-file JSON,
+// following the same pattern documented for testimonials.json (adoption-website-project-summary.md
+// Section 10.1, Path A) rather than a new database or PHP endpoint (outside this task's file scope).
+// Any fetch failure or a genuinely empty list renders the same friendly empty state — never a raw
+// path or HTTP status (per Section 15.3's established pattern).
+(function () {
+  var lostGrid = document.getElementById('pcLostGrid');
+  var foundGrid = document.getElementById('pcFoundGrid');
+  var lostCount = document.getElementById('pcLostCount');
+  var foundCount = document.getElementById('pcFoundCount');
+
+  var iconPin = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>';
+  var iconCalendar = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>';
+  var iconPawPlaceholder = '<i class="fa-solid fa-paw" style="font-size:24px;line-height:1;" aria-hidden="true"></i>';
+
+  function escapeHtml(str) {
+    var div = document.createElement('div');
+    div.textContent = str == null ? '' : String(str);
+    return div.innerHTML;
+  }
+
+  function cardHtml(entry) {
+    var img = entry.photo
+      ? '<img src="' + escapeHtml(entry.photo) + '" alt="' + escapeHtml(entry.name || 'Pet photo') + '" class="pc-lf-card__img" loading="lazy">'
+      : '<div class="pc-lf-card__img-placeholder">' + iconPawPlaceholder + '</div>';
+    return '<div class="pc-lf-card">' + img +
+      '<div class="pc-lf-card__body">' +
+        '<div class="pc-lf-card__name">' + escapeHtml(entry.name || 'Unidentified pet') + '</div>' +
+        '<div class="pc-lf-card__meta">' + iconPin + '<span>' + escapeHtml(entry.location || 'Beverly Hills area') + '</span>' +
+          '<span>&middot;</span>' + iconCalendar + '<span>' + escapeHtml(entry.date || '') + '</span></div>' +
+        '<p class="pc-lf-card__desc">' + escapeHtml(entry.description || '') + '</p>' +
+        '<a class="pc-lf-card__contact" href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">' +
+          escapeHtml(entry.contactLabel || 'Contact about this pet') + '</a>' +
+      '</div></div>';
+  }
+
+  function emptyStateHtml(message) {
+    return '<div class="pc-empty-state">' +
+      '<div class="pc-empty-state__icon"><i class="fa-solid fa-paw" style="font-size:40px;" aria-hidden="true"></i></div>' +
+      '<div class="pc-empty-state__title">Nothing posted right now</div>' +
+      '<div class="pc-empty-state__subtitle">' + message + '</div></div>';
+  }
+
+  function render(grid, countEl, list, emptyMessage) {
+    if (!list || !list.length) {
+      grid.innerHTML = emptyStateHtml(emptyMessage);
+      countEl.textContent = '';
+      return;
+    }
+    grid.innerHTML = list.map(cardHtml).join('');
+    countEl.textContent = list.length + (list.length === 1 ? ' report' : ' reports');
+  }
+
+  grid_loading: {
+    lostGrid.innerHTML = '<div class="pc-loading-squares"><span></span><span></span><span></span></div>';
+    foundGrid.innerHTML = '<div class="pc-loading-squares"><span></span><span></span><span></span></div>';
+  }
+
+  fetch('/lost-and-found/lost-and-found-data.json')
+    .then(function (res) { if (!res.ok) { throw new Error('fetch failed'); } return res.json(); })
+    .then(function (data) {
+      render(lostGrid, lostCount, data && data.lost, 'No lost-pet reports at the moment — check back soon.');
+      render(foundGrid, foundCount, data && data.found, 'No found-pet reports at the moment — check back soon.');
+    })
+    .catch(function (err) {
+      console.error('Lost & Found data failed to load:', err);
+      render(lostGrid, lostCount, null, 'We couldn\'t load reports right now — please check back soon.');
+      render(foundGrid, foundCount, null, 'We couldn\'t load reports right now — please check back soon.');
+    });
+})();
+</script>
+<script src="/admin/chat-widget.js"></script>
+</body>
+</html>
