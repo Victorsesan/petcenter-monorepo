@@ -10,6 +10,8 @@
 
 **Important:** This brief supersedes older round-one and second-round launcher wording where the older wording conflicts with the current seven-account plan. Historical completion documents remain evidence only; they are not final implementation authority.
 
+**Scope lock:** This file is for `WEB-01` through `WEB-05` only. A `DESIGN-01` or `DESIGN-02` account must not use this brief. A `WEB-*` account must not use `REDESIGN-ACCOUNTS-OPERATIONAL-BRIEF.md`. If a launcher or user message names a different account family than the brief being read, stop using the mismatched brief, select the brief matching the account ID, and continue without asking the coordinator to choose between unrelated assignments.
+
 ## 1. Purpose and operating model
 
 Five accounts will inspect, repair, secure, test, and integrate the four functional web areas:

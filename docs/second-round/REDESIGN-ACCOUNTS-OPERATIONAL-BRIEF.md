@@ -8,6 +8,8 @@
 
 **Important:** This is a redesign wave, not permission to discard working behavior. The existing routes, backend contracts, authentication, authorization, accessibility, RTL behavior, and project data flows must survive the redesign.
 
+**Scope lock:** This file is for `DESIGN-01` and `DESIGN-02` only. A `WEB-01` through `WEB-05` account must not use this brief. A `DESIGN-*` account must not use `WEB-ACCOUNTS-OPERATIONAL-BRIEF.md`. If a launcher or user message names a different account family than the brief being read, stop using the mismatched brief, select the brief matching the account ID, and continue without asking the coordinator to choose between unrelated assignments.
+
 ## 1. Redesign assignments
 
 | Account | Assignment | Branch | Primary ownership |
