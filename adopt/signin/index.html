@@ -383,39 +383,56 @@
   </div>
 </div>
 
-<main class="design02-gateway design02-shell" id="accountGateway">
+<!-- TASK-DESIGN-02 START — Account gateway with explicit login/signup and safe OAuth state. -->
+<main class="design02-gateway design02-shell" id="accountGateway" data-auth-gateway>
   <div class="design02-gateway__grid">
     <section class="design02-gateway__intro" aria-labelledby="gatewayTitle">
       <span class="design02-eyebrow">Pet Center accounts</span>
-      <h1 id="gatewayTitle">Good care starts with a clear next step.</h1>
-      <p>Choose the workspace that matches your role. This gateway keeps the existing account and administration routes visible without inventing a new authentication contract.</p>
+      <h1 id="gatewayTitle">One place to care, connect, and keep moving.</h1>
+      <p>Sign in to manage your Pet Center activity, or create an account to save pets, follow placements, and work with trusted rehoming tools.</p>
       <div class="design02-gateway__trust" aria-label="Account experience principles">
         <div><strong>01</strong><span>Role-led access</span></div>
         <div><strong>02</strong><span>Reviewed listings</span></div>
         <div><strong>03</strong><span>Human support</span></div>
       </div>
+      <a class="design02-gateway__back" href="/">Return to Pet Center</a>
     </section>
-    <section class="design02-gateway__choices design02-panel" aria-labelledby="chooseWorkspace">
-      <span class="design02-kicker">Choose a workspace</span>
-      <h2 id="chooseWorkspace">Where would you like to go?</h2>
-      <a class="design02-choice" href="/account/settings/">
-        <span class="design02-choice__icon" aria-hidden="true">V</span><span><strong>Visitor account</strong><span>Manage preferences, alerts, favorites, and placement updates.</span></span><span class="design02-choice__arrow" aria-hidden="true">→</span>
-      </a>
-      <a class="design02-choice" href="/merchant/">
-        <span class="design02-choice__icon" aria-hidden="true">M</span><span><strong>Merchant workspace</strong><span>Publish and maintain rehoming listings through the existing merchant flow.</span></span><span class="design02-choice__arrow" aria-hidden="true">→</span>
-      </a>
-      <a class="design02-choice" href="/admin/">
-        <span class="design02-choice__icon" aria-hidden="true">A</span><span><strong>Authorized admin</strong><span>Open the protected dashboard. Staff authentication remains handled by the existing admin endpoint.</span></span><span class="design02-choice__arrow" aria-hidden="true">→</span>
-      </a>
-      <div class="design02-notify">
-        <span class="design02-kicker">Need the self-service listing flow?</span>
-        <p class="small muted">Leave an email and we will notify you when the public listing experience is ready.</p>
-        <div class="rehome-notify-form" id="notifyForm"><input type="email" id="notifyEmail" placeholder="Email address" autocomplete="email" dir="ltr" aria-label="Email address"><button class="design02-btn design02-btn--accent" type="button" onclick="submitNotify()">Notify me</button></div>
-        <div class="design02-notify__success" id="notifySuccess" role="status">You’re on the list. We’ll email you when the experience is ready.</div>
+    <section class="design02-gateway__auth design02-panel" aria-labelledby="authTitle">
+      <div class="design02-auth-heading">
+        <span class="design02-kicker">Secure account access</span>
+        <h2 id="authTitle">Welcome back</h2>
+        <p>Use the same account across adoption, rehoming, and saved searches.</p>
       </div>
+      <div class="design02-auth-tabs" role="tablist" aria-label="Account access mode">
+        <button type="button" id="loginTab" role="tab" aria-selected="true" aria-controls="loginPanel" data-auth-tab="login">Sign in</button>
+        <button type="button" id="signupTab" role="tab" aria-selected="false" aria-controls="signupPanel" data-auth-tab="signup">Create account</button>
+      </div>
+      <section id="loginPanel" data-auth-panel="login" role="tabpanel" aria-labelledby="loginTab">
+        <form data-auth-form="login" novalidate>
+          <label class="design02-auth-field">Email address<input name="email" type="email" autocomplete="email" required aria-label="email address"></label>
+          <label class="design02-auth-field">Password<input name="password" type="password" autocomplete="current-password" required aria-label="password"></label>
+          <div class="design02-auth-row"><label class="design02-check"><input type="checkbox" name="remember"> <span>Remember this device</span></label><a href="/contact-us/">Forgot password?</a></div>
+          <button class="design02-btn design02-btn--primary design02-auth-submit" type="submit">Sign in</button>
+          <button class="design02-google" type="button" data-google-signin><span class="design02-google__g" aria-hidden="true">G</span> Continue with Google</button>
+          <p class="design02-auth-status" data-auth-status role="status" aria-live="polite" hidden></p>
+        </form>
+      </section>
+      <section id="signupPanel" data-auth-panel="signup" role="tabpanel" aria-labelledby="signupTab" hidden>
+        <form data-auth-form="signup" novalidate>
+          <label class="design02-auth-field">Your name<input name="name" type="text" autocomplete="name" required aria-label="your name"></label>
+          <label class="design02-auth-field">Email address<input name="email" type="email" autocomplete="email" required aria-label="email address"></label>
+          <label class="design02-auth-field">Create a password<input name="password" type="password" autocomplete="new-password" minlength="8" required aria-label="create a password"></label>
+          <label class="design02-check"><input type="checkbox" name="terms" required> <span>I agree to the <a href="https://docs.petcenterco.com/terms-of-service/" target="_blank" rel="noopener">Terms of Service</a> and <a href="https://docs.petcenterco.com/privacy-policy/" target="_blank" rel="noopener">Privacy Policy</a>.</span></label>
+          <button class="design02-btn design02-btn--accent design02-auth-submit" type="submit">Create account</button>
+          <button class="design02-google" type="button" data-google-signin><span class="design02-google__g" aria-hidden="true">G</span> Sign up with Google</button>
+          <p class="design02-auth-status" data-auth-status role="status" aria-live="polite" hidden></p>
+        </form>
+      </section>
+      <p class="design02-auth-note">Protected role areas still require their existing server-side authorization. This page never claims a successful login without a configured backend response.</p>
     </section>
   </div>
 </main>
+<!-- TASK-DESIGN-02 END -->
 <!-- Footer copied verbatim from cats.html (canonical blueprint, Warning & Instructions rule 13) -->
 <footer class="pc-footer">
   <div class="pc-footer__inner">
@@ -475,6 +492,7 @@
 </footer>
 
 <script src="/assets/js/preload.js"></script>
+<script src="/assets/js/design02-accounts.js"></script>
 <script>
 function submitNotify() {
   var email = document.getElementById('notifyEmail').value.trim();
@@ -486,9 +504,12 @@ function submitNotify() {
   document.getElementById('notifyForm').style.display = 'none';
   document.getElementById('notifySuccess').style.display = 'block';
 }
-document.getElementById('notifyEmail').addEventListener('keydown', function(e) {
+/* TASK-DESIGN-02-EXTRA START — Guard the legacy notification binding after gateway replacement. */
+var notifyEmail = document.getElementById('notifyEmail');
+if (notifyEmail) notifyEmail.addEventListener('keydown', function(e) {
   if (e.key === 'Enter') submitNotify();
 });
+/* TASK-DESIGN-02-EXTRA END */
 
 // Header scroll effect — copied verbatim from cats.html (canonical blueprint)
 (function() {
