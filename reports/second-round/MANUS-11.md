@@ -6,94 +6,94 @@
 - **Scope:** Final coordinator — reconcile reports, shared-file changes, dependencies, issue classifications, commit order, and CEO-facing report.
 - **Starting commit:** `251d8c26ab89bc9a3fd2bc12e155af41b1d03a87` (current `main` after the account-wide correction).
 - **Branch:** `task/second-round-MANUS-11`.
-- **Ending commit:** recorded in commit metadata below.
+- **Latest report-content commit:** indexed in `reports/second-round/ACCOUNT-REPORT-INDEX.md`; the task-branch tip is checked at handoff.
 - **Protected paths:** `.env`, `config.php`, `pet.json`, `applications/`, `uploads/`, `chat-media/`, and `logs/` were not opened, copied, modified, or staged.
 
 ## Correction and evidence boundary
 
-Read `docs/second-round/ACCOUNT-WIDE-CORRECTION.md` and re-read the MANUS-11 section of `docs/second-round/MANUS-ACCOUNT-PROMPTS.md`. The correction is authoritative: the inventory was generated from an external intake workspace, and its 62 worker-package completion/handoff files are not in this Git repository. I verified the tracked paths and the report files on fetched remote branches. The only completion-named tracked files are the two core reference files `docs/second-round/core-docs/Task-AccessibilityWidget-Completion-4.md` and `Task-WidgetPositioning-Completion-2.md`; neither is a worker-package completion handoff. Neither is a substitute for an unavailable package completion. No missing completion file is claimed as read or compared.
+Read `docs/second-round/ACCOUNT-WIDE-CORRECTION.md` and re-read the MANUS-11 section of `docs/second-round/MANUS-ACCOUNT-PROMPTS.md`. At the starting main commit `251d8c26`, the completion-evidence directory had zero Markdown files; I wrongly generalized that main-only fact into a claim that the files were unavailable in the Git repository. The user was right to direct this review to all fetched refs: `origin/task/second-round-MANUS-04` contains the import commit `0ac7755` and the evidence bundle. After M04 was integrated and the M11 branch synced with main `c177938`, the current main tree contains all **64** `IMPORT-MANIFEST.md` records: **62 worker-package completion/handoff files plus two outer-archive references**. I verified every path against `origin/main` and recomputed all 64 SHA-256 values; there are zero missing paths or hash mismatches. This explicitly corrects the earlier overbroad “not in this Git repository” statement. C5 and C6 are the two inventory packages without a listed completion filename; their status is assessed from the register, reports, and source rather than an invented document.
 
-### Inventory-listed completion-file evidence gaps
+### Inventory-listed completion evidence — verified path index, not a current gap
 
-Every completion file named below is unavailable in this repository. These are the 62 inventory-listed files; package names are retained to disambiguate duplicate filenames. `Rehoming-Platform-C6` and `rehoming-platform-task-C5` are the two inventory packages with no completion filename listed at all.
+The following 62 inventory-listed worker-package files were absent from the starting `main` snapshot but present on the MANUS-04 remote evidence branch; they are now in current `origin/main` and this synced branch. The table is a path index, not a list of open evidence gaps. Package names disambiguate duplicate filenames. The manifest has two additional `outer-archive` reference documents, making 64 verified entries total. `Rehoming-Platform-C6` and `rehoming-platform-task-C5` are the two inventory packages with no completion filename listed at all.
 
-| Package | Unavailable completion/handoff file |
+| Package | Verified repository path |
 |---|---|
-| Admin-Project-1-Task-1 | `Task-1-Completion.md` |
-| Admin-Project-1-Task-2 | `Task-2-Completion.md` |
-| Admin-Project-1-Task-3 | `Task-3-Completion.md` |
-| Admin-Project-1-Task-4 | `Task-4-Completion.md` |
-| Admin-Project-1-Task-5a-5b | `Task-5a-5b-Completion.md` |
-| Admin-Project-1-Task-6 | `Task-6-Completion.md` |
-| Admin-Project-1-Task-7 | `Task-7-Completion.md` |
-| Project-5-Task-5 | `Task-5-Completion.md` |
-| Project-5-Task-5b | `Task-5b-Completion.md` |
-| Project-5-Task-6a | `Task-6a-Completion.md` |
-| Project-5-Task-6b | `Task-6b-Completion.md` |
-| Project-5-Task-7a | `Task-7a-Completion.md` |
-| Project-5-Task-9 | `Task-9-Completion.md` |
-| Rehoming-Platform-C1a-C1b | `Task-C1a-C1b-Completion.md` |
-| Rehoming-Platform-Task-A1 | `Task-A1-Completion.md` |
-| Rehoming-Platform-Task-A2 | `Task-A2-Completion.md` |
-| Rehoming-Platform-Task-A3 | `Task-A3-Completion.md` |
-| Rehoming-Platform-Task-B1 | `Task-B1-Completion.md` |
-| Rehoming-Platform-Task-B2 | `Task-B2-Completion.md` |
-| Rehoming-Platform-Task-B3 | `Task-B3-Completion.md` |
-| Rehoming-Platform-Task-B4 | `Task-B4-Completion.md` |
-| Rehoming-Platform-Task-B5 | `Task-B5-Completion.md` |
-| Rehoming-Platform-Task-B6 | `Task-B6-Completion.md` |
-| Rehoming-Platform-Task-C2 | `Task-C2-Completion.md` |
-| Rehoming-Platform-Task-C3 | `Task-C3-Completion.md` |
-| Rehoming-Platform-Task-D1 | `Task-D1-Completion.md` |
-| Rehoming-Platform-Task-E1 | `Task-E1-Completion.md` |
-| Rehoming-Platform-Task-E2 | `Task-E2-Completion.md` |
-| Rehoming-Platform-Task-E3 | `Task-E3-Completion.md` |
-| Rehoming-Platform-Task-E4 | `Task-E4-Completion.md` |
-| Rehoming-Platform-Task-E5 | `Task-E5-Completion.md` |
-| Rehoming-Platform-Task-F1 | `Task-F1-Completion.md` |
-| Rehoming-Platform-Task-F2 | `Task-F2-Completion.md` |
-| Rehoming-Platform-Task-F3 | `Task-F3-Completion.md` |
-| Rehoming-Platform-Task-F4 | `Task-F4-Completion.md` |
-| Rehoming-Platform-Task-F5 | `Task-F5-Completion.md` |
-| Rehoming-Platform-Task-F7 | `Task-F7-Completion.md` |
-| Unified-Status-Dashboard-Task-4 | `Task-4-Completion.md` |
-| WEB-PROJECTS-1-2-Task-10 | `Task-10-Completion.md` |
-| WEB-PROJECTS-1-2-Task-2 | `Task-2-Completion.md` |
-| WEB-PROJECTS-3-4-5-Task-2 | `Task-2-Completion.md` |
-| WEB-PROJECTS-3-4-5-Task-3 | `Task-3-Completion.md` |
-| WEB-PROJECTS-3-4-5-Task-4-and-4b-1 | `Task-4-Completion.md` |
-| Web-project-1-2-task-9 | `Task-9-Completion.md` |
-| admin-dashboard-task-1a | `Task-1a-Completion.md` |
-| admin-project-2-task-1a | `Task-1a-Completion.md` |
-| admin-project-2-task-1b | `Task-1b-Completion.md` |
-| admin-project-4-task-3 | `Task-3-Completion.md` |
-| pet-center-adoption-system-task-8 | `Task-8-Completion.md` |
-| rehoming-platform-task-f6 | `Task-F6-Completion.md` |
-| rehoming-platform-task-g1 | `Task-G1-Completion.md` |
-| unified-status-dashboard-task-1 | `Task-1-Completion.md` |
-| unified-status-dashboard-task-10 | `Task-10-Completion.md` |
-| unified-status-dashboard-task-12 | `Task-12-Completion.md` |
-| unified-status-dashboard-task-2 | `Task-2-Completion.md` |
-| unified-status-dashboard-task-3 | `Task-3-Completion.md` |
-| unified-status-dashboard-task-8 | `Task-8-Completion.md` |
-| unified-status-dashboard-task-9 | `Task-9-Completion.md` |
-| unified-status-dashboard-task-shipping-tier1 | `Task-SHIPPING-TIER1-Completion.md` |
-| unified-status-task-5 | `Task-5-Completion.md` |
-| unified-status-task-6 | `Task-6-Completion.md` |
-| unified-status-task-7 | `Task-7-Completion.md` |
+| `Admin-Project-1-Task-1` | `docs/second-round/completion-evidence/Admin-Project-1-Task-1/Task-1-Completion.md` |
+| `Admin-Project-1-Task-2` | `docs/second-round/completion-evidence/Admin-Project-1-Task-2/Task-2-Completion.md` |
+| `Admin-Project-1-Task-3` | `docs/second-round/completion-evidence/Admin-Project-1-Task-3/Task-3-Completion.md` |
+| `Admin-Project-1-Task-4` | `docs/second-round/completion-evidence/Admin-Project-1-Task-4/Task-4-Completion.md` |
+| `Admin-Project-1-Task-5a-5b` | `docs/second-round/completion-evidence/Admin-Project-1-Task-5a-5b/Task-5a-5b-Completion.md` |
+| `Admin-Project-1-Task-6` | `docs/second-round/completion-evidence/Admin-Project-1-Task-6/Task-6-Completion.md` |
+| `Admin-Project-1-Task-7` | `docs/second-round/completion-evidence/Admin-Project-1-Task-7/Task-7-Completion.md` |
+| `Project-5-Task-5` | `docs/second-round/completion-evidence/Project-5-Task-5/Task-5-Completion.md` |
+| `Project-5-Task-5b` | `docs/second-round/completion-evidence/Project-5-Task-5b/Task-5b-Completion.md` |
+| `Project-5-Task-6a` | `docs/second-round/completion-evidence/Project-5-Task-6a/Task-6a-Completion.md` |
+| `Project-5-Task-6b` | `docs/second-round/completion-evidence/Project-5-Task-6b/Task-6b-Completion.md` |
+| `Project-5-Task-7a` | `docs/second-round/completion-evidence/Project-5-Task-7a/Task-7a-Completion.md` |
+| `Project-5-Task-9` | `docs/second-round/completion-evidence/Project-5-Task-9/Task-9-Completion.md` |
+| `Rehoming-Platform-C1a-C1b` | `docs/second-round/completion-evidence/Rehoming-Platform-C1a-C1b/Task-C1a-C1b-Completion.md` |
+| `Rehoming-Platform-Task-A1` | `docs/second-round/completion-evidence/Rehoming-Platform-Task-A1/Task-A1-Completion.md` |
+| `Rehoming-Platform-Task-A2` | `docs/second-round/completion-evidence/Rehoming-Platform-Task-A2/Task-A2-Completion.md` |
+| `Rehoming-Platform-Task-A3` | `docs/second-round/completion-evidence/Rehoming-Platform-Task-A3/Task-A3-Completion.md` |
+| `Rehoming-Platform-Task-B1` | `docs/second-round/completion-evidence/Rehoming-Platform-Task-B1/Task-B1-Completion.md` |
+| `Rehoming-Platform-Task-B2` | `docs/second-round/completion-evidence/Rehoming-Platform-Task-B2/Task-B2-Completion.md` |
+| `Rehoming-Platform-Task-B3` | `docs/second-round/completion-evidence/Rehoming-Platform-Task-B3/Task-B3-Completion.md` |
+| `Rehoming-Platform-Task-B4` | `docs/second-round/completion-evidence/Rehoming-Platform-Task-B4/Task-B4-Completion.md` |
+| `Rehoming-Platform-Task-B5` | `docs/second-round/completion-evidence/Rehoming-Platform-Task-B5/Task-B5-Completion.md` |
+| `Rehoming-Platform-Task-B6` | `docs/second-round/completion-evidence/Rehoming-Platform-Task-B6/Task-B6-Completion.md` |
+| `Rehoming-Platform-Task-C2` | `docs/second-round/completion-evidence/Rehoming-Platform-Task-C2/Task-C2-Completion.md` |
+| `Rehoming-Platform-Task-C3` | `docs/second-round/completion-evidence/Rehoming-Platform-Task-C3/Task-C3-Completion.md` |
+| `Rehoming-Platform-Task-D1` | `docs/second-round/completion-evidence/Rehoming-Platform-Task-D1/Task-D1-Completion.md` |
+| `Rehoming-Platform-Task-E1` | `docs/second-round/completion-evidence/Rehoming-Platform-Task-E1/Task-E1-Completion.md` |
+| `Rehoming-Platform-Task-E2` | `docs/second-round/completion-evidence/Rehoming-Platform-Task-E2/Task-E2-Completion.md` |
+| `Rehoming-Platform-Task-E3` | `docs/second-round/completion-evidence/Rehoming-Platform-Task-E3/Task-E3-Completion.md` |
+| `Rehoming-Platform-Task-E4` | `docs/second-round/completion-evidence/Rehoming-Platform-Task-E4/Task-E4-Completion.md` |
+| `Rehoming-Platform-Task-E5` | `docs/second-round/completion-evidence/Rehoming-Platform-Task-E5/Task-E5-Completion.md` |
+| `Rehoming-Platform-Task-F1` | `docs/second-round/completion-evidence/Rehoming-Platform-Task-F1/Task-F1-Completion.md` |
+| `Rehoming-Platform-Task-F2` | `docs/second-round/completion-evidence/Rehoming-Platform-Task-F2/Task-F2-Completion.md` |
+| `Rehoming-Platform-Task-F3` | `docs/second-round/completion-evidence/Rehoming-Platform-Task-F3/Task-F3-Completion.md` |
+| `Rehoming-Platform-Task-F4` | `docs/second-round/completion-evidence/Rehoming-Platform-Task-F4/Task-F4-Completion.md` |
+| `Rehoming-Platform-Task-F5` | `docs/second-round/completion-evidence/Rehoming-Platform-Task-F5/Task-F5-Completion.md` |
+| `Rehoming-Platform-Task-F7` | `docs/second-round/completion-evidence/Rehoming-Platform-Task-F7/Task-F7-Completion.md` |
+| `Unified-Status-Dashboard-Task-4` | `docs/second-round/completion-evidence/Unified-Status-Dashboard-Task-4/Task-4-Completion.md` |
+| `WEB-PROJECTS-1-2-Task-10` | `docs/second-round/completion-evidence/WEB-PROJECTS-1-2-Task-10/Task-10-Completion.md` |
+| `WEB-PROJECTS-1-2-Task-2` | `docs/second-round/completion-evidence/WEB-PROJECTS-1-2-Task-2/Task-2-Completion.md` |
+| `WEB-PROJECTS-3-4-5-Task-2` | `docs/second-round/completion-evidence/WEB-PROJECTS-3-4-5-Task-2/Task-2-Completion.md` |
+| `WEB-PROJECTS-3-4-5-Task-3` | `docs/second-round/completion-evidence/WEB-PROJECTS-3-4-5-Task-3/Task-3-Completion.md` |
+| `WEB-PROJECTS-3-4-5-Task-4-and-4b-1` | `docs/second-round/completion-evidence/WEB-PROJECTS-3-4-5-Task-4-and-4b-1/Task-4-Completion.md` |
+| `Web-project-1-2-task-9` | `docs/second-round/completion-evidence/Web-project-1-2-task-9/Task-9-Completion.md` |
+| `admin-dashboard-task-1a` | `docs/second-round/completion-evidence/admin-dashboard-task-1a/Task-1a-Completion.md` |
+| `admin-project-2-task-1a` | `docs/second-round/completion-evidence/admin-project-2-task-1a/Task-1a-Completion.md` |
+| `admin-project-2-task-1b` | `docs/second-round/completion-evidence/admin-project-2-task-1b/Task-1b-Completion.md` |
+| `admin-project-4-task-3` | `docs/second-round/completion-evidence/admin-project-4-task-3/Task-3-Completion.md` |
+| `pet-center-adoption-system-task-8` | `docs/second-round/completion-evidence/pet-center-adoption-system-task-8/Task-8-Completion.md` |
+| `rehoming-platform-task-f6` | `docs/second-round/completion-evidence/rehoming-platform-task-f6/Task-F6-Completion.md` |
+| `rehoming-platform-task-g1` | `docs/second-round/completion-evidence/rehoming-platform-task-g1/Task-G1-Completion.md` |
+| `unified-status-dashboard-task-1` | `docs/second-round/completion-evidence/unified-status-dashboard-task-1/Task-1-Completion.md` |
+| `unified-status-dashboard-task-10` | `docs/second-round/completion-evidence/unified-status-dashboard-task-10/Task-10-Completion.md` |
+| `unified-status-dashboard-task-12` | `docs/second-round/completion-evidence/unified-status-dashboard-task-12/Task-12-Completion.md` |
+| `unified-status-dashboard-task-2` | `docs/second-round/completion-evidence/unified-status-dashboard-task-2/Task-2-Completion.md` |
+| `unified-status-dashboard-task-3` | `docs/second-round/completion-evidence/unified-status-dashboard-task-3/Task-3-Completion.md` |
+| `unified-status-dashboard-task-8` | `docs/second-round/completion-evidence/unified-status-dashboard-task-8/Task-8-Completion.md` |
+| `unified-status-dashboard-task-9` | `docs/second-round/completion-evidence/unified-status-dashboard-task-9/Task-9-Completion.md` |
+| `unified-status-dashboard-task-shipping-tier1` | `docs/second-round/completion-evidence/unified-status-dashboard-task-shipping-tier1/Task-SHIPPING-TIER1-Completion.md` |
+| `unified-status-task-5` | `docs/second-round/completion-evidence/unified-status-task-5/Task-5-Completion.md` |
+| `unified-status-task-6` | `docs/second-round/completion-evidence/unified-status-task-6/Task-6-Completion.md` |
+| `unified-status-task-7` | `docs/second-round/completion-evidence/unified-status-task-7/Task-7-Completion.md` |
 
 ## Documents read
 
-- Ordered account packet: `INTEGRATION-PROGRESS.md`, `TODO.md`, `docs/second-round/README.md`, `docs/second-round/SECOND-ROUND-REQUEST.md`, `docs/second-round/SECOND-ROUND-SETUP-AND-SKILLS.md`, `docs/second-round/SECOND-ROUND-MANUS-COORDINATION.md`, `docs/second-round/WORKER-PACKAGE-INVENTORY.md`, and all sections of `docs/second-round/SECOND-ROUND-ISSUE-REGISTER.md`.
-- `docs/second-round/ACCOUNT-WIDE-CORRECTION.md`; complete updated MANUS-11 section of `docs/second-round/MANUS-ACCOUNT-PROMPTS.md`.
-- `reports/second-round/README.md` and `reports/second-round/ACCOUNT-REPORT-INDEX.md`.
-- Relevant core coordination/integration protocol files: `docs/second-round/core-docs/WORKER-GIT-SYNC-PROTOCOL-7.md`, `Admin-Code-Integrator-5.md`, and `Web-Code-Integrator-5.md`.
-- Relevant account reports read from fetched branches: `reports/second-round/MANUS-01.md`, `MANUS-02.md`, `MANUS-05.md`, `MANUS-07.md`, and `MANUS-09.md`.
-- Earlier session source reads retained for continuity: `docs/second-round/core-docs/Admin-Project-1-Worker-Task-Assignments-2.md` and the account-specific MANUS-11 instruction before the correction. The updated MANUS-11 prompt was re-read after the correction.
+- User task attachment: `/home/ubuntu/upload/pasted_content.txt`.
+- Root project context: `adoption-website-project-summary.md`, `ADMIN_DASHBOARD_PROJECT_SUMMARY.md`, `PETCENTER_DESIGN_SYSTEM_v1.0.md`, `INTEGRATION-PROGRESS.md`, `TODO.md`, `ROADBLOCKS-AND-FIXES.md`, and `WORKER-GIT-SYNC-PROTOCOL.md`.
+- Required second-round packet: `docs/second-round/README.md`, `SECOND-ROUND-REQUEST.md`, `SECOND-ROUND-SETUP-AND-SKILLS.md`, `SECOND-ROUND-MANUS-COORDINATION.md`, `WORKER-PACKAGE-INVENTORY.md`, `ACCOUNT-WIDE-CORRECTION.md`, `SECOND-ROUND-ISSUE-REGISTER.md`, and the MANUS-11 section of `MANUS-ACCOUNT-PROMPTS.md`.
+- Relevant core guidance: `origin/task/second-round-MANUS-03:docs/second-round/CORE-DOCUMENT-READING-GATE.md`; files under `docs/second-round/core-docs/`: `ROADBLOCKS-AND-FIXES-2.md`, `TODO-5.md`, `WORKER-GIT-SYNC-PROTOCOL-7.md`, `VDM-GIT-SYNC-COORDINATION-PROTOCOL-7.md`, `Admin-Code-Integrator-5.md`, `Web-Code-Integrator-5.md`, `Admin-Project-1-Worker-Task-Assignments-2.md`, `Task-AccessibilityWidget-Completion-4.md`, and `Task-WidgetPositioning-Completion-2.md`.
+- Completion-evidence index and handoffs: `docs/second-round/completion-evidence/IMPORT-MANIFEST.md`, `docs/second-round/completion-evidence/outer-archive/Pet_Center_Integration_Progress_and_Handoff.md`, and `docs/second-round/completion-evidence/outer-archive/Task-1-Completion-14.md`. The 62 worker-package completion files are individually path-indexed above and mapped to issue rows in the crosswalk; mapped review notes identify which package evidence was consulted. The full 64-entry manifest path/hash integrity was verified, but I do not claim every one of the 64 document bodies was read word-for-word.
+- Account reports and coordinator indexes: `reports/second-round/README.md`, `ACCOUNT-REPORT-INDEX.md`, current fetched MANUS-01 through MANUS-10 reports, the M03 integration-build report, and the evolving `MANUS-11.md`. Worker-reported tests are attributed rather than claimed as MANUS-11 reruns.
 
-## Account/report reconciliation matrix
+## Account/report reconciliation matrix — initial 2026-11-04 snapshot (superseded)
 
-A worker report is evidence of that worker's findings, not proof that a code fix has been merged or independently accepted. The available reports are all on unmerged task branches. No report branch was merged by MANUS-11.
+A worker report is evidence of that worker's findings, not proof that a code fix has been merged or independently accepted. The rows below preserve the initial snapshot only; later sections supersede its branch availability, code, and evidence claims.
 
 | Account | Report/branch available at this review | Coordinator status and classification |
 |---|---|---|
@@ -149,21 +149,21 @@ This is an explicitly partial classification, not the complete register closeout
 
 - **Starting commit:** `251d8c26ab89bc9a3fd2bc12e155af41b1d03a87`.
 - **Branch:** `task/second-round-MANUS-11`.
-- **Report commit:** this report-only branch tip; the exact commit hash is supplied in the final handoff.
+- **Report-content commit:** indexed in `reports/second-round/ACCOUNT-REPORT-INDEX.md`; branch sync with `origin/main` is recorded below.
 
 
-## Coordinator continuation — 2026-11-04 (supersedes stale evidence/branch statements above)
+## Historical coordinator continuation — 2026-11-04 (superseded by 2026-11-08)
 
 This continuation corrects the earlier evidence-gap and account-availability sections. Those sections reflected an earlier snapshot of `origin/main` and must not be read as a claim that completion documents are absent from every fetched branch.
 
 ### Repository and completion-evidence reconciliation
 
 - Audited against `origin/main` at `251d8c26ab89bc9a3fd2bc12e155af41b1d03a87`; account work remains unmerged unless explicitly identified below as already present on main.
-- The worker completion documents are present on `origin/task/second-round-MANUS-04`, not on `origin/main`. The branch's `docs/second-round/completion-evidence/IMPORT-MANIFEST.md` has 64 SHA-256 entries; a byte-level SHA-256 check against all 64 mapped paths passed. The 64 entries comprise 62 worker-package completion/handoff files plus two outer-archive reference documents. The inventory's 64 packages include two packages without completion files: Rehoming C5 and C6.
+- At this historical 2026-11-04 check, the worker completion documents were present on `origin/task/second-round-MANUS-04` and absent from the then-audited `origin/main` baseline. The branch's `IMPORT-MANIFEST.md` had 64 SHA-256 entries (62 worker-package files plus two outer-archive references), and all 64 mapped paths matched. After the later M04/M05 integration, the same files are present on current `origin/main` `c177938`. The inventory includes two packages without completion filenames: Rehoming C5 and C6.
 - Therefore the earlier assertion that all 62 files were unavailable “in this Git repository” is superseded and was too broad. Correct wording: they were absent from the audited `main` snapshot but are available in a fetched account-branch evidence bundle. Evidence branch/path and commit must be cited; branch presence is not mainline integration or task acceptance.
 - Scope reviewers read the completion documents mapped to their assigned packages where noted below. MANUS-09 verified selected paths but did not review document bodies after a safety interlock; MANUS-10 checked the manifest/tree but did not read the 62 bodies individually. I do not claim that every completion document body has now been read end to end.
 
-### Current account/report matrix
+### Account/report matrix as of 2026-11-04 (historical)
 
 | Account | Branch/report at reviewed refs | Coordinator result (all source changes remain unmerged unless noted) |
 |---|---|---|
@@ -216,9 +216,9 @@ MANUS-10's new work changes the prior handoff: QA is no longer wholly absent, bu
 All assertions above are attributed to the latest worker reports and fetched Git diff. MANUS-11 has not audited every new source hunk, rerun worker tests, merged branches, or deployed any change. Revisit this section if any account ref advances again before integration.
 
 
-## Authoritative coordinator snapshot — 2026-11-05 (supersedes all prior branch/evidence matrices)
+## Historical coordinator snapshot — 2026-11-05 (superseded by the 2026-11-08 refresh)
 
-This snapshot supersedes the account tables above, including the 2026-11-04 post-fetch section where branches or reports were described as absent/report-only. A fresh `git fetch --all --prune` was performed. The assignment baseline remains `origin/main` `251d8c26ab89bc9a3fd2bc12e155af41b1d03a87`. All ten worker report branches now exist; **none of MANUS-01 through MANUS-10 is merged into `main`**. Commit hashes below are the freshly observed remote tips. “Worker claims” below are not independently accepted unless a separate coordinator check is stated.
+This was the coordinator snapshot as of 2026-11-05 and is now superseded by the 2026-11-08 refresh below. At that snapshot the assignment baseline was `origin/main` `251d8c26ab89bc9a3fd2bc12e155af41b1d03a87`, before M04/M05 integration. The branch tips and “none merged” statement in this historical matrix are not current. “Worker claims” below are not independently accepted unless a separate coordinator check is stated.
 
 | Account | Fresh branch tip; changed paths vs main | Completion/evidence documents reviewed | Current coordinator position |
 |---|---|---|---|
@@ -235,7 +235,7 @@ This snapshot supersedes the account tables above, including the 2026-11-04 post
 
 ### Completion evidence and issue-register scope
 
-The mapped worker completion documents above are available in the imported MANUS-04 evidence branch; that branch's manifest documents their provenance. This corrects reports which described files as missing from Git. Availability/readability establishes evidence availability only, not implementation correctness, test success, or mainline integration. The two inventory packages C5/C6 without completion records, MANUS-04 Task 7b, and MANUS-07 Task 11 remain precise evidence gaps. The round-one `Pet_Center_Integration_Progress_and_Handoff.md` was read from MANUS-03's branch; it documents earlier mechanical stops and says round two owns the collected bugs. The standalone `Task-1-Completion-14.md` is Project 3 Task 1 research, not a MANUS-11 coordinator completion package. No separate MANUS-11-specific worker completion file is listed.
+At the 2026-11-05 snapshot, the mapped worker completion documents were present on the imported MANUS-04 evidence branch and not yet in the audited main baseline. They are now also in `origin/main` `c177938`; the current manifest check confirms 64/64 paths and hashes. Availability/readability establishes evidence availability only, not implementation correctness, test success, or mainline acceptance. C5/C6 have no completion filename in the inventory, and MANUS-04 Task 7b and MANUS-07 Task 11 remain specific evidence gaps. The round-one `Pet_Center_Integration_Progress_and_Handoff.md` was read from MANUS-03's branch; it documents earlier mechanical stops and says round two owns the collected bugs. The standalone `Task-1-Completion-14.md` is Project 3 Task 1 research, not a MANUS-11 coordinator completion package. No separate MANUS-11-specific worker completion file is listed.
 
 The 145-row issue-register classification is **complete** in `MANUS-11-ISSUE-CROSSWALK.md`. It distinguishes mainline from worker-branch-only changes and retains `Blocked`/`Needs My Review` where evidence or runtime dependencies remain. Classification is not integration acceptance: this report and account index remain `IN PROGRESS` until applicable owner decisions, integration, and runtime checks are complete.
 
@@ -298,7 +298,7 @@ All register rows have a disposition and there are no pending reviewer jobs. The
 
 ### Fresh refs and repository-wide completion evidence
 
-A fresh `git fetch --all --prune` confirmed `origin/main` at `c177938` and `origin/adopt-deploy` at `542c770`. Current worker tips are recorded in `ACCOUNT-REPORT-INDEX.md`. The MANUS-04 merge `151d46b` and the MANUS-05 merge `c177938` are ancestors of main; the report-only/integration-doc updates do not change that source state. The imported completion evidence remains available on the MANUS-04 evidence branch, while the account-specific reports and later code updates are at their own fresh tips. I did not reopen protected data, configuration, uploads, chat media, logs, or runtime payloads.
+A fresh `git fetch --all --prune` confirmed `origin/main` at `c177938` and `origin/adopt-deploy` at `542c770`. Current worker tips are recorded in `ACCOUNT-REPORT-INDEX.md`. The MANUS-04 merge `151d46b` and the MANUS-05 merge `c177938` are ancestors of main; the report-only/integration-doc updates do not change that source state. The imported completion evidence is now present on both the MANUS-04 evidence branch and current main `c177938`; the account-specific reports and later code updates remain at their own fresh tips. I did not reopen protected data, configuration, uploads, chat media, logs, or runtime payloads.
 
 The new mainline source invalidates several earlier “missing implementation” conclusions. Main now contains `adopt/rehoming/list-a-pet/index.html`, `merchant-publish-listing.php`, the A2 `adopt/admin/needs-extra-love-check.php` maintenance job, the C5 `merchant-chat-*.php` endpoints, and C6 `merchant-reviews.php` / `merchant-review-moderate.php`. I independently confirmed those paths on `origin/main` and ran `php -l` on nine non-protected M05 PHP files (the A2 job, publish/chat/review endpoints and shared library); all nine passed. This is syntax validation only—not live auth, upload, storage, mail, or browser acceptance. M05’s report has historical opening text (“code changes: none” and absent C5/C6 stacks) that its later implementation section and the current main tree supersede.
 
@@ -310,7 +310,7 @@ M05’s A1 posting route is now chosen on main (`/rehoming/list-a-pet/`) and the
 - **MANUS-06 `8d05874`:** its final report claims D1–G1 implementation work and 90/90 desktop/mobile E2E checks. Those changes remain branch-only and are not accepted on main. The branch’s merchant posting route `/merchant/post-listing/` competes with M05’s `/rehoming/list-a-pet/` route and dashboard link, causing a real `adopt/merchant/index.html` merge conflict. The branch report says Stripe fails closed without `STRIPE_SECRET_KEY`; no live Stripe call or production secret was used. The new implementation/test results are attributed to M06, not independently reproduced here. Crosswalk dispositions now distinguish candidate fixes from mainline and retain mail, cron, auth, real-data, route-selection, and deployment gates.
 - **MANUS-08 `be1beab`:** its current report says its branch is synced to main `c177938`, the seven-page/42-case viewport matrix passed, and all seven deployed URLs returned HTTP 200 at deploy snapshot `542c770`. The live pages still lack the CTA/status-row/footer fixes; at 390 px and 360 px the cats Request-One button extends to about 404 px. These are M08’s live-browser findings, not a fresh MANUS-11 browser test. The existing deploy refs also contain tracked upload/chat-media/log paths; deployment owners must review their safe handling before release. M08 code has not been deployed or merged by this coordinator.
 - **MANUS-09 `bd41d5b`:** the latest report adds the stored-thread-email ownership guard, an exclusive-lock JSON review append, strict adoption-code validation, `LOCK_EX` writes, and four testimonial URL fixes. It reports 8 PHPUnit tests/20 assertions and a 46-file PHP lint pass. The guard is duplicated with M01 and must be integrated once; adoption writes conflict with M07 in `adopt/admin/update-adoption.php`. No approved live staging target was available, so reported live testing remains outstanding. Protected contact configuration was not inspected by MANUS-11.
-- **Other fresh refs:** M01 `22594e4`, M02 `5833edc`, M04 `151d46b`, M05 `c177938`, M07 `b961a0b`, M10 `0f0d459`, and the M11 coordinator-content commit `95ca8d5`. Their report availability and current tips are recorded in the account index.
+- **Other fresh refs:** M01 `22594e4`, M02 `5833edc`, M04 `151d46b`, M05 `c177938`, M07 `b961a0b`, M10 `0f0d459`, and the earlier M11 coordinator-content commit `95ca8d5` (superseded by the subsequent evidence correction). Their report availability and current tips are recorded in the account index.
 
 ### Current cumulative merge rehearsal
 
