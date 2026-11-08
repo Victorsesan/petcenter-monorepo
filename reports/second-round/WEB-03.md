@@ -34,10 +34,11 @@ Reviewed the completion-evidence manifest and README plus all 13 matching public
 | PHP syntax | `php -l`: 21 non-protected public PHP handlers passed. No PHP endpoint was executed. Configuration, upload/runtime, admin and protected data paths were excluded. |
 | Accessibility | axe-core 4.14.0: serious color-contrast 419 nodes/51 routes; critical missing-label 45/2; label-content-name-mismatch 4/1; link-in-text-block 3/2; list semantics 2/1; meta-viewport 2/2; target-size 18/6. These are static-preview findings, not a production/authenticated-user audit. |
 | Forms / APIs | Four client-only forms were exercised with synthetic local values; all prevented submission, sent zero POSTs, showed success, and cleared their fields. Backend submissions were not attempted. Protected pet/runtime requests were blocked; one PHP configuration endpoint was stubbed with 503, so its runtime response remains unverified. |
-| RTL | Through the accessibility panel, Arabic could be selected, but the page remained `lang="en"` with no `dir` on `html` or `body`. Only static fonts/CDN requests were allowed; no external translator request was made. |
-| Network / widget | Browser requests to protected data and non-allowlisted hosts were blocked; no protected payload was read. The chat-widget script path was reachable, but chat/API submission was not tested. |
+| RTL | Selecting Arabic navigated to `/ar/`, which returned 404 in the sanitized preview; no RTL document state was reached. The final check explicitly blocked four protected per-record pet JSON requests and two external requests. No external translator request was observed. |
+| Network / widget | The route matrix blocked protected-data and non-allowlisted requests. Earlier exploratory RTL probes reached only per-record placeholders absent from the sanitized preview (404); no protected payload was served or read. The chat-widget script path was reachable, but chat/API submission was not tested. |
 
 ### Confirmed findings and evidence
+
 
 - The quiz inline script fails parsing with `Invalid or unexpected token`; the browser route reports `Invalid or unexpected token` on `/pets/quiz/`. The fetched `origin/redesign/public-adoption` version of this file passes `node --check`, but is not integrated into this branch.
 - Both `adopt/contact-us/index.html:318` and `adopt/contact-us/contact-us.html:315` submit the department value `health`; `adopt/contact-us/contact-handler.php:65` accepts `health-claim` instead. No real form POST was made. The fetched redesign branch still contains the mismatch in both forms.
@@ -45,7 +46,7 @@ Reviewed the completion-evidence manifest and README plus all 13 matching public
 - Eight local link targets returned 404 in the sanitized preview: `/rehome/` (53 anchor references across 18 routes), `/adoption-application.html` (4), `/birds.html` (8), `/blog-home.html` (8), `/cats.html` (8), `/dogs.html` (12), `/reptiles.html` (8), and `/small-mammals.html` (8). The project summary describes `/rehome/` as retired, while the current WEB brief names `/signin/` and `/rehoming/` as current entries; coordinator/WEB-04/05 should confirm the intended destination before mass link edits. Two `/cdn-cgi/l/email-protection` links were observed separately; this is a Cloudflare-generated path, not a repository page. No public-root `.htaccess` rewrite was found; production-specific routing remains unverified.
 - `/about.html` and `/contact.html` both redirected to `/` in the preview; this may be legacy behavior and was not tested against production routing.
 - The local-only `/foster/`, `/partners/`, `/volunteer/`, and `/rehoming-resources/` forms display success and clear entered values without sending data. Do not represent these flows as backend-confirmed submissions.
-- Arabic selection did not produce an RTL document state. The axe findings above also need owner review; fixing them entails site-wide/shared styling or component changes and is not a safe baseline-only edit.
+- The Arabic selector navigates to `/ar/`, which returned 404 in the preview. The final confirmation blocked four protected per-record pet JSON requests; earlier exploratory probes reached only missing sanitized placeholders (404), so no protected payload was served. Production rewrite/RTL behavior remains unverified. The axe findings also need owner review; fixing them entails site-wide/shared styling or component changes and is not a safe baseline-only edit.
 
 ### Cross-branch coordination
 
