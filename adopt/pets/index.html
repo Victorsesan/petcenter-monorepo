@@ -392,6 +392,24 @@ h1, h2, h3, h4, h5, h6 {
 .pets-breadcrumb a:hover { color: var(--orange); }
 .pets-breadcrumb span { color: var(--warm-gray); }
 
+/* TASK-3 START — Location filter bar */
+.pets-location-bar { max-width: 1280px; margin: 0 auto; padding: 0 24px 18px; }
+.pets-location-bar__inner {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  background: #fff; border: 1px solid rgba(16,33,75,.1); border-radius: 12px;
+  padding: 12px 16px; box-shadow: 0 2px 10px rgba(16,33,75,.05);
+}
+.pets-location-bar__label {
+  font-family: 'Sora', sans-serif; font-size: 13px; font-weight: 600; color: var(--navy);
+}
+.pets-location-bar__inner input {
+  flex: 1; min-width: 140px; border: 1px solid rgba(16,33,75,.15); border-radius: 8px;
+  padding: 9px 12px; font-family: 'Sora', sans-serif; font-size: 13.5px; color: var(--navy);
+  outline: none;
+}
+.pets-location-bar__inner input:focus { border-color: var(--gold-dark); }
+/* TASK-3 END */
+
 /* ═══════════════════════════════════════════════════════
    CATEGORY GRID SECTION
    ═══════════════════════════════════════════════════════ */
@@ -794,7 +812,13 @@ h1, h2, h3, h4, h5, h6 {
         <li><a href="/pets/small-mammals/">Small Mammals</a></li>
         <!-- TASK-2 START — Livestocks & Aquariums added to Our Pets dropdown -->
         <li><a href="/pets/livestocks/">Livestocks</a></li>
-        <li><a href="/pets/aquariums/">Aquariums</a></li>
+        <li><a href="/pets/aquariums/">Aquariums</a>
+    <!-- TASK-8 START -->
+    <a href="/pets/quiz/">Find Your Match</a>
+    <!-- TASK-8 END --></li>
+        <!-- TASK-8 START -->
+        <li><a href="/pets/quiz/">Find Your Match</a></li>
+        <!-- TASK-8 END -->
         <!-- TASK-2 END -->
       </ul>
     </li>
@@ -820,6 +844,9 @@ h1, h2, h3, h4, h5, h6 {
     <!-- TASK-2 START — Livestocks & Aquariums added to mobile menu -->
     <a href="/pets/livestocks/">Livestocks</a>
     <a href="/pets/aquariums/">Aquariums</a>
+    <!-- TASK-8 START -->
+    <a href="/pets/quiz/">Find Your Match</a>
+    <!-- TASK-8 END -->
     <!-- TASK-2 END -->
     <a href="/blog/">Blog</a>
     <a href="/testimonials/">Testimonials</a>
@@ -847,6 +874,21 @@ h1, h2, h3, h4, h5, h6 {
   <span aria-hidden="true">›</span>
   <span>Browse All Pets</span>
 </nav>
+
+<!-- TASK-3 START — Location filter: pets.html has no per-pet listing to filter
+     (just category cards + counts), so it can't host the full State/City/Near-Me
+     sheet the 7 category pages use. Instead this compact bar carries whatever
+     the visitor types here forward as a "?state=" link param on every category
+     card, and each category page auto-applies it on load against its own
+     (already-built) State filter — reusing the same mechanism rather than
+     building a second one. -->
+<section class="pets-location-bar">
+  <div class="pets-location-bar__inner">
+    <span class="pets-location-bar__label">Looking in a specific state?</span>
+    <input type="text" id="petsLocationInput" placeholder="e.g. CA" autocomplete="off" maxlength="30">
+  </div>
+</section>
+<!-- TASK-3 END -->
 
 <!-- ════════════════════════════════════════════════════
      CATEGORY GRID
@@ -882,7 +924,13 @@ h1, h2, h3, h4, h5, h6 {
           <li><a href="/pets/small-mammals/">Small Mammals</a></li>
           <!-- TASK-2 START — Livestocks & Aquariums added to footer Our Pets column -->
           <li><a href="/pets/livestocks/">Livestocks</a></li>
-          <li><a href="/pets/aquariums/">Aquariums</a></li>
+          <li><a href="/pets/aquariums/">Aquariums</a>
+    <!-- TASK-8 START -->
+    <a href="/pets/quiz/">Find Your Match</a>
+    <!-- TASK-8 END --></li>
+        <!-- TASK-8 START -->
+        <li><a href="/pets/quiz/">Find Your Match</a></li>
+        <!-- TASK-8 END -->
           <!-- TASK-2 END -->
         </ul>
       </div>
@@ -1066,6 +1114,17 @@ var CATEGORIES = [
 /* Arrow SVG shared by all browse buttons */
 var ARROW_SVG = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>';
 
+/* TASK-3 START — Location filter: append whatever's typed in the location
+   bar to every card link as "?state=", so the category page can auto-select
+   that state on arrival (see the matching read-on-load added to each of the
+   7 category pages). Re-runs buildCards() on input so links stay in sync. */
+function pcLocationSuffix() {
+  var input = document.getElementById('petsLocationInput');
+  var val = input ? input.value.trim() : '';
+  return val ? '?state=' + encodeURIComponent(val) : '';
+}
+// TASK-3 END
+
 /* ─── Build category cards ───────────────────────────── */
 function buildCards(counts) {
   var grid = document.getElementById('catsGrid');
@@ -1074,9 +1133,10 @@ function buildCards(counts) {
   grid.innerHTML = CATEGORIES.map(function (cat, i) {
     var cnt = counts[cat.slug] !== undefined ? counts[cat.slug] : null;
     var countLabel = cnt === null ? 'Loading…' : cnt > 0 ? cnt + ' available' : 'Check back soon';
+    var cardUrl = cat.url + pcLocationSuffix(); // TASK-3
 
     return (
-      '<a href="' + cat.url + '" class="cat-card" style="animation:slideUp 0.45s cubic-bezier(0.22,1,0.36,1) ' + (i * 0.06) + 's both;">' +
+      '<a href="' + cardUrl + '" class="cat-card" style="animation:slideUp 0.45s cubic-bezier(0.22,1,0.36,1) ' + (i * 0.06) + 's both;">' +
         '<div class="cat-img cat-img--' + cat.slug + '" id="catImg-' + cat.slug + '">' +
           '<img class="cat-photo" src="' + cat.img + '" alt="' + cat.label + '" ' +
                'onload="(function(el){el.closest(\'.cat-img\').classList.add(\'img-loaded\');})(this)" ' +
@@ -1096,6 +1156,7 @@ function buildCards(counts) {
 
 /* ─── Fetch pet counts from JSON files ───────────────── */
 /* Data source: /adoptions/pets/{category}/index.json     */
+var pcLastCounts = {}; // TASK-3 — kept so the location bar can re-render links without refetching
 (function loadCounts() {
   // Show skeletons removed → build cards first with null counts for instant render
   buildCards({});
@@ -1119,9 +1180,18 @@ function buildCards(counts) {
   ).then(function (results) {
     var counts = {};
     results.forEach(function (r) { counts[r.slug] = r.count; });
+    pcLastCounts = counts; // TASK-3
     buildCards(counts);
   });
 })();
+
+// TASK-3 START — Rebuild card links (not a refetch) whenever the location text changes
+(function () {
+  var input = document.getElementById('petsLocationInput');
+  if (!input) return;
+  input.addEventListener('input', function () { buildCards(pcLastCounts); });
+})();
+// TASK-3 END
 </script>
 <script src="/admin/chat-widget.js"></script>
 

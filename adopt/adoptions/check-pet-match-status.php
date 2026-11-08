@@ -53,22 +53,30 @@
 
 header('Content-Type: application/json');
 
-// TASK-7a: same lightweight per-IP rate limiting shape as the rest of this
-// project's public endpoints (see chat-start.php's chatCheckRateLimit
-// pattern) — prevents this from being hammered as an email-enumeration
-// probe. NOTE: the concrete wiring below assumes the same chat-config.php
-// helper Task 7b's design also builds on — if that file lives somewhere
-// this endpoint can't include, swap in an equivalent before deploying;
-// left as a clearly marked TODO rather than silently shipping without any
-// limiter.
-// TODO: confirm chat-config.php's require path once this file's final
-// deploy location is set, then uncomment:
-// require_once __DIR__ . '/chat-config.php';
-// if (!chatCheckRateLimit('petmatch_status_' . $_SERVER['REMOTE_ADDR'], 20, 600)) {
-//     http_response_code(429);
-//     echo json_encode(['matches' => [], 'message' => 'Too many requests, please try again shortly.']);
-//     exit;
-// }
+// TASK-7a: file-backed per-IP rate limiting prevents this public email
+// lookup from becoming an enumeration probe. It intentionally does not load
+// the chat MySQL configuration: this endpoint reads the JSON data store only.
+$limitDir = __DIR__ . '/pet-match-status-rate-limits';
+if (!is_dir($limitDir)) @mkdir($limitDir, 0750, true);
+$limitPath = $limitDir . '/' . hash('sha256', $_SERVER['REMOTE_ADDR'] ?? 'unknown') . '.json';
+$limitHandle = @fopen($limitPath, 'c+');
+if ($limitHandle === false) {
+    http_response_code(503);
+    echo json_encode(['matches' => []]);
+    exit;
+}
+flock($limitHandle, LOCK_EX);
+$limit = json_decode(stream_get_contents($limitHandle) ?: '', true);
+if (!is_array($limit) || (int)($limit['window_start'] ?? 0) < time() - 600) $limit = ['window_start' => time(), 'attempts' => 0];
+$limit['attempts']++;
+ftruncate($limitHandle, 0); rewind($limitHandle); fwrite($limitHandle, json_encode($limit)); fflush($limitHandle);
+$limitExceeded = $limit['attempts'] > 20;
+flock($limitHandle, LOCK_UN); fclose($limitHandle);
+if ($limitExceeded) {
+    http_response_code(429);
+    echo json_encode(['matches' => [], 'message' => 'Too many requests, please try again shortly.']);
+    exit;
+}
 
 $email = isset($_GET['email']) ? trim($_GET['email']) : '';
 
