@@ -89,6 +89,10 @@ Never:
 
 Keep the Git remote credential-free. Never inspect, copy, modify, or commit protected runtime content such as `.env`, `config.php`, `pet.json`, `applications/`, `uploads/`, `chat-media/`, or `logs/` unless the current project protocol explicitly authorizes a safe, controlled test and the coordinator confirms the boundary.
 
+### GitHub/Hostinger metadata is not a worker blocker
+
+Workers do not need GitHub webhook, Actions, environment, or Hostinger deployment metadata in order to complete or publish an assigned Git branch. If GitHub returns `403`, `404`, or an equivalent permission error for deployment/webhook metadata, record it as an access observation and continue. Do not try to obtain elevated access, do not change deployment settings, and do not wait for the coordinator to confirm whether a worker branch is excluded from Hostinger deployment. The worker may push only its assigned branch because the current policy forbids Hostinger deployment, upload, and automatic-deployment triggers for all workers. The coordinator will handle any production deployment gate separately.
+
 ## 5. Coordination and synchronization system
 
 Git does not expose another account's unsaved edits. A remote branch becomes visible to other accounts only after save, commit, and push. Do not promise or attempt unsafe live merging of uncommitted work.
