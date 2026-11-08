@@ -43,7 +43,7 @@ The repository currently contains the project summaries, assignment trackers, sy
 No account may push directly to `main`. The coordinator owns merges into the integration branch:
 
 ```text
-integration/project-audit
+integration/second-round-final-2026-11-06
 ```
 
 The current `main` branch must remain protected until the coordinator has reviewed and merged tested work.

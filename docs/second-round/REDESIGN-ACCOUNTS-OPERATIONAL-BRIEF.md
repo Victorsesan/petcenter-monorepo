@@ -20,7 +20,7 @@
 The coordinator merges accepted work into:
 
 ```text
-integration/project-audit
+integration/second-round-final-2026-11-06
 ```
 
 Neither redesign account may push directly to `main`.
