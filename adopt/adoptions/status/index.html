@@ -58,6 +58,9 @@ a { color: var(--orange); text-decoration: none; transition: color var(--transit
 a:hover { color: var(--navy); }
 h1, h2, h3, h4, h5, h6 { font-family: 'Cormorant Garamond', Georgia, serif; color: var(--navy); line-height: 1.25; }
 .pc-container { max-width: 1280px; margin-block: 0; margin-inline: auto; padding-block: 0; padding-inline: 24px; }
+/* TASK-status-3 START: Keep screen-reader field labels available without changing the compact visual form. */
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+/* TASK-status-3 END */
 
 /* ─── Global Header (identical to index.html) ─────────────────────────────── */
 .pc-header {
@@ -200,6 +203,12 @@ flex: 1; border: 1.5px solid #ece6dd; border-radius: 9px; padding-block: 12px; p
 }
 /* TASK-3 END */
 .dash-lookup-card input:focus { border-color: var(--orange); }
+/* TASK-status-3 START: Give keyboard users a high-contrast focus indicator on every lookup/carousel control. */
+.dash-lookup-card input:focus-visible,
+.dash-lookup-card button:focus-visible,
+.dash-pets-arrow:focus-visible,
+.dash-pets-dot:focus-visible { outline: 3px solid var(--navy); outline-offset: 2px; }
+/* TASK-status-3 END */
 .dash-lookup-card button {
   background: var(--orange); color: #fff; border: none; border-radius: 9px;
   padding-block: 12px; padding-inline: 24px; font-family: 'Sora', sans-serif; font-size: 13.5px; font-weight: 600;
@@ -247,8 +256,9 @@ flex: 1; border: 1.5px solid #ece6dd; border-radius: 9px; padding-block: 12px; p
   display: flex; align-items: center; justify-content: space-between;
   padding-block: 10px 4px; padding-inline: 0; margin-bottom: 4px;
 }
+/* TASK-status-3 START: Provide usable touch targets and reverse carousel controls in RTL layouts. */
 .dash-pets-arrow {
-  width: 30px; height: 30px; border-radius: 50%;
+  width: 44px; height: 44px; border-radius: 50%;
   background: #fff; border: 1.5px solid #e8e2da;
   color: var(--navy); cursor: pointer;
   display: flex; align-items: center; justify-content: center;
@@ -256,13 +266,18 @@ flex: 1; border: 1.5px solid #ece6dd; border-radius: 9px; padding-block: 12px; p
 }
 .dash-pets-arrow:hover { border-color: var(--orange); color: var(--orange); }
 .dash-pets-arrow:disabled { opacity: 0.3; cursor: not-allowed; }
-.dash-pets-dots { display: flex; gap: 6px; align-items: center; }
+.dash-pets-dots { display: flex; gap: 0; align-items: center; }
 .dash-pets-dot {
-  width: 7px; height: 7px; border-radius: 50%;
-  background: #e8e2da; cursor: pointer;
-  transition: background 0.2s, transform 0.2s;
+  width: 44px; height: 44px; flex: 0 0 44px; padding: 0; border: 0; border-radius: 50%;
+  background: transparent; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;
 }
-.dash-pets-dot.active { background: var(--orange); transform: scale(1.3); }
+.dash-pets-dot::before {
+  content: ''; width: 8px; height: 8px; border-radius: 50%;
+  background: #e8e2da; transition: background 0.2s, transform 0.2s;
+}
+.dash-pets-dot.active::before { background: var(--orange); transform: scale(1.3); }
+[dir="rtl"] .dash-pets-arrow svg { transform: scaleX(-1); }
+/* TASK-status-3 END */
 
 .dash-card__details { padding-block: 0 28px; padding-inline: 28px; }
 .dash-detail-grid {
@@ -388,26 +403,34 @@ flex: 1; border: 1.5px solid #ece6dd; border-radius: 9px; padding-block: 12px; p
 <section class="dash-hero">
   <span class="eyebrow">Adoption Status Dashboard</span>
   <h1>Check Your Application</h1>
-  <p>Enter your adoption code to see full details, payment options, and next steps for your application.</p>
+  <!-- TASK-status-3 START: Tell applicants that both identifiers are required before they reach the lookup form. -->
+  <p>Enter your adoption code and the last name on your application to see its status and next steps.</p>
+  <!-- TASK-status-3 END -->
 </section>
 
 <!-- LOOKUP CARD -->
 <div class="dash-lookup">
-  <div class="dash-lookup-card">
-    <input type="text" id="codeInput" placeholder="e.g. AD-47293-2026" maxlength="16" autocomplete="off" spellcheck="false">
+  <!-- TASK-status-3 START: Preserve the server-side code/last-name contract and keep the surname out of the URL. -->
+  <form id="statusLookupForm" class="dash-lookup-card" action="/adoptions/status/adoption-status-check.php" method="post" novalidate>
+    <label class="sr-only" for="codeInput">Adoption code</label>
+    <input type="text" id="codeInput" name="code" placeholder="e.g. AD-47293-2026" maxlength="16" autocomplete="off" spellcheck="false" required>
     <!-- TASK-3 START: never placed in the URL or sent to a static file. -->
-    <input type="text" id="lastNameInput" placeholder="Last name on application" maxlength="80" autocomplete="off" spellcheck="false">
+    <label class="sr-only" for="lastNameInput">Last name on application</label>
+    <input type="text" id="lastNameInput" name="last_name" placeholder="Last name on application" maxlength="80" autocomplete="family-name" spellcheck="false" required>
     <!-- TASK-3 END -->
-    <button id="lookupBtn" onclick="lookupStatus()">Check Status</button>
-  </div>
+    <button id="lookupBtn" type="submit">Check Status</button>
+  </form>
+  <!-- TASK-status-3 END -->
 </div>
 
 <!-- RESULT BODY -->
-<div class="dash-body" id="dashBody">
+<!-- TASK-status-3 START: Announce asynchronous lookup states and results to assistive technology. -->
+<div class="dash-body" id="dashBody" role="status" aria-live="polite" aria-atomic="true" aria-busy="false">
   <div class="dash-state">
-    <p>Enter your adoption code above to view your application status.</p>
+    <p>Enter your adoption code and the last name on the application to view its status.</p>
   </div>
 </div>
+<!-- TASK-status-3 END -->
 
 
 <footer class="pc-footer">
@@ -527,6 +550,22 @@ function escapeHtml(str) {
   });
 }
 
+// TASK-status-3 START: Allow only secure external checkout URLs or HTTP(S) links back to this origin.
+function safeCheckoutUrl(value) {
+  if (typeof value !== 'string' || !value.trim()) return '';
+  try {
+    var url = new URL(value.trim(), window.location.href);
+    if (url.username || url.password) return '';
+    if (url.protocol === 'https:' || (url.origin === window.location.origin && url.protocol === 'http:')) {
+      return url.href;
+    }
+  } catch (e) {
+    return '';
+  }
+  return '';
+}
+// TASK-status-3 END
+
 function fmtDate(s) {
   if (!s) return '\u2014';
   var d = new Date(s.replace(' ', 'T'));
@@ -550,8 +589,17 @@ function fmtApprovedDate(s) {
 }
 // TASK-10 END
 
-function showDashState(html) {
-  document.getElementById('dashBody').innerHTML = '<div class="dash-state">' + html + '</div>';
+// TASK-status-3 START: Render lookup feedback as text and preserve distinct, safe messages for validation, HTTP, and network errors.
+function showDashState(message, isError) {
+  var body = document.getElementById('dashBody');
+  body.setAttribute('aria-busy', 'false');
+  body.innerHTML = '';
+  var state = document.createElement('div');
+  state.className = 'dash-state' + (isError ? ' error' : '');
+  var text = document.createElement('p');
+  text.textContent = message;
+  state.appendChild(text);
+  body.appendChild(state);
 }
 
 function lookupStatus() {
@@ -559,13 +607,19 @@ function lookupStatus() {
   var lastNameInput = document.getElementById('lastNameInput');
   var code = input.value.trim().toUpperCase();
   var lastName = lastNameInput.value.trim();
-  if (!code && !lastName) return;
+  if (!code) {
+    showDashState('Please enter your adoption code.', true);
+    input.focus();
+    return;
+  }
   if (!code.match(/^AD-\d{5}-\d{4}$/)) {
-    showDashState('<p style="color:var(--error);">Please enter a valid adoption code (e.g.\u00a0AD-47293-2026).</p>');
+    showDashState('Please enter a valid adoption code (e.g. AD-47293-2026).', true);
+    input.focus();
     return;
   }
   if (!lastName) {
-    showDashState('<p style="color:var(--error);">Please enter the last name used on the application.</p>');
+    showDashState('Please enter the last name used on the application.', true);
+    lastNameInput.focus();
     return;
   }
   if (window.history && window.history.replaceState) {
@@ -576,7 +630,8 @@ function lookupStatus() {
   fetchAndRender(code, lastName);
 }
 function fetchAndRender(code, lastName) {
-  showDashState('<p>Checking status&hellip;</p>');
+  showDashState('Checking status…');
+  document.getElementById('dashBody').setAttribute('aria-busy', 'true');
   fetch('/adoptions/status/adoption-status-check.php', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -585,23 +640,34 @@ function fetchAndRender(code, lastName) {
   })
     .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, status: r.status, data: d }; }); })
     .then(function (result) {
+      document.getElementById('dashBody').setAttribute('aria-busy', 'false');
       if (result.ok && result.data && result.data.success) {
         renderDashboard(result.data, code);
       } else if (result.status === 429) {
-        showDashState('<p class="error" style="color:var(--error);">Too many lookups. Please wait a moment and try again.</p>');
+        showDashState('Too many lookups. Please wait a moment and try again.', true);
+      } else if (result.status >= 500) {
+        showDashState('The status service is temporarily unavailable. Please try again in a moment.', true);
       } else {
-        showDashState('<p class="error" style="color:var(--error);">No application found matching that code and last name. Please double-check both and try again.</p>');
+        showDashState('No application found matching that code and last name. Please double-check both and try again.', true);
       }
     })
     .catch(function () {
-      showDashState('<p class="error" style="color:var(--error);">Something went wrong checking your status. Please try again in a moment.</p>');
+      showDashState('Something went wrong checking your status. Please try again in a moment.', true);
     });
 }
+// TASK-status-3 END
 
 function renderDashboard(d, code) {
-  var status = (d.status || 'PENDING').toUpperCase();
+  // TASK-status-3 START: Never label an unknown or missing persisted status as Pending.
+  var status = typeof d.status === 'string' ? d.status.toUpperCase() : '';
+  if (['PENDING', 'APPROVED', 'REJECTED'].indexOf(status) === -1) {
+    showDashState('We could not read the application status. Please try again later or contact support.', true);
+    return;
+  }
+  // TASK-status-3 END
   var petImg = d.pet_image_url || '/assets/images/pet-placeholder.jpg';
   var body = document.getElementById('dashBody');
+  body.setAttribute('aria-busy', 'false');
 
   var html = '<div class="dash-card"><div class="dash-card__top">';
 
@@ -614,6 +680,7 @@ function renderDashboard(d, code) {
     html += '<span class="dash-badge dash-badge--pending">Pending</span>';
   }
 
+  // TASK-status-3 START: Keep generated pet-carousel controls labelled and touch-operable for multi-pet application results.
   // Primary pet slide — always slide 0
   html += '<div class="dash-pets-outer" id="dashPetsOuter">' +
             '<div class="dash-pets-track" id="dashPetsTrack">' +
@@ -628,14 +695,15 @@ function renderDashboard(d, code) {
           '</div>' +
           // Nav placeholder — shown by JS only if multiple pets
           '<div class="dash-pets-nav" id="dashPetsNav" style="display:none;">' +
-            '<button class="dash-pets-arrow" id="dashPetsPrev" disabled>' +
-              '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>' +
+            '<button type="button" class="dash-pets-arrow" id="dashPetsPrev" aria-label="Previous pet" aria-controls="dashPetsTrack" disabled>' +
+              '<svg aria-hidden="true" focusable="false" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>' +
             '</button>' +
             '<div class="dash-pets-dots" id="dashPetsDots"></div>' +
-            '<button class="dash-pets-arrow" id="dashPetsNext">' +
-              '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>' +
+            '<button type="button" class="dash-pets-arrow" id="dashPetsNext" aria-label="Next pet" aria-controls="dashPetsTrack">' +
+              '<svg aria-hidden="true" focusable="false" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>' +
             '</button>' +
           '</div>';
+  // TASK-status-3 END
 
   html += '<div class="dash-meta-row">' +
             '<div class="item"><div class="label">Adoption Code</div><div class="value">' + escapeHtml(code) + '</div></div>' +
@@ -647,7 +715,9 @@ function renderDashboard(d, code) {
   // Detail grid
   html += '<div class="dash-card__details"><div class="dash-detail-grid">';
   html += detailItem('Applied On', fmtDate(d.applied_at));
-  html += '<div class="dash-detail-item" id="dashFeeItem"><div class="label">Adoption Fee</div><div class="value" id="dashFeeValue" style="transition:opacity 0.35s ease;">' + (d.adoption_fee ? '$' + d.adoption_fee : '\u2014') + '</div></div>';
+  // TASK-status-3 START: Escape record-sourced fee text before concatenating it into the result HTML.
+  html += '<div class="dash-detail-item" id="dashFeeItem"><div class="label">Adoption Fee</div><div class="value" id="dashFeeValue" style="transition:opacity 0.35s ease;">' + (d.adoption_fee ? '$' + escapeHtml(d.adoption_fee) : '\u2014') + '</div></div>';
+  // TASK-status-3 END
   html += detailItem('Email', d.applicant_email || '\u2014');
   html += detailItem('Phone', d.applicant_phone || '\u2014');
   // TASK-10 START: "Approved By" (name + position, position in small font under the name)
@@ -659,15 +729,19 @@ function renderDashboard(d, code) {
       escapeHtml(d.approved_by || '\u2014') +
       (d.approved_position ? '<div style="font-size:12px;font-weight:400;color:var(--muted);margin-top:2px;">' + escapeHtml(d.approved_position) + '</div>' : '') +
       '</div></div>';
+    // TASK-status-3 START: Escape malformed stored timestamps before rendering them as HTML.
     html += '<div class="dash-detail-item"><div class="label">Approved On</div><div class="value" style="font-family:\'Bitter\',serif;">' +
-      fmtApprovedDate(d.approved_at) + '</div></div>';
+      escapeHtml(fmtApprovedDate(d.approved_at)) + '</div></div>';
+    // TASK-status-3 END
   }
   // TASK-10 END
   html += '</div></div>';
 
   // Status-specific messaging
   if (status === 'PENDING') {
-    html += '<div class="dash-card__msg"><p>Your application is under review. Our adoption team carefully reviews every application — check back in 1&#8211;2 hours for an update. You\'ll also receive an email as soon as your status changes.</p></div>';
+    // TASK-status-3 START: Do not promise email updates until a working status-change sender exists.
+    html += '<div class="dash-card__msg"><p>Your application is under review. Our adoption team carefully reviews every application — check back in 1&#8211;2 hours for an update.</p></div>';
+    // TASK-status-3 END
   } else if (status === 'REJECTED') {
     html += '<div class="dash-card__msg"><p><strong>Application not approved.</strong></p>' +
             '<p style="margin-top:8px;">' + (d.rejection_notes ? escapeHtml(d.rejection_notes) : 'No additional reason was provided.') + '</p></div>';
@@ -686,12 +760,15 @@ function renderDashboard(d, code) {
       '<p class="tip"><em>Tip: Always check your inbox/spam folder for email updates from us to stay up to date.</em></p>' +
     '</div>';
 
-    if (d.checkout_url) {
-      html += '<a href="' + escapeHtml(d.checkout_url) + '" class="dash-checkout-btn">' +
+    // TASK-status-3 START: Never activate an unsafe record-sourced URL such as javascript: or data:.
+    var checkoutUrl = safeCheckoutUrl(d.checkout_url);
+    if (checkoutUrl) {
+      html += '<a href="' + escapeHtml(checkoutUrl) + '" class="dash-checkout-btn">' +
         'Proceed to Checkout ' +
         '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>' +
       '</a>';
     }
+    // TASK-status-3 END
   }
 
   html += '</div>'; // .dash-card
@@ -708,28 +785,34 @@ function renderDashboard(d, code) {
     var nextBtn = document.getElementById('dashPetsNext');
     var current = 0;
     var total   = 1 + additionalIds.length; // primary + additional
+    var feeTransitionTimer = null;
 
     // TASK-2 START — Livestocks & Aquariums added (LVS/AQU), consistent with adoption-application.html's categoryMap
     var catMap = { 'DOG': 'dogs', 'CAT': 'cats', 'BIRD': 'birds', 'REP': 'reptiles', 'SM': 'small-mammals', 'LVS': 'livestocks', 'AQU': 'aquariums' };
     // TASK-2 END
 
+    // TASK-status-3 START: Keep RTL slide movement, active-dot state, and fee transitions synchronized to the selected pet.
     function goTo(idx) {
       current = idx;
-      track.style.transform = 'translateX(-' + (idx * 100) + '%)';
+      var isRtl = getComputedStyle(track).direction === 'rtl';
+      track.style.transform = 'translateX(' + ((isRtl ? idx : -idx) * 100) + '%)';
       prevBtn.disabled = idx === 0;
       nextBtn.disabled = idx === total - 1;
       dotsEl.querySelectorAll('.dash-pets-dot').forEach(function(dot, i) {
         dot.classList.toggle('active', i === idx);
+        dot.setAttribute('aria-current', String(i === idx));
       });
       // Fade adoption fee to current pet's fee
       var feeEl = document.getElementById('dashFeeValue');
       if (feeEl) {
         var slide = track.querySelectorAll('.dash-pets-slide')[idx];
         var fee = slide ? (slide.dataset.fee || '\u2014') : '\u2014';
+        if (feeTransitionTimer !== null) clearTimeout(feeTransitionTimer);
         feeEl.style.opacity = '0';
-        setTimeout(function() {
+        feeTransitionTimer = setTimeout(function() {
           feeEl.textContent = fee;
           feeEl.style.opacity = '1';
+          feeTransitionTimer = null;
         }, 350);
       }
     }
@@ -737,12 +820,17 @@ function renderDashboard(d, code) {
     function buildDots() {
       dotsEl.innerHTML = '';
       for (var i = 0; i < total; i++) {
-        var dot = document.createElement('span');
+        var dot = document.createElement('button');
+        dot.type = 'button';
         dot.className = 'dash-pets-dot' + (i === 0 ? ' active' : '');
+        dot.setAttribute('aria-label', 'Show pet ' + (i + 1));
+        dot.setAttribute('aria-controls', 'dashPetsTrack');
+        dot.setAttribute('aria-current', String(i === 0));
         (function(idx) { dot.addEventListener('click', function() { goTo(idx); }); })(i);
         dotsEl.appendChild(dot);
       }
     }
+    // TASK-status-3 END
 
     function buildSlide(name, breed, age, imgUrl) {
       var slide = document.createElement('div');
@@ -813,6 +901,7 @@ function detailItem(label, value) {
 }
 
 // ─── Auto-lookup from ?code= URL param on page load ────────────────────────
+// TASK-status-3 START: Prefill only the non-sensitive adoption code and submit both identifiers through the POST form.
 (function () {
   var params = new URLSearchParams(window.location.search);
   var code = params.get('code');
@@ -820,20 +909,19 @@ function detailItem(label, value) {
     code = code.trim().toUpperCase();
     document.getElementById('codeInput').value = code;
     if (code.match(/^AD-\d{5}-\d{4}$/)) {
-      showDashState('<p>Enter the last name on the application above to view this status.</p>');
+      showDashState('Enter the last name on the application above to view this status.');
       var lastNameInput = document.getElementById('lastNameInput');
       if (lastNameInput) lastNameInput.focus();
     } else {
-      showDashState('<p style="color:var(--error);">Invalid adoption code in URL.</p>');
+      showDashState('Invalid adoption code in URL.', true);
     }
   }
-  document.getElementById('codeInput').addEventListener('keydown', function (e) {
-    if (e.key === 'Enter') lookupStatus();
-  });
-  document.getElementById('lastNameInput').addEventListener('keydown', function (e) {
-    if (e.key === 'Enter') lookupStatus();
+  document.getElementById('statusLookupForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    lookupStatus();
   });
 })();
+// TASK-status-3 END
 </script>
 <script src="/admin/chat-widget.js"></script>
 
