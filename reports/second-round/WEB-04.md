@@ -8,7 +8,7 @@
 
 ## Assignment
 
-Implemented the current WEB-04 scope: a usable sign-in/sign-up gateway, server-side Google OpenID Connect flow, server-authoritative accounts and roles, protected visitor/merchant routes, private adopter-profile persistence, session and CSRF safeguards, and consistent authorization for Rehoming mutations. Existing routes and API payload/response shapes were preserved where modified. No Hostinger deployment, upload, configuration change, production request, or deployment trigger was performed.
+Implemented the current WEB-04 scope: a usable sign-in/sign-up gateway, server-side Google OpenID Connect flow, server-authoritative accounts and roles, protected visitor/merchant routes, private adopter-profile persistence, session and CSRF safeguards, and consistent authorization for Rehoming mutations. Existing routes and API payload/response shapes were preserved where modified. No manual Hostinger deployment, upload, configuration change, production request, or Hostinger-specific deployment-trigger action was performed. The authorized GitHub push was limited to `qa/rehoming-auth-backend`; GitHub deployment-metadata access returned HTTP 403, so remote Hostinger integration settings could not be inspected.
 
 ## Starting repository state
 
@@ -126,5 +126,5 @@ Before any future production publication, create and verify **both** (a) a repos
 - **Synchronized starting base:** `a50c06109dd82a7bdadc8aa8b0e6d9bfdea8061b`
 - **Backend/security implementation:** `b8557b3edf61b4f2fb6b312483970c23f34cb60e`
 - **Gateway/route implementation (ending code commit):** `6e287c4fe4267a10febdf89eec2d75886a6a9c87`
-- The report-only commit follows these code commits; the final branch tip is recorded in the delivery message and Git history.
-- **No force-push, main push, Hostinger deployment, upload, or deployment trigger was performed.**
+- The report is published on the same assigned branch; the final branch tip after this clarification is recorded in the delivery message and Git history.
+- **Publication:** The assigned GitHub branch was pushed normally (non-force). No push to `main` and no manual Hostinger deployment/upload/configuration/trigger action occurred. Deployment metadata remained inaccessible (HTTP 403); no tracked `.github/workflows` files were found.
