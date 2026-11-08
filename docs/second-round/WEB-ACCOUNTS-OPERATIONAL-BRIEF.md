@@ -99,7 +99,7 @@ Use this safe near-real-time system:
 2. Each account commits small logical units and pushes completed units promptly.
 3. GitHub branch and pull-request notifications are enabled for all accounts and the coordinator.
 4. A coordinator or approved lightweight monitor records each push: account, branch, commit, changed files, tests, and conflict status.
-5. The coordinator merges accepted commits into `integration/project-audit`.
+5. The coordinator merges accepted commits into `integration/second-round-final-2026-11-06`.
 6. A stable staging service is refreshed only from accepted integration commits.
 7. Every account fetches before beginning a new work unit and immediately before committing.
 8. No tool may silently pull or overwrite files in an account's active worktree.
@@ -125,7 +125,7 @@ git status --short --branch
 
 Do not force-push. Do not reset away another account's changes. Do not use `git add .` or `git add -A`; stage explicit paths only.
 
-The coordinator may require a rebase or merge from the latest `integration/project-audit` before accepting a branch. If reconciliation affects a protected or shared file, report the conflict rather than silently choosing a side.
+The coordinator may require a rebase or merge from the latest `integration/second-round-final-2026-11-06` before accepting a branch. If reconciliation affects a protected or shared file, report the conflict rather than silently choosing a side.
 
 ## 6. General execution rules
 

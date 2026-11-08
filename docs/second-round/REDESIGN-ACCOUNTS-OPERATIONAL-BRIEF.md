@@ -78,7 +78,7 @@ Git cannot show unsaved changes from another account. Real-time uncommitted coll
 6. Do not automatically pull over an active worktree.
 7. Do not overwrite another account's changes.
 8. Notify the coordinator before changing a shared file or contract.
-9. Reconcile deliberately with the latest `integration/project-audit` before handoff.
+9. Reconcile deliberately with the latest `integration/second-round-final-2026-11-06` before handoff.
 10. The coordinator owns integration merges and staging refreshes.
 
 Before starting:
