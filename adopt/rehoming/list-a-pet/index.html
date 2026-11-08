@@ -4,12 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Post a pet | Pet Center</title>
+  <link rel="stylesheet" href="/assets/css/design02-accounts.css">
   <style>body{font-family:system-ui,sans-serif;background:#f8f5ef;color:#10214b;margin:0;padding:32px}.card{max-width:760px;margin:auto;background:#fff;padding:28px;border-radius:16px;box-shadow:0 8px 30px #10214b18}label{display:block;font-weight:600;margin-top:14px}input,textarea,select{width:100%;box-sizing:border-box;padding:11px;margin-top:6px;border:1px solid #d8cfbf;border-radius:8px;font:inherit}button{margin-top:22px;padding:12px 18px;border:0;border-radius:8px;background:#ed7624;color:#fff;font-weight:700;cursor:pointer}.error{color:#a52626}.success{color:#0d7c4a}</style>
 </head>
-<body>
+<body class="design02-shell design02-post-form">
 <!-- TASK-MANUS-05 START — Minimal deployable A1 merchant posting form. The page is intentionally
      server-backed through merchant-publish-listing.php and does not pretend to replace account auth. -->
 <main class="card">
+  <span class="design02-eyebrow">Merchant workspace</span>
   <h1>Post a pet for rehoming</h1><p>Share accurate information so potential adopters can make an informed decision.</p>
   <form id="listingForm">
     <label>Name<input name="name" required maxlength="120"></label>
