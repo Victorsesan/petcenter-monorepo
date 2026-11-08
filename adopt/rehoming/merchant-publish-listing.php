@@ -3,7 +3,10 @@
 declare(strict_types=1);
 require_once __DIR__ . '/merchant-platform-lib.php';
 if($_SERVER['REQUEST_METHOD']!=='POST') rh_json_response(['success'=>false,'error'=>'POST required'],405);
-$account=rh_require_role('merchant'); $input=rh_input();
+/** TASK-WEB-04 START — Listing creation is a verified-merchant, CSRF-protected operation. */
+rh_require_csrf();
+$account=rh_require_verified_merchant(); $input=rh_input();
+/** TASK-WEB-04 END */
 $required=['name','category','breed','health_status','temperament','reason_for_rehoming']; foreach($required as $field) if(rh_clean_text($input[$field]??'')==='') rh_json_response(['success'=>false,'error'=>$field.' is required'],422);
 $category=rh_clean_id($input['category']??''); if(!in_array($category,['dogs','cats','birds','reptiles','small-mammals','livestocks','aquariums'],true)) rh_json_response(['success'=>false,'error'=>'Invalid category'],422);
 $spay=$input['spay_neuter_status']??'unknown'; $type=$input['listing_type']??'permanent'; $currency=$input['currency_code']??'USD';

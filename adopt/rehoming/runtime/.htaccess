@@ -1,3 +1,11 @@
 # TASK-MANUS-05 START — JSON runtime records are API-owned, never static downloads.
-Deny from all
+# TASK-WEB-04 START — Private account/session data must not be served as static files.
+<IfModule mod_authz_core.c>
+    Require all denied
+</IfModule>
+<IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+</IfModule>
+# TASK-WEB-04 END
 # TASK-MANUS-05 END

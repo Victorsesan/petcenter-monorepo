@@ -23,6 +23,12 @@
  * as-is, it just lives inside that same new folder rather than at site root.
  */
 
+/** TASK-WEB-04 START — The pre-account upload remains public but every submission is CSRF-protected. */
+require_once __DIR__ . '/../rehoming/web04-auth-core.php';
+web04_session_start();
+web04_security_headers();
+/** TASK-WEB-04 END */
+
 // contact-config.php lives at /contact-us/contact-config.php (confirmed from
 // ADMIN_DASHBOARD_PROJECT_SUMMARY.md's documented file tree — admin/,
 // contact-us/, adoptions/ etc. are all root-level siblings). This file sits
@@ -44,7 +50,14 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 header('Access-Control-Allow-Origin: https://adopt.petcenterco.com');
 header('Access-Control-Allow-Methods: POST');
-header('Access-Control-Allow-Headers: Content-Type');
+header('Access-Control-Allow-Headers: Content-Type, X-CSRF-Token');
+/** TASK-WEB-04 START — Require the session-bound token and canonical same-origin request. */
+if (!web04_csrf_valid(true)) {
+    http_response_code(403);
+    echo json_encode(['success' => false, 'message' => 'Request verification failed. Refresh and try again.']);
+    exit;
+}
+/** TASK-WEB-04 END */
 
 // ============================================
 // TEMP STORAGE — separate from contact-config.php's own UPLOAD_TEMP_DIR
@@ -52,8 +65,11 @@ header('Access-Control-Allow-Headers: Content-Type');
 // scoped to verification only, and is fully cleaned up every request)
 // ============================================
 define('VERIFY_TEMP_DIR', __DIR__ . '/uploads/verification-temp/');
-if (!is_dir(VERIFY_TEMP_DIR)) {
-    @mkdir(VERIFY_TEMP_DIR, 0755, true);
+try { verifyEnsurePrivateDirectory(VERIFY_TEMP_DIR); }
+catch (Throwable $error) {
+    http_response_code(503);
+    echo json_encode(['success' => false, 'message' => 'Verification uploads are temporarily unavailable.']);
+    exit;
 }
 // Matches the site's established pattern for a staged-upload folder sitting
 // inside a public webroot (see ADMIN_DASHBOARD_PROJECT_SUMMARY.md's
@@ -63,7 +79,7 @@ if (!is_dir(VERIFY_TEMP_DIR)) {
 // is blocked at the web server level"). Copied verbatim per Rule 7 rather
 // than inventing a different protection scheme. Doubly important here since
 // this folder briefly holds a liveness video + ID photos before deletion.
-verifyEnsureHtaccessDeny(VERIFY_TEMP_DIR);
+// Private directory permissions and the modern/legacy server rule are checked before accepting media.
 
 /**
  * TASK-B1 (integration fix, B2 reconciliation — flagged as an interpretive
@@ -73,30 +89,54 @@ verifyEnsureHtaccessDeny(VERIFY_TEMP_DIR);
  * sensitive biometric material — and those are still deleted unconditionally
  * below, exactly as before. But B2's admin review queue needs *something*
  * durable to read, or "nothing stored, full stop" makes a queue impossible
- * by construction. This directory holds ONLY a small non-sensitive text
- * record per submission (username, email, country, timestamp, status) —
- * never the video or ID images themselves. This interpretation should be
+ * by construction. This directory holds ONLY a small text record per
+ * submission (username, email, country, timestamp, status, and email result);
+ * these fields are personal data and the directory is restricted. The video
+ * and ID images themselves are never stored in the queue. This interpretation should be
  * confirmed with the CEO/VDM; until then, treat this as the working
  * assumption both B1 and B2 are integrating against.
  */
 define('VERIFY_QUEUE_DIR', __DIR__ . '/uploads/verification-queue/');
-if (!is_dir(VERIFY_QUEUE_DIR)) {
-    @mkdir(VERIFY_QUEUE_DIR, 0755, true);
+try { verifyEnsurePrivateDirectory(VERIFY_QUEUE_DIR); }
+catch (Throwable $error) {
+    http_response_code(503);
+    echo json_encode(['success' => false, 'message' => 'Verification uploads are temporarily unavailable.']);
+    exit;
 }
 // Same .htaccess protection as VERIFY_TEMP_DIR above — this directory holds
 // a username/email/country per pending request, which is still PII a direct
 // browser request to a guessed filename should never be able to read.
-verifyEnsureHtaccessDeny(VERIFY_QUEUE_DIR);
 
 /**
- * Writes a `Deny from all` .htaccess into $dir if one isn't already there.
- * Shared by both of this file's upload-adjacent directories above.
+ * Prepares owner-only verification storage and a deny-all web-server rule;
+ * failure blocks the upload instead of falling back to public storage.
  */
-function verifyEnsureHtaccessDeny($dir) {
-    $htaccessPath = $dir . '.htaccess';
-    if (!file_exists($htaccessPath)) {
-        @file_put_contents($htaccessPath, "Deny from all\n");
+function verifyEnsurePrivateDirectory(string $dir): void {
+    $dir = rtrim($dir, DIRECTORY_SEPARATOR);
+    if ($dir === '' || is_link($dir) || (!is_dir($dir) && !@mkdir($dir, 0700, true) && !is_dir($dir)) || !is_writable($dir)) {
+        throw new RuntimeException('Private verification storage is unavailable');
     }
+    if (!@chmod($dir, 0700)) throw new RuntimeException('Private verification storage permissions could not be set');
+    verifyEnsureHtaccessDeny($dir);
+}
+
+function verifyEnsureHtaccessDeny(string $dir): void {
+    $htaccessPath = rtrim($dir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . '.htaccess';
+    $rules = "<IfModule mod_authz_core.c>\n    Require all denied\n</IfModule>\n<IfModule !mod_authz_core.c>\n    Order allow,deny\n    Deny from all\n</IfModule>\n";
+    if (is_link($htaccessPath)) throw new RuntimeException('Verification storage access rules are unsafe');
+    $current = is_file($htaccessPath) ? file_get_contents($htaccessPath) : '';
+    if ($current === false) throw new RuntimeException('Verification storage access rules cannot be read');
+    if ($current !== $rules) {
+        $tmp = $htaccessPath . '.' . bin2hex(random_bytes(8)) . '.tmp';
+        $previousMask = umask(0077);
+        try { $written = file_put_contents($tmp, $rules, LOCK_EX); }
+        finally { umask($previousMask); }
+        if ($written === false || !@chmod($tmp, 0640) || !@rename($tmp, $htaccessPath)) {
+            @unlink($tmp);
+            throw new RuntimeException('Verification storage access rules could not be installed');
+        }
+    }
+    if (!@chmod($htaccessPath, 0640)) throw new RuntimeException('Verification storage access rules could not be secured');
 }
 
 /**
@@ -115,16 +155,19 @@ function verifyCleanupTempFiles($paths) {
 // ============================================
 // VALIDATE REQUIRED FIELDS
 // ============================================
-$username = trim(htmlspecialchars($_POST['username'] ?? '', ENT_QUOTES, 'UTF-8'));
-$country = trim(htmlspecialchars($_POST['country'] ?? '', ENT_QUOTES, 'UTF-8'));
+$usernameInput = $_POST['username'] ?? null;
+$countryInput = $_POST['country'] ?? null;
+$emailInput = $_POST['email'] ?? null;
+$username = is_string($usernameInput) ? trim($usernameInput) : '';
+$country = is_string($countryInput) ? trim($countryInput) : '';
 // TASK-B1 (integration fix): merchant email, added so B2's review queue has
 // a way to correspond about approval/rejection — not in the original spec.
-$email = trim(htmlspecialchars($_POST['email'] ?? '', ENT_QUOTES, 'UTF-8'));
+$email = is_string($emailInput) ? trim($emailInput) : '';
 
 $errors = [];
-if ($username === '') $errors[] = 'Missing: username';
-if ($country === '') $errors[] = 'Missing: country';
-if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) $errors[] = 'Missing or invalid: email';
+if ($username === '' || web04_text_length($username) > 120 || preg_match('//u', $username) !== 1 || preg_match('/[\x00-\x1f\x7f]/', $username)) $errors[] = 'Missing or invalid: username';
+if ($country === '' || web04_text_length($country) > 100 || preg_match('//u', $country) !== 1 || preg_match('/[\x00-\x1f\x7f]/', $country)) $errors[] = 'Missing or invalid: country';
+if ($email === '' || strlen($email) > 254 || preg_match('/[\x00-\x20\x7f]/', $email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) $errors[] = 'Missing or invalid: email';
 if (empty($_FILES['video']) || $_FILES['video']['error'] !== UPLOAD_ERR_OK) $errors[] = 'Missing or invalid: liveness video';
 if (empty($_FILES['id_front']) || $_FILES['id_front']['error'] !== UPLOAD_ERR_OK) $errors[] = 'Missing or invalid: front of ID';
 if (empty($_FILES['id_back']) || $_FILES['id_back']['error'] !== UPLOAD_ERR_OK) $errors[] = 'Missing or invalid: back of ID';
@@ -134,6 +177,18 @@ if (!empty($errors)) {
     echo json_encode(['success' => false, 'message' => implode('; ', $errors)]);
     exit;
 }
+$htmlUsername = htmlspecialchars($username, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+$htmlEmail = htmlspecialchars($email, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+$htmlCountry = htmlspecialchars($country, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+
+/** TASK-WEB-04 START — Limit repeat biometric/document submissions by account email and source IP. */
+if (!web04_rate_limit('merchant-verification-upload-ip', '', 10, 900)
+    || !web04_rate_limit('merchant-verification-upload', $email, 3, 900)) {
+    http_response_code(429);
+    echo json_encode(['success' => false, 'message' => 'Too many verification submissions. Please try again later.']);
+    exit;
+}
+/** TASK-WEB-04 END */
 
 // ============================================
 // VALIDATE FILE TYPES / SIZES
@@ -223,11 +278,11 @@ $emailHTML = <<<HTML
         <div class="content">
             <div class="field">
                 <span class="label">Merchant Username</span>
-                <span class="value">{$username}</span>
+                <span class="value">{$htmlUsername}</span>
             </div>
             <div class="field">
                 <span class="label">Merchant Email</span>
-                <span class="value">{$email}</span>
+                <span class="value">{$htmlEmail}</span>
             </div>
             <div class="field">
                 <span class="label">Submission Timestamp</span>
@@ -235,7 +290,7 @@ $emailHTML = <<<HTML
             </div>
             <div class="field">
                 <span class="label">Stated Country</span>
-                <span class="value">{$country}</span>
+                <span class="value">{$htmlCountry}</span>
             </div>
             <div class="field">
                 <span class="label">Attachments</span>
@@ -261,7 +316,9 @@ $attachments = [
 // that constant receives mail sent to it; do not hand-pick a subset)
 // ============================================
 $subject = "Verification Request — {$username} — {$submittedAt}";
-$result = sendContactEmail(CONTACT_ADMIN_EMAILS, $subject, $emailHTML, $attachments);
+try { $result = sendContactEmail(CONTACT_ADMIN_EMAILS, $subject, $emailHTML, $attachments); }
+catch (Throwable $error) { $result = ['success' => false, 'message' => 'Email delivery failed']; }
+if (!is_array($result) || !is_bool($result['success'] ?? null)) $result = ['success' => false, 'message' => 'Email delivery failed'];
 
 // ============================================
 // QUEUE RECORD (TASK-B1, integration fix for B2) — a small non-sensitive
@@ -286,7 +343,10 @@ $queueFile = VERIFY_QUEUE_DIR . "{$timestamp}_{$safeUsername}.json";
 // ADMIN_DASHBOARD_PROJECT_SUMMARY.md's chat-bot-profile.json: "full-replace
 // on every save, LOCK_EX protected"). One file per submission here means
 // concurrent writes to the SAME file are unlikely, but costs nothing to match.
-@file_put_contents($queueFile, json_encode($queueRecord, JSON_PRETTY_PRINT), LOCK_EX);
+$queueJson = json_encode($queueRecord, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_SUBSTITUTE);
+if ($queueJson === false || file_put_contents($queueFile, $queueJson, LOCK_EX) === false) {
+    error_log('Verification review-queue record could not be written.');
+}
 
 // ============================================
 // CLEANUP — always, regardless of outcome. This is the privacy-compliance-
@@ -297,11 +357,11 @@ $queueFile = VERIFY_QUEUE_DIR . "{$timestamp}_{$safeUsername}.json";
 verifyCleanupTempFiles($tempPaths);
 
 if (!$result['success']) {
-    error_log('Verification email error: ' . $result['message']);
+    error_log('Verification email delivery failed.');
     http_response_code(500);
     echo json_encode([
         'success' => false,
-        'message' => 'Failed to submit verification: ' . $result['message']
+        'message' => 'We could not submit your verification just now. Please try again later or contact Pet Center support.'
     ]);
     exit;
 }

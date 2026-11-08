@@ -2,3 +2,14 @@ config.php
 **/config.php
 **/pet.json
 **/applications/
+# TASK-WEB-04 START — Never commit private Rehoming or staging test-account runtime records.
+/adopt/rehoming/runtime/*.json
+/adopt/rehoming/runtime/*.tmp
+/adopt/rehoming/runtime/*.lock
+/adopt/rehoming/runtime/.*.lock
+/adopt/admin/test-accounts-data/*.json
+/adopt/admin/test-accounts-data/*.tmp
+/adopt/admin/test-accounts-data/.*.lock
+/adopt/verify/uploads/verification-temp/
+/adopt/verify/uploads/verification-queue/
+# TASK-WEB-04 END
