@@ -761,8 +761,11 @@
 
 /* TASK-web12-3 END */
 </style>
+<!-- DESIGN-01 START: shared public design layer -->
+<link rel="stylesheet" href="/assets/css/public-redesign.css">
+<!-- DESIGN-01 END: shared public design layer -->
 </head>
-<body>
+<body class="pc-public-page pc-public-testimonials">
 <!-- BUGFIX-MANUS-09-3-START: use the site-root widget path so nested pages do not resolve it relatively. -->
 <script src="/admin/chat-widget.js"></script>
 <!-- BUGFIX-MANUS-09-3-END -->
@@ -2357,5 +2360,8 @@ function showMsg(type, text) {
   setTimeout(function(){ el.className = 'pc-form-msg'; }, 6000);
 }
 </script>
+<!-- DESIGN-01 START: shared public navigation enhancement -->
+<script src="/assets/js/public-chrome.js"></script>
+<!-- DESIGN-01 END: shared public navigation enhancement -->
 </body>
 </html>

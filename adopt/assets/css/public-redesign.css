@@ -1,0 +1,478 @@
+/* DESIGN-01 START: shared public adoption design system
+   Token and component layer. Page-specific CSS remains in place below this shared layer. */
+:root {
+  --pc-brand-navy: #10214b;
+  --pc-brand-navy-soft: #1a2f5c;
+  --pc-brand-orange: #ed7624;
+  --pc-brand-orange-hover: #d4621a;
+  --pc-action-orange: #b44b08;
+  --pc-action-orange-hover: #923900;
+  --pc-brand-gold: #d7bd88;
+  --pc-brand-gold-hover: #b89968;
+  --pc-neutral-warm: #d0c3ba;
+  --pc-neutral-cream: #ebe7e1;
+  --pc-page-bg: #f9f7f4;
+  --pc-surface: #ffffff;
+  --pc-text: #2c2416;
+  --pc-muted: #7a6d5f;
+  --pc-border: rgba(16, 33, 75, 0.14);
+  --pc-success: #10b981;
+  --pc-error: #ef4444;
+  --pc-warning: #f59e0b;
+  --pc-info: #3b82f6;
+  --pc-form-milk: #fff3e6;
+  --pc-form-plum: #381932;
+  --pc-font-display: "Cormorant Garamond", Bitter, Georgia, serif;
+  --pc-font-body: Sora, "DM Sans", Arial, sans-serif;
+  --pc-font-numeric: Bitter, Georgia, serif;
+  --pc-space-1: 4px;
+  --pc-space-2: 8px;
+  --pc-space-3: 12px;
+  --pc-space-4: 16px;
+  --pc-space-5: 24px;
+  --pc-space-6: 32px;
+  --pc-space-7: 48px;
+  --pc-space-8: 64px;
+  --pc-radius-sm: 8px;
+  --pc-radius-card: 12px;
+  --pc-radius-panel: 18px;
+  --pc-shadow-soft: 0 8px 28px rgba(16, 33, 75, 0.08);
+  --pc-shadow-raised: 0 16px 40px rgba(16, 33, 75, 0.14);
+  --pc-content-width: 1200px;
+  --pc-form-width: 820px;
+  --pc-motion-fast: 160ms;
+  --pc-motion-standard: 240ms;
+}
+
+/* DESIGN-01 — shared public page base and typography fallbacks. */
+body.pc-public-page {
+  color: var(--pc-text);
+  font-family: var(--pc-font-body);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+body.pc-public-page :is(h1, h2, h3, h4) {
+  font-family: var(--pc-font-display);
+  line-height: 1.15;
+  text-wrap: balance;
+}
+body.pc-public-page :is(button, input, select, textarea) {
+  font: inherit;
+}
+body.pc-public-page img {
+  max-inline-size: 100%;
+}
+body.pc-public-page :is(.pc-number, [data-pc-number], .pc-pet-card__fee, .pc-biz-score, .pc-biz-count, .pc-match-ring__count) {
+  font-family: var(--pc-font-numeric);
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+/* DESIGN-01 — reliable keyboard focus and predictable interaction states. */
+body.pc-public-page :is(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 3px solid var(--pc-brand-gold-hover);
+  outline-offset: 3px;
+}
+body.pc-public-page :is(button, .pc-btn, .pc-hero__btn-primary, .pc-pet-card__btn, .pc-submit-btn) {
+  min-block-size: 44px;
+  transition-duration: var(--pc-motion-standard);
+}
+body.pc-public-page :is(button, .pc-btn, .pc-hero__btn-primary, .pc-pet-card__btn, .pc-submit-btn):disabled,
+body.pc-public-page :is(button, .pc-btn, .pc-hero__btn-primary, .pc-pet-card__btn, .pc-submit-btn)[aria-disabled="true"] {
+  cursor: not-allowed;
+  opacity: 0.58;
+  transform: none;
+}
+body.pc-public-page :is(input, select, textarea) {
+  accent-color: var(--pc-brand-navy);
+}
+body.pc-public-page ::selection {
+  color: var(--pc-brand-navy);
+  background: rgba(215, 189, 136, 0.42);
+}
+
+/* DESIGN-01 — shared fixed navigation shell, keyboard dropdown, and mobile menu. */
+body.pc-public-page .pc-header {
+  min-block-size: 68px;
+  padding-inline: clamp(16px, 3vw, 32px);
+  background: rgba(16, 33, 75, 0.97);
+  box-shadow: 0 4px 20px rgba(10, 24, 52, 0.15);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+body.pc-public-page .pc-header__nav {
+  gap: clamp(2px, 0.45vw, 8px);
+}
+body.pc-public-page .pc-header__nav a {
+  min-block-size: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding-inline: clamp(8px, 0.9vw, 14px);
+  border-radius: 8px;
+  transition: color var(--pc-motion-standard) ease, background-color var(--pc-motion-standard) ease;
+}
+body.pc-public-page .pc-header__nav a:hover,
+body.pc-public-page .pc-header__nav a:focus-visible {
+  color: var(--pc-brand-gold);
+  background: rgba(255, 255, 255, 0.1);
+}
+body.pc-public-page .pc-header__nav .nav-donate a,
+body.pc-public-page .pc-mobile-menu .mobile-donate {
+  background: var(--pc-action-orange);
+  color: #fff;
+  font-weight: 700;
+}
+body.pc-public-page .pc-header__nav .nav-donate a:hover,
+body.pc-public-page .pc-mobile-menu .mobile-donate:hover {
+  background: var(--pc-action-orange-hover);
+  color: #fff;
+}
+body.pc-public-page .pc-header__nav .has-drop > ul {
+  border: 1px solid rgba(215, 189, 136, 0.28);
+  border-radius: var(--pc-radius-sm);
+  box-shadow: var(--pc-shadow-raised);
+}
+body.pc-public-page .pc-header__nav .has-drop:hover > ul,
+body.pc-public-page .pc-header__nav .has-drop:focus-within > ul {
+  display: block;
+}
+body.pc-public-page .pc-hamburger {
+  min-inline-size: 44px;
+  min-block-size: 44px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+}
+body.pc-public-page .pc-mobile-menu {
+  background: rgba(16, 33, 75, 0.99);
+  border-block-start: 1px solid rgba(215, 189, 136, 0.2);
+}
+body.pc-public-page .pc-mobile-menu.open {
+  max-block-size: calc(100vh - 68px);
+  max-block-size: calc(100dvh - 68px);
+  overflow-y: auto;
+  padding-block-end: calc(100vh - 68px - 56px);
+  padding-block-end: calc(100dvh - 68px - 56px);
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+body.pc-public-page .pc-mobile-menu a {
+  min-block-size: 48px;
+  display: flex;
+  align-items: center;
+  border-block-end-color: rgba(255, 255, 255, 0.1);
+}
+
+/* DESIGN-01 — canonical five-column public footer and its responsive collapse. */
+body.pc-public-page .pc-footer {
+  padding-block: clamp(40px, 6vw, 64px) 28px;
+  background: #0b1834;
+  color: rgba(255, 255, 255, 0.78);
+}
+body.pc-public-page .pc-footer__inner {
+  inline-size: min(100%, var(--pc-content-width));
+}
+body.pc-public-page .pc-footer__top {
+  grid-template-columns: 2fr 1fr 1.2fr 1fr 1.3fr;
+  gap: clamp(20px, 3vw, 40px);
+}
+body.pc-public-page .pc-footer__col h5 {
+  color: var(--pc-brand-gold);
+}
+body.pc-public-page .pc-footer__col ul a,
+body.pc-public-page .pc-footer__links a {
+  color: rgba(255, 255, 255, 0.76);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+body.pc-public-page .pc-footer__col ul a:hover,
+body.pc-public-page .pc-footer__links a:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+/* DESIGN-01 — restrained home hero using existing tracked PetCenter artwork. */
+body.pc-public-home .pc-hero {
+  min-block-size: min(760px, 96svh);
+  background-image: linear-gradient(118deg, rgba(16, 33, 75, 0.88), rgba(16, 33, 75, 0.5)), url("/assets/images/hero-banner.jpg");
+  background-position: center;
+  background-size: cover;
+}
+body.pc-public-home .pc-hero__inner {
+  max-inline-size: 760px;
+}
+body.pc-public-home .pc-hero h1 {
+  font-size: clamp(2.75rem, 6vw, 5rem);
+  letter-spacing: -0.035em;
+}
+body.pc-public-home .pc-hero__eyebrow {
+  border-radius: 999px;
+}
+body.pc-public-home .pc-hero__btn-primary,
+body.pc-public-page .pc-btn--orange,
+body.pc-public-page .pc-pet-card__btn,
+body.pc-public-form #adoptionForm button[type="submit"],
+body.pc-public-status .status-checkout-btn {
+  background: var(--pc-action-orange);
+  color: #fff;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  font-weight: 700;
+}
+body.pc-public-home .pc-hero__btn-primary:hover,
+body.pc-public-page .pc-btn--orange:hover,
+body.pc-public-page .pc-pet-card__btn:hover,
+body.pc-public-form #adoptionForm button[type="submit"]:hover,
+body.pc-public-status .status-checkout-btn:hover {
+  background: var(--pc-action-orange-hover);
+  color: #fff;
+}
+
+/* DESIGN-01 — category discovery and reusable pet cards. */
+body.pc-public-category .pc-cat-banner {
+  min-block-size: 300px;
+  padding-block: 120px 52px;
+  background-color: var(--pc-brand-navy);
+}
+body.pc-public-category .pc-cat-banner__inner {
+  max-inline-size: 680px;
+}
+body.pc-public-category .pc-cat-banner h1 {
+  font-size: clamp(2.4rem, 5vw, 3.5rem);
+  letter-spacing: -0.025em;
+}
+body.pc-public-page .pc-pet-card {
+  overflow: clip;
+  border: 1px solid var(--pc-border);
+  border-radius: var(--pc-radius-card);
+  background: var(--pc-surface);
+  box-shadow: var(--pc-shadow-soft);
+  transition: box-shadow var(--pc-motion-standard) ease, transform var(--pc-motion-standard) ease;
+}
+body.pc-public-page .pc-pet-card:hover {
+  box-shadow: var(--pc-shadow-raised);
+  transform: translateY(-3px);
+}
+body.pc-public-page .pc-pet-card__img-wrap {
+  overflow: hidden;
+  background: var(--pc-neutral-cream);
+}
+body.pc-public-page .pc-pet-card__img-wrap img {
+  transition: transform 320ms ease;
+}
+body.pc-public-page .pc-pet-card__body {
+  padding: clamp(16px, 2vw, 22px);
+}
+body.pc-public-page .pc-pet-card__name {
+  color: var(--pc-brand-navy);
+  font-family: var(--pc-font-display);
+}
+body.pc-public-page .pc-pet-card__footer {
+  gap: var(--pc-space-3);
+  flex-wrap: wrap;
+}
+body.pc-public-page .pc-pet-card__fee {
+  color: var(--pc-brand-navy);
+}
+body.pc-public-page .pc-pet-card__btn {
+  min-block-size: 44px;
+  padding-inline: 20px;
+}
+
+/* DESIGN-01 — content-led editorial layouts and image cards. */
+body.pc-public-editorial .pc-blog-hero {
+  background-color: var(--pc-brand-navy);
+}
+body.pc-public-editorial .pc-blog-hero h1,
+body.pc-public-editorial .pc-blog-hero__inner h1 {
+  font-size: clamp(2.5rem, 5vw, 3.75rem);
+}
+body.pc-public-editorial .pc-blog-card,
+body.pc-public-editorial .pc-blog-featured {
+  overflow: clip;
+  border: 1px solid var(--pc-border);
+  border-radius: var(--pc-radius-card);
+  background: var(--pc-surface);
+  box-shadow: var(--pc-shadow-soft);
+  transition: box-shadow var(--pc-motion-standard) ease, transform var(--pc-motion-standard) ease;
+}
+body.pc-public-editorial .pc-blog-card:hover,
+body.pc-public-editorial .pc-blog-featured:hover {
+  box-shadow: var(--pc-shadow-raised);
+  transform: translateY(-2px);
+}
+body.pc-public-editorial :is(.pc-blog-card__img, .pc-blog-featured__img) img {
+  inline-size: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+}
+body.pc-public-editorial .pc-blog-card__title {
+  color: var(--pc-brand-navy);
+  font-family: var(--pc-font-display);
+}
+
+/* DESIGN-01 — application form: calm Milk & Plum surfaces, orange reserved for submit. */
+body.pc-public-form {
+  background: var(--pc-form-milk);
+}
+body.pc-public-form #adoptionForm {
+  max-inline-size: var(--pc-form-width);
+  margin-inline: auto;
+}
+body.pc-public-form #adoptionForm :is(input:not([type="checkbox"]):not([type="radio"]), select, textarea) {
+  border-color: rgba(56, 25, 50, 0.28);
+  border-radius: 9px;
+}
+body.pc-public-form #adoptionForm :is(label, legend) {
+  color: var(--pc-form-plum);
+}
+body.pc-public-form #adoptionForm :is(input, select, textarea):focus-visible {
+  border-color: var(--pc-brand-gold-hover);
+  box-shadow: 0 0 0 3px rgba(184, 153, 104, 0.2);
+}
+body.pc-public-form .pc-stepper,
+body.pc-public-form .step-indicator {
+  max-inline-size: var(--pc-form-width);
+  margin-inline: auto;
+}
+
+/* DESIGN-01 — application status lookup and state feedback. */
+body.pc-public-status {
+  background: var(--pc-page-bg);
+}
+body.pc-public-status .dash-hero {
+  background: linear-gradient(135deg, var(--pc-brand-navy), var(--pc-brand-navy-soft));
+}
+body.pc-public-status .dash-lookup-card,
+body.pc-public-status .dash-state,
+body.pc-public-status .status-card {
+  border: 1px solid var(--pc-border);
+  border-radius: var(--pc-radius-panel);
+  background: var(--pc-surface);
+  box-shadow: var(--pc-shadow-soft);
+}
+body.pc-public-status .dash-lookup-card {
+  inline-size: min(100% - 32px, 760px);
+}
+body.pc-public-status .status-checkout-btn {
+  min-block-size: 48px;
+  padding-inline: 24px;
+}
+
+/* DESIGN-01 — public reviews and their existing filter/search components. */
+body.pc-public-testimonials .pc-testi-hero {
+  background: linear-gradient(135deg, var(--pc-brand-navy), var(--pc-brand-navy-soft));
+}
+body.pc-public-testimonials :is(.pc-biz-info, .pc-testi-grid > *, .pc-testi-form) {
+  border-radius: var(--pc-radius-card);
+  box-shadow: var(--pc-shadow-soft);
+}
+body.pc-public-testimonials .pc-biz-score {
+  color: var(--pc-brand-navy);
+}
+body.pc-public-testimonials .pc-filter-btn,
+body.pc-public-testimonials .pc-search-btn {
+  min-inline-size: 44px;
+  min-block-size: 44px;
+}
+body.pc-public-testimonials .pc-filter-btn:focus-visible,
+body.pc-public-testimonials .pc-search-btn:focus-visible {
+  outline-color: var(--pc-brand-gold);
+}
+body.pc-public-testimonials .pc-submit-btn,
+body.pc-public-testimonials .pc-sheet-apply {
+  background: var(--pc-action-orange);
+  color: #fff;
+}
+body.pc-public-testimonials .pc-submit-btn:hover,
+body.pc-public-testimonials .pc-sheet-apply:hover {
+  background: var(--pc-action-orange-hover);
+  color: #fff;
+}
+
+/* DESIGN-01 — shared public dialog and bottom-sheet surfaces; visibility and motion remain page-owned. */
+body.pc-public-page :is(.modal-box, .success-modal) {
+  border: 1px solid var(--pc-border);
+  border-radius: var(--pc-radius-panel);
+  background: var(--pc-surface);
+  color: var(--pc-text);
+  box-shadow: var(--pc-shadow-raised);
+}
+body.pc-public-page :is(.pc-filter-sheet, .pc-review-sheet) {
+  border: 1px solid var(--pc-border);
+  border-start-start-radius: var(--pc-radius-panel);
+  border-start-end-radius: var(--pc-radius-panel);
+  background: var(--pc-surface);
+  color: var(--pc-text);
+  box-shadow: var(--pc-shadow-raised);
+}
+body.pc-public-page :is(.modal-overlay, .pc-sheet-backdrop) {
+  background-color: rgba(11, 24, 52, 0.58);
+}
+body.pc-public-page :is(.modal-top, .pc-sheet-header) {
+  border-block-end: 1px solid var(--pc-border);
+}
+body.pc-public-page :is(.modal-close, .pc-sheet-close, .pc-sheet-clear, .pc-sheet-apply) {
+  min-inline-size: 44px;
+  min-block-size: 44px;
+}
+
+/* DESIGN-01 — accessible, reusable feedback and empty-state primitives. */
+body.pc-public-page :is(.pc-alert, .status-msg, .pc-form-msg, .pc-multi-notice) {
+  border-radius: var(--pc-radius-sm);
+}
+body.pc-public-page :is(.pc-empty-state, .pc-pets-empty) {
+  padding: clamp(24px, 4vw, 40px);
+  border: 1px dashed var(--pc-border);
+  border-radius: var(--pc-radius-card);
+  background: rgba(255, 255, 255, 0.82);
+  color: var(--pc-muted);
+  text-align: center;
+}
+body.pc-public-page :is(.pc-loading, [aria-busy="true"]) {
+  cursor: progress;
+}
+
+/* DESIGN-01 — phone/tablet layout, five-column footer fallback, and reduced motion. */
+@media (max-width: 900px) {
+  body.pc-public-page .pc-footer__top {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 560px) {
+  body.pc-public-page .pc-header {
+    padding-inline: 16px;
+  }
+  body.pc-public-page .pc-footer__top {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+  body.pc-public-page .pc-footer__bottom {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  body.pc-public-page .pc-footer__links {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  body.pc-public-home .pc-hero {
+    min-block-size: min(720px, 94svh);
+    padding-inline: 20px;
+  }
+  body.pc-public-home .pc-hero__btns {
+    gap: 12px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  body.pc-public-page *,
+  body.pc-public-page *::before,
+  body.pc-public-page *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+/* DESIGN-01 END: shared public adoption design system */

@@ -880,8 +880,11 @@ p { color: var(--muted); }
 
 
   </style>
+<!-- DESIGN-01 START: shared public design layer -->
+<link rel="stylesheet" href="/assets/css/public-redesign.css">
+<!-- DESIGN-01 END: shared public design layer -->
   </head>
-<body>
+<body class="pc-public-page pc-public-category">
 
 <header class="pc-header pc-header--solid" id="pcHeader">
   <a href="/" class="pc-header__logo pc-header__logo--desktop">
@@ -1800,5 +1803,8 @@ document.addEventListener('DOMContentLoaded', function() {
 <!-- ═══ Filter Bottom Sheet — end ═══ -->
 <script src="/admin/chat-widget.js"></script>
 <script src="/assets/js/accessibility-widget.js" defer></script>
+<!-- DESIGN-01 START: shared public navigation enhancement -->
+<script src="/assets/js/public-chrome.js"></script>
+<!-- DESIGN-01 END: shared public navigation enhancement -->
 </body>
 </html>

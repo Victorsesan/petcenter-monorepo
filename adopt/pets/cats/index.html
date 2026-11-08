@@ -1040,10 +1040,13 @@ p { color: var(--muted); }
 }
 </style>
 <!-- TASK-9 END -->
+<!-- DESIGN-01 START: shared public design layer -->
+<link rel="stylesheet" href="/assets/css/public-redesign.css">
+<!-- DESIGN-01 END: shared public design layer -->
   </head>
 <!-- TASK-10 END -->
 
-<body>
+<body class="pc-public-page pc-public-category">
 
 <header class="pc-header pc-header--solid" id="pcHeader">
   <a href="/" class="pc-header__logo pc-header__logo--desktop">
@@ -3568,6 +3571,9 @@ window.pcClearServerRadiusSearch = pcClearServerRadiusSearch;
 })();
 // TASK-9 END
 </script>
+<!-- DESIGN-01 START: shared public navigation enhancement -->
+<script src="/assets/js/public-chrome.js"></script>
+<!-- DESIGN-01 END: shared public navigation enhancement -->
 </body>
 <!-- TASK-10 END -->
 

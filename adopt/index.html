@@ -1372,11 +1372,14 @@ p { color: var(--muted); }
 /* TASK-web12-3 END */
 </style>
 <!-- TASK-9 END -->
+<!-- DESIGN-01 START: shared public design layer -->
+<link rel="stylesheet" href="/assets/css/public-redesign.css">
+<!-- DESIGN-01 END: shared public design layer -->
 </head>
 <!-- TASK-1 START — data-i18n-page identifies which manifest namespace
      (assets/i18n/{lang}/index.json) i18n-core.js loads for THIS page, on
      top of the always-loaded common.json (header/footer/hamburger) -->
-<body data-i18n-page="index">
+<body data-i18n-page="index" class="pc-public-page pc-public-home">
 <!-- TASK-1 END -->
 <!-- PRELOADER -->
 <div aria-label="Loading Pet Center" class="walk-right" data-i18n-attr="aria-label:index.petcenter-preloader.aria-label.1" id="petcenter-preloader" role="status">
@@ -3521,5 +3524,8 @@ function closeStatusPopup() {
 
 </script>
 
+<!-- DESIGN-01 START: shared public navigation enhancement -->
+<script src="/assets/js/public-chrome.js"></script>
+<!-- DESIGN-01 END: shared public navigation enhancement -->
 </body>
 </html>
