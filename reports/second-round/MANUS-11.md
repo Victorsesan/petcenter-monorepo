@@ -214,3 +214,139 @@ A fresh `git fetch origin` after the prior continuation revealed new work that w
 MANUS-10's new work changes the prior handoff: QA is no longer wholly absent, but there is still no coordinator-run retest against a merged commit. Its report records PHP preview testing on current `main` followed by branch-only source changes; its later completion pass supplies limited local verification but not a fresh production run. The imported MANUS-04 completion docs and its broader unmerged patch still require route/data reconciliation with the new MANUS-10 changes. Do not merge the MANUS-10 branch wholesale: compare each of its 47 changed source paths with the assigned owner, especially `adopt/apply/`, the category `index.json` files, `assets/js/i18n-*`, testimonial variants, and widget-loaded pages.
 
 All assertions above are attributed to the latest worker reports and fetched Git diff. MANUS-11 has not audited every new source hunk, rerun worker tests, merged branches, or deployed any change. Revisit this section if any account ref advances again before integration.
+
+
+## Authoritative coordinator snapshot — 2026-11-05 (supersedes all prior branch/evidence matrices)
+
+This snapshot supersedes the account tables above, including the 2026-11-04 post-fetch section where branches or reports were described as absent/report-only. A fresh `git fetch --all --prune` was performed. The assignment baseline remains `origin/main` `251d8c26ab89bc9a3fd2bc12e155af41b1d03a87`. All ten worker report branches now exist; **none of MANUS-01 through MANUS-10 is merged into `main`**. Commit hashes below are the freshly observed remote tips. “Worker claims” below are not independently accepted unless a separate coordinator check is stated.
+
+| Account | Fresh branch tip; changed paths vs main | Completion/evidence documents reviewed | Current coordinator position |
+|---|---|---|---|
+| MANUS-01 | `ed77629f`; 11 paths (9 PHP, 1 JS, report), including consolidated chat auth/lock/reset/setup/widget. | Seven mapped Admin Project 1 completion files are present/read on MANUS-04 evidence ref; this corrects the earlier “unavailable” claim. | Later report continuation supersedes earlier “Tasks 3–6 absent” matrix; implementation is branch-only and shared auth/widget contracts conflict with MANUS-02. Live DB/session/deployment and retention/versioning decisions remain. |
+| MANUS-02 | `2be10c1`; 75 paths (8 source, 67 Markdown/evidence/report), including transcription/language work and migration change. | Two mapped Task 1a/1b completion files are present/read on MANUS-04 evidence ref. | Branch-only; cumulative merge conflicts with MANUS-01 in `adopt/admin/chat-start.php` and `chat-widget.js`. Live GROQ, migration, authenticated/audio/multilingual checks remain. |
+| MANUS-03 | `63e0417d`; 110 paths (35 HTML/CSS/JS, 75 Markdown/report/evidence). | Three mapped Task 2/9/10 completion files are present/read on MANUS-04 evidence ref, correcting its report's “unavailable” wording. | Broad CSS/widget/page branch; cumulative merge is clean after MANUS-01, but its pages/docs overlap later branches. Translation Tasks 1/4–8, signin scope, redirect and RTL gaps remain. Its report says MANUS-10 repaired chat scroll; MANUS-08's later controlled check found an additional duplicate-close stale-scroll case. |
+| MANUS-04 | `151d46b`; 102 paths (29 source/data, 73 Markdown/evidence/report). | Ten mapped Task 2/3/4/5/5b/6a/6b/7a/8/9 documents are present/read; Task 7b completion handoff is absent. 5b is marked optional/unassigned in its assignment tracker. | Partial/unmerged; cumulative conflict with MANUS-03 across seven category pages plus `WORKER-PACKAGE-INVENTORY.md` and two sync protocols. Shared page/API/storage/admin/status integration, upload endpoint, data-owner inputs and Task 7b remain. |
+| MANUS-05 | `b00737b`; 3 paths (two PHP/JS implementation files and report). | Twelve mapped A1–A3/B1–B6/C1–C3 completion files are present/read; inventory gaps C4/C5/C6 and no separate A4 package. | The later implementation follow-up supersedes earlier “no code” wording: A2 maintenance job and A4 component are on the branch, not main. Cron scheduling, caller integration, A1/C-stack gaps and storage/account contracts remain. Cumulative merge is clean at its current point. |
+| MANUS-06 | `0fc5c8a`; 9 paths (8 source, report). | Fourteen mapped D1/E1–E5/F1–F7/G1 completion files are present/read, correcting earlier missing-evidence wording. | Unmerged; report's initial/final blocked matrix conflicts with an intervening implementation-completion pass. Pet-detail page conflicts cumulatively with existing work. Server/account/storage/mail/scheduler/upload/PHP runtime contracts remain. |
+| MANUS-07 | `67cb26d`; 4 paths (PHP, HTML, `.htaccess`, report). | Twelve mapped status/shipping completion files are present/read; Task 11 document is absent. | Task 3 candidate is unmerged; status page conflicts cumulatively. Rate-limit directory writability and live deployment are unverified; missing package payloads and upstream dependencies remain. |
+| MANUS-08 | `af7cf21`; 1 path (report only). | No MANUS-08-specific completion package identified. Four relevant comparator records (Tasks 8/9/10 and F6) were reviewed on MANUS-04 evidence ref. | No implementation to merge. Report findings include mobile accessibility-panel clipping, duplicate-close stale restoration on latest M10, reduced-motion, contrast, and unresolved widget architecture/design decisions. Findings are worker-observed, not source acceptance. |
+| MANUS-09 | `d28d4dc`; 7 paths (6 source, report): chat-rate, update-adoption, four testimonial pages. | Six mapped security/admin/5b/F6/shipping completion files are present/read. | Source changes are unmerged. Its update-adoption findings need Shipping Tier 1/Task 12 ownership; chat-rate overlaps MANUS-01 (auto-merge was clean in this rehearsal but contract testing remains); testimonial corrections overlap MANUS-10. |
+| MANUS-10 | `2e1bff1`; 49 paths (48 source/data, report): 39 HTML, 3 JS, 6 JSON. | Three mapped widget/accessibility/Task 10 records were reviewed; no MANUS-10-specific completion handoff was identified. | Browser-QA/rollout branch is unmerged and has the broadest shared-page overlap. The report's final 66-route sweep and fixes remain worker-reported; report contains stale/contradictory status text, and deployment/protected-data/backend checks remain open. |
+
+### Completion evidence and issue-register scope
+
+The mapped worker completion documents above are available in the imported MANUS-04 evidence branch; that branch's manifest documents their provenance. This corrects reports which described files as missing from Git. Availability/readability establishes evidence availability only, not implementation correctness, test success, or mainline integration. The two inventory packages C5/C6 without completion records, MANUS-04 Task 7b, and MANUS-07 Task 11 remain precise evidence gaps. The round-one `Pet_Center_Integration_Progress_and_Handoff.md` was read from MANUS-03's branch; it documents earlier mechanical stops and says round two owns the collected bugs. The standalone `Task-1-Completion-14.md` is Project 3 Task 1 research, not a MANUS-11 coordinator completion package. No separate MANUS-11-specific worker completion file is listed.
+
+The 145-row issue-register classification is **complete** in `MANUS-11-ISSUE-CROSSWALK.md`. It distinguishes mainline from worker-branch-only changes and retains `Blocked`/`Needs My Review` where evidence or runtime dependencies remain. Classification is not integration acceptance: this report and account index remain `IN PROGRESS` until applicable owner decisions, integration, and runtime checks are complete.
+
+### Fresh cumulative integration rehearsal (no checkout, no branch mutation)
+
+Using Git's merge-tree machinery and temporary unreferenced merge commits, I rehearsed the documented order against `origin/main` and skipped each conflicting worker branch without taking either side. No branch was rebased, merged to a named ref, pushed, or deployed. The clean subset comprised MANUS-01, -03, -05, -08, and -09; the report-only MANUS-08 branch contributed no application files. Results at the fetched tips:
+
+| Branch | Result after preceding clean branches | Exact conflict paths |
+|---|---|---|
+| MANUS-01 | Clean | — |
+| MANUS-02 | Conflict | `adopt/admin/chat-start.php`; `adopt/admin/chat-widget.js` |
+| MANUS-03 | Clean | — |
+| MANUS-04 | Conflict | `adopt/pets/aquariums/index.html`, `birds/index.html`, `cats/index.html`, `dogs/index.html`, `livestocks/index.html`, `reptiles/index.html`, `small-mammals/index.html`; `docs/second-round/WORKER-PACKAGE-INVENTORY.md`; `docs/second-round/core-docs/VDM-GIT-SYNC-COORDINATION-PROTOCOL-7.md`; `docs/second-round/core-docs/WORKER-GIT-SYNC-PROTOCOL-7.md` |
+| MANUS-05 | Clean | — |
+| MANUS-06 | Conflict | `adopt/pets/detail/index.html` |
+| MANUS-07 | Conflict | `adopt/adoptions/status/index.html` |
+| MANUS-08 | Clean (report only) | — |
+| MANUS-09 | Clean | — |
+| MANUS-10 | Conflict | `adopt/admin/chat-widget.js`; `adopt/adoptions/status/index.html`; `adopt/apply/index.html`; `adopt/blog/index.html`; `adopt/blog/post/index.html`; `adopt/pets/aquariums/index.html`; `birds/index.html`; `cats/index.html`; `dogs/index.html`; `pets/index.html`; `livestocks/index.html`; `reptiles/index.html`; `small-mammals/index.html`; `adopt/services/index.html`; `adopt/testimonials/inde8x.html`; `adopt/testimonials/index.html`; `adopt/testimonials3/index.html`; `adopt/testimonials3/index8.html` |
+
+Each individual branch is clean relative to `main` when merged alone; the conflicts above are cumulative, real overlaps in the documented order, not authentication failures. They require anchor-by-anchor integration preserving both owners' changes. The MANUS-03 `INTEGRATION-BUILD-CHECK-2026-11-04.md` is an earlier rehearsal (it predates the current MANUS-08 tip and M10's latest 49-path tip); this fresh run updates its conflict snapshot.
+
+### Coordinator-run safe checks on the clean subset
+
+The clean subset was parsed from temporary Git objects into `/tmp/manus11-clean-subset-check`; protected names and directories were excluded. No application code was executed. On the changed non-protected files: `php -l` passed for 11 PHP files, `node --check` passed for 4 JS files, and Python's standard-library `HTMLParser` accepted 28 HTML files. `git diff --check ... -- adopt` passed for application paths. A repository-wide diff whitespace scan reports trailing whitespace in imported completion-evidence Markdown; those worker evidence files were not edited to hide it. Full browser/live/database tests were not run against the conflicting cumulative set. Worker browser/test claims remain attributed, not certified by MANUS-11.
+
+The coordinator-owned `reports/second-round/ACCOUNT-REPORT-INDEX.md` was updated on this branch: MANUS-01–10 are `READY FOR REVIEW` with the exact fresh tips above; none is `RECONCILED`. MANUS-11 remains `IN PROGRESS`. This index update records submission/availability only and does not signal acceptance.
+
+### Remaining coordinator work and boundaries
+
+- The exact row-level classifications for all 145 register rows, including evidence paths and main-vs-branch state, are complete in `MANUS-11-ISSUE-CROSSWALK.md`; unresolved owner/runtime dependencies remain explicit there.
+- Work the merge conflicts only after code-level anchor review and task-owner contracts; MANUS-11 has not changed worker-owned application code. Protected paths remain excluded.
+- After approved integration, run relevant PHP/JS/browser tests on the actual integrated tree at desktop/phone sizes; current safe parser checks apply only to the clean subset and do not close runtime/security issues.
+- Obtain authorized operator/data-owner decisions for production secrets, schema/migrations, cron, protected records, storage/privacy, external services, deployment, business/design policy, and live verification.
+- This continuation's report, index, and crosswalk are scoped to the MANUS-11 task branch only; `main` and worker-owned application source remain unchanged.
+
+
+## Complete issue-register disposition — 2026-11-06 coordinator continuation
+
+The row-by-row status pass is complete: all **145 physical rows (register lines 7–151)** have a classification in [`MANUS-11-ISSUE-CROSSWALK.md`](MANUS-11-ISSUE-CROSSWALK.md). The refreshed 2026-11-08 counts are **2 Fixed on main; 29 Fixed on worker branches only; 11 False Alarm/Already Resolved; 76 Needs My Review; 27 Blocked.** Worker-branch fixes are not accepted into main by this report. The crosswalk records evidence refs and distinguishes source/branch state from deployment/runtime state. It is a coordinator classification, not merge approval.
+
+The first account-review output did not cover the full register consistently. I did not treat it as exhaustive: I directly reconciled MANUS-05 rows 36–63, then closed the 14 previously unmapped rows (Task 1a, Task 8, Unified Status Tasks 5–7) by comparing their specific completion evidence with current main and fetched worker trees. Rows without source/runtime evidence remain `Needs My Review` or `Blocked`; no missing implementation was guessed. No worker-owned application source was changed.
+
+### New independently checked cross-account findings
+
+- **M05 verification-queue contract is still incompatible on main.** B1 writes per-submission records under `adopt/verify/uploads/verification-queue/{timestamp}_{user}.json`; B2 reads per-user records under `adopt/verifications/requests/{username}/request.json`. The queue UI therefore cannot consume new B1 submissions without an agreed path/schema migration. This is recorded against register rows 44/49 and is an owner handoff, not an M11 code change.
+- **The adoption quiz is present, but its shared-nav follow-through is incomplete.** `adopt/pets/quiz/index.html` exists on main and M03. A targeted search finds the `/pets/quiz/` navigation link only in the cats page and the quiz page, not the other category-page navigation copies. M03/CEO must decide and complete the shared-file rollout.
+- **Historical admin Task 1a evidence does not match a verifiable implementation in the current source tree.** Its completion record says the Groq model and MIME fixes were made, while `GROQ_API_KEY_TASK1A` remains a placeholder and the live provider test is outstanding. The main admin-reply path does not expose the claimed Task-1a implementation; M02's `chat-transcribe.php` model change is a different endpoint. Rows 97–101 therefore remain split between Blocked, Needs My Review, and no-issue classifications in the crosswalk.
+- **Unified Status Tasks 5–7 remain non-deployable.** Their completion documents are available on the evidence ref, but `submit-installment.php`, `get-bnpl-applications.php`, `update-bnpl-status.php`, `bnpl-status.html`, and `bnpl-status-lib.php` are absent from main and all fetched worker tips. Task 6's reported dependency on Task 4's initial status record remains unresolved in source. This is why the related rows are not called fixed.
+- **M09 chat-rating ownership guard is duplicated on M01 and M09 branches, not on main.** Both current tips contain the same `chat_threads.email` ownership check; M09 `bd41d5b` additionally reports an exclusive-lock append covering the JSON read/modify/write cycle. Integrate the shared behavior once. M09 reports 8 PHPUnit tests/20 assertions and 46 PHP files linted; no approved live staging target was available, so those remain attributed worker results.
+- **M05 A2 and M06 F3 are separate scheduled jobs, not a path conflict.** M05 A2 maintenance is `adopt/admin/needs-extra-love-check.php`, now on main; M06 F3 digest configuration/compiler use `adopt/adoptions/scripts/` on the M06 branch. These have different responsibilities. Hosting still needs to schedule the A2 job and agree the digest cadence/mail configuration before deployment; do not describe the distinct paths as conflicting.
+- **M05 status is superseded by the merge to main at `c177938`.** Main now contains the A1 posting page/publish endpoint, A2 maintenance job, C5 merchant-chat endpoints, and C6 review/moderation endpoints. Coordinator `php -l` passed for nine merged M05 PHP files. The M05 report’s opening “code changes: none” / missing-stack wording is historical and contradicted by its later implementation pass and current main paths; do not treat it as current. Remaining gaps include the missing A1 upload-temp/VideoUploadManager flow, C1a/C1b stopped integration, C3’s specific `/merchant-conduct-agree` endpoint/wiring, C4’s upload/moderation dependency, and C6 public-profile integration. No endpoint/runtime or production auth test was run by MANUS-11.
+
+### Current completion boundary
+
+All register rows have a disposition and there are no pending reviewer jobs. The coordinator report/index/crosswalk are the only files in this continuation's intended change set. Branch conflicts, branch-only work, missing completion/source artifacts, cross-account contract decisions, and deployment/runtime checks remain open as listed above and in the existing handoffs. This continuation does not merge worker branches, modify protected runtime state, or declare the second round complete. The prior snapshot's row-closeout and commit-status bullets are superseded by this continuation; the coordinator-only documentation update will be committed and pushed to the MANUS-11 branch after the final validation below.
+
+
+## Coordinator refresh — 2026-11-08 (supersedes earlier snapshots)
+
+### Fresh refs and repository-wide completion evidence
+
+A fresh `git fetch --all --prune` confirmed `origin/main` at `c177938` and `origin/adopt-deploy` at `542c770`. Current worker tips are recorded in `ACCOUNT-REPORT-INDEX.md`. The MANUS-04 merge `151d46b` and the MANUS-05 merge `c177938` are ancestors of main; the report-only/integration-doc updates do not change that source state. The imported completion evidence remains available on the MANUS-04 evidence branch, while the account-specific reports and later code updates are at their own fresh tips. I did not reopen protected data, configuration, uploads, chat media, logs, or runtime payloads.
+
+The new mainline source invalidates several earlier “missing implementation” conclusions. Main now contains `adopt/rehoming/list-a-pet/index.html`, `merchant-publish-listing.php`, the A2 `adopt/admin/needs-extra-love-check.php` maintenance job, the C5 `merchant-chat-*.php` endpoints, and C6 `merchant-reviews.php` / `merchant-review-moderate.php`. I independently confirmed those paths on `origin/main` and ran `php -l` on nine non-protected M05 PHP files (the A2 job, publish/chat/review endpoints and shared library); all nine passed. This is syntax validation only—not live auth, upload, storage, mail, or browser acceptance. M05’s report has historical opening text (“code changes: none” and absent C5/C6 stacks) that its later implementation section and the current main tree supersede.
+
+M05’s A1 posting route is now chosen on main (`/rehoming/list-a-pet/`) and the publish endpoint exists, but the A1 completion document’s `VideoUploadManager` asset and merchant upload-temp endpoint remain absent/unverified. Thus the posting/upload feature is not end-to-end accepted. The A2 job is present, but the host must still schedule it. M05 C5 chat endpoints are not the C3 safe-exchange agreement API: `merchant-code-of-conduct.js` still names `/merchant-conduct-agree`, for which no matching main endpoint/wiring was found. C1a/C1b remains stopped; C4 still depends on image/upload moderation; C6’s public-profile display integration is not verified. Main’s M05 additions do not resolve the B1/B2 verification-queue path/schema mismatch.
+
+### Latest worker work and completion evidence
+
+- **MANUS-03 `797b173`:** latest commit updates integration build/RTL QA reports. The new report records a 21/21 RTL candidate matrix for M08+M10; this is a worker-reported candidate result, not MANUS-11 rerun evidence. M03’s seven category pages and shared docs/protocols still conflict in the current cumulative order.
+- **MANUS-06 `8d05874`:** its final report claims D1–G1 implementation work and 90/90 desktop/mobile E2E checks. Those changes remain branch-only and are not accepted on main. The branch’s merchant posting route `/merchant/post-listing/` competes with M05’s `/rehoming/list-a-pet/` route and dashboard link, causing a real `adopt/merchant/index.html` merge conflict. The branch report says Stripe fails closed without `STRIPE_SECRET_KEY`; no live Stripe call or production secret was used. The new implementation/test results are attributed to M06, not independently reproduced here. Crosswalk dispositions now distinguish candidate fixes from mainline and retain mail, cron, auth, real-data, route-selection, and deployment gates.
+- **MANUS-08 `be1beab`:** its current report says its branch is synced to main `c177938`, the seven-page/42-case viewport matrix passed, and all seven deployed URLs returned HTTP 200 at deploy snapshot `542c770`. The live pages still lack the CTA/status-row/footer fixes; at 390 px and 360 px the cats Request-One button extends to about 404 px. These are M08’s live-browser findings, not a fresh MANUS-11 browser test. The existing deploy refs also contain tracked upload/chat-media/log paths; deployment owners must review their safe handling before release. M08 code has not been deployed or merged by this coordinator.
+- **MANUS-09 `bd41d5b`:** the latest report adds the stored-thread-email ownership guard, an exclusive-lock JSON review append, strict adoption-code validation, `LOCK_EX` writes, and four testimonial URL fixes. It reports 8 PHPUnit tests/20 assertions and a 46-file PHP lint pass. The guard is duplicated with M01 and must be integrated once; adoption writes conflict with M07 in `adopt/admin/update-adoption.php`. No approved live staging target was available, so reported live testing remains outstanding. Protected contact configuration was not inspected by MANUS-11.
+- **Other fresh refs:** M01 `22594e4`, M02 `5833edc`, M04 `151d46b`, M05 `c177938`, M07 `b961a0b`, M10 `0f0d459`, and M11’s prior commit `30fe102`. Their report availability and current tips are recorded in the account index.
+
+### Current cumulative merge rehearsal
+
+I reran the documented account order against fresh `origin/main` using `git merge-tree` and temporary unreferenced merge commits. Conflicting branches were skipped without taking either side. No named branch, worker ref, `main`, `adopt-deploy`, or application file was changed. M04 and M05 were already in the main base.
+
+| Account | Fresh rehearsal result | Conflict paths |
+|---|---|---|
+| M01 | Clean | — |
+| M02 | Conflict | `adopt/admin/chat-start.php`; `adopt/admin/chat-widget.js`; `docs/second-round/WORKER-PACKAGE-INVENTORY.md`; `reports/second-round/README.md` |
+| M03 | Conflict | Seven category pages (`aquariums`, `birds`, `cats`, `dogs`, `livestocks`, `reptiles`, `small-mammals`); `docs/second-round/WORKER-PACKAGE-INVENTORY.md`; `docs/second-round/core-docs/VDM-GIT-SYNC-COORDINATION-PROTOCOL-7.md`; `docs/second-round/core-docs/WORKER-GIT-SYNC-PROTOCOL-7.md` |
+| M04 | Already in main | — |
+| M05 | Already in main | — |
+| M06 | Conflict | `adopt/merchant/index.html` |
+| M07 | Clean in the cumulative clean subset | — |
+| M08 | Clean in the cumulative clean subset | — |
+| M09 | Conflict | `adopt/admin/update-adoption.php` |
+| M10 | Clean in the cumulative clean subset | — |
+| M11 | Clean (documentation-only) | — |
+
+This supersedes the November 6/earlier merge tables. “Clean” is mechanical merge-tree compatibility only, not source review, test certification, or merge approval. In particular, the M06 conflict is a consequential route decision, not a harmless textual overlap. The M02/M03 chat and category conflicts must be resolved with the responsible owners and then re-tested on the actual integrated tree.
+
+### Crosswalk and coordinator checks
+
+The refreshed [`MANUS-11-ISSUE-CROSSWALK.md`](MANUS-11-ISSUE-CROSSWALK.md) still accounts for all **145 unique physical register rows (lines 7–151)**. Updated counts are **27 fixed on worker branches only, 2 fixed on main, 12 false alarms/already resolved, 76 needs review, and 28 blocked**. Fourteen row bases/dispositions were refreshed for newly available M05/M06/M09 evidence; candidate-branch fixes remain clearly distinct from mainline acceptance. Row 37 remains blocked on the missing A1 uploader; row 63 remains blocked on the specific C3 agreement endpoint; M06 F3/F4/G1 and M09 fixes are now identified as branch-only candidates, not “absent everywhere.”
+
+There is a real A2-path documentation/deployment discrepancy: the F3 completion record says A2 established `adoptions/scripts/needs-extra-love-check.php`, while current main has the A2 source at `adopt/admin/needs-extra-love-check.php`. M06 F3 digest code is a separate job under `adopt/adoptions/scripts/`; reconcile the canonical A2 deployment path and schedule the distinct jobs deliberately. The account index now records the fresh tips, M04/M05 mainline state, M08 live findings, M09 tests, the actual conflict list, and the crosswalk counts.
+
+Validation on this coordinator refresh: the nine M05 PHP syntax checks passed; the crosswalk parser found 145 unique IDs with the counts above; and `git diff --check` passed on the coordinator-owned documentation. I did not execute application code, run M06/M09 suites, access a live account/service, or rerun a browser matrix. Worker test results above are attributed statements. Only the MANUS-11 report, account index, and issue crosswalk are in the change set; application source, `main`, worker branches, and deployment refs remain untouched.
+
+### Remaining owner actions
+
+1. Integrator: resolve M02/M03 chat and category conflicts; integrate M01/M09 duplicate chat-rating ownership behavior once; resolve M06/M05 merchant-route/API choice; resolve the M09/M07 adoption-writer conflict; then rerun the complete PHP/JS/browser/security matrix on the chosen integrated tree.
+2. M05/integrator: complete A1 upload-temp/VideoUploadManager wiring and production merchant auth/storage checks; decide the C3 agreement endpoint; complete C1a/C1b and C4 dependencies; wire C6 to the public profile; reconcile B1/B2 queue storage; schedule the A2 job.
+3. M06/deployment owner: confirm live mail/cron configuration, D1 storage/notification persistence, E2 CSRF/session policy, real listing/account data, selected F4 route/upload behavior, F6 site-wide consent integration, and the Stripe business/secret decision. Do not treat its 90/90 local matrix as production proof.
+4. M08/deployment owner: integrate the category fixes, rerun the combined browser matrix, review the tracked upload/chat-media/log deployment paths, and deploy only through the authorized release owner; the current live site remains unfixed per M08’s report.
+5. M09/M07/security owner: resolve `update-adoption.php` changes with the shared writer owner and provide an approved staging URL/credential mechanism before any live smoke test.
+6. CEO/design/data owners: settle pending route, data schema, migration, privacy, account-auth, design, and external-service decisions recorded in the crosswalk. Do not bypass protected data/configuration restrictions.
+
+This refresh supersedes earlier branch-tip, conflict, issue-count, “M05 code missing,” and A2/F3-path-conflict claims in the MANUS-11 report. The task’s coordinator documentation is updated; integration/deployment acceptance remains with the authorized owners.

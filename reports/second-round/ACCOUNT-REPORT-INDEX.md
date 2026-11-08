@@ -1,29 +1,33 @@
 # Second-Round Account Report Index
 
-This is the central register for reports from all 11 Manus accounts. Each account owns the report path shown below. Accounts must update their own report on their branch; the coordinator updates status here after reviewing the branch and evidence. No credentials belong in this file.
+This is the central register for reports from all 11 Manus accounts. Each account owns the report path shown below; the coordinator updates status after reviewing the branch and evidence. No credentials belong in this file.
 
 | Account ID | Assigned work package | Required report path | Status | Branch | Commit | Coordinator notes |
 |---|---|---|---|---|---|---|
-| `MANUS-01` | Admin Project 1 — Tasks 1–7: live-chat security, sessions, tokens, PIN, lock, password, reset, and auth-state | `reports/second-round/MANUS-01.md` | NOT STARTED | `task/second-round-MANUS-01` | — | — |
-| `MANUS-02` | Admin Projects 2/3/4 — Tasks 1a, 1b, 2, 3: transcription, read-aloud, dark/light mode, and chat-language preference | `reports/second-round/MANUS-02.md` | NOT STARTED | `task/second-round-MANUS-02` | — | — |
-| `MANUS-03` | Web Projects 1–2 — Tasks 1–10 and their completion packages | `reports/second-round/MANUS-03.md` | NOT STARTED | `task/second-round-MANUS-03` | — | — |
-| `MANUS-04` | Web Projects 3–5 — Tasks 1, 2, 3, 3b, 4, 4b, 5, 5b, 6a, 6b, 7a, 7b, 8, 9 | `reports/second-round/MANUS-04.md` | NOT STARTED | `task/second-round-MANUS-04` | — | — |
-| `MANUS-05` | Rehoming Platform — Tasks A1–C6 | `reports/second-round/MANUS-05.md` | NOT STARTED | `task/second-round-MANUS-05` | — | — |
-| `MANUS-06` | Rehoming Platform — Tasks D1–G1 | `reports/second-round/MANUS-06.md` | NOT STARTED | `task/second-round-MANUS-06` | — | — |
-| `MANUS-07` | Unified Status Dashboard — Tasks 1–12 | `reports/second-round/MANUS-07.md` | NOT STARTED | `task/second-round-MANUS-07` | — | — |
-| `MANUS-08` | Accessibility, widget positioning, design system, responsive design, and rebranding consistency | `reports/second-round/MANUS-08.md` | NOT STARTED | `task/second-round-MANUS-08` | — | — |
-| `MANUS-09` | Cross-cutting security, PHP quality, HTML quality, upload safety, authentication, and security issue-register findings | `reports/second-round/MANUS-09.md` | NOT STARTED | `task/second-round-MANUS-09` | — | — |
-| `MANUS-10` | Browser and integration QA: Playwright, desktop/mobile behavior, console errors, network failures, routes, forms, and visual checks | `reports/second-round/MANUS-10.md` | NOT STARTED | `task/second-round-MANUS-10` | — | — |
-| `MANUS-11` | Final coordinator: reconcile reports, shared-file changes, dependencies, issue classifications, commit order, and final CEO report | `reports/second-round/MANUS-11.md` | NOT STARTED | `task/second-round-MANUS-11` | — | — |
+| `MANUS-01` | Admin Project 1 — Tasks 1–7: live-chat security, sessions, tokens, PIN, lock, password, reset, and auth-state | `reports/second-round/MANUS-01.md` | READY FOR REVIEW | `task/second-round-MANUS-01` | `22594e4` | Fresh tip. Candidate chat/auth work is branch-only; reconcile the shared chat implementation with M02 and M09, then run approved live/runtime checks. |
+| `MANUS-02` | Admin Projects 2/3/4 — Tasks 1a, 1b, 2, 3: transcription, read-aloud, dark/light mode, and chat-language preference | `reports/second-round/MANUS-02.md` | READY FOR REVIEW | `task/second-round-MANUS-02` | `5833edc` | Fresh tip; cumulative merge conflicts in `adopt/admin/chat-start.php`, `adopt/admin/chat-widget.js`, worker-package inventory, and report README. Provider/audio validation remains unperformed. |
+| `MANUS-03` | Web Projects 1–2 — Tasks 1–10 and their completion packages | `reports/second-round/MANUS-03.md` | READY FOR REVIEW | `task/second-round-MANUS-03` | `797b173` | Fresh tip adds integration build/RTL QA documentation. Cumulative merge conflicts include seven category pages and shared documentation/protocols; resolve deliberately and rerun combined QA. |
+| `MANUS-04` | Web Projects 3–5 — Tasks 1, 2, 3, 3b, 4, 4b, 5, 5b, 6a, 6b, 7a, 7b, 8, 9 | `reports/second-round/MANUS-04.md` | READY FOR REVIEW | `task/second-round-MANUS-04` | `151d46b` | M04 is integrated into current main `c177938`; coordinator acceptance and remaining deployment/backend evidence are still open. |
+| `MANUS-05` | Rehoming Platform — Tasks A1–C6 | `reports/second-round/MANUS-05.md` | READY FOR REVIEW | `task/second-round-MANUS-05` | `c177938` | M05 is integrated into current main. Main now contains the A1 posting page/publish endpoint, A2 maintenance job, C5 chat endpoints, and C6 review/moderation endpoints; upload, runtime auth, C3 wiring, and task-level acceptance remain open. Coordinator PHP syntax checks passed on nine merged M05 PHP files. |
+| `MANUS-06` | Rehoming Platform — Tasks D1–G1 | `reports/second-round/MANUS-06.md` | READY FOR REVIEW | `task/second-round-MANUS-06` | `8d05874` | Fresh branch report claims a 90/90 desktop/mobile E2E pass and completes multiple surfaces on the candidate branch. It is not on main; fresh cumulative rehearsal conflicts in `adopt/merchant/index.html`, including the competing A1/F4 route. The F3 evidence also cites an A2 cron path different from main. Stripe secret/live service and other deployment contracts remain. |
+| `MANUS-07` | Unified Status Dashboard — Tasks 1–12 | `reports/second-round/MANUS-07.md` | READY FOR REVIEW | `task/second-round-MANUS-07` | `b961a0b` | Fresh tip; mechanically clean in the cumulative rehearsal after M06 is skipped, but status-page/deployment checks, missing payloads, and owner decisions remain. |
+| `MANUS-08` | Accessibility, widget positioning, design system, responsive design, and rebranding consistency | `reports/second-round/MANUS-08.md` | READY FOR REVIEW | `task/second-round-MANUS-08` | `be1beab` | Fresh report says its branch is synced to main `c177938`, its 42-case page matrix passes, and live deploy snapshot `542c770` still lacks the fixes; report-only deployment verification does not merge or deploy the source changes. Existing tracked runtime/upload/chat-media deployment paths require owner review. |
+| `MANUS-09` | Cross-cutting security, PHP quality, HTML quality, upload safety, authentication, and security issue-register findings | `reports/second-round/MANUS-09.md` | READY FOR REVIEW | `task/second-round-MANUS-09` | `bd41d5b` | Fresh endpoint-test/security pass reports 8 PHPUnit tests/20 assertions and a 46-file PHP lint pass. Email/thread ownership, locked writes, testimonial URL fixes, and adoption-path hardening are branch-only; conflicts with M01 and M07 require one deliberate integration. Live staging target remains unavailable. |
+| `MANUS-10` | Browser and integration QA: Playwright, desktop/mobile behavior, console errors, network failures, routes, forms, and visual checks | `reports/second-round/MANUS-10.md` | READY FOR REVIEW | `task/second-round-MANUS-10` | `0f0d459` | Fresh tip; clean in the cumulative rehearsal after conflict branches are skipped. Shared widget work still requires reconciliation with M02/M03; report is not integration acceptance. |
+| `MANUS-11` | Final coordinator: reconcile reports, shared-file changes, dependencies, issue classifications, commit order, and final CEO report | `reports/second-round/MANUS-11.md` | IN PROGRESS | `task/second-round-MANUS-11` | `30fe102` | Fresh 145-row crosswalk: 27 fixed on worker branches only, 2 fixed on main, 12 false alarms/already resolved, 76 needs review, 28 blocked. Fresh merge-tree rehearsal: M02, M03, M06, and M09 conflict; M04/M05 are already in main; M01/M07/M08/M10/M11 merge cleanly in the cumulative clean subset. |
 
 ## Status vocabulary
 
 - **NOT STARTED** — no report submitted.
 - **IN PROGRESS** — account has reported its starting state.
 - **BLOCKED** — account cannot proceed without a documented dependency or decision.
-- **READY FOR REVIEW** — branch and report are available for coordinator review.
+- **READY FOR REVIEW** — branch and report are available for coordinator review; this is not test certification or merge approval.
 - **RECONCILED** — coordinator verified the report, tests, and handoff.
 
 ## Coordinator checklist
 
-The coordinator must verify that every account report identifies its source documents, issue classifications, changed files, tests, branch, commit, and unresolved blockers. The coordinator must then classify every master-register item as Fixed, False Alarm/Already Resolved, or Needs My Review.
+The coordinator verifies that every account report identifies its source documents, issue classifications, changed files, tests, branch, commit, and unresolved blockers, then classifies every master-register item. A row marked fixed on a worker branch is not accepted on main until it is integrated and rechecked.
+
+## Coordinator snapshot — 2026-11-08
+
+Fresh remote refs: `origin/main` is `c177938` and `origin/adopt-deploy` is `542c770`. M04 and M05 are included in main; the other candidate code changes remain on worker branches unless specifically noted. The cumulative rehearsal used `git merge-tree` and temporary unreferenced merge objects only; it changed no worker branch, main, deploy branch, or application file. See `MANUS-11.md` for the changed-path findings, attributed worker test results, integration order, and remaining CEO/deployment actions. The crosswalk is a coordinator disposition of all 145 physical register rows, not a declaration that all underlying tasks are accepted or live.
