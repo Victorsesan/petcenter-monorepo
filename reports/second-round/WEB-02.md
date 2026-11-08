@@ -1,10 +1,10 @@
 # WEB-02 — Admin Dashboard Baseline QA Report
 
-**Date:** 2026-11-08 08:12 UTC
+**Date:** 2026-11-08 09:21 UTC (updated after branch publication)
 **Assigned branch:** `qa/admin-dashboard`
 **Base:** `origin/main` at `42228b6`
 **Implementation commit:** `eb5f886` (`WEB-02: harden admin dashboard baseline`)
-**Status:** Implementation and isolated verification complete; external push is held for the Hostinger-trigger safety check described below.
+**Status:** Implementation and isolated verification are complete. The assigned branch is published to `origin/qa/admin-dashboard`; no Hostinger action was performed.
 
 ## Scope and safety boundary
 
@@ -46,11 +46,11 @@ API request/response shapes used by existing UI flows were preserved; lower-case
 2. **Medium — broad CORS and cleartext GeoIP remain.** `adopt/admin/admin-auth.php:17` still emits `Access-Control-Allow-Origin: *`. The same endpoint sends the client IP to `http://ip-api.com` at line 81. Confirm whether cross-origin clients are required; otherwise restrict CORS, and review whether the third-party IP/location lookup should be removed or replaced with an approved encrypted service. Not changed because this alters integration/privacy behavior.
 3. **High — hosting-level protection of private admin files is unverified.** The corrected `adopt/admin/.htaccess` intentionally has comments only, not deny rules. Confirm through the approved hosting configuration that `.env`, `admin-activity.log`, `chat-config.php`, and other private/runtime files cannot be fetched over HTTP. No production URL was probed. Do not infer protection from dot-file naming.
 4. **Medium — one-time setup lifecycle.** The source comment in `chat-session-token-setup.php:24–27` instructs the operator to delete or move the script outside the web root after successful setup. It now requires admin authorization, but this task did not access the database or execute the script; the coordinator should verify its post-setup removal during an approved release.
-5. **Hostinger automation status is not fully observable here.** No tracked `.github/workflows` files were found. GitHub API requests for repository hooks, deployments, and Actions workflow metadata returned HTTP 403 (integration permission denied), so external webhooks and Hostinger’s configured deployment branch could not be verified. Confirm the assigned branch is excluded from Hostinger auto-deployment, or disable the trigger, before pushing if that connection might observe this branch. No deployment was initiated.
+5. **Access observation — GitHub deployment metadata returned HTTP 403.** The authorized API metadata request was denied with HTTP 403 (integration permission denied). This is an access observation only, not a blocker; no metadata contents were available and no settings were changed. No tracked `.github/workflows` files were found during repository review. The branch push proceeded as instructed and was limited to `origin/qa/admin-dashboard`; no Hostinger deployment, upload, or trigger was initiated by this task.
 6. **Responsive/RTL end-to-end coverage remains limited.** Browser checks covered the clean login screen and generated form semantics, not authenticated production workflows, RTL navigation, or a full mobile/tablet visual review; those require a controlled staging account and approved test data.
 
 ## Coordinator reminder: backups and release controls
 
 Before any future production change, create and verify both (a) a repository backup (including a Git bundle stored outside the repository with its checksum) and (b) Hostinger backups of website files, database/export where applicable, `.htaccess` and hosting configuration, securely stored environment values, and protected runtime data. Verify the archives/exports are non-empty and recoverable. Record the last known-good commit and rollback procedure. No backup or production change was performed by WEB-02.
 
-The assigned code commit is local as of this report. `TODO.md` was read but not edited: its own rules prohibit edits on a task branch and direct workers to update it on `main`, while the current WEB instructions prohibit worker pushes to `main`. The coordinator should resolve that shared-inbox workflow when integrating this report; WEB-02 made no change to `main`.
+The implementation commit is `eb5f886` and the original report commit is `3527a59`; both are in the published assigned branch. The report follow-up records the successful push. `TODO.md` was read but not edited: its own rules prohibit edits on a task branch and direct workers to update it on `main`, while the current WEB instructions prohibit worker pushes to `main`. The coordinator should resolve that shared-inbox workflow when integrating this report; WEB-02 made no change to `main`.
