@@ -371,9 +371,7 @@ p { color: var(--muted); }
               <h2>My Listings</h2>
               <p style="font-size:14px;">Every pet you've posted — edit details, close a listing, or post a new one.</p>
             </div>
-            <!-- Routes into Task A1's posting form (pet-posting-form.html, confirmed
-                 from Task-A1-Completion.md) via A1_POSTING_PANEL_URL. That form is
-                 A1's deliverable, not rebuilt here (Scope Lock). -->
+            <!-- TASK-MANUS-06: live F4 guided posting route. -->
             <a href="javascript:void(0)" onclick="window.location.href = A1_POSTING_PANEL_URL" class="pc-btn pc-btn--orange"><i class="fas fa-plus"></i> Post New Listing</a>
           </div>
           <div class="pc-apps-scroll">
@@ -865,11 +863,8 @@ function loadListings() {
   }).join('');
 }
 
-// A1_POSTING_PANEL_URL: A1's real output file, confirmed from Task-A1-Completion.md,
-// which delivers it as `pet-posting-form-v2.html`. Digits in filenames are
-// not significant on this project, so the source filename used here is
-// `pet-posting-form.html`. Kept as one constant so any rename is a one-line change.
-const A1_POSTING_PANEL_URL = 'pet-posting-form.html';
+// TASK-MANUS-06: live F4 guided posting route.
+const A1_POSTING_PANEL_URL = '/merchant/post-listing/';
 
 // TASK-E1 START (E1c — merchant listing edit modal logic)
 // Revision note 5: A1's form is create-only (its submit path builds new
