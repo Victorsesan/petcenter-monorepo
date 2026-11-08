@@ -41,30 +41,49 @@ if (!isAuthenticated()) {
     die(json_encode(['success' => false, 'error' => 'Unauthorized — token mismatch or missing']));
 }
 
-$category = trim($_POST['category'] ?? '');
-$pet_id   = trim($_POST['pet_id']   ?? '');
+$category = $_POST['category'] ?? '';
+$pet_id   = $_POST['pet_id'] ?? '';
 
-if (!$category || !$pet_id) {
+if (!is_string($category) || !is_string($pet_id) || trim($category) === '' || trim($pet_id) === '') {
     http_response_code(400);
     die(json_encode(['success' => false, 'error' => 'category and pet_id are required']));
 }
 
-// Sanitize path components
-$category = preg_replace('/[^a-z0-9\-]/', '', strtolower($category));
-$pet_id   = preg_replace('/[^A-Za-z0-9\-]/', '', $pet_id);
-
-$pet_folder = __DIR__ . "/../adoptions/pets/{$category}/{$pet_id}";
-$pet_json   = $pet_folder . '/pet.json';
-
-if (!is_dir($pet_folder)) {
+// TASK-WEB-02-ADMIN-BASELINE START — accept only known category/ID pairs and canonical paths.
+$category = trim($category);
+$pet_id = trim($pet_id);
+$allowed_prefixes = [
+    'dogs' => ['DOG'], 'cats' => ['CAT'], 'birds' => ['BIRD'],
+    'reptiles' => ['REP', 'REPTILE'], 'small-mammals' => ['SM', 'MAM'],
+    'livestocks' => ['LVS'], 'aquariums' => ['AQU'],
+];
+if (!isset($allowed_prefixes[$category])
+    || !preg_match('/^([A-Z]+)-\d{5}$/i', $pet_id, $pet_id_parts)
+    || !in_array(strtoupper($pet_id_parts[1]), $allowed_prefixes[$category], true)) {
+    http_response_code(400);
+    die(json_encode(['success' => false, 'error' => 'Invalid category or pet ID']));
+}
+$pet_id = strtoupper($pet_id_parts[1]) . '-' . substr($pet_id, strrpos($pet_id, '-') + 1);
+$pets_base = realpath(__DIR__ . '/../adoptions/pets');
+$category_folder = $pets_base !== false ? realpath($pets_base . DIRECTORY_SEPARATOR . $category) : false;
+$category_prefix = $category_folder !== false ? rtrim($category_folder, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR : '';
+$pet_candidate = $category_folder !== false ? $category_folder . DIRECTORY_SEPARATOR . $pet_id : '';
+$pet_folder = $pet_candidate !== '' ? realpath($pet_candidate) : false;
+$pet_json = $pet_folder !== false ? $pet_folder . DIRECTORY_SEPARATOR . 'pet.json' : '';
+if ($pets_base === false || $category_folder === false
+    || strpos($category_folder, rtrim($pets_base, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR) !== 0
+    || $pet_folder === false || is_link($pet_candidate)
+    || strpos($pet_folder, $category_prefix) !== 0 || !is_dir($pet_folder)) {
     http_response_code(404);
-    die(json_encode(['success' => false, 'error' => "Pet folder not found: {$category}/{$pet_id}"]));
+    die(json_encode(['success' => false, 'error' => 'Pet folder not found']));
 }
 
-if (!file_exists($pet_json)) {
+if (is_link($pet_json) || !is_file($pet_json) || realpath($pet_json) === false
+    || strpos(realpath($pet_json), $category_prefix) !== 0) {
     http_response_code(404);
     die(json_encode(['success' => false, 'error' => 'pet.json not found for this pet']));
 }
+// TASK-WEB-02-ADMIN-BASELINE END
 
 // Load existing data
 $pet_data = json_decode(file_get_contents($pet_json), true);
@@ -124,7 +143,7 @@ if (isset($_FILES['single_image']) && $_FILES['single_image']['error'] === UPLOA
     }
 
     if (!move_uploaded_file($file['tmp_name'], $dest)) {
-        die(json_encode(['success' => false, 'error' => 'Failed to move single_image to: ' . $dest]));
+        die(json_encode(['success' => false, 'error' => 'Failed to save the single image.']));
     }
 
     $pet_data['single_image']     = $filename;
@@ -177,15 +196,26 @@ $has_bulk_upload = isset($_FILES['bulk_images'])
 if ($has_bulk_upload) {
     $bulk_folder = $pet_folder . '/bulk_images';
 
+    if (is_link($bulk_folder)) {
+        http_response_code(400);
+        die(json_encode(['success' => false, 'error' => 'Bulk image storage is invalid.']));
+    }
+
     // Create folder if missing
     if (!is_dir($bulk_folder)) {
         if (!mkdir($bulk_folder, 0755, true)) {
             die(json_encode(['success' => false, 'error' => 'Could not create bulk_images folder']));
         }
     }
+    $real_bulk_folder = realpath($bulk_folder);
+    $pet_folder_prefix = rtrim($pet_folder, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+    if ($real_bulk_folder === false || strpos($real_bulk_folder, $pet_folder_prefix) !== 0) {
+        http_response_code(400);
+        die(json_encode(['success' => false, 'error' => 'Bulk image storage is invalid.']));
+    }
 
     // Delete ALL existing bulk images regardless of count
-    $existing = glob($bulk_folder . '/*');
+    $existing = glob($real_bulk_folder . '/*');
     if ($existing) {
         foreach ($existing as $old_file) { @unlink($old_file); }
     }
@@ -203,7 +233,7 @@ if ($has_bulk_upload) {
         $ext = strtolower(pathinfo($names[$i], PATHINFO_EXTENSION));
         if (!in_array($ext, ['jpg', 'jpeg', 'png'])) $ext = 'jpg';
         $filename = 'image' . $counter . '.' . $ext;
-        $dest     = $bulk_folder . '/' . $filename;
+        $dest     = $real_bulk_folder . '/' . $filename;
         if (move_uploaded_file($tmp_names[$i], $dest)) {
             $new_bulk[] = $filename;
             $counter++;
@@ -226,7 +256,7 @@ $written  = file_put_contents($pet_json, $json_str);
 if ($written === false) {
     die(json_encode([
         'success' => false,
-        'error'   => 'file_put_contents failed — check folder permissions on: ' . $pet_json,
+        'error'   => 'Could not save pet data. Check the storage permissions.',
     ]));
 }
 

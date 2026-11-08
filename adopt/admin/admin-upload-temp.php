@@ -34,14 +34,20 @@ $env_file = __DIR__ . '/.env';
 if (file_exists($env_file)) {
     preg_match('/ADMIN_TOKEN=(.+)/', file_get_contents($env_file), $matches);
     $admin_token = isset($matches[1]) ? trim($matches[1]) : null;
-    if ($admin_token) {
-        $provided = $_SERVER['HTTP_X_ADMIN_TOKEN'] ?? ($_SESSION['admin_token'] ?? null);
-        if ($provided !== $admin_token) {
-            http_response_code(401);
-            out(false, 'Unauthorized');
-        }
-    }
+} else {
+    $admin_token = null;
 }
+// TASK-WEB-02-ADMIN-BASELINE START — image staging is admin-only and must fail closed when auth is unconfigured.
+if (!$admin_token) {
+    http_response_code(500);
+    out(false, 'Admin authentication is not configured.');
+}
+$provided = $_SERVER['HTTP_X_ADMIN_TOKEN'] ?? ($_SESSION['admin_token'] ?? null);
+if (!is_string($provided) || !hash_equals($admin_token, $provided)) {
+    http_response_code(401);
+    out(false, 'Unauthorized');
+}
+// TASK-WEB-02-ADMIN-BASELINE END
 
 // Base upload directory for admin pet images
 $UPLOAD_BASE = __DIR__ . '/../adoptions/';
@@ -116,7 +122,8 @@ $meta = [
 ];
 file_put_contents($TEMP_DIR . DIRECTORY_SEPARATOR . $token . '.json', json_encode($meta));
 
-error_log("admin-upload-temp.php: saved {$field} file -> {$filename} (token={$token})");
+// Do not write the bearer upload token to logs; it can authorize later attachment of the staged file.
+error_log("admin-upload-temp.php: saved {$field} file -> {$filename}");
 
 out(true, 'Uploaded.', ['token' => $token, 'field' => $field, 'name' => $f['name'], 'size' => $f['size']]);
 ?>

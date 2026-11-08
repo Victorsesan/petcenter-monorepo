@@ -21,21 +21,60 @@ if (!isAuthenticated()) {
 $category = $_POST['category'] ?? $_GET['category'] ?? null;
 $pet_id   = $_POST['pet_id']   ?? $_GET['pet_id']   ?? null;
 
-if (!$category) {
+// TASK-WEB-02-ADMIN-BASELINE START — constrain request selectors before constructing storage paths.
+$allowed_categories = ['dogs', 'cats', 'birds', 'reptiles', 'small-mammals', 'livestocks', 'aquariums'];
+if (!is_string($category) || trim($category) === '') {
     http_response_code(400);
     die(json_encode(['success' => false, 'message' => 'category is required']));
 }
+$category = trim($category);
+if (!in_array($category, $allowed_categories, true)) {
+    http_response_code(400);
+    die(json_encode(['success' => false, 'message' => 'Invalid category']));
+}
+$category_prefixes = [
+    'dogs' => ['DOG'], 'cats' => ['CAT'], 'birds' => ['BIRD'],
+    'reptiles' => ['REP', 'REPTILE'], 'small-mammals' => ['SM', 'MAM'],
+    'livestocks' => ['LVS'], 'aquariums' => ['AQU'],
+];
+if ($pet_id !== null) {
+    if (!is_string($pet_id) || !preg_match('/^([A-Z]+)-\d{5}$/i', trim($pet_id), $pet_id_parts)
+        || !in_array(strtoupper($pet_id_parts[1]), $category_prefixes[$category], true)) {
+        http_response_code(400);
+        die(json_encode(['success' => false, 'message' => 'Invalid pet ID']));
+    }
+    $pet_id = strtoupper($pet_id_parts[1]) . '-' . substr(trim($pet_id), strrpos(trim($pet_id), '-') + 1);
+}
 
 $pets_base = __DIR__ . '/../adoptions/pets';
-
-// Return single pet
-if ($pet_id) {
-    $pet_file = $pets_base . "/{$category}/{$pet_id}/pet.json";
-    if (!file_exists($pet_file)) {
+$pets_real = realpath($pets_base);
+$category_folder = $pets_real !== false ? realpath($pets_real . DIRECTORY_SEPARATOR . $category) : false;
+if ($pets_real === false || $category_folder === false
+    || strpos($category_folder, rtrim($pets_real, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR) !== 0
+    || !is_dir($category_folder)) {
+    if ($pet_id) {
         http_response_code(404);
         die(json_encode(['success' => false, 'message' => 'Pet not found']));
     }
-    $pet = json_decode(file_get_contents($pet_file), true);
+    echo json_encode([]);
+    exit;
+}
+$category_prefix = rtrim($category_folder, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+// TASK-WEB-02-ADMIN-BASELINE END
+
+// Return single pet
+if ($pet_id) {
+    $pet_directory = $category_folder . DIRECTORY_SEPARATOR . $pet_id;
+    $pet_file = $pet_directory . DIRECTORY_SEPARATOR . 'pet.json';
+    $real_pet_directory = realpath($pet_directory);
+    $real_pet_file = realpath($pet_file);
+    if (is_link($pet_directory) || is_link($pet_file) || $real_pet_directory === false
+        || strpos($real_pet_directory, $category_prefix) !== 0 || $real_pet_file === false
+        || strpos($real_pet_file, $category_prefix) !== 0 || !is_file($real_pet_file)) {
+        http_response_code(404);
+        die(json_encode(['success' => false, 'message' => 'Pet not found']));
+    }
+    $pet = json_decode(file_get_contents($real_pet_file), true);
     // Ensure single_image_url is set
     if (!isset($pet['single_image_url']) && isset($pet['single_image']) && $pet['single_image']) {
         $pet['single_image_url'] = "/adoptions/pets/{$category}/{$pet_id}/" . $pet['single_image'];
@@ -46,20 +85,20 @@ if ($pet_id) {
 
 // Return list of pets for category
 $category_folder = $pets_base . "/{$category}";
-$index_file = $category_folder . '/index.json';
-
 $pets = [];
-if (is_dir($category_folder)) {
-    foreach (scandir($category_folder) as $folder) {
-        if ($folder === '.' || $folder === '..' || $folder === 'index.json') continue;
-        $pet_file = $category_folder . '/' . $folder . '/pet.json';
-        if (file_exists($pet_file)) {
-            $pet_data = json_decode(file_get_contents($pet_file), true);
-            if ($pet_data) {
-                $pets[] = $pet_data;
-            }
+foreach (scandir($category_folder) as $folder) {
+    if ($folder === '.' || $folder === '..' || $folder === 'index.json') continue;
+    $pet_directory = $category_folder . DIRECTORY_SEPARATOR . $folder;
+    $pet_file = $pet_directory . DIRECTORY_SEPARATOR . 'pet.json';
+    $real_pet_directory = realpath($pet_directory);
+    $real_pet_file = realpath($pet_file);
+    if (is_link($pet_directory) || is_link($pet_file) || $real_pet_directory === false
+        || strpos($real_pet_directory, $category_prefix) !== 0 || $real_pet_file === false
+        || strpos($real_pet_file, $category_prefix) !== 0 || !is_file($real_pet_file)) continue;
+    $pet_data = json_decode(file_get_contents($real_pet_file), true);
+    if ($pet_data) {
+        $pets[] = $pet_data;
         }
-    }
 }
 
 // Ensure all pets have pet_id and single_image_url

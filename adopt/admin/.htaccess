@@ -1,1 +1,4 @@
-Facebook
+# TASK-WEB-02-ADMIN-BASELINE START
+# The former bare "Facebook" line was not an Apache directive and could cause HTTP 500 responses.
+# No access policy is encoded here; confirm hosting-level restrictions separately before release.
+# TASK-WEB-02-ADMIN-BASELINE END

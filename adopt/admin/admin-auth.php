@@ -1,4 +1,17 @@
 <?php
+// TASK-WEB-02-ADMIN-BASELINE START — harden the existing session cookie without changing its path or domain.
+$sessionCookie = session_get_cookie_params();
+$isHttps = (!empty($_SERVER['HTTPS']) && strtolower((string)$_SERVER['HTTPS']) !== 'off')
+    || (string)($_SERVER['SERVER_PORT'] ?? '') === '443';
+session_set_cookie_params([
+    'lifetime' => $sessionCookie['lifetime'],
+    'path' => $sessionCookie['path'],
+    'domain' => $sessionCookie['domain'],
+    'secure' => !empty($sessionCookie['secure']) || $isHttps,
+    'httponly' => true,
+    'samesite' => 'Lax',
+]);
+// TASK-WEB-02-ADMIN-BASELINE END
 session_start();
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
@@ -29,10 +42,20 @@ if (!$provided_token) {
     die(json_encode(['success' => false, 'message' => 'No token provided in request']));
 }
 
-if ($provided_token !== $admin_token) {
+if (!is_string($provided_token) || !hash_equals($admin_token, $provided_token)) {
     http_response_code(401);
     die(json_encode(['success' => false, 'message' => 'Invalid token']));
 }
+
+// TASK-WEB-02-ADMIN-BASELINE START — rotate the session identifier on fresh authentication.
+$alreadyAuthenticated = isset($_SESSION['admin_token'])
+    && is_string($_SESSION['admin_token'])
+    && hash_equals($admin_token, $_SESSION['admin_token']);
+if (!$alreadyAuthenticated && !session_regenerate_id(true)) {
+    http_response_code(500);
+    die(json_encode(['success' => false, 'message' => 'Could not establish a secure admin session']));
+}
+// TASK-WEB-02-ADMIN-BASELINE END
 
 // Valid — set session and trigger login log via security.php
 $_SESSION['admin_token']   = $provided_token;

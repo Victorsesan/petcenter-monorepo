@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit colors="true">
     <testsuites>
-        <testsuite name="MANUS-09 endpoint tests">
+        <testsuite name="Admin and endpoint regression tests">
             <file>tests/Manus09EndpointTest.php</file>
+            <file>tests/Web02AdminBaselineTest.php</file>
         </testsuite>
     </testsuites>
 </phpunit>

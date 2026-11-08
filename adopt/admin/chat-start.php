@@ -188,7 +188,6 @@ if ($existing) {
     $sessionToken = $authPayload['sessionToken'];
     /* TASK-3 END */
     $db->prepare('UPDATE chat_threads SET preferred_chat_language = ? WHERE id = ?')->execute([$preferredChatLanguage, $existing['id']]);
-    $db->prepare('UPDATE chat_threads SET preferred_chat_language = ? WHERE id = ?')->execute([$preferredChatLanguage, $thread['id']]);
 
     chatRespond([
         'success'      => true,

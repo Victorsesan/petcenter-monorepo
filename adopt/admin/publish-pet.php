@@ -86,6 +86,40 @@ $prefix_map = ['dogs' => 'DOG', 'cats' => 'CAT', 'birds' => 'BIRD', 'reptiles' =
 /* BUGFIX-4 END */
 // TASK-2 END
 
+// TASK-WEB-02-ADMIN-BASELINE START — validate filesystem path selectors and opaque upload tokens before side effects.
+foreach ($pets as $candidate) {
+    if (!is_array($candidate)) {
+        http_response_code(400);
+        die(json_encode(['success' => false, 'message' => 'Invalid pet data']));
+    }
+    $candidateCategory = $candidate['category'] ?? null;
+    if ($candidateCategory !== null && $candidateCategory !== ''
+        && (!is_string($candidateCategory) || !array_key_exists($candidateCategory, $prefix_map))) {
+        http_response_code(400);
+        die(json_encode(['success' => false, 'message' => 'Invalid pet category']));
+    }
+    foreach (['single_token', 'video_token'] as $tokenField) {
+        if (isset($candidate[$tokenField]) && $candidate[$tokenField] !== ''
+            && (!is_string($candidate[$tokenField]) || !preg_match('/^[a-f0-9]{32}$/i', $candidate[$tokenField]))) {
+            http_response_code(400);
+            die(json_encode(['success' => false, 'message' => 'Invalid upload token']));
+        }
+    }
+    if (isset($candidate['bulk_tokens'])) {
+        if (!is_array($candidate['bulk_tokens'])) {
+            http_response_code(400);
+            die(json_encode(['success' => false, 'message' => 'Invalid bulk upload tokens']));
+        }
+        foreach ($candidate['bulk_tokens'] as $bulkToken) {
+            if (!is_string($bulkToken) || !preg_match('/^[a-f0-9]{32}$/i', $bulkToken)) {
+                http_response_code(400);
+                die(json_encode(['success' => false, 'message' => 'Invalid upload token']));
+            }
+        }
+    }
+}
+// TASK-WEB-02-ADMIN-BASELINE END
+
 foreach ($pets as $pet_input) {
     $category = $pet_input['category'] ?? null;
     $name = $pet_input['name'] ?? null;
