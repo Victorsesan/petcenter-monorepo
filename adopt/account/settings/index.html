@@ -505,6 +505,9 @@ p { color: var(--muted); }
 }
 .dropdown-panel__row:last-child { border-bottom: none; }
 .dropdown-panel__row:hover { background: rgba(16,33,75,0.05); }
+/* TASK-WEB-04 START — Visible keyboard focus for adopter-profile listbox options. */
+.dropdown-panel__row:focus-visible { outline: 2px solid #A34A0E; outline-offset: -2px; background: rgba(237,118,36,0.08); }
+/* TASK-WEB-04 END */
 .dropdown-panel__row.selected { background: rgba(215,189,136,0.12); border-inline-start-color: var(--gold); font-weight: 600; }
 
 /* Save button uses the canonical .pc-btn .pc-btn--orange from cats.html (no custom button) */
@@ -605,10 +608,11 @@ p { color: var(--muted); }
   <!-- Adopter Profile form -->
   <form class="b5-card" id="adopterProfileForm" novalidate>
     <h2>Adopter Profile</h2>
+    <!-- TASK-WEB-04 START — Accurate private-profile disclosure; no automatic message sharing is implemented. -->
     <p class="b5-card__lede">
-      Filled out once — it's shared automatically with a merchant the first time you message them about a
-      listing. It's never public and never visible to any other merchant unless you message them too.
+      This adopter profile is saved to your private account and is not public. It is not automatically attached to messages in the current Rehoming flow.
     </p>
+    <!-- TASK-WEB-04 END -->
 
     <div class="pc-form-grid">
 
@@ -706,8 +710,8 @@ p { color: var(--muted); }
       <div class="field field--full">
         <label for="whyThisPet">Why This Pet? <span class="opt">(a sentence or two is plenty)</span></label>
         <textarea id="whyThisPet" name="whyThisPet" maxlength="400"
-                  placeholder="Tell the merchant a little about why you're interested..."></textarea>
-        <span class="field__hint">This is sent along with your first message to a merchant, not shown publicly.</span>
+                  placeholder="Add a short note about why you're interested..."></textarea>
+        <span class="field__hint">This stays in your private profile and is not currently sent to merchants.</span>
       </div>
 
     </div>
@@ -717,14 +721,15 @@ p { color: var(--muted); }
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
         <path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
-      Saved. This will attach to your next new enquiry.
+      Saved to your private account. It is not currently sent to merchants.
     </div>
+    <p id="profileError" role="alert" aria-live="assertive" hidden></p>
   </form>
 
   <!-- Visitor track record -->
   <section class="b5-card" id="trackRecordCard">
     <h2>Your Track Record</h2>
-    <p class="b5-card__lede">Shown to merchants alongside your adopter profile once you message them.</p>
+    <p class="b5-card__lede">Adoption history is not connected to live records yet. This private section is not currently shared with merchants.</p>
     <div id="trackRecordContent">
       <!-- Populated by script below: either the two-stat layout or the "New to Pet Center" fallback -->
     </div>
@@ -804,6 +809,7 @@ p { color: var(--muted); }
   </div>
 </footer>
 
+<script src="/assets/js/web04-csrf.js" defer></script>
 <script>
 'use strict';
 
@@ -885,10 +891,25 @@ p { color: var(--muted); }
     var valueEl = trigger.querySelector('[data-trigger-value]');
     var rows = Array.prototype.slice.call(dd.querySelectorAll('.dropdown-panel__row'));
     var fieldName = dd.getAttribute('data-field-name');
+    /* TASK-WEB-04 START — Keyboard-operable listbox behavior with explicit selected state. */
+    panel.id = 'profile-' + fieldName + '-listbox';
+    var triggerLabelledBy = trigger.getAttribute('aria-labelledby') || '';
+    var listboxLabelId = triggerLabelledBy.trim().split(/\s+/)[0] || '';
+    valueEl.id = 'profile-' + fieldName + '-value';
+    if (triggerLabelledBy) trigger.setAttribute('aria-labelledby', triggerLabelledBy + ' ' + valueEl.id);
+    if (listboxLabelId) panel.setAttribute('aria-labelledby', listboxLabelId);
+    panel.setAttribute('aria-orientation', 'vertical');
+    trigger.setAttribute('aria-controls', panel.id);
+    rows.forEach(function (row, index) {
+      row.id = panel.id + '-option-' + index;
+      row.tabIndex = -1;
+      row.setAttribute('aria-selected', row.classList.contains('selected') ? 'true' : 'false');
+    });
 
     function selectRow(row) {
-      rows.forEach(function (r) { r.classList.remove('selected'); });
+      rows.forEach(function (r) { r.classList.remove('selected'); r.setAttribute('aria-selected', 'false'); });
       row.classList.add('selected');
+      row.setAttribute('aria-selected', 'true');
       valueEl.textContent = row.textContent;
       valueEl.classList.remove('is-placeholder');
       dd.setAttribute('data-value', row.getAttribute('data-value'));
@@ -898,19 +919,28 @@ p { color: var(--muted); }
       }));
     }
 
-    function open() {
+    function open(focusOption) {
       closeAllDropdowns(dd);
       trigger.classList.add('active');
       trigger.setAttribute('aria-expanded', 'true');
       panel.classList.add('open');
       reposition();
+      if (focusOption && rows.length) {
+        var selectedRow = rows.find(function (row) { return row.getAttribute('aria-selected') === 'true'; });
+        var focusRow = selectedRow || rows[0];
+        window.requestAnimationFrame(function () {
+          window.requestAnimationFrame(function () {
+            if (panel.classList.contains('open') && (document.activeElement === trigger || panel.contains(document.activeElement))) focusRow.focus();
+          });
+        });
+      }
     }
     function close() {
       trigger.classList.remove('active');
       trigger.setAttribute('aria-expanded', 'false');
       panel.classList.remove('open');
     }
-    function toggle() { panel.classList.contains('open') ? close() : open(); }
+    function toggle(focusOption) { panel.classList.contains('open') ? close() : open(focusOption); }
 
     // Smart positioning: flip upward if not enough room below (Section 24 requirement)
     function reposition() {
@@ -930,15 +960,43 @@ p { color: var(--muted); }
       }
     }
 
-    trigger.addEventListener('click', function (e) { e.stopPropagation(); toggle(); });
+    trigger.addEventListener('click', function (e) { e.stopPropagation(); toggle(false); });
     trigger.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
-      else if (e.key === 'ArrowDown') { e.preventDefault(); if (!panel.classList.contains('open')) open(); }
-      else if (e.key === 'Escape') { close(); }
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(true); }
+      else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (!panel.classList.contains('open')) open(true);
+        else if (rows.length) (e.key === 'ArrowDown' ? rows[0] : rows[rows.length - 1]).focus();
+      } else if (e.key === 'Home' || e.key === 'End') {
+        e.preventDefault();
+        if (!panel.classList.contains('open')) open(false);
+        if (rows.length) (e.key === 'Home' ? rows[0] : rows[rows.length - 1]).focus();
+      } else if (e.key === 'Escape') { e.preventDefault(); close(); trigger.focus(); }
+      else if (e.key === 'Tab') close();
     });
     rows.forEach(function (row) {
       row.addEventListener('click', function (e) { e.stopPropagation(); selectRow(row); });
+      row.addEventListener('keydown', function (e) {
+        var index = rows.indexOf(row);
+        if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+          e.preventDefault();
+          var step = e.key === 'ArrowDown' ? 1 : -1;
+          rows[(index + step + rows.length) % rows.length].focus();
+        } else if (e.key === 'Home' || e.key === 'End') {
+          e.preventDefault();
+          (e.key === 'Home' ? rows[0] : rows[rows.length - 1]).focus();
+        } else if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          selectRow(row);
+          trigger.focus();
+        } else if (e.key === 'Escape') {
+          e.preventDefault();
+          close();
+          trigger.focus();
+        } else if (e.key === 'Tab') close();
+      });
     });
+    /* TASK-WEB-04 END */
 
     window.addEventListener('resize', function () { if (panel.classList.contains('open')) reposition(); }, { passive: true });
     window.addEventListener('scroll', function () {
@@ -959,48 +1017,65 @@ p { color: var(--muted); }
     }
   });
 
-  // ─── Persistence stub ─────────────────────────────────────────────────
-  // TODO(integration): the real visitor account system doesn't exist yet.
-  // This stub keys on a placeholder visitor email in localStorage purely so
-  // the form is demoable end-to-end. Once the CEO's account system ships,
-  // replace STORAGE_KEY's lookup with the real logged-in visitor's ID and
-  // swap localStorage for a real backend call.
-  var PLACEHOLDER_VISITOR_EMAIL = 'demo.visitor@example.com';
-  var STORAGE_KEY = 'pc_adopter_profile_' + PLACEHOLDER_VISITOR_EMAIL;
-
+  // TASK-WEB-04 START — Replace the shared placeholder localStorage stub with account-owned server storage.
+  // Discard the old demo-only key; it was not tied to an authenticated person and is never migrated.
+  try { localStorage.removeItem('pc_adopter_profile_demo.visitor@example.com'); } catch (ignoreStorageError) {}
   var form = document.getElementById('adopterProfileForm');
   var saveToast = document.getElementById('saveToast');
+  var profileError = document.getElementById('profileError');
 
-  function loadProfile() {
-    var raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return;
-    try {
-      var data = JSON.parse(raw);
-      dropdowns.forEach(function (dd) {
-        var fieldName = dd.getAttribute('data-field-name');
-        if (data[fieldName]) {
-          var row = dd.querySelector('.dropdown-panel__row[data-value="' + data[fieldName] + '"]');
-          if (row) row.click();
-        }
-      });
-      if (data.otherPetsSpecies) document.getElementById('otherPetsSpecies').value = data.otherPetsSpecies;
-      if (data.whyThisPet) document.getElementById('whyThisPet').value = data.whyThisPet;
-    } catch (err) { /* malformed stub data — ignore and start fresh */ }
+  function populateProfile(data) {
+    dropdowns.forEach(function (dd) {
+      var fieldName = dd.getAttribute('data-field-name');
+      if (data[fieldName]) {
+        var row = dd.querySelector('.dropdown-panel__row[data-value="' + data[fieldName] + '"]');
+        if (row) row.click();
+      }
+    });
+    if (data.otherPetsSpecies) document.getElementById('otherPetsSpecies').value = data.otherPetsSpecies;
+    if (data.whyThisPet) document.getElementById('whyThisPet').value = data.whyThisPet;
   }
 
-  form.addEventListener('submit', function (e) {
+  async function loadProfile() {
+    try {
+      var response = await fetch('/rehoming/auth.php?action=profile', { headers: { 'Accept': 'application/json' }, cache: 'no-store' });
+      var result = await response.json();
+      if (!response.ok || !result.success) throw new Error(result.message || 'Unable to load your private profile.');
+      populateProfile(result.profile || {});
+    } catch (error) {
+      profileError.textContent = error.message || 'Unable to load your private profile.';
+      profileError.hidden = false;
+    }
+  }
+
+  form.addEventListener('submit', async function (e) {
     e.preventDefault();
+    profileError.textContent = '';
+    profileError.hidden = true;
+    saveToast.classList.remove('show');
+    var saveButton = form.querySelector('button[type="submit"]');
+    saveButton.disabled = true;
     var data = {};
     dropdowns.forEach(function (dd) { data[dd.getAttribute('data-field-name')] = dd.getAttribute('data-value') || ''; });
     // Species detail only applies when other pets = yes; clear it otherwise so stale text is never saved/shared
     data.otherPetsSpecies = (data.otherPets === 'yes') ? document.getElementById('otherPetsSpecies').value.trim() : '';
     data.whyThisPet = document.getElementById('whyThisPet').value.trim();
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-    saveToast.classList.add('show');
-    setTimeout(function () { saveToast.classList.remove('show'); }, 3000);
+    try {
+      var response = await fetch('/rehoming/auth.php?action=profile', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(data) });
+      var result = await response.json();
+      if (!response.ok || !result.success) throw new Error(result.message || 'Unable to save your profile.');
+      saveToast.classList.add('show');
+      setTimeout(function () { saveToast.classList.remove('show'); }, 3000);
+    } catch (error) {
+      profileError.textContent = error.message || 'Unable to save your profile.';
+      profileError.hidden = false;
+    } finally {
+      saveButton.disabled = false;
+    }
   });
 
   loadProfile();
+  // TASK-WEB-04 END
 
   // ─── Track record display ─────────────────────────────────────────────
   // TODO(integration, Task D1): completedAdoptions should come from D1's

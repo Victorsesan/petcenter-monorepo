@@ -4,13 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Post a pet | Pet Center</title>
-  <style>body{font-family:system-ui,sans-serif;background:#f8f5ef;color:#10214b;margin:0;padding:32px}.card{max-width:760px;margin:auto;background:#fff;padding:28px;border-radius:16px;box-shadow:0 8px 30px #10214b18}label{display:block;font-weight:600;margin-top:14px}input,textarea,select{width:100%;box-sizing:border-box;padding:11px;margin-top:6px;border:1px solid #d8cfbf;border-radius:8px;font:inherit}button{margin-top:22px;padding:12px 18px;border:0;border-radius:8px;background:#ed7624;color:#fff;font-weight:700;cursor:pointer}.error{color:#a52626}.success{color:#0d7c4a}</style>
+  <style>body{font-family:system-ui,sans-serif;background:#f8f5ef;color:#10214b;margin:0;padding:32px}.card{max-width:760px;margin:auto;background:#fff;padding:28px;border-radius:16px;box-shadow:0 8px 30px #10214b18}label{display:block;font-weight:600;margin-top:14px}input,textarea,select{width:100%;box-sizing:border-box;padding:11px;margin-top:6px;border:1px solid #d8cfbf;border-radius:8px;font:inherit}button{margin-top:22px;padding:12px 18px;border:0;border-radius:8px;background:#ed7624;color:#fff;font-weight:700;cursor:pointer}button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid #10214b;outline-offset:2px}.error{color:#a52626}.success{color:#0d7c4a}@media(max-width:600px){body{padding:16px}.card{padding:20px}}</style>
 </head>
 <body>
-<!-- TASK-MANUS-05 START — Minimal deployable A1 merchant posting form. The page is intentionally
-     server-backed through merchant-publish-listing.php and does not pretend to replace account auth. -->
+<!-- TASK-MANUS-05 START — A1 merchant posting form, protected by the WEB-04 account gateway. -->
 <main class="card">
-  <h1>Post a pet for rehoming</h1><p>Share accurate information so potential adopters can make an informed decision.</p>
+  <h1>Post a pet for rehoming</h1><p>Verified merchants can share accurate information so potential adopters can make an informed decision.</p>
+  <!-- TASK-WEB-04 START — Use same-origin CSRF protection and an accessible submit status for the existing merchant publishing contract. -->
   <form id="listingForm">
     <label>Name<input name="name" required maxlength="120"></label>
     <label>Category<select name="category" required><option value="dogs">Dog</option><option value="cats">Cat</option><option value="birds">Bird</option><option value="reptiles">Reptile</option><option value="small-mammals">Small mammal</option><option value="livestocks">Livestock</option><option value="aquariums">Aquarium</option></select></label>
@@ -23,16 +23,18 @@
     <label>Currency<select name="currency_code"><option>USD</option><option>CAD</option><option>GBP</option><option>AUD</option></select></label>
     <label><input type="checkbox" name="is_urgent" value="1" style="width:auto"> This is an urgent rehoming situation.</label>
     <label>Additional details<textarea name="description" maxlength="4000"></textarea></label>
-    <button type="submit">Publish listing</button><p id="result" role="status"></p>
+    <button type="submit">Publish listing</button><p id="result" role="status" aria-live="polite" aria-atomic="true"></p>
   </form>
 </main>
+<script src="/assets/js/web04-csrf.js" defer></script>
 <script>
 // TASK-MANUS-05 ENDPOINT CLIENT — JSON submit with server-side validation as the authority.
 document.getElementById('listingForm').addEventListener('submit', async function (event) {
-  event.preventDefault(); const result=document.getElementById('result'); result.className=''; result.textContent='Publishing…';
+  event.preventDefault(); const result=document.getElementById('result'); const button=event.currentTarget.querySelector('button[type="submit"]'); result.className=''; result.textContent='Publishing…'; button.disabled=true;
   const data=Object.fromEntries(new FormData(event.currentTarget)); data.is_urgent=event.currentTarget.is_urgent.checked;
-  try { const response=await fetch('/rehoming/merchant-publish-listing.php',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)}); const json=await response.json(); if(!response.ok) throw new Error(json.error||'Unable to publish'); result.className='success'; result.textContent='Listing published: '+json.listing.pet_id; event.currentTarget.reset(); } catch(error) { result.className='error'; result.textContent=error.message; }
+  try { const response=await fetch('/rehoming/merchant-publish-listing.php',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(data)}); const json=await response.json(); if(!response.ok) throw new Error(json.error||'Unable to publish'); result.className='success'; result.textContent='Listing published: '+json.listing.pet_id; event.currentTarget.reset(); } catch(error) { result.className='error'; result.textContent=error.message||'Unable to publish listing.'; } finally { button.disabled=false; }
 });
 </script>
+<!-- TASK-WEB-04 END — Listing form posts the unchanged payload through the CSRF-protected route. -->
 </body>
 </html>

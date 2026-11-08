@@ -14,8 +14,10 @@
   'use strict';
 
   var config = {
-    signUpUrl: '/signin/',
-    logInUrl: '/signin/'
+    // TASK-WEB-04 START — Match the gateway's explicit account-creation mode; callers may still override either URL.
+    signUpUrl: '/signin/?mode=signup',
+    logInUrl: '/signin/?mode=login'
+    // TASK-WEB-04 END
   };
   var modal = null;
   var previousFocus = null;
