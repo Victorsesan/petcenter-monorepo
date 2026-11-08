@@ -66,6 +66,7 @@ Before opening application source or editing code, every account must read and r
 14. The assignment tracker for the account's project.
 15. Every available matching completion or handoff document under `docs/second-round/completion-evidence/`.
 16. Current reports relevant to the assigned scope.
+17. `docs/second-round/HOSTINGER-PREDEPLOY-AND-ROLLBACK-CHECKLIST.md`
 
 If a referenced completion file is absent, record the exact missing path as an evidence gap and continue all independently verifiable work. Do not invent the missing implementation and do not stop the entire assignment.
 
@@ -178,7 +179,7 @@ Read `adoption-website-project-summary.md`, the Web Projects trackers, and match
 
 This is a mandatory first-priority task within the rehoming project. Before full rehoming acceptance testing, users must have a real gateway rather than the current `Coming soon` destination.
 
-First inventory all rehoming pages, endpoints, data dependencies, uploads, redirects, public routes, authenticated routes, merchant routes, and admin routes. Then implement and test the gateway described in Section 9 of this brief. Coordinate with WEB-05 on route names and with WEB-02 where admin authentication or shared helpers are involved. Do not use a hidden field, query parameter, or client-side value as proof of role.
+First inventory all rehoming pages, endpoints, data dependencies, uploads, redirects, public routes, authenticated routes, merchant routes, and admin routes. The current known repository scope includes `adopt/signin/index.html`, `adopt/rehoming/index.html`, `adopt/rehoming/list-a-pet/index.html`, the PHP files under `adopt/rehoming/`, and related scripts such as `adopt/assets/js/rehoming-platform-v1.js` and `adopt/assets/js/show-auth-prompt.js`. Treat this as an initial inventory, not a complete allowlist: search the repository and document the final authoritative paths before editing. Then implement and test the gateway described in Section 9 of this brief. Coordinate with WEB-05 on route names and with WEB-02 where admin authentication or shared helpers are involved. Do not use a hidden field, query parameter, or client-side value as proof of role.
 
 ### WEB-05 — Rehoming functional QA and integration
 
@@ -188,7 +189,7 @@ Treat Rehoming as the largest and highest-risk project. Read all Rehoming Platfo
 
 ### 9.1 Gateway scope
 
-Replace the current rehoming entry behavior where the existing Sign Up link leads to a “Coming soon” notice. Use the repository's established naming conventions, but document one authoritative route set. A recommended structure is:
+Replace the current rehoming entry behavior where the existing Sign Up link leads to a “Coming soon” notice. Use the repository's established naming conventions, but document one authoritative route set. The existing source includes `/signin/` and `/rehoming/` entry paths; do not assume a new `/rehoming/auth/` tree exists. If a new route is justified, implement it deliberately and update every link, redirect, test, and report consistently. A possible final structure is:
 
 ```text
 /rehoming/auth/
@@ -314,9 +315,13 @@ Each account must create or update its assigned report after implementation, not
 - exact external configuration requirements;
 - confirmation that no secrets or protected runtime data were committed;
 - confirmation that no conflict markers remain;
-- confirmation that all independently verifiable in-scope work was completed.
+- confirmation that all independently verifiable in-scope work was completed;
+- additional security, accessibility, performance, UX, compatibility, route, data, and deployment findings discovered during the work;
+- exact reference to any backup, rollback, Hostinger, or release-approval risk found.
 
 `TODO.md` is the shared inbox. Read it at the start and end of the session. Follow its repository rules: do not edit it on a task branch unless the current protocol explicitly authorizes the entry workflow; never put secrets there; add only completed, actionable, clearly addressed information using the prescribed format. Do not use `TODO.md` as a plan dump.
+
+No account may deploy, upload, push, or trigger an automatic deployment to Hostinger. Before production publication, the coordinator must create and verify both a repository backup and a Hostinger backup, prepare a rollback path, and obtain the user's explicit permission for the exact release commit and target. Workers must remind the coordinator of this gate in their reports and add any additional release risks they discover. Follow `docs/second-round/HOSTINGER-PREDEPLOY-AND-ROLLBACK-CHECKLIST.md`.
 
 ## 11. Short launcher to send with this file
 

@@ -42,6 +42,7 @@ Before inspecting or editing application source, both redesign accounts must rea
 13. `docs/second-round/SECOND-ROUND-ISSUE-REGISTER.md`
 14. The assignment and completion evidence relevant to the redesign scope.
 15. The reports produced by the five web-project accounts after their baseline work is merged or otherwise made available.
+16. `docs/second-round/HOSTINGER-PREDEPLOY-AND-ROLLBACK-CHECKLIST.md`
 
 Both core structural summaries are mandatory even when the account is redesigning only one area. They document the existing live files, paths, functions, architecture, and dependencies.
 
@@ -259,9 +260,13 @@ Each redesign account must provide:
 - exact external configuration requirements;
 - confirmation that no secrets or protected runtime data were committed;
 - confirmation that no conflict markers remain;
-- confirmation that all independently verifiable redesign work was completed.
+- confirmation that all independently verifiable redesign work was completed;
+- additional security, accessibility, performance, UX, compatibility, route, data, and deployment findings discovered during the work;
+- exact reference to any backup, rollback, Hostinger, or release-approval risk found.
 
 Read and follow `TODO.md` at the start and end of each session. Add only completed, actionable, addressed information under its prescribed rules; do not use it as a plan dump.
+
+No account may deploy, upload, push, or trigger an automatic deployment to Hostinger. Before production publication, the coordinator must create and verify both a repository backup and a Hostinger backup, prepare a rollback path, and obtain the user's explicit permission for the exact release commit and target. Workers must remind the coordinator of this gate in their reports and add any additional release risks they discover. Follow `docs/second-round/HOSTINGER-PREDEPLOY-AND-ROLLBACK-CHECKLIST.md`.
 
 ## 13. Short launcher to send with this file
 
