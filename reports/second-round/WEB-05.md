@@ -52,11 +52,14 @@ All checks ran against the local sandbox checkout only. No production endpoints 
 
 - Existing JS response-statistics suite: `node adopt/rehoming/merchant-response-stats.test-v1.js` — **17 passed, 0 failed**.
 - Existing PHP response-statistics suite: `php adopt/rehoming/merchant-response-stats.test.php` — **14 passed, 0 failed**.
+- Isolated PHP HTTP tests against a temporary copy of the publish endpoint (temporary runtime under `/tmp`, no repository runtime writes): **5 passed** — GET rejected (405), anonymous POST denied (401), visitor POST denied (403), too-short text rejected (422), and valid merchant POST succeeded without `mbstring`, returning the expected merchant-owned active listing shape.
+- Isolated PHP HTTP tests against temporary copies of the merchant-chat endpoints (separate temporary runtime): **8 passed** — anonymous thread-list denied (401), merchant cannot start a visitor enquiry (403), visitor can start a thread, another valid visitor cannot poll it (404), creator sees own thread, participant sends a message, merchant participant reads it, and an unrelated visitor sees an empty thread list.
 - PHP syntax: `php -l` on **20** tracked rehoming, verification, and related admin-verification PHP files — all passed, including `merchant-publish-listing.php`.
 - JS syntax: `node --check` over `.js` files in the rehoming, merchant, profile, verification, and shared `assets/js` trees — all passed.
 - Portability regression check: PHP 8.3.6 reports `mbstring=no` in this sandbox. Loading the existing library and calling `rh_text_length()` returned 20 and 21 for 20- and 21-character ASCII strings. The patched endpoint now uses that tested helper.
 - Static local HTTP smoke: `/rehoming/`, `/rehoming/list-a-pet/`, `/merchant/`, and `/merchants/?merchant_id=MERCH-00001` returned HTTP 200. `/rehoming/merchant-publish-listing.php` returned 200 only because the HTTP smoke used Python’s static file server; this is **not** an executed PHP/API success.
 - Chromium headless local render: the hub and posting form loaded with the expected page titles and no matching uncaught/resource-load error strings in captured logs. This did not submit forms, access sessions, test API authorization, inspect a production console, or validate mobile/RTL/accessibility behavior.
+- Isolated API tests used only synthetic identities and data. The test server and store were temporary; no real user data, tokens, production services, or repository runtime directory were involved.
 - `git diff --check` passed.
 
 ## Open integration blockers / coordinator actions
@@ -66,6 +69,17 @@ All checks ran against the local sandbox checkout only. No production endpoints 
 3. **Reconcile demo/stub stores with the server contract.** The hub’s localStorage data must not be reported as durable cross-account placement, messaging, favorites, or account state. B5/B6, D1/F1/F3 and E1 evidence contain explicit mock/stub or persistence caveats; stage tests need seeded, non-sensitive test accounts and cleanup.
 4. **Confirm the missing evidence set.** The import manifest has no C4/C5/C6 completion packages. Current C5 endpoint files do not substitute for the C5 task’s contract, tests, or browser integration evidence.
 5. **Before any coordinator merge/staging decision, take and verify both backups:** a repository backup (including current branches/refs) and a Hostinger files **and database** backup. Keep deployment disabled; no WEB-05 account may deploy, upload, or trigger Hostinger auto-deployment. This branch did not deploy or upload anything.
+
+## Suggested integration implementation sequence
+
+These are concrete next steps for the named owners; they are not claimed as completed code because the shared contracts are not yet available in this branch:
+
+1. **WEB-04: authoritative account/session gateway.** Publish the sign-in/signup routes and server-created `$_SESSION['pc_account']` contract first. Add a login handoff on the posting page and keep `rh_require_role('merchant')` as the final server-side gate. Test visitor, merchant, admin, expired/absent session and logout; never accept a URL or form field as role proof.
+2. **A1/F4/C4/C5: authenticated listing media.** Agree one upload endpoint and data shape before changing the form. Stage uploads in a non-public, size-limited area; validate MIME/content server-side; associate each temporary upload token with the authenticated merchant; run the agreed moderation step; only then allow publish to attach approved media references. Enforce F4's minimum-three-photo rule both in the form and again in publish validation. Do not create a front-end-only upload substitute.
+3. **A1/A2/A3/B3/D1/E1/F1/F3: one server-backed listing/account store.** Define authoritative listing IDs/status/merchant ownership plus visitor identity and placement records. Point browse, merchant dashboard and public profile to that repository/API; preserve localStorage only as an explicitly labelled demo/test adapter, not production state. Reconcile `status` transitions once across D1/E2 and preserve old deep links.
+4. **C5/C3/C2: message and moderation wiring.** Keep the now-tested participant checks, then publish C5's endpoint/token contract; connect the compose/inbox UI to those endpoints, insert C3's gift-check at the named anchor, and invoke C2/C4 checks within server-side handlers rather than on a separate uncalled stub. Add idempotency/rate limits and test same-account, cross-account, test-account and hidden/moderated cases.
+5. **B1/B2/B3/B4/B6/C6/G1: verification, profile, reviews and checkout.** Replace stub merchant/profile data with server-fetched records; keep verification documents private and separately authorized; expose only public-safe visible review fields; restrict moderation to admins; bind donation/checkout changes to the authenticated merchant's own listing and use a real provider-created Payment Link. Until then the hub's generated URL is only a demo record and must never be presented as a payment link.
+6. **Acceptance run.** After integration only, run end-to-end browser tests at desktop and mobile widths for visitor and merchant, keyboard/focus and accessibility, RTL where localized, plus API auth/ownership/error cases. Use synthetic test accounts and verify cleanup. Keep staging isolated and deployment disabled until the coordinator verifies backups and explicitly approves the rollout process.
 
 ## Files changed
 
