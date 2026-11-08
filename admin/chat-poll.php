@@ -27,10 +27,17 @@ error_reporting(0);
 @ini_set('display_errors', 0);
 
 require_once __DIR__ . '/chat-config.php';
+/* TASK-1 START — session-token base layer */
+require_once __DIR__ . '/includes/chat-auth.php';
+/* TASK-1 END */
 
 $chatId        = trim($_GET['chatId'] ?? '');
 $lastMessageId = (int)($_GET['lastMessageId'] ?? 0);
 $lastEventId   = (int)($_GET['lastEventId'] ?? 0);
+/* TASK-1 START — read the session token the same way every other GET param
+   here is read (querystring), since this is a GET endpoint */
+$sessionToken  = trim($_GET['sessionToken'] ?? '');
+/* TASK-1 END */
 
 if ($chatId === '') {
     chatRespond(['success' => false, 'error' => 'chatId is required'], 400);
@@ -45,6 +52,14 @@ $thread = $stmt->fetch();
 if (!$thread) {
     chatRespond(['success' => false, 'error' => 'Chat not found'], 404);
 }
+
+/* TASK-1 START — enforce the session token AFTER confirming the thread
+   exists (so a bad chatId still gets the existing, more specific 404
+   rather than a generic 401), but BEFORE anything below reads or mutates
+   any message/event/typing state for this thread. This is the actual fix:
+   chatId alone no longer reaches any real data past this point. */
+chatRequireSessionToken($chatId, $sessionToken);
+/* TASK-1 END */
 
 $threadId = $thread['id'];
 

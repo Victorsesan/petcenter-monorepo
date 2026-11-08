@@ -1,0 +1,31 @@
+{
+  "events": [
+    {
+      "day": "20",
+      "month": "SEP",
+      "type": "Adoption Day",
+      "title": "Weekend Adoption Day",
+      "time": "10:00 AM – 5:00 PM",
+      "location": "Pet Center, Beverly Hills",
+      "description": "Our regular Saturday adoption day — dozens of pets across every category on-site, no appointment needed."
+    },
+    {
+      "day": "27",
+      "month": "SEP",
+      "type": "Pop-Up",
+      "title": "Beverly Gardens Park Pop-Up",
+      "time": "11:00 AM – 3:00 PM",
+      "location": "Beverly Gardens Park",
+      "description": "A smaller off-site group of adoptable dogs and cats, alongside a few of our community partners."
+    },
+    {
+      "day": "3",
+      "month": "OCT",
+      "type": "Meet & Greet",
+      "title": "Quiet Hours Meet & Greet",
+      "time": "6:00 PM – 8:00 PM",
+      "location": "Pet Center, Beverly Hills",
+      "description": "A lower-key evening session, especially good for shy pets and visitors who prefer a quieter environment."
+    }
+  ]
+}

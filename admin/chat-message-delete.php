@@ -24,6 +24,9 @@ error_reporting(0);
 @ini_set('display_errors', 0);
 
 require_once __DIR__ . '/chat-config.php';
+/* TASK-1 START — session-token base layer */
+require_once __DIR__ . '/includes/chat-auth.php';
+/* TASK-1 END */
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     chatRespond(['success' => false, 'error' => 'POST required'], 405);
@@ -37,6 +40,9 @@ if (empty($input)) {
 $chatId    = trim($input['chatId'] ?? '');
 $messageId = (int)($input['messageId'] ?? 0);
 $adminId   = (int)($input['adminId'] ?? 0); // only present for admin-side deletes
+/* TASK-1 START */
+$sessionToken = trim($input['sessionToken'] ?? '');
+/* TASK-1 END */
 
 if ($chatId === '' || !$messageId) {
     chatRespond(['success' => false, 'error' => 'chatId and messageId are required'], 400);
@@ -81,6 +87,13 @@ if ($adminId) {
     if ($message['from_type'] !== 'user') {
         chatRespond(['success' => false, 'error' => 'You can only delete your own messages'], 403);
     }
+    /* TASK-1 START — same gap as chat-message-edit.php's customer branch:
+       previously anyone who knew a chatId + messageId could delete that
+       customer's own message with no proof they actually own the
+       conversation. A valid session token for this exact chatId is now
+       required. */
+    chatRequireSessionToken($chatId, $sessionToken);
+    /* TASK-1 END */
 }
 
 // ── Time window check ────────────────────────────────────────────────────

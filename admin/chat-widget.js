@@ -36,6 +36,10 @@
     // editDeleteWindowMinutes removed — edit/delete is unlimited (no time restriction), per decision
     storageKeyChatId: 'pc_chat_active_id',
     storageKeyLastMsg: 'pc_chat_last_msg_id',
+    /* TASK-1 START — session-token persistence key, same localStorage
+       pattern as the other pc_chat_* keys above. */
+    storageKeyToken: 'pc_chat_session_token',
+    /* TASK-1 END */
     storageKeyDraftUuid: 'pc_chat_draft_uuid', // pre-thread temporary draft key, Section 4
     contactFormUrl: '/contact-us/contact-us.html', // absolute path — contact-us.html lives at /contact-us/ not site root
   };
@@ -53,6 +57,15 @@
     panelOpen: false,
     mode: null,           // 'launcher' | 'email' | 'live'
     chatId: null,
+    /* TASK-1 START — the session token issued by chat-start.php for
+       state.chatId. Required by the backend (this task) on every
+       subsequent read/write call for an existing thread — see
+       includes/chat-auth.php. Set once by openLiveThread()/
+       resumeStoredChat() and read automatically by apiGet()/apiPost()
+       below, so individual call sites below don't each need to remember
+       to attach it by hand. */
+    sessionToken: null,
+    /* TASK-1 END */
     fullName: null,
     email: null,
     status: null,          // waiting | active | done
@@ -105,16 +118,31 @@
   }
 
   async function apiGet(endpoint, params) {
-    const qs = new URLSearchParams(params || {}).toString();
+    /* TASK-1 START — attach the session token to every GET call
+       automatically, one place, rather than every call site below having
+       to remember to add it by hand. Sent as a plain sessionToken query
+       param, matching how chat-poll.php/chat-history.php/chat-draft.php
+       read it server-side. Omitted entirely (not sent as the string
+       "null") when there's no token yet — e.g. chat-start.php itself
+       needs none, and the very first chat-poll.php call after a fresh
+       chat-start.php response already has state.sessionToken set by then
+       (see openLiveThread()), so this only stays empty pre-thread. */
+    const merged = state.sessionToken ? Object.assign({ sessionToken: state.sessionToken }, params) : (params || {});
+    const qs = new URLSearchParams(merged).toString();
+    /* TASK-1 END */
     const res = await fetch(CONFIG.apiBase + endpoint + (qs ? '?' + qs : ''));
     return res.json();
   }
 
   async function apiPost(endpoint, body) {
+    /* TASK-1 START — same reasoning as apiGet() above, for JSON-body POST
+       calls. */
+    const merged = state.sessionToken ? Object.assign({ sessionToken: state.sessionToken }, body) : (body || {});
+    /* TASK-1 END */
     const res = await fetch(CONFIG.apiBase + endpoint, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body || {}),
+      body: JSON.stringify(merged),
     });
     return res.json();
   }
@@ -1048,6 +1076,10 @@
     localStorage.removeItem(CONFIG.storageKeyLastMsg);
     localStorage.removeItem('pc_chat_name');
     localStorage.removeItem('pc_chat_email');
+    /* TASK-1 START */
+    localStorage.removeItem(CONFIG.storageKeyToken);
+    state.sessionToken = null;
+    /* TASK-1 END */
     localStorage.removeItem(CONFIG.storageKeyDraftUuid);
     if (state.chatId) localStorage.removeItem('pc_ticket_closed_' + state.chatId);
 
@@ -1388,7 +1420,10 @@
           // TASK-9 START
           // TASK-9c: true here — this is the fresh pre-chat submission
           // path, the one moment the entrance animation should play.
-          openLiveThread(json.chatId, json.fullName, json.email, json.status, undefined, true);
+          /* TASK-1 START — pass through the sessionToken chat-start.php's
+             response now includes on every success path. */
+          openLiveThread(json.chatId, json.fullName, json.email, json.status, undefined, true, json.sessionToken);
+          /* TASK-1 END */
           // TASK-9 END
         } else {
           errorMsg.textContent = json.error || 'Something went wrong. Please try again.';
@@ -1413,6 +1448,19 @@
   // ============================================
   function resumeStoredChat(storedChatId) {
     dlog('resuming stored chat: ' + storedChatId);
+    /* TASK-1 START — load the token stored by a prior openLiveThread()
+       call BEFORE polling, since apiGet() (see its own TASK-1 comment
+       above) only attaches whatever's already in state.sessionToken. This
+       endpoint no longer works on storedChatId alone — see chat-poll.php's
+       own TASK-1 hardening — so a resume with no stored token, or an
+       expired one, now correctly falls into the same "no longer resolves"
+       branch below as a deleted thread would, sending the customer back
+       through the pre-chat gate rather than silently failing. Using the
+       SAME email there resumes this exact thread and issues a fresh
+       token (chat-start.php Path 2), so no history is actually lost —
+       only a rare, safe extra step. */
+    state.sessionToken = localStorage.getItem(CONFIG.storageKeyToken) || null;
+    /* TASK-1 END */
     // Always fetch from message 0 on resume so the full history loads —
     // using the stored lastMessageId would skip all existing messages and
     // show an empty panel, which is the bug that was reported.
@@ -1420,15 +1468,24 @@
       if (json.success) {
         const storedName = localStorage.getItem('pc_chat_name') || '';
         const storedEmail = localStorage.getItem('pc_chat_email') || '';
-        // Pass skipRestore=false so openLiveThread also starts from 0
+        // Pass skipRestore=false so openLiveThread also starts from 0.
+        // No sessionToken arg needed here — state.sessionToken was already
+        // set above, and openLiveThread() only overwrites it when a real
+        // one is passed (see that function's own TASK-1 comment).
         openLiveThread(storedChatId, storedName, storedEmail, json.status, false);
       } else {
-        // Stored chat no longer resolves (e.g. deleted by an admin) — clear
-        // the stale pointer and fall back to the launcher.
+        // Stored chat no longer resolves — either genuinely deleted by an
+        // admin, or (TASK-1) the stored session token was missing/expired.
+        // Same safe fallback either way: clear the stale pointers and
+        // return to the launcher.
         localStorage.removeItem(CONFIG.storageKeyChatId);
         localStorage.removeItem(CONFIG.storageKeyLastMsg);
         localStorage.removeItem('pc_chat_name');
         localStorage.removeItem('pc_chat_email');
+        /* TASK-1 START */
+        localStorage.removeItem(CONFIG.storageKeyToken);
+        state.sessionToken = null;
+        /* TASK-1 END */
         renderLauncher();
       }
     }).catch(() => renderLauncher());
@@ -1466,10 +1523,24 @@
   // pre-existing function (default undefined/falsy, so every other
   // caller is unaffected) — set true only by the fresh pre-chat-submit
   // call site, read below to decide whether to fire triggerBlobIntro().
-  function openLiveThread(chatId, fullName, email, status, skipRestore, playIntroAnimation) {
+  /* TASK-1 START — added the trailing `sessionToken` parameter, same
+     append-at-the-end approach as TASK-9c took just above: every existing
+     caller that doesn't pass one gets undefined, which the guard below
+     treats as "keep whatever's already in state" rather than clobbering
+     it with nothing. */
+  function openLiveThread(chatId, fullName, email, status, skipRestore, playIntroAnimation, sessionToken) {
   // TASK-9 END
+  /* TASK-1 END */
     state.mode = 'live';
     state.chatId = chatId;
+    /* TASK-1 START — only overwrite state.sessionToken when a real one was
+       passed in. rebuildLiveView()/pollOnce() etc. never call
+       openLiveThread() again mid-session, so in practice this only matters
+       for resumeStoredChat(), which already sets state.sessionToken itself
+       from localStorage BEFORE calling openLiveThread() — passing
+       undefined here must not blank that back out. */
+    if (sessionToken) state.sessionToken = sessionToken;
+    /* TASK-1 END */
     state.fullName = fullName;
     state.email = email;
     state.status = status;
@@ -1481,6 +1552,12 @@
     localStorage.setItem(CONFIG.storageKeyChatId, chatId);
     if (fullName) localStorage.setItem('pc_chat_name', fullName);
     if (email) localStorage.setItem('pc_chat_email', email);
+    /* TASK-1 START — persist the session token the same way chatId/name/
+       email already are, so a page reload can send it straight back to
+       chat-poll.php via resumeStoredChat() without needing a fresh
+       chat-start.php round-trip. */
+    if (state.sessionToken) localStorage.setItem(CONFIG.storageKeyToken, state.sessionToken);
+    /* TASK-1 END */
     updateLauncherButtonState();
 
     headerTitleEl.textContent = fullName || 'Live Chat';
@@ -2256,6 +2333,11 @@
             adminName: evt.admin_name || '',
             rating: selectedRating,
             comment: textarea.value.trim(),
+            /* TASK-1 START — chat-rate.php's submit action now requires a
+               valid session token for this chatId, same as every other
+               customer-facing write. */
+            sessionToken: state.sessionToken,
+            /* TASK-1 END */
           }),
         });
         const json = await res.json();
@@ -2295,7 +2377,11 @@
       await fetch(CONFIG.apiBase + 'chat-draft.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'save', draftKey: 'unread:' + state.chatId, body: String(count) }),
+        /* TASK-1 START — draftKey 'unread:{chatId}' is one of the two real-
+           chat-id shapes chat-draft.php now requires a token for (see that
+           file's own TASK-1 comment on the 3 draftKey shapes). */
+        body: JSON.stringify({ action: 'save', draftKey: 'unread:' + state.chatId, body: String(count), sessionToken: state.sessionToken }),
+        /* TASK-1 END */
       });
     } catch (e) { /* non-critical */ }
   }
@@ -2303,7 +2389,12 @@
   async function loadUnreadCount() {
     if (!state.chatId) return;
     try {
-      const res = await fetch(CONFIG.apiBase + 'chat-draft.php?action=get&draftKey=' + encodeURIComponent('unread:' + state.chatId));
+      /* TASK-1 START — same reasoning as saveUnreadCount() above; GET so
+         the token goes in the querystring, matching every other GET
+         endpoint in this file. */
+      const tokenQs = state.sessionToken ? '&sessionToken=' + encodeURIComponent(state.sessionToken) : '';
+      const res = await fetch(CONFIG.apiBase + 'chat-draft.php?action=get&draftKey=' + encodeURIComponent('unread:' + state.chatId) + tokenQs);
+      /* TASK-1 END */
       const json = await res.json();
       if (json.success && json.draft) {
         const count = parseInt(json.draft, 10) || 0;
@@ -2458,6 +2549,13 @@
         const fd = new FormData();
         fd.append('file', file);
         fd.append('kind', kind);
+        /* TASK-1 START — chat-upload-temp.php now verifies these when
+           present (see that file's own TASK-1 comment on why it can't
+           require them outright yet) — sending them here closes that gap
+           for real, for this widget, going forward. */
+        if (state.chatId) fd.append('chatId', state.chatId);
+        if (state.sessionToken) fd.append('sessionToken', state.sessionToken);
+        /* TASK-1 END */
         const res = await fetch(CONFIG.apiBase + 'chat-upload-temp.php', { method: 'POST', body: fd });
         const json = await res.json();
         state.composer.uploadingCount = Math.max(0, state.composer.uploadingCount - 1);
@@ -2509,6 +2607,13 @@
       fd.append('fileName', file.name);
       fd.append('fileSize', file.size);
       fd.append('chunk', chunk, 'chunk_' + i);
+      /* TASK-1 START — see chat-upload-temp.php's TASK-1 comment above;
+         same reasoning applies here. Sent on every chunk, not just
+         finalize, since chat-upload-video-chunk.php checks admin-token/
+         session-token on both actions independently. */
+      if (state.chatId) fd.append('chatId', state.chatId);
+      if (state.sessionToken) fd.append('sessionToken', state.sessionToken);
+      /* TASK-1 END */
 
       try {
         const res = await fetch(CONFIG.apiBase + 'chat-upload-video-chunk.php', { method: 'POST', body: fd });
@@ -2532,6 +2637,10 @@
       fd.append('sessionId', sessionId);
       fd.append('totalChunks', totalChunks);
       fd.append('fileName', file.name);
+      /* TASK-1 START — same as the upload-action chunk loop above. */
+      if (state.chatId) fd.append('chatId', state.chatId);
+      if (state.sessionToken) fd.append('sessionToken', state.sessionToken);
+      /* TASK-1 END */
       const res = await fetch(CONFIG.apiBase + 'chat-upload-video-chunk.php', { method: 'POST', body: fd });
       const json = await res.json();
       if (json.success) {
@@ -2693,6 +2802,11 @@
           const voiceExt = recordedMime.includes('mp4') ? 'mp4' : recordedMime.includes('ogg') ? 'ogg' : 'webm';
           fd.append('file', recordedBlob, 'voice-message.' + voiceExt);
           fd.append('kind', 'audio');
+          /* TASK-1 START — same as the other chat-upload-temp.php call
+             site above. */
+          if (state.chatId) fd.append('chatId', state.chatId);
+          if (state.sessionToken) fd.append('sessionToken', state.sessionToken);
+          /* TASK-1 END */
           const res = await fetch(CONFIG.apiBase + 'chat-upload-temp.php', { method: 'POST', body: fd });
           const json = await res.json();
           if (json.success) {

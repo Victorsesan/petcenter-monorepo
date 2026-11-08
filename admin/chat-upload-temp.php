@@ -20,6 +20,9 @@ error_reporting(0);
 @ini_set('display_errors', 0);
 
 require_once __DIR__ . '/chat-config.php';
+/* TASK-1 START — session-token base layer */
+require_once __DIR__ . '/includes/chat-auth.php';
+/* TASK-1 END */
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     chatRespond(['success' => false, 'error' => 'POST required'], 405);
@@ -35,6 +38,58 @@ $kind = $_POST['kind'] ?? ''; // 'image', 'audio', or 'video'
 if (!in_array($kind, ['image', 'audio', 'video'], true)) {
     chatRespond(['success' => false, 'error' => "kind must be 'image', 'audio', or 'video'"], 400);
 }
+
+/* TASK-1 START (revised — second verification round)
+   This endpoint's original contract never sent a chatId here — a staged
+   upload was chat-agnostic until chat-send.php consumed its token, a
+   genuine documented design choice (ADMIN_DASHBOARD_PROJECT_SUMMARY.md's
+   own note that "the actual security boundary is downstream" for the
+   sibling chunked-video endpoint). chat-widget.js has SINCE been updated
+   (also this task, after being raised as a blocker and then supplied) to
+   send chatId + sessionToken on every call here, so the first branch
+   below is the live, normal customer path now, not a someday-ready one.
+   Second verification round addition: this file is very likely also used
+   by the admin dashboard's chat composer for image/audio attachments
+   ahead of chat-admin-reply.php — chat-admin-reply.php's own
+   imageTokens[]/audioToken inputs have to come staged from somewhere, and
+   no separate admin-only staging endpoint is documented anywhere in the
+   file structure, so this is the only candidate. Not explicitly confirmed
+   the way chat-upload-video-chunk.php's admin usage is (that one names
+   `uploadVideoChunked()` and its X-Admin-Token header directly) — the
+   same free win already given to
+   chat-upload-video-chunk.php (checking X-Admin-Token, which that
+   sibling endpoint is confirmed to already receive from the admin
+   dashboard) is added here too. Unlike that sibling file, nothing in the
+   project documentation confirms whether the admin dashboard currently
+   sends X-Admin-Token to THIS endpoint specifically — so this check is
+   purely additive and safe either way: if the header is sent, admin
+   uploads get verified for real and are exempted from the anonymous rate
+   limit below; if it isn't (today, most likely), nothing changes and the
+   existing rate-limited fallback still applies exactly as before.
+     1. A valid admin token wins outright, same precedence as
+        chat-upload-video-chunk.php.
+     2. Otherwise, a chatId + sessionToken pair (now sent by the current
+        chat-widget.js) is verified for real.
+     3. Otherwise, rate-limited + audit-logged as a fallback for any other
+        caller. */
+if (chatIsAdminAuthenticated()) {
+    log_audit('admin', 'chat-upload-temp', 'staged_' . $kind . '_admin');
+} else {
+    $uploadChatId = trim($_POST['chatId'] ?? '');
+    $uploadSessionToken = trim($_POST['sessionToken'] ?? '');
+
+    if ($uploadChatId !== '') {
+        chatRequireSessionToken($uploadChatId, $uploadSessionToken);
+        log_audit($uploadChatId, 'chat-upload-temp', 'staged_' . $kind);
+    } else {
+        $uploadIp = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+        if (!chatCheckRateLimit('chat_upload_temp_ip:' . $uploadIp, 30, 600)) { // 30 staged uploads / 10 min / IP
+            chatRespond(['success' => false, 'error' => 'Too many uploads. Please wait a few minutes and try again.'], 429);
+        }
+        log_audit('unknown', 'chat-upload-temp', 'staged_' . $kind . '_no_session');
+    }
+}
+/* TASK-1 END */
 
 // ── Upload error check ──────────────────────────────────────────────────
 if ($file['error'] !== UPLOAD_ERR_OK) {

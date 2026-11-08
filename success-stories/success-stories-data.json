@@ -1,0 +1,53 @@
+{
+  "stories": [
+    {
+      "name": "Biscuit",
+      "species": "Dogs",
+      "adoptedDate": "March 2025",
+      "before": "Surrendered after his family moved; spent 3 months at the shelter, very shy around new people.",
+      "after": "Now goes on daily hikes with his new family in Malibu and has become the neighborhood's unofficial greeter."
+    },
+    {
+      "name": "Luna",
+      "species": "Cats",
+      "adoptedDate": "January 2025",
+      "before": "Found as a stray kitten, bottle-fed by a foster for 6 weeks before she was old enough to be listed.",
+      "after": "Rules the house from the top of the refrigerator and has fully claimed her adopter's home office chair."
+    },
+    {
+      "name": "Kiwi",
+      "species": "Birds",
+      "adoptedDate": "June 2024",
+      "before": "Owner surrender due to a household allergy; had been with the same family for 4 years.",
+      "after": "Learned to whistle the intro to her new owner's favorite song within two months of moving in."
+    },
+    {
+      "name": "Spike",
+      "species": "Reptiles",
+      "adoptedDate": "August 2024",
+      "before": "Outgrew his original owner's starter enclosure and needed a bigger, more experienced home.",
+      "after": "Living in a custom-built enclosure and, according to his adopter, 'basically runs the living room now.'"
+    },
+    {
+      "name": "Clover",
+      "species": "Small Mammals",
+      "adoptedDate": "February 2025",
+      "before": "One of a litter of unplanned rabbit kits surrendered by a family who couldn't separate the pair.",
+      "after": "Bonded with a second rabbit at her new home and the two are, per her adopter, inseparable."
+    },
+    {
+      "name": "Duke",
+      "species": "Livestocks",
+      "adoptedDate": "October 2024",
+      "before": "A rescued miniature goat in need of proper acreage and a zoning-approved home.",
+      "after": "Now living on a small hobby farm with two other goats and, by all accounts, in charge of the whole pasture."
+    },
+    {
+      "name": "Marlin",
+      "species": "Aquariums",
+      "adoptedDate": "April 2025",
+      "before": "Part of a tank breakdown from a family relocating overseas.",
+      "after": "Settled into a fully cycled 40-gallon community tank and is thriving alongside his new tankmates."
+    }
+  ]
+}

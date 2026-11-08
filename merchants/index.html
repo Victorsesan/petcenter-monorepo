@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="Merchant public profile — Pet Center Rehoming Platform. View this merchant's listings, badges, and reviews.">
+<title>Merchant Profile — Pet Center</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ════════════════════════════════════════════════════════════════════════════
+   TASK-B6 — Merchant public profile page: base structure
+   Cloned foundation: :root variables, reset, typography, .pc-container, .pc-btn,
+   .pc-card, .pc-pet-card, .pc-pet-grid, .pc-skeleton, .pc-empty-state, and the
+   global header/footer/hamburger block are copied VERBATIM from cats.html per
+   Directive 13 / Rule 7 (never recreate a feature from scratch). Everything
+   under the "MERCHANT PROFILE — NEW, TASK-B6" comment further down is this
+   task's own new work.
+   Colors: Navy #10214b | Gold #d7bd88 | Orange #ED7624
+   Typography: Cormorant Garamond (headers) | Sora (body)
+   Rule: NO borders on cards — shadows only | NO emojis — SVG icons only
+   ════════════════════════════════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Sora:wght@300;400;500;600;700&display=swap');
+
+/* ─── CSS Variables (verbatim from cats.html) ───────────────────────────────── */
+:root {
+  --navy: #10214b;
+  --navy-light: #1a2f5c;
+  --gold: #d7bd88;
+  --gold-dark: #b89968;
+  --orange: #ED7624;
+  --orange-light: #fef0e6;
+  --warm-gray: #d0c3ba;
+  --chocolate: #3d2817;
+  --bg: #f9f7f4;
+  --surface: #ffffff;
+  --text: #2c2416;
+  --muted: #7a6d5f;
+  --success: #0d7c4a;
+  --success-bg: #e6f7ef;
+  --error: #c0392b;
+  --error-bg: #fdecea;
+  --shadow-sm: 0 2px 8px rgba(16,33,75,0.06);
+  --shadow-md: 0 4px 20px rgba(16,33,75,0.10);
+  --shadow-lg: 0 8px 40px rgba(16,33,75,0.14);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --transition: 0.25s ease;
+}
+
+/* ─── Reset & Base (verbatim from cats.html) ────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; overflow-x: hidden; width: 100%; }
+body {
+  font-family: 'Sora', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  padding-top: 68px;
+  overflow-x: hidden;
+  width: 100%;
+  position: relative;
+}
+img { max-width: 100%; height: auto; display: block; }
+a { color: var(--orange); text-decoration: none; transition: color var(--transition); }
+a:hover { color: var(--navy); }
+
+/* ─── Typography (verbatim from cats.html) ──────────────────────────────────── */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  color: var(--navy);
+  line-height: 1.25;
+}
+h1 { font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 700; }
+h2 { font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 600; }
+h3 { font-size: clamp(1.2rem, 2.2vw, 1.8rem); font-weight: 600; }
+h4 { font-size: 1.2rem; font-weight: 600; }
+p { color: var(--muted); }
+
+/* ─── Layout Utilities (verbatim from cats.html) ────────────────────────────── */
+.pc-container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+.pc-section { padding: 72px 0; }
+.pc-section--sm { padding: 40px 0; }
+.text-center { text-align: center; }
+.text-navy { color: var(--navy); }
+.text-orange { color: var(--orange); }
+.text-muted { color: var(--muted); }
+
+/* ─── Buttons (verbatim from cats.html) ─────────────────────────────────────── */
+.pc-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 28px;
+  border-radius: var(--radius-sm);
+  font-family: 'Sora', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  border: none;
+  transition: all var(--transition);
+  text-decoration: none;
+  white-space: nowrap;
+  min-height: 44px;
+}
+.pc-btn--primary {
+  background: linear-gradient(135deg, var(--navy), var(--navy-light));
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(16,33,75,0.25);
+}
+.pc-btn--primary:hover {
+  background: linear-gradient(135deg, var(--navy-light), #243970);
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(16,33,75,0.32);
+}
+.pc-btn--ghost {
+  background: transparent;
+  color: var(--navy);
+  box-shadow: inset 0 0 0 2px var(--gold);
+}
+.pc-btn--ghost:hover { background: var(--orange-light); color: var(--orange); }
+.pc-btn--sm { padding: 8px 18px; font-size: 13px; min-height: 36px; }
+.pc-btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+
+/* ─── Cards (verbatim from cats.html) ───────────────────────────────────────── */
+.pc-card {
+  background: var(--surface);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition: box-shadow var(--transition), transform var(--transition);
+}
+.pc-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+.pc-card__body { padding: 20px; }
+
+/* ─── Pet Cards — copied verbatim from cats.html lines 158-341 (includes Task A2 NEL + bonded-pair styles, diary link, posted caption) ─── */
+.pc-pet-card {
+  background: var(--surface);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  cursor: pointer;
+  transition: box-shadow var(--transition), transform var(--transition);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+}
+.pc-pet-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-4px); }
+.pc-pet-card__img-wrap { position: relative; overflow: hidden; aspect-ratio: 4/3; background: var(--bg); }
+.pc-pet-card__img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
+.pc-pet-card:hover .pc-pet-card__img { transform: scale(1.05); }
+
+/* Adopted badge — "OUT OF TOWN" style (screenshot 8) */
+.pc-pet-card__adopted-badge {
+  position: absolute;
+  top: 12px;
+  left: 0;
+  background: #10214b;
+  color: #fff;
+  font-family: 'Sora', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  border-radius: 0 4px 4px 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+}
+
+/* TASK-A2 START — "Needs Extra Love" badge. Mirrors the ADOPTED badge's
+   corner-ribbon language (same navy, same type scale) rather than
+   inventing a new badge style, but sits on the opposite corner (right)
+   since the two badges can appear on different pets on the same grid and
+   must never visually collide. Heart icon is inline SVG, no emoji, per
+   Rule 2. Design-system note: PETCENTER_DESIGN_SYSTEM_v1.0.md Section 1
+   flags the card component as "not yet documented" — this badge styling
+   is a best-effort match to this file's own existing badge convention,
+   not a claim that Design has signed off on it as the locked spec. */
+.pc-pet-card__nel-badge {
+  position: absolute;
+  top: 12px;
+  right: 0;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: #10214b;
+  color: #fff;
+  font-family: 'Sora', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 6px 14px 6px 12px;
+  border-radius: 4px 0 0 4px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+}
+.pc-pet-card__nel-badge svg { width: 12px; height: 12px; fill: var(--gold); flex-shrink: 0; }
+/* TASK-A2 END */
+
+/* TASK-A2 START — Bonded-pair merged card. Two pets rendered as one card
+   (per spec: "single card with a Bonded pair — must adopt together
+   label, linking to both individual detail pages"), so the outer element
+   can't be a single <a> the way every other pet card is — it needs two
+   independent links to two different detail pages. Kept as visually
+   close to .pc-pet-card as possible (same radius/shadow/hover-lift) so it
+   doesn't look like a foreign component in the grid. */
+.pc-pet-card--bonded { cursor: default; }
+.pc-pet-card--bonded .pc-pet-card__img-wrap { display: flex; }
+.pc-pet-card--bonded .pc-pet-card__img-wrap a { width: 50%; height: 100%; display: block; }
+.pc-pet-card--bonded .pc-pet-card__img-wrap img { width: 100%; }
+.pc-pet-card__bonded-badge {
+  position: absolute;
+  top: 12px;
+  left: 0;
+  background: var(--gold);
+  color: var(--navy);
+  font-family: 'Sora', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  padding: 6px 14px;
+  border-radius: 0 4px 4px 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  z-index: 1;
+}
+.pc-pet-card--bonded .pc-pet-card__name a { color: inherit; text-decoration: none; }
+.pc-pet-card--bonded .pc-pet-card__name a:hover { text-decoration: underline; }
+/* TASK-A2 END */
+
+/* Card body */
+.pc-pet-card__body {
+  padding: 16px 18px 18px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.pc-pet-card__name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 10px;
+  line-height: 1.2;
+}
+
+/* Detail rows with icons */
+.pc-pet-card__details {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+.pc-pet-card__detail-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Sora', sans-serif;
+  font-size: 13px;
+  color: var(--muted);
+  font-weight: 400;
+}
+.pc-pet-card__detail-row svg {
+  flex-shrink: 0;
+  color: var(--gold-dark);
+  opacity: 0.85;
+}
+.pc-pet-card__detail-val {
+  color: var(--text);
+  font-weight: 500;
+}
+
+/* Fee row */
+.pc-pet-card__fee-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: auto;
+  padding-top: 10px;
+  border-top: 1px solid var(--bg);
+}
+.pc-pet-card__fee-row svg { color: var(--orange); flex-shrink: 0; }
+.pc-pet-card__fee {
+  font-family: 'Sora', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--orange);
+}
+
+/* Diary button */
+.pc-pet-card__diary {
+  display: inline-block;
+  margin-top: 10px;
+  font-family: 'Sora', sans-serif;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--gold-dark);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  text-align: left;
+  transition: color var(--transition);
+}
+.pc-pet-card__diary:hover { color: var(--orange); }
+/* TASK-2 START — Posted-on date caption for pet cards */
+.pc-pet-card__posted {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+/* TASK-2 END */
+
+.pc-pet-card__placeholder { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; color: var(--muted); }
+
+/* ─── Pet Grid + skeleton + empty state (verbatim from cats.html) ───────────── */
+.pc-pet-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+.pc-skeleton {
+  background: linear-gradient(90deg, #f0ece8 25%, #e8e3de 50%, #f0ece8 75%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.4s infinite;
+  border-radius: var(--radius-md);
+  height: 320px;
+}
+@keyframes skeleton-shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+.pc-empty-state {
+  grid-column: 1 / -1;
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center; padding: 64px 24px;
+}
+.pc-empty-state__icon { color: var(--gold-dark); margin-bottom: 18px; }
+.pc-empty-state__title { font-family: 'Sora', sans-serif; font-size: 17px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+.pc-empty-state__subtitle { font-family: 'Sora', sans-serif; font-size: 14px; color: var(--muted); max-width: 340px; }
+
+/* ─── Global Header (pc-header) — verbatim from cats.html ───────────────────── */
+.pc-header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  padding: 0 24px; height: 68px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: transparent;
+  transition: background 0.35s ease, box-shadow 0.35s ease;
+  overflow: visible;
+}
+.pc-header.scrolled, .pc-header--solid {
+  background: rgba(16,33,75,0.97);
+  box-shadow: 0 2px 20px rgba(0,0,0,0.18);
+}
+.pc-header__logo img { height: 44px; width: auto; display: block; }
+.pc-header__logo--desktop { display: block; }
+.pc-header__logo--mobile  { display: none; }
+@media (max-width: 900px) {
+  .pc-header__logo--desktop { display: none; }
+  .pc-header__logo--mobile  { display: block; }
+}
+.pc-header__nav { display: flex; align-items: center; gap: 4px; list-style: none; }
+.pc-header__nav li { position: relative; }
+.pc-header__nav a {
+  display: block; padding: 8px 11px;
+  font-family: 'Sora', sans-serif; font-size: 13px; font-weight: 500;
+  color: rgba(255,255,255,0.9); text-decoration: none; border-radius: 6px;
+  transition: color 0.2s, background 0.2s; white-space: nowrap;
+}
+.pc-header__nav a:hover { color: #d7bd88; background: rgba(255,255,255,0.08); }
+.pc-header__nav .nav-donate a { background: #ED7624; color: #fff; font-weight: 600; padding: 8px 16px; }
+.pc-header__nav .nav-donate a:hover { background: #d4621a; color: #fff; }
+.pc-header__nav .nav-signup a,
+.pc-header__nav .nav-login a { border: 1px solid rgba(215,189,136,0.5); color: #d7bd88; }
+.pc-header__nav .nav-signup a:hover,
+.pc-header__nav .nav-login a:hover { background: rgba(215,189,136,0.12); }
+.pc-header__nav .has-drop > ul {
+  display: none; position: absolute; top: calc(100% + 4px); left: 0;
+  background: #10214b; border-radius: 8px; list-style: none; min-width: 168px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.22); padding: 6px 0; z-index: 100;
+}
+.pc-header__nav .has-drop:hover > ul { display: block; }
+.pc-header__nav .has-drop > ul a { padding: 9px 18px; font-size: 13px; border-radius: 0; }
+.pc-hamburger {
+  display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 8px;
+  background: none; border: none; width: 32px; height: auto; justify-content: center;
+}
+.pc-hamburger span { display: block; width: 24px; height: 2px; background: #fff; border-radius: 2px; transition: all 0.3s ease; }
+.pc-hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(8px, 8px); }
+.pc-hamburger.active span:nth-child(2) { opacity: 0; }
+.pc-hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -7px); }
+.pc-mobile-menu {
+  display: flex; flex-direction: column; position: absolute; top: 100%; left: 0; right: 0;
+  background: rgba(16,33,75,0.98); z-index: 999; max-height: 0; overflow: hidden;
+  opacity: 0; pointer-events: none; transition: all 0.3s ease; box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+}
+.pc-mobile-menu.open {
+  max-height: calc(100vh - 68px); overflow-y: auto; opacity: 1; pointer-events: auto;
+  padding: 16px 0 calc(100vh - 68px - 56px);
+  overscroll-behavior: contain; -webkit-overflow-scrolling: touch;
+}
+.pc-mobile-menu a {
+  display: block; padding: 12px 28px;
+  font-family: 'Sora', sans-serif; font-size: 15px; font-weight: 500;
+  color: rgba(255,255,255,0.9); text-decoration: none;
+  border-bottom: 1px solid rgba(255,255,255,0.06); transition: all 0.2s ease;
+}
+.pc-mobile-menu a:hover { color: #d7bd88; background: rgba(255,255,255,0.05); }
+.pc-mobile-menu .mobile-donate {
+  margin: 12px 28px 0; display: inline-block; background: #ED7624; color: #fff;
+  padding: 11px 24px; border-radius: 8px; font-weight: 600; border-bottom: none;
+}
+@media (max-width: 900px) {
+  .pc-header__nav { display: none; }
+  .pc-hamburger { display: flex; }
+}
+
+/* ─── Global Footer + responsive.css + print — copied verbatim from cats.html lines 885-975 ─── */
+/* ─── Global Footer ─────────────────────────────────────────────────────────── */
+.pc-footer {
+  background: #0b1834;
+  padding: 60px 24px 28px;
+  color: rgba(255,255,255,0.65);
+  font-family: 'Sora', sans-serif;
+}
+.pc-footer__inner { max-width: 1200px; margin: 0 auto; }
+.pc-footer__top {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1.5fr;
+  gap: 40px;
+  padding-bottom: 40px;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+.pc-footer__brand img { height: 40px; margin-bottom: 16px; display: block; }
+.pc-footer__brand p { font-size: 13.5px; line-height: 1.7; max-width: 280px; }
+.pc-footer__col h5 { font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; font-weight: 700; color: #d7bd88; margin-bottom: 16px; }
+.pc-footer__col ul { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+.pc-footer__col ul a { font-size: 13px; color: rgba(255,255,255,0.6); text-decoration: none; transition: color 0.2s; }
+.pc-footer__col ul a:hover { color: #d7bd88; }
+.pc-footer__bottom { padding-top: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+.pc-footer__copy { font-size: 12.5px; }
+.pc-footer__links { display: flex; gap: 20px; }
+.pc-footer__links a { font-size: 12.5px; color: rgba(255,255,255,0.5); text-decoration: none; }
+.pc-footer__links a:hover { color: #d7bd88; }
+@media (max-width: 900px) { .pc-footer__top { grid-template-columns: 1fr 1fr; gap: 28px; } }
+@media (max-width: 560px) { .pc-footer__top { grid-template-columns: 1fr; gap: 24px; } }
+
+/* ════════════════════════════════════════════════════════════════
+   Pet Center — responsive.css
+   Site-wide responsive / mobile-first breakpoints
+   Colors: Navy #10214b | Gold #d7bd88 | Orange #ED7624
+   ════════════════════════════════════════════════════════════════ */
+
+/* ── 1280px and below: constrain max container ─────────────── */
+@media (max-width: 1280px) {
+  .pc-container { padding: 0 20px; }
+}
+
+/* ── 1024px: tablet landscape ──────────────────────────────── */
+@media (max-width: 1024px) {
+  .pc-grid-4 { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ── 900px: tablet portrait / wide mobile ──────────────────── */
+@media (max-width: 900px) {
+  /* Header */
+  .pc-header__nav { display: none; }
+  .pc-hamburger { display: flex; }
+
+  /* Footer */
+  .pc-footer__top { grid-template-columns: 1fr 1fr; gap: 28px; }
+}
+
+/* ── 768px: tablet ─────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .pc-grid-3 { grid-template-columns: repeat(2, 1fr); }
+  .pc-grid-2 { grid-template-columns: 1fr; }
+}
+
+/* ── 640px: large mobile ───────────────────────────────────── */
+@media (max-width: 640px) {
+  .pc-section { padding: 48px 0; }
+}
+
+/* ── 560px: mobile ─────────────────────────────────────────── */
+@media (max-width: 560px) {
+  /* Footer */
+  .pc-footer__top { grid-template-columns: 1fr; gap: 24px; }
+}
+
+/* ── 480px: small mobile ───────────────────────────────────── */
+@media (max-width: 480px) {
+  .pc-grid-4 { grid-template-columns: 1fr; }
+
+  /* Footer */
+  .pc-footer__bottom { flex-direction: column; text-align: center; }
+  .pc-footer__links { justify-content: center; }
+}
+
+/* ── Print styles ──────────────────────────────────────────── */
+@media print {
+  .pc-header,
+  .pc-hamburger,
+  .pc-mobile-menu,
+  .pc-footer,
+  .pc-filter-bar,
+  .no-print { display: none !important; }
+  body { padding-top: 0 !important; }
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   MERCHANT PROFILE — NEW, TASK-B6
+   Everything below is this task's own new work: the page's own two sections
+   (header, listings-grid) plus placeholder styling for the five sections
+   reserved for other tasks (badges/impact-stats/donation-links/reviews/
+   actions — B4, G1, C6, C1a). No dropdown is built anywhere in this task.
+   ════════════════════════════════════════════════════════════════════════════ */
+
+/* TASK-B6 START */
+/* Merchant hero banner — same navy gradient treatment as cats.html's
+   .pc-cat-banner (category page banner) reused here for brand consistency
+   across "banner-style" sections, but with its own class name since the
+   content (merchant identity, not a category title) is different. */
+.merchant-hero {
+  background: linear-gradient(120deg, #10214b 0%, #1a3070 60%, #2a4080 100%);
+  padding: 96px 0 48px;
+  position: relative;
+  overflow: hidden;
+}
+.merchant-hero__inner {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+.merchant-hero__avatar {
+  width: 104px;
+  height: 104px;
+  border-radius: 50%;
+  object-fit: cover;
+  /* gold ring drawn with box-shadow, not border (design rule: no borders) */
+  box-shadow: 0 0 0 3px rgba(215,189,136,0.6), 0 6px 24px rgba(0,0,0,0.3);
+  flex-shrink: 0;
+  background: var(--navy-light);
+}
+.merchant-hero__identity { flex: 1; min-width: 240px; }
+.merchant-hero__name {
+  color: #fff;
+  font-size: clamp(1.7rem, 3.2vw, 2.4rem);
+  margin-bottom: 6px;
+}
+/* Reserved-section placeholder chrome — a dashed box naming which task owns
+   the section, so the shell is visibly complete (per completion-file
+   requirement: "all seven sections present, even the placeholder ones")
+   without pretending to be that task's real finished UI. */
+.merchant-section { padding: 36px 0; } /* spacing only, no divider borders */
+.merchant-section__title { margin-bottom: 20px; }
+.merchant-section__placeholder {
+  /* shadow-only card treatment (design rule: no borders on cards) */
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  color: var(--muted);
+  font-family: 'Sora', sans-serif;
+  font-size: 13.5px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.merchant-section__placeholder svg { flex-shrink: 0; color: var(--gold-dark); }
+
+/* Listings-grid section heading row (count + grid, mirrors cats.html's own
+   controls-row spirit but simplified — no search/filter here, out of scope
+   for a structure-only task) */
+.merchant-listings__count {
+  font-family: 'Sora', sans-serif;
+  font-size: 13.5px;
+  color: var(--muted);
+  margin-bottom: 20px;
+}
+.merchant-listings__count strong { color: var(--navy); }
+
+@media (max-width: 640px) {
+  .merchant-hero { padding: 84px 0 36px; }
+  .merchant-hero__inner { gap: 18px; }
+  .merchant-hero__avatar { width: 76px; height: 76px; }
+}
+@media (max-width: 1024px) { .pc-pet-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 768px)  { .pc-pet-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; } }
+@media (max-width: 480px)  { .pc-pet-grid { grid-template-columns: 1fr; } }
+/* TASK-B6 END */
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     Global Header — copied verbatim from cats.html per Directive 13
+     (cats.html is the canonical blueprint for header/footer/hamburger).
+     This is the current, corrected version: 7 categories, /signin/ path,
+     matching adoption-website-project-summary.md Section 2.6 — NOT the
+     stale 5-category /rehome/ copy in PETCENTER_DESIGN_SYSTEM_v1.0.md
+     Section 26, which the doc itself flags as possibly drifted.
+     ═══════════════════════════════════════════════════════════════════════ -->
+<header class="pc-header pc-header--solid" id="pcHeader">
+  <a href="/" class="pc-header__logo pc-header__logo--desktop">
+    <img src="/assets/images/logo-petcenter.png" alt="Pet Center">
+  </a>
+  <a href="/" class="pc-header__logo pc-header__logo--mobile">
+    <img src="/assets/images/logo-petcenter-icon.png" alt="Pet Center">
+  </a>
+  <ul class="pc-header__nav">
+    <li><a href="/">Home</a></li>
+    <li class="has-drop"><a href="#">Our Pets</a>
+      <ul>
+        <li><a href="/pets/dogs/">Dogs</a></li>
+        <li><a href="/pets/cats/">Cats</a></li>
+        <li><a href="/pets/birds/">Birds</a></li>
+        <li><a href="/pets/reptiles/">Reptiles</a></li>
+        <li><a href="/pets/small-mammals/">Small Mammals</a></li>
+        <li><a href="/pets/livestocks/">Livestocks</a></li>
+        <li><a href="/pets/aquariums/">Aquariums</a></li>
+      </ul>
+    </li>
+    <li><a href="/blog/">Blog</a></li>
+    <li><a href="/testimonials/">Testimonials</a></li>
+    <li class="nav-donate"><a href="https://donate.petcenterco.com" target="_blank" rel="noopener">Donate</a></li>
+    <li><a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact</a></li>
+    <li class="nav-signup"><a href="/signin/">Sign Up</a></li>
+  </ul>
+  <button class="pc-hamburger" id="pcHamburger" aria-label="Open menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+  <nav class="pc-mobile-menu" id="pcMobileMenu" aria-label="Mobile navigation">
+    <a href="/">Home</a>
+    <a href="/pets/dogs/">Dogs</a>
+    <a href="/pets/cats/">Cats</a>
+    <a href="/pets/birds/">Birds</a>
+    <a href="/pets/reptiles/">Reptiles</a>
+    <a href="/pets/small-mammals/">Small Mammals</a>
+    <a href="/pets/livestocks/">Livestocks</a>
+    <a href="/pets/aquariums/">Aquariums</a>
+    <a href="/blog/">Blog</a>
+    <a href="/testimonials/">Testimonials</a>
+    <a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact</a>
+    <a href="/signin/">Sign Up</a>
+    <a href="https://donate.petcenterco.com" class="mobile-donate" target="_blank" rel="noopener">Donate</a>
+  </nav>
+</header>
+
+<main>
+
+<!-- TASK-B6 START -->
+<!-- MERCHANT-PROFILE: header -->
+<!-- This task's own content: merchant name and photo only (per the section contract). Populated by renderMerchantHeader() from a local stub until a merchant account record contract exists (none is published in SHARED CONTRACTS - logged in the completion file). -->
+<section class="merchant-hero">
+  <div class="pc-container merchant-hero__inner">
+    <!-- Merchant photo; falls back to an inline SVG silhouette if the photo is missing/fails (see onerror + MERCHANT_AVATAR_FALLBACK in JS) -->
+    <img class="merchant-hero__avatar" id="merchantAvatar" src="" alt="">
+    <div class="merchant-hero__identity">
+      <h1 class="merchant-hero__name" id="merchantName">Loading merchant...</h1>
+    </div>
+  </div>
+</section>
+<!-- END MERCHANT-PROFILE: header -->
+<!-- TASK-B6 END -->
+
+<div class="pc-container">
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       MERCHANT-PROFILE: badges — RESERVED FOR TASK B4
+       B4 renders the badge chip row here (Verified / Trusted / Charity /
+       Takeback Commitment). Left as an empty, anchor-commented placeholder
+       per this task's structure-only scope — B4 writes its real markup
+       into this exact block, it does not need to wait for B4's own
+       completion file to exist to plan against this location.
+       ═══════════════════════════════════════════════════════════════════ -->
+  <section class="merchant-section">
+    <h2 class="merchant-section__title">Badges</h2>
+    <!-- MERCHANT-PROFILE: badges -->
+    <div class="merchant-section__placeholder">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/><path d="M8.5 13.5 7 22l5-3 5 3-1.5-8.5"/></svg>
+      Reserved for Task B4 — badge chip row (Verified, Trusted, Charity, Takeback Commitment)
+    </div>
+    <!-- END MERCHANT-PROFILE: badges -->
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       MERCHANT-PROFILE: impact-stats — RESERVED FOR TASK B4
+       ═══════════════════════════════════════════════════════════════════ -->
+  <section class="merchant-section">
+    <h2 class="merchant-section__title">Impact</h2>
+    <!-- MERCHANT-PROFILE: impact-stats -->
+    <div class="merchant-section__placeholder">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      Reserved for Task B4 — "X pets rehomed &middot; Y active listings &middot; avg Z days to home"
+    </div>
+    <!-- END MERCHANT-PROFILE: impact-stats -->
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       MERCHANT-PROFILE: donation-links — RESERVED FOR TASK G1
+       ═══════════════════════════════════════════════════════════════════ -->
+  <section class="merchant-section">
+    <h2 class="merchant-section__title">Support this merchant</h2>
+    <!-- MERCHANT-PROFILE: donation-links -->
+    <div class="merchant-section__placeholder">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      Reserved for Task G1 — donation link and Amazon wishlist link, plus adoption-fee checkout
+    </div>
+    <!-- END MERCHANT-PROFILE: donation-links -->
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       MERCHANT-PROFILE: listings-grid — THIS TASK'S OWN CONTENT
+       Reuses cats.html's .pc-pet-card / .pc-pet-grid component verbatim
+       per Rule 7. Renders the merchant's own active listings only (not
+       every listing on the platform) — filtered client-side against a
+       local stub dataset shaped exactly like the real pet.json objects
+       cats.html already fetches, since a real "merchant's listings"
+       endpoint doesn't exist yet (that's the listing schema A1/A2 own).
+       Reconcile against the real endpoint at the integration checkpoint
+       once A1's completion file exists, per SHARED CONTRACTS.
+       ═══════════════════════════════════════════════════════════════════ -->
+  <section class="merchant-section">
+    <h2 class="merchant-section__title">Active Listings</h2>
+    <!-- MERCHANT-PROFILE: listings-grid -->
+    <div class="merchant-listings__count" id="merchantListingsCount"></div>
+    <div class="pc-pet-grid" id="merchantListingsGrid">
+      <div class="pc-skeleton"></div><div class="pc-skeleton"></div>
+      <div class="pc-skeleton"></div><div class="pc-skeleton"></div>
+    </div>
+    <!-- END MERCHANT-PROFILE: listings-grid -->
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       MERCHANT-PROFILE: reviews — RESERVED FOR TASK C6
+       ═══════════════════════════════════════════════════════════════════ -->
+  <section class="merchant-section">
+    <h2 class="merchant-section__title">Reviews</h2>
+    <!-- MERCHANT-PROFILE: reviews -->
+    <div class="merchant-section__placeholder">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      Reserved for Task C6 — thumbs counts and the list of visible reviews, each with the merchant's reply
+    </div>
+    <!-- END MERCHANT-PROFILE: reviews -->
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       MERCHANT-PROFILE: actions — RESERVED FOR TASK C1a (Report button)
+       AND TASK C6 (thumbs-up/down). New section added in the project
+       doc's second revision.
+       ═══════════════════════════════════════════════════════════════════ -->
+  <section class="merchant-section">
+    <h2 class="merchant-section__title">Actions</h2>
+    <!-- MERCHANT-PROFILE: actions -->
+    <div class="merchant-section__placeholder">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      Reserved for Task C1a (Report button) and Task C6 (thumbs-up/down)
+    </div>
+    <!-- END MERCHANT-PROFILE: actions -->
+  </section>
+
+</div>
+</main>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     Footer — copied verbatim from cats.html per Directive 13
+     ═══════════════════════════════════════════════════════════════════════ -->
+<footer class="pc-footer">
+  <div class="pc-footer__inner">
+    <div class="pc-footer__top">
+      <div class="pc-footer__brand">
+        <img src="/assets/images/logo-petcenter.png" alt="Pet Center">
+        <p>Every pet deserves a loving home. Browse our available pets and start your adoption journey today.</p>
+      </div>
+      <div class="pc-footer__col">
+        <h5>Our Pets</h5>
+        <ul>
+          <li><a href="/pets/dogs/">Dogs</a></li>
+          <li><a href="/pets/cats/">Cats</a></li>
+          <li><a href="/pets/birds/">Birds</a></li>
+          <li><a href="/pets/reptiles/">Reptiles</a></li>
+          <li><a href="/pets/small-mammals/">Small Mammals</a></li>
+          <li><a href="/pets/livestocks/">Livestocks</a></li>
+          <li><a href="/pets/aquariums/">Aquariums</a></li>
+        </ul>
+      </div>
+      <div class="pc-footer__col">
+        <h5>Information</h5>
+        <ul>
+          <li><a href="/">About Us</a></li>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/testimonials/">Testimonials</a></li>
+          <li><a href="https://donate.petcenterco.com" target="_blank" rel="noopener">Donate</a></li>
+          <li><a href="https://docs.petcenterco.com/health-guarantee/" target="_blank" rel="noopener">Health Guarantee</a></li>
+          <li><a href="https://docs.petcenterco.com/shipping-cancellation/" target="_blank" rel="noopener">Shipping &amp; Cancellation</a></li>
+          <li><a href="https://docs.petcenterco.com/shipping-insurance-claims/" target="_blank" rel="noopener">Shipping Insurance</a></li>
+          <li><a href="https://docs.petcenterco.com/data-retention-security/" target="_blank" rel="noopener">Data &amp; Security</a></li>
+        </ul>
+      </div>
+      <div class="pc-footer__col">
+        <h5>Support</h5>
+        <ul>
+          <li><a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact Us</a></li>
+          <li><a href="/signin/">Sign Up</a></li>
+          <li><a href="https://docs.petcenterco.com/returns-refunds/" target="_blank" rel="noopener">Returns &amp; Refunds</a></li>
+          <li><a href="https://docs.petcenterco.com/faq/" target="_blank" rel="noopener">FAQ</a></li>
+        </ul>
+      </div>
+      <div class="pc-footer__col">
+        <h5>Visit Us</h5>
+        <p style="color:rgba(255,255,255,.7);font-size:13px;line-height:1.8;margin-bottom:0;">235-269 N Beverly Dr<br>Beverly Hills, CA</p>
+        <p style="color:rgba(255,255,255,.6);font-size:12px;line-height:1.6;margin-top:4px;">Golden Triangle Shopping Center, Section #257</p>
+        <p style="color:rgba(255,255,255,.7);font-size:13px;line-height:1.8;margin-top:10px;"><strong style="color:#d7bd88;">Hours:</strong><br>Mon – Fri: 7am – 9pm<br>Sat – Sun: 10am – 6pm</p>
+      </div>
+    </div>
+    <div class="pc-footer__bottom">
+      <span class="pc-footer__copy">&copy; 2026 Pet Center. All rights reserved.</span>
+      <div class="pc-footer__links">
+        <a href="https://docs.petcenterco.com/privacy-policy/" target="_blank" rel="noopener">Privacy Policy</a>
+        <a href="https://docs.petcenterco.com/terms-of-service/" target="_blank" rel="noopener">Terms of Service</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════════════
+// Header scroll state — verbatim behavior from cats.html (adds .scrolled
+// once the page scrolls past the top so the transparent header gets a
+// solid navy background/shadow).
+// ═══════════════════════════════════════════════════════════════════════════
+(function() {
+  var header = document.getElementById('pcHeader');
+  if (!header) return;
+  function updateHeaderOnScroll() {
+    if (window.scrollY > 0) { header.classList.add('scrolled'); }
+    else { header.classList.remove('scrolled'); }
+  }
+  window.addEventListener('scroll', updateHeaderOnScroll, { passive: true });
+  updateHeaderOnScroll();
+})();
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Mobile Menu Toggle — canonical implementation, copied verbatim from
+// cats.html (Section 2.4 of adoption-website-project-summary.md). Do not
+// modify or reimplement — this exact open/close + body-scroll-lock +
+// aria-expanded pattern is mandatory site-wide.
+// ═══════════════════════════════════════════════════════════════════════════
+(function () {
+  var hamburger = document.getElementById('pcHamburger');
+  var mobileMenu = document.getElementById('pcMobileMenu');
+  if (!hamburger || !mobileMenu) return;
+
+  function openMenu() {
+    hamburger.classList.add('active');
+    mobileMenu.classList.add('open');
+    hamburger.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeMenu() {
+    hamburger.classList.remove('active');
+    mobileMenu.classList.remove('open');
+    hamburger.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  hamburger.addEventListener('click', function (e) {
+    e.stopPropagation();
+    mobileMenu.classList.contains('open') ? closeMenu() : openMenu();
+  });
+
+  mobileMenu.querySelectorAll('a').forEach(function (link) {
+    link.addEventListener('click', closeMenu);
+  });
+
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest('header') && !e.target.closest('.pc-mobile-menu')) {
+      closeMenu();
+    }
+  });
+})();
+
+// ═══════════════════════════════════════════════════════════════════════════
+// TASK-B6 — Merchant profile + listings loader
+// Two data needs on this page. Neither has an owning contract in the
+// SHARED CONTRACTS list yet, so both run on local stubs (flagged in the
+// completion file as gaps, not silently invented):
+//   1. The merchant account record - only `name` and `photo_url` are used
+//      (the section contract says "merchant name, photo"). No task owns
+//      this record's field names.
+//   2. This merchant's listings - base fields are the REAL pet.json fields
+//      cats.html already reads; contract fields come from SHARED CONTRACTS
+//      (`status` enum, `held_for_review`, `grouped_with`, `needs_extra_love`).
+//      The link from a listing to its merchant (`merchant_id` here) is NOT
+//      in any published contract - assumed name, to be reconciled with A1.
+// ═══════════════════════════════════════════════════════════════════════════
+(function () {
+
+  // Inline SVG silhouette (data URI) used when the merchant has no photo or
+  // the photo fails to load - avoids depending on an extra asset file that
+  // may not exist on the server.
+  var MERCHANT_AVATAR_FALLBACK = 'data:image/svg+xml;utf8,' + encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#d7bd88" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="24" height="24" fill="#1a2f5c"/><path d="M5 20v-1a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5v1"/><circle cx="12" cy="8" r="3.5"/></svg>');
+
+  // ── Stub merchant record (swap for a real fetch once a contract exists) ──
+  var STUB_MERCHANT = {
+    merchant_id: 'MERCH-0001',
+    name: 'Golden Gate Rescue Co.',
+    photo_url: ''   // empty -> exercises the SVG fallback
+  };
+
+  // ── Stub listings. Uses the contract's exact status values ('active' etc.),
+  //    NOT the old 'Available'/'Adopted' strings. Includes a held listing and
+  //    a pending one so the visitor-facing filter below is visibly working. ──
+  var P = '/assets/images/pet-placeholder.jpg';
+  var STUB_LISTINGS = [
+    { pet_id: 'DOG-00042', merchant_id: 'MERCH-0001', category: 'dogs', name: 'Biscuit', breed: 'Labrador Mix', age_years: 3, size: 'Large', adoption_fee: 175, single_image_url: P, status: 'active', held_for_review: false, published_date: '2026-09-10 09:00:00' },
+    { pet_id: 'CAT-00017', merchant_id: 'MERCH-0001', category: 'cats', name: 'Willow', breed: 'Domestic Shorthair', age_years: 2, size: 'Medium', adoption_fee: 90, single_image_url: P, status: 'active', held_for_review: false, published_date: '2026-09-14 09:00:00', needs_extra_love: true, grouped_with: ['CAT-00018'] },
+    { pet_id: 'CAT-00018', merchant_id: 'MERCH-0001', category: 'cats', name: 'Hazel', breed: 'Domestic Shorthair', age_years: 2, size: 'Medium', adoption_fee: 90, single_image_url: P, status: 'active', held_for_review: false, published_date: '2026-09-14 09:00:00', grouped_with: ['CAT-00017'] },
+    { pet_id: 'DOG-00051', merchant_id: 'MERCH-0001', category: 'dogs', name: 'Scout', breed: 'Border Collie', age_years: 1, size: 'Medium', adoption_fee: 200, single_image_url: P, status: 'active', held_for_review: false, published_date: '2026-09-18 09:00:00' },
+    // Must NOT render: held back by C2's posting-velocity detector
+    { pet_id: 'DOG-00060', merchant_id: 'MERCH-0001', category: 'dogs', name: 'HeldDog', breed: 'Mixed', age_years: 2, size: 'Small', adoption_fee: 50, single_image_url: P, status: 'active', held_for_review: true, published_date: '2026-09-20 09:00:00' },
+    // Must NOT render: not an "active" listing
+    { pet_id: 'DOG-00061', merchant_id: 'MERCH-0001', category: 'dogs', name: 'PendingDog', breed: 'Mixed', age_years: 4, size: 'Small', adoption_fee: 60, single_image_url: P, status: 'pending_placement', held_for_review: false, published_date: '2026-09-21 09:00:00' },
+    // Must NOT render: belongs to a different merchant
+    { pet_id: 'DOG-00070', merchant_id: 'MERCH-0002', category: 'dogs', name: 'OtherMerchantDog', breed: 'Mixed', age_years: 5, size: 'Large', adoption_fee: 80, single_image_url: P, status: 'active', held_for_review: false, published_date: '2026-09-22 09:00:00' }
+  ];
+
+  // Escapes the free-text fields the verbatim card renderer below inserts
+  // into HTML as raw strings. cats.html only ever rendered admin-entered
+  // text; merchants are untrusted authors, so their text is escaped HERE
+  // (in this page's own code) without altering the verbatim card code.
+  function escHtml(v) {
+    return String(v == null ? '' : v).replace(/&/g, '&amp;').replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+  // Returns a copy of a listing with only the display strings escaped.
+  function sanitizeListing(l) {
+    var c = Object.assign({}, l);
+    ['name', 'breed', 'size', 'single_image_url'].forEach(function (k) {
+      if (c[k] != null) c[k] = escHtml(c[k]);
+    });
+    return c;
+  }
+
+  // Visitor-facing filter: this merchant's listings only, status must be
+  // exactly 'active' (SHARED CONTRACTS status enum), and never a listing
+  // where held_for_review is true (contract: such a listing never appears
+  // to visitors).
+  function getVisibleListings(all, merchantId) {
+    return all.filter(function (l) {
+      return l.merchant_id === merchantId && l.status === 'active' && l.held_for_review !== true;
+    });
+  }
+
+  // Reads the ?merchant_id= URL param; used to filter listings now and to
+  // fetch the merchant record once a real endpoint exists.
+  function getMerchantIdFromUrl() {
+    var params = new URLSearchParams(window.location.search);
+    return params.get('merchant_id') || '';
+  }
+
+  // Fills the header section (name + photo). Photo falls back to the inline
+  // SVG silhouette when empty or when the image errors.
+  function renderMerchantHeader(merchant) {
+    var avatar = document.getElementById('merchantAvatar');
+    avatar.onerror = function () { avatar.onerror = null; avatar.src = MERCHANT_AVATAR_FALLBACK; };
+    avatar.src = merchant.photo_url || MERCHANT_AVATAR_FALLBACK;
+    avatar.alt = merchant.name;
+    document.getElementById('merchantName').textContent = merchant.name;
+    document.title = merchant.name + ' - Pet Center';
+  }
+
+  // ── Card rendering: copied VERBATIM from cats.html renderPets() (lines
+  //    2045-2171: icons, formatPostedDate, groupBondedPairs,
+  //    renderBondedPairCard, single-pet card incl. NEL badge + diary link).
+  //    Only change: wrapped in buildListingsHTML(pets) and `category`
+  //    fallback defined, since this page is not tied to one category. ──────
+  var category = '';
+  function buildListingsHTML(pets) {
+    // SVG icons for card details
+    // TASK-2 START — Posted-on date icon + formatter
+    var iconPosted = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>';
+    function formatPostedDate(dateStr) {
+      if (!dateStr) return null;
+      var d = new Date(String(dateStr).replace(' ', 'T'));
+      if (isNaN(d.getTime())) return null;
+      var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      return months[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
+    }
+    // TASK-2 END
+    var iconBreed  = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>';
+    var iconAge    = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>';
+    var iconSize   = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>';
+    var iconFee    = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>';
+
+    // TASK-A2 START — Needs Extra Love badge (inline SVG heart, no emoji).
+    var iconHeart = '<svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-10-9.1C.5 8.6 2 5 5.5 5c2 0 3.3 1 4.5 2.4C11.2 6 12.5 5 14.5 5 18 5 19.5 8.6 22 11.9 19.5 16.4 12 21 12 21z"/></svg>';
+
+    /**
+     * Groups any bonded-pair listings (Task A2: grouped_with) in the
+     * already-filtered/sorted `pets` array into a single merged render
+     * entry, so the grid shows one card per pair instead of two. If a
+     * pair's partner isn't present in this same filtered/sorted result
+     * set (the current search/filter excluded it), that's a real signal
+     * the pairing shouldn't be forced back into view here — falls back to
+     * rendering that pet as a normal single card rather than pulling in
+     * a listing the user's own filters just excluded.
+     */
+    function groupBondedPairs(list) {
+      var byId = {};
+      list.forEach(function(p) { byId[p.pet_id] = p; });
+      var seen = {};
+      var out = [];
+      list.forEach(function(p) {
+        if (seen[p.pet_id]) return;
+        if (p.grouped_with && p.grouped_with.length) {
+          var partner = byId[p.grouped_with[0]];
+          if (partner && !seen[partner.pet_id]) {
+            out.push({ bondedPair: [p, partner] });
+            seen[p.pet_id] = true;
+            seen[partner.pet_id] = true;
+            return;
+          }
+        }
+        out.push(p);
+        seen[p.pet_id] = true;
+      });
+      return out;
+    }
+
+    function renderBondedPairCard(pair) {
+      var a = pair[0], b = pair[1];
+      var imgA = a.single_image_url || '/assets/images/pet-placeholder.jpg';
+      var imgB = b.single_image_url || '/assets/images/pet-placeholder.jpg';
+      var urlA = '/pets/detail/?pet_id=' + encodeURIComponent(a.pet_id) + '&category=' + encodeURIComponent(a.category || category);
+      var urlB = '/pets/detail/?pet_id=' + encodeURIComponent(b.pet_id) + '&category=' + encodeURIComponent(b.category || category);
+      var fee = (a.adoption_fee || b.adoption_fee || 0).toLocaleString('en-US');
+      return '<div class="pc-pet-card pc-pet-card--bonded">' +
+        '<div class="pc-pet-card__img-wrap">' +
+          '<div class="pc-pet-card__bonded-badge">Bonded pair — must adopt together</div>' +
+          '<a href="' + urlA + '"><img src="' + imgA + '" alt="' + (a.name || 'Pet') + '" class="pc-pet-card__img" loading="lazy"></a>' +
+          '<a href="' + urlB + '"><img src="' + imgB + '" alt="' + (b.name || 'Pet') + '" class="pc-pet-card__img" loading="lazy"></a>' +
+        '</div>' +
+        '<div class="pc-pet-card__body">' +
+          '<h3 class="pc-pet-card__name"><a href="' + urlA + '">' + (a.name || 'Unknown') + '</a> &amp; <a href="' + urlB + '">' + (b.name || 'Unknown') + '</a></h3>' +
+          '<div class="pc-pet-card__details">' +
+            '<div class="pc-pet-card__detail-row">' + iconBreed + '<span class="pc-pet-card__detail-val">' + (a.breed || 'Mixed') + '</span></div>' +
+          '</div>' +
+          '<div class="pc-pet-card__fee-row">' + iconFee + '<span class="pc-pet-card__fee">' + fee + '</span></div>' +
+        '</div>' +
+      '</div>';
+    }
+    // TASK-A2 END
+
+    var html = groupBondedPairs(pets).map(function(entry) {
+      if (entry.bondedPair) return renderBondedPairCard(entry.bondedPair); // TASK-A2
+      var p = entry;
+      var img = p.single_image_url || '/assets/images/pet-placeholder.jpg';
+      var fee = (p.adoption_fee || 0).toLocaleString('en-US');
+      var url = '/pets/detail/?pet_id=' + encodeURIComponent(p.pet_id) + '&category=' + encodeURIComponent(p.category || category);
+      var petName = p.name || 'Unknown';
+      var breed = p.breed || 'Mixed';
+      var age = p.age_years ? p.age_years + (p.age_years === 1 ? ' year' : ' years') : '—';
+      var size = p.size || '—';
+      // TASK-2 START — Posted-on date, rendered only when the pet record has one
+      var postedText = formatPostedDate(p.published_date);
+      var postedHTML = postedText ? '<div class="pc-pet-card__posted">' + iconPosted + '<span>Posted ' + postedText + '</span></div>' : '';
+      // TASK-2 END
+      
+      // Adopted badge — "ADOPTED" strip style
+      var adoptedBadge = p.status === 'Adopted'
+        ? '<div class="pc-pet-card__adopted-badge">ADOPTED</div>'
+        : '';
+
+      // TASK-A2 START — Needs Extra Love badge (only when the flag is
+      // present and true; older/pre-A2 pet records simply won't have the
+      // field yet, so this degrades to "no badge" rather than erroring).
+      var nelBadge = p.needs_extra_love
+        ? '<div class="pc-pet-card__nel-badge">' + iconHeart + 'Needs Extra Love</div>'
+        : '';
+      // TASK-A2 END
+
+      return '<a href="' + url + '" class="pc-pet-card">' +
+        '<div class="pc-pet-card__img-wrap">' +
+          '<img src="' + img + '" alt="' + petName + '" class="pc-pet-card__img" loading="lazy">' +
+          adoptedBadge +
+          nelBadge +
+        '</div>' +
+        '<div class="pc-pet-card__body">' +
+          '<h3 class="pc-pet-card__name">' + petName + '</h3>' +
+          '<div class="pc-pet-card__details">' +
+            '<div class="pc-pet-card__detail-row">' + iconBreed + '<span class="pc-pet-card__detail-val">' + breed + '</span></div>' +
+            '<div class="pc-pet-card__detail-row">' + iconAge   + '<span class="pc-pet-card__detail-val">' + age   + '</span></div>' +
+            '<div class="pc-pet-card__detail-row">' + iconSize  + '<span class="pc-pet-card__detail-val">' + size  + '</span></div>' +
+          '</div>' +
+          '<div class="pc-pet-card__fee-row">' +
+            iconFee +
+            '<span class="pc-pet-card__fee">' + fee + '</span>' +
+          '</div>' +
+          // TASK-2 START — Posted-on date, rendered only when the pet record has one
+          postedHTML +
+          // TASK-2 END
+          '<span class="pc-pet-card__diary">Read ' + petName + '\'s diary!</span>' +
+        '</div>' +
+      '</a>';
+    }).join('');
+    return html;
+  }
+
+  // Empty-state markup (same pc-empty-state component cats.html uses), shown when the merchant has no visible active listings.
+  var PC_NO_LISTINGS_HTML =
+    '<div class="pc-empty-state">' +
+      '<svg class="pc-empty-state__icon" viewBox="0 0 512 512" width="52" height="52" fill="currentColor">' +
+        '<path d="M290.59 192c-20.18 0-106.82 1.98-162.59 85.95V192c0-52.94-43.06-96-96-96-17.67 0-32 14.33-32 32s14.33 32 32 32c17.64 0 32 14.36 32 32v256c0 35.3 28.7 64 64 64h176c8.84 0 16-7.16 16-16v-16c0-17.67-14.33-32-32-32h-32l128-96v144c0 8.84 7.16 16 16 16h32c8.84 0 16-7.16 16-16V289.86c-10.29 2.67-20.89 4.54-32 4.54-61.81 0-113.52-44.05-125.41-102.4zM448 96h-64l-64-64v134.4c0 53.02 42.98 96 96 96s96-42.98 96-96V32l-64 64zm-72 80c-8.84 0-16-7.16-16-16s7.16-16 16-16 16 7.16 16 16-7.16 16-16 16zm80 0c-8.84 0-16-7.16-16-16s7.16-16 16-16 16 7.16 16 16-7.16 16-16 16z"/>' +
+      '</svg>' +
+      '<div class="pc-empty-state__title">No active listings yet</div>' +
+      '<div class="pc-empty-state__subtitle">This merchant hasn\'t posted any pets for rehoming right now.</div>' +
+    '</div>';
+
+  // Writes the count line and the card grid (or the empty state) into the listings-grid section.
+  function renderListings(listings) {
+    var grid = document.getElementById('merchantListingsGrid');
+    var countEl = document.getElementById('merchantListingsCount');
+    if (!listings.length) {
+      grid.innerHTML = PC_NO_LISTINGS_HTML;
+      countEl.textContent = '';
+      return;
+    }
+    countEl.innerHTML = '<strong>' + listings.length + '</strong> active listing' + (listings.length === 1 ? '' : 's');
+    grid.innerHTML = buildListingsHTML(listings.map(sanitizeListing)); // escape merchant-authored text first
+  }
+
+  // Page entry point: reads ?merchant_id= (falls back to the stub merchant
+  // so the shell is viewable on its own), renders header, then the
+  // filtered listings.
+  function init() {
+    var merchantId = getMerchantIdFromUrl() || STUB_MERCHANT.merchant_id;
+    renderMerchantHeader(STUB_MERCHANT);
+    renderListings(getVisibleListings(STUB_LISTINGS, merchantId));
+  }
+
+  document.addEventListener('DOMContentLoaded', init);
+})();
+</script>
+</body>
+</html>

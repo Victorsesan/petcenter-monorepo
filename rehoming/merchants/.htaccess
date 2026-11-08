@@ -1,0 +1,9 @@
+# TASK-B3 — blocks direct browser access to merchant profile.json files.
+# Found during self re-verification: profile.json holds verification_status, charity
+# registration numbers/country, and other non-public fields — none of this should be
+# directly browsable by guessing a merchant ID's folder URL. Mirrors the exact pattern
+# ADMIN_DASHBOARD_PROJECT_SUMMARY.md documents for CHAT_UPLOAD_TEMP_DIR ("protected by an
+# auto-written .htaccess containing Deny from all, so even though this folder is inside
+# the public webroot, direct browser access by guessing its filename is blocked at the
+# web server level") — same directive, reused rather than invented, per Rule 7.
+Deny from all

@@ -28,6 +28,121 @@ chatRequireAdmin();
 $db = chatDb();
 $action = $_GET['action'] ?? 'list';
 
+// <!-- TASK-7 START -->
+// Task 7 — Admin Auth-State Badge. Read-only helpers that turn a chat's
+// existing log_audit() rows (Task 1's contract) into one of five
+// display states for the admin list/claim view: none, pin_set,
+// password_set, locked, verified_session. No new logging is added here —
+// this only reads rows some other task already writes.
+//
+// 3-PASS HISTORY (see Task-7-Completion.md for full detail on each):
+//   1st pass — built against a flagged assumption (table `chat_auth_audit`,
+//     endpoint substrings) since no vocabulary was published.
+//   2nd pass — reconciled against Task 1's real implementation directly:
+//     table is `chat_auth_audit_log`, and the state signal lives in
+//     `result` (not `endpoint`). Matched on result === 'verified'.
+//   3rd pass (current) — per the project-wide Worker Sync Notice
+//     (Post-Task1-Task7), 'verified' was wrong for this purpose: Task 1's
+//     verify_token() logs result 'verified' on *every* successful session
+//     poll (~every 2.5s for any open chat panel), so treating the newest
+//     'verified' row as "verified this session" would show that state for
+//     nearly every active chat regardless of whether a PIN/password was
+//     ever entered. The Sync Notice's proposed vocabulary fixes this with
+//     a distinct result string, 'tier_verified', reserved for an actual
+//     PIN/password check (to be logged by Tasks 3/5a) — and explicitly
+//     calls for excluding verify_token rows from this computation
+//     entirely so that high-frequency polling noise can never mask an
+//     earlier real lock or tier-verification event. Both changes are
+//     applied in chatDeriveAuthBadge() below.
+//
+// Current result-value vocabulary (CEO-confirmed):
+//   pin_set | password_set | tier_verified | locked | unlocked
+// 'unlocked' needs no explicit branch below — it simply isn't 'locked',
+// so it naturally falls through to whatever the tier scan finds next.
+//
+// principal_id is assumed to equal chat_threads.chat_id, matching how
+// every other file in this project identifies one anonymous chat
+// conversation — see the Shared Contract's reuse notes.
+
+// Batch-fetches every audit row for a set of chat IDs in one query (no
+// N+1 per-thread lookups) and reduces each chat's rows down to a single
+// badge state. Orders by created_at DESC with id DESC as a tiebreaker —
+// `created_at` alone isn't reliable for same-second rows (e.g. a tier
+// being set and immediately verified in one request/response cycle), and
+// since the audit log is insert-only, its auto-increment id always
+// matches true chronological order even when timestamps tie.
+function chatFetchAuditBadges($db, array $principalIds) {
+    $badges = [];
+    foreach ($principalIds as $id) {
+        $badges[$id] = 'none'; // default: no audit history at all for this chat
+    }
+    if (empty($principalIds)) {
+        return $badges;
+    }
+
+    $placeholders = implode(',', array_fill(0, count($principalIds), '?'));
+    $stmt = $db->prepare(
+        "SELECT principal_id, endpoint, result, created_at
+         FROM chat_auth_audit_log
+         WHERE principal_id IN ($placeholders)
+         ORDER BY created_at DESC, id DESC"
+    );
+    $stmt->execute($principalIds);
+    $rows = $stmt->fetchAll();
+
+    // Group rows by principal, keeping the DESC time order from the query
+    // so index 0 of each group is always that chat's most recent event.
+    $byPrincipal = [];
+    foreach ($rows as $row) {
+        $byPrincipal[$row['principal_id']][] = $row;
+    }
+
+    foreach ($byPrincipal as $principalId => $auditRows) {
+        $badges[$principalId] = chatDeriveAuthBadge($auditRows);
+    }
+
+    return $badges;
+}
+
+// Applies the badge precedence rule to one chat's audit rows (already
+// sorted newest-first): a live lock always wins display, then a real
+// tier verification, then whichever protection tier was ever configured
+// (most recent tier wins, in case of an upgrade), then 'none'.
+function chatDeriveAuthBadge(array $auditRowsDesc) {
+    // Exclude Task 1's high-frequency session-token polling noise —
+    // verify_token() logs a 'verified' row on every successful poll, so
+    // without this filter it would almost always be the literal newest
+    // row for any open chat and could mask a real lock or tier-verified
+    // event that happened earlier but isn't chronologically last.
+    $meaningful = array_values(array_filter($auditRowsDesc, function ($row) {
+        return $row['endpoint'] !== 'verify_token';
+    }));
+
+    $mostRecent = $meaningful[0] ?? null;
+
+    if ($mostRecent && $mostRecent['result'] === 'locked') {
+        return 'locked';
+    }
+
+    if ($mostRecent && $mostRecent['result'] === 'tier_verified') {
+        return 'verified_session';
+    }
+
+    // Neither locked nor freshly tier-verified right now — fall back to
+    // whichever tier was most recently set.
+    foreach ($meaningful as $row) {
+        if ($row['result'] === 'password_set') {
+            return 'password_set';
+        }
+        if ($row['result'] === 'pin_set') {
+            return 'pin_set';
+        }
+    }
+
+    return 'none';
+}
+// <!-- TASK-7 END -->
+
 if ($action === 'list') {
 
     $adminId = (int)($_GET['adminId'] ?? 0);
@@ -101,6 +216,31 @@ if ($action === 'list') {
     );
     $archived = $stmt->fetchAll();
 
+    // <!-- TASK-7 START -->
+    // Attach the read-only auth_badge field to every thread across all
+    // five buckets in one batch lookup, so the admin dashboard can render
+    // each chat's protection state without a second request per thread.
+    $allThreadsForBadges = array_merge($waiting, $activeMine, $activeOthers, $done, $archived);
+    $principalIds = array_values(array_unique(array_filter(array_map(
+        function ($t) { return $t['chat_id'] ?? null; },
+        $allThreadsForBadges
+    ))));
+    $authBadges = chatFetchAuditBadges($db, $principalIds);
+
+    // Writes the computed auth_badge onto every row of a bucket in place.
+    $attachAuthBadge = function (array &$threads) use ($authBadges) {
+        foreach ($threads as &$t) {
+            $t['auth_badge'] = $authBadges[$t['chat_id']] ?? 'none';
+        }
+        unset($t);
+    };
+    $attachAuthBadge($waiting);
+    $attachAuthBadge($activeMine);
+    $attachAuthBadge($activeOthers);
+    $attachAuthBadge($done);
+    $attachAuthBadge($archived);
+    // <!-- TASK-7 END -->
+
     chatRespond([
         'success' => true,
         'waiting' => $waiting,
@@ -128,6 +268,22 @@ if ($action === 'list') {
         $stmt->execute([$query]);
     }
     $results = $stmt->fetchAll();
+
+    // <!-- TASK-7 START -->
+    // Lookup results also carry auth_badge, consistent with the list
+    // results — an admin jumping straight to one thread via the lookup box
+    // should see its protection state before opening it, same as any
+    // thread found through the normal list view.
+    $lookupPrincipalIds = array_values(array_unique(array_filter(array_map(
+        function ($t) { return $t['chat_id'] ?? null; },
+        $results
+    ))));
+    $lookupBadges = chatFetchAuditBadges($db, $lookupPrincipalIds);
+    foreach ($results as &$r) {
+        $r['auth_badge'] = $lookupBadges[$r['chat_id']] ?? 'none';
+    }
+    unset($r);
+    // <!-- TASK-7 END -->
 
     chatRespond(['success' => true, 'results' => $results]);
 

@@ -66,10 +66,31 @@ foreach ($chatIds as $chatId) {
 
     if (!$threadId) { $failed[] = $chatId; continue; }
 
+    // TASK-2 fix (bulk-action validation): archive/unarchive previously
+    // called ->execute() with no try/catch, unlike the delete branch below.
+    // chatDb() sets PDO::ERRMODE_EXCEPTION, so a transient DB error on any
+    // one ID (lock timeout, deadlock, etc.) would throw uncaught mid-loop
+    // and crash the whole request with no JSON response — silently
+    // breaking this file's own documented contract that "one bad ID never
+    // aborts the rest of the batch" (see the file's top comment and
+    // ADMIN_DASHBOARD_PROJECT_SUMMARY.md's chat-manage.php doc). Wrapping
+    // these two branches in try/catch, matching the delete branch's
+    // existing pattern, makes that guarantee actually hold for all three
+    // actions instead of just one.
     if ($action === 'archive') {
-        $ok = $db->prepare("UPDATE chat_threads SET archived = 1 WHERE id = ?")->execute([$threadId]);
+        try {
+            $ok = $db->prepare("UPDATE chat_threads SET archived = 1 WHERE id = ?")->execute([$threadId]);
+        } catch (Exception $e) {
+            error_log('chat-manage.php archive failed for ' . $chatId . ': ' . $e->getMessage());
+            $ok = false;
+        }
     } elseif ($action === 'unarchive') {
-        $ok = $db->prepare("UPDATE chat_threads SET archived = 0 WHERE id = ?")->execute([$threadId]);
+        try {
+            $ok = $db->prepare("UPDATE chat_threads SET archived = 0 WHERE id = ?")->execute([$threadId]);
+        } catch (Exception $e) {
+            error_log('chat-manage.php unarchive failed for ' . $chatId . ': ' . $e->getMessage());
+            $ok = false;
+        }
     } else { // delete — permanent, cannot be undone
         try {
             $db->beginTransaction();
