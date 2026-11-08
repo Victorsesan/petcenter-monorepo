@@ -1238,7 +1238,7 @@ button { font-family: inherit; }
         <input type="text" id="pmWebsiteHP" name="website" tabindex="-1" autocomplete="off">
       </div>
       <input type="hidden" id="pmFormRenderedAt" name="form_rendered_at" value="">
-      <div class="cf-turnstile" data-sitekey="YOUR_TURNSTILE_SITE_KEY" data-callback="pmOnTurnstileSuccess" data-size="invisible"></div>
+      <div id="pmTurnstileWidget" aria-live="polite"></div>
       <input type="hidden" id="pmTurnstileToken" name="turnstile_token" value="">
       <!-- TASK-5b END -->
     </div>
@@ -1361,6 +1361,34 @@ button { font-family: inherit; }
 
 <!-- TASK-5b START — Cloudflare Turnstile widget script, Invisible mode -->
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+<script>
+// TASK-5b — public Turnstile site key is deployment configuration, not source.
+// Explicit rendering avoids shipping a fake key in the static page.
+(function () {
+  function renderTurnstile(config) {
+    if (!config || !config.site_key || !window.turnstile) return;
+    var mount = document.getElementById('pmTurnstileWidget');
+    if (!mount || mount.dataset.rendered === '1') return;
+    window.turnstile.render(mount, {
+      sitekey: config.site_key,
+      size: 'invisible',
+      callback: window.pmOnTurnstileSuccess,
+      'error-callback': function () { mount.setAttribute('data-turnstile-error', '1'); },
+      'expired-callback': function () { var field = document.getElementById('pmTurnstileToken'); if (field) field.value = ''; }
+    });
+    mount.dataset.rendered = '1';
+  }
+  window.pmTurnstileConfig = fetch('/pet-match-turnstile-config.php', { credentials: 'same-origin' })
+    .then(function (res) { return res.ok ? res.json() : null; })
+    .catch(function () { return null; });
+  function attempt() { window.pmTurnstileConfig.then(renderTurnstile); }
+  window.addEventListener('load', attempt);
+  var timer = window.setInterval(function () {
+    if (window.turnstile) { window.clearInterval(timer); attempt(); }
+  }, 100);
+  window.setTimeout(function () { window.clearInterval(timer); }, 15000);
+})();
+</script>
 <!-- TASK-5b END -->
 
 <script>
