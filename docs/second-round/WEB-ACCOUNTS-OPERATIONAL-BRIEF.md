@@ -189,19 +189,18 @@ Treat Rehoming as the largest and highest-risk project. Read all Rehoming Platfo
 
 ### 9.1 Gateway scope
 
-Replace the current rehoming entry behavior where the existing Sign Up link leads to a “Coming soon” notice. Use the repository's established naming conventions, but document one authoritative route set. The existing source includes `/signin/` and `/rehoming/` entry paths; do not assume a new `/rehoming/auth/` tree exists. If a new route is justified, implement it deliberately and update every link, redirect, test, and report consistently. A possible final structure is:
+Replace the current rehoming entry behavior where the existing Sign Up link leads to a “Coming soon” notice. Use the repository's established naming conventions and document one authoritative route set. The current known source paths are:
 
 ```text
-/rehoming/auth/
-/rehoming/auth/login.php
-/rehoming/auth/signup.php
-/rehoming/auth/logout.php
-/rehoming/auth/callback.php
-/rehoming/privacy-policy/
-/rehoming/terms-of-service/
+/signin/                         # current public sign-in entry
+/rehoming/                       # current rehoming hub entry
+/rehoming/list-a-pet/            # current listing entry
+/rehoming/*.php                  # current rehoming backend files
+/assets/js/rehoming-platform-v1.js
+/assets/js/show-auth-prompt.js
 ```
 
-The final route may differ if the source structure requires it, but all links, redirects, tests, and reports must use the same final route.
+These are repository paths under `adopt/`, not a guarantee that every route is already a working authentication flow. Do not create a parallel `/rehoming/auth/` tree unless the inventory, route contract, and coordinator review justify it. If a new route is required, implement it deliberately and update every link, redirect, test, and report consistently. The final route decision must be recorded in the WEB-04 report and coordinated with WEB-05.
 
 ### 9.2 Identity and roles
 
