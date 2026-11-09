@@ -73,7 +73,7 @@ Each malformed `adopt.petcenterco.com/admin/chat-widget.js` reference was replac
 
 ### Live deployment smoke test
 
-No approved staging smoke-test script, staging URL, or staging credential variable is present in the repository, all repository refs, the configured environment-variable names, or the local Manus configuration metadata. Therefore no live request was sent: inventing a hostname or probing arbitrary deployment endpoints would not be a valid smoke test and could affect an unknown environment. The live smoke test remains an environment handoff item requiring the staging URL and approved credential mechanism from the deployment owner.
+The public deployment target is now verified as `https://adopt.petcenterco.com`. Read-only and invalid-input guard requests were sent only to non-mutating paths; no production credential, applicant payload, upload, approval, or database mutation was performed.
 
 ### Modified PHP and direct JavaScript integration audit
 
@@ -86,8 +86,17 @@ No approved staging smoke-test script, staging URL, or staging credential variab
 
 ### Final status
 
-Static and local automated validation is complete. PHPUnit 9.6.17 endpoint coverage passed with **8 tests and 20 assertions** using isolated temporary fixtures and stubbed dependencies; no production database, credentials, or protected payloads were touched. Live staging verification is **not executed**, solely because the approved staging target and credential mechanism are absent from this execution environment; no arbitrary endpoint or credential source was used.
+Static and local automated validation is complete. PHPUnit 9.6.17 endpoint coverage passed with **8 tests and 20 assertions** using isolated temporary fixtures and stubbed dependencies; the merchant-response suites passed **14/14 PHP cases** and **17/17 JavaScript cases**. The current `main` integration initially exposed two stale `update-adoption.php` contract failures; normalization and the expected invalid-code response were corrected, after which all 8 PHPUnit tests passed again and all **60** admin/apply PHP files linted successfully.
 
 ## Scope and safety confirmation
 
-Only the reviewed application configuration/endpoints, the isolated PHPUnit suite/configuration, and this report were changed. No credentials, tokens, passwords, keys, ZIPs, applicant data, or protected payloads were added. No direct push to `main` was made. The scoped commit was pushed to `origin/task/second-round-MANUS-09` after final diff review.
+## Final environment/configuration and deployment audit — 2026-11-09
+
+- The active and legacy adoption upload handlers no longer require `adopt/apply/config.php`. They now share `adopt/apply/apply-env.php`, which reads optional `UPLOAD_BASE`, `LOG_FILE`, and comma-separated `ADMIN_EMAILS` values from the protected `adopt/admin/.env` while preserving the existing safe defaults.
+- A parser-based scan found **zero PHP include/require statements targeting generic `config.php`**. Legitimate shared `chat-config.php` and `contact-config.php` dependencies remain because they are separate subsystem foundations, not the retired apply config path. `chat-config.php` was intentionally not rewritten; a full database credential migration would require coordinated live `.env` provisioning.
+- `adopt/apply/.htaccess` and the deployment-root `adopt/.htaccess` deny direct access to legacy configuration files. Live checks now return HTTP 403 for both `/apply/config.php` and `/admin/.env`.
+- The current `origin/main` is `4d2ec47`; the current `origin/adopt-deploy` is `e8c88ae`. Normalized `main/adopt` versus deploy comparison reports **0 missing paths, 0 extra paths, and 0 content mismatches**.
+- Live read-only/guard checks returned expected results: home and quiz HTTP 200; chat rating HTTP 400 for missing action and HTTP 401 for missing session; adoption update HTTP 401 without admin authentication; upload/contact/verification endpoints rejected invalid methods or missing files without mutation; protected `.env` and legacy config paths HTTP 403.
+- The sandbox PHP CLI lacks the `pdo_mysql` driver, so a direct database connection was not fabricated or attempted against production. Live endpoint guards and the complete local endpoint suite passed without database or protected-payload mutation. Database-backed authenticated flows still require a real admin session and the server’s configured runtime driver for a true read-only query check.
+
+The environment-path fix, adoption validation correction, and configuration-file denial rules were merged into `main` and published through `adopt-deploy`. No credentials, tokens, passwords, keys, ZIPs, applicant data, or protected payloads were added to the repository.
