@@ -153,3 +153,7 @@ The live deployment was revalidated against `https://adopt.petcenterco.com` afte
 - `php -l` passed for all deployed PHP endpoints and digest files. An isolated PHP fixture successfully exercised the 200 success paths for saved-search registration and merchant donation/wishlist persistence, confirming the JSON storage contracts and file writes without changing production data. These endpoints do not use a SQL database connection; their documented persistence layer is locked JSON storage.
 - Direct public access to `visitor-saved-searches.json`, `verified-rehome-stories.json`, and the digest token secret now returns HTTP 403. The PHP endpoint remains executable and returns its expected JSON contract; the protection rule is scoped to JSON files only.
 - Final matrix result: 75 checks passed with zero failures after propagation. The final deployment commit is `83d0b1c32ae1e8b60bca95fd09b543743c1ec255`; canonical `main` is `b276e09`.
+
+### Final remote synchronization
+
+The deployment branch subsequently received its remote synchronization merge at `af71b57c9ed42469491f1bd3ffe8349933599b5e`, retaining the published payload from `83d0b1c`. A final tree comparison reports `main/adopt` = 2,557 files and the flattened `adopt-deploy` root = 2,558 files including `.gitignore`, with zero missing and zero different mapped runtime files.
