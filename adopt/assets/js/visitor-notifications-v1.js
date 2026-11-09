@@ -87,16 +87,27 @@ function getUnreadCount(recipient_id) {
   return listNotifications(recipient_id).length;
 }
 
-/**
- * Minimal HTML-escaping helper. `title`/`body`/`action_url` are supplied by
- * whichever D1 module creates the notification (vet-document.js,
- * placement-checkins.js, placement-waitlist.js) — today those are all
- * hardcoded, author-written strings, but `action_url` is built from
- * `listing.id` and a stored upload URL, neither of which this module
- * controls, so every one of these fields is escaped before being placed in
- * markup rather than assuming today's callers are the only callers this
- * will ever have.
+/* BUGFIX-MANUS-06-1-START — validate action URL schemes before rendering.
+ * HTML escaping alone does not stop `javascript:` or protocol-relative links;
+ * uploaded-file URLs are externally influenced, so allow only HTTPS URLs or
+ * same-site root-relative paths and reject control characters/backslashes.
  */
+function safeActionUrl(value) {
+  if (typeof value !== 'string') return null;
+  const raw = value.trim();
+  if (!raw || /[\u0000-\u001f\u007f\\]/.test(raw)) return null;
+  if (raw.startsWith('/') && !raw.startsWith('//')) return raw;
+  if (!/^https:\/\//i.test(raw)) return null;
+  try {
+    const parsed = new URL(raw);
+    if (parsed.protocol !== 'https:' || parsed.username || parsed.password) return null;
+    return raw;
+  } catch (err) {
+    return null;
+  }
+}
+
+/** HTML-escapes dynamic notification content after URL scheme validation. */
 function escapeHtml(value) {
   return String(value)
     .replace(/&/g, '&amp;')
@@ -118,8 +129,9 @@ function renderNotificationList(recipient_id) {
   }
   return items.map((n) => {
     const date = new Date(n.created_at).toLocaleDateString();
-    const link = n.action_url
-      ? ` <a href="${escapeHtml(n.action_url)}" style="color:var(--primary);text-decoration:underline;">Open</a>`
+    const safeUrl = safeActionUrl(n.action_url);
+    const link = safeUrl
+      ? ` <a href="${escapeHtml(safeUrl)}" style="color:var(--primary);text-decoration:underline;">Open</a>`
       : '';
     return `
       <div class="notification-item" style="display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--border);">
@@ -134,6 +146,7 @@ function renderNotificationList(recipient_id) {
       </div>`;
   }).join('');
 }
+/* BUGFIX-MANUS-06-1-END */
 
 module.exports = {
   NOTIFICATION_TYPES,
@@ -142,5 +155,7 @@ module.exports = {
   dismissNotification,
   getUnreadCount,
   renderNotificationList,
+  safeActionUrl,
+  escapeHtml,
 };
 /* <!-- TASK-D1 END --> */

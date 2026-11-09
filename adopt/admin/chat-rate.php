@@ -16,6 +16,36 @@ require_once __DIR__ . '/includes/chat-auth.php';
 $reviewsDir = __DIR__ . '/reviews/';
 if (!is_dir($reviewsDir)) @mkdir($reviewsDir, 0755, true);
 
+/**
+ * Append one review while holding an exclusive file lock across the full
+ * read/modify/write cycle. A write-only LOCK_EX is not enough here: two
+ * simultaneous requests could both read the same old array and lose one
+ * review when they subsequently write it.
+ */
+function chatAppendReviewAtomically(string $file, array $entry): bool {
+    $handle = @fopen($file, 'c+');
+    if ($handle === false || !@flock($handle, LOCK_EX)) {
+        if (is_resource($handle)) @fclose($handle);
+        return false;
+    }
+
+    rewind($handle);
+    $raw = stream_get_contents($handle);
+    $reviews = json_decode($raw ?: '', true);
+    if (!is_array($reviews)) $reviews = [];
+    $reviews[] = $entry;
+    $json = json_encode($reviews, JSON_PRETTY_PRINT);
+    $ok = $json !== false
+        && ftruncate($handle, 0)
+        && rewind($handle)
+        && fwrite($handle, $json) === strlen($json)
+        && fflush($handle);
+
+    @flock($handle, LOCK_UN);
+    @fclose($handle);
+    return $ok;
+}
+
 $action = $_REQUEST['action'] ?? 'submit';
 
 // ── Submit a rating ─────────────────────────────────────────────────────
@@ -37,27 +67,39 @@ if ($action === 'submit' && $_SERVER['REQUEST_METHOD'] === 'POST') {
         chatRespond(['success' => false, 'error' => 'Rating must be 1–5'], 400);
     }
 
-    /* TASK-1 START — submitting a rating was previously completely open:
-       anyone who knew a chatId (and could supply any syntactically valid
-       email — the submitted email is never checked against the thread's
-       actual email) could post a fake rating attributed to a real admin
-       for a real conversation that wasn't theirs. A valid session token
-       for this exact chatId is now required, same as every other
-       customer-facing write in this task. Note: this does NOT fix the
-       separate pre-existing gap that $email isn't cross-checked against
-       the thread's stored email — that's unrelated to session-token
-       enforcement and out of this task's scope; logged under "Bugs Found
-       Outside Task Scope" in Task-1-Completion.md. */
+    /* TASK-1 START — submitting a rating now requires a valid session token
+       for this exact chatId, same as every other customer-facing write in
+       this task. The stored-thread-email ownership check immediately below
+       is an additional integrity guard: a valid token must not be paired
+       with a different syntactically valid email address. */
     $sessionToken = trim($input['sessionToken'] ?? '');
     chatRequireSessionToken($chatId, $sessionToken);
+    /* BUGFIX-MANUS-09-1-START — a valid session token must not be paired
+       with an unrelated syntactically valid email address. */
+    $threadEmailStmt = chatDb()->prepare(
+        "SELECT email FROM chat_threads WHERE chat_id = ? LIMIT 1"
+    );
+    $threadEmailStmt->execute([$chatId]);
+    $storedEmail = $threadEmailStmt->fetchColumn();
+    if ($storedEmail === false || strcasecmp(trim((string)$storedEmail), $email) !== 0) {
+        chatRespond(['success' => false, 'error' => 'Email does not match this chat'], 403);
+    }
+    /* BUGFIX-MANUS-09-1-END */
     /* TASK-1 END */
 
-    $file = $reviewsDir . preg_replace('/[^A-Za-z0-9\-]/', '', $chatId) . '.json';
-    $reviews = [];
-    if (file_exists($file)) {
-        $reviews = json_decode(file_get_contents($file), true) ?: [];
+    /* BUGFIX-MANUS-01-1-START — keep a valid session token from being paired
+       with an unrelated syntactically valid email when saving a rating. */
+    $threadEmailStmt = chatDb()->prepare(
+        "SELECT email FROM chat_threads WHERE chat_id = ? LIMIT 1"
+    );
+    $threadEmailStmt->execute([$chatId]);
+    $storedEmail = $threadEmailStmt->fetchColumn();
+    if ($storedEmail === false || strcasecmp(trim((string)$storedEmail), $email) !== 0) {
+        chatRespond(['success' => false, 'error' => 'Email does not match this chat'], 403);
     }
+    /* BUGFIX-MANUS-01-1-END */
 
+    $file = $reviewsDir . preg_replace('/[^A-Za-z0-9\-]/', '', $chatId) . '.json';
     $entry = [
         'chatId'    => $chatId,
         'email'     => $email,
@@ -67,9 +109,7 @@ if ($action === 'submit' && $_SERVER['REQUEST_METHOD'] === 'POST') {
         'comment'   => $comment,
         'createdAt' => date('Y-m-d H:i:s'),
     ];
-    $reviews[] = $entry;
-
-    if (file_put_contents($file, json_encode($reviews, JSON_PRETTY_PRINT)) === false) {
+    if (!chatAppendReviewAtomically($file, $entry)) {
         chatRespond(['success' => false, 'error' => 'Failed to save review'], 500);
     }
 

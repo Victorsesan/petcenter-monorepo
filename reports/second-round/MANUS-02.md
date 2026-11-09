@@ -1,0 +1,27 @@
+
+
+## Production-check availability — 2026-11-05
+
+Checked the latest fetched repository refs before attempting production authentication or audio submission. `adopt/admin/chat-transcribe.php` is present on this MANUS-02 task branch but absent from both `origin/main` and `origin/adopt-deploy`; the transcript migration is likewise not on `origin/main`. Therefore the feature under test is not the code currently published by the repository's deployment pipeline. The repository's Worker Git Sync Protocol and Integrator Git Sync Merge Protocol explicitly reserve merging to `main` and refreshing `adopt-deploy`/hosting for the Integrator; workers must not touch the deploy branch or hosting panel. No deployment or production request was attempted.
+
+This sandbox also has no `GROQ_API_KEY`, SSH agent socket, FTP/SFTP host, or production database connection variables. The earlier local test used synthetic fixture bytes and localhost-only mocks, not a recording of real speech. Consequently I did not claim to have verified production authentication, migration execution, real-audio recognition quality, or a live Groq response. Those checks can only target this implementation after the Integrator publishes it and an authorized server-side provider key plus a permitted test chat/audio fixture are available.
+
+
+## Production-tree audit and customer-widget regression repair — 2026-11-09
+
+A fresh fetch found `origin/main` at `a50c061`, `origin/adopt-deploy` at `8f29660`, and MANUS-02 at `5833edc`; MANUS-02 is included in `main`. The deploy branch already contains `admin/chat-transcribe.php`, `admin/chat-migrate.php`, and the Admin Project 2 transcript controls. A tree-and-blob comparison found that every intended deploy file matches the flattened `main/adopt` tree byte-for-byte, with no accidental missing, extra, or stale runtime file.
+
+The only two paths absent from `adopt-deploy` but present in `main/adopt` are `admin/chat-setup.php` and `admin/chat-session-token-setup.php`. They are one-time public database-creation scripts whose own comments say to remove them after setup. Commit `35cce06` is explicitly titled `Deploy: remove public chat setup endpoints`. They are intentionally not republished; adding them would undo the production security cleanup. The deploy tree has 2,546 files, exactly matching the flattened source after those two documented exclusions and the deploy-root `.gitignore` convention.
+
+The live homepage loaded successfully at `https://adopt.petcenterco.com/`. A read-only GET of `https://adopt.petcenterco.com/admin/chat-transcribe.php` returned HTTP 405 with `POST required`, matching the endpoint's method guard. The live `/admin/chat-widget.js` response matched the deploy-branch blob exactly before this repair. This confirms the PHP endpoint and site are live, but a GET-only probe does not claim authenticated transcription or real-audio/provider success.
+
+The live customer widget lacked Task 1a's customer-side transcription button even though its backend endpoint and the admin-side Task 1b UI were deployed. Comparison with MANUS-02's original tested implementation confirmed the customer control, styles, and `admin`-audio-only render hook were absent from current `main`; the only remaining “transcript” matches were the older download-chat-transcript option. I restored the previously tested Task 1a control and Task 1b native read-aloud UI on a repair branch from current `main`, without replacing later authentication, language, accessibility, or dashboard changes.
+
+Validation: `node --check adopt/admin/chat-widget.js` passed. Chromium interaction tests passed for customer-side pending/result display, low-confidence warning, preferred-language metadata, copy, native read-aloud language, hide/show, and retry recovery; existing admin-side customer-audio and admin-audio paths also passed. Static checks confirm the control attaches only to audio sent by an admin and posts through the existing session-token-aware `apiPost` helper. The production endpoint GET probe did not access the database or call Groq. A real authenticated audio round-trip still requires a permitted production test chat/audio and a working production Groq configuration; no fake production customer conversation or provider charge was created during this check.
+
+
+### Merge, publish, and live verification — 2026-11-09
+
+The repair was committed as `c15f9ca` on `bugfix/manus02-customer-transcription-ui`, merged into `main` by merge commit `7f86c52`, and pushed to `origin/main`. The flattened production payload was refreshed in `adopt-deploy` by commit `9e72c90`; the only deploy payload file changed was `admin/chat-widget.js`. The two intentionally retired setup endpoints and the deployment ignore protections were left intact.
+
+After waiting 48 seconds, cache-busted live requests returned HTTP 200 for both `https://adopt.petcenterco.com/` and `https://adopt.petcenterco.com/admin/chat-widget.js`. The live widget body contains the `BUGFIX-1` MANUS-02 marker, Task 1a customer controls, the admin-sent-audio render guard, the transcription endpoint request, copy control, and native “Read aloud” action. The live endpoint `GET /admin/chat-transcribe.php` returns HTTP 405 as expected for a POST-only endpoint. This verifies that the UI deployment reached the live host; it does not substitute for a real authenticated POST/audio-to-Groq round-trip, which remains unverified because this session has no production Groq key or permitted production test audio/chat.

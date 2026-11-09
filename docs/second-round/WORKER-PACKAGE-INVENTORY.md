@@ -1,8 +1,10 @@
 # Second-Round Worker Package and Completion Inventory
 
-Generated from the extracted worker packages under `/home/ubuntu/workspace/intake/tmp/`. This is an inventory for review, not a claim that every package is correct or complete.
+Generated from the original worker archive and the extracted evidence now preserved under `docs/second-round/completion-evidence/`. This is an inventory for review, not a claim that every package is correct or complete.
 
-**Repository availability notice:** The uploaded worker archive has now been imported as Markdown evidence under `docs/second-round/completion-evidence/`, with per-archive subdirectories and an `IMPORT-MANIFEST.md`. The inventory below remains the source index; accounts should read the matching evidence file from that folder when it is present, then compare it with the assignment and current repository source. If a specific file is absent from the manifest, record that exact evidence gap.
+
+**Repository availability notice:** The uploaded worker archive has been imported as read-only Markdown evidence under `docs/second-round/completion-evidence/`, grouped by worker-package name, with an `IMPORT-MANIFEST.md`. The 62 listed completion reports and the standalone `Task-1-Completion-14.md` are preserved where present; the two packages marked `False` remain evidence gaps. Historical evidence is not proof that current source matches the claim. Accounts must read the matching evidence when present, compare it with the assignment and current branches, and record any remaining gap.
+**Repository availability notice:** The historical completion/handoff files are now preserved under `docs/second-round/completion-evidence/`, grouped by worker-package name. They are evidence of what previous workers attempted, not proof that the current source matches or that the work was complete. Every account must read the matching evidence before opening application source, compare it with the original tracker and current branches, and record any mismatch or unfinished item in its report.
 
 | Worker package | Files | Completion/handoff present | Completion files |
 |---|---:|---|---|

@@ -17,7 +17,9 @@
  */
 
 const { STATUS, onTransition } = require('./placement-lifecycle-v1.js');
-const { createNotification, NOTIFICATION_TYPES } = require('./visitor-notifications-v1.js');
+// BUGFIX-MANUS-06-3-IMPORT-START — reuse D1's URL allowlist and HTML escaping for uploaded links.
+const { createNotification, NOTIFICATION_TYPES, safeActionUrl, escapeHtml } = require('./visitor-notifications-v1.js');
+// BUGFIX-MANUS-06-3-IMPORT-END
 
 // Field contract (Section 7: "these three constants are the field's real contract")
 const VET_DOC_MAX_FILES = 5;
@@ -80,13 +82,17 @@ function deliverVetDocuments(listing, deps = {}) {
   if (!listing.vet_documents || !listing.vet_documents.length) return false;
   if (!listing.likely_adopter_id) return false;
 
+  // BUGFIX-MANUS-06-3-DELIVERY-START — stored upload URLs must not become unsafe hrefs.
+  const safeUrl = safeActionUrl(listing.vet_document_url);
+  const emailUrl = safeUrl && /^https:\/\//i.test(safeUrl) ? safeUrl : null;
+
   createNotification({
     recipient_id: listing.likely_adopter_id,
     type: NOTIFICATION_TYPES.VET_DOCUMENT_DELIVERED,
     listing_id: listing.id,
     title: 'Vet records are ready',
     body: 'The previous owner uploaded vaccination and vet records for your new pet.',
-    action_url: listing.vet_document_url,
+    action_url: safeUrl,
   });
 
   // Email is best-effort: a mail failure must never block delivery or throw.
@@ -97,7 +103,9 @@ function deliverVetDocuments(listing, deps = {}) {
         deps.sendEmail({
           to,
           subject: 'Vet records for your new pet',
-          html: `<p>The previous owner has uploaded vet records. Log in to view them: <a href="${listing.vet_document_url}">open documents</a>.</p>`,
+          html: emailUrl
+            ? `<p>The previous owner has uploaded vet records. Log in to view them: <a href="${escapeHtml(emailUrl)}">open documents</a>.</p>`
+            : '<p>The previous owner has uploaded vet records. Log in to view them.</p>',
         });
       }
     }
@@ -107,6 +115,7 @@ function deliverVetDocuments(listing, deps = {}) {
 
   listing.vet_documents_delivered_at = new Date().toISOString();
   return true;
+  // BUGFIX-MANUS-06-3-DELIVERY-END
 }
 
 // Auto-delivery: when a listing reaches placement_complete, deliver any

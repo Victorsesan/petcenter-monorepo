@@ -7,6 +7,7 @@
   <title>Aquariums for Adoption — Pet Center</title>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
+/* TASK-web12-3 START: logical CSS properties for RTL */
 /* ════════════════════════════════════════════════════════════════════════════
    PET CENTER ADOPTION WEBSITE — Design System v1.0
    Colors: Navy #10214b | Gold #d7bd88 | Orange #ED7624
@@ -75,9 +76,9 @@ h4 { font-size: 1.2rem; font-weight: 600; }
 p { color: var(--muted); }
 
 /* ─── Layout Utilities ───────────────────────────────────────────────────────── */
-.pc-container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
-.pc-section { padding: 72px 0; }
-.pc-section--sm { padding: 40px 0; }
+.pc-container { max-width: 1280px; margin-block: 0; margin-inline: auto; padding-block: 0; padding-inline: 24px; }
+.pc-section { padding-block: 72px; padding-inline: 0; }
+.pc-section--sm { padding-block: 40px; padding-inline: 0; }
 .pc-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
 .pc-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
 .pc-grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
@@ -91,7 +92,7 @@ p { color: var(--muted); }
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 12px 28px;
+  padding-block: 12px; padding-inline: 28px;
   border-radius: var(--radius-sm);
   font-family: 'Sora', sans-serif;
   font-size: 14px;
@@ -115,17 +116,19 @@ p { color: var(--muted); }
   transform: translateY(-1px);
   box-shadow: 0 6px 20px rgba(16,33,75,0.32);
 }
+/* BUGFIX-MANUS-08-1-CTA-START: darker orange gradient stops keep the required white CTA label at or above 4.5:1 contrast. */
 .pc-btn--orange {
-  background: linear-gradient(135deg, var(--orange), #d96919);
+  background: linear-gradient(135deg, #b9550e, #b6500c);
   color: #fff;
   box-shadow: 0 4px 14px rgba(237,118,36,0.30);
 }
 .pc-btn--orange:hover {
-  background: linear-gradient(135deg, #d96919, #c45e10);
+  background: linear-gradient(135deg, #b6500c, #b14e0b);
   color: #fff;
   transform: translateY(-1px);
   box-shadow: 0 6px 20px rgba(237,118,36,0.38);
 }
+/* BUGFIX-MANUS-08-1-CTA-END */
 .pc-btn--ghost {
   background: transparent;
   color: var(--navy);
@@ -137,8 +140,8 @@ p { color: var(--muted); }
 .pc-btn--signin { background: transparent; color: #d7bd88; box-shadow: inset 0 0 0 1px rgba(215,189,136,0.5); }
 .pc-btn--signin:hover { background: rgba(215,189,136,0.12); color: #d7bd88; }
 /* TASK-1 END */
-.pc-btn--sm { padding: 8px 18px; font-size: 13px; min-height: 36px; }
-.pc-btn--lg { padding: 16px 40px; font-size: 16px; }
+.pc-btn--sm { padding-block: 8px; padding-inline: 18px; font-size: 13px; min-height: 36px; }
+.pc-btn--lg { padding-block: 16px; padding-inline: 40px; font-size: 16px; }
 .pc-btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
 
 /* ─── Cards ────────────────────────────────────────────────────────────────────── */
@@ -151,7 +154,7 @@ p { color: var(--muted); }
 }
 .pc-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
 .pc-card__body { padding: 20px; }
-.pc-card__footer { padding: 16px 20px; background: var(--bg); }
+.pc-card__footer { padding-block: 16px; padding-inline: 20px; background: var(--bg); }
 
 /* ─── Pet Cards ─────────────────────────────────────────────────────────────────── */
 /* ─── Pet Cards — redesigned ─────────────────────────────────────────────────── */
@@ -176,7 +179,7 @@ p { color: var(--muted); }
 .pc-pet-card__adopted-badge {
   position: absolute;
   top: 12px;
-  left: 0;
+  inset-inline-start: 0;
   background: #10214b;
   color: #fff;
   font-family: 'Sora', sans-serif;
@@ -184,8 +187,8 @@ p { color: var(--muted); }
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  padding: 6px 14px;
-  border-radius: 0 4px 4px 0;
+  padding-block: 6px; padding-inline: 14px;
+  border-start-start-radius: 0; border-start-end-radius: 4px; border-end-end-radius: 4px; border-end-start-radius: 0;
   box-shadow: 0 2px 8px rgba(0,0,0,0.25);
 }
 
@@ -214,7 +217,7 @@ p { color: var(--muted); }
 
 /* Card body */
 .pc-pet-card__body {
-  padding: 16px 18px 18px;
+  padding-block: 16px 18px; padding-inline: 18px;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -297,7 +300,7 @@ p { color: var(--muted); }
   border: none;
   cursor: pointer;
   padding: 0;
-  text-align: left;
+  text-align: start;
   transition: color var(--transition);
 }
 .pc-pet-card__diary:hover { color: var(--orange); }
@@ -322,7 +325,7 @@ p { color: var(--muted); }
   gap: 10px;
   border: 1.5px solid var(--warm-gray);
   border-radius: 999px;
-  padding: 10px 18px;
+  padding-block: 10px; padding-inline: 18px;
   background: var(--surface);
   box-shadow: var(--shadow-sm);
   transition: border-color var(--transition);
@@ -342,7 +345,7 @@ p { color: var(--muted); }
 .pc-search-bar input::placeholder { color: #b0a69a; }
 .pc-search-clear {
   background: none; border: none; font-size: 19px; line-height: 1;
-  cursor: pointer; color: var(--muted); padding: 2px 4px; flex-shrink: 0;
+  cursor: pointer; color: var(--muted); padding-block: 2px; padding-inline: 4px; flex-shrink: 0;
   display: none;
 }
 .pc-search-clear.show { display: block; }
@@ -351,7 +354,7 @@ p { color: var(--muted); }
 .pc-filter-btn {
   display: inline-flex; align-items: center; gap: 7px; flex-shrink: 0;
   background: var(--navy); color: var(--gold); border: 1.5px solid transparent;
-  border-radius: 999px; padding: 12px 20px;
+  border-radius: 999px; padding-block: 12px; padding-inline: 20px;
   font-family: 'Sora', sans-serif; font-size: 13.5px; font-weight: 600;
   cursor: pointer;
   transition: border-color .2s ease, transform .15s ease, background .2s ease;
@@ -364,20 +367,20 @@ p { color: var(--muted); }
 
 @media (max-width: 560px) {
   .pc-controls-row { gap: 8px; }
-  .pc-search-bar { padding: 9px 12px; }
+  .pc-search-bar { padding-block: 9px; padding-inline: 12px; }
   .pc-search-bar input { font-size: 13.5px; }
-  .pc-filter-btn { padding: 11px 16px; font-size: 12.5px; gap: 5px; }
+  .pc-filter-btn { padding-block: 11px; padding-inline: 16px; font-size: 12.5px; gap: 5px; }
 }
 
 @media (max-width: 380px) {
-  .pc-filter-btn { padding: 10px 13px; font-size: 11.5px; }
+  .pc-filter-btn { padding-block: 10px; padding-inline: 13px; font-size: 11.5px; }
 }
 
 /* ─── Hidden native selects (state holders for the filter sheet's chips) ──── */
 .hidden-select { display: none !important; }
 
 /* ─── Loading squares (search debounce indicator) ─────────────────────────── */
-.pc-loading-squares { display: flex; gap: 8px; justify-content: center; padding: 60px 0; grid-column: 1 / -1; }
+.pc-loading-squares { display: flex; gap: 8px; justify-content: center; padding-block: 60px; padding-inline: 0; grid-column: 1 / -1; }
 .pc-loading-squares span {
   width: 14px; height: 14px; background: var(--gold); border-radius: 3px;
   animation: pcSquareMorph 1.2s ease-in-out infinite;
@@ -393,7 +396,7 @@ p { color: var(--muted); }
 .pc-empty-state {
   grid-column: 1 / -1;
   display: flex; flex-direction: column; align-items: center;
-  text-align: center; padding: 64px 24px;
+  text-align: center; padding-block: 64px; padding-inline: 24px;
 }
 .pc-empty-state__icon { color: var(--gold-dark); margin-bottom: 18px; }
 .pc-empty-state__title {
@@ -418,8 +421,8 @@ p { color: var(--muted); }
 .pc-sheet-backdrop.show { opacity: 1; visibility: visible; }
 
 .pc-filter-sheet {
-  position: fixed; left: 0; right: 0; bottom: 0;
-  background: var(--navy); border-radius: 18px 18px 0 0;
+  position: fixed; inset-inline-start: 0; inset-inline-end: 0; bottom: 0;
+  background: var(--navy); border-start-start-radius: 18px; border-start-end-radius: 18px; border-end-end-radius: 0; border-end-start-radius: 0;
   z-index: 6001;
   max-height: 82vh; max-height: 82dvh;
   display: flex; flex-direction: column;
@@ -437,24 +440,24 @@ p { color: var(--muted); }
 .pc-sheet-drag-zone:active { cursor: grabbing; }
 .pc-sheet-handle {
   width: 40px; height: 4px; background: rgba(255,255,255,.25);
-  border-radius: 4px; margin: 10px auto 0; flex-shrink: 0;
+  border-radius: 4px; margin-block: 10px 0; margin-inline: auto; flex-shrink: 0;
 }
 .pc-sheet-header {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 14px 20px 8px; flex-shrink: 0;
+  padding-block: 14px 8px; padding-inline: 20px; flex-shrink: 0;
 }
 .pc-sheet-header h3 { font-family: 'Sora', sans-serif; font-size: 18px; color: #fff; font-weight: 700; }
 .pc-sheet-close {
   background: none; border: none; color: #fff; font-size: 22px; line-height: 1;
-  cursor: pointer; padding: 4px 8px; opacity: .8;
+  cursor: pointer; padding-block: 4px; padding-inline: 8px; opacity: .8;
 }
 .pc-sheet-close:hover { opacity: 1; }
 
 .pc-sheet-body-outer { position: relative; flex: 1; min-height: 0; display: flex; flex-direction: column; }
-.pc-sheet-body { overflow-y: auto; padding: 8px 20px 20px; flex: 1; min-height: 0; }
+.pc-sheet-body { overflow-y: auto; padding-block: 8px 20px; padding-inline: 20px; flex: 1; min-height: 0; }
 
 .pc-sheet-footer {
-  display: flex; gap: 12px; padding: 16px 20px 22px;
+  display: flex; gap: 12px; padding-block: 16px 22px; padding-inline: 20px;
   border-top: 1px solid rgba(255,255,255,.08); flex-shrink: 0;
 }
 .pc-sheet-clear, .pc-sheet-apply {
@@ -476,12 +479,12 @@ p { color: var(--muted); }
 .pc-chip-scroll {
   max-height: 168px; /* ~4 rows */
   overflow-y: auto;
-  padding-right: 4px;
+  padding-inline-end: 4px;
 }
 .pc-chip-row { display: flex; flex-wrap: wrap; gap: 10px; }
 .pc-chip {
   background: #1c2c56; border: 1px solid rgba(255,255,255,.15);
-  color: #e5e5e5; border-radius: 999px; padding: 9px 16px;
+  color: #e5e5e5; border-radius: 999px; padding-block: 9px; padding-inline: 16px;
   font-family: 'Sora', sans-serif; font-size: 13px; cursor: pointer;
   display: flex; align-items: center; gap: 6px; transition: all .15s ease;
   white-space: nowrap;
@@ -490,9 +493,51 @@ p { color: var(--muted); }
 .pc-chip.selected { background: var(--gold); color: var(--navy); border-color: var(--gold); font-weight: 600; }
 .pc-chip.selected::before { content: "✓"; font-weight: 700; }
 
+/* TASK-3 START — Location filter: "Near Me" free-text input + status line */
+.pc-nearme-row { margin-bottom: 10px; display: flex; gap: 8px; align-items: stretch; }
+.pc-nearme-input {
+  width: 100%; background: #1c2c56; border: 1px solid rgba(255,255,255,.15);
+  color: #fff; border-radius: 10px; padding: 11px 14px;
+  font-family: 'Sora', sans-serif; font-size: 13.5px; outline: none;
+}
+.pc-nearme-input::placeholder { color: rgba(255,255,255,.45); }
+.pc-nearme-input:focus { border-color: var(--gold); }
+.pc-nearme-status {
+  font-family: 'Sora', sans-serif; font-size: 12px; color: rgba(255,255,255,.6);
+  margin-top: 8px; min-height: 14px;
+}
+/* TASK-3 END */
+
+/* TASK-3b START — Use My Location button + postal-code format hint */
+.pc-nearme-geo-btn {
+  flex: 0 0 auto; width: 42px; background: #1c2c56; border: 1px solid rgba(255,255,255,.15);
+  border-radius: 10px; font-size: 16px; cursor: pointer; color: #fff;
+  display: flex; align-items: center; justify-content: center; /* TASK-3d — centres the SVG icon that replaced the emoji */
+}
+.pc-nearme-geo-btn:hover { border-color: var(--gold); }
+.pc-postal-hint {
+  font-family: 'Sora', sans-serif; font-size: 11.5px; color: rgba(255,255,255,.45);
+  margin: -4px 0 10px 2px;
+}
+/* TASK-3b END */
+
+/* TASK-3d START — Visible distance/location notice above the pet grid */
+.pc-location-notice {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  margin: -8px 0 18px; padding: 10px 14px; border-radius: 10px;
+  background: rgba(215,189,136,.18); border: 1px solid rgba(184,153,104,.45);
+  font-family: 'Sora', sans-serif; font-size: 13px; color: var(--navy);
+}
+.pc-location-notice[hidden] { display: none; }
+.pc-location-notice__clear {
+  background: none; border: 0; padding: 2px 4px; cursor: pointer;
+  font-family: inherit; font-size: 13px; font-weight: 600; color: var(--navy); text-decoration: underline;
+}
+/* TASK-3d END */
+
 /* Scroll-to-bottom floating hint button */
 .pc-sheet-scroll-hint {
-  position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%);
+  position: absolute; bottom: 14px; inset-inline-start: 50%; transform: translateX(-50%);
   width: 52px; height: 30px; border-radius: 999px;
   background: rgba(16,33,75,0.35);
   border: 1.5px solid var(--gold);
@@ -562,28 +607,28 @@ p { color: var(--muted); }
   .pc-pet-grid { grid-template-columns: repeat(3, 1fr); }
   .pc-pet-detail-hero { grid-template-columns: 1fr; }
   .pc-pet-detail-gallery { position: static; }
-  
-  
+
+
 }
 @media (max-width: 768px) {
   .pc-pet-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
   .pc-grid-4, .pc-grid-3 { grid-template-columns: 1fr 1fr; }
-  
-  
-  
-  
+
+
+
+
   .pc-filters { flex-direction: column; }
-  .pc-status-box { padding: 28px 20px; }
-  .pc-modal { padding: 28px 20px; }
-  .pc-pet-info-panel { padding: 24px 20px; }
-  
+  .pc-status-box { padding-block: 28px; padding-inline: 20px; }
+  .pc-modal { padding-block: 28px; padding-inline: 20px; }
+  .pc-pet-info-panel { padding-block: 24px; padding-inline: 20px; }
+
 }
 @media (max-width: 480px) {
   .pc-pet-grid { grid-template-columns: 1fr; }
   .pc-grid-4, .pc-grid-3, .pc-grid-2 { grid-template-columns: 1fr; }
-  .pc-btn--lg { padding: 14px 28px; }
+  .pc-btn--lg { padding-block: 14px; padding-inline: 28px; }
   .pc-status-form { flex-direction: column; }
-  .pc-section { padding: 48px 0; }
+  .pc-section { padding-block: 48px; padding-inline: 0; }
   .pc-pet-prefill.show { flex-direction: column; text-align: center; }
 }
 
@@ -613,9 +658,9 @@ p { color: var(--muted); }
 /* ─── Global Header (pc-header) ─────────────────────────────────────────────── */
 .pc-header {
   position: fixed;
-  top: 0; left: 0; right: 0;
+  top: 0; inset-inline-start: 0; inset-inline-end: 0;
   z-index: 1000;
-  padding: 0 24px;
+  padding-block: 0; padding-inline: 24px;
   height: 68px;
   display: flex;
   align-items: center;
@@ -645,7 +690,7 @@ p { color: var(--muted); }
 .pc-header__nav li { position: relative; }
 .pc-header__nav a {
   display: block;
-  padding: 8px 11px;
+  padding-block: 8px; padding-inline: 11px;
   font-family: 'Sora', sans-serif;
   font-size: 13px;
   font-weight: 500;
@@ -656,7 +701,7 @@ p { color: var(--muted); }
   white-space: nowrap;
 }
 .pc-header__nav a:hover { color: #d7bd88; background: rgba(255,255,255,0.08); }
-.pc-header__nav .nav-donate a { background: #ED7624; color: #fff; font-weight: 600; padding: 8px 16px; }
+.pc-header__nav .nav-donate a { background: #ED7624; color: #fff; font-weight: 600; padding-block: 8px; padding-inline: 16px; }
 .pc-header__nav .nav-donate a:hover { background: #d4621a; color: #fff; }
 .pc-header__nav .nav-signup a,
 .pc-header__nav .nav-login a { border: 1px solid rgba(215,189,136,0.5); color: #d7bd88; }
@@ -666,17 +711,17 @@ p { color: var(--muted); }
   display: none;
   position: absolute;
   top: calc(100% + 4px);
-  left: 0;
+  inset-inline-start: 0;
   background: #10214b;
   border-radius: 8px;
   list-style: none;
   min-width: 168px;
   box-shadow: 0 8px 32px rgba(0,0,0,0.22);
-  padding: 6px 0;
+  padding-block: 6px; padding-inline: 0;
   z-index: 100;
 }
 .pc-header__nav .has-drop:hover > ul { display: block; }
-.pc-header__nav .has-drop > ul a { padding: 9px 18px; font-size: 13px; border-radius: 0; }
+.pc-header__nav .has-drop > ul a { padding-block: 9px; padding-inline: 18px; font-size: 13px; border-radius: 0; }
 .pc-hamburger {
   display: none;
   flex-direction: column;
@@ -689,30 +734,30 @@ p { color: var(--muted); }
   height: auto;
   justify-content: center;
 }
-.pc-hamburger span { 
-  display: block; 
-  width: 24px; 
-  height: 2px; 
-  background: #fff; 
-  border-radius: 2px; 
+.pc-hamburger span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: #fff;
+  border-radius: 2px;
   transition: all 0.3s ease;
 }
-.pc-hamburger.active span:nth-child(1) { 
-  transform: rotate(45deg) translate(8px, 8px); 
+.pc-hamburger.active span:nth-child(1) {
+  transform: rotate(45deg) translate(8px, 8px);
 }
-.pc-hamburger.active span:nth-child(2) { 
-  opacity: 0; 
+.pc-hamburger.active span:nth-child(2) {
+  opacity: 0;
 }
-.pc-hamburger.active span:nth-child(3) { 
-  transform: rotate(-45deg) translate(7px, -7px); 
+.pc-hamburger.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(7px, -7px);
 }
 .pc-mobile-menu {
   display: flex;
   flex-direction: column;
   position: absolute;
   top: 100%;
-  left: 0;
-  right: 0;
+  inset-inline-start: 0;
+  inset-inline-end: 0;
   background: rgba(16,33,75,0.98);
   z-index: 999;
   max-height: 0;
@@ -727,13 +772,13 @@ p { color: var(--muted); }
   overflow-y: auto;
   opacity: 1;
   pointer-events: auto;
-  padding: 16px 0 calc(100vh - 68px - 56px);
+  padding-block: 16px calc(100vh - 68px - 56px); padding-inline: 0;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
 }
 .pc-mobile-menu a {
   display: block;
-  padding: 12px 28px;
+  padding-block: 12px; padding-inline: 28px;
   font-family: 'Sora', sans-serif;
   font-size: 15px;
   font-weight: 500;
@@ -742,16 +787,16 @@ p { color: var(--muted); }
   border-bottom: 1px solid rgba(255,255,255,0.06);
   transition: all 0.2s ease;
 }
-.pc-mobile-menu a:hover { 
-  color: #d7bd88; 
-  background: rgba(255,255,255,0.05); 
+.pc-mobile-menu a:hover {
+  color: #d7bd88;
+  background: rgba(255,255,255,0.05);
 }
 .pc-mobile-menu .mobile-donate {
-  margin: 12px 28px 0;
+  margin-block: 12px 0; margin-inline: 28px;
   display: inline-block;
   background: #ED7624;
   color: #fff;
-  padding: 11px 24px;
+  padding-block: 11px; padding-inline: 24px;
   border-radius: 8px;
   font-weight: 600;
   border-bottom: none;
@@ -764,7 +809,7 @@ p { color: var(--muted); }
 /* ─── Category Page Banner ──────────────────────────────────────────────────── */
 .pc-cat-banner {
   background: linear-gradient(120deg, #10214b 0%, #1a3070 60%, #2a4080 100%);
-  padding: 100px 0 60px;
+  padding-block: 100px 60px; padding-inline: 0;
   position: relative;
   overflow: hidden;
 }
@@ -775,13 +820,13 @@ p { color: var(--muted); }
   background: url('/assets/images/aquariums-banner.jpg') center/cover no-repeat;
   opacity: 0.15;
 }
-.pc-cat-banner__inner { 
-  position: relative; 
-  z-index: 1; 
+.pc-cat-banner__inner {
+  position: relative;
+  z-index: 1;
   text-align: center;
   max-width: 800px;
-  margin: 0 auto;
-  padding: 0 24px;
+  margin-block: 0; margin-inline: auto;
+  padding-block: 0; padding-inline: 24px;
 }
 .pc-cat-banner__eyebrow {
   display: inline-block;
@@ -793,7 +838,7 @@ p { color: var(--muted); }
   color: #d7bd88;
   background: rgba(215,189,136,0.12);
   border: 1px solid rgba(215,189,136,0.3);
-  padding: 5px 16px;
+  padding-block: 5px; padding-inline: 16px;
   border-radius: 20px;
   margin-bottom: 20px;
 }
@@ -810,7 +855,7 @@ p { color: var(--muted); }
   font-family: 'Sora', sans-serif;
   font-size: 16px;
   max-width: 520px;
-  margin: 0 auto;
+  margin-block: 0; margin-inline: auto;
 }
 .pc-cat-banner__crumb {
   font-family: 'Sora', sans-serif;
@@ -822,23 +867,27 @@ p { color: var(--muted); }
 }
 .pc-cat-banner__crumb a { color: rgba(255,255,255,0.6); text-decoration: none; }
 .pc-cat-banner__crumb a:hover { color: #d7bd88; }
-.pc-cat-banner__crumb span { color: rgba(255,255,255,0.35); margin: 0 8px; }
+.pc-cat-banner__crumb span { color: rgba(255,255,255,0.35); margin-block: 0; margin-inline: 8px; }
 
 /* ─── Global Footer ─────────────────────────────────────────────────────────── */
 .pc-footer {
   background: #0b1834;
-  padding: 60px 24px 28px;
+  padding-block: 60px 28px; padding-inline: 24px;
   color: rgba(255,255,255,0.65);
   font-family: 'Sora', sans-serif;
 }
+
 .pc-footer__inner { max-width: 1200px; margin: 0 auto; }
+/* BUGFIX-MANUS-08-4-FOOTER-START: restore the canonical five-track grid for the five adoption footer columns. */
+.pc-footer__inner { max-width: 1200px; margin-block: 0; margin-inline: auto; }
 .pc-footer__top {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1.5fr;
+  grid-template-columns: 2fr 1fr 1.2fr 1fr 1.3fr;
   gap: 40px;
   padding-bottom: 40px;
   border-bottom: 1px solid rgba(255,255,255,0.07);
 }
+/* BUGFIX-MANUS-08-4-FOOTER-END */
 .pc-footer__brand img { height: 40px; margin-bottom: 16px; display: block; }
 .pc-footer__brand p { font-size: 13.5px; line-height: 1.7; max-width: 280px; }
 .pc-footer__col h5 { font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; font-weight: 700; color: #d7bd88; margin-bottom: 16px; }
@@ -861,7 +910,7 @@ p { color: var(--muted); }
 
 /* ── 1280px and below: constrain max container ─────────────── */
 @media (max-width: 1280px) {
-  .pc-container { padding: 0 20px; }
+  .pc-container { padding-block: 0; padding-inline: 20px; }
 }
 
 /* ── 1024px: tablet landscape ──────────────────────────────── */
@@ -887,7 +936,7 @@ p { color: var(--muted); }
 
 /* ── 640px: large mobile ───────────────────────────────────── */
 @media (max-width: 640px) {
-  .pc-section { padding: 48px 0; }
+  .pc-section { padding-block: 48px; padding-inline: 0; }
 }
 
 /* ── 560px: mobile ─────────────────────────────────────────── */
@@ -918,8 +967,32 @@ p { color: var(--muted); }
 
 
 
-  </style>
+
+
+/* BUGFIX-MANUS-08-3-RESPONSIVE-START: keep the category status and CTA inside narrow phone viewports. */
+@media (max-width: 640px) {
+  .pc-results-summary-row { flex-wrap: wrap; justify-content: flex-start !important; gap: 12px; }
+}
+/* BUGFIX-MANUS-08-3-RESPONSIVE-END */
+</style>
+</style>
+<!-- TASK-10 START -->
+<!-- TASK-9 START: cross-document View Transitions API, enabled sitewide.
+     Animates same-origin full-page navigations (e.g. the Settings Widget's
+     language switcher navigating between /, /es/, /pt/, /fr/, /ar/, /zh/)
+     in browsers that support the cross-document View Transitions API
+     (Chromium 126+). Browsers without support ignore this at-rule and
+     navigate normally with no error -- this is a progressive enhancement,
+     not a dependency. -->
+<style>
+@view-transition {
+  navigation: auto;
+}
+</style>
+<!-- TASK-9 END -->
   </head>
+<!-- TASK-10 END -->
+
 <body>
 
 <header class="pc-header pc-header--solid" id="pcHeader">
@@ -940,7 +1013,13 @@ p { color: var(--muted); }
         <li><a href="/pets/small-mammals/">Small Mammals</a></li>
         <!-- TASK-2 START — Livestocks & Aquariums added to Our Pets dropdown -->
         <li><a href="/pets/livestocks/">Livestocks</a></li>
-        <li><a href="/pets/aquariums/">Aquariums</a></li>
+        <li><a href="/pets/aquariums/">Aquariums</a>
+    <!-- TASK-8 START -->
+    <a href="/pets/quiz/">Find Your Match</a>
+    <!-- TASK-8 END --></li>
+        <!-- TASK-8 START -->
+        <li><a href="/pets/quiz/">Find Your Match</a></li>
+        <!-- TASK-8 END -->
         <!-- TASK-2 END -->
       </ul>
     </li>
@@ -967,6 +1046,9 @@ p { color: var(--muted); }
     <!-- TASK-2 START — Livestocks & Aquariums added to mobile menu -->
     <a href="/pets/livestocks/">Livestocks</a>
     <a href="/pets/aquariums/">Aquariums</a>
+    <!-- TASK-8 START -->
+    <a href="/pets/quiz/">Find Your Match</a>
+    <!-- TASK-8 END -->
     <!-- TASK-2 END -->
     <a href="/blog/">Blog</a>
     <a href="/testimonials/">Testimonials</a>
@@ -1044,6 +1126,7 @@ p { color: var(--muted); }
       <option value="age">Youngest First</option>
       <option value="fee_asc">Lowest Fee</option>
       <option value="fee_desc">Highest Fee</option>
+      <option value="distance">Nearest First</option><!-- TASK-3d — only meaningful while a distance search is active; otherwise treated as Name A-Z -->
     </select>
     <select class="hidden-select" id="filterCompatible" name="compatible" style="display:none;">
       <option value="">Any</option>
@@ -1053,11 +1136,46 @@ p { color: var(--muted); }
       <option value="other_pets">Other Pets</option>
       <option value="untamed">Untamed</option>
     </select>
+    <!-- TASK-3 START — Location filter state holders. filterState/filterCity are
+         plain string matches against pet.location's "City, State" text (populated
+         dynamically in populateFilters(), same pattern as filterBreed). filterRadius
+         plus the two hidden coordinate fields back the "near me" distance search:
+         the coordinates are filled in by geocoding (OpenStreetMap Nominatim) only
+         when a radius search is actually run — see the Apply button handler below. -->
+    <select class="hidden-select" id="filterState" name="state" style="display:none;">
+      <option value="">All States</option>
+    </select>
+    <select class="hidden-select" id="filterCity" name="city" style="display:none;">
+      <option value="">All Cities</option>
+    </select>
+    <select class="hidden-select" id="filterRadius" name="radius" style="display:none;">
+      <option value="">Any Distance</option>
+      <option value="25">Within 25 miles</option>
+      <option value="60">Within 60 miles</option>
+      <option value="100">Within 100 miles</option>
+      <option value="250">Within 250 miles</option>
+      <option value="500">Within 500 miles</option>
+    </select>
+    <input type="hidden" id="filterNearMeLat" value="">
+    <input type="hidden" id="filterNearMeLng" value="">
+    <!-- TASK-3b START — Country selector state holder. Confirmed target markets
+         are USA/Canada/UK/Australia; this narrows Nominatim's countrycodes
+         param (see pcGeocodeLocation) instead of always searching US-only. -->
+    <select class="hidden-select" id="filterCountry" name="country" style="display:none;">
+      <option value="us">United States</option>
+      <option value="ca">Canada</option>
+      <option value="gb">United Kingdom</option>
+      <option value="au">Australia</option>
+    </select>
+    <!-- TASK-3b END -->
+    <!-- TASK-3 END -->
 
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;">
+    <!-- BUGFIX-MANUS-08-2-ROW-START: identify the results row for narrow-screen wrapping. -->
+<div class="pc-results-summary-row" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;">
+<!-- BUGFIX-MANUS-08-2-ROW-END -->
       <div>
         <h2 style="margin:0;font-size:1.6rem;" id="categoryTitle">Loading…</h2>
-        <p style="margin:4px 0 0;font-size:13px;"><span id="petCount">—</span> <span id="categoryCount"></span> available</p>
+        <p style="margin-block: 4px 0; margin-inline: 0;font-size:13px;"><span id="petCount">—</span> <span id="categoryCount"></span> available</p>
       </div>
       <!-- TASK 1b: "List Out A Pet" renamed to "Signin" per Dev Manager Task 1 assignment, restyled to match the site's existing Signin button look (.pc-btn--signin, gold border/text); link target updated from /rehome/ to /signin/ per CEO's request to retire the "rehome" URL sitewide -->
       <!-- TASK-1 START -->
@@ -1070,6 +1188,12 @@ p { color: var(--muted); }
       </div>
       <!-- TASK-1 END -->
     </div>
+    <!-- TASK-3d START — Visible location/distance notice. The sheet closes on Apply, so anything
+         written to the in-sheet status line (errors, "couldn't find that location") was never
+         seen. This line sits above the pet grid and carries the active-distance summary plus a
+         one-tap Clear. Text is always set with textContent (visitor-typed text goes in here). -->
+    <p class="pc-location-notice" id="pcLocationNotice" role="status" aria-live="polite" hidden></p>
+    <!-- TASK-3d END -->
 
     <div class="pc-pet-grid" id="petGrid">
       <div class="pc-skeleton"></div><div class="pc-skeleton"></div>
@@ -1095,7 +1219,13 @@ p { color: var(--muted); }
           <li><a href="/pets/small-mammals/">Small Mammals</a></li>
           <!-- TASK-2 START — Livestocks & Aquariums added to footer Our Pets column -->
           <li><a href="/pets/livestocks/">Livestocks</a></li>
-          <li><a href="/pets/aquariums/">Aquariums</a></li>
+          <li><a href="/pets/aquariums/">Aquariums</a>
+    <!-- TASK-8 START -->
+    <a href="/pets/quiz/">Find Your Match</a>
+    <!-- TASK-8 END --></li>
+        <!-- TASK-8 START -->
+        <li><a href="/pets/quiz/">Find Your Match</a></li>
+        <!-- TASK-8 END -->
           <!-- TASK-2 END -->
         </ul>
       </div>
@@ -1149,7 +1279,7 @@ p { color: var(--muted); }
 (function() {
   var header = document.getElementById('pcHeader');
   if (!header) return;
-  
+
   function updateHeaderOnScroll() {
     if (window.scrollY > 0) {
       header.classList.add('scrolled');
@@ -1157,7 +1287,7 @@ p { color: var(--muted); }
       header.classList.remove('scrolled');
     }
   }
-  
+
   window.addEventListener('scroll', updateHeaderOnScroll, { passive: true });
   updateHeaderOnScroll();
 })();
@@ -1317,7 +1447,105 @@ document.addEventListener('DOMContentLoaded', function() {
     var target = row.getAttribute('data-target');
     draft[target] = chip.getAttribute('data-value');
     renderChipSelection();
+    // TASK-3b START — refresh the postal-code hint whenever the country chip changes
+    if (row.id === 'pcCountryChipRow') pcUpdatePostalHint(chip.getAttribute('data-value'));
+    // TASK-3b END
   });
+
+  // TASK-3b START — Country selector: postal-format hints + a country default
+  // guessed from the visitor's browser locale (no IP lookup, no account —
+  // per this task's Recommended Enhancement #2), USA if nothing usable comes back.
+  var pcPostalHints = {
+    us: 'Format: ZIP code, e.g. 90210',
+    ca: 'Format: postal code, e.g. A1A 1A1',
+    gb: 'Format: postcode, e.g. SW1A 1AA',
+    au: 'Format: postcode, e.g. 2000'
+  };
+  function pcUpdatePostalHint(countryCode) {
+    var hintEl = document.getElementById('pcPostalHint');
+    if (hintEl) hintEl.textContent = pcPostalHints[countryCode] || pcPostalHints.us;
+    // TASK-3d — the input's own placeholder now follows the country too. A city/town name is
+    // offered first everywhere because OpenStreetMap postcode coverage varies by country.
+    var inputEl = document.getElementById('pcNearMeInput');
+    var placeholders = {
+      us: 'City, State or ZIP code',
+      ca: 'City, Province or postal code',
+      gb: 'Town or postcode',
+      au: 'Suburb, State or postcode'
+    };
+    if (inputEl) inputEl.placeholder = placeholders[countryCode] || placeholders.us;
+  }
+  (function pcSetDefaultCountry() {
+    var lang = (navigator.language || navigator.userLanguage || '').toLowerCase();
+    var guess = 'us';
+    if (lang.indexOf('en-ca') === 0 || lang.indexOf('fr-ca') === 0) guess = 'ca';
+    else if (lang.indexOf('en-gb') === 0) guess = 'gb';
+    else if (lang.indexOf('en-au') === 0) guess = 'au';
+    var countrySelect = document.getElementById('filterCountry');
+    var countryRow = document.getElementById('pcCountryChipRow');
+    if (countrySelect) countrySelect.value = guess;
+    if (countryRow) {
+      countryRow.querySelectorAll('.pc-chip').forEach(function(c) {
+        c.classList.toggle('selected', c.getAttribute('data-value') === guess);
+      });
+    }
+    pcUpdatePostalHint(guess);
+  })();
+  // TASK-3b END
+
+  // TASK-3b START — "Use my location": browser geolocation hands back
+  // coordinates directly, so this skips Nominatim geocoding entirely and
+  // works the same regardless of which country chip is selected.
+  // TASK-3d START — Apply used to detect "Use my location" by comparing the input's text to
+  // the literal string 'Current location', so a visitor typing those words (or any future
+  // wording change) would break it. An explicit flag replaces that: it is set by the
+  // geolocation success handler and dropped the moment the visitor types in the field.
+  window.pcUsingGeolocation = false;
+  var pcNearMeInputForFlag = document.getElementById('pcNearMeInput');
+  if (pcNearMeInputForFlag) {
+    pcNearMeInputForFlag.addEventListener('input', function() {
+      window.pcUsingGeolocation = false;
+      document.getElementById('filterNearMeLat').value = '';
+      document.getElementById('filterNearMeLng').value = '';
+    });
+  }
+  // TASK-3d END
+  var pcUseMyLocationBtn = document.getElementById('pcUseMyLocationBtn');
+  if (pcUseMyLocationBtn) {
+    pcUseMyLocationBtn.addEventListener('click', function() {
+      var statusEl = document.getElementById('pcNearMeStatus');
+      var nearMeInputEl = document.getElementById('pcNearMeInput');
+      if (!navigator.geolocation) {
+        if (statusEl) statusEl.textContent = "Location services aren't available in this browser.";
+        return;
+      }
+      if (statusEl) statusEl.textContent = 'Finding your location…';
+      navigator.geolocation.getCurrentPosition(function(pos) {
+        document.getElementById('filterNearMeLat').value = pos.coords.latitude;
+        document.getElementById('filterNearMeLng').value = pos.coords.longitude;
+        if (nearMeInputEl) nearMeInputEl.value = 'Current location'; // TASK-3d — display label only; the flag below is what Apply checks
+        window.pcUsingGeolocation = true;
+        draft['filterNearMeLat'] = String(pos.coords.latitude);
+        draft['filterNearMeLng'] = String(pos.coords.longitude);
+        // A "near me" search needs a radius to actually filter by — default
+        // to 25mi if the visitor hasn't already picked one.
+        var radiusRow = document.getElementById('pcRadiusChipRow');
+        var currentRadius = radiusRow && radiusRow.querySelector('.pc-chip.selected');
+        if (radiusRow && (!currentRadius || currentRadius.getAttribute('data-value') === '')) {
+          var twentyFive = radiusRow.querySelector('[data-value="25"]');
+          if (twentyFive) {
+            radiusRow.querySelectorAll('.pc-chip').forEach(function(c) { c.classList.remove('selected'); });
+            twentyFive.classList.add('selected');
+            draft['filterRadius'] = '25';
+          }
+        }
+        if (statusEl) statusEl.textContent = 'Got it — hit Apply to see pets near you.';
+      }, function() {
+        if (statusEl) statusEl.textContent = "Couldn't get your location — try typing it instead.";
+      });
+    });
+  }
+  // TASK-3b END
 
   function openSheet() {
     seedDraftFromChips();
@@ -1357,6 +1585,30 @@ document.addEventListener('DOMContentLoaded', function() {
       draft[target] = firstChip ? firstChip.getAttribute('data-value') : '';
     });
     renderChipSelection();
+    // TASK-3 START — Near Me text/coordinates aren't chip-driven, so Clear
+    // needs to reset them explicitly alongside the chip rows above.
+    var nearMeInput = document.getElementById('pcNearMeInput');
+    if (nearMeInput) nearMeInput.value = '';
+    var statusEl = document.getElementById('pcNearMeStatus');
+    if (statusEl) statusEl.textContent = '';
+    document.getElementById('filterNearMeLat').value = '';
+    document.getElementById('filterNearMeLng').value = '';
+    // TASK-3b START — reset country back to USA and refresh the postal hint to match
+    var countrySelectEl = document.getElementById('filterCountry');
+    if (countrySelectEl) countrySelectEl.value = 'us';
+    var countryRowEl = document.getElementById('pcCountryChipRow');
+    if (countryRowEl) {
+      countryRowEl.querySelectorAll('.pc-chip').forEach(function(c) {
+        c.classList.toggle('selected', c.getAttribute('data-value') === 'us');
+      });
+    }
+    pcUpdatePostalHint('us');
+    // TASK-3b END
+    // TASK-3c START — clear the server radius search result so Clear actually clears it
+    if (window.pcClearServerRadiusSearch) window.pcClearServerRadiusSearch();
+    // TASK-3c END
+    window.pcUsingGeolocation = false; // TASK-3d
+    // TASK-3 END
     // Sheet stays open (spec requirement)
   });
 
@@ -1365,8 +1617,71 @@ document.addEventListener('DOMContentLoaded', function() {
       var el = document.getElementById(id);
       if (el) el.value = draft[id];
     });
-    if (window.pcApplyAndRender) window.pcApplyAndRender();
+
+    // TASK-3 START — A radius value with no resolved "near me" text has nothing
+    // to measure distance from, so it's geocoded here on Apply (not as-you-type)
+    // to respect Nominatim's rate limit. State/City chips apply immediately since
+    // they're plain string matches needing no network round-trip.
+    var radiusVal = document.getElementById('filterRadius')?.value || '';
+    var nearMeInput = document.getElementById('pcNearMeInput');
+    var nearMeText = nearMeInput ? nearMeInput.value.trim() : '';
+    var countryVal = document.getElementById('filterCountry')?.value || 'us'; // TASK-3b
+
+    // TASK-3d START — second verification round rewrite of the distance branch of Apply:
+    //  1. Every Apply starts with NO active distance search. Before, an ID list from an
+    //     earlier search survived, so changing only the radius (with the location field
+    //     emptied) silently re-used the old list while claiming the new radius.
+    //  2. Results/errors are reported in the visible notice above the grid. They used to be
+    //     written to the in-sheet status line AFTER closeSheet(), i.e. never seen.
+    //  3. "Use my location" is detected with window.pcUsingGeolocation, not by comparing the
+    //     field's text to the literal 'Current location'.
+    //  4. A failed or missing endpoint is reported instead of showing "no pets match".
+    pcClearServerRadiusSearch();
+    pcSetLocationNotice('');
     closeSheet();
+
+    var latNow = document.getElementById('filterNearMeLat')?.value;
+    var lngNow = document.getElementById('filterNearMeLng')?.value;
+    var usingGeo = window.pcUsingGeolocation === true && !!latNow && !!lngNow;
+    var render = function() { if (window.pcApplyAndRender) window.pcApplyAndRender(); };
+
+    if (radiusVal && (usingGeo || nearMeText)) {
+      if (window.pcShowSearchLoading) window.pcShowSearchLoading();
+      var coordsPromise = usingGeo
+        ? Promise.resolve({ lat: latNow, lng: lngNow })
+        : pcGeocodeLocation(nearMeText, countryVal);
+      coordsPromise.then(function(coords) {
+        if (!coords) {
+          pcSetLocationNotice("Couldn't find that location. Try a city and state or province; postal codes aren't recognised everywhere. Showing all pets.");
+          document.getElementById('filterRadius').value = '';
+          render();
+          return;
+        }
+        document.getElementById('filterNearMeLat').value = coords.lat;
+        document.getElementById('filterNearMeLng').value = coords.lng;
+        return pcRunServerRadiusSearch(coords.lat, coords.lng, radiusVal).then(function(result) {
+          if (result.stale) return; // a newer search owns the screen now
+          if (!result.ok) {
+            pcSetLocationNotice('Distance search is unavailable right now. Showing all pets.');
+            document.getElementById('filterRadius').value = '';
+          } else {
+            var where = usingGeo ? 'your location' : nearMeText;
+            var note = 'Showing pets within ' + radiusVal + ' miles of ' + where + '.';
+            if (result.pending > 0) note += ' Some pet locations are still being looked up, so this list may be incomplete. Try again in a moment.';
+            pcSetLocationNotice(note, true);
+          }
+          render();
+        });
+      });
+    } else {
+      if (radiusVal) {
+        pcSetLocationNotice('Enter a city or postal code (or tap the location button) to search by distance.');
+        document.getElementById('filterRadius').value = '';
+      }
+      render();
+    }
+    // TASK-3d END
+    // TASK-3 END
   });
 
   // ─── Scroll-hint button: fixed-center, glows, fades while scrolling,
@@ -1502,15 +1817,155 @@ document.addEventListener('DOMContentLoaded', function() {
   window.pcNormalizeSearch = normalize;
 })();
 
+// TASK-3 START — Location filter helpers: geocoding + distance math.
+// Free, no-API-key geocoding via OpenStreetMap Nominatim (usage policy caps
+// requests at ~1/sec, so calls are chained through a single shared queue
+// rather than fired in parallel). Results are cached in memory for this page
+// load only — a persistent shared cache is a Task 3b enhancement, not needed
+// here since a single visitor rarely repeats the same search.
+var pcGeocodeCache = {};
+var pcGeocodeQueue = Promise.resolve();
+var pcLastGeocodeAt = 0; // TASK-3d — timestamp of the last Nominatim call, so a lone search isn't delayed a full second for nothing
+
+function pcGeocodeLocation(query, countryCode) {
+  var trimmed = (query || '').trim();
+  if (!trimmed) return Promise.resolve(null);
+  var key = trimmed.toLowerCase() + '|' + (countryCode || 'us'); // TASK-3b — cache key now includes country so the same text in two countries doesn't collide
+  if (Object.prototype.hasOwnProperty.call(pcGeocodeCache, key)) {
+    return Promise.resolve(pcGeocodeCache[key]);
+  }
+  pcGeocodeQueue = pcGeocodeQueue.then(function() {
+    return new Promise(function(resolve) {
+      setTimeout(function() {
+        pcLastGeocodeAt = Date.now(); // TASK-3d
+        // TASK-3b — countrycodes now driven by the selected country (us/ca/gb/au)
+        // instead of being hardcoded to "us", covering all 4 confirmed target
+        // markets through this same single Nominatim integration.
+        fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=' + (countryCode || 'us') + '&q=' + encodeURIComponent(query))
+          .then(function(r) { return r.ok ? r.json() : []; })
+          .then(function(results) {
+            var coords = (results && results[0])
+              ? { lat: parseFloat(results[0].lat), lng: parseFloat(results[0].lon) }
+              : null;
+            pcGeocodeCache[key] = coords;
+            resolve(coords);
+          })
+          .catch(function() {
+            pcGeocodeCache[key] = null;
+            resolve(null);
+          });
+      }, Math.max(0, 1100 - (Date.now() - pcLastGeocodeAt))); // TASK-3d — still never closer than ~1.1s apart (Nominatim's 1 req/sec policy), but no wait when the last call was long ago
+    });
+  });
+  return pcGeocodeQueue;
+}
+
+// TASK-3c START — Server-side Haversine: the Great-circle distance math and
+// the per-pet geocoding both moved to geo-filter.php (persisted cache, one
+// copy shared by every visitor, instead of Task 3's in-memory client cache).
+// pcHaversineMiles was removed from here since nothing client-side computes
+// distance anymore — see geo-filter.php for the same formula, server-side.
+// TASK-3c END
+
+// pet.json stores location as free text, e.g. "Los Angeles, CA"
+function pcParseLocation(loc) {
+  if (!loc) return { city: '', state: '' };
+  var text = String(loc).trim();
+  var parts = text.split(',');
+  var city = (parts[0] || '').trim();
+  var state = (parts[1] || '').trim();
+  // TASK-3d START — pet.location is free text typed by an admin. Tolerate a missing comma
+  // ("Los Angeles CA") by peeling a trailing 2-letter code off as the state, and upper-case
+  // short codes so "ca" / "Ca" / "CA" never become three separate State chips.
+  if (!state) {
+    var m = text.match(/^(.*\S)\s+([A-Za-z]{2})$/);
+    if (m) { city = m[1].trim(); state = m[2]; }
+  }
+  if (state.length <= 3) state = state.toUpperCase();
+  // TASK-3d END
+  return { city: city, state: state };
+}
+
+// TASK-3c START — Calls geo-filter.php with the visitor's resolved
+// coordinates + chosen radius; the server geocodes every pet in this
+// category (using its own persisted cache) and returns just the IDs within
+// range, nearest-first. Replaces Task 3b's pcGeocodeAllPetLocations(), which
+// did this same work in the browser with a cache that reset every page load.
+var pcRadiusMatchIds = null; // null = no server radius search active; array = active, filter to these IDs only
+// TASK-3d START — second verification round hardening of the search helper:
+//  - newest-search-wins token, so a slow earlier request can never overwrite a later one
+//  - real failure handling: a missing/erroring endpoint no longer looks like "zero pets nearby"
+//  - coordinates rounded to 2 decimals (~0.7 mi) before they go into the URL, because query
+//    strings end up in server access logs and a visitor's exact position doesn't belong there;
+//    the smallest radius offered is 25 mi, so nothing is lost
+var pcRadiusSearchSeq = 0;
+function pcRunServerRadiusSearch(lat, lng, radiusMiles) {
+  var mySeq = ++pcRadiusSearchSeq;
+  var catalog = document.querySelector('[data-category]');
+  var category = (catalog && catalog.getAttribute('data-category')) || 'cats';
+  var url = '/adoptions/pets/geo-filter.php?category=' + encodeURIComponent(category) +
+    '&lat=' + encodeURIComponent(Number(lat).toFixed(2)) + '&lng=' + encodeURIComponent(Number(lng).toFixed(2)) +
+    '&radius=' + encodeURIComponent(radiusMiles);
+  return fetch(url)
+    .then(function(r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+    .then(function(data) {
+      if (mySeq !== pcRadiusSearchSeq) return { ok: false, stale: true };
+      if (!data || !Array.isArray(data.ids)) throw new Error('Unexpected response');
+      pcRadiusMatchIds = data.ids;
+      return { ok: true, pending: Number(data.pending) || 0 };
+    })
+    .catch(function() {
+      if (mySeq === pcRadiusSearchSeq) pcRadiusMatchIds = null;
+      return { ok: false, stale: mySeq !== pcRadiusSearchSeq };
+    });
+}
+function pcClearServerRadiusSearch() { pcRadiusSearchSeq++; pcRadiusMatchIds = null; }
+
+// Visible notice above the grid (the sheet is already closed when results arrive)
+function pcSetLocationNotice(msg, withClear) {
+  var el = document.getElementById('pcLocationNotice');
+  if (!el) return;
+  el.textContent = '';
+  if (!msg) { el.hidden = true; return; }
+  var span = document.createElement('span');
+  span.textContent = msg;
+  el.appendChild(span);
+  if (withClear) {
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'pc-location-notice__clear';
+    b.textContent = 'Clear';
+    b.addEventListener('click', pcClearDistanceFilter);
+    el.appendChild(b);
+  }
+  el.hidden = false;
+}
+// Clears only the distance search (not the other filters) and re-renders
+function pcClearDistanceFilter() {
+  pcClearServerRadiusSearch();
+  var r = document.getElementById('filterRadius'); if (r) r.value = '';
+  var la = document.getElementById('filterNearMeLat'); if (la) la.value = '';
+  var ln = document.getElementById('filterNearMeLng'); if (ln) ln.value = '';
+  var inp = document.getElementById('pcNearMeInput'); if (inp) inp.value = '';
+  window.pcUsingGeolocation = false;
+  pcSetLocationNotice('');
+  if (window.pcApplyAndRender) window.pcApplyAndRender();
+}
+// TASK-3d END
+window.pcRunServerRadiusSearch = pcRunServerRadiusSearch;
+window.pcClearServerRadiusSearch = pcClearServerRadiusSearch;
+// TASK-3c END
+// TASK-3 END
+
 // Pet Loading and Filtering
 (function() {
   var catalog = document.querySelector('[data-category]');
   var category = (catalog && catalog.getAttribute('data-category')) || 'aquariums';
   var petGrid = document.querySelector('.pc-pet-grid');
   if(!petGrid) return;
-  
+
   var allPets = [];
-  
+
   var PC_NO_PETS_HTML =
     '<div class="pc-empty-state">' +
       '<svg class="pc-empty-state__icon" viewBox="0 0 576 512" width="52" height="52" fill="currentColor">' +
@@ -1535,7 +1990,7 @@ document.addEventListener('DOMContentLoaded', function() {
           petGrid.innerHTML = PC_NO_PETS_HTML;
           return [];
         }
-        
+
         return Promise.all(data.pets.map(function(petId) {
           return fetch('/adoptions/pets/' + category + '/' + petId + '/pet.json')
             .then(function(r) {
@@ -1555,6 +2010,18 @@ document.addEventListener('DOMContentLoaded', function() {
           return [];
         }
         populateFilters();
+        // TASK-3 START — Pick up "?state=XX" carried over from pets.html's
+        // location bar and pre-select it, case-insensitively, against whatever
+        // states populateFilters() just found in this category's own pets.
+        var pcStateParam = new URLSearchParams(window.location.search).get('state');
+        if (pcStateParam) {
+          var stateSelectEl = document.getElementById('filterState');
+          var match = stateSelectEl && Array.prototype.find.call(stateSelectEl.options, function(o) {
+            return o.value && o.value.toLowerCase() === pcStateParam.trim().toLowerCase();
+          });
+          if (match) stateSelectEl.value = match.value;
+        }
+        // TASK-3 END
         applyAndRender();
         updatePetCount();
         return allPets;
@@ -1567,7 +2034,7 @@ document.addEventListener('DOMContentLoaded', function() {
         petGrid.innerHTML = PC_NO_PETS_HTML;
       });
   }
-  
+
   function populateFilters() {
     var breedSelect = document.getElementById('filterBreed');
     if (allPets.length === 0) {
@@ -1612,8 +2079,49 @@ document.addEventListener('DOMContentLoaded', function() {
       });
       if (window.pcLayoutAllChipRows) window.pcLayoutAllChipRows();
     }
+
+    // TASK-3 START — Location filter: dynamically extract distinct states/cities
+    // from pet.location ("City, State"), same dedupe-and-sort pattern as Breed above.
+    var states = [], cities = [];
+    allPets.forEach(function(p) {
+      var loc = pcParseLocation(p.location);
+      // TASK-3d — case-insensitive de-dupe so differently-capitalised spellings share one chip
+      if (loc.state && !states.some(function(s) { return s.toLowerCase() === loc.state.toLowerCase(); })) states.push(loc.state);
+      if (loc.city && !cities.some(function(c) { return c.toLowerCase() === loc.city.toLowerCase(); })) cities.push(loc.city);
+    });
+    states.sort(function(a, b) { return a.localeCompare(b); });
+    cities.sort(function(a, b) { return a.localeCompare(b); });
+
+    function pcSyncSelectOptions(select, values) {
+      if (!select) return;
+      select.querySelectorAll('option:not([value=""])').forEach(function(o) { o.remove(); });
+      values.forEach(function(v) {
+        var o = document.createElement('option');
+        o.value = v; o.textContent = v;
+        select.appendChild(o);
+      });
+    }
+    function pcSyncChipRow(rowId, values) {
+      var row = document.getElementById(rowId);
+      if (!row) return;
+      row.querySelectorAll('.pc-chip:not([data-value=""])').forEach(function(c) { c.remove(); });
+      values.forEach(function(v) {
+        var chip = document.createElement('button');
+        chip.type = 'button';
+        chip.className = 'pc-chip';
+        chip.setAttribute('data-value', v);
+        chip.textContent = v;
+        row.appendChild(chip);
+      });
+    }
+    pcSyncSelectOptions(document.getElementById('filterState'), states);
+    pcSyncSelectOptions(document.getElementById('filterCity'), cities);
+    pcSyncChipRow('pcStateChipRow', states);
+    pcSyncChipRow('pcCityChipRow', cities);
+    if (window.pcLayoutAllChipRows) window.pcLayoutAllChipRows();
+    // TASK-3 END
   }
-  
+
   var searchTerm = '';
 
   function applyAndRender() {
@@ -1624,10 +2132,31 @@ document.addEventListener('DOMContentLoaded', function() {
     var sort       = document.getElementById('sortBy')?.value || 'name';
     var compatible = document.getElementById('filterCompatible')?.value || '';
     var normSearch = window.pcNormalizeSearch ? window.pcNormalizeSearch(searchTerm) : searchTerm.toLowerCase();
+    // TASK-3 START — Location filter state
+    var pcState  = document.getElementById('filterState')?.value || '';
+    var pcCity   = document.getElementById('filterCity')?.value || '';
+    var pcRadius = document.getElementById('filterRadius')?.value || '';
+    // TASK-3c — pcRadiusActive now reflects whether the server-side radius
+    // search actually returned a result set (pcRadiusMatchIds is an array),
+    // not whether coordinates merely exist — replaces Task 3's client-Haversine check.
+    var pcRadiusActive = !!(pcRadius && Array.isArray(pcRadiusMatchIds));
+    // TASK-3 END
 
     var filtered = allPets.filter(function(p) {
       if (breed && p.breed !== breed) return false;
       if (size && p.size !== size) return false;
+      // TASK-3 START — Location filter: radius search (when a "near me" location
+      // has been resolved) takes priority over the plain State/City chips.
+      if (pcRadiusActive) {
+        // TASK-3c — matching against the ID list geo-filter.php already computed server-side
+        var petIdentifier = p.id || p.pet_id;
+        if (pcRadiusMatchIds.indexOf(petIdentifier) === -1) return false;
+      } else if (pcState || pcCity) {
+        var petLoc = pcParseLocation(p.location);
+        if (pcState && petLoc.state.toLowerCase() !== pcState.toLowerCase()) return false; // TASK-3d — case-insensitive
+        if (pcCity && petLoc.city.toLowerCase() !== pcCity.toLowerCase()) return false;
+      }
+      // TASK-3 END
       if (normSearch) {
         var breedNorm = (p.breed || '').toLowerCase();
         var idNorm = (p.pet_id || '').toLowerCase().replace(/-/g, '');
@@ -1661,7 +2190,20 @@ document.addEventListener('DOMContentLoaded', function() {
       }
       return true;
     });
-    
+
+    // TASK-3d START — "Nearest First": geo-filter.php already returns IDs nearest-first, so
+    // ordering by position in that list reuses the server's Haversine result. Without an
+    // active distance search there is nothing to be near, so it falls back to Name A-Z.
+    if (sort === 'distance' && !pcRadiusActive) sort = 'name';
+    window.pcRadiusEmptyHint = pcRadiusActive
+      ? 'No pets found within that distance. Try a larger radius, or clear the distance filter.'
+      : '';
+    if (sort === 'distance') {
+      filtered.sort(function(a, b) {
+        return pcRadiusMatchIds.indexOf(a.id || a.pet_id) - pcRadiusMatchIds.indexOf(b.id || b.pet_id);
+      });
+    } else
+    // TASK-3d END
     if (sort === 'name') {
       filtered.sort(function(a, b) { return (a.name || '').localeCompare(b.name || ''); });
     } else if (sort === 'age') {
@@ -1671,18 +2213,18 @@ document.addEventListener('DOMContentLoaded', function() {
     } else if (sort === 'fee_desc') {
       filtered.sort(function(a, b) { return (b.adoption_fee || 0) - (a.adoption_fee || 0); });
     }
-    
+
     renderPets(filtered);
   }
   window.pcApplyAndRender = applyAndRender;
-  
+
   function renderPets(pets) {
     if(!pets.length) {
-      petGrid.innerHTML = '<div class="pc-empty-state"><svg class="pc-empty-state__icon" viewBox="0 0 24 24" width="52" height="52" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="8" x2="14" y2="14"/><line x1="14" y1="8" x2="8" y2="14"/></svg><h3>No pets match your filters</h3><p>Try adjusting your search criteria.</p></div>';
+      petGrid.innerHTML = '<div class="pc-empty-state"><svg class="pc-empty-state__icon" viewBox="0 0 24 24" width="52" height="52" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="8" x2="14" y2="14"/><line x1="14" y1="8" x2="8" y2="14"/></svg><h3>No pets match your filters</h3><p>' + (window.pcRadiusEmptyHint || 'Try adjusting your search criteria.') + '</p></div>'; // TASK-3d — distance-specific hint when a radius search is active
       petGrid.style.gridColumn = '1 / -1';
       return;
     }
-    
+
     // SVG icons for card details
     var iconBreed  = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>';
     var iconAge    = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>';
@@ -1698,7 +2240,7 @@ document.addEventListener('DOMContentLoaded', function() {
       return months[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
     }
     // TASK-2 END
-    
+
     var html = pets.map(function(p) {
       var img = p.single_image_url || '/assets/images/pet-placeholder.jpg';
       var fee = (p.adoption_fee || 0).toLocaleString('en-US');
@@ -1711,13 +2253,14 @@ document.addEventListener('DOMContentLoaded', function() {
       var postedText = formatPostedDate(p.published_date);
       var postedHTML = postedText ? '<div class="pc-pet-card__posted">' + iconPosted + '<span>Posted ' + postedText + '</span></div>' : '';
       // TASK-2 END
-      
+
       // Adopted badge — "ADOPTED" strip style
       var adoptedBadge = p.status === 'Adopted'
         ? '<div class="pc-pet-card__adopted-badge">ADOPTED</div>'
         : '';
+
       var matchedBadge = p.status === 'Matched' ? '<div class=\"pc-pet-card__matched-badge\">MATCHED</div>' : '';
-      
+
       return '<a href="' + url + '" class="pc-pet-card">' +
         '<div class="pc-pet-card__img-wrap">' +
           '<img src="' + img + '" alt="' + petName + '" class="pc-pet-card__img" loading="lazy">' +
@@ -1741,16 +2284,16 @@ document.addEventListener('DOMContentLoaded', function() {
         '</div>' +
       '</a>';
     }).join('');
-    
+
     petGrid.innerHTML = html;
   }
-  
+
   function updatePetCount() {
     var countEl = document.getElementById('petCount');
     if (countEl) {
       countEl.textContent = allPets.length;
     }
-    
+
     // Update category title and count text based on loaded category
     var categoryTitle = document.getElementById('categoryTitle');
     var categoryCountText = document.getElementById('categoryCount');
@@ -1763,7 +2306,7 @@ document.addEventListener('DOMContentLoaded', function() {
       categoryCountText.textContent = category === 'small-mammals' ? 'small mammals' : category;
     }
   }
-  
+
   // Event listeners for filters
   // (The hidden <select> elements are pure state holders written to by the
   // filter sheet's Apply button, which calls applyAndRender() directly —
@@ -1780,6 +2323,9 @@ document.addEventListener('DOMContentLoaded', function() {
     searchTerm = term || '';
     applyAndRender();
   };
+  // TASK-3 START
+  window.pcGetAllPets = function() { return allPets; };
+  // TASK-3 END
 
   // Load pets on page load
   loadPets();
@@ -1808,6 +2354,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <button type="button" class="pc-chip" data-value="age">Youngest First</button>
             <button type="button" class="pc-chip" data-value="fee_asc">Lowest Fee</button>
             <button type="button" class="pc-chip" data-value="fee_desc">Highest Fee</button>
+            <button type="button" class="pc-chip" data-value="distance">Nearest First</button><!-- TASK-3d -->
           </div>
         </div>
       </div>
@@ -1873,6 +2420,75 @@ document.addEventListener('DOMContentLoaded', function() {
         </div>
       </div>
 
+      <!-- TASK-3 START — Location filter: manual State/City chips (auto-populated
+           from the pets actually loaded, same pattern as Breed) plus a "Near Me"
+           radius search. Radius search geocodes the typed location and every
+           distinct pet location via OpenStreetMap Nominatim (free, no API key)
+           and filters by great-circle (Haversine) distance — see the script block
+           below. State/City and radius are mutually exclusive: entering a Near Me
+           search takes priority on Apply. -->
+      <div class="pc-sheet-filter-group" data-filter="filterState">
+        <div class="pc-sheet-filter-group__label">State</div>
+        <div class="pc-chip-scroll">
+          <div class="pc-chip-row" data-target="filterState" id="pcStateChipRow">
+            <button type="button" class="pc-chip selected" data-value="">All States</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="pc-sheet-filter-group" data-filter="filterCity">
+        <div class="pc-sheet-filter-group__label">City</div>
+        <div class="pc-chip-scroll">
+          <div class="pc-chip-row" data-target="filterCity" id="pcCityChipRow">
+            <button type="button" class="pc-chip selected" data-value="">All Cities</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="pc-sheet-filter-group" data-filter="filterNearMe">
+        <div class="pc-sheet-filter-group__label">Near Me</div>
+
+        <!-- TASK-3b START — Country selector: narrows the geocoding search to
+             the selected country (Nominatim covers all four target markets
+             through the same single integration Task 3 already built — only
+             the countrycodes param needs to vary). Defaults to the visitor's
+             own country when guessable from navigator.language, USA otherwise. -->
+        <div class="pc-chip-scroll">
+          <div class="pc-chip-row" data-target="filterCountry" id="pcCountryChipRow">
+            <button type="button" class="pc-chip selected" data-value="us">USA</button>
+            <button type="button" class="pc-chip" data-value="ca">Canada</button>
+            <button type="button" class="pc-chip" data-value="gb">UK</button>
+            <button type="button" class="pc-chip" data-value="au">Australia</button>
+          </div>
+        </div>
+        <!-- TASK-3b END -->
+
+        <div class="pc-nearme-row">
+          <input type="text" id="pcNearMeInput" class="pc-nearme-input" placeholder="Enter a city, state or ZIP" autocomplete="off">
+          <!-- TASK-3b START — "Use my location": one of Task 3's own Recommended
+               Enhancements, folded into this task since it already reopens this
+               file/zone. Skips geocoding entirely — the browser returns
+               coordinates directly, so this works the same regardless of country. -->
+          <button type="button" class="pc-nearme-geo-btn" id="pcUseMyLocationBtn" title="Use my current location" aria-label="Use my current location"><!-- TASK-3d — project rule: no emojis, inline SVG icons only (this was an emoji) --><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="8"/><line x1="12" y1="1" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="23"/><line x1="1" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="23" y2="12"/></svg></button>
+          <!-- TASK-3b END -->
+        </div>
+        <!-- TASK-3b START — Postal-code format hint, text swaps with the selected country -->
+        <div class="pc-postal-hint" id="pcPostalHint">Format: ZIP code, e.g. 90210</div>
+        <!-- TASK-3b END -->
+        <div class="pc-chip-scroll">
+          <div class="pc-chip-row" data-target="filterRadius" id="pcRadiusChipRow">
+            <button type="button" class="pc-chip selected" data-value="">Any Distance</button>
+            <button type="button" class="pc-chip" data-value="25">25 mi</button>
+            <button type="button" class="pc-chip" data-value="60">60 mi</button>
+            <button type="button" class="pc-chip" data-value="100">100 mi</button>
+            <button type="button" class="pc-chip" data-value="250">250 mi</button>
+            <button type="button" class="pc-chip" data-value="500">500 mi</button>
+          </div>
+        </div>
+        <div class="pc-nearme-status" id="pcNearMeStatus" aria-live="polite"></div>
+      </div>
+      <!-- TASK-3 END -->
+
     </div>
 
     <button class="pc-sheet-scroll-hint" id="pcSheetScrollHint" type="button" aria-label="Scroll to bottom">
@@ -1889,6 +2505,8 @@ document.addEventListener('DOMContentLoaded', function() {
 </div>
 <!-- ═══ Filter Bottom Sheet — end ═══ -->
 <script src="/admin/chat-widget.js"></script>
+
+<script src="/assets/js/accessibility-widget.js" defer></script>
 
 <!-- TASK-7a: temporary local Pet Match notification stub; not an auth session. -->
 <script>
@@ -1921,6 +2539,545 @@ document.addEventListener('DOMContentLoaded', function() {
     }).catch(function(){body.textContent='Could not check for updates right now — try again shortly.';});
 })();
 </script>
+<!-- TASK-10 START -->
+<!-- TASK-9 START: Settings Widget -- gear-icon trigger + panel housing the
+     sitewide language switcher and the personal widget-background-opacity
+     slider. Defines the shared `preferences` object (localStorage key
+     "preferences", fields {lang, opacity}) that this page's own
+     lang-redirect.js / i18n-core.js (Task 1) already read `preferences.lang`
+     from, and that Admin-Project #4's `preferred_chat_language` field also
+     reads independently -- the exact field name/shape/values documented in
+     this task must not change without notifying that project first.
+     Z-INDEX NOTE: the site's real, documented highest z-index anywhere is
+     6001 (the filter/form bottom-sheet system), not the floating contact
+     button's 4000 -- this widget's trigger/panel/dropdown are placed at
+     6100/6200/6300 so they always sit above every existing floating
+     element, including both of those. -->
+<style>
+/* Renamed from --pc-widget-opacity (added in this task's first pass) to
+   --pc-widget-bg-opacity, and a second, distinct --pc-widget-opacity
+   variable added for the whole widget's own opacity -- per user follow-up,
+   "Widget Background Opacity" (panel's rgba background only, children
+   stay fully legible) and "Widget Opacity" (the entire trigger + panel,
+   via real CSS `opacity` on the container) are two separate controls. */
+:root { --pc-widget-bg-opacity: 0.90; --pc-widget-opacity: 1; }
 
+/* "Central position" = vertically centered on the viewport's right edge.
+   User follow-up moved this from the left edge (this task's original
+   build) to the right edge -- everything else about the placement logic
+   from that first pass still applies: vertically centered avoids the
+   hero's own CTA buttons (the collision found and fixed when this was
+   briefly bottom-center), and vertical centering keeps clear of the
+   bottom-right floating contact button (z-index 4000), re-confirmed by
+   Playwright screenshot below since moving to the same edge as that
+   button is exactly the kind of collision worth re-checking, not
+   assuming safe by reasoning alone. */
+.pc-settings-widget {
+  position: fixed;
+  top: 50%;
+  inset-inline-end: 16px;
+  transform: translateY(-50%);
+  z-index: 6100;
+  font-family: 'Sora', sans-serif;
+  /* Whole-widget opacity (trigger + panel together), separate from the
+     panel-only rgba background opacity below. Real CSS `opacity`, by
+     design, fades everything inside -- that's the intended effect of this
+     specific control, unlike the background one. */
+  opacity: var(--pc-widget-opacity);
+  transition: opacity 0.2s ease;
+}
+
+.pc-settings-trigger {
+  width: 52px; height: 52px; border-radius: 50%; border: none; cursor: pointer;
+  background: #10214b; color: #d7bd88;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 16px rgba(16,33,75,0.35);
+  transition: transform 0.3s cubic-bezier(.4,0,.2,1), background 0.3s cubic-bezier(.4,0,.2,1);
+}
+.pc-settings-trigger:hover { transform: rotate(35deg); background: #1a2f5c; }
+.pc-settings-trigger[aria-expanded="true"] { background: #ED7624; color: #fff; }
+
+.pc-settings-panel {
+  position: absolute;
+  top: 50%;
+  /* Opens to the LEFT of the trigger now that the trigger sits on the
+     right edge (was `inset-inline-start: calc(100% + 12px)` opening rightward off a
+     left-edge trigger). */
+  inset-inline-end: calc(100% + 12px);
+  transform: translateY(-50%);
+  width: 280px;
+  max-width: calc(100vw - 32px);
+  /* rgba() background driven by the Widget Background Opacity slider --
+     never container `opacity`, which would also fade the panel's
+     text/children (Task 9's explicit requirement: "rgba() backgrounds,
+     not container opacity"). The separate whole-widget opacity control
+     lives on .pc-settings-widget above. */
+  background: rgba(16, 33, 75, var(--pc-widget-bg-opacity));
+  color: #f2f2f2;
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+  z-index: 6200;
+}
+.pc-settings-panel[hidden] { display: none; }
+
+.pc-settings-panel__header {
+  display: flex; align-items: center; justify-content: space-between;
+  font-weight: 700; margin-bottom: 12px; font-size: 15px;
+}
+.pc-settings-panel__close {
+  background: none; border: none; color: inherit; font-size: 20px; line-height: 1;
+  cursor: pointer; padding-block: 2px; padding-inline: 6px;
+}
+
+.pc-settings-row { margin-bottom: 14px; }
+.pc-settings-row:last-child { margin-bottom: 0; }
+.pc-settings-label { display: block; font-size: 12.5px; margin-bottom: 6px; color: #d7bd88; }
+/* One-line description under a consequential setting, per Design System
+   Section 19's "Settings Widget Control Pattern -- Toggle + Description"
+   rule (pair every consequential control with a plain-language line
+   explaining its effect, since a user shouldn't have to guess). */
+.pc-settings-desc { font-size: 11.5px; color: #a39b91; margin-block: -2px 8px; margin-inline: 0; line-height: 1.4; }
+
+.pc-lang-dropdown { position: relative; }
+.pc-lang-dropdown__trigger {
+  width: 100%; display: flex; align-items: center; justify-content: space-between;
+  background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.16);
+  color: #f2f2f2; border-radius: 8px; padding-block: 8px; padding-inline: 12px; font-size: 13.5px; cursor: pointer;
+  font-family: 'Sora', sans-serif;
+}
+.pc-lang-dropdown__panel {
+  position: absolute; top: calc(100% + 6px); inset-inline-start: 0; inset-inline-end: 0;
+  background: #10214b; border: 1px solid rgba(255,255,255,0.14);
+  /* Sharp corner nearest the trigger (top-left here, since the trigger
+     sits above this downward-opening panel) -- the "message bubble" corner
+     rule from PETCENTER_DESIGN_SYSTEM_v1_0.md Section 24 (v1.25). */
+  border-start-start-radius: 0; border-start-end-radius: 8px; border-end-end-radius: 8px; border-end-start-radius: 8px;
+  list-style: none; margin: 0; padding: 4px; max-height: 200px; overflow-y: auto;
+  z-index: 6300;
+}
+.pc-lang-dropdown__panel[hidden] { display: none; }
+.pc-lang-dropdown__panel li { padding-block: 8px; padding-inline: 10px; font-size: 13.5px; border-radius: 6px; cursor: pointer; }
+.pc-lang-dropdown__panel li:hover,
+.pc-lang-dropdown__panel li[aria-selected="true"] { background: rgba(215,189,136,0.18); }
+
+.pc-opacity-slider { width: 100%; accent-color: #d7bd88; }
+.pc-opacity-value { font-size: 12px; color: #a39b91; float: inline-end; margin-top: 2px; }
+
+@media (max-width: 600px) {
+  /* Below 600px, opening the panel to the right of a left-edge trigger
+     would push a 280px-wide panel off the right edge of the viewport on
+     most phones. Anchor the panel to open downward from the trigger
+     instead, still clear of both the hero content and the bottom-right
+     contact button. Anchored via `inset-inline-end: 0` (not `inset-inline-start: 0`) since the
+     trigger itself now sits near the right edge -- `inset-inline-start: 0` would push
+     a near-full-width panel further right and off-screen. */
+  .pc-settings-panel {
+    top: calc(100% + 10px);
+    inset-inline-end: 0;
+    inset-inline-start: auto;
+    transform: none;
+    width: calc(100vw - 48px);
+  }
+}
+
+/* TASK-web12-3 END */
+</style>
+
+<div class="pc-settings-widget" id="pcSettingsWidget">
+  <button type="button" class="pc-settings-trigger" id="pcSettingsTrigger"
+          aria-haspopup="true" aria-expanded="false" aria-controls="pcSettingsPanel"
+          aria-label="Open site settings">
+    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <circle cx="12" cy="12" r="3"></circle>
+      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+    </svg>
+  </button>
+
+  <div class="pc-settings-panel" id="pcSettingsPanel" role="dialog" aria-modal="false"
+       aria-label="Site settings" hidden="">
+    <div class="pc-settings-panel__header">
+      <span data-i18n="common.settingsWidget.1">Settings</span>
+      <button type="button" class="pc-settings-panel__close" id="pcSettingsClose"
+              aria-label="Close settings">&times;</button>
+    </div>
+
+    <div class="pc-settings-row">
+      <label class="pc-settings-label" id="pcLangLabel" data-i18n="common.settingsWidget.2">Language</label>
+      <div class="pc-lang-dropdown" id="pcLangDropdown">
+        <button type="button" class="pc-lang-dropdown__trigger" id="pcLangTrigger"
+                aria-haspopup="listbox" aria-expanded="false" aria-labelledby="pcLangLabel"
+                aria-controls="pcLangListbox">
+          <span id="pcLangCurrentLabel">English</span>
+          <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </button>
+        <ul class="pc-lang-dropdown__panel" id="pcLangListbox" role="listbox"
+            aria-labelledby="pcLangLabel" tabindex="-1" hidden="">
+          <li role="option" data-lang="en" aria-selected="true" tabindex="0">English</li>
+          <li role="option" data-lang="es" aria-selected="false" tabindex="0">Español</li>
+          <li role="option" data-lang="pt" aria-selected="false" tabindex="0">Português</li>
+          <li role="option" data-lang="fr" aria-selected="false" tabindex="0">Français</li>
+          <li role="option" data-lang="ar" aria-selected="false" tabindex="0">العربية</li>
+          <li role="option" data-lang="zh-Hans" aria-selected="false" tabindex="0">简体中文</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="pc-settings-row">
+      <label class="pc-settings-label" for="pcOpacitySlider" id="pcOpacityLabel" data-i18n="common.settingsWidget.3">Widget Background Opacity</label>
+      <input type="range" id="pcOpacitySlider" class="pc-opacity-slider"
+             min="20" max="100" step="5" value="90"
+             role="slider" aria-labelledby="pcOpacityLabel"
+             aria-valuemin="20" aria-valuemax="100" aria-valuenow="90" aria-valuetext="90%">
+      <span class="pc-opacity-value" id="pcOpacityValue" aria-hidden="true">90%</span>
+    </div>
+
+    <div class="pc-settings-row">
+      <label class="pc-settings-label" for="pcWidgetOpacitySlider" id="pcWidgetOpacityLabel" data-i18n="common.settingsWidget.4">Widget Opacity</label>
+      <input type="range" id="pcWidgetOpacitySlider" class="pc-opacity-slider"
+             min="20" max="100" step="5" value="100"
+             role="slider" aria-labelledby="pcWidgetOpacityLabel"
+             aria-valuemin="20" aria-valuemax="100" aria-valuenow="100" aria-valuetext="100%">
+      <span class="pc-opacity-value" id="pcWidgetOpacityValue" aria-hidden="true">100%</span>
+    </div>
+
+    <!-- TASK (Color Vision Accessibility) START: brief calls for this
+         control to sit "alongside the existing dark mode toggle" -- no dark
+         mode toggle exists anywhere in this codebase yet (Design System
+         Section 19 documents its intended look/behavior but confirms it
+         is not yet built; searched before assuming otherwise). Not adding
+         a placeholder/stub toggle for a feature that hasn't been
+         specified as buildable here -- flagging the gap in this task's
+         completion file instead, per "flag it rather than inventing." -->
+    <div class="pc-settings-row">
+      <label class="pc-settings-label" id="pcVisionLabel" data-i18n="common.settingsWidget.5">Color Vision</label>
+      <p class="pc-settings-desc" id="pcVisionDesc" data-i18n="common.settingsWidget.6">Adjusts status colors, alerts, and charts sitewide for your selected vision type.</p>
+      <div class="pc-lang-dropdown" id="pcVisionDropdown">
+        <button type="button" class="pc-lang-dropdown__trigger" id="pcVisionTrigger"
+                aria-haspopup="listbox" aria-expanded="false" aria-labelledby="pcVisionLabel"
+                aria-controls="pcVisionListbox">
+          <span id="pcVisionCurrentLabel">Normal Vision</span>
+          <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </button>
+        <ul class="pc-lang-dropdown__panel" id="pcVisionListbox" role="listbox"
+            aria-labelledby="pcVisionLabel" tabindex="-1" hidden="">
+          <li role="option" data-vision="normal" aria-selected="true" tabindex="0">Normal Vision</li>
+          <li role="option" data-vision="deuteranopia" aria-selected="false" tabindex="0">Deuteranopia</li>
+          <li role="option" data-vision="protanopia" aria-selected="false" tabindex="0">Protanopia</li>
+          <li role="option" data-vision="tritanopia" aria-selected="false" tabindex="0">Tritanopia</li>
+        </ul>
+      </div>
+    </div>
+    <!-- TASK (Color Vision Accessibility) END -->
+  </div>
+</div>
+
+<script>
+// TASK-9 START: Settings Widget logic + `preferences` schema owner.
+(function () {
+  'use strict';
+
+  var PREFS_KEY = 'preferences';
+  // Written by admin-dashboard.html's "Default Widget Background Opacity"
+  // and "Default Widget Opacity" controls (this task's admin-side
+  // deliverable). Read here only as a fallback default for a visitor with
+  // no personal preference saved yet -- a visitor's own saved choice in
+  // `preferences.opacity` / `preferences.widgetOpacity` always wins.
+  var ADMIN_DEFAULTS_KEY = 'pc_admin_settings_defaults';
+
+  // LANG_FOLDER_MAP mirrors Task 1's /en/-/zh/ folder scaffolding -- English
+  // is the un-prefixed root (never a redirect target), the rest are their
+  // own language-code folders. 'zh-Hans' (tagged, not bare 'zh') is the
+  // CEO-confirmed value for Chinese everywhere this schema is used.
+  var LANG_FOLDER_MAP = { en: '/', es: '/es/', pt: '/pt/', fr: '/fr/', ar: '/ar/', 'zh-Hans': '/zh/' };
+  var LANG_LABELS = { en: 'English', es: 'Español', pt: 'Português', fr: 'Français', ar: 'العربية', 'zh-Hans': '简体中文' };
+  var VISION_LABELS = { normal: 'Normal Vision', deuteranopia: 'Deuteranopia', protanopia: 'Protanopia', tritanopia: 'Tritanopia' };
+
+  function readAdminDefaultOpacity() {
+    try {
+      var raw = localStorage.getItem(ADMIN_DEFAULTS_KEY);
+      if (!raw) return 90;
+      var parsed = JSON.parse(raw);
+      var val = Number(parsed && parsed.opacity);
+      return (val >= 20 && val <= 100) ? val : 90;
+    } catch (e) { return 90; }
+  }
+
+  function readAdminDefaultWidgetOpacity() {
+    try {
+      var raw = localStorage.getItem(ADMIN_DEFAULTS_KEY);
+      if (!raw) return 100;
+      var parsed = JSON.parse(raw);
+      var val = Number(parsed && parsed.widgetOpacity);
+      return (val >= 20 && val <= 100) ? val : 100;
+    } catch (e) { return 100; }
+  }
+
+  function getPreferences() {
+    try {
+      var raw = localStorage.getItem(PREFS_KEY);
+      var parsed = raw ? JSON.parse(raw) : {};
+      return {
+        lang: (typeof parsed.lang === 'string' && parsed.lang) ? parsed.lang : 'en',
+        opacity: (typeof parsed.opacity === 'number') ? parsed.opacity : readAdminDefaultOpacity(),
+        widgetOpacity: (typeof parsed.widgetOpacity === 'number') ? parsed.widgetOpacity : readAdminDefaultWidgetOpacity(),
+        colorVision: (typeof parsed.colorVision === 'string' && VISION_LABELS[parsed.colorVision]) ? parsed.colorVision : 'normal'
+      };
+    } catch (e) {
+      return { lang: 'en', opacity: readAdminDefaultOpacity(), widgetOpacity: readAdminDefaultWidgetOpacity(), colorVision: 'normal' };
+    }
+  }
+
+  function setPreferences(partial) {
+    var current = getPreferences();
+    var next = { lang: current.lang, opacity: current.opacity, widgetOpacity: current.widgetOpacity, colorVision: current.colorVision };
+    for (var k in partial) { if (Object.prototype.hasOwnProperty.call(partial, k)) next[k] = partial[k]; }
+    try { localStorage.setItem(PREFS_KEY, JSON.stringify(next)); } catch (e) { /* storage unavailable -- fail silently, in-memory state still applies for this tab */ }
+    return next;
+  }
+
+  // Panel-only rgba() background opacity -- children stay fully legible
+  // regardless of this value.
+  function applyBackgroundOpacity(value) {
+    document.documentElement.style.setProperty('--pc-widget-bg-opacity', (value / 100).toFixed(2));
+    var sliderEl = document.getElementById('pcOpacitySlider');
+    var valueEl = document.getElementById('pcOpacityValue');
+    if (sliderEl) {
+      sliderEl.value = value;
+      sliderEl.setAttribute('aria-valuenow', value);
+      sliderEl.setAttribute('aria-valuetext', value + '%');
+    }
+    if (valueEl) valueEl.textContent = value + '%';
+  }
+
+  // Whole-widget opacity -- real CSS `opacity` on .pc-settings-widget,
+  // fades the trigger button and everything inside the panel together.
+  function applyWidgetOpacity(value) {
+    document.documentElement.style.setProperty('--pc-widget-opacity', (value / 100).toFixed(2));
+    var sliderEl = document.getElementById('pcWidgetOpacitySlider');
+    var valueEl = document.getElementById('pcWidgetOpacityValue');
+    if (sliderEl) {
+      sliderEl.value = value;
+      sliderEl.setAttribute('aria-valuenow', value);
+      sliderEl.setAttribute('aria-valuetext', value + '%');
+    }
+    if (valueEl) valueEl.textContent = value + '%';
+  }
+
+  function applyLangSelection(code) {
+    var currentLabelEl = document.getElementById('pcLangCurrentLabel');
+    if (currentLabelEl) currentLabelEl.textContent = LANG_LABELS[code] || 'English';
+    var options = document.querySelectorAll('#pcLangListbox li');
+    options.forEach(function (opt) {
+      opt.setAttribute('aria-selected', opt.getAttribute('data-lang') === code ? 'true' : 'false');
+    });
+  }
+
+  // Sets the `data-vision` attribute on <html>, which every
+  // [data-vision="..."] CSS override block above (and in admin-dashboard.html)
+  // keys off of. "normal" matches no override rule, so it's a no-op that
+  // simply leaves the default colors in place -- no separate "clear" branch
+  // needed.
+  function applyVisionSelection(vision) {
+    document.documentElement.setAttribute('data-vision', vision);
+    var currentLabelEl = document.getElementById('pcVisionCurrentLabel');
+    if (currentLabelEl) currentLabelEl.textContent = VISION_LABELS[vision] || 'Normal Vision';
+    var options = document.querySelectorAll('#pcVisionListbox li');
+    options.forEach(function (opt) {
+      opt.setAttribute('aria-selected', opt.getAttribute('data-vision') === vision ? 'true' : 'false');
+    });
+  }
+
+  function navigateToLang(code) {
+    var target = LANG_FOLDER_MAP[code] || '/';
+    // Cross-document View Transitions (enabled sitewide via the
+    // `@view-transition { navigation: auto; }` at-rule in <head>) animate
+    // this navigation automatically in supporting browsers -- a plain
+    // same-origin navigation is all that's needed to trigger it.
+    window.location.href = target;
+  }
+
+  // Apply stored/default preferences immediately (before DOMContentLoaded)
+  // so both CSS variables are correct before first paint -- avoids a flash
+  // of the defaults on a return visitor with different saved values. The
+  // `data-vision` attribute is likewise set here, before first paint, so
+  // there's no flash of un-adjusted colors either.
+  (function initFromStoredPreferencesEarly() {
+    var prefs = getPreferences();
+    document.documentElement.style.setProperty('--pc-widget-bg-opacity', (prefs.opacity / 100).toFixed(2));
+    document.documentElement.style.setProperty('--pc-widget-opacity', (prefs.widgetOpacity / 100).toFixed(2));
+    document.documentElement.setAttribute('data-vision', prefs.colorVision);
+  })();
+
+  document.addEventListener('DOMContentLoaded', function () {
+    var trigger = document.getElementById('pcSettingsTrigger');
+    var panel = document.getElementById('pcSettingsPanel');
+    var closeBtn = document.getElementById('pcSettingsClose');
+    var langTrigger = document.getElementById('pcLangTrigger');
+    var langListbox = document.getElementById('pcLangListbox');
+    var opacitySlider = document.getElementById('pcOpacitySlider');
+    var widgetOpacitySlider = document.getElementById('pcWidgetOpacitySlider');
+    var visionTrigger = document.getElementById('pcVisionTrigger');
+    var visionListbox = document.getElementById('pcVisionListbox');
+
+    if (!trigger || !panel) return;
+
+    var prefs = getPreferences();
+    applyBackgroundOpacity(prefs.opacity);
+    applyWidgetOpacity(prefs.widgetOpacity);
+    applyLangSelection(prefs.lang);
+    applyVisionSelection(prefs.colorVision);
+
+    function openPanel() {
+      panel.hidden = false;
+      trigger.setAttribute('aria-expanded', 'true');
+    }
+    function closeAllDropdowns() {
+      if (langListbox && !langListbox.hidden) {
+        langListbox.hidden = true;
+        langTrigger.setAttribute('aria-expanded', 'false');
+      }
+      if (visionListbox && !visionListbox.hidden) {
+        visionListbox.hidden = true;
+        visionTrigger.setAttribute('aria-expanded', 'false');
+      }
+    }
+    function closePanel() {
+      panel.hidden = true;
+      trigger.setAttribute('aria-expanded', 'false');
+      closeAllDropdowns();
+    }
+
+    trigger.addEventListener('click', function () {
+      panel.hidden ? openPanel() : closePanel();
+    });
+    if (closeBtn) closeBtn.addEventListener('click', closePanel);
+
+    document.addEventListener('click', function (e) {
+      if (!e.target.closest('#pcSettingsWidget')) closePanel();
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') closePanel();
+    });
+
+    // Language dropdown: open/close + selection.
+    if (langTrigger && langListbox) {
+      langTrigger.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var isOpen = !langListbox.hidden;
+        langListbox.hidden = isOpen;
+        langTrigger.setAttribute('aria-expanded', String(!isOpen));
+      });
+      langListbox.addEventListener('click', function (e) {
+        var opt = e.target.closest('li[role="option"]');
+        if (!opt) return;
+        var code = opt.getAttribute('data-lang');
+        setPreferences({ lang: code });
+        applyLangSelection(code);
+        closeAllDropdowns();
+        navigateToLang(code);
+      });
+      // Keyboard support: ArrowUp/ArrowDown move focus between options,
+      // Enter/Space activates the focused option.
+      langListbox.addEventListener('keydown', function (e) {
+        var opts = Array.prototype.slice.call(langListbox.querySelectorAll('li[role="option"]'));
+        var idx = opts.indexOf(document.activeElement);
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          idx = Math.min(opts.length - 1, idx + 1);
+          opts[idx].focus();
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          idx = Math.max(0, idx - 1);
+          opts[idx].focus();
+        } else if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          if (document.activeElement && document.activeElement.click) document.activeElement.click();
+        } else if (e.key === 'Escape') {
+          closeAllDropdowns();
+          langTrigger.focus();
+        }
+      });
+    }
+
+    // Color Vision dropdown: same open/close/selection/keyboard pattern as
+    // the language dropdown above -- unlike language, selecting an option
+    // here does NOT navigate anywhere, it just applies immediately.
+    if (visionTrigger && visionListbox) {
+      visionTrigger.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var isOpen = !visionListbox.hidden;
+        visionListbox.hidden = isOpen;
+        visionTrigger.setAttribute('aria-expanded', String(!isOpen));
+      });
+      visionListbox.addEventListener('click', function (e) {
+        var opt = e.target.closest('li[role="option"]');
+        if (!opt) return;
+        var vision = opt.getAttribute('data-vision');
+        setPreferences({ colorVision: vision });
+        applyVisionSelection(vision);
+        closeAllDropdowns();
+      });
+      visionListbox.addEventListener('keydown', function (e) {
+        var opts = Array.prototype.slice.call(visionListbox.querySelectorAll('li[role="option"]'));
+        var idx = opts.indexOf(document.activeElement);
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          idx = Math.min(opts.length - 1, idx + 1);
+          opts[idx].focus();
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          idx = Math.max(0, idx - 1);
+          opts[idx].focus();
+        } else if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          if (document.activeElement && document.activeElement.click) document.activeElement.click();
+        } else if (e.key === 'Escape') {
+          closeAllDropdowns();
+          visionTrigger.focus();
+        }
+      });
+    }
+
+    // Both opacity sliders -- native <input type="range"> already provides
+    // full keyboard support (Arrow keys, Home/End, PageUp/PageDown); role
+    // and aria-value* attributes are set explicitly per this task's spec.
+    if (opacitySlider) {
+      opacitySlider.addEventListener('input', function () {
+        var value = Number(opacitySlider.value);
+        applyBackgroundOpacity(value);
+        setPreferences({ opacity: value });
+      });
+    }
+    if (widgetOpacitySlider) {
+      widgetOpacitySlider.addEventListener('input', function () {
+        var value = Number(widgetOpacitySlider.value);
+        applyWidgetOpacity(value);
+        setPreferences({ widgetOpacity: value });
+      });
+    }
+
+    // Native `storage` event -- fires in OTHER tabs/windows on this origin
+    // when `preferences` changes there, and vice versa. This is the
+    // cross-tab sync mechanism this task requires; no polling needed.
+    window.addEventListener('storage', function (e) {
+      if (e.key !== PREFS_KEY) return;
+      var updated = getPreferences();
+      applyBackgroundOpacity(updated.opacity);
+      applyWidgetOpacity(updated.widgetOpacity);
+      applyLangSelection(updated.lang);
+      applyVisionSelection(updated.colorVision);
+    });
+  });
+})();
+// TASK-9 END
+</script>
 </body>
+<!-- TASK-10 END -->
+
 </html>

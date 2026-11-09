@@ -486,7 +486,9 @@
   </style>
 </head>
 <body>
-<script src="adopt.petcenterco.com/admin/chat-widget.js"></script>
+<!-- BUGFIX-MANUS-09-5-START: use the site-root widget path so nested pages do not resolve it relatively. -->
+<script src="/admin/chat-widget.js"></script>
+<!-- BUGFIX-MANUS-09-5-END -->
 <!-- Header -->
 <header class="pc-header">
   <a href="../index.html" class="pc-header__logo">
@@ -647,7 +649,10 @@
       </div>
       <div class="fg">
         <label for="tEmail">Email Address *</label>
-        <input type="email" id="tEmail" name="email" placeholder="you@example.com" required>
+        <!-- BUGFIX-MANUS-03-1 START: email and telephone controls stay LTR under document RTL. -->
+<input type="email" id="tEmail" name="email" placeholder="you@example.com" required dir="ltr">
+<!-- BUGFIX-MANUS-03-1 END -->
+
       </div>
       <div class="fg">
         <label>Rate Your Experience *</label>

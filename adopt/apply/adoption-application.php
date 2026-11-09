@@ -48,7 +48,10 @@ function sanitize_folder($email) {
 }
 
 function safe_name($name) {
-    return preg_replace('/[^A-Za-z0-9_\-\.]/', '_', mb_substr($name, 0, 200));
+    $shortName = function_exists('mb_substr')
+        ? mb_substr($name, 0, 200, 'UTF-8')
+        : substr($name, 0, 200);
+    return preg_replace('/[^A-Za-z0-9_\-\.]/', '_', $shortName);
 }
 
 // TASK-7b START
@@ -190,15 +193,12 @@ if ($postMax && $contentLen > 0 && $contentLen > ini_size_to_bytes($postMax)) {
 }
 
 // ── Config ────────────────────────────────────────────────────────────────────
-
-if (file_exists(__DIR__ . '/config.php')) {
-    require_once __DIR__ . '/config.php';
-}
+require_once __DIR__ . '/apply-env.php';
 
 $admin_defaults = ['adopt@petcenterco.com', 'zeusvictor88@gmail.com'];
-$ADMIN_EMAILS   = (defined('ADMIN_EMAILS') && is_array(ADMIN_EMAILS)) ? ADMIN_EMAILS : $admin_defaults;
-$UPLOAD_BASE    = defined('UPLOAD_BASE') ? UPLOAD_BASE : __DIR__ . '/uploads/adoption-applications/';
-$LOG_FILE       = defined('LOG_FILE')    ? LOG_FILE    : __DIR__ . '/adoption_applications.log';
+$ADMIN_EMAILS   = applyEnvEmails('ADMIN_EMAILS', $admin_defaults);
+$UPLOAD_BASE    = applyEnvPath('UPLOAD_BASE', __DIR__ . '/uploads/adoption-applications/');
+$LOG_FILE       = applyEnvPath('LOG_FILE', __DIR__ . '/adoption_applications.log');
 
 if (!defined('MAX_PER_FIELD')) define('MAX_PER_FIELD', 5);
 if (!defined('MAX_FILE_SIZE')) define('MAX_FILE_SIZE', 5 * 1024 * 1024);
@@ -210,13 +210,16 @@ $ALLOWED_MIME = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'];
 
 $user_email = '';
 foreach (['user_email', 'email', 'userEmail', 'appEmail', 'app_email'] as $k) {
-    if (!empty($_POST[$k])) { $user_email = filter_var(trim($_POST[$k]), FILTER_SANITIZE_EMAIL); break; }
+    if (isset($_POST[$k]) && is_scalar($_POST[$k]) && trim((string)$_POST[$k]) !== '') {
+        $user_email = filter_var(trim((string)$_POST[$k]), FILTER_SANITIZE_EMAIL);
+        break;
+    }
 }
 if (!$user_email || !filter_var($user_email, FILTER_VALIDATE_EMAIL)) {
     json_out(false, 'Please provide a valid email address.');
 }
 
-$applicant_name = !empty($_POST['name']) ? trim($_POST['name']) : '';
+$applicant_name = isset($_POST['name']) && is_scalar($_POST['name']) ? trim((string)$_POST['name']) : '';
 
 // ── Submission ID (use the adoption code generated client-side, validate format) ──
 

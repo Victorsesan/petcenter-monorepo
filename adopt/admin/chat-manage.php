@@ -94,6 +94,23 @@ foreach ($chatIds as $chatId) {
     } else { // delete — permanent, cannot be undone
         try {
             $db->beginTransaction();
+            /* BUGFIX-MANUS-01-3 START — the security tables intentionally use
+               application-level principal_id links rather than foreign keys.
+               Remove every credential, device, lock, reset, token, and audit
+               row before deleting the thread so a permanent delete cannot
+               leave recoverable security state behind. */
+            foreach ([
+                'chat_auth',
+                'chat_remember_device',
+                'chat_lock_settings',
+                'chat_password_resets',
+                'chat_session_token',
+                'chat_auth_audit_log',
+            ] as $securityTable) {
+                $db->prepare("DELETE FROM {$securityTable} WHERE principal_id = ?")
+                   ->execute([$chatId]);
+            }
+            /* BUGFIX-MANUS-01-3 END */
             // chat_messages and chat_events both have ON DELETE CASCADE on
             // thread_id, so deleting the thread row removes all of its
             // messages and events automatically at the database level.
