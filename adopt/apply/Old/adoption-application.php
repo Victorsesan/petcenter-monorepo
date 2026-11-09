@@ -82,15 +82,12 @@ if ($postMax && $contentLen > 0 && $contentLen > ini_size_to_bytes($postMax)) {
 }
 
 // ── Config ────────────────────────────────────────────────────────────────────
-
-if (file_exists(__DIR__ . '/config.php')) {
-    require_once __DIR__ . '/config.php';
-}
+require_once __DIR__ . '/../apply-env.php';
 
 $admin_defaults = ['adopt@petcenterco.com', 'zeusvictor88@gmail.com'];
-$ADMIN_EMAILS   = (defined('ADMIN_EMAILS') && is_array(ADMIN_EMAILS)) ? ADMIN_EMAILS : $admin_defaults;
-$UPLOAD_BASE    = defined('UPLOAD_BASE') ? UPLOAD_BASE : __DIR__ . '/uploads/adoption-applications/';
-$LOG_FILE       = defined('LOG_FILE')    ? LOG_FILE    : __DIR__ . '/adoption_applications.log';
+$ADMIN_EMAILS   = applyEnvEmails('ADMIN_EMAILS', $admin_defaults);
+$UPLOAD_BASE    = applyEnvPath('UPLOAD_BASE', __DIR__ . '/uploads/adoption-applications/');
+$LOG_FILE       = applyEnvPath('LOG_FILE', __DIR__ . '/adoption_applications.log');
 
 if (!defined('MAX_PER_FIELD')) define('MAX_PER_FIELD', 5);
 if (!defined('MAX_FILE_SIZE')) define('MAX_FILE_SIZE', 5 * 1024 * 1024);
