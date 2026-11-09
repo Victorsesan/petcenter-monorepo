@@ -48,7 +48,10 @@ function sanitize_folder($email) {
 }
 
 function safe_name($name) {
-    return preg_replace('/[^A-Za-z0-9_\-\.]/', '_', mb_substr($name, 0, 200));
+    $shortName = function_exists('mb_substr')
+        ? mb_substr($name, 0, 200, 'UTF-8')
+        : substr($name, 0, 200);
+    return preg_replace('/[^A-Za-z0-9_\-\.]/', '_', $shortName);
 }
 
 // TASK-7b START
@@ -210,13 +213,16 @@ $ALLOWED_MIME = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'];
 
 $user_email = '';
 foreach (['user_email', 'email', 'userEmail', 'appEmail', 'app_email'] as $k) {
-    if (!empty($_POST[$k])) { $user_email = filter_var(trim($_POST[$k]), FILTER_SANITIZE_EMAIL); break; }
+    if (isset($_POST[$k]) && is_scalar($_POST[$k]) && trim((string)$_POST[$k]) !== '') {
+        $user_email = filter_var(trim((string)$_POST[$k]), FILTER_SANITIZE_EMAIL);
+        break;
+    }
 }
 if (!$user_email || !filter_var($user_email, FILTER_VALIDATE_EMAIL)) {
     json_out(false, 'Please provide a valid email address.');
 }
 
-$applicant_name = !empty($_POST['name']) ? trim($_POST['name']) : '';
+$applicant_name = isset($_POST['name']) && is_scalar($_POST['name']) ? trim((string)$_POST['name']) : '';
 
 // ── Submission ID (use the adoption code generated client-side, validate format) ──
 

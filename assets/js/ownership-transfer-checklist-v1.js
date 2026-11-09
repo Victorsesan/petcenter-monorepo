@@ -1,4 +1,7 @@
 /* <!-- TASK-D1 START --> */
+// BUGFIX-MANUS-06-2-IMPORT-START — share D1's safe URL scheme check for uploaded docs.
+const { safeActionUrl } = require('./visitor-notifications-v1.js');
+// BUGFIX-MANUS-06-2-IMPORT-END
 /**
  * D1 — Ownership Transfer Checklist
  * ----------------------------------
@@ -175,13 +178,17 @@ function renderChecklistModalContent(listing, onToggle) {
  * the platform too.
  */
 function renderVetDocumentLink(listing) {
+  // BUGFIX-MANUS-06-2-RENDER-START — escaping alone permits javascript: hrefs.
   if (listing.vet_document_url) {
+    const safeUrl = safeActionUrl(listing.vet_document_url);
+    if (!safeUrl) return ` <span style="color:var(--muted);font-style:italic;">(document link unavailable)</span>`;
     // Escaped: this URL comes from an uploaded file's stored location, not
     // a hardcoded string, so it must not be trusted as safe markup as-is.
-    const safeUrl = escapeHtml(listing.vet_document_url);
-    return ` &mdash; <a href="${safeUrl}" target="_blank" rel="noopener" style="color:var(--primary);text-decoration:underline;">view uploaded document</a>`;
+    const escapedUrl = escapeHtml(safeUrl);
+    return ` &mdash; <a href="${escapedUrl}" target="_blank" rel="noopener" style="color:var(--primary);text-decoration:underline;">view uploaded document</a>`;
   }
   return ` <span style="color:var(--muted);font-style:italic;">(no document uploaded yet)</span>`;
+  // BUGFIX-MANUS-06-2-RENDER-END
 }
 
 module.exports = {

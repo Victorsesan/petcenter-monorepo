@@ -42,6 +42,7 @@ $statements = [
             unread_for_admin    TINYINT(1) DEFAULT 1,
             unread_for_user     TINYINT(1) DEFAULT 0,
             archived            TINYINT(1) NOT NULL DEFAULT 0,
+            preferred_chat_language VARCHAR(10) NULL, /* AP4-TASK-3 */
             INDEX (email), INDEX (status), INDEX (chat_id), INDEX (archived)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
     ",
@@ -62,6 +63,15 @@ $statements = [
             edited_at     TIMESTAMP NULL,
             original_body TEXT NULL,
             deleted_at    TIMESTAMP NULL,
+            /* TASK-admin234-1a START — on-demand cached speech transcript fields. */
+            transcript TEXT NULL,
+            transcript_status ENUM('none','pending','done','failed') NOT NULL DEFAULT 'none',
+            transcript_confidence DECIMAL(4,3) NULL,
+            /* TASK-admin234-1b START — cache detected source language for native read-aloud. */
+            transcript_language VARCHAR(16) NULL,
+            /* TASK-admin234-1b END */
+            transcript_started_at TIMESTAMP NULL,
+            /* TASK-admin234-1a END */
             created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (thread_id) REFERENCES chat_threads(id) ON DELETE CASCADE,
             INDEX (thread_id, created_at),
@@ -137,6 +147,60 @@ $statements = [
             draft_key     VARCHAR(64) PRIMARY KEY,
             body          TEXT NOT NULL,
             updated_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+    ",
+
+    /* TASK-3 START — shared PIN/password protection record. Passwords and
+       PINs use the same adaptive-hash columns and only the tier changes. */
+    'chat_auth' => "
+        CREATE TABLE IF NOT EXISTS chat_auth (
+            principal_id    VARCHAR(20) PRIMARY KEY,
+            auth_tier       ENUM('none','pin','password') NOT NULL DEFAULT 'none',
+            secret_hash     VARCHAR(255) NULL,
+            salt            VARCHAR(64) NULL,
+            failed_attempts INT NOT NULL DEFAULT 0,
+            locked_until    DATETIME NULL,
+            created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            INDEX (auth_tier), INDEX (locked_until)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+    ",
+    /* TASK-5 START — one-way remembered-device verifiers only. */
+    'chat_remember_device' => "
+        CREATE TABLE IF NOT EXISTS chat_remember_device (
+            id                 INT AUTO_INCREMENT PRIMARY KEY,
+            principal_id       VARCHAR(20) NOT NULL,
+            device_fingerprint CHAR(64) NOT NULL,
+            label              VARCHAR(120) NOT NULL,
+            last_used_at       TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            created_at         TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            UNIQUE KEY uq_chat_device (principal_id, device_fingerprint),
+            INDEX (principal_id)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+    ",
+    /* TASK-4 START — authoritative server-side lock timestamps. */
+    'chat_lock_settings' => "
+        CREATE TABLE IF NOT EXISTS chat_lock_settings (
+            principal_id   VARCHAR(20) PRIMARY KEY,
+            delay_seconds  INT NOT NULL DEFAULT 300,
+            aggressive     TINYINT(1) NOT NULL DEFAULT 0,
+            last_closed_at DATETIME NULL,
+            locked_at      DATETIME NULL,
+            updated_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            INDEX (locked_at)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+    ",
+    /* TASK-6 START — single-use temporary password records. */
+    'chat_password_resets' => "
+        CREATE TABLE IF NOT EXISTS chat_password_resets (
+            id           INT AUTO_INCREMENT PRIMARY KEY,
+            principal_id VARCHAR(20) NOT NULL,
+            contact_email VARCHAR(255) NOT NULL,
+            temp_hash    VARCHAR(255) NOT NULL,
+            expires_at   DATETIME NOT NULL,
+            used_at      DATETIME NULL,
+            created_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            INDEX (principal_id), INDEX (contact_email), INDEX (expires_at)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
     ",
 

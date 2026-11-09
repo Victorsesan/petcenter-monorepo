@@ -16,6 +16,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
 <style>
+/* TASK-web12-3 START: logical CSS properties for RTL */
 /* ==========================================================================
    TASK-B1 START — Root palette
    Core PetCenter brand palette (Design System Section 2). This is a
@@ -50,13 +51,13 @@ body {
   color: var(--text);
   line-height: 1.6;
 }
-h1, h2, h3 { font-family: 'Cormorant Garamond', serif; color: var(--primary); margin: 0 0 8px; }
+h1, h2, h3 { font-family: 'Cormorant Garamond', serif; color: var(--primary); margin-block: 0 8px; margin-inline: 0; }
 .numeral, .step-num { font-family: 'Bitter', serif; } /* Section 1: all numerals use Bitter, never Cormorant */
 
 .page-wrap {
   max-width: 680px;
-  margin: 0 auto;
-  padding: 32px 20px 80px;
+  margin-block: 0; margin-inline: auto;
+  padding-block: 32px 80px; padding-inline: 20px;
 }
 .brand-row {
   display: flex; align-items: center; gap: 10px;
@@ -80,7 +81,7 @@ h1, h2, h3 { font-family: 'Cormorant Garamond', serif; color: var(--primary); ma
 .stepper .step.done .circle { border-color: var(--success); color: #fff; background: var(--success); }
 .stepper .label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; text-align: center; }
 .stepper .step.active .label { color: var(--primary); font-weight: 600; }
-.stepper .connector { position: absolute; top: 17px; left: calc(-50% + 17px); width: calc(100% - 34px); height: 2px; background: var(--border); z-index: -1; }
+.stepper .connector { position: absolute; top: 17px; inset-inline-start: calc(-50% + 17px); width: calc(100% - 34px); height: 2px; background: var(--border); z-index: -1; }
 .stepper .step.done .connector, .stepper .step.active .connector { background: var(--orange); }
 .stepper .step:first-child .connector { display: none; }
 
@@ -97,7 +98,7 @@ h1, h2, h3 { font-family: 'Cormorant Garamond', serif; color: var(--primary); ma
 /* ---------- Buttons (Design System Section 17: never Orange next to Orange/Navy) ---------- */
 .btn {
   font-family: 'Sora', sans-serif; font-weight: 600; font-size: 14px;
-  padding: 12px 22px; border-radius: 9px; border: none; cursor: pointer;
+  padding-block: 12px; padding-inline: 22px; border-radius: 9px; border: none; cursor: pointer;
   transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px;
 }
 .btn--primary { background: var(--orange); color: #fff; }
@@ -106,7 +107,7 @@ h1, h2, h3 { font-family: 'Cormorant Garamond', serif; color: var(--primary); ma
 .btn--secondary { background: #f0ede8; color: var(--primary); border: 1px solid var(--border); }
 .btn--secondary:hover { background: var(--border); }
 .small-btn {
-  background: #f3f4f6; border-radius: 6px; padding: 6px 8px; border: 1px solid #e5e7eb;
+  background: #f3f4f6; border-radius: 6px; padding-block: 6px; padding-inline: 8px; border: 1px solid #e5e7eb;
   color: #111; cursor: pointer; font-size: 13px; font-family: 'Sora', sans-serif; transition: background 0.2s;
 }
 .small-btn:hover { background: #e5e7eb; }
@@ -114,14 +115,14 @@ h1, h2, h3 { font-family: 'Cormorant Garamond', serif; color: var(--primary); ma
 /* ---------- Liveness check UI ---------- */
 .camera-frame {
   position: relative; width: 100%; max-width: 420px; aspect-ratio: 4/3;
-  margin: 0 auto 18px; border-radius: 12px; overflow: hidden; background: #0d1730;
+  margin-block: 0 18px; margin-inline: auto; border-radius: 12px; overflow: hidden; background: #0d1730;
   border: 2px solid var(--border);
 }
 .camera-frame video { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
 .camera-frame.recording { border-color: var(--error); }
 .rec-dot {
-  position: absolute; top: 10px; left: 10px; display: flex; align-items: center; gap: 6px;
-  background: rgba(0,0,0,0.55); color: #fff; font-size: 12px; padding: 4px 10px; border-radius: 999px;
+  position: absolute; top: 10px; inset-inline-start: 10px; display: flex; align-items: center; gap: 6px;
+  background: rgba(0,0,0,0.55); color: #fff; font-size: 12px; padding-block: 4px; padding-inline: 10px; border-radius: 999px;
   display: none;
 }
 .camera-frame.recording .rec-dot { display: flex; }
@@ -159,19 +160,19 @@ h1, h2, h3 { font-family: 'Cormorant Garamond', serif; color: var(--primary); ma
 .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.65); display: none; align-items: center; justify-content: center; z-index: 9999; padding: 16px; }
 .modal.open { display: flex; }
 .modal-box { background: #fff; border-radius: 12px; padding: 0; max-width: 600px; width: 100%; max-height: 85vh; max-height: 85dvh; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.3); display: flex; flex-direction: column; }
-.modal-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 14px 18px; border-bottom: 1px solid var(--border); flex-shrink: 0; background: #fff; }
+.modal-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding-block: 14px; padding-inline: 18px; border-bottom: 1px solid var(--border); flex-shrink: 0; background: #fff; }
 .modal-top__actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
-.modal-scroll { flex: 1; overflow-y: auto; padding: 20px 20px 24px; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
-.modal-close { padding: 6px 12px; background: #f0ede8; border: 1px solid var(--border); border-radius: 6px; cursor: pointer; font-size: 13px; font-family: 'Sora', sans-serif; font-weight: 500; color: var(--text); transition: all 0.2s; flex-shrink: 0; }
+.modal-scroll { flex: 1; overflow-y: auto; padding-block: 20px 24px; padding-inline: 20px; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+.modal-close { padding-block: 6px; padding-inline: 12px; background: #f0ede8; border: 1px solid var(--border); border-radius: 6px; cursor: pointer; font-size: 13px; font-family: 'Sora', sans-serif; font-weight: 500; color: var(--text); transition: all 0.2s; flex-shrink: 0; }
 .modal-close:hover { background: var(--border); color: var(--primary); }
 .modal-content img { max-width: 100%; height: auto; border-radius: 8px; }
 .success-modal { text-align: center; padding: 24px; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
-.success-icon { width: 64px; height: 64px; background: rgba(13,124,74,0.12); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; } /* exact color from Design System Section 5's canonical "Use A" markup */
-.success-warning { background: #fff8e7; border: 1.5px solid rgba(237,118,36,0.2); border-radius: 8px; padding: 16px; margin: 20px 0; font-size: 13.5px; line-height: 1.7; color: #6b4d2a; text-align: left; }
+.success-icon { width: 64px; height: 64px; background: rgba(13,124,74,0.12); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-block: 0 20px; margin-inline: auto; } /* exact color from Design System Section 5's canonical "Use A" markup */
+.success-warning { background: #fff8e7; border: 1.5px solid rgba(237,118,36,0.2); border-radius: 8px; padding: 16px; margin-block: 20px; margin-inline: 0; font-size: 13.5px; line-height: 1.7; color: #6b4d2a; text-align: start; }
 .success-warning strong { display: block; color: #c67c1a; margin-bottom: 8px; font-size: 14px; font-weight: 700; }
 .success-modal .btn { margin-top: 20px; }
 
-.gate-msg { text-align: center; padding: 60px 20px; }
+.gate-msg { text-align: center; padding-block: 60px; padding-inline: 20px; }
 .gate-msg .icon { color: var(--muted); margin-bottom: 12px; }
 
 .error-inline { color: var(--error); font-size: 13.5px; margin-top: 10px; display: none; align-items: center; gap: 6px; }
@@ -179,10 +180,12 @@ h1, h2, h3 { font-family: 'Cormorant Garamond', serif; color: var(--primary); ma
 .step-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
 
 @media (max-width: 480px) {
-  .panel { padding: 20px 16px; }
+  .panel { padding-block: 20px; padding-inline: 16px; }
   .stepper .label { font-size: 9.5px; }
 }
 /* TASK-B1 END — Root palette / shared component CSS */
+
+/* TASK-web12-3 END */
 </style>
 </head>
 <body>
@@ -271,12 +274,12 @@ h1, h2, h3 { font-family: 'Cormorant Garamond', serif; color: var(--primary); ma
 
       <div class="field">
         <label>Email</label>
-        <div id="emailDisplay" style="padding:11px 14px;border:1.5px solid var(--border);border-radius:9px;background:#fafaf8;color:var(--text);"></div>
+        <div id="emailDisplay" style="padding-block: 11px; padding-inline: 14px;border:1.5px solid var(--border);border-radius:9px;background:#fafaf8;color:var(--text);"></div>
       </div>
 
       <div class="field">
         <label>Country</label>
-        <div id="countryDisplay" style="padding:11px 14px;border:1.5px solid var(--border);border-radius:9px;background:#fafaf8;color:var(--text);"></div>
+        <div id="countryDisplay" style="padding-block: 11px; padding-inline: 14px;border:1.5px solid var(--border);border-radius:9px;background:#fafaf8;color:var(--text);"></div>
       </div>
 
       <div class="error-inline" id="submitError"><i class="fa-solid fa-triangle-exclamation"></i> <span></span></div>
@@ -766,5 +769,8 @@ function initSubmitStep() {
 }
 /* TASK-B1 END — Verify-account flow controller */
 </script>
+<script src="/assets/js/accessibility-widget.js" defer></script>
+
+<script src="/admin/chat-widget.js"></script>
 </body>
 </html>

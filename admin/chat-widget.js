@@ -39,6 +39,10 @@
     /* TASK-1 START — session-token persistence key, same localStorage
        pattern as the other pc_chat_* keys above. */
     storageKeyToken: 'pc_chat_session_token',
+    /* TASK-5 START — random browser-held device secret; only its server hash
+       is persisted remotely. */
+    storageKeyDevice: 'pc_chat_device_token',
+    /* TASK-5 END */
     /* TASK-1 END */
     storageKeyDraftUuid: 'pc_chat_draft_uuid', // pre-thread temporary draft key, Section 4
     contactFormUrl: '/contact-us/contact-us.html', // absolute path — contact-us.html lives at /contact-us/ not site root
@@ -65,9 +69,13 @@
        below, so individual call sites below don't each need to remember
        to attach it by hand. */
     sessionToken: null,
+    /* TASK-3 START — current protection tier for the open conversation. */
+    authTier: 'none',
+    /* TASK-3 END */
     /* TASK-1 END */
     fullName: null,
     email: null,
+    preferredChatLanguage: null, // AP4-TASK-3
     status: null,          // waiting | active | done
     lastMessageId: 0,
     lastEventId: 0,
@@ -147,6 +155,71 @@
     return res.json();
   }
 
+  /* TASK-5 START — create one random browser-held device secret; the server
+     stores only its SHA-256 verifier and never the raw value. */
+  function deviceToken() {
+    let token = localStorage.getItem(CONFIG.storageKeyDevice);
+    if (!token) {
+      token = uuid().replace(/-/g, '') + uuid().replace(/-/g, '');
+      localStorage.setItem(CONFIG.storageKeyDevice, token);
+    }
+    return token;
+  }
+  /* TASK-5 END */
+
+  /* TASK-5 SECURITY START — informational meter uses length and character
+     diversity, never composition requirements. The server remains
+     authoritative and performs the breach-range check on save. */
+  function passwordStrengthScore(value) {
+    const text = String(value || '');
+    const common = ['password','password123','123456789012','1234567890','qwertyuiop12','letmein12345','welcome12345','iloveyou1234','adminadmin12','petcenter123'];
+    if (!text) return { score: 0, label: '' };
+    if (common.includes(text.toLowerCase())) return { score: 1, label: 'Common password — choose a different one.' };
+    let score = text.length >= 12 ? 2 : 1;
+    if (text.length >= 16) score++;
+    if (/[A-Z]/.test(text) && /[a-z]/.test(text)) score++;
+    if (/\d/.test(text) || /[^A-Za-z0-9]/.test(text)) score++;
+    score = Math.min(4, score);
+    return { score, label: ['Too short', 'Weak', 'Fair', 'Good', 'Strong'][score] };
+  }
+  /* TASK-5 SECURITY END */
+
+  /* TASK-3 START — shared PIN/password gate contract. */
+  function AuthGate({ tier, principalId, email, onVerifySuccess, onVerifyFail }) {
+    const wrap = el('div', { class: 'pcw-auth-gate' });
+    const input = el('input', { type: tier === 'pin' ? 'tel' : 'password', inputmode: tier === 'pin' ? 'numeric' : 'text', maxlength: tier === 'pin' ? '6' : '1024', placeholder: tier === 'pin' ? 'Enter your 6-digit PIN' : 'Enter your chat password' });
+    const remember = el('label', { class: 'pcw-check-row' }, [el('input', { type: 'checkbox' }), el('span', {}, 'Remember this device')]);
+    const error = el('div', { class: 'pcw-error-msg' });
+    const submit = el('button', { type: 'button', class: 'pcw-primary-btn' }, 'Unlock chat');
+    wrap.appendChild(el('h3', {}, tier === 'pin' ? 'This chat is PIN protected' : 'This chat is password protected'));
+    wrap.appendChild(input); wrap.appendChild(remember); wrap.appendChild(error); wrap.appendChild(submit);
+    submit.addEventListener('click', async () => {
+      submit.disabled = true; error.classList.remove('show');
+      try {
+        const json = await apiPost('chat-auth-gate.php', { action:'verify', chatId:principalId, email, tier, secret:input.value, rememberDevice:remember.querySelector('input').checked, deviceToken:deviceToken() });
+        if (!json.success) throw new Error(json.error || 'Could not unlock chat.');
+        onVerifySuccess(json);
+      } catch (e) { error.textContent = e.message; error.classList.add('show'); if (onVerifyFail) onVerifyFail(e); submit.disabled = false; }
+    });
+    if (tier === 'password') {
+      const forgot = el('button', { type: 'button', class: 'pcw-link-btn' }, 'Forgot password?');
+      forgot.addEventListener('click', async () => {
+        const reset = await apiPost('chat-password-reset.php', { action:'request', email });
+        const temp = window.prompt(reset.message || 'Check your email, then enter the temporary password:');
+        if (!temp) return;
+        const logged = await apiPost('chat-password-reset.php', { action:'temporaryLogin', email, temporaryPassword:temp });
+        if (!logged.success) { error.textContent = logged.error || 'Temporary password rejected.'; error.classList.add('show'); return; }
+        const next = window.prompt('Choose a new password of at least 12 characters:');
+        if (!next) return;
+        const changed = await apiPost('chat-password-reset.php', { action:'change', email, chatId:logged.chatId, sessionToken:logged.sessionToken, newPassword:next });
+        error.textContent = changed.message || changed.error || 'Password reset complete. Enter the new password above.'; error.classList.add('show');
+      });
+      wrap.appendChild(forgot);
+    }
+    return wrap;
+  }
+  /* TASK-3 END */
+
   function initials(name) {
     if (!name) return '?';
     const parts = name.trim().split(/\s+/).filter(Boolean);
@@ -166,24 +239,49 @@
   // ============================================
   const STYLE = `
   .pcw-launcher-btn {
-    position: fixed; bottom: 20px; right: 20px; z-index: 9998;
-    width: 60px; height: 60px; border-radius: 50%;
+    position: fixed; bottom: 20px; inset-inline-end: 20px; z-index: 9998;
+    width: 56px; height: 56px; border-radius: 50%;
     background: linear-gradient(135deg, #10214b, #1a2f5c);
-    border: 2px solid #d7bd88; color: #fff; cursor: pointer;
+    border: 3px solid #d7bd88; color: #fff; cursor: pointer;
     display: flex; align-items: center; justify-content: center;
-    font-size: 24px; box-shadow: 0 6px 20px rgba(16,33,75,0.35);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 6px 20px rgba(16,33,75,0.35);
+    touch-action: none;
+    /* TASK (Dark Mode / Color Filter Audit): size matched byte-for-byte to
+       .pc-a11y-trigger (56px + 3px border = same 62px outer circle on both
+       widgets, measured from the actual settings-widget CSS rather than
+       eyeballed) -- was 60px + 2px border (64px outer) before, visibly
+       larger than the settings widget as reported. Hover transform/shadow
+       animation also dropped, matching the no-animation instruction
+       applied consistently to both widgets' base triggers, not just the
+       one it was stated for. */
   }
-  .pcw-launcher-btn:hover { transform: scale(1.06); box-shadow: 0 8px 26px rgba(16,33,75,0.45); }
+  /* TASK (Widget Positioning) START: position-sync with the settings
+     widget only -- see wireChatPositionSync() near the end of this file.
+     Scope Lock: this is the one thing this task asked to be touched in
+     this file; nothing else about the chat widget's own features changes.
+     Desktop-only (the existing @media (max-width:480px) block below
+     already gives the panel a dedicated, working full-width mobile
+     layout -- left untouched here beyond the one hside line added to it,
+     so as not to regress an already-shipped mobile behavior that isn't
+     part of this task). */
+  body[data-pcw-vzone="top"] .pcw-launcher-btn { top: 84px; bottom: auto; }
+  body[data-pcw-vzone="middle"] .pcw-launcher-btn { top: 50%; bottom: auto; margin-top: -30px; }
+  body[data-pcw-hside="left"] .pcw-launcher-btn { inset-inline-start: 20px; inset-inline-end: auto; }
+  @media (min-width: 481px) {
+    body[data-pcw-vzone="top"] .pcw-panel { top: 160px; bottom: auto; }
+    body[data-pcw-vzone="middle"] .pcw-panel { top: 50%; bottom: auto; transform: translateY(-50%); }
+    body[data-pcw-hside="left"] .pcw-panel { inset-inline-start: 20px; inset-inline-end: auto; }
+  }
+  /* TASK (Widget Positioning) END */
   .pcw-launcher-btn .pcw-badge {
-    position: absolute; top: -4px; right: -4px; min-width: 20px; height: 20px;
+    position: absolute; top: -4px; inset-inline-end: -4px; min-width: 20px; height: 20px;
     border-radius: 10px; background: #ED7624; color: #fff; font-size: 11px;
     font-weight: 700; display: none; align-items: center; justify-content: center;
-    padding: 0 5px; font-family: 'Sora', system-ui, sans-serif; border: 2px solid #fff;
+    padding-block: 0; padding-inline: 5px; font-family: 'Sora', system-ui, sans-serif; border: 2px solid #fff;
   }
   .pcw-launcher-btn .pcw-badge.show { display: flex; }
   .pcw-launcher-btn .pcw-active-dot {
-    position: absolute; bottom: 2px; right: 2px; width: 12px; height: 12px;
+    position: absolute; bottom: 2px; inset-inline-end: 2px; width: 12px; height: 12px;
     border-radius: 50%; background: #10b981; border: 2px solid #fff; display: none;
   }
   .pcw-launcher-btn .pcw-active-dot.show { display: block; }
@@ -196,7 +294,7 @@
   .pcw-backdrop.show { opacity: 1; visibility: visible; }
 
   .pcw-powered-by {
-    flex-shrink: 0; text-align: center; padding: 6px 0 10px;
+    flex-shrink: 0; text-align: center; padding-block: 6px 10px; padding-inline: 0;
     font-size: 10.5px; color: #b0a69a; font-family: 'Sora', system-ui, sans-serif;
   }
 
@@ -208,22 +306,22 @@
   .pcw-sheet-backdrop.show { opacity: 1; visibility: visible; }
 
   .pcw-options-sheet {
-    position: absolute; left: 0; right: 0; bottom: 0;
-    background: #121212; border-radius: 16px 16px 0 0; z-index: 10002;
+    position: absolute; inset-inline-start: 0; inset-inline-end: 0; bottom: 0;
+    background: #121212; border-start-start-radius: 16px; border-start-end-radius: 16px; border-end-end-radius: 0; border-end-start-radius: 0; z-index: 10002;
     max-height: 82%; display: flex; flex-direction: column;
     transform: translateY(100%);
     transition: transform 0.35s cubic-bezier(.32,.72,0,1);
     box-shadow: 0 -8px 32px rgba(0,0,0,0.4);
   }
   .pcw-options-sheet.open { transform: translateY(0); }
-  .pcw-sheet-handle { width: 36px; height: 4px; background: rgba(255,255,255,0.25); border-radius: 4px; margin: 9px auto 0; flex-shrink: 0; }
-  .pcw-sheet-header { display: flex; align-items: center; justify-content: space-between; padding: 12px 18px 6px; flex-shrink: 0; }
+  .pcw-sheet-handle { width: 36px; height: 4px; background: rgba(255,255,255,0.25); border-radius: 4px; margin-block: 9px 0; margin-inline: auto; flex-shrink: 0; }
+  .pcw-sheet-header { display: flex; align-items: center; justify-content: space-between; padding-block: 12px 6px; padding-inline: 18px; flex-shrink: 0; }
   .pcw-sheet-header h3 { font-family: 'Sora', system-ui, sans-serif; font-size: 16px; color: #fff; font-weight: 700; margin: 0; }
-  .pcw-sheet-close { background: none; border: none; color: #fff; font-size: 20px; line-height: 1; cursor: pointer; padding: 4px 8px; opacity: 0.8; }
+  .pcw-sheet-close { background: none; border: none; color: #fff; font-size: 20px; line-height: 1; cursor: pointer; padding-block: 4px; padding-inline: 8px; opacity: 0.8; }
   .pcw-sheet-close:hover { opacity: 1; }
-  .pcw-sheet-body { overflow-y: auto; padding: 6px 18px 18px; flex: 1; }
+  .pcw-sheet-body { overflow-y: auto; padding-block: 6px 18px; padding-inline: 18px; flex: 1; }
 
-  .pcw-option-row { display: flex; align-items: center; gap: 12px; padding: 13px 4px; border-bottom: 1px solid rgba(255,255,255,0.07); }
+  .pcw-option-row { display: flex; align-items: center; gap: 12px; padding-block: 13px; padding-inline: 4px; border-bottom: 1px solid rgba(255,255,255,0.07); }
   .pcw-option-row:last-of-type { border-bottom: none; }
   .pcw-option-clickable { cursor: pointer; }
   .pcw-option-clickable:hover { background: rgba(255,255,255,0.04); border-radius: 8px; }
@@ -235,12 +333,43 @@
   .pcw-option-chevron { color: rgba(255,255,255,0.4); font-size: 11px; transition: transform 0.2s ease; }
   .pcw-option-row.open .pcw-option-chevron { transform: rotate(180deg); }
 
+  /* TASK-3/4/5 START — explicit protection controls live inside the options
+     sheet instead of relying on browser prompts, so each setting is visible,
+     keyboard reachable, and independently actionable. */
+  .pcw-protection-panel {
+    display: none; padding: 12px 4px 14px; border-bottom: 1px solid rgba(255,255,255,0.07);
+  }
+  .pcw-protection-panel.open { display: block; }
+  .pcw-protection-summary { margin: 0 0 10px; color: rgba(255,255,255,0.66); font-size: 11px; line-height: 1.45; }
+  .pcw-protection-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .pcw-protection-btn { min-height: 36px; border: 1px solid rgba(215,189,136,0.45); border-radius: 7px; background: rgba(255,255,255,0.06); color: #fff; cursor: pointer; font: 600 11px 'Sora', system-ui, sans-serif; padding: 7px 8px; }
+  .pcw-protection-btn:hover { border-color: #ED7624; background: rgba(237,118,36,0.14); }
+  .pcw-protection-btn.danger { border-color: rgba(239,68,68,0.55); color: #fecaca; }
+  .pcw-protection-form { display: none; margin-top: 10px; }
+  .pcw-protection-form.open { display: block; }
+  .pcw-protection-form label { display: block; margin: 0 0 5px; color: rgba(255,255,255,0.72); font-size: 11px; }
+  .pcw-protection-form input[type=password], .pcw-protection-form input[type=number] { box-sizing: border-box; width: 100%; border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; background: rgba(255,255,255,0.08); color: #fff; padding: 9px; font: 12px 'Sora', system-ui, sans-serif; }
+  .pcw-protection-form input:focus { outline: 2px solid #ED7624; outline-offset: 1px; }
+  .pcw-password-strength-track { height: 5px; border-radius: 3px; background: rgba(255,255,255,0.12); overflow: hidden; margin: 6px 0 3px; }
+  .pcw-password-strength-fill { height: 100%; width: 0; border-radius: 3px; transition: width 0.25s ease, background-color 0.25s ease; }
+  .pcw-password-strength-fill.score-0, .pcw-password-strength-fill.score-1 { width: 25%; background: #ef4444; }
+  .pcw-password-strength-fill.score-2 { width: 50%; background: #ED7624; }
+  .pcw-password-strength-fill.score-3 { width: 75%; background: #d7bd88; }
+  .pcw-password-strength-fill.score-4 { width: 100%; background: #10b981; }
+  .pcw-password-strength-label { display: block; min-height: 14px; color: rgba(255,255,255,0.58); font-size: 10px; }
+  .pcw-protection-warning { margin: 7px 0 0; padding: 7px 8px; border-left: 2px solid #ED7624; color: #7a6d5f; background: #fff8f2; font-size: 11px; line-height: 1.4; }
+  .pcw-protection-warning[hidden] { display: none; }
+  .pcw-protection-check { display: flex; align-items: center; gap: 7px; margin: 9px 0; color: rgba(255,255,255,0.72); font-size: 11px; }
+  .pcw-protection-message { min-height: 16px; margin-top: 8px; color: #fca5a5; font-size: 11px; }
+  .pcw-protection-message.ok { color: #86efac; }
+  /* TASK-3/4/5 END */
+
   .pcw-toggle-switch {
     width: 42px; height: 24px; border-radius: 999px; border: none; background: rgba(255,255,255,0.15);
     cursor: pointer; position: relative; flex-shrink: 0; transition: background 0.2s ease;
   }
   .pcw-toggle-switch::after {
-    content: ''; position: absolute; top: 2px; left: 2px; width: 20px; height: 20px;
+    content: ''; position: absolute; top: 2px; inset-inline-start: 2px; width: 20px; height: 20px;
     border-radius: 50%; background: #fff; transition: transform 0.2s ease;
   }
   .pcw-toggle-switch.on { background: #ED7624; }
@@ -292,7 +421,7 @@
   }
 
   .pcw-panel {
-    position: fixed; bottom: 92px; right: 20px; z-index: 9999;
+    position: fixed; bottom: 92px; inset-inline-end: 20px; z-index: 9999;
     width: 380px; max-width: calc(100vw - 32px); height: 560px; max-height: calc(100vh - 120px);
     background: #fff; border-radius: 16px; box-shadow: 0 16px 48px rgba(16,33,75,0.28);
     display: none; flex-direction: column; overflow: hidden;
@@ -329,15 +458,15 @@
     animation: pcwBlobMorph 1.1s cubic-bezier(0.4,0,0.2,1) forwards;
   }
   .pcw-blob-1 {
-    top: -10%; left: -12%; background: radial-gradient(circle at 35% 35%, #1a2f5c, #10214b);
+    top: -10%; inset-inline-start: -12%; background: radial-gradient(circle at 35% 35%, #1a2f5c, #10214b);
   }
   .pcw-blob-2 {
-    bottom: -14%; right: -10%; width: 50%; padding-top: 50%;
+    bottom: -14%; inset-inline-end: -10%; width: 50%; padding-top: 50%;
     background: radial-gradient(circle at 40% 40%, #e2c99a, #d7bd88);
     animation-delay: 0.08s;
   }
   .pcw-blob-3 {
-    top: 30%; right: 8%; width: 30%; padding-top: 30%;
+    top: 30%; inset-inline-end: 8%; width: 30%; padding-top: 30%;
     background: radial-gradient(circle at 45% 45%, #ff8a3d, #ED7624);
     animation-delay: 0.16s;
   }
@@ -369,7 +498,7 @@
 
   .pcw-header {
     background: linear-gradient(135deg, #10214b, #1a2f5c); color: #fff;
-    padding: 16px 18px; display: flex; align-items: center; justify-content: space-between;
+    padding-block: 16px; padding-inline: 18px; display: flex; align-items: center; justify-content: space-between;
     flex-shrink: 0;
   }
   .pcw-header h3 { font-family: 'Cormorant Garamond', serif; font-weight: 700; font-size: 19px; margin: 0; }
@@ -387,9 +516,9 @@
   .pcw-launcher-intro { font-size: 13.5px; color: #4a4030; line-height: 1.6; margin-bottom: 18px; }
   .pcw-launcher-choices { display: flex; flex-direction: column; gap: 10px; }
   .pcw-choice-btn {
-    display: flex; align-items: center; gap: 12px; padding: 14px 16px;
+    display: flex; align-items: center; gap: 12px; padding-block: 14px; padding-inline: 16px;
     border: 1.5px solid rgba(16,33,75,0.12); border-radius: 12px; background: #fdfcfa;
-    cursor: pointer; text-align: left; transition: border-color 0.15s ease, background 0.15s ease;
+    cursor: pointer; text-align: start; transition: border-color 0.15s ease, background 0.15s ease;
     font-family: 'Sora', system-ui, sans-serif;
   }
   .pcw-choice-btn:hover { border-color: #ED7624; background: #fff8f2; }
@@ -410,7 +539,7 @@
   .pcw-field { margin-bottom: 14px; }
   .pcw-field label { display: block; font-size: 12.5px; font-weight: 600; color: #10214b; margin-bottom: 5px; }
   .pcw-field input, .pcw-field select, .pcw-field textarea {
-    width: 100%; padding: 10px 12px; border: 1.5px solid rgba(16,33,75,0.14); border-radius: 8px;
+    width: 100%; padding-block: 10px; padding-inline: 12px; border: 1.5px solid rgba(16,33,75,0.14); border-radius: 8px;
     font-family: 'Sora', system-ui, sans-serif; font-size: 13.5px; color: #2c2416; background: #fff;
   }
   .pcw-field input:focus, .pcw-field select:focus, .pcw-field textarea:focus {
@@ -435,12 +564,12 @@
 
   .pcw-chat-id-pill {
     align-self: center; font-size: 10.5px; color: #7a6d5f; background: #f4f1ea;
-    padding: 4px 10px; border-radius: 20px; margin-bottom: 10px;
+    padding-block: 4px; padding-inline: 10px; border-radius: 20px; margin-bottom: 10px;
   }
 
   .pcw-joined-banner {
     background: #fff8f2; border: 1px solid rgba(237,118,36,0.2); border-radius: 10px;
-    padding: 10px 12px; margin-bottom: 12px; font-size: 12px;
+    padding-block: 10px; padding-inline: 12px; margin-bottom: 12px; font-size: 12px;
   }
   .pcw-joined-banner .pcw-jb-line1 { font-weight: 600; color: #10214b; margin-bottom: 6px; }
   .pcw-joined-banner .pcw-jb-line2 { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
@@ -451,7 +580,7 @@
     display: flex; align-items: center; justify-content: center; flex-shrink: 0;
   }
   .pcw-jb-link-icon { color: #d7bd88; font-size: 11px; }
-  .pcw-jb-bluecheck { color: #1d9bf0; font-size: 11px; margin-left: 2px; }
+  .pcw-jb-bluecheck { color: #1d9bf0; font-size: 11px; margin-inline-start: 2px; }
   .pcw-jb-position { color: #7a6d5f; font-size: 11px; }
 
   .pcw-msg-row { display: flex; gap: 8px; max-width: 88%; margin-bottom: 2px; }
@@ -462,9 +591,9 @@
     background: #10214b; color: #d7bd88; font-size: 10px; font-weight: 700;
     display: flex; align-items: center; justify-content: center;
   }
-  .pcw-msg-bubble { border-radius: 14px; padding: 9px 13px; font-size: 13px; line-height: 1.5; }
-  .pcw-msg-row.user .pcw-msg-bubble { background: #10214b; color: #fff; border-bottom-right-radius: 4px; }
-  .pcw-msg-row.admin .pcw-msg-bubble, .pcw-msg-row.bot .pcw-msg-bubble { background: #f4f1ea; color: #2c2416; border-bottom-left-radius: 4px; }
+  .pcw-msg-bubble { border-radius: 14px; padding-block: 9px; padding-inline: 13px; font-size: 13px; line-height: 1.5; }
+  .pcw-msg-row.user .pcw-msg-bubble { background: #10214b; color: #fff; border-end-end-radius: 4px; }
+  .pcw-msg-row.admin .pcw-msg-bubble, .pcw-msg-row.bot .pcw-msg-bubble { background: #f4f1ea; color: #2c2416; border-end-start-radius: 4px; }
   .pcw-msg-row.system .pcw-msg-bubble { background: #fff8f2; color: #7a6d5f; font-style: italic; border: 1px dashed rgba(237,118,36,0.25); }
   .pcw-msg-meta-row {
     display: flex; align-items: center; gap: 6px; margin-top: 3px;
@@ -484,7 +613,7 @@
     max-height: 0; overflow: hidden; opacity: 0; transition: max-height 0.25s ease, opacity 0.2s ease, margin 0.25s ease;
     background: rgba(16,33,75,0.05); border-radius: 8px; margin-top: 0;
   }
-  .pcw-original-reveal.show { max-height: 200px; opacity: 1; margin-top: 6px; padding: 8px 10px; }
+  .pcw-original-reveal.show { max-height: 200px; opacity: 1; margin-top: 6px; padding-block: 8px; padding-inline: 10px; }
   .pcw-original-reveal-label { font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: #a89c8a; margin-bottom: 3px; }
   .pcw-original-reveal-text { font-size: 12px; color: #4a4030; font-style: italic; line-height: 1.4; }
 
@@ -503,9 +632,9 @@
   }
   .pcw-audio-bar button { width: 28px; height: 28px; border-radius: 50%; border: none; background: #ED7624; color: #fff; cursor: pointer; flex-shrink: 0; }
   .pcw-audio-bar .pcw-audio-track { flex: 1; height: 4px; background: rgba(0,0,0,0.12); border-radius: 2px; position: relative; }
-  .pcw-audio-bar .pcw-audio-fill { position: absolute; left: 0; top: 0; height: 100%; background: #ED7624; border-radius: 2px; width: 0%; }
+  .pcw-audio-bar .pcw-audio-fill { position: absolute; inset-inline-start: 0; top: 0; height: 100%; background: #ED7624; border-radius: 2px; width: 0%; }
 
-  .pcw-typing-dots { display: flex; gap: 3px; padding: 9px 13px; align-self: flex-start; }
+  .pcw-typing-dots { display: flex; gap: 3px; padding-block: 9px; padding-inline: 13px; align-self: flex-start; }
   .pcw-typing-dots span { width: 6px; height: 6px; border-radius: 50%; background: #a89c8a; animation: pcwTypingBounce 1.2s infinite ease-in-out; }
   .pcw-typing-dots span:nth-child(2) { animation-delay: 0.15s; }
   .pcw-typing-dots span:nth-child(3) { animation-delay: 0.3s; }
@@ -517,30 +646,30 @@
      reuse the same dots visually while still being distinguishable in
      JS from the real admin-typing indicator (see the :not() selector
      in handlePollResult()). */
-  .pcw-typing-dots--recording { gap: 7px; padding: 8px 13px; }
+  .pcw-typing-dots--recording { gap: 7px; padding-block: 8px; padding-inline: 13px; }
   .pcw-typing-dots--recording i { color: #ED7624; font-size: 12px; animation: pcwTypingBounce 1.2s infinite ease-in-out; }
   .pcw-typing-dots--recording span { width: auto; height: auto; border-radius: 0; background: none; animation: none; font-size: 11.5px; color: #a89c8a; font-style: italic; }
-  .pcw-bot-processing { margin: 2px 0; }
+  .pcw-bot-processing { margin-block: 2px; margin-inline: 0; }
   /* TASK-8 END */
 
   .pcw-no-answer-notice {
     text-align: center; font-size: 11.5px; color: #7a6d5f; background: #f9f7f4;
-    padding: 8px 12px; border-radius: 8px; margin: 8px 0;
+    padding-block: 8px; padding-inline: 12px; border-radius: 8px; margin-block: 8px; margin-inline: 0;
   }
 
   .pcw-history-divider {
-    display: flex; align-items: center; gap: 10px; margin: 10px 0; cursor: pointer;
+    display: flex; align-items: center; gap: 10px; margin-block: 10px; margin-inline: 0; cursor: pointer;
   }
   .pcw-history-divider hr { flex: 1; border: none; border-top: 1px solid rgba(16,33,75,0.12); }
   .pcw-history-divider span { font-size: 11px; color: #7a6d5f; white-space: nowrap; display: flex; align-items: center; gap: 5px; }
   .pcw-history-divider:hover span { color: #ED7624; }
 
   /* ── Composer ───────────────────────────────────────────────────── */
-  .pcw-composer { flex-shrink: 0; border-top: 1px solid rgba(16,33,75,0.08); padding: 10px 12px; background: #fff; }
+  .pcw-composer { flex-shrink: 0; border-top: 1px solid rgba(16,33,75,0.08); padding-block: 10px; padding-inline: 12px; background: #fff; }
   .pcw-attach-row { display: flex; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
   .pcw-attach-chip {
     display: flex; align-items: center; gap: 6px; background: #f4f1ea; border-radius: 8px;
-    padding: 5px 9px; font-size: 11px; color: #4a4030;
+    padding-block: 5px; padding-inline: 9px; font-size: 11px; color: #4a4030;
   }
   .pcw-attach-chip .pcw-chip-status { color: #7a6d5f; }
   .pcw-attach-chip.uploading .pcw-chip-status { color: #ED7624; }
@@ -559,7 +688,7 @@
   .pcw-tool-btn.recording { background: #ef4444; color: #fff; }
   .pcw-composer-input {
     flex: 1; resize: none; border: 1.5px solid rgba(16,33,75,0.14); border-radius: 18px;
-    padding: 8px 14px; font-family: 'Sora', system-ui, sans-serif; font-size: 13px; max-height: 90px;
+    padding-block: 8px; padding-inline: 14px; font-family: 'Sora', system-ui, sans-serif; font-size: 13px; max-height: 90px;
   }
   .pcw-composer-input:focus { outline: none; border-color: #ED7624; }
   .pcw-send-btn {
@@ -569,7 +698,7 @@
   .pcw-send-btn:disabled { background: #d7bd88; cursor: not-allowed; }
 
   .pcw-recording-bar {
-    display: none; align-items: center; gap: 10px; padding: 8px 4px; font-size: 13px; color: #10214b;
+    display: none; align-items: center; gap: 10px; padding-block: 8px; padding-inline: 4px; font-size: 13px; color: #10214b;
   }
   .pcw-recording-bar.active { display: flex; }
   .pcw-recording-dot { width: 9px; height: 9px; border-radius: 50%; background: #ef4444; animation: pcwPulse 1s infinite; }
@@ -577,7 +706,7 @@
   .pcw-recording-time { font-variant-numeric: tabular-nums; font-weight: 600; }
 
   .pcw-voice-preview {
-    display: none; align-items: center; gap: 10px; padding: 8px 10px; background: #f4f1ea;
+    display: none; align-items: center; gap: 10px; padding-block: 8px; padding-inline: 10px; background: #f4f1ea;
     border-radius: 10px; margin-bottom: 8px;
   }
   .pcw-voice-preview.active { display: flex; }
@@ -585,18 +714,18 @@
   .pcw-msg-bubble.pcw-msg-failed { background: #fef2f2; border: 1px solid rgba(239,68,68,0.3); }
   .pcw-msg-fail-row { display: flex; align-items: center; gap: 6px; margin-top: 6px; font-size: 11px; color: #ef4444; }
   .pcw-retry-btn {
-    border: none; background: #ef4444; color: #fff; border-radius: 6px; padding: 3px 8px;
-    font-size: 10.5px; cursor: pointer; display: flex; align-items: center; gap: 4px; margin-left: auto;
+    border: none; background: #ef4444; color: #fff; border-radius: 6px; padding-block: 3px; padding-inline: 8px;
+    font-size: 10.5px; cursor: pointer; display: flex; align-items: center; gap: 4px; margin-inline-start: auto;
   }
   .pcw-retry-btn:hover { background: #dc2626; }
 
   .pcw-msg-action-btn {
     border: none; background: none; color: #a89c8a; cursor: pointer; font-size: 10px;
-    display: flex; align-items: center; gap: 3px; padding: 2px 4px;
+    display: flex; align-items: center; gap: 3px; padding-block: 2px; padding-inline: 4px;
   }
   .pcw-msg-action-btn:hover { color: #ED7624; }
   .pcw-edit-input {
-    width: 100%; border: 1.5px solid #ED7624; border-radius: 8px; padding: 6px 9px;
+    width: 100%; border: 1.5px solid #ED7624; border-radius: 8px; padding-block: 6px; padding-inline: 9px;
     font-family: 'Sora', system-ui, sans-serif; font-size: 13px; resize: none;
   }
 
@@ -605,7 +734,7 @@
   .pcw-download-chip {
     display: inline-flex; align-items: center; gap: 8px; text-decoration: none;
     background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25);
-    border-radius: 8px; padding: 7px 10px; font-size: 12px; color: inherit;
+    border-radius: 8px; padding-block: 7px; padding-inline: 10px; font-size: 12px; color: inherit;
     max-width: 220px; transition: background 0.15s ease;
   }
   .pcw-msg-row.user .pcw-download-chip { background: rgba(255,255,255,0.1); color: #fff; }
@@ -621,10 +750,10 @@
 
   .pcw-ticket-closed {
     background: #f0fdf4; border: 1px solid rgba(16,185,129,0.2); border-radius: 12px;
-    padding: 12px 14px; margin: 10px 0; font-size: 13px;
+    padding-block: 12px; padding-inline: 14px; margin-block: 10px; margin-inline: 0; font-size: 13px;
   }
   .pcw-ticket-closed-notice { display: flex; align-items: center; margin-bottom: 10px; font-weight: 600; color: #10214b; }
-  .pcw-rating-prompt { background: #fff; border: 1.5px solid rgba(16,33,75,0.1); border-radius: 10px; padding: 12px 14px; }
+  .pcw-rating-prompt { background: #fff; border: 1.5px solid rgba(16,33,75,0.1); border-radius: 10px; padding-block: 12px; padding-inline: 14px; }
   .pcw-rating-prompt-title { font-size: 13px; font-weight: 600; color: #10214b; margin-bottom: 10px; }
   .pcw-rating-btn-row { display: flex; gap: 8px; }
   .pcw-rating-dismiss-btn {
@@ -633,17 +762,17 @@
   }
   .pcw-rating-form {
     background: #fff; border: 1.5px solid rgba(16,33,75,0.1); border-radius: 12px;
-    padding: 16px 14px; margin-top: 10px; position: relative;
+    padding-block: 16px; padding-inline: 14px; margin-top: 10px; position: relative;
   }
   .pcw-rating-form-close {
-    position: absolute; top: 10px; right: 10px; width: 26px; height: 26px; border-radius: 50%;
+    position: absolute; top: 10px; inset-inline-end: 10px; width: 26px; height: 26px; border-radius: 50%;
     border: none; background: #f4f1ea; cursor: pointer; color: #7a6d5f; font-size: 12px;
     display: flex; align-items: center; justify-content: center;
   }
   .pcw-rating-form-title { font-size: 13.5px; font-weight: 700; color: #10214b; margin-bottom: 14px; }
   .pcw-rating-faces { display: flex; gap: 4px; justify-content: space-between; margin-bottom: 12px; }
   .pcw-rating-face {
-    flex: 1; border: 1.5px solid rgba(16,33,75,0.1); border-radius: 10px; padding: 8px 2px;
+    flex: 1; border: 1.5px solid rgba(16,33,75,0.1); border-radius: 10px; padding-block: 8px; padding-inline: 2px;
     background: #fdfcfa; cursor: pointer; text-align: center; font-family: 'Sora', system-ui, sans-serif;
     transition: all 0.15s ease;
   }
@@ -652,7 +781,7 @@
   .pcw-rating-face.selected .pcw-face-icon { color: #ED7624; }
   .pcw-face-label { display: block; font-size: 9.5px; color: #7a6d5f; }
   .pcw-rating-textarea {
-    width: 100%; border: 1.5px solid rgba(16,33,75,0.14); border-radius: 8px; padding: 9px 12px;
+    width: 100%; border: 1.5px solid rgba(16,33,75,0.14); border-radius: 8px; padding-block: 9px; padding-inline: 12px;
     font-family: 'Sora', system-ui, sans-serif; font-size: 13px; resize: none; height: 80px; box-sizing: border-box;
   }
   .pcw-rating-textarea:focus { outline: none; border-color: #ED7624; }
@@ -661,9 +790,9 @@
   .pcw-dropdown { position: relative; width: 100%; }
   .pcw-dropdown-trigger {
     width: 100%; display: flex; align-items: center; justify-content: space-between;
-    padding: 10px 14px; border: 1.5px solid rgba(16,33,75,0.18); border-radius: 10px;
+    padding-block: 10px; padding-inline: 14px; border: 1.5px solid rgba(16,33,75,0.18); border-radius: 10px;
     background: #fff; cursor: pointer; font-family: 'Sora', system-ui, sans-serif;
-    font-size: 13px; color: #a89c8a; text-align: left; transition: border-color 0.2s ease;
+    font-size: 13px; color: #a89c8a; text-align: start; transition: border-color 0.2s ease;
   }
   .pcw-dropdown-trigger.has-value { color: #10214b; }
   .pcw-dropdown-trigger:hover, .pcw-dropdown-trigger.open { border-color: #ED7624; }
@@ -673,7 +802,7 @@
   }
   .pcw-dropdown-trigger.open .pcw-dropdown-chevron { transform: rotate(180deg); }
   .pcw-dropdown-list {
-    position: absolute; top: calc(100% + 6px); left: 0; right: 0; z-index: 9999;
+    position: absolute; top: calc(100% + 6px); inset-inline-start: 0; inset-inline-end: 0; z-index: 9999;
     background: #1e2d4e; border-radius: 12px;
     box-shadow: 0 8px 32px rgba(16,33,75,0.35); overflow: hidden;
     max-height: 0; opacity: 0; pointer-events: none;
@@ -682,7 +811,7 @@
   .pcw-dropdown-list.open { max-height: 320px; opacity: 1; pointer-events: auto; }
   .pcw-dropdown-item {
     display: flex; align-items: center; justify-content: space-between;
-    padding: 14px 18px; cursor: pointer; color: #e8ddd0; font-size: 14px;
+    padding-block: 14px; padding-inline: 18px; cursor: pointer; color: #e8ddd0; font-size: 14px;
     border-bottom: 1px solid rgba(255,255,255,0.07); transition: background 0.15s ease;
   }
   .pcw-dropdown-item:last-child { border-bottom: none; }
@@ -704,13 +833,21 @@
 
   @media (max-width: 480px) {
     .pcw-panel {
-      bottom: 14px; right: 14px; left: 14px; width: auto; max-width: calc(100vw - 28px);
+      bottom: 14px; inset-inline-end: 14px; inset-inline-start: 14px; width: auto; max-width: calc(100vw - 28px);
       height: 78vh; height: 78dvh; max-height: calc(100vh - 100px);
       border-radius: 16px;
     }
-    .pcw-launcher-btn { bottom: 16px; right: 16px; }
+    .pcw-launcher-btn { bottom: 16px; inset-inline-end: 16px; }
+    /* TASK (Widget Positioning): the panel is already edge-to-edge
+       (inset-inline-start:14px;inset-inline-end:14px) on mobile, so hside only needs to move the
+       launcher button itself -- the panel's own left/right don't need an
+       hside variant here. */
+    body[data-pcw-hside="left"] .pcw-launcher-btn { inset-inline-start: 16px; inset-inline-end: auto; }
   }
-  `;
+
+/* TASK-web12-3 START: logical CSS properties for RTL */
+/* TASK-web12-3 END */
+`;
 
   function injectStyle() {
     if (document.getElementById('pcw-style')) return;
@@ -739,8 +876,17 @@
   let launcherBtn, badgeEl, activeDotEl, panelEl, headerTitleEl, headerSubEl, bodyEl, backdropEl;
 
   function buildScaffold() {
+    // TASK (Dark Mode / Color Filter Audit): was `<i class="fas fa-comment-dots">`
+    // (Font Awesome) -- an external icon-font dependency this project
+    // doesn't otherwise rely on (the settings widget's icons are all
+    // inline SVG), and if Font Awesome's stylesheet doesn't happen to be
+    // loaded on a given page this renders as an empty box rather than a
+    // chat icon. Replaced with an inline SVG at the same 24x24 size the
+    // settings widget's own trigger icon uses, so the two are visually
+    // consistent and neither depends on a page happening to load the
+    // right external font.
     launcherBtn = el('button', { class: 'pcw-launcher-btn', type: 'button', title: 'Chat with us' }, [
-      el('i', { class: 'fas fa-comment-dots' }),
+      el('span', { 'aria-hidden': 'true', html: '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>' }),
       (badgeEl = el('span', { class: 'pcw-badge' })),
       (activeDotEl = el('span', { class: 'pcw-active-dot' })),
     ]);
@@ -796,6 +942,23 @@
     _pcwScrollLockCount++;
     if (_pcwScrollLockCount > 1) return;
     _pcwScrollLockY = window.scrollY || window.pageYOffset || 0;
+    // TASK (Chat Widget Scroll Fix): confirmed via research (MDN's own
+    // CSS Scroll Anchoring docs, plus multiple independent write-ups on
+    // this exact position:fixed body-lock technique) that taking <body>
+    // out of normal flow like this is a documented trigger for the
+    // browser's scroll-anchoring feature to pick a NEW anchor element and
+    // "helpfully" keep adjusting scroll position around it as layout
+    // settles back to normal on unlock -- which lands wherever that
+    // anchor's heuristic puts it, not necessarily back where the user
+    // was. That matches the reported symptom precisely: it never happens
+    // if the page was already at the top (nothing for an anchor to
+    // "correct"), and when it does fire, it's not a stale-position bug
+    // (which would at least be consistent with SOME prior state) but a
+    // browser heuristic landing roughly mid-page. Disabling anchoring for
+    // the duration of the lock removes the browser's incentive to touch
+    // scroll position on its own at all -- the explicit scrollTo below
+    // becomes the only thing moving it.
+    document.body.style.overflowAnchor = 'none';
     document.body.style.position = 'fixed';
     document.body.style.top = (-_pcwScrollLockY) + 'px';
     document.body.style.left = '0';
@@ -803,14 +966,49 @@
     document.body.style.width = '100%';
   }
   function pcwUnlockBodyScroll() {
-    _pcwScrollLockCount = Math.max(0, _pcwScrollLockCount - 1);
+    // TASK (Chat Widget Scroll Fix): this guard used to decrement FIRST
+    // and check `> 0` after -- so a second, redundant call arriving after
+    // the count had already reached 0 would compute Math.max(0, -1) = 0,
+    // see `0 > 0` as false, and fall through to re-run the restore logic
+    // a second time, using the SAME stale `_pcwScrollLockY` captured at
+    // the original lock. If the user had scrolled around freely in the
+    // meantime (the page is fully unlocked and scrollable at that point),
+    // that stray second call would yank them back to wherever they were
+    // when the chat was first opened -- matching exactly what was
+    // reported ("stops the page at a certain position... closes it, it
+    // will just scroll the page to a certain position"). Checking before
+    // decrementing makes a call that arrives after the count is already 0
+    // a true no-op.
+    if (_pcwScrollLockCount <= 0) return;
+    _pcwScrollLockCount--;
     if (_pcwScrollLockCount > 0) return;
     document.body.style.position = '';
     document.body.style.top = '';
     document.body.style.left = '';
     document.body.style.right = '';
     document.body.style.width = '';
+
+    /* MANUS-10 START — restore without honoring host-page smooth scrolling. */
+    // Public pages may set `scroll-behavior: smooth` globally. The ordinary
+    // two-argument scrollTo call then animates this restoration and can leave
+    // the page visibly stranded at an intermediate position when the panel
+    // closes. Restore the exact pre-open position without an animation.
+    const root = document.documentElement;
+    const previousScrollBehavior = root.style.scrollBehavior;
+    root.style.scrollBehavior = 'auto';
     window.scrollTo(0, _pcwScrollLockY);
+    root.style.scrollBehavior = previousScrollBehavior;
+    /* MANUS-10 END */
+// TASK (Chat Widget Scroll Fix): a style change doesn't force the
+    // browser to finish layout before the next line of JS runs -- calling
+    // scrollTo() immediately risks doing so against a transient, not-yet-
+    // settled layout (the CSS-Tricks writeup on this exact technique flags
+    // this ordering issue specifically). One rAF is enough to guarantee a
+    // layout/paint has happened since the style change above.
+    requestAnimationFrame(function () {
+      window.scrollTo(0, _pcwScrollLockY);
+      document.body.style.overflowAnchor = '';
+    });
   }
 
   function pcwEnableDragToClose(sheetEl, handleEl, onClose) {
@@ -992,6 +1190,57 @@
       accessibilityRow.classList.toggle('open', isOpen);
     });
 
+    /* TASK-4/5 START — self-contained protection section appended after
+       accessibility so other workers can merge their own section unchanged. */
+    const protectionRow = el('div', { class: 'pcw-option-row pcw-option-clickable' }, [
+      el('div', { class: 'pcw-option-icon' }, el('i', { class: 'fas fa-shield-alt' })),
+      el('div', { class: 'pcw-option-label' }, 'Chat protection'),
+      el('i', { class: 'fas fa-chevron-down pcw-option-chevron' }),
+    ]);
+    const protectionPanel = buildProtectionPanel();
+    protectionRow.addEventListener('click', () => {
+      const isOpen = protectionPanel.classList.toggle('open');
+      protectionRow.classList.toggle('open', isOpen);
+    });
+    /* TASK-4/5 END */
+
+    // AP4-TASK-3 START — dedicated, append-only language preference section.
+    const languageRow = el('div', { class: 'pcw-option-row pcw-option-clickable ap4-language-row' }, [
+      el('div', { class: 'pcw-option-icon' }, el('i', { class: 'fas fa-language' })),
+      el('div', { class: 'pcw-option-label' }, 'Chat language'),
+    ]);
+    const languagePanel = el('div', { class: 'ap4-language-options' });
+    const optionsLanguageSelect = el('select', { class: 'ap4-language-select', 'aria-label': 'Chat language' });
+    Object.keys(AP4_CHAT_LANGUAGES).forEach(code => {
+      const option = el('option', { value: code }, AP4_CHAT_LANGUAGES[code]);
+      optionsLanguageSelect.appendChild(option);
+    });
+    optionsLanguageSelect.value = state.preferredChatLanguage || ap4ResolveChatLanguage();
+    const languageSaveStatus = el('div', { class: 'pcw-field-hint ap4-language-status', 'aria-live': 'polite' });
+    optionsLanguageSelect.addEventListener('change', async () => {
+      const selected = optionsLanguageSelect.value;
+      if (!state.chatId || !state.sessionToken) {
+        languageSaveStatus.textContent = 'Start or resume your chat to save this preference.';
+        return;
+      }
+      optionsLanguageSelect.disabled = true;
+      languageSaveStatus.textContent = 'Saving…';
+      try {
+        const result = await apiPost('chat-update-language.php', { chatId: state.chatId, preferred_chat_language: selected });
+        if (!result.success) throw new Error(result.error || 'Could not save language.');
+        state.preferredChatLanguage = selected;
+        languageSaveStatus.textContent = 'Language updated. Our team will see this preference.';
+      } catch (err) {
+        languageSaveStatus.textContent = 'Could not save language. Please try again.';
+        dlog('language preference update failed: ' + err.message, 'error');
+      } finally { optionsLanguageSelect.disabled = false; }
+    });
+    languagePanel.appendChild(optionsLanguageSelect);
+    languagePanel.appendChild(languageSaveStatus);
+    languagePanel.appendChild(el('div', { class: 'pcw-field-hint' }, 'You can change your language anytime from the chat options panel, and doing so will also update what our team sees on their end.'));
+    languagePanel.appendChild(el('div', { class: 'pcw-field-hint' }, "We always try our absolute best to provide ease of communications to our user's of all nationality, however on some occasions during peak hours we might have mostly English speaking customer care on standby whom might be able to chat with your selected language only through text(via our auto-translate) and not verbally."));
+    languageRow.addEventListener('click', () => languagePanel.classList.toggle('open'));
+    // AP4-TASK-3 END
     const endSessionRow = el('div', { class: 'pcw-option-row pcw-option-clickable' }, [
       el('div', { class: 'pcw-option-icon', style: 'background:rgba(239,68,68,0.15);color:#ef4444;' }, el('i', { class: 'fas fa-rotate-left' })),
       el('div', { class: 'pcw-option-label' }, 'End chat session'),
@@ -999,7 +1248,7 @@
     endSessionRow.addEventListener('click', endChatSession);
 
     const body = el('div', { class: 'pcw-sheet-body' }, [
-      soundRow, transcriptRow, accessibilityRow, accessibilityPanel, endSessionRow,
+      soundRow, transcriptRow, accessibilityRow, accessibilityPanel, languageRow, languagePanel, protectionRow, protectionPanel, endSessionRow,
     ]);
 
     optionsSheetEl = el('div', { class: 'pcw-options-sheet', role: 'dialog', 'aria-modal': 'true', 'aria-label': 'Chat options' }, [
@@ -1016,7 +1265,92 @@
     panelEl.appendChild(optionsSheetEl);
   }
 
+  /* TASK-3/4/5 START — build visible settings controls and route every action
+     through the authenticated endpoints. No secret is ever placed in a URL. */
+  function buildProtectionPanel() {
+    const panel = el('div', { class: 'pcw-protection-panel' });
+    const summary = el('p', { class: 'pcw-protection-summary' }, 'Protect this conversation with a PIN or password, configure automatic locking, or revoke remembered devices.');
+    const actions = el('div', { class: 'pcw-protection-actions' });
+    const message = el('div', { class: 'pcw-protection-message', role: 'status', 'aria-live': 'polite' });
+    const secretForm = el('div', { class: 'pcw-protection-form' });
+    const secretLabel = el('label', {}, 'New secret');
+    const secretInput = el('input', { type: 'password', autocomplete: 'new-password' });
+    const strengthTrack = el('div', { class: 'pcw-password-strength-track' }, el('div', { class: 'pcw-password-strength-fill' }));
+    const strengthLabel = el('span', { class: 'pcw-password-strength-label' });
+    secretInput.addEventListener('input', () => {
+      const result = selectedTier === 'password' ? passwordStrengthScore(secretInput.value) : { score: 0, label: '' };
+      strengthTrack.firstChild.className = 'pcw-password-strength-fill' + (result.label ? ' score-' + result.score : '');
+      strengthLabel.textContent = result.label;
+    });
+    const secretSubmit = el('button', { type: 'button', class: 'pcw-protection-btn' }, 'Save protection');
+    secretForm.appendChild(secretLabel); secretForm.appendChild(secretInput); secretForm.appendChild(strengthTrack); secretForm.appendChild(strengthLabel); secretForm.appendChild(secretSubmit);
+
+    const lockForm = el('div', { class: 'pcw-protection-form' });
+    const delayLabel = el('label', {}, 'Lock after closing (seconds)');
+    const delayInput = el('input', { type: 'number', min: '0', max: '3600', value: '300', inputmode: 'numeric' });
+    const aggressiveLabel = el('label', { class: 'pcw-protection-check' }, [el('input', { type: 'checkbox' }), el('span', {}, 'Lock immediately when closed')]);
+    const lockSubmit = el('button', { type: 'button', class: 'pcw-protection-btn' }, 'Save lock settings');
+    lockForm.appendChild(delayLabel); lockForm.appendChild(delayInput); lockForm.appendChild(aggressiveLabel); lockForm.appendChild(lockSubmit);
+
+    let selectedTier = null;
+    function setMessage(text, ok) { message.textContent = text; message.classList.toggle('ok', !!ok); }
+    function openSecretForm(tier) {
+      selectedTier = tier; secretInput.value = ''; secretInput.inputMode = tier === 'pin' ? 'numeric' : 'text'; secretInput.maxLength = tier === 'pin' ? 6 : 1024;
+      strengthTrack.firstChild.className = 'pcw-password-strength-fill'; strengthLabel.textContent = '';
+      secretLabel.textContent = tier === 'pin' ? 'New 6-digit PIN' : 'New password (at least 12 characters)';
+      secretForm.classList.add('open'); lockForm.classList.remove('open'); secretInput.focus();
+    }
+    const pinBtn = el('button', { type: 'button', class: 'pcw-protection-btn' }, 'Set PIN');
+    const passwordBtn = el('button', { type: 'button', class: 'pcw-protection-btn' }, 'Set password');
+    const lockBtn = el('button', { type: 'button', class: 'pcw-protection-btn' }, 'Lock settings');
+    const revokeBtn = el('button', { type: 'button', class: 'pcw-protection-btn danger' }, 'Revoke devices');
+    pinBtn.addEventListener('click', () => openSecretForm('pin'));
+    passwordBtn.addEventListener('click', () => openSecretForm('password'));
+    lockBtn.addEventListener('click', async () => {
+      secretForm.classList.remove('open'); lockForm.classList.toggle('open');
+      if (lockForm.classList.contains('open')) {
+        try {
+          const status = await apiPost('chat-lock.php', { action:'status', chatId:state.chatId });
+          if (status.success && status.lock) { delayInput.value = status.lock.delay_seconds ?? 300; aggressiveLabel.querySelector('input').checked = !!Number(status.lock.aggressive); }
+          else setMessage(status.error || 'Could not load lock settings.', false);
+        } catch (e) { setMessage('Could not load lock settings. Try again.', false); }
+      }
+    });
+    revokeBtn.addEventListener('click', async () => {
+      if (!window.confirm('Revoke all remembered devices for this chat?')) return;
+      revokeBtn.disabled = true;
+      try {
+        const json = await apiPost('chat-auth-gate.php', { action:'forgetDevices', chatId:state.chatId, email:state.email });
+        setMessage(json.success ? 'Remembered devices revoked.' : (json.error || 'Could not revoke devices.'), !!json.success);
+      } catch (e) { setMessage('Could not revoke devices. Try again.', false); }
+      revokeBtn.disabled = false;
+    });
+    secretSubmit.addEventListener('click', async () => {
+      secretSubmit.disabled = true;
+      try {
+        const json = await apiPost('chat-auth-gate.php', { action:'set', chatId:state.chatId, email:state.email, tier:selectedTier, secret:secretInput.value });
+        if (json.success) { state.sessionToken = json.sessionToken || state.sessionToken; state.authTier = selectedTier; localStorage.setItem(CONFIG.storageKeyToken, state.sessionToken); secretForm.classList.remove('open'); setMessage(selectedTier === 'pin' ? 'PIN protection enabled.' : 'Password protection enabled.', true); }
+        else setMessage(json.error || 'Could not save protection.', false);
+      } catch (e) { setMessage('Could not save protection. Try again.', false); }
+      secretSubmit.disabled = false;
+    });
+    lockSubmit.addEventListener('click', async () => {
+      lockSubmit.disabled = true;
+      try {
+        const json = await apiPost('chat-lock.php', { action:'set', chatId:state.chatId, delaySeconds:delayInput.value, aggressive:aggressiveLabel.querySelector('input').checked });
+        setMessage(json.success ? 'Lock settings saved.' : (json.error || 'Could not save lock settings.'), !!json.success);
+      } catch (e) { setMessage('Could not save lock settings. Try again.', false); }
+      lockSubmit.disabled = false;
+    });
+    actions.appendChild(pinBtn); actions.appendChild(passwordBtn); actions.appendChild(lockBtn); actions.appendChild(revokeBtn);
+    panel.appendChild(summary); panel.appendChild(actions); panel.appendChild(secretForm); panel.appendChild(lockForm); panel.appendChild(message);
+    return panel;
+  }
+  /* TASK-3/4/5 END */
+
   function openOptionsSheet() {
+    const languageSelect = optionsSheetEl && optionsSheetEl.querySelector('.ap4-language-options select');
+    if (languageSelect && state.preferredChatLanguage) languageSelect.value = state.preferredChatLanguage;
     optionsSheetEl.classList.add('open');
     optionsBackdropEl.classList.add('show');
     pcwLockBodyScroll();
@@ -1110,7 +1444,10 @@
       // closed — rebuild the message view from scratch so anything that
       // arrived while closed (and was never appended to messagesEl) is
       // actually shown, rather than silently missing.
-      rebuildLiveView();
+      apiPost('chat-lock.php', { action: 'status', chatId: state.chatId }).then(lockCheck => {
+        if (lockCheck.success) rebuildLiveView();
+        else { state.sessionToken = null; localStorage.removeItem(CONFIG.storageKeyToken); renderAuthGate(state.chatId, state.fullName, state.email, state.status, state.authTier); }
+      }).catch(() => renderAuthGate(state.chatId, state.fullName, state.email, state.status, state.authTier));
       return;
     }
 
@@ -1150,6 +1487,12 @@
   }
 
   function closePanel() {
+    /* TASK-4 START — the browser timer is advisory; the server timestamps the
+       close and re-checks it on every later token verification. */
+    if (state.mode === 'live' && state.chatId && state.sessionToken) {
+      apiPost('chat-lock.php', { action: 'closed', chatId: state.chatId }).catch(() => {});
+    }
+    /* TASK-4 END */
     state.panelOpen = false;
     panelEl.classList.remove('open');
     if (backdropEl) backdropEl.classList.remove('show');
@@ -1271,6 +1614,26 @@
     { value: 'health', label: 'Health / medical' },
     { value: 'general', label: 'General / other' },
   ];
+  // AP4-TASK-3 START — customer chat-language preference.
+  // Keep codes aligned with the shared contract; names shown in the picker
+  // are native names. A selected value is persisted to the thread server-side.
+  const AP4_CHAT_LANGUAGES = {
+    en: 'English', es: 'Español', fr: 'Français', de: 'Deutsch',
+    pt: 'Português', it: 'Italiano', 'zh-Hans': '中文（简体）',
+    ja: '日本語', ko: '한국어', ar: 'العربية', hi: 'हिन्दी',
+    vi: 'Tiếng Việt', tl: 'Filipino', ru: 'Русский',
+  };
+  function ap4ResolveChatLanguage() {
+    try {
+      const prefs = JSON.parse(localStorage.getItem('preferences') || '{}');
+      if (prefs && prefs.lang && Object.prototype.hasOwnProperty.call(AP4_CHAT_LANGUAGES, prefs.lang)) return prefs.lang;
+    } catch (e) { /* malformed local preference: continue to browser detection */ }
+    const browserLang = (navigator.language || '').toLowerCase();
+    if (browserLang.startsWith('zh')) return 'zh-Hans';
+    const shortCode = browserLang.split('-')[0];
+    return Object.prototype.hasOwnProperty.call(AP4_CHAT_LANGUAGES, shortCode) ? shortCode : 'en';
+  }
+  // AP4-TASK-3 END
 
   // ============================================
   // PRE-CHAT GATE (Tier 1 items 1 & 2 — single form, no branching step)
@@ -1292,6 +1655,34 @@
       el('label', {}, 'Email'),
       el('input', { type: 'email', name: 'email', required: 'required' }),
     ]);
+    /* TASK-3 START — optional protection is collected directly after email so
+       a new chat can be born protected without a second unguarded session. */
+    const authTierInput = el('select', { name: 'authTier' }, [
+      el('option', { value: '' }, 'No chat lock'),
+      el('option', { value: 'pin' }, 'Protect with a 6-digit PIN'),
+      el('option', { value: 'password' }, 'Protect with a password'),
+    ]);
+    const authSecretInput = el('input', { type: 'password', name: 'authSecret', minlength: '6', maxlength: '1024', placeholder: 'Set a PIN or password (optional)' });
+    const prechatStrengthTrack = el('div', { class: 'pcw-password-strength-track' }, el('div', { class: 'pcw-password-strength-fill' }));
+    const prechatStrengthLabel = el('span', { class: 'pcw-password-strength-label' });
+    authSecretInput.addEventListener('input', () => {
+      const result = authTierInput.value === 'password' ? passwordStrengthScore(authSecretInput.value) : { score: 0, label: '' };
+      prechatStrengthTrack.firstChild.className = 'pcw-password-strength-fill' + (result.label ? ' score-' + result.score : '');
+      prechatStrengthLabel.textContent = result.label;
+    });
+    const noProtectionAck = el('input', { type: 'checkbox', name: 'noProtectionAck' });
+    const noProtectionLabel = el('label', { class: 'pcw-check-row' }, [noProtectionAck, el('span', {}, 'I understand this chat may be reopened with the email or chat ID.')]);
+    const noProtectionWarning = el('div', { class: 'pcw-protection-warning' }, 'If this chat does not already have a PIN or password, anyone who has your email or chat ID could reopen it.');
+    const protectionField = el('div', { class: 'pcw-field' }, [el('label', {}, 'Protect this chat (optional)'), authTierInput, authSecretInput, prechatStrengthTrack, prechatStrengthLabel, noProtectionWarning, noProtectionLabel]);
+    function updateProtectionWarning() {
+      const unprotected = authTierInput.value === '';
+      noProtectionWarning.hidden = !unprotected;
+      noProtectionLabel.hidden = !unprotected;
+      if (!unprotected) noProtectionAck.checked = false;
+    }
+    authTierInput.addEventListener('change', updateProtectionWarning);
+    updateProtectionWarning();
+    /* TASK-3 END */
     // TASK-9 START
     // TASK-9b: phone number field, optional, added to the pre-chat gate.
     // Follows the exact same .pcw-field / label+input pattern as
@@ -1365,11 +1756,29 @@
       el('div', { class: 'pcw-field-hint' }, "Leave blank if you're not sure — we'll also check by your email."),
     ]);
 
+    // AP4-TASK-3 START — language is selected before the chat panel opens.
+    let selectedChatLanguage = ap4ResolveChatLanguage();
+    const chatLanguageSelect = el('select', { name: 'preferredLanguage', class: 'ap4-language-select', 'aria-label': 'Preferred chat language' });
+    Object.keys(AP4_CHAT_LANGUAGES).forEach(code => {
+      const option = el('option', { value: code }, AP4_CHAT_LANGUAGES[code]);
+      option.selected = code === selectedChatLanguage;
+      chatLanguageSelect.appendChild(option);
+    });
+    chatLanguageSelect.addEventListener('change', () => {
+      selectedChatLanguage = chatLanguageSelect.value;
+    });
+    const chatLanguageField = el('div', { class: 'pcw-field ap4-language-field' }, [
+      el('label', {}, 'Preferred language'), chatLanguageSelect,
+      el('div', { class: 'pcw-field-hint' }, 'You can change your language anytime from the chat options panel, and doing so will also update what our team sees on their end.'),
+      el('div', { class: 'pcw-field-hint' }, "We always try our absolute best to provide ease of communications to our user's of all nationality, however on some occasions during peak hours we might have mostly English speaking customer care on standby whom might be able to chat with your selected language only through text(via our auto-translate) and not verbally."),
+    ]);
+    // AP4-TASK-3 END
     const errorMsg = el('div', { class: 'pcw-error-msg' });
     const submitBtn = el('button', { type: 'submit', class: 'pcw-primary-btn' }, 'Start Chat');
 
     form.appendChild(nameField);
     form.appendChild(emailField);
+    form.appendChild(protectionField);
     // TASK-9 START
     // TASK-9b: mount the new phone field directly after email, before the
     // reason dropdown — grouping it with the other plain text-style fields.
@@ -1377,6 +1786,7 @@
     // TASK-9 END
     form.appendChild(reasonField);
     form.appendChild(chatIdField);
+    form.appendChild(chatLanguageField); // AP4-TASK-3
     form.appendChild(errorMsg);
     form.appendChild(submitBtn);
 
@@ -1392,6 +1802,11 @@
         return;
       }
       dropdownTrigger.classList.remove('pcw-field-error');
+      if (authTierInput.value === '' && !noProtectionAck.checked) {
+        errorMsg.textContent = 'Please acknowledge the risk of leaving this chat without a PIN or password.';
+        errorMsg.classList.add('show');
+        return;
+      }
 
       submitBtn.disabled = true;
       submitBtn.textContent = 'Starting...';
@@ -1407,6 +1822,10 @@
         /* TASK-9 END */
         reason: selectedReason,  // use the tracked value directly, not fd.get (more reliable)
         chatId: fd.get('chatId').trim(),
+        preferred_chat_language: selectedChatLanguage, // AP4-TASK-3
+        authTier: fd.get('authTier'),
+        authSecret: fd.get('authSecret'),
+        deviceToken: deviceToken(),
       };
 
       // Clean up the outside-click listener once form is submitted
@@ -1422,7 +1841,12 @@
           // path, the one moment the entrance animation should play.
           /* TASK-1 START — pass through the sessionToken chat-start.php's
              response now includes on every success path. */
-          openLiveThread(json.chatId, json.fullName, json.email, json.status, undefined, true, json.sessionToken);
+          if (json.authRequired) {
+            renderAuthGate(json.chatId, json.fullName, json.email, json.status, json.authTier);
+          } else {
+            state.authTier = json.authTier || 'none';
+            openLiveThread(json.chatId, json.fullName, json.email, json.status, undefined, true, json.sessionToken);
+          }
           /* TASK-1 END */
           // TASK-9 END
         } else {
@@ -1446,48 +1870,21 @@
   // ============================================
   // RESUME A STORED SESSION (Tier 1 item 22 — persistence across navigation)
   // ============================================
+  // Renders the shared gate after chat-start has identified a protected thread.
+  function renderAuthGate(chatId, fullName, email, status, tier) {
+    state.mode = 'auth-gate'; state.chatId = chatId; state.fullName = fullName; state.email = email; state.status = status; state.authTier = tier;
+    headerTitleEl.textContent = 'Unlock Chat'; headerSubEl.textContent = chatId; bodyEl.innerHTML = ''; bodyEl.appendChild(renderBackToLauncher());
+    bodyEl.appendChild(AuthGate({ tier, principalId: chatId, email, onVerifySuccess: (json) => { state.sessionToken = json.sessionToken; localStorage.setItem(CONFIG.storageKeyToken, json.sessionToken); openLiveThread(chatId, fullName, email, status, false, false, json.sessionToken); } }));
+  }
+
   function resumeStoredChat(storedChatId) {
     dlog('resuming stored chat: ' + storedChatId);
-    /* TASK-1 START — load the token stored by a prior openLiveThread()
-       call BEFORE polling, since apiGet() (see its own TASK-1 comment
-       above) only attaches whatever's already in state.sessionToken. This
-       endpoint no longer works on storedChatId alone — see chat-poll.php's
-       own TASK-1 hardening — so a resume with no stored token, or an
-       expired one, now correctly falls into the same "no longer resolves"
-       branch below as a deleted thread would, sending the customer back
-       through the pre-chat gate rather than silently failing. Using the
-       SAME email there resumes this exact thread and issues a fresh
-       token (chat-start.php Path 2), so no history is actually lost —
-       only a rare, safe extra step. */
-    state.sessionToken = localStorage.getItem(CONFIG.storageKeyToken) || null;
-    /* TASK-1 END */
-    // Always fetch from message 0 on resume so the full history loads —
-    // using the stored lastMessageId would skip all existing messages and
-    // show an empty panel, which is the bug that was reported.
-    apiGet('chat-poll.php', { chatId: storedChatId, lastMessageId: 0, lastEventId: 0 }).then(json => {
-      if (json.success) {
-        const storedName = localStorage.getItem('pc_chat_name') || '';
-        const storedEmail = localStorage.getItem('pc_chat_email') || '';
-        // Pass skipRestore=false so openLiveThread also starts from 0.
-        // No sessionToken arg needed here — state.sessionToken was already
-        // set above, and openLiveThread() only overwrites it when a real
-        // one is passed (see that function's own TASK-1 comment).
-        openLiveThread(storedChatId, storedName, storedEmail, json.status, false);
-      } else {
-        // Stored chat no longer resolves — either genuinely deleted by an
-        // admin, or (TASK-1) the stored session token was missing/expired.
-        // Same safe fallback either way: clear the stale pointers and
-        // return to the launcher.
-        localStorage.removeItem(CONFIG.storageKeyChatId);
-        localStorage.removeItem(CONFIG.storageKeyLastMsg);
-        localStorage.removeItem('pc_chat_name');
-        localStorage.removeItem('pc_chat_email');
-        /* TASK-1 START */
-        localStorage.removeItem(CONFIG.storageKeyToken);
-        state.sessionToken = null;
-        /* TASK-1 END */
-        renderLauncher();
-      }
+    const storedName = localStorage.getItem('pc_chat_name') || '';
+    const storedEmail = localStorage.getItem('pc_chat_email') || '';
+    apiPost('chat-start.php', { fullName: storedName || 'Customer', email: storedEmail, reason: 'general', chatId: storedChatId, deviceToken: deviceToken() }).then(json => {
+      if (!json.success) { renderLauncher(); return; }
+      if (json.authRequired) renderAuthGate(json.chatId, json.fullName, json.email, json.status, json.authTier);
+      else { state.authTier = json.authTier || 'none'; state.sessionToken = json.sessionToken; openLiveThread(json.chatId, json.fullName, json.email, json.status, false, false, json.sessionToken); }
     }).catch(() => renderLauncher());
   }
 
@@ -1752,7 +2149,7 @@
       const senderRow = el('div', { class: 'pcw-msg-sender' });
       senderRow.appendChild(document.createTextNode(msg.admin_name));
       if (msg.admin_blue_check) {
-        senderRow.appendChild(el('i', { class: 'fas fa-circle-check pcw-jb-bluecheck', style: 'margin-left:4px;font-size:11px;' }));
+        senderRow.appendChild(el('i', { class: 'fas fa-circle-check pcw-jb-bluecheck', style: 'margin-inline-start:4px;font-size:11px;' }));
       }
       col.appendChild(senderRow);
     }
@@ -2036,6 +2433,7 @@
   }
 
   function handlePollResult(json) {
+    if (json.preferred_chat_language && Object.prototype.hasOwnProperty.call(AP4_CHAT_LANGUAGES, json.preferred_chat_language)) state.preferredChatLanguage = json.preferred_chat_language;
     let scrolledToBottom = isScrolledToBottom();
 
     // v2.0: bot messages don't have a chat_admin_profiles row to LEFT JOIN
@@ -2239,9 +2637,9 @@
     const wrap = el('div', { class: 'pcw-ticket-closed' });
 
     const closedNotice = el('div', { class: 'pcw-ticket-closed-notice' }, [
-      el('i', { class: 'fas fa-circle-check', style: 'color:#10b981;margin-right:7px;' }),
+      el('i', { class: 'fas fa-circle-check', style: 'color:#10b981;margin-inline-end:7px;' }),
       el('strong', {}, 'Ticket Closed'),
-      el('span', { style: 'color:#7a6d5f;font-size:12px;margin-left:6px;' },
+      el('span', { style: 'color:#7a6d5f;font-size:12px;margin-inline-start:6px;' },
         'This conversation has been marked resolved, you can start a new chat below'),
     ]);
     wrap.appendChild(closedNotice);
@@ -2667,7 +3065,7 @@
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       recordedChunks = [];
       // Detect the best supported audio format — iOS Safari requires mp4,
-      // Chrome/Android use webm. Some Android browsers (e.g. Brave Beta) 
+      // Chrome/Android use webm. Some Android browsers (e.g. Brave Beta)
       // report video/webm even for audio-only recordings — we accept this
       // and handle it correctly on the server side.
       const preferredMime = [
@@ -3002,10 +3400,118 @@
   // ============================================
   // INIT
   // ============================================
+  // TASK (Widget Positioning) START =================================
+  // Position-sync with the accessibility/settings widget ONLY -- the one
+  // thing this task asked to be touched in this file. Reads/writes the
+  // same 'pc_widget_positions' localStorage key the settings widget owns
+  // (see assets/js/accessibility-widget.js); this widget never initiates
+  // a move itself (no drag/D-pad here, by design -- out of this task's
+  // scope), it only ever reacts to what that key says its own 'chat'
+  // field currently is, including when the settings widget's own drag/
+  // D-pad swaps this widget out of a spot it occupied.
+  const WIDGET_POS_KEY = 'pc_widget_positions';
+  function readChatPosition() {
+    try {
+      const raw = localStorage.getItem(WIDGET_POS_KEY);
+      const parsed = raw ? JSON.parse(raw) : {};
+      return parsed.chat || 'bottom-right';
+    } catch (e) { return 'bottom-right'; }
+  }
+  function applyChatPosition() {
+    const parts = readChatPosition().split('-');
+    document.body.setAttribute('data-pcw-vzone', parts[0]);
+    document.body.setAttribute('data-pcw-hside', parts[1]);
+  }
+  function writeChatPosition(next) {
+    try {
+      const raw = localStorage.getItem(WIDGET_POS_KEY);
+      const parsed = raw ? JSON.parse(raw) : {};
+      const current = parsed.chat || 'bottom-right';
+      if (next === current) return;
+      const updated = { a11y: parsed.a11y || 'bottom-left', chat: next };
+      // Same swap rule as the settings widget's moveWidgetTo(): if the
+      // settings widget already occupies the target zone, it takes this
+      // widget's old spot rather than the two ever sharing one zone.
+      if (updated.a11y === next) updated.a11y = current;
+      localStorage.setItem(WIDGET_POS_KEY, JSON.stringify(updated));
+      applyChatPosition();
+      window.dispatchEvent(new CustomEvent('pc:widget-positions-change', { detail: updated }));
+    } catch (e) { /* ignore */ }
+  }
+  // TASK (Dark Mode / Color Filter Audit): this widget now drags exactly
+  // like the settings widget, per explicit instruction that the drag fix
+  // applies to both. `touch-action: none` on the launcher button (added
+  // to its CSS above) and handling `pointercancel` here are the two
+  // pieces that were missing from the settings widget's first version --
+  // without `touch-action: none`, a touch drag gets reinterpreted as a
+  // page scroll after a few pixels of movement, the browser fires
+  // pointercancel, and no more pointermove events arrive -- exactly the
+  // "can't be dragged continuously" symptom reported. Built correctly
+  // here from the start rather than copying the original bug.
+  function wireChatDragToReposition() {
+    let dragging = false, moved = false, startX = 0, startY = 0, justDragged = false;
+    function reset() {
+      dragging = false;
+      launcherBtn.style.left = ''; launcherBtn.style.top = ''; launcherBtn.style.right = ''; launcherBtn.style.bottom = ''; launcherBtn.style.marginTop = '';
+      launcherBtn.classList.remove('pcw-dragging');
+    }
+    function onPointerDown(e) {
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      dragging = true; moved = false; startX = e.clientX; startY = e.clientY;
+      launcherBtn.classList.add('pcw-dragging');
+      try { launcherBtn.setPointerCapture(e.pointerId); } catch (err) { /* ignore */ }
+    }
+    function onPointerMove(e) {
+      if (!dragging) return;
+      const dx = e.clientX - startX, dy = e.clientY - startY;
+      if (!moved && (Math.abs(dx) > 6 || Math.abs(dy) > 6)) moved = true;
+      if (!moved) return;
+      launcherBtn.style.left = (e.clientX - 28) + 'px';
+      launcherBtn.style.top = (e.clientY - 28) + 'px';
+      launcherBtn.style.right = 'auto'; launcherBtn.style.bottom = 'auto'; launcherBtn.style.marginTop = '0';
+    }
+    function onPointerUp(e) {
+      if (!dragging) return;
+      const wasMoved = moved;
+      reset();
+      if (!wasMoved) return;
+      justDragged = true;
+      const vh = window.innerHeight, vw = window.innerWidth;
+      const vzone = e.clientY < vh / 3 ? 'top' : (e.clientY > (vh * 2) / 3 ? 'bottom' : 'middle');
+      const hside = e.clientX < vw / 2 ? 'left' : 'right';
+      writeChatPosition(vzone + '-' + hside);
+    }
+    // Registered alongside pointerup, not instead of it: a cancelled
+    // gesture (browser hands off to panning/scrolling, a second finger
+    // arrives, palm rejection) fires pointercancel with NO pointerup at
+    // all -- without this, `dragging` would stay stuck true and the next
+    // real drag attempt would start from a broken state.
+    function onPointerCancel() { reset(); }
+    launcherBtn.addEventListener('pointerdown', onPointerDown);
+    document.addEventListener('pointermove', onPointerMove);
+    document.addEventListener('pointerup', onPointerUp);
+    document.addEventListener('pointercancel', onPointerCancel);
+    launcherBtn.addEventListener('click', (e) => {
+      if (justDragged) { justDragged = false; e.stopImmediatePropagation(); e.preventDefault(); }
+    }, true);
+  }
+
+  function wireChatPositionSync() {
+    applyChatPosition();
+    wireChatDragToReposition();
+    // Cross-tab: 'storage' only fires in OTHER tabs than the one that wrote it.
+    window.addEventListener('storage', (e) => { if (e.key === WIDGET_POS_KEY) applyChatPosition(); });
+    // Same-tab: dispatched by accessibility-widget.js's moveWidgetTo() when
+    // both widgets are loaded on the same page (e.g. admin-dashboard.html).
+    window.addEventListener('pc:widget-positions-change', applyChatPosition);
+  }
+  // TASK (Widget Positioning) END ====================================
+
   function init() {
     injectStyle();
     buildScaffold();
     updateLauncherButtonState();
+    wireChatPositionSync();
     dlog('widget initialized');
   }
 

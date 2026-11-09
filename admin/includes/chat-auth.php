@@ -31,12 +31,9 @@
  *   verify_token(token_string, principal_id): bool
  *   invalidate_all_tokens(principal_id): void
  *   log_audit(principal_id, endpoint, result): void
- * check_pin_throttle() is NOT implemented here — per the Shared Contract,
- * that function is Task 3's to add (its signature is published now only so
- * Task 6 can build its exemption against it in parallel). Do not stub it
- * here; an empty/fake stub would be worse than a missing function, since a
- * caller would silently get "always allowed" behavior from a throttle that
- * doesn't actually exist yet.
+ * check_pin_throttle() is implemented below by Task 3 and is shared by the
+ * PIN and password gate. It uses bounded progressive delays, not a permanent
+ * account lockout, so forgotten-PIN and recovery flows remain available.
  *
  * chat_session_token TABLE — created by the standalone one-time setup
  * script chat-session-token-setup.php (same CREATE TABLE IF NOT EXISTS /
@@ -127,6 +124,14 @@ function verify_token($token_string, $principal_id) {
     }
 
     $db = chatDb();
+    /* TASK-4 START — a client-side countdown is only a convenience. Re-check
+       the authoritative close/lock timestamps before honoring any token so a
+       second tab cannot remain valid after the configured lock point. */
+    if (chatAuthEnforceLock($principal_id)) {
+        log_audit($principal_id, 'verify_token', 'locked');
+        return false;
+    }
+    /* TASK-4 END */
     $hash = hash('sha256', $token_string);
 
     $stmt = $db->prepare(
@@ -236,3 +241,202 @@ function chatRequireSessionToken($principal_id, $providedToken = null) {
     }
 }
 // TASK-1 END
+
+/* TASK-3 START — shared chat protection helpers
+   These helpers keep PIN/password storage, progressive throttling, trusted
+   device checks, and the server-side idle-lock decision in one place. The
+   customer-facing endpoints below call these helpers instead of duplicating
+   authentication rules. */
+
+// Loads the one protection record for an anonymous chat principal.
+function chatAuthGet($principalId) {
+    $stmt = chatDb()->prepare("SELECT * FROM chat_auth WHERE principal_id = ? LIMIT 1");
+    $stmt->execute([$principalId]);
+    return $stmt->fetch() ?: null;
+}
+
+// Creates an explicitly unprotected record so every chat has one stable auth row.
+function chatAuthEnsure($principalId) {
+    $existing = chatAuthGet($principalId);
+    if ($existing) return $existing;
+    $stmt = chatDb()->prepare(
+        "INSERT INTO chat_auth (principal_id, auth_tier, secret_hash, salt, failed_attempts, locked_until)
+         VALUES (?, 'none', NULL, NULL, 0, NULL)"
+    );
+    $stmt->execute([$principalId]);
+    return chatAuthGet($principalId);
+}
+
+/* TASK-5 SECURITY START — HIBP k-anonymity screening. Only the first five
+   SHA-1 characters leave this server; an unavailable breach service fails
+   open, while the local common-password list and length policy fail closed. */
+function chatAuthPasswordBreached($secret) {
+    $digest = strtoupper(sha1((string)$secret));
+    $prefix = substr($digest, 0, 5);
+    $suffix = substr($digest, 5);
+    if (function_exists('curl_init')) {
+        $ch = curl_init('https://api.pwnedpasswords.com/range/' . $prefix);
+        curl_setopt_array($ch, [
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_CONNECTTIMEOUT => 2,
+            CURLOPT_TIMEOUT => 3,
+            CURLOPT_HTTPHEADER => ['Add-Padding: true', 'User-Agent: PetCenter-Chat-Password-Check'],
+        ]);
+        $body = curl_exec($ch);
+        $status = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+        if ($status !== 200 || !is_string($body)) return false;
+    } else {
+        $context = stream_context_create(['http' => [
+            'method' => 'GET', 'timeout' => 3,
+            'header' => "Add-Padding: true\r\nUser-Agent: PetCenter-Chat-Password-Check\r\n",
+        ]]);
+        $body = @file_get_contents('https://api.pwnedpasswords.com/range/' . $prefix, false, $context);
+        if (!is_string($body)) return false;
+    }
+    foreach (preg_split('/\r?\n/', $body) as $line) {
+        [$remoteSuffix] = array_pad(explode(':', trim($line), 2), 1, '');
+        if (hash_equals(strtoupper(trim($remoteSuffix)), $suffix)) return true;
+    }
+    return false;
+}
+/* TASK-5 SECURITY END */
+
+// Applies the settled password/PIN policy without imposing composition rules.
+function chatAuthValidateSecret($tier, $secret) {
+    $secret = (string)$secret;
+    if ($tier === 'pin') {
+        if (!preg_match('/^\d{6}$/', $secret)) return 'PIN must be exactly 6 digits.';
+        return null;
+    }
+    if ($tier === 'password') {
+        if (mb_strlen($secret, 'UTF-8') < 12) return 'Password must be at least 12 characters.';
+        if (mb_strlen($secret, 'UTF-8') > 1024) return 'Password is too long.';
+        /* TASK-6 SECURITY START — PASSWORD_DEFAULT is bcrypt on older PHP
+           builds, and bcrypt safely accepts only 72 bytes. Reject rather
+           than silently truncating a longer password on that fallback path. */
+        if (!defined('PASSWORD_ARGON2ID') && strlen($secret) > 72) return 'Password is too long for this server.';
+        /* TASK-6 SECURITY END */
+        $blocked = [
+            'password','password123','123456789012','1234567890','qwertyuiop12',
+            'letmein12345','welcome12345','iloveyou1234','adminadmin12','petcenter123',
+        ];
+        if (in_array(mb_strtolower($secret, 'UTF-8'), $blocked, true)) {
+            return 'Choose a password that is not common or previously exposed.';
+        }
+        if (chatAuthPasswordBreached($secret)) {
+            return 'Choose a password that has not appeared in a known breach.';
+        }
+        return null;
+    }
+    return 'Unsupported authentication tier.';
+}
+
+// Stores a PIN or password with PHP's adaptive password hashing implementation.
+function chatAuthSetSecret($principalId, $tier, $secret) {
+    $error = chatAuthValidateSecret($tier, $secret);
+    if ($error !== null) return ['success' => false, 'error' => $error];
+    $algo = defined('PASSWORD_ARGON2ID') ? PASSWORD_ARGON2ID : PASSWORD_DEFAULT;
+    $hash = password_hash((string)$secret, $algo);
+    if ($hash === false) return ['success' => false, 'error' => 'Could not protect the secret.'];
+    $salt = bin2hex(random_bytes(16));
+    $stmt = chatDb()->prepare(
+        "INSERT INTO chat_auth (principal_id, auth_tier, secret_hash, salt, failed_attempts, locked_until)
+         VALUES (?, ?, ?, ?, 0, NULL)
+         ON DUPLICATE KEY UPDATE auth_tier = VALUES(auth_tier), secret_hash = VALUES(secret_hash),
+           salt = VALUES(salt), failed_attempts = 0, locked_until = NULL, updated_at = CURRENT_TIMESTAMP"
+    );
+    $stmt->execute([$principalId, $tier, $hash, $salt]);
+    invalidate_all_tokens($principalId);
+    log_audit($principalId, $tier . '_set', $tier . '_set');
+    return ['success' => true];
+}
+
+// Returns the progressive delay without creating a hard lockout.
+function check_pin_throttle($principalId) {
+    $auth = chatAuthGet($principalId);
+    if (!$auth || empty($auth['locked_until'])) return ['allowed' => true, 'delay_seconds' => 0];
+    $remaining = strtotime($auth['locked_until']) - time();
+    if ($remaining <= 0) {
+        chatDb()->prepare("UPDATE chat_auth SET locked_until = NULL WHERE principal_id = ?")->execute([$principalId]);
+        return ['allowed' => true, 'delay_seconds' => 0];
+    }
+    return ['allowed' => false, 'delay_seconds' => $remaining];
+}
+
+// Adds a bounded progressive delay after an incorrect PIN/password attempt.
+function chatAuthRecordFailure($principalId) {
+    $db = chatDb();
+    $stmt = $db->prepare("SELECT failed_attempts FROM chat_auth WHERE principal_id = ? FOR UPDATE");
+    $stmt->execute([$principalId]);
+    $attempts = (int)$stmt->fetchColumn() + 1;
+    $delay = min(300, 2 ** min(8, max(0, $attempts - 1)));
+    $db->prepare("UPDATE chat_auth SET failed_attempts = ?, locked_until = ? WHERE principal_id = ?")
+       ->execute([$attempts, date('Y-m-d H:i:s', time() + $delay), $principalId]);
+    return $delay;
+}
+
+// Clears only the progressive credential throttle after a successful check.
+function chatAuthClearThrottle($principalId) {
+    chatDb()->prepare("UPDATE chat_auth SET failed_attempts = 0, locked_until = NULL WHERE principal_id = ?")
+       ->execute([$principalId]);
+}
+
+// Computes a server-side verifier for the client-held remembered-device secret.
+function chatAuthDeviceHash($deviceToken) {
+    return hash('sha256', (string)$deviceToken);
+}
+
+// Checks whether a remembered device is still valid and updates its last-use time.
+function chatAuthTrustedDevice($principalId, $deviceToken) {
+    if (!is_string($deviceToken) || !preg_match('/^[A-Fa-f0-9]{32,128}$/', $deviceToken)) return false;
+    $hash = chatAuthDeviceHash($deviceToken);
+    $stmt = chatDb()->prepare("SELECT id FROM chat_remember_device WHERE principal_id = ? AND device_fingerprint = ? LIMIT 1");
+    $stmt->execute([$principalId, $hash]);
+    $id = $stmt->fetchColumn();
+    if (!$id) return false;
+    chatDb()->prepare("UPDATE chat_remember_device SET last_used_at = CURRENT_TIMESTAMP WHERE id = ?")->execute([$id]);
+    return true;
+}
+
+// Saves a trusted device only after the customer has successfully verified a tier.
+function chatAuthRememberDevice($principalId, $deviceToken, $label) {
+    if (!is_string($deviceToken) || !preg_match('/^[A-Fa-f0-9]{32,128}$/', $deviceToken)) return false;
+    $hash = chatAuthDeviceHash($deviceToken);
+    $label = mb_substr(trim((string)$label), 0, 120);
+    chatDb()->prepare(
+        "INSERT INTO chat_remember_device (principal_id, device_fingerprint, label, last_used_at)
+         VALUES (?, ?, ?, CURRENT_TIMESTAMP)
+         ON DUPLICATE KEY UPDATE label = VALUES(label), last_used_at = CURRENT_TIMESTAMP"
+    )->execute([$principalId, $hash, $label ?: 'This device']);
+    return true;
+}
+
+// Invalidates every remembered device for a principal, without exposing tokens.
+function chatAuthForgetDevices($principalId) {
+    chatDb()->prepare("DELETE FROM chat_remember_device WHERE principal_id = ?")->execute([$principalId]);
+}
+
+// Enforces delayed/aggressive lock settings on the server before token use.
+function chatAuthEnforceLock($principalId) {
+    $stmt = chatDb()->prepare("SELECT * FROM chat_lock_settings WHERE principal_id = ? LIMIT 1");
+    $stmt->execute([$principalId]);
+    $lock = $stmt->fetch();
+    if (!$lock || empty($lock['last_closed_at']) || !empty($lock['locked_at'])) return false;
+    $dueAt = strtotime($lock['last_closed_at']) + (int)$lock['delay_seconds'];
+    if (!$lock['aggressive'] && time() < $dueAt) return false;
+    chatDb()->prepare("UPDATE chat_lock_settings SET locked_at = CURRENT_TIMESTAMP WHERE principal_id = ? AND locked_at IS NULL")
+       ->execute([$principalId]);
+    chatDb()->prepare("DELETE FROM chat_session_token WHERE principal_id = ?")->execute([$principalId]);
+    log_audit($principalId, 'chat-lock.php', 'locked');
+    return true;
+}
+
+// Provides the current lock setting while keeping the lock decision server-owned.
+function chatAuthLockStatus($principalId) {
+    chatAuthEnforceLock($principalId);
+    $stmt = chatDb()->prepare("SELECT delay_seconds, aggressive, last_closed_at, locked_at FROM chat_lock_settings WHERE principal_id = ? LIMIT 1");
+    $stmt->execute([$principalId]);
+    return $stmt->fetch() ?: ['delay_seconds' => 300, 'aggressive' => 0, 'last_closed_at' => null, 'locked_at' => null];
+}
+/* TASK-3 END */
