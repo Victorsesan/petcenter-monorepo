@@ -1,0 +1,12 @@
+# Never serve deployment configuration files.
+RewriteEngine On
+RewriteRule ^apply/config\.php$ - [F,L,NC]
+RewriteRule ^admin/\.env$ - [F,L,NC]
+
+<FilesMatch "^(config\.php|\.env)$">
+    Require all denied
+</FilesMatch>
+<IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+</IfModule>
