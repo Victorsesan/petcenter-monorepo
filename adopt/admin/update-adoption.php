@@ -33,12 +33,12 @@ if (!$code || !$status) {
     die(json_encode(['success' => false, 'message' => 'code and status are required']));
 }
 
-if (!is_scalar($code) || !is_scalar($status) || !preg_match('/^AD-\d{5}-\d{4}$/', (string)$code)) {
+$code = is_scalar($code) ? strtoupper(trim((string)$code)) : '';
+if ($code === '' || !is_scalar($status) || !preg_match('/^AD-\d{5}-\d{4}$/', $code)) {
     http_response_code(400);
-    die(json_encode(['success' => false, 'message' => 'invalid application code']));
+    die(json_encode(['success' => false, 'message' => 'Invalid adoption code']));
 }
 
-$code = (string)$code;
 $status = (string)$status;
 
 if (!in_array($status, ['APPROVED', 'REJECTED'], true)) {
