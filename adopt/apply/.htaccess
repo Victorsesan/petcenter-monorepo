@@ -1,0 +1,8 @@
+# Runtime configuration files are never public.
+<FilesMatch "^(config\.php|\.env)$">
+    Require all denied
+</FilesMatch>
+<IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+</IfModule>
