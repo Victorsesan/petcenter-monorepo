@@ -1,6 +1,12 @@
 # Pre-filled Manus Account Prompts
 
-The 11 prompt sections below are the same unified instructions with the account ID and work package already filled in. The GitHub token is intentionally not included in this document or any repository file; supply it transiently only during the account's private setup.
+> **ARCHIVED ACCOUNT APPENDIX — DO NOT USE FOR THE CURRENT WAVE:** These pre-filled prompts belong to the completed historical 11-account MANUS round. Current web accounts must use [`WEB-ACCOUNTS-OPERATIONAL-BRIEF.md`](WEB-ACCOUNTS-OPERATIONAL-BRIEF.md); current redesign accounts must use [`REDESIGN-ACCOUNTS-OPERATIONAL-BRIEF.md`](REDESIGN-ACCOUNTS-OPERATIONAL-BRIEF.md).
+
+There is no current-wave launcher in this archived file. Do not paste or follow any `Prompt for MANUS-XX` section below. Use [`CURRENT-WAVE-ACCOUNT-LAUNCHERS.md`](CURRENT-WAVE-ACCOUNT-LAUNCHERS.md), then let the account read only the canonical brief matching its account family: [`WEB-ACCOUNTS-OPERATIONAL-BRIEF.md`](WEB-ACCOUNTS-OPERATIONAL-BRIEF.md) for `WEB-01` through `WEB-05`, or [`REDESIGN-ACCOUNTS-OPERATIONAL-BRIEF.md`](REDESIGN-ACCOUNTS-OPERATIONAL-BRIEF.md) for `DESIGN-01` and `DESIGN-02`.
+
+Before opening any application source, every account must complete [`CORE-DOCUMENT-READING-GATE.md`](CORE-DOCUMENT-READING-GATE.md), read both structural project summaries in full, read every listed core document including Worker, VDM, Admin Integrator, and Web Integrator protocols, and then read every matching historical completion/handoff file under [`completion-evidence/`](completion-evidence/). The completion evidence is historical input to reconcile against the current repository, not a replacement for the original tracker. The account must perform Worker implementation, VDM review, and Integrator reconciliation in that order.
+
+Every account must try the environment's existing authorized GitHub connector or CLI first. A GitHub token is a last resort only, and it is intentionally not included in this document or any repository file. If private token authentication is genuinely required, supply it transiently during setup; never echo, save, persist in a remote URL, commit, or report it. Missing worker completion files are evidence gaps for every account, not a reason to stop the entire assignment: continue all independently verifiable work and publish the required report.
 
 ## Prompt for MANUS-01
 

@@ -155,7 +155,11 @@ if ($action === 'finalize') {
         @file_put_contents($temp_dir . '/.htaccess', "Deny from all\n");
     }
 
-    $safe_name = preg_replace('/[^A-Za-z0-9_\-\.]/', '_', mb_substr(pathinfo($fileName, PATHINFO_FILENAME), 0, 100));
+    $originalBaseName = pathinfo($fileName, PATHINFO_FILENAME);
+    $shortBaseName = function_exists('mb_substr')
+        ? mb_substr($originalBaseName, 0, 100, 'UTF-8')
+        : substr($originalBaseName, 0, 100);
+    $safe_name = preg_replace('/[^A-Za-z0-9_\-\.]/', '_', $shortBaseName);
     $stagedName = $token . '_' . $safe_name . '.' . $ext;
     $stagedPath = $temp_dir . '/' . $stagedName;
 

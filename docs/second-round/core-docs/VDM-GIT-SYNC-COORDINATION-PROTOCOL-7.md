@@ -106,22 +106,21 @@ Everything else about how you write a sub-task — what and where, never how, re
 
 ## SETTING UP YOUR COPY OF THE REPO (ONCE, TESTED)
 
-**A session with no GitHub login should use the approved token route in step 2, subject to the credential-handling rules below.**
+**A session with no visible GitHub login is not automatically a blocker. Follow the approved access order below; a token is a last resort only.**
 
-**How to get the repository — follow these in order, moving to the next approved method when a method fails:**
+**How to get the repository — follow these in order, and do not stop at the first failure:**
 
-1. **Claude Code session (tested, no token needed).** If you are working in a Claude Code session (claude.ai/code), attach `Victorsesan/petcenter-monorepo` with push access; it clones and pushes through its own GitHub connection. Clone in one go with a generous timeout (the repo is large; up to 10 minutes; do not interrupt it).
-2. **The CEO's access token (the standard fallback; use it whenever step 1 is not available).** If you are in an ordinary chat, or your session says it has no GitHub credentials, use the access token the CEO gave you. It is in the CEO's handover message to you and starts with `github_pat_`. The CEO created it for exactly this purpose and authorized every department to use it for this repository, so using it is part of your job, not something to ask permission for. Having no GitHub login in your session activates this approved fallback: this step exists for that case. Write the token only in the clone command; never put it in any file in the repo, in `TODO.md`, or in a report. If you cannot find a token in your handover message, ask the CEO for it once and continue with any independently verifiable work available meanwhile. First turn on **Code execution and file creation** and **Allow network egress**, then (replace `[TOKEN]` with the token):
+1. **Existing authorized access first.** Use the repository connector, authorized GitHub CLI, credential helper, or other approved session integration already available. If working in a Claude Code session, attach `Victorsesan/petcenter-monorepo` with push access. Clone and push through that approved connection.
+2. **Private token authentication only as a last resort.** If every approved access method genuinely fails, use the platform's private secret/input flow. Never request a token merely because a normal GitHub login is not displayed. Never echo, save, put it in a remote URL, commit, or report it. If no approved access method or private credential flow is available, report the exact access error and continue with any work that does not require repository access.
 ```
-git clone --filter=blob:limit=1m --no-checkout https://Victorsesan:[TOKEN]@github.com/Victorsesan/petcenter-monorepo.git
+git clone --filter=blob:limit=1m --no-checkout https://github.com/Victorsesan/petcenter-monorepo.git
 cd petcenter-monorepo
 git sparse-checkout init --no-cone
 printf '/*\n!*.mp4\n!*.jpg\n!*.jpeg\n!*.png\n!*.webp\n!*.ttf\n!*.afm\n!*.ufm\n' | git sparse-checkout set --no-cone --stdin
 git checkout main
 ```
    This is the **light clone**: about 3 seconds and about 25 MB instead of several minutes and 600+ MB, because the repo holds about 600 MB of videos and photos that coordination work does not need. Every branch and the full history are still there. If you really need one excluded file, fetch just that one: `git sparse-checkout add "/adopt/path/to/file.jpg"`.
-   The token is stored in the clone's remote address, so later `git fetch`, `git pull` and `git push` work with no extra login. This was tested: a VDM session that first reported "no GitHub credentials" cloned the full repo (2,435 files) and saw every branch as soon as it used the token.
-3. **Only if the clone fails with `Host not in allowlist: github.com`** (your session cannot reach GitHub at all), tell the CEO and wait. Do not try other routes.
+3. **If access still fails**, record the exact error and method tried. Do not put credentials in clone URLs or keep retrying with exposed credentials.
 
 **Whichever method you used, now set your git identity.** Without it your first commit fails with "Author identity unknown / Please tell me who you are":
 ```

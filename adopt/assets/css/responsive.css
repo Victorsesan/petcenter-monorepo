@@ -1,3 +1,4 @@
+/* TASK-web12-3 START: logical CSS properties for RTL */
 /* ════════════════════════════════════════════════════════════════
    Pet Center — responsive.css
    Site-wide responsive / mobile-first breakpoints
@@ -6,7 +7,7 @@
 
 /* ── 1280px and below: constrain max container ─────────────── */
 @media (max-width: 1280px) {
-  .pc-container { padding: 0 20px; }
+  .pc-container { padding-block: 0; padding-inline: 20px; }
 }
 
 /* ── 1024px: tablet landscape ──────────────────────────────── */
@@ -24,7 +25,7 @@
 
   /* Catalog */
   .pc-catalog-grid { grid-template-columns: repeat(2, 1fr); gap: 18px; }
-  .pc-banner { padding: 80px 20px 40px; }
+  .pc-banner { padding-block: 80px 40px; padding-inline: 20px; }
   .pc-banner h1 { font-size: clamp(1.8rem, 5vw, 2.8rem); }
   .pc-filter-bar { flex-wrap: wrap; gap: 10px; }
 
@@ -49,17 +50,17 @@
 
   /* Admin table */
   .pc-admin-table { font-size: 13px; }
-  .pc-admin-table td, .pc-admin-table th { padding: 10px 12px; }
+  .pc-admin-table td, .pc-admin-table th { padding-block: 10px; padding-inline: 12px; }
 }
 
 /* ── 640px: large mobile ───────────────────────────────────── */
 @media (max-width: 640px) {
-  .pc-section { padding: 48px 0; }
+  .pc-section { padding-block: 48px; padding-inline: 0; }
   .pc-filter-bar .pc-select-wrap,
   .pc-filter-bar select { width: 100%; }
 
   /* Form steps */
-  .step-indicator__item { padding: 10px 4px; font-size: 10px; }
+  .step-indicator__item { padding-block: 10px; padding-inline: 4px; font-size: 10px; }
   .step-indicator__num { width: 24px; height: 24px; font-size: 11px; line-height: 24px; }
   .form-nav { flex-direction: column; }
   .form-nav .pc-btn { width: 100%; justify-content: center; }
@@ -90,8 +91,8 @@
 /* ── 480px: small mobile ───────────────────────────────────── */
 @media (max-width: 480px) {
   .pc-grid-4 { grid-template-columns: 1fr; }
-  .pc-testi-card { padding: 22px 18px; }
-  .pc-testi-reply { padding-left: 0; }
+  .pc-testi-card { padding-block: 22px; padding-inline: 18px; }
+  .pc-testi-reply { padding-inline-start: 0; }
 
   /* Footer */
   .pc-footer__bottom { flex-direction: column; text-align: center; }
@@ -113,3 +114,4 @@
   .no-print { display: none !important; }
   body { padding-top: 0 !important; }
 }
+/* TASK-web12-3 END */

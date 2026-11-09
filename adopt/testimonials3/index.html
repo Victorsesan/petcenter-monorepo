@@ -8,6 +8,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Sora:wght@300;400;500;600;700&family=Roboto:wght@400;500;700&family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/styles.css">
   <style>
+/* TASK-web12-3 START: logical CSS properties for RTL */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { overflow-x: hidden; width: 100%; }
     body { overflow-x: hidden; width: 100%; position: relative; }
@@ -27,20 +28,20 @@
     .pc-header {
       position: sticky; top: 0; z-index: 1000;
       background: rgba(16,33,75,0.97);
-      padding: 0 24px; height: 68px;
+      padding-block: 0; padding-inline: 24px; height: 68px;
       display: flex; align-items: center; justify-content: space-between;
       box-shadow: 0 2px 20px rgba(0,0,0,0.18);
     }
     .pc-header__logo img { height: 40px; width: auto; }
     .pc-header__nav { display: flex; align-items: center; gap: 4px; list-style: none; }
     .pc-header__nav a {
-      display: block; padding: 8px 11px;
+      display: block; padding-block: 8px; padding-inline: 11px;
       font-family: 'Sora', sans-serif; font-size: 13px; font-weight: 500;
       color: rgba(255,255,255,0.9); text-decoration: none;
       border-radius: 6px; transition: color 0.2s, background 0.2s;
     }
     .pc-header__nav a:hover { color: #d7bd88; background: rgba(255,255,255,0.08); }
-    .pc-header__nav .nav-donate a { background: #ED7624; color: #fff; font-weight: 600; padding: 8px 16px; }
+    .pc-header__nav .nav-donate a { background: #ED7624; color: #fff; font-weight: 600; padding-block: 8px; padding-inline: 16px; }
     .pc-header__nav .nav-donate a:hover { background: #d4621a; }
     .pc-hamburger {
       display: none; flex-direction: column; gap: 5px;
@@ -48,13 +49,13 @@
     }
     .pc-hamburger span { display: block; width: 24px; height: 2px; background: #fff; border-radius: 2px; transition: all 0.3s; }
     .pc-mobile-menu {
-      display: none; position: fixed; top: 68px; left: 0; right: 0;
+      display: none; position: fixed; top: 68px; inset-inline-start: 0; inset-inline-end: 0;
       background: rgba(16,33,75,0.98); z-index: 999;
-      padding: 16px 0 24px; box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+      padding-block: 16px 24px; padding-inline: 0; box-shadow: 0 8px 32px rgba(0,0,0,0.3);
     }
     .pc-mobile-menu.open { display: block; }
     .pc-mobile-menu a {
-      display: block; padding: 12px 28px;
+      display: block; padding-block: 12px; padding-inline: 28px;
       font-family: 'Sora', sans-serif; font-size: 15px; font-weight: 500;
       color: rgba(255,255,255,0.9); text-decoration: none;
       border-bottom: 1px solid rgba(255,255,255,0.06);
@@ -100,10 +101,10 @@
     }
     .pcgb-cover-fallback svg { opacity: .35; }
     .pcgb-cover-more {
-      position: absolute; right: 10px; bottom: 10px;
+      position: absolute; inset-inline-end: 10px; bottom: 10px;
       background: rgba(0,0,0,.65); color: #fff;
       font-family: 'Roboto', sans-serif; font-size: 12.5px; font-weight: 500;
-      padding: 6px 12px; border-radius: 6px; cursor: pointer;
+      padding-block: 6px; padding-inline: 12px; border-radius: 6px; cursor: pointer;
       display: flex; align-items: center; gap: 6px;
       transition: background .15s ease;
     }
@@ -111,8 +112,8 @@
 
     /* ── Identity block ── */
     .pcgb-identity {
-      max-width: 1100px; margin: 0 auto;
-      padding: 20px 24px 0;
+      max-width: 1100px; margin-block: 0; margin-inline: auto;
+      padding-block: 20px 0; padding-inline: 24px;
     }
     .pcgb-identity-top {
       display: flex; align-items: flex-start; justify-content: space-between;
@@ -157,7 +158,7 @@
     .pcgb-action-btn {
       display: flex; flex-direction: column; align-items: center; gap: 4px;
       background: none; border: none; cursor: pointer;
-      min-width: 64px; padding: 6px 8px;
+      min-width: 64px; padding-block: 6px; padding-inline: 8px;
       font-family: 'Roboto', sans-serif; font-size: 12px; color: #1a73e8; font-weight: 500;
     }
     .pcgb-action-icon {
@@ -179,7 +180,7 @@
     .pcgb-tab {
       font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 500;
       color: #5f6368; background: none; border: none; cursor: pointer;
-      padding: 14px 16px 12px; white-space: nowrap;
+      padding-block: 14px 12px; padding-inline: 16px; white-space: nowrap;
       border-bottom: 3px solid transparent;
       transition: color .15s ease, border-color .15s ease;
     }
@@ -191,7 +192,7 @@
       font-size: 11px; font-weight: 700; letter-spacing: .14em;
       text-transform: uppercase; color: #d7bd88;
       background: rgba(215,189,136,0.12); border: 1px solid rgba(215,189,136,0.3);
-      padding: 5px 16px; border-radius: 20px; margin-bottom: 20px;
+      padding-block: 5px; padding-inline: 16px; border-radius: 20px; margin-bottom: 20px;
     }
     .pc-testi-hero h1 {
       font-family: 'Cormorant Garamond', serif;
@@ -200,13 +201,13 @@
     }
     .pc-testi-hero p {
       font-family: 'Sora', sans-serif; font-size: 15px;
-      color: rgba(255,255,255,0.75); max-width: 500px; margin: 0 auto;
+      color: rgba(255,255,255,0.75); max-width: 500px; margin-block: 0; margin-inline: auto;
     }
 
     /* ══════════════════════════════════════════════════════════════
        V2: TAB PANELS + NEW FEATURE SECTIONS
        ══════════════════════════════════════════════════════════════ */
-    .pcgb-tabpanel { display: none; max-width: 1100px; margin: 0 auto; padding: 28px 24px; }
+    .pcgb-tabpanel { display: none; max-width: 1100px; margin-block: 0; margin-inline: auto; padding-block: 28px; padding-inline: 24px; }
     .pcgb-tabpanel.active { display: block; }
     .pcgb-section-title {
       font-family: 'Google Sans', 'Roboto', sans-serif; font-size: 18px; font-weight: 500;
@@ -221,20 +222,20 @@
     }
     .pcgb-rb-score { text-align: center; min-width: 110px; }
     .pcgb-rb-score-num { font-family: 'Google Sans', 'Roboto', sans-serif; font-size: 48px; font-weight: 500; color: #202124; line-height: 1; }
-    .pcgb-rb-score-stars { color: #fbbc04; font-size: 18px; margin: 8px 0 4px; letter-spacing: 2px; }
+    .pcgb-rb-score-stars { color: #fbbc04; font-size: 18px; margin-block: 8px 4px; margin-inline: 0; letter-spacing: 2px; }
     .pcgb-rb-score-count { font-family: 'Roboto', sans-serif; font-size: 13px; color: #5f6368; }
     .pcgb-rb-bars { flex: 1; min-width: 220px; display: flex; flex-direction: column; gap: 6px; }
     .pcgb-rb-row { display: flex; align-items: center; gap: 10px; }
     .pcgb-rb-row-label { font-family: 'Roboto', sans-serif; font-size: 13px; color: #5f6368; width: 46px; flex-shrink: 0; }
     .pcgb-rb-row-track { flex: 1; height: 8px; background: #e8eaed; border-radius: 4px; overflow: hidden; }
     .pcgb-rb-row-fill { height: 100%; background: #fbbc04; border-radius: 4px; transition: width .5s ease; }
-    .pcgb-rb-row-count { font-family: 'Roboto', sans-serif; font-size: 12.5px; color: #5f6368; width: 24px; text-align: right; flex-shrink: 0; }
+    .pcgb-rb-row-count { font-family: 'Roboto', sans-serif; font-size: 12.5px; color: #5f6368; width: 24px; text-align: end; flex-shrink: 0; }
 
     /* ── Templated topic summary sentence (recommendation #3) ── */
     .pcgb-summary-sentence {
       font-family: 'Roboto', sans-serif; font-size: 14.5px; line-height: 1.7;
-      color: #3c4043; background: #f8f9fa; border-left: 3px solid #1a73e8;
-      padding: 14px 18px; border-radius: 4px; margin-bottom: 24px;
+      color: #3c4043; background: #f8f9fa; border-inline-start: 3px solid #1a73e8;
+      padding-block: 14px; padding-inline: 18px; border-radius: 4px; margin-bottom: 24px;
     }
     .pcgb-summary-sentence strong { color: #202124; font-weight: 700; }
     .pcgb-summary-label {
@@ -247,7 +248,7 @@
     .pcgb-quick-topics { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
     .pcgb-quick-chip {
       background: #fff; border: 1px solid #dadce0; border-radius: 8px;
-      padding: 8px 14px; font-family: 'Roboto', sans-serif; font-size: 13px;
+      padding-block: 8px; padding-inline: 14px; font-family: 'Roboto', sans-serif; font-size: 13px;
       color: #3c4043; cursor: pointer; display: flex; align-items: center; gap: 6px;
       transition: all .15s ease;
     }
@@ -271,12 +272,12 @@
     .pcgb-pt-day {
       font-family: 'Roboto', sans-serif; font-size: 12.5px; font-weight: 500;
       color: #5f6368; background: #f1f3f4; border: none; border-radius: 6px;
-      padding: 8px 12px; cursor: pointer; white-space: nowrap;
+      padding-block: 8px; padding-inline: 12px; cursor: pointer; white-space: nowrap;
     }
     .pcgb-pt-day.active { background: #1a73e8; color: #fff; }
     .pcgb-pt-chart { display: flex; align-items: flex-end; gap: 3px; height: 120px; }
     .pcgb-pt-bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; position: relative; }
-    .pcgb-pt-bar { width: 100%; max-width: 18px; background: #3c4c6e; border-radius: 2px 2px 0 0; transition: background .15s ease; }
+    .pcgb-pt-bar { width: 100%; max-width: 18px; background: #3c4c6e; border-start-start-radius: 2px; border-start-end-radius: 2px; border-end-end-radius: 0; border-end-start-radius: 0; transition: background .15s ease; }
     .pcgb-pt-bar.now { background: #1a73e8; }
     .pcgb-pt-bar-wrap:hover .pcgb-pt-bar { background: #1a73e8; }
     .pcgb-pt-labels { display: flex; gap: 3px; margin-top: 6px; }
@@ -292,7 +293,7 @@
     .pcgb-photo-cat {
       font-family: 'Roboto', sans-serif; font-size: 13px; font-weight: 500;
       color: #3c4043; background: #f1f3f4; border: none; border-radius: 8px;
-      padding: 8px 16px; cursor: pointer; white-space: nowrap;
+      padding-block: 8px; padding-inline: 16px; cursor: pointer; white-space: nowrap;
       transition: background .15s ease, color .15s ease;
     }
     .pcgb-photo-cat:hover { background: #e8eaed; }
@@ -321,7 +322,7 @@
     }
     .pcgb-qa-q-text { font-family: 'Roboto', sans-serif; font-size: 14.5px; color: #202124; font-weight: 500; }
     .pcgb-qa-q-meta { font-family: 'Roboto', sans-serif; font-size: 12px; color: #9aa0a6; margin-top: 3px; }
-    .pcgb-qa-a { display: flex; gap: 10px; padding-left: 38px; }
+    .pcgb-qa-a { display: flex; gap: 10px; padding-inline-start: 38px; }
     .pcgb-qa-a-icon {
       width: 26px; height: 26px; border-radius: 50%; background: #10214b;
       color: #d7bd88; display: flex; align-items: center; justify-content: center;
@@ -337,7 +338,7 @@
     }
     .pcgb-about-desc { font-family: 'Roboto', sans-serif; font-size: 14.5px; line-height: 1.7; color: #3c4043; }
     .pcgb-about-row {
-      display: flex; align-items: center; gap: 12px; padding: 12px 0;
+      display: flex; align-items: center; gap: 12px; padding-block: 12px; padding-inline: 0;
       border-top: 1px solid #f1f3f4; font-family: 'Roboto', sans-serif; font-size: 14px; color: #3c4043;
     }
     .pcgb-about-row:first-of-type { border-top: none; }
@@ -345,25 +346,25 @@
     .pcgb-about-row a { color: #1a73e8; text-decoration: none; }
     .pcgb-about-row a:hover { text-decoration: underline; }
     .pcgb-hours-table { font-family: 'Roboto', sans-serif; font-size: 13.5px; }
-    .pcgb-hours-row { display: flex; justify-content: space-between; padding: 5px 0; color: #3c4043; }
+    .pcgb-hours-row { display: flex; justify-content: space-between; padding-block: 5px; padding-inline: 0; color: #3c4043; }
     .pcgb-hours-row.today { font-weight: 700; color: #188038; }
 
     /* ── Main layout ── */
     .pc-testi-main {
-      max-width: 1100px; margin: 0 auto;
-      padding: 20px 24px 24px;
+      max-width: 1100px; margin-block: 0; margin-inline: auto;
+      padding-block: 20px 24px; padding-inline: 24px;
     }
 
     /* ── Powered by Google badge ── */
     .pc-testi-poweredby {
       display: flex; align-items: center; justify-content: center;
-      gap: 2px; padding: 20px 24px 12px;
+      gap: 2px; padding-block: 20px 12px; padding-inline: 24px;
       opacity: calc(var(--gr-opacity) / 100);
     }
     .pc-poweredby-text {
       font-family: 'Sora', sans-serif; font-size: 13px; font-weight: 600;
       color: #10214b; letter-spacing: .02em;
-      margin-right: -6px; /* compensates for transparent padding baked into the logo image itself */
+      margin-inline-end: -6px; /* compensates for transparent padding baked into the logo image itself */
     }
     .pc-poweredby-logo { width: 92px; height: auto; display: block; margin-top: 1px; }
     /* Fallback SVG (only appears if the PNG fails to load) sized to match */
@@ -398,7 +399,7 @@
     .pc-filter-btn {
       display: inline-flex; align-items: center; gap: 7px;
       background: #10214b; color: #d7bd88; border: 1.5px solid transparent;
-      border-radius: 999px; padding: 9px 18px;
+      border-radius: 999px; padding-block: 9px; padding-inline: 18px;
       font-family: 'Sora', sans-serif; font-size: 13.5px; font-weight: 600;
       cursor: pointer;
       transition: border-color .2s ease, transform .15s ease, background .2s ease;
@@ -419,7 +420,7 @@
     .pc-search-bar {
       display: flex; align-items: center; gap: 10px;
       border: 1.5px solid #d0c3ba; border-radius: 999px;
-      padding: 10px 18px; background: #fff;
+      padding-block: 10px; padding-inline: 18px; background: #fff;
       transition: border-color .2s ease;
     }
     .pc-search-bar:focus-within { border-color: #b89968; }
@@ -431,18 +432,18 @@
     .pc-search-bar input::placeholder { color: #b0a69a; }
     .pc-search-clear {
       background: none; border: none; font-size: 19px; cursor: pointer;
-      color: #7a6d5f; line-height: 1; padding: 2px 4px;
+      color: #7a6d5f; line-height: 1; padding-block: 2px; padding-inline: 4px;
     }
     .pc-search-clear:hover { color: #10214b; }
     .pc-search-highlight {
       background: rgba(215,189,136,0.4); color: #10214b; font-weight: 700;
-      border-radius: 3px; padding: 0 1px;
+      border-radius: 3px; padding-block: 0; padding-inline: 1px;
     }
 
     /* ── Loading squares (search debounce state) ── */
     .pc-loading-squares {
       display: flex; gap: 8px; justify-content: center;
-      padding: 60px 0; grid-column: 1 / -1;
+      padding-block: 60px; padding-inline: 0; grid-column: 1 / -1;
     }
     .pc-loading-squares span {
       width: 14px; height: 14px; background: #d7bd88; border-radius: 3px;
@@ -464,8 +465,8 @@
     .pc-sheet-backdrop.show { opacity: 1; visibility: visible; }
 
     .pc-filter-sheet, .pc-review-sheet {
-      position: fixed; left: 0; right: 0; bottom: 0;
-      background: #121212; border-radius: 18px 18px 0 0;
+      position: fixed; inset-inline-start: 0; inset-inline-end: 0; bottom: 0;
+      background: #121212; border-start-start-radius: 18px; border-start-end-radius: 18px; border-end-end-radius: 0; border-end-start-radius: 0;
       z-index: 1500; max-height: 82vh; max-height: 82dvh;
       display: flex; flex-direction: column;
       transform: translateY(100%);
@@ -479,18 +480,18 @@
        explicit instruction; the panel must occupy the full screen width
        on every breakpoint. */
 
-    .pc-sheet-handle { width: 40px; height: 4px; background: rgba(255,255,255,.25); border-radius: 4px; margin: 10px auto 0; flex-shrink: 0; }
+    .pc-sheet-handle { width: 40px; height: 4px; background: rgba(255,255,255,.25); border-radius: 4px; margin-block: 10px 0; margin-inline: auto; flex-shrink: 0; }
     .pc-sheet-header {
       display: flex; align-items: center; justify-content: space-between;
-      padding: 14px 20px 8px; flex-shrink: 0;
+      padding-block: 14px 8px; padding-inline: 20px; flex-shrink: 0;
     }
     .pc-sheet-header h3 { font-family: 'Sora', sans-serif; font-size: 18px; color: #fff; font-weight: 700; }
     .pc-sheet-close {
       background: none; border: none; color: #fff; font-size: 22px; line-height: 1;
-      cursor: pointer; padding: 4px 8px; opacity: .8;
+      cursor: pointer; padding-block: 4px; padding-inline: 8px; opacity: .8;
     }
     .pc-sheet-close:hover { opacity: 1; }
-    .pc-sheet-body { overflow-y: auto; padding: 8px 20px 20px; flex: 1; }
+    .pc-sheet-body { overflow-y: auto; padding-block: 8px 20px; padding-inline: 20px; flex: 1; }
     .pc-sheet-group { margin-bottom: 22px; }
     .pc-sheet-group h4 {
       font-family: 'Sora', sans-serif; font-size: 13px; color: rgba(255,255,255,.6);
@@ -499,7 +500,7 @@
     .pc-chip-row { display: flex; flex-wrap: wrap; gap: 10px; }
     .pc-chip {
       background: #1e1e1e; border: 1px solid rgba(255,255,255,.15);
-      color: #e5e5e5; border-radius: 999px; padding: 9px 16px;
+      color: #e5e5e5; border-radius: 999px; padding-block: 9px; padding-inline: 16px;
       font-family: 'Sora', sans-serif; font-size: 13px; cursor: pointer;
       display: flex; align-items: center; gap: 6px; transition: all .15s ease;
     }
@@ -509,7 +510,7 @@
     .pc-chip-empty { color: rgba(255,255,255,.4); font-family: 'Sora', sans-serif; font-size: 13px; }
 
     .pc-sheet-footer {
-      display: flex; gap: 12px; padding: 16px 20px 22px;
+      display: flex; gap: 12px; padding-block: 16px 22px; padding-inline: 20px;
       border-top: 1px solid rgba(255,255,255,.08); flex-shrink: 0;
     }
     .pc-sheet-clear, .pc-sheet-apply {
@@ -563,7 +564,7 @@
     .pc-time-badge {
       background: rgba(16,163,74,.12); color: #15803d;
       font-family: 'Sora', sans-serif; font-size: 11px; font-weight: 600;
-      padding: 3px 10px; border-radius: 20px; display: inline-block;
+      padding-block: 3px; padding-inline: 10px; border-radius: 20px; display: inline-block;
     }
     .pc-testi-card__text {
       font-family: 'Sora', sans-serif; font-size: 14px;
@@ -588,7 +589,7 @@
     .pc-report-link {
       background: none; border: none; cursor: pointer;
       font-family: 'Sora', sans-serif; font-size: 12px; color: #b0a69a;
-      text-decoration: underline; padding: 4px 0;
+      text-decoration: underline; padding-block: 4px; padding-inline: 0;
     }
     .pc-report-link:hover { color: #7a6d5f; }
     .pc-report-link.reported { color: #16a34a; text-decoration: none; cursor: default; }
@@ -616,17 +617,17 @@
       position: relative;
     }
     .pc-testi-card__reply-inner {
-      padding-left: 28px;
+      padding-inline-start: 28px;
       position: relative;
     }
     /* Vertical stem of the L, running down from the top of the reply block */
     .pc-reply-line-v {
-      position: absolute; left: 0; top: -6px; bottom: 12px;
+      position: absolute; inset-inline-start: 0; top: -6px; bottom: 12px;
       width: 2px; background: #e5ddd2;
     }
     /* Horizontal elbow of the L, turning right into the avatar */
     .pc-reply-line-h {
-      position: absolute; left: 0; top: 20px;
+      position: absolute; inset-inline-start: 0; top: 20px;
       width: 14px; height: 2px; background: #e5ddd2;
     }
     .pc-testi-card__reply-header {
@@ -679,11 +680,11 @@
     .pc-page-btn:hover:not(:disabled) { background: #10214b; color: #fff; border-color: #10214b; }
     .pc-page-btn.active { background: #10214b; color: #fff; border-color: #10214b; font-weight: 700; }
     .pc-page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-    .pc-page-btn.wide { width: auto; padding: 0 14px; font-size: 13px; }
+    .pc-page-btn.wide { width: auto; padding-block: 0; padding-inline: 14px; font-size: 13px; }
 
     /* ── "Leave a review" trigger (replaces old navy form section) ── */
     .pc-leave-review-trigger {
-      text-align: center; padding: 8px 24px 50px;
+      text-align: center; padding-block: 8px 50px; padding-inline: 24px;
     }
     .pc-leave-review-trigger h3 {
       font-family: 'Cormorant Garamond', serif;
@@ -709,7 +710,7 @@
     }
     .pc-testi-form input,
     .pc-testi-form textarea {
-      padding: 11px 14px;
+      padding-block: 11px; padding-inline: 14px;
       border: 1px solid rgba(255,255,255,0.2);
       border-radius: 8px;
       font-family: 'Sora', sans-serif; font-size: 14px;
@@ -729,19 +730,19 @@
     .pc-star.active, .pc-star:hover { color: #f59e0b; }
     .pc-star-text { font-family: 'Sora', sans-serif; font-size: 12px; color: rgba(255,255,255,0.55); margin-top: 4px; }
     .pc-star-text.chosen { color: #f59e0b; font-weight: 600; }
-    .pc-char-count { font-family: 'Sora', sans-serif; font-size: 11.5px; color: rgba(255,255,255,0.4); text-align: right; }
+    .pc-char-count { font-family: 'Sora', sans-serif; font-size: 11.5px; color: rgba(255,255,255,0.4); text-align: end; }
     .pc-submit-btn {
       display: inline-flex; align-items: center; justify-content: center; gap: 8px;
       background: #d7bd88; color: #10214b;
       border: none; border-radius: 999px;
-      padding: 13px 32px;
+      padding-block: 13px; padding-inline: 32px;
       font-family: 'Sora', sans-serif; font-size: 14px; font-weight: 700;
       cursor: pointer; transition: background 0.2s, color 0.2s;
     }
     .pc-submit-btn:hover { background: #b89968; color: #fff; }
     .pc-submit-btn:disabled { opacity: .6; cursor: default; }
     .pc-form-msg {
-      padding: 12px 16px; border-radius: 8px;
+      padding-block: 12px; padding-inline: 16px; border-radius: 8px;
       font-family: 'Sora', sans-serif; font-size: 13.5px;
       display: none;
     }
@@ -750,17 +751,21 @@
 
     /* ── Footer ── */
     .pc-footer-mini {
-      background: #0b1834; padding: 28px 24px;
+      background: #0b1834; padding-block: 28px; padding-inline: 24px;
       text-align: center;
       font-family: 'Sora', sans-serif; font-size: 12.5px;
       color: rgba(255,255,255,0.4);
     }
     .pc-footer-mini a { color: rgba(255,255,255,0.55); text-decoration: none; }
     .pc-footer-mini a:hover { color: #d7bd88; }
-  </style>
+
+/* TASK-web12-3 END */
+</style>
 </head>
 <body>
-<script src="adopt.petcenterco.com/admin/chat-widget.js"></script>
+<!-- BUGFIX-MANUS-09-3-START: use the site-root widget path so nested pages do not resolve it relatively. -->
+<script src="/admin/chat-widget.js"></script>
+<!-- BUGFIX-MANUS-09-3-END -->
 <!-- Header -->
 <header class="pc-header">
   <a href="../index.html" class="pc-header__logo">
@@ -1006,7 +1011,10 @@
       </div>
       <div class="fg">
         <label for="tEmail">Email Address *</label>
-        <input type="email" id="tEmail" name="email" placeholder="you@example.com" required>
+        <!-- BUGFIX-MANUS-03-1 START: email and telephone controls stay LTR under document RTL. -->
+<input type="email" id="tEmail" name="email" placeholder="you@example.com" required dir="ltr">
+<!-- BUGFIX-MANUS-03-1 END -->
+
       </div>
       <div class="fg">
         <label>Rate Your Experience *</label>
@@ -1034,8 +1042,8 @@
 </div><!-- /#pcgbPage -->
 
 <!-- Footer -->
-<footer style="background:#10214b;color:#fff;padding:48px 24px 24px;margin-top:60px;">
-  <div style="max-width:1280px;margin:0 auto;">
+<footer style="background:#10214b;color:#fff;padding-block: 48px 24px; padding-inline: 24px;margin-top:60px;">
+  <div style="max-width:1280px;margin-block: 0; margin-inline: auto;">
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:36px;margin-bottom:36px;">
       <div>
         <img src="../assets/images/logo-petcenter.png" alt="Pet Center" style="height:44px;margin-bottom:16px;">

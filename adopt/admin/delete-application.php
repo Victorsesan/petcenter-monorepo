@@ -33,6 +33,7 @@ $appsBaseDir = realpath(__DIR__ . '/../adoptions/applications');
 if (!$appsBaseDir) {
     chatRespond(['success' => false, 'error' => 'Applications directory not found on server'], 500);
 }
+$appsPrefix = rtrim($appsBaseDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
 
 function rrmdir($dir) {
     if (!is_dir($dir)) return false;
@@ -49,13 +50,14 @@ $deleted = [];
 $failed = [];
 
 foreach ($ids as $id) {
+    if (!is_scalar($id)) { $failed[] = $id; continue; }
     $safeId = preg_replace('/[^A-Za-z0-9\-]/', '', trim($id));
     if ($safeId === '') { $failed[] = $id; continue; }
 
     $targetDir = $appsBaseDir . '/' . $safeId;
     $realTarget = realpath($targetDir);
 
-    if (!$realTarget || strpos($realTarget, $appsBaseDir) !== 0) {
+    if (!$realTarget || strpos($realTarget, $appsPrefix) !== 0) {
         $failed[] = $id;
         continue;
     }

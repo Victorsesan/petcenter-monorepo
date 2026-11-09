@@ -32,6 +32,9 @@ header('Content-Type: text/plain; charset=utf-8');
 
 require_once __DIR__ . '/chat-config.php';
 
+// Schema setup is an administrative operation; never expose it as a public URL.
+chatRequireAdmin();
+
 if (DB_NAME === 'REPLACE_WITH_YOUR_DB_NAME' || DB_USER === 'REPLACE_WITH_YOUR_DB_USER') {
     die("chat-config.php still has placeholder database credentials.\n" .
         "Open chat-config.php, replace DB_HOST / DB_NAME / DB_USER / DB_PASSWORD with your real Hostinger MySQL details, then reload this page.\n");
@@ -79,6 +82,65 @@ $statements = [
             INDEX (principal_id, created_at)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
     ",
+
+    /* TASK-3 START — final shared auth shape. The PIN/password tier is
+       mutually exclusive by contract; password fields reuse the same secret
+       columns activated here rather than requiring a later schema rewrite. */
+    'chat_auth' => "
+        CREATE TABLE IF NOT EXISTS chat_auth (
+            principal_id   VARCHAR(20) PRIMARY KEY,
+            auth_tier      ENUM('none','pin','password') NOT NULL DEFAULT 'none',
+            secret_hash    VARCHAR(255) NULL,
+            salt           VARCHAR(64) NULL,
+            failed_attempts INT NOT NULL DEFAULT 0,
+            locked_until   DATETIME NULL,
+            created_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            INDEX (auth_tier), INDEX (locked_until)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+    ",
+    /* TASK-5 START — remembered devices store only a one-way verifier, never
+       the browser token itself. */
+    'chat_remember_device' => "
+        CREATE TABLE IF NOT EXISTS chat_remember_device (
+            id                  INT AUTO_INCREMENT PRIMARY KEY,
+            principal_id        VARCHAR(20) NOT NULL,
+            device_fingerprint  CHAR(64) NOT NULL,
+            label               VARCHAR(120) NOT NULL,
+            last_used_at        TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            created_at          TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            UNIQUE KEY uq_chat_device (principal_id, device_fingerprint),
+            INDEX (principal_id)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+    ",
+    /* TASK-4 START — close/lock settings are separate from credential
+       throttling so a delayed lock cannot block lookup or recovery. */
+    'chat_lock_settings' => "
+        CREATE TABLE IF NOT EXISTS chat_lock_settings (
+            principal_id     VARCHAR(20) PRIMARY KEY,
+            delay_seconds    INT NOT NULL DEFAULT 300,
+            aggressive       TINYINT(1) NOT NULL DEFAULT 0,
+            last_closed_at   DATETIME NULL,
+            locked_at        DATETIME NULL,
+            updated_at       TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            INDEX (locked_at)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+    ",
+    /* TASK-6 START — temporary reset credentials are single-use records with
+       hashed secrets and a short expiry. */
+    'chat_password_resets' => "
+        CREATE TABLE IF NOT EXISTS chat_password_resets (
+            id             INT AUTO_INCREMENT PRIMARY KEY,
+            principal_id   VARCHAR(20) NOT NULL,
+            contact_email  VARCHAR(255) NOT NULL,
+            temp_hash      VARCHAR(255) NOT NULL,
+            expires_at     DATETIME NOT NULL,
+            used_at        DATETIME NULL,
+            created_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            INDEX (principal_id), INDEX (contact_email), INDEX (expires_at)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+    ",
+    /* TASK-3 END */
 
 ];
 

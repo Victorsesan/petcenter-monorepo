@@ -5,9 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="Pet adoption details — Pet Center">
   <title id="pageTitle">Pet Details — Pet Center</title>
+  <!-- TASK-MANUS-06 START: F3 crawler-safe fallback metadata; per-pet tags are supplied by pet-share.php. -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Pet Center">
+  <meta property="og:title" content="Pet Details — Pet Center">
+  <meta property="og:description" content="Browse adoptable pets at Pet Center.">
+  <meta name="twitter:card" content="summary_large_image">
+  <!-- TASK-MANUS-06 END -->
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/plyr/3.8.4/plyr.min.css">
   <style>
+/* TASK-MANUS-06 START: G1 support controls reuse the detail-page component vocabulary. */
+.pc-support-merchant__row { display:flex; flex-wrap:wrap; gap:10px; margin-top:4px; }
+.pc-support-merchant__row .pc-btn { flex:1 1 auto; justify-content:center; }
+.pc-support-merchant__note { font-size:12px; color:var(--muted); margin-top:10px; line-height:1.5; }
+/* TASK-MANUS-06 END */
 /* ════════════════════════════════════════════════════════════════════════════
    PET CENTER ADOPTION WEBSITE — Design System v1.0
    Colors: Navy #10214b | Gold #d7bd88 | Orange #ED7624
@@ -1873,7 +1885,7 @@ body { padding-bottom: 84px; }
 
 /* ─── Category Page Banner ──────────────────────────────────────────────────── */
 .pc-cat-banner {
-  background: #10214b url('/assets/images/pet-detail.png') center/cover no-repeat;
+  background: #10214b url('/assets/images/pet-placeholder.jpg') center/cover no-repeat;
   padding: 140px 0 90px;
   position: relative;
   overflow: hidden;
@@ -2538,7 +2550,7 @@ body { padding-bottom: 84px; }
     <li><a href="/testimonials/">Testimonials</a></li>
     <li class="nav-donate"><a href="https://donate.petcenterco.com" target="_blank" rel="noopener">Donate</a></li>
     <li><a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact</a></li>
-    <li class="nav-signup"><a href="/rehome/">Sign Up</a></li>
+    <li class="nav-signup"><a href="/signin/">Sign Up</a></li>
   </ul>
   <button class="pc-hamburger" id="pcHamburger" aria-label="Open menu" aria-expanded="false">
     <span></span><span></span><span></span>
@@ -2557,7 +2569,7 @@ body { padding-bottom: 84px; }
     <a href="/blog/">Blog</a>
     <a href="/testimonials/">Testimonials</a>
     <a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact</a>
-    <a href="/rehome/">Sign Up</a>
+    <a href="/signin/">Sign Up</a>
     <a href="https://donate.petcenterco.com" class="mobile-donate" target="_blank" rel="noopener">Donate</a>
   </nav>
 </header>
@@ -2641,7 +2653,9 @@ body { padding-bottom: 84px; }
                  only ever one hero image on this page, unlike the card
                  grids which rebuild many cards from an array each render. -->
             <div id="heroAdoptedBadge" class="pc-hero-adopted-badge" style="display:none;">ADOPTED</div>
-            <img id="galleryMain" src="/assets/images/pet-placeholder.jpg" alt="Pet photo" onerror="this.src='/assets/images/pet-placeholder.jpg'">
+            <!-- BUGFIX-MANUS-06-4-START — stop a failed placeholder from recursively reloading itself. -->
+            <img id="galleryMain" src="/assets/images/pet-placeholder.jpg" alt="Pet photo" onerror="this.onerror=null;this.src='/assets/images/pet-placeholder.jpg'">
+            <!-- BUGFIX-MANUS-06-4-END -->
           </div>
           <div class="pc-gallery-thumbs" id="galleryThumbs"></div>
         </div>
@@ -2915,6 +2929,18 @@ body { padding-bottom: 84px; }
                 This listed pet has multiple options to choose from. It may contain different pets with different prices, ages, sex, or color. Please read more about them in the About section below before applying. While filling out your application, you must make sure to include how many amongst the listed options you wish to adopt (if applicable), preferred color, sex, and any additional information or request you wish to include based on the description. Each listed pet with multiple options is priced per pet unless stated otherwise in their description.
               </div>
             </div>
+
+            <!-- TASK-MANUS-06 START: G1 merchant opt-in links and listing checkout display. -->
+            <div class="pc-info-section" id="supportMerchantSection" style="display:none;">
+              <div class="pc-info-section__title">Support <span id="supportMerchantPetName">This Pet</span></div>
+              <div class="pc-support-merchant__row">
+                <a href="#" id="supportDonationBtn" class="pc-btn pc-btn--ghost pc-btn--sm" style="display:none;" target="_blank" rel="noopener noreferrer nofollow">Donate to <span id="supportDonationMerchantName">this merchant</span></a>
+                <a href="#" id="supportWishlistBtn" class="pc-btn pc-btn--ghost pc-btn--sm" style="display:none;" target="_blank" rel="noopener noreferrer nofollow">View Amazon Wishlist</a>
+                <a href="#" id="supportPayFeeBtn" class="pc-btn pc-btn--orange pc-btn--sm" style="display:none;" target="_blank" rel="noopener noreferrer">Pay Adoption Fee<span id="supportPayFeeAmount"></span></a>
+              </div>
+              <div class="pc-support-merchant__note">Donation and wishlist links are provided directly by the listing merchant. The adoption fee button opens a secure payment page.</div>
+            </div>
+            <!-- TASK-MANUS-06 END -->
           </div>
 
           <!-- Adopted message -->
@@ -3083,7 +3109,7 @@ body { padding-bottom: 84px; }
         <h5>Support</h5>
         <ul>
           <li><a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact Us</a></li>
-          <li><a href="/rehome/">Sign Up</a></li>
+          <li><a href="/signin/">Sign Up</a></li>
           <li><a href="https://docs.petcenterco.com/returns-refunds/" target="_blank" rel="noopener">Returns & Refunds</a></li>
           <li><a href="https://docs.petcenterco.com/faq/" target="_blank" rel="noopener">FAQ</a></li>
         </ul>
@@ -3256,6 +3282,9 @@ body { padding-bottom: 84px; }
         
         // Populate all pet info fields
         populatePetInfo(pet, category);
+        // TASK-MANUS-06 START: render G1 controls from the fetched listing, never a local demo record.
+        populateSupportMerchantSection(pet);
+        // TASK-MANUS-06 END
         
         // Setup adoption actions
         setupAdoptionActions(pet, category, petId);
@@ -3648,6 +3677,45 @@ body { padding-bottom: 84px; }
       })(i);
     }
   }
+
+  // TASK-MANUS-06 START: G1 donation/wishlist opt-in and fee-link renderer.
+  // The fields are the published cross-task contract: merchant donation_link /
+  // wishlist_link, per-listing show_*_link flags, and a fee link snapshot.
+  function populateSupportMerchantSection(pet) {
+    var section = document.getElementById('supportMerchantSection');
+    if (!section) return;
+    var merchant = pet.merchant || {};
+    var shown = false;
+    var name = document.getElementById('supportMerchantPetName');
+    if (name) name.textContent = (pet.name || 'This Pet') + "'s Rehoming";
+    var donation = document.getElementById('supportDonationBtn');
+    if (donation && pet.show_donation_link === true && isValidHttpUrl(merchant.donation_link)) {
+      donation.href = merchant.donation_link; donation.style.display = 'inline-flex'; shown = true;
+      var merchantName = document.getElementById('supportDonationMerchantName');
+      if (merchantName) merchantName.textContent = merchant.name || 'this merchant';
+    }
+    var wishlist = document.getElementById('supportWishlistBtn');
+    if (wishlist && pet.show_wishlist_link === true && isValidHttpUrl(merchant.wishlist_link)) {
+      wishlist.href = merchant.wishlist_link; wishlist.style.display = 'inline-flex'; shown = true;
+    }
+    var fee = document.getElementById('supportPayFeeBtn');
+    var amount = parseFloat(pet.adoption_fee);
+    var linkAmount = parseFloat(pet.fee_checkout_url_amount);
+    var currency = pet.currency_code || 'USD';
+    var linkCurrency = pet.fee_checkout_url_currency || 'USD';
+    if (fee && isValidHttpUrl(pet.fee_checkout_url) && !isNaN(amount) && amount === linkAmount && currency === linkCurrency) {
+      fee.href = pet.fee_checkout_url; fee.style.display = 'inline-flex'; shown = true;
+      var symbols = { USD: '$', CAD: 'CA$', GBP: '£', AUD: 'A$' };
+      var feeText = document.getElementById('supportPayFeeAmount');
+      if (feeText) feeText.textContent = ' (' + (symbols[currency] || '$') + amount.toLocaleString('en-US') + ')';
+    }
+    section.style.display = shown ? 'block' : 'none';
+  }
+  function isValidHttpUrl(value) {
+    if (!value || typeof value !== 'string') return false;
+    try { var url = new URL(value); return url.protocol === 'http:' || url.protocol === 'https:'; } catch (error) { return false; }
+  }
+  // TASK-MANUS-06 END
 
   function setupAdoptionActions(pet, category, petId) {
     var applyBtn = document.getElementById('applyBtn');
@@ -4074,10 +4142,15 @@ body { padding-bottom: 84px; }
 // Share Button - Web Share API
 function sharePet() {
   var petName = document.getElementById('petName')?.textContent || 'Pet';
+  // TASK-MANUS-06 START: share the server-rendered OG endpoint, not a URL
+  // whose pet data only exists after JavaScript runs in the browser.
+  var shareParams = new URLSearchParams(window.location.search);
+  var shareUrl = '/pets/detail/pet-share.php?pet_id=' + encodeURIComponent(shareParams.get('pet_id') || '') + '&category=' + encodeURIComponent(shareParams.get('category') || '');
+  // TASK-MANUS-06 END
   var shareData = {
     title: petName + ' - Pet Center',
     text: 'Check out this adorable pet available for adoption at Pet Center!',
-    url: window.location.href
+    url: shareUrl
   };
   
   if (navigator.share) {
@@ -4086,7 +4159,7 @@ function sharePet() {
     });
   } else {
     // Fallback: Copy to clipboard
-    navigator.clipboard.writeText(window.location.href).then(function() {
+    navigator.clipboard.writeText(shareUrl).then(function() {
       showShareToast('Link copied to clipboard!');
     }).catch(function() {
       alert('Could not copy link. Please try again.');
@@ -4379,5 +4452,6 @@ function showShareToast(message) {
   tryDock();
 })();
 </script>
+<script src="/assets/js/cookie-consent.js"></script>
 </body>
 </html>

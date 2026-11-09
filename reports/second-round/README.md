@@ -4,7 +4,7 @@ This directory is the central reporting location for the 11 second-round Manus a
 
 The aggregate status is maintained in [ACCOUNT-REPORT-INDEX.md](ACCOUNT-REPORT-INDEX.md). The issue source is [the master issue register](../../docs/second-round/SECOND-ROUND-ISSUE-REGISTER.md), and the work ownership is defined in [the coordination plan](../../docs/second-round/SECOND-ROUND-MANUS-COORDINATION.md).
 
-**Universal evidence rule:** The uploaded worker archive has now been imported as Markdown evidence under `docs/second-round/completion-evidence/`, with per-archive subdirectories and an `IMPORT-MANIFEST.md`. Every account should use the matching evidence file when present, compare it with the assignment and current source, and record only genuinely absent files as evidence gaps. Accounts must continue independently verifiable checks and submit their report even when some items are Blocked or Needs My Review.
+**Universal evidence rule:** The uploaded worker archive is preserved as read-only Markdown evidence under `docs/second-round/completion-evidence/`, grouped by worker-package name, with the import manifest. The 62 listed completion reports are available where present; the two packages without completion files remain evidence gaps. Historical reports must be compared with the task tracker, current source, and relevant branches; they do not prove implementation completeness. Continue independently verifiable checks and submit the account report even when some items are Blocked or Needs My Review.
 
 Do not put GitHub tokens, passwords, API keys, private keys, applicant data, or other secrets in these reports. Reports are repository artifacts and are visible to every participating account.
 

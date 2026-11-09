@@ -1,5 +1,7 @@
 # Second-Round Manus Account Coordination Plan
 
+> **CURRENT-WAVE NOTICE — 2026-11-07:** This document preserves the historical 11-account second-round coordination plan. It is not the active assignment plan for the current wave. The current wave has five web accounts (`WEB-01`–`WEB-05`) and two redesign accounts (`DESIGN-01`–`DESIGN-02`). Use [`WEB-ACCOUNTS-OPERATIONAL-BRIEF.md`](WEB-ACCOUNTS-OPERATIONAL-BRIEF.md) and [`REDESIGN-ACCOUNTS-OPERATIONAL-BRIEF.md`](REDESIGN-ACCOUNTS-OPERATIONAL-BRIEF.md) for current scopes, branches, synchronization, reading gates, and deliverables. Historical reports and evidence remain available for reconciliation.
+
 ## Mission
 
 This document coordinates the second debugging round after mechanical integration. The goal is to verify each assigned task against its original project brief, create genuinely missing deliverables that were never completed, reconcile cross-worker contracts, verify every issue in the master register, and report each outcome without guessing.

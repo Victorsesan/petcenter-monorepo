@@ -35,7 +35,8 @@
  * checks below instead, per Task 5b's documented spec for this endpoint.
  */
 
-require_once __DIR__ . '/admin/chat-config.php'; // reused only for chatCheckRateLimit(), not for any DB connection — this endpoint uses flat-file storage, not chatDb(). Path corrected: this file lives at the site root (pet-match.html's fetch() call targets the root-relative /pet-match-submit.php), while chat-config.php lives inside admin/ per the documented File Structure on Server — an earlier version of this file incorrectly assumed both files were siblings in admin/
+// This public endpoint intentionally has no dependency on the chat database.
+// Its rate limiter and deployment secrets are resolved locally below.
 
 header('Content-Type: application/json');
 
@@ -82,10 +83,22 @@ if ($renderedAt <= 0 || (microtime(true) * 1000 - $renderedAt) < 3000) {
 }
 
 // 3. Cloudflare Turnstile — verify the token server-side before accepting.
-//    TURNSTILE_SECRET_KEY must be defined in chat-config.php or an env var;
-//    this file does not hardcode it. Fails closed (rejects) if unset.
-$turnstileToken = $payload['turnstile_token'] ?? '';
-if (empty($turnstileToken) || !defined('TURNSTILE_SECRET_KEY')) {
+//    The secret is deployment configuration only: environment first, then a
+//    root .env file if the host does not expose environment variables.
+function pmDeploymentSecret(string $name): string {
+    $value = getenv($name);
+    if (is_string($value) && trim($value) !== '') return trim($value);
+    $envPath = __DIR__ . '/.env';
+    if (is_file($envPath)) {
+        foreach (file($envPath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line) {
+            if (strpos(trim($line), $name . '=') === 0) return trim(substr(trim($line), strlen($name) + 1), " \t\"'");
+        }
+    }
+    return '';
+}
+$turnstileToken = trim((string)($payload['turnstile_token'] ?? ''));
+$turnstileSecret = pmDeploymentSecret('TURNSTILE_SECRET_KEY');
+if ($turnstileToken === '' || $turnstileSecret === '') {
     http_response_code(400);
     echo json_encode(['message' => 'Verification failed — please refresh and try again.']);
     exit;
@@ -93,9 +106,10 @@ if (empty($turnstileToken) || !defined('TURNSTILE_SECRET_KEY')) {
 $verify = @file_get_contents('https://challenges.cloudflare.com/turnstile/v0/siteverify', false, stream_context_create([
     'http' => [
         'method' => 'POST',
+        'timeout' => 8,
         'header' => 'Content-Type: application/x-www-form-urlencoded',
         'content' => http_build_query([
-            'secret' => TURNSTILE_SECRET_KEY,
+            'secret' => $turnstileSecret,
             'response' => $turnstileToken,
             'remoteip' => $_SERVER['REMOTE_ADDR'] ?? '',
         ]),
@@ -108,14 +122,26 @@ if (!$verifyResult || empty($verifyResult['success'])) {
     exit;
 }
 
-// 4. Server-side rate limiting — reuses the existing chatCheckRateLimit()
-//    sliding-window helper already documented in
-//    ADMIN_DASHBOARD_PROJECT_SUMMARY.md, for consistency with the rest of
-//    the site rather than inventing a second limiter. (This helper's own
-//    bookkeeping may itself use chatDb() internally — that's unrelated
-//    to how THIS endpoint stores pet match requests, which is flat-file.)
+// 4. File-backed sliding-window limiter. Pet Match uses JSON storage, so it
+//    must not become coupled to the separate chat MySQL database.
+$rateDir = __DIR__ . '/adoptions/pet-match-rate-limits';
+if (!is_dir($rateDir)) @mkdir($rateDir, 0750, true);
 $clientIp = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
-if (!chatCheckRateLimit('pet_match_submit_' . $clientIp, 5, 600)) { // 5 submissions per 10 minutes per IP
+$ratePath = $rateDir . '/' . hash('sha256', $clientIp) . '.json';
+$rateHandle = @fopen($ratePath, 'c+');
+if ($rateHandle === false) {
+    http_response_code(500);
+    echo json_encode(['message' => 'Submission service temporarily unavailable.']);
+    exit;
+}
+flock($rateHandle, LOCK_EX);
+$rate = json_decode(stream_get_contents($rateHandle) ?: '', true);
+if (!is_array($rate) || (int)($rate['window_start'] ?? 0) < time() - 600) $rate = ['window_start' => time(), 'attempts' => 0];
+$rate['attempts']++;
+ftruncate($rateHandle, 0); rewind($rateHandle); fwrite($rateHandle, json_encode($rate)); fflush($rateHandle);
+$rateExceeded = $rate['attempts'] > 5;
+flock($rateHandle, LOCK_UN); fclose($rateHandle);
+if ($rateExceeded) {
     http_response_code(429);
     echo json_encode(['message' => 'Too many requests — please wait a few minutes and try again.']);
     exit;
