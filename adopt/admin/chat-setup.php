@@ -17,6 +17,9 @@ header('Content-Type: text/plain; charset=utf-8');
 
 require_once __DIR__ . '/chat-config.php';
 
+// Schema setup is an administrative operation; never expose it as a public URL.
+chatRequireAdmin();
+
 if (DB_NAME === 'REPLACE_WITH_YOUR_DB_NAME' || DB_USER === 'REPLACE_WITH_YOUR_DB_USER') {
     die("chat-config.php still has placeholder database credentials.\n" .
         "Open chat-config.php, replace DB_HOST / DB_NAME / DB_USER / DB_PASSWORD with your real Hostinger MySQL details, then reload this page.\n");

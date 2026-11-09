@@ -11,6 +11,9 @@ error_reporting(E_ALL);
 
 require_once __DIR__ . '/chat-config.php';
 
+// Migrations are an administrative operation; never expose them as a public URL.
+chatRequireAdmin();
+
 if (DB_NAME === 'REPLACE_WITH_YOUR_DB_NAME') {
     die("Set real DB credentials in chat-config.php first.\n");
 }
