@@ -1596,21 +1596,21 @@ body { padding-bottom: 84px; }
   .pc-pet-grid { grid-template-columns: repeat(3, 1fr); }
   .pc-pet-detail-hero { grid-template-columns: 1fr; }
   .pc-pet-detail-gallery { position: static; }
-
-
+  
+  
 }
 @media (max-width: 768px) {
   .pc-pet-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
   .pc-grid-4, .pc-grid-3 { grid-template-columns: 1fr 1fr; }
-
-
-
-
+  
+  
+  
+  
   .pc-filters { flex-direction: column; }
   .pc-status-box { padding: 28px 20px; }
   .pc-modal { padding: 28px 20px; }
   .pc-pet-info-panel { padding: 24px 20px; }
-
+  
 }
 @media (max-width: 480px) {
   .pc-pet-grid { grid-template-columns: 1fr; }
@@ -1811,22 +1811,22 @@ body { padding-bottom: 84px; }
   height: auto;
   justify-content: center;
 }
-.pc-hamburger span {
-  display: block;
-  width: 24px;
-  height: 2px;
-  background: #fff;
-  border-radius: 2px;
+.pc-hamburger span { 
+  display: block; 
+  width: 24px; 
+  height: 2px; 
+  background: #fff; 
+  border-radius: 2px; 
   transition: all 0.3s ease;
 }
-.pc-hamburger.active span:nth-child(1) {
-  transform: rotate(45deg) translate(8px, 8px);
+.pc-hamburger.active span:nth-child(1) { 
+  transform: rotate(45deg) translate(8px, 8px); 
 }
-.pc-hamburger.active span:nth-child(2) {
-  opacity: 0;
+.pc-hamburger.active span:nth-child(2) { 
+  opacity: 0; 
 }
-.pc-hamburger.active span:nth-child(3) {
-  transform: rotate(-45deg) translate(7px, -7px);
+.pc-hamburger.active span:nth-child(3) { 
+  transform: rotate(-45deg) translate(7px, -7px); 
 }
 .pc-mobile-menu {
   display: flex;
@@ -1844,7 +1844,7 @@ body { padding-bottom: 84px; }
   transition: all 0.3s ease;
   box-shadow: 0 8px 32px rgba(0,0,0,0.3);
 }
-.pc-mobile-menu.open {
+.pc-mobile-menu.open { 
   max-height: calc(100vh - 68px);
   overflow-y: auto;
   opacity: 1;
@@ -1864,9 +1864,9 @@ body { padding-bottom: 84px; }
   border-bottom: 1px solid rgba(255,255,255,0.06);
   transition: all 0.2s ease;
 }
-.pc-mobile-menu a:hover {
-  color: #d7bd88;
-  background: rgba(255,255,255,0.05);
+.pc-mobile-menu a:hover { 
+  color: #d7bd88; 
+  background: rgba(255,255,255,0.05); 
 }
 .pc-mobile-menu .mobile-donate {
   margin: 12px 28px 0;
@@ -1897,9 +1897,9 @@ body { padding-bottom: 84px; }
   background: rgba(16,33,75,0.62);
   z-index: 0;
 }
-.pc-cat-banner__inner {
-  position: relative;
-  z-index: 1;
+.pc-cat-banner__inner { 
+  position: relative; 
+  z-index: 1; 
   text-align: center;
   max-width: 800px;
   margin: 0 auto;
@@ -1934,24 +1934,24 @@ body { padding-bottom: 84px; }
   max-width: 520px;
   margin: 0 auto;
 }
-.pc-cat-banner__crumb {
-  font-family: 'Sora', sans-serif;
-  font-size: 12px;
-  color: rgba(255,255,255,0.6);
-  margin-bottom: 14px;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+.pc-cat-banner__crumb { 
+  font-family: 'Sora', sans-serif; 
+  font-size: 12px; 
+  color: rgba(255,255,255,0.6); 
+  margin-bottom: 14px; 
+  letter-spacing: 0.06em; 
+  text-transform: uppercase; 
 }
-.pc-cat-banner__crumb a {
-  color: rgba(255,255,255,0.6);
-  text-decoration: none;
+.pc-cat-banner__crumb a { 
+  color: rgba(255,255,255,0.6); 
+  text-decoration: none; 
 }
-.pc-cat-banner__crumb a:hover {
-  color: #d7bd88;
+.pc-cat-banner__crumb a:hover { 
+  color: #d7bd88; 
 }
-.pc-cat-banner__crumb span {
-  color: rgba(255,255,255,0.35);
-  margin: 0 8px;
+.pc-cat-banner__crumb span { 
+  color: rgba(255,255,255,0.35); 
+  margin: 0 8px; 
 }
 
 /* ─── Global Footer ─────────────────────────────────────────────────────────── */
@@ -2018,7 +2018,7 @@ body { padding-bottom: 84px; }
     grid-template-columns: 1fr;
     gap: 32px;
   }
-
+  
   .pc-pet-detail-gallery {
     position: static;
   }
@@ -2514,7 +2514,7 @@ body { padding-bottom: 84px; }
   } else {
     window.addEventListener('load', hideLoader);
   }
-
+  
   // FALLBACK: Ensure preloader hides after 5 seconds even if page doesn't load
   setTimeout(function() {
     if (loader && loader.style.display !== 'none') {
@@ -3138,7 +3138,7 @@ body { padding-bottom: 84px; }
 (function() {
   var header = document.getElementById('pcHeader');
   if (!header) return;
-
+  
   function updateHeaderOnScroll() {
     if (window.scrollY > 0) {
       header.classList.add('scrolled');
@@ -3146,7 +3146,7 @@ body { padding-bottom: 84px; }
       header.classList.remove('scrolled');
     }
   }
-
+  
   window.addEventListener('scroll', updateHeaderOnScroll, { passive: true });
   updateHeaderOnScroll();
 })();
@@ -3155,7 +3155,7 @@ body { padding-bottom: 84px; }
 (function() {
   var hamburger = document.getElementById('pcHamburger');
   var mobileMenu = document.getElementById('pcMobileMenu');
-
+  
   if (!hamburger || !mobileMenu) return;
 
   function openMenu() {
@@ -3175,12 +3175,12 @@ body { padding-bottom: 84px; }
     e.stopPropagation();
     mobileMenu.classList.contains('open') ? closeMenu() : openMenu();
   });
-
+  
   var links = mobileMenu.querySelectorAll('a');
   links.forEach(function(link) {
     link.addEventListener('click', closeMenu);
   });
-
+  
   document.addEventListener('click', function(e) {
     if (!e.target.closest('header') && !e.target.closest('.pc-mobile-menu')) {
       closeMenu();
@@ -3193,15 +3193,15 @@ body { padding-bottom: 84px; }
   var urlParams = new URLSearchParams(window.location.search);
   var petId = urlParams.get('pet_id');
   var category = urlParams.get('category');
-
+  
   var currentImageIndex = 0;
   var allImages = [];
-
+  
   if(!petId || !category) {
     showError('Pet not found');
     return;
   }
-
+  
   fetch('/adoptions/pets/' + category + '/' + petId + '/pet.json')
     .then(function(r) {
       if (!r.ok) throw new Error('Pet not found');
@@ -3210,28 +3210,28 @@ body { padding-bottom: 84px; }
     .then(function(pet) {
       // Update page title
       document.title = (pet.name || 'Pet') + ' - Pet Center';
-
+      
       // Banner title and description
       var bannerTitle = document.getElementById('bannerTitle');
       if (bannerTitle) bannerTitle.textContent = pet.name || 'Pet';
-
+      
       var bannerDesc = document.getElementById('bannerDescription');
       if (bannerDesc) bannerDesc.textContent = 'Meet ' + (pet.name || 'this pet') + ' and learn more about their adoption.';
-
+      
       // Build images — single image first, then probe bulk images that actually exist
       allImages = [];
       if (pet.single_image_url) allImages.push(pet.single_image_url);
-
+      
       // Store video URL if available
       var petVideoUrl = pet.video_url || null;
-
+      
       function renderPet() {
         // Show content, hide skeleton loader
         var loading = document.getElementById('petDetailLoading');
         var content = document.getElementById('petDetailContent');
         if (loading) loading.style.display = 'none';
         if (content) content.style.display = 'block';
-
+        
         // Show video section if available
         var videoSection = document.getElementById('petVideoSection');
         if (videoSection) {
@@ -3268,7 +3268,7 @@ body { padding-bottom: 84px; }
             videoSection.style.display = 'none';
           }
         }
-
+        
         // Update main gallery image
         var mainImage = document.getElementById('galleryMain');
         if (mainImage && allImages.length > 0) {
@@ -3276,23 +3276,23 @@ body { padding-bottom: 84px; }
           mainImage.alt = pet.name || 'Pet';
           mainImage.addEventListener('click', function() { openLightbox(0); });
         }
-
+        
         // Build thumbnail gallery
         buildThumbnailGallery(allImages);
-
+        
         // Populate all pet info fields
         populatePetInfo(pet, category);
         // TASK-MANUS-06 START: render G1 controls from the fetched listing, never a local demo record.
         populateSupportMerchantSection(pet);
         // TASK-MANUS-06 END
-
+        
         // Setup adoption actions
         setupAdoptionActions(pet, category, petId);
-
+        
         // Handle adopted status
         if (pet.status === 'Adopted') showAdoptedStatus(category);
       }
-
+      
       // Probe bulk images with HEAD requests — only add ones that actually return 200
       if (pet.bulk_images_url) {
         var probes = [];
@@ -3321,7 +3321,7 @@ body { padding-bottom: 84px; }
     .catch(function(err) {
       showError('Error loading pet details: ' + err.message);
     });
-
+  
   // TASK-2 START — shared date formatter for Posted-on display
   function formatPostedDate(dateStr) {
     if (!dateStr) return null;
@@ -3632,7 +3632,7 @@ body { padding-bottom: 84px; }
     // Load recommended
     loadRecommended(category, petId, pet);
   }
-
+  
   function updateInfoItem(elementId, value) {
     var el = document.getElementById(elementId);
     if (el) el.textContent = value;
@@ -3943,37 +3943,37 @@ body { padding-bottom: 84px; }
       }
     });
   }
-
+  
   function updateMainImage(index) {
     if (index < 0 || index >= allImages.length) return;
-
+    
     var mainImg = document.getElementById('galleryMain');
     if (mainImg) {
       mainImg.src = allImages[index];
     }
-
+    
     currentImageIndex = index;
     setActiveThumb(index);
   }
-
+  
   function openLightbox(startIndex) {
     currentImageIndex = startIndex || 0;
     var overlay = document.getElementById('lightboxOverlay');
     var mainImg = document.getElementById('lightboxImage');
-
+    
     if (!overlay || !mainImg) return;
-
+    
     // Update main image
     mainImg.src = allImages[currentImageIndex];
-
+    
     // Build lightbox thumbnails
     buildLightboxThumbs();
-
+    
     // Show overlay
     overlay.classList.add('active');
     document.body.style.overflow = 'hidden';
   }
-
+  
   function closeLightbox() {
     var overlay = document.getElementById('lightboxOverlay');
     if (overlay) {
@@ -3981,13 +3981,13 @@ body { padding-bottom: 84px; }
       document.body.style.overflow = 'auto';
     }
   }
-
+  
   function buildLightboxThumbs() {
     var thumbsContainer = document.getElementById('lightboxThumbs');
     if (!thumbsContainer) return;
-
+    
     thumbsContainer.innerHTML = '';
-
+    
     allImages.forEach(function(img, index) {
       var thumb = document.createElement('div');
       thumb.className = 'pc-lightbox-thumb' + (index === currentImageIndex ? ' active' : '');
@@ -3998,16 +3998,16 @@ body { padding-bottom: 84px; }
       thumbsContainer.appendChild(thumb);
     });
   }
-
+  
   function goToImage(index) {
     if (index < 0 || index >= allImages.length) return;
-
+    
     currentImageIndex = index;
     var mainImg = document.getElementById('lightboxImage');
     if (mainImg) {
       mainImg.src = allImages[currentImageIndex];
     }
-
+    
     // Update active thumb
     var thumbs = document.querySelectorAll('.pc-lightbox-thumb');
     thumbs.forEach(function(t, i) {
@@ -4018,7 +4018,7 @@ body { padding-bottom: 84px; }
       }
     });
   }
-
+  
   function buildThumbnailGallery(images) {
     var thumbsContainer = document.getElementById('galleryThumbs');
     if (!thumbsContainer) return;
@@ -4123,7 +4123,7 @@ body { padding-bottom: 84px; }
   document.getElementById('lightboxOverlay')?.addEventListener('click', function(e) {
     if (e.target === this) closeLightbox();
   });
-
+  
   // Keyboard navigation for lightbox
   document.addEventListener('keydown', function(e) {
     if (document.getElementById('lightboxOverlay')?.classList.contains('active')) {
@@ -4132,7 +4132,7 @@ body { padding-bottom: 84px; }
       if (e.key === 'Escape') closeLightbox();
     }
   });
-
+  
   // Make functions globally accessible
   window.openLightbox = openLightbox;
   window.closeLightbox = closeLightbox;
@@ -4152,7 +4152,7 @@ function sharePet() {
     text: 'Check out this adorable pet available for adoption at Pet Center!',
     url: shareUrl
   };
-
+  
   if (navigator.share) {
     navigator.share(shareData).catch(function(err) {
       console.log('Share cancelled:', err);
