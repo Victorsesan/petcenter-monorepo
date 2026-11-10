@@ -188,3 +188,18 @@ The final live checks prove deployment integrity, route availability, consent in
 - Canonical `main`: `b276e09b7e667ad0e84dbcce37e993d3686fa5ad`.
 - Canonical `adopt-deploy`: `af71b57c9ed42469491f1bd3ffe8349933599b5e`.
 - MANUS-06 report branch after this audit: the commit produced by this documentation update.
+
+
+## FINAL CURRENT-BRANCH AND LIVE-SERVER STATUS — 2026-11-09
+
+A final repository-wide status audit was run after later security commits landed on the shared branches. Current remote heads are:
+
+- `origin/main`: `dd9070247d89fcb6ebcd1f07361c95e3a3c326fb` — merge of the admin maintenance endpoint security fix.
+- `origin/adopt-deploy`: `78edabf9016b246cf238fcb47ad8f92800c43f7a` — deployment of that same security fix.
+- `origin/task/second-round-MANUS-06`: `bc5938cbcfec6a62c28c67c2dd9d4a6090f50816` — this report's requirements-coverage audit.
+
+The later shared security update changed only admin maintenance endpoint files plus the synchronized detail-page payload. A current mapped-tree comparison found 2,557 files under `origin/main/adopt` and 2,558 files under the flattened `origin/adopt-deploy` root (the extra file is deployment `.gitignore`), with **zero missing and zero different mapped runtime files**. All MANUS-06 critical paths remain present, including the rehoming hub, consent script, rehoming engine, merchant dashboard/posting route, checkout endpoint, donation/wishlist endpoint, saved-search endpoint, JSON-store protection, and pet detail page.
+
+The current public live-server matrix returned **75/75 checks passed with zero failures**. It covered `/`, `/rehoming/`, `/merchant/`, `/merchant/post-listing/`, `/account/settings/`, `/pets/detail/`, all referenced assets and navigation routes, consent-script presence and behavior, endpoint JSON/error contracts, PHP syntax, source-leak checks, and protected storage. Current live responses include HTTP 200 for all primary pages/assets, HTTP 405 JSON for GET requests to all three POST-only PHP endpoints, HTTP 422/404/503 JSON for their invalid/unknown/unconfigured cases, and HTTP 403 for the saved-search/story JSON stores and digest secret.
+
+The GitHub deployment REST endpoint was queried but returned HTTP 403 `Resource not accessible by integration` for this session's token. Therefore no GitHub deployment-status object is claimed; deployment confirmation is based on the current remote `adopt-deploy` commit, zero-difference branch payload comparison, and direct public HTTPS verification. No MANUS-06 deployment blocker or missing runtime file remains. The only residual items are explicitly documented acceptance-evidence or operational dependencies (saved screenshots, authenticated production-session testing, external email delivery, and optional `STRIPE_SECRET_KEY` configuration), not unrecorded deployment failures.
