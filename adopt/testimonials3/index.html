@@ -764,7 +764,6 @@
 </head>
 <body>
 <!-- BUGFIX-MANUS-09-3-START: use the site-root widget path so nested pages do not resolve it relatively. -->
-<script src="/admin/chat-widget.js"></script>
 <!-- BUGFIX-MANUS-09-3-END -->
 <!-- Header -->
 <header class="pc-header">
@@ -2357,5 +2356,9 @@ function showMsg(type, text) {
   setTimeout(function(){ el.className = 'pc-form-msg'; }, 6000);
 }
 </script>
+
+  <!-- Shared customer chat and accessibility widgets; keep these sitewide for consistent placement. -->
+  <script src="/admin/chat-widget.js"></script>
+  <script src="/assets/js/accessibility-widget.js" defer></script>
 </body>
 </html>

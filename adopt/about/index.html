@@ -583,8 +583,9 @@ p { color: var(--muted); }
   document.addEventListener('click', function (e) { if (!e.target.closest('header') && !e.target.closest('.pc-mobile-menu')) { closeMenu(); } });
 })();
 </script>
-<script src="/admin/chat-widget.js"></script>
 
-<script src="/assets/js/accessibility-widget.js" defer></script>
+  <!-- Shared customer chat and accessibility widgets; keep these sitewide for consistent placement. -->
+  <script src="/admin/chat-widget.js"></script>
+  <script src="/assets/js/accessibility-widget.js" defer></script>
 </body>
 </html>
