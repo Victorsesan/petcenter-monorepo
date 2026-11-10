@@ -241,3 +241,7 @@ Added `tools/live-navigation-audit.py`, a read-only same-origin crawler that tes
 These were stale legacy targets. The tracked site files now use the current clean routes: `/pets/dogs/`, `/pets/cats/`, `/pets/birds/`, `/pets/reptiles/`, `/pets/small-mammals/`, `/blog/`, `/apply/`, and `/signin/` respectively. The `/signin/` mapping follows the existing repository-wide decision to retire `/rehome/`; it does not claim that the signup backend is complete. The replacement covered 33 tracked HTML/JS/PHP files, including repeated headers, footer links, category detail variants, and the pet-detail JavaScript route map.
 
 The signup gateway remains a separate major issue: `/signin/` is still a “Coming Soon” page and `/signup/` remains HTTP 404. That issue is owned by WEB-04 and DESIGN-02, not MANUS-05, and remains explicitly flagged for integrators.
+
+### Final live verification
+
+After deployment propagation, the rerun crawled 35 live HTML pages and tested 35 same-origin targets. The final result was **0 broken links, 0 broken header links, 0 redirects, 0 untitled pages, and 0 non-HTML navigation targets**. The earlier single `/pets/cats/` failure was transient deployment propagation; direct probes and the final crawler both returned HTTP 200 for `/pets/cats/` and all category routes.
