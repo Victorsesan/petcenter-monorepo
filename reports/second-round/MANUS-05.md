@@ -245,3 +245,9 @@ The signup gateway remains a separate major issue: `/signin/` is still a “Comi
 ### Final live verification
 
 After deployment propagation, the rerun crawled 35 live HTML pages and tested 35 same-origin targets. The final result was **0 broken links, 0 broken header links, 0 redirects, 0 untitled pages, and 0 non-HTML navigation targets**. The earlier single `/pets/cats/` failure was transient deployment propagation; direct probes and the final crawler both returned HTTP 200 for `/pets/cats/` and all category routes.
+
+## Category asset and image verification — 2026-11-10
+
+Added `tools/live-category-assets-audit.py` and ran it against the seven live category pages: dogs, cats, birds, reptiles, small mammals, aquariums, and livestocks. The checker inspected asset-bearing `img`, `script`, `link`, `source`, `poster`, `srcset`, and CSS `url(...)` references, excluding ordinary navigation anchors.
+
+Final result: all 7 category pages returned HTTP 200; 8 unique linked assets were tested; 7 were same-origin and 1 was external; **0 asset failures** and **0 image/resource 404s** were found. The initial pass reported `https://docs.petcenterco.com/faq/` as a 403 because the first extractor treated every anchor as an asset; that false positive was removed by restricting the final checker to actual asset-bearing elements.
