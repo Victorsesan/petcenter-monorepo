@@ -1984,6 +1984,13 @@ window.pcClearServerRadiusSearch = pcClearServerRadiusSearch;
       '<div class="pc-empty-state__subtitle">Please check back soon — new arrivals are added often.</div>' +
     '</div>';
 
+  // BUGFIX-INTEGRATOR-RECORD-LOAD-MESSAGE-START
+  // Reuse the category-specific empty-state icon and layout, but do not claim every pet was adopted when records fail to load.
+  var PC_PET_DATA_UNAVAILABLE_HTML = PC_NO_PETS_HTML
+    .replace('All our pets here have found their homes', 'Pet listings are temporarily unavailable')
+    .replace('Please check back soon — new arrivals are added often.', 'Please try again shortly.');
+  // BUGFIX-INTEGRATOR-RECORD-LOAD-MESSAGE-END
+
   function loadPets() {
     return fetch('/adoptions/pets/' + category + '/index.json')
       .then(function(r) {
@@ -2012,10 +2019,13 @@ window.pcClearServerRadiusSearch = pcClearServerRadiusSearch;
       })
       .then(function(pets) {
         allPets = pets.filter(function(p) { return p; });
+        // BUGFIX-INTEGRATOR-RECORD-LOAD-STATE-START
         if (allPets.length === 0) {
-          petGrid.innerHTML = PC_NO_PETS_HTML;
+          // `pets.length` is nonzero only when the index listed records but every record request failed.
+          petGrid.innerHTML = pets.length ? PC_PET_DATA_UNAVAILABLE_HTML : PC_NO_PETS_HTML;
           return [];
         }
+        // BUGFIX-INTEGRATOR-RECORD-LOAD-STATE-END
         populateFilters();
         // TASK-3 START — Pick up "?state=XX" carried over from pets.html's
         // location bar and pre-select it, case-insensitively, against whatever
@@ -2038,7 +2048,9 @@ window.pcClearServerRadiusSearch = pcClearServerRadiusSearch;
         // must never expose the internal folder path or raw HTTP status,
         // both of which reveal server structure to anyone who hits this state.
         console.error('Error loading pets for category "' + category + '":', err);
-        petGrid.innerHTML = PC_NO_PETS_HTML;
+        // BUGFIX-INTEGRATOR-RECORD-LOAD-ERROR-START
+        petGrid.innerHTML = PC_PET_DATA_UNAVAILABLE_HTML;
+        // BUGFIX-INTEGRATOR-RECORD-LOAD-ERROR-END
       });
   }
 
