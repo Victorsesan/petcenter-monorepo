@@ -172,3 +172,40 @@ The repository-wide reconciliation found that origin/main preserved the A1/C1 ev
 ### Integration contract
 
 The existing account owner must populate `$_SESSION['pc_account']` with `account_id` and `account_type` (`merchant`, `visitor`, or `admin`) and configure `PETCENTER_REHOMING_TOKEN_SECRET` with at least 32 random characters. This is an integration contract, not a new login system. The new API records live under `adopt/rehoming/runtime/` and are denied as static downloads.
+
+
+## Final integrator re-audit — 2026-11-10
+
+**Account/worker ID:** `MANUS-05`
+
+This section records the work completed after the 2026-11-05 implementation pass so integrators can identify it during a repository-wide sweep.
+
+### Completed by MANUS-05
+
+- Reconciled the deployment tree and added the previously missing live files `adopt/admin/chat-session-token-setup.php` and `adopt/admin/chat-setup.php` to `origin/adopt-deploy` in deployment commit `5b003c6`.
+- Added `tools/rehoming-live-smoke.sh`, a repeatable live test covering route availability, HTTP method guards, unauthenticated guards, secret-loaded detection, and optional authenticated visitor chat/review flows.
+- Added `docs/REHOMING-LIVE-OPERATIONS.md`, documenting Hostinger secret setup, safe secret verification, dedicated test-account execution, rollback guidance, and the exact smoke-test commands.
+- The local production-shaped authenticated fixture passed **16 checks, 0 failures, 2 intentional skips**, including thread creation/token issuance, message send, poll, thread listing, authenticated review reads, review eligibility, and test-account review submission.
+- The live smoke test passed all route and guard checks but correctly reported the remaining runtime configuration issue: HTTP 503 `Rehoming token secret is not configured`. No secret was committed or exposed.
+
+### Current repository and deployment audit
+
+At the 2026-11-10 audit, `origin/main` was `a5f73c8` and `origin/adopt-deploy` was `558252d`. The MANUS-05 worker branch `origin/task/second-round-MANUS-05` was `c177938` and is an ancestor of `main`; the MANUS-05 implementation is therefore merged into current `main`.
+
+The current `main` and `adopt-deploy` trees are **not fully identical**. The exact sole difference is `merchant/post-listing/index.html` in the flattened deployment tree. The deploy version contains the appended sitewide customer-chat and accessibility widget scripts, while the current `main` version does not. There are no other file additions, deletions, or modifications between the two deployment trees. This is an integrator release concern requiring an explicit decision: either merge the widget change back into `main` and republish, or republish current `main` after confirming that the widgets are intentionally excluded.
+
+The latest main commits also include MANUS-09 environment/security hardening, MANUS-06 runtime integration, chat maintenance endpoint protection, credential-rotation documentation, and MANUS-02 handoff documentation. These are outside MANUS-05 ownership; integrators should retain them when resolving the one-file deployment drift.
+
+### Remaining MANUS-05 operational dependency
+
+`PETCENTER_REHOMING_TOKEN_SECRET` is still not visible to the live PHP runtime. Hostinger authentication was blocked by Cloudflare verification in the available browser, so the variable was not set from this session. The source, runbook, and automated test are complete; authenticated live chat/review testing remains pending until the secret is configured and a dedicated logged-in test-account session is available.
+
+### Handoff references
+
+- Smoke test: `tools/rehoming-live-smoke.sh`
+- Hostinger/runbook: `docs/REHOMING-LIVE-OPERATIONS.md`
+- Worker branch: `task/second-round-MANUS-05`
+- Original worker implementation head: `c177938`
+- Documentation/tooling commit: `702b584`
+- Deployment reconciliation commit: `5b003c6`
+- This final integrator handoff is authored under account ID `MANUS-05`.
