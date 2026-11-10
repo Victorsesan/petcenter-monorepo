@@ -203,3 +203,24 @@ The later shared security update changed only admin maintenance endpoint files p
 The current public live-server matrix returned **75/75 checks passed with zero failures**. It covered `/`, `/rehoming/`, `/merchant/`, `/merchant/post-listing/`, `/account/settings/`, `/pets/detail/`, all referenced assets and navigation routes, consent-script presence and behavior, endpoint JSON/error contracts, PHP syntax, source-leak checks, and protected storage. Current live responses include HTTP 200 for all primary pages/assets, HTTP 405 JSON for GET requests to all three POST-only PHP endpoints, HTTP 422/404/503 JSON for their invalid/unknown/unconfigured cases, and HTTP 403 for the saved-search/story JSON stores and digest secret.
 
 The GitHub deployment REST endpoint was queried but returned HTTP 403 `Resource not accessible by integration` for this session's token. Therefore no GitHub deployment-status object is claimed; deployment confirmation is based on the current remote `adopt-deploy` commit, zero-difference branch payload comparison, and direct public HTTPS verification. No MANUS-06 deployment blocker or missing runtime file remains. The only residual items are explicitly documented acceptance-evidence or operational dependencies (saved screenshots, authenticated production-session testing, external email delivery, and optional `STRIPE_SECRET_KEY` configuration), not unrecorded deployment failures.
+
+
+## FINAL INTEGRATOR SWEEP — 2026-11-10
+
+**Account/worker ID:** MANUS-06. **Scope:** Rehoming Platform Tasks D1–G1. **Report branch:** `task/second-round-MANUS-06`.
+
+A fresh remote sweep found new shared-site commits after the previous status record. Current heads are:
+
+- `origin/main`: `38c8d21` (`Verify full navigation and authentication status`).
+- `origin/adopt-deploy`: `536dc12` (`Deploy: publish corrected sitewide navigation from main 6668858`).
+- `origin/task/second-round-MANUS-06`: `088f924` before this report update.
+
+The new main/deployment changes affect sitewide navigation/authentication, security, and shared chat/accessibility widget loading. They touch several MANUS-06 pages, including `account/settings`, `merchant`, `merchant/post-listing`, `pets/detail`, and `rehoming`, but do not remove or alter the MANUS-06 PHP endpoints or shared rehoming engine. A current mapped-tree comparison reports 2,560 files under `origin/main/adopt` and 2,561 files under the flattened `origin/adopt-deploy` root, with **zero missing and zero different mapped runtime files**.
+
+The new widget integration was checked on all five MANUS-06 pages. `/admin/chat-widget.js` returned HTTP 200 with 180,778 bytes, `/assets/js/accessibility-widget.js` returned HTTP 200 with 120,152 bytes, and every page contained the expected chat, accessibility, and cookie-consent references. The prior one-off root asset request failure was transient: three retries and a HEAD request returned HTTP 200, and the complete validation was rerun successfully.
+
+The final current-deployment matrix returned **82/82 checks passed with zero failures**. It covered all primary MANUS-06 pages, referenced navigation/assets, the new sitewide widget assets, cookie-consent integration, all checkout/donation/saved-search JSON response contracts, source-leak checks, protected storage, and PHP lint for all deployed MANUS-06 endpoints and digest files. Expected operational behavior remains unchanged: Stripe returns a deliberate 503 when `STRIPE_SECRET_KEY` is not configured; this is configuration-dependent, not a deployment defect.
+
+### Integrator handoff conclusion
+
+MANUS-06 has completed its implementation, reconciliation, deployment, live verification, and documentation scope. No MANUS-06 source, deployment, synchronization, or endpoint correction remains for this worker. Integrators performing a sweeping check should identify this work by **MANUS-06**, the branch `task/second-round-MANUS-06`, and this report. The only explicitly retained non-source dependencies are the acceptance-evidence items already documented (saved screenshots, authenticated production-session testing, external email delivery) and optional Stripe configuration.
