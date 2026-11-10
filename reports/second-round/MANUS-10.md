@@ -126,3 +126,50 @@ After `origin/main` advanced through the MANUS-04 integration merge (`5814eab`),
 The expanded route inventory now covers **52 active HTML routes** from the merged tree. Playwright regression at 1440×900 and 390×844 completed **104 checks** with **0 HTTP failures, 0 uncaught page errors, 0 horizontal-overflow failures, and 0 non-protected failed requests**. The only 404s are the 52 protected per-pet `adoptions/pets/*/pet.json` records. The intentional legacy `/about.html` external adoption-policy redirect was tested with commit-level navigation handling and is not a local route failure.
 
 The pass also repaired current-main-only defects found during the expanded sweep: missing livestock/aquarium banner paths, the legacy application root logo path, an unavailable Cloudflare-only email decoder reference, the legacy application mobile column overflow, and the legacy apply variant step-indicator overflow. All active non-vendor public pages now carry both shared `/admin/chat-widget.js` and `/assets/js/accessibility-widget.js` loaders; admin/vendor/archived package content remains excluded where appropriate. JavaScript, PHP, HTML structure, diff hygiene, and protected-path staging checks all pass.
+
+## Follow-up integrator sweep — 2026-11-10
+
+**Worker ID:** `MANUS-10`
+**Purpose:** Review new repository changes, validate the latest category-record fix, reconcile `main` with `adopt-deploy`, and identify deployment/security concerns for the integrator.
+
+### Current refs reviewed
+
+- `origin/main`: `0786a3fab7bb60012b01549614dbfee5bdbeda4b`
+- `origin/adopt-deploy`: `3f7f03f4086942de0b609fd45c212e4c8597d32d`
+- `origin/task/second-round-MANUS-10`: `0f0d459c205227505acfa42447118d6fe3431e1d`
+
+### New changes reviewed
+
+- `8740d8d` / `d9f482b`: seven category pages now distinguish unavailable protected pet records from a genuinely empty category. This is a safe public-code change and does not read, copy, or fabricate protected records.
+- `6dcdf4b`: environment-only chat database configuration, internal admin-script denial rules, and verification-mail path correction. The five PHP files pass `php -l`.
+- `6668858` and related sitewide widget changes: current `main` has no malformed absolute chat-widget URLs and the shared widget composition is normalized.
+- `origin/bugfix/sitewide-widgets` was not merged wholesale: its diff removes hundreds of lines from multiple pages and requires owner review rather than a blind cherry-pick.
+
+### Validation completed
+
+- Latest-main local Chromium regression across `aquariums`, `birds`, `cats`, `dogs`, `livestocks`, `reptiles`, and `small-mammals` at `390x844`: all seven routes returned HTTP 200, zero page errors, zero 5xx responses, and `scrollWidth=clientWidth=390`.
+- The unavailable-record message appeared for categories whose protected records could not load; empty categories retained the normal empty state.
+- `php -l` passed for `chat-config.php`, `chat-migrate.php`, `chat-session-token-setup.php`, `chat-setup.php`, and `verification-mail.php` from latest `main`.
+- Safe live probes returned HTTP 200 for all seven category routes, HTTP 403 for `/admin/.env`, and HTTP 403 for `/apply/config.php`.
+
+### Deployment drift and concerns
+
+Normalized application-tree comparison found zero missing paths and zero missing application files, but one deploy-only `.gitignore` and thirteen content mismatches:
+
+- seven category `index.html` files containing the new unavailable-record state;
+- `admin/.htaccess`;
+- `admin/chat-config.php`;
+- `admin/chat-migrate.php`;
+- `admin/chat-session-token-setup.php`;
+- `admin/chat-setup.php`;
+- `admin/verification-mail.php`.
+
+The deployment branch explicitly reverted the environment-only chat refactor in `3f7f03f`. This is currently the correct safety hold until the hosting environment has `DB_HOST`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`, and `DB_CHARSET` provisioned, the former tracked database/admin credentials are rotated, and a verified Hostinger/database backup exists. The deploy branch still contains tracked credential material that must be treated as compromised; no secret value is reproduced in this report.
+
+### Delivery state
+
+- The seven category changes are prepared separately on `task/second-round-MANUS-10-deploy-candidate` for integrator review; no production deployment was triggered by MANUS-10.
+- The environment-only chat refactor remains a controlled cutover item, not a safe blind deploy.
+- MANUS-10 completed this review and validation pass. Remaining actions are integrator/host-owner actions: backup, credential rotation, protected environment provisioning, controlled deployment, and authenticated post-cutover checks.
+
+**MANUS-10 status:** application review and safe local validation complete; production release intentionally held at the documented security/backup gate.
