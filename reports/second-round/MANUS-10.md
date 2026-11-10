@@ -168,7 +168,7 @@ The deployment branch explicitly reverted the environment-only chat refactor in 
 
 ### Delivery state
 
-- The seven category changes are prepared separately on `task/second-round-MANUS-10-deploy-candidate` for integrator review; no production deployment was triggered by MANUS-10.
+- The seven category changes are prepared separately on `task/second-round-MANUS-10-deploy-candidate` at commit `8f233ad46a82e1d823e3005aa2e74c691f021dde` for integrator review; no production deployment was triggered by MANUS-10.
 - The environment-only chat refactor remains a controlled cutover item, not a safe blind deploy.
 - MANUS-10 completed this review and validation pass. Remaining actions are integrator/host-owner actions: backup, credential rotation, protected environment provisioning, controlled deployment, and authenticated post-cutover checks.
 
