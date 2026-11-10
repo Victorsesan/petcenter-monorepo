@@ -8,6 +8,10 @@ The aggregate status is maintained in [ACCOUNT-REPORT-INDEX.md](ACCOUNT-REPORT-I
 
 Do not put GitHub tokens, passwords, API keys, private keys, applicant data, or other secrets in these reports. Reports are repository artifacts and are visible to every participating account.
 
+## Recent integration handoffs
+
+- **Before changing the live-chat widget, transcription, read-aloud, or chat-language preference flows, read [MANUS-02's report](MANUS-02.md).** It records the customer-side transcript UI regression repair, current `main` and `adopt-deploy` commit IDs, live verification, and the remaining production Groq audio round-trip prerequisite. The active account brief requires reading current reports relevant to the assigned scope; this link makes that handoff easy to find.
+
 ## Required report structure
 
 ```markdown
