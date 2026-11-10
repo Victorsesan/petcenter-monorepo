@@ -35,7 +35,7 @@ These are not unresolved MANUS-09 code defects in the deployed changes, but docu
 | Authenticated admin upload flows | Guard/method checks passed, but no real admin credential or file upload was used. | Deployment owner should run a controlled authenticated upload/cleanup test. |
 | Authenticated public/contact/chat upload flows | Missing-file and method guards passed; full valid-upload flow remains unverified. | Run controlled staging/production integration tests with disposable files. |
 | Live database-backed authenticated flows | Not executed from the sandbox because PHP CLI lacks `pdo_mysql` and no production session was used. | Run read-only authenticated checks in the server runtime with its configured driver. |
-| `chat-config.php` credential migration | Intentionally not changed; it is a shared foundation requiring coordinated `.env` provisioning. | Treat as a separate sitewide migration, not a silent MANUS-09 patch. |
+| `chat-config.php` credential migration | Now implemented on `main` by the later `6dcdf4b` security commit, but not yet published to `adopt-deploy` because hosting-side `DB_*` provisioning and credential rotation are still required. | Integrator must complete the controlled cutover and remove tracked secret material before deployment. |
 
 ## Interpretation
 

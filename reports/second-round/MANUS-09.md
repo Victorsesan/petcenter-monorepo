@@ -100,3 +100,31 @@ Static and local automated validation is complete. PHPUnit 9.6.17 endpoint cover
 - The sandbox PHP CLI lacks the `pdo_mysql` driver, so a direct database connection was not fabricated or attempted against production. Live endpoint guards and the complete local endpoint suite passed without database or protected-payload mutation. Database-backed authenticated flows still require a real admin session and the server’s configured runtime driver for a true read-only query check.
 
 The environment-path fix, adoption validation correction, and configuration-file denial rules were merged into `main` and published through `adopt-deploy`. No credentials, tokens, passwords, keys, ZIPs, applicant data, or protected payloads were added to the repository.
+
+## Post-delivery integrator sweep — 2026-11-10
+
+**Worker ID:** `MANUS-09`  
+**Purpose:** Recheck new repository changes after the prior completion handoff and identify any relevant deployment or security concern before integrator sweeping.
+
+### Current repository state
+
+- `origin/main`: `9d61debf8279532cf8a41277da7bcee7a92231df`.
+- `origin/adopt-deploy`: `3f7f03f4086942de0b609fd45c212e4c8597d32d`.
+- The working tree on `task/MANUS-09-env-audit` is clean.
+- The normalized `main/adopt` to flattened `adopt-deploy` comparison has **0 missing paths** and **0 deploy-only paths**, but **13 content mismatches** remain: seven public category pages plus `admin/.htaccess`, `admin/chat-config.php`, `admin/chat-migrate.php`, `admin/chat-session-token-setup.php`, `admin/chat-setup.php`, and `admin/verification-mail.php`.
+
+### New relevant changes reviewed
+
+- `6dcdf4b` (`Security: harden chat configuration and admin internals`) removes the tracked database password from `chat-config.php`, loads `DB_HOST`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`, and `DB_CHARSET` from the server environment, fails closed when required DB values are absent, protects internal admin PHP files with `.htaccess`, and corrects the verification-mail contact-config path. The five changed PHP files pass `php -l`.
+- `6668858` and its related sitewide widget work normalize public widget composition. Current `origin/main` has zero malformed absolute chat-widget URLs; each of the four MANUS-09 testimonial variants contains exactly one `/admin/chat-widget.js` and one `/assets/js/accessibility-widget.js` reference.
+- `8740d8d`/`d9f482b` add the category record-load failure-state fix on `main`. The fix is not yet published to `adopt-deploy`.
+
+### Deployment/security concerns requiring integrator control
+
+1. **Do not publish the new environment-only `chat-config.php` until the hosting environment has `DB_HOST`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`, and `DB_CHARSET` provisioned and the controlled chat cutover tests pass.** The deployment audit explicitly says publishing first would fail closed and could disable database-backed chat.
+2. **Credential rotation remains required.** The current `main` chat source no longer contains the former DB password, but `adopt-deploy` still contains the former chat configuration and the tracked admin `.env` remains present in both repository trees. Treat the former admin/database credentials as compromised; rotate them, remove tracked secret material through the approved history-rewrite process, and only then publish the environment-only refactor.
+3. **The seven category listing fixes are in `main` but not live.** The deploy owner must complete the required Hostinger backup/control check before publishing them; the seven missing protected cat/dog records also require restoration from the protected server backup and were not opened or modified by MANUS-09.
+
+### Sweep conclusion
+
+No new MANUS-09-owned source defect was found in the current `main` after the sweep: generic `config.php` includes remain at zero, malformed absolute widget references remain at zero, current PHP changes lint clean, and the four testimonial pages have exactly one copy of each shared widget. The remaining actions are explicitly documented deployment/credential-rotation gates for the integrator; they should not be marked complete until hosting-side provisioning, rotation, backup, publication, and authenticated post-cutover checks are evidenced.
