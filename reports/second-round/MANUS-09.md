@@ -103,7 +103,7 @@ The environment-path fix, adoption validation correction, and configuration-file
 
 ## Post-delivery integrator sweep — 2026-11-10
 
-**Worker ID:** `MANUS-09`  
+**Worker ID:** `MANUS-09`
 **Purpose:** Recheck new repository changes after the prior completion handoff and identify any relevant deployment or security concern before integrator sweeping.
 
 ### Current repository state
