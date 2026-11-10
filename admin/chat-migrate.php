@@ -14,9 +14,8 @@ require_once __DIR__ . '/chat-config.php';
 // Migrations are an administrative operation; never expose them as a public URL.
 chatRequireAdmin();
 
-if (DB_NAME === '' || DB_USER === '' || DB_PASSWORD === '') {
-    die("Chat database environment variables are not configured.\n" .
-        "Provision DB_HOST / DB_NAME / DB_USER / DB_PASSWORD on the server, then reload this page.\n");
+if (DB_NAME === 'REPLACE_WITH_YOUR_DB_NAME') {
+    die("Set real DB credentials in chat-config.php first.\n");
 }
 
 $pdo = chatDb();
