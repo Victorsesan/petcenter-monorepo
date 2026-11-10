@@ -34,5 +34,9 @@ document.getElementById('listingForm').addEventListener('submit', async function
   try { const response=await fetch('/rehoming/merchant-publish-listing.php',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)}); const json=await response.json(); if(!response.ok) throw new Error(json.error||'Unable to publish'); result.className='success'; result.textContent='Listing published: '+json.listing.pet_id; event.currentTarget.reset(); } catch(error) { result.className='error'; result.textContent=error.message; }
 });
 </script>
+
+  <!-- Shared customer chat and accessibility widgets; keep these sitewide for consistent placement. -->
+  <script src="/admin/chat-widget.js"></script>
+  <script src="/assets/js/accessibility-widget.js" defer></script>
 </body>
 </html>
