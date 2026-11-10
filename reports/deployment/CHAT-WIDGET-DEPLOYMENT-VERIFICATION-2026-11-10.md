@@ -14,6 +14,12 @@ The correction removes the legacy inline settings widget from 15 public template
 
 The admin dashboard was intentionally excluded because it has its own internal live-chat UI rather than the customer-facing launcher.
 
+Published commits:
+
+- `main`: `06df1e6` — sitewide widget correction plus removal of a leftover merge marker in the merchant page.
+- `adopt-deploy`: `558252d` — flattened production-tree publication.
+- Original implementation branch: `bugfix/sitewide-widgets` at `52a7a59`.
+
 ## Files and behavior changed
 
 - 53 public HTML templates were normalized.
@@ -31,7 +37,9 @@ The admin dashboard was intentionally excluded because it has its own internal l
 - Legacy-widget scan: zero remaining public HTML files contain `pc-settings-widget` or `pcSettingsWidget`.
 - `git diff --check`: passed.
 
-## Live verification
+## Live verification after host propagation
+
+All of these representative routes returned HTTP 200 after propagation: `/`, `/pets/`, `/pets/dogs/`, `/pets/detail/`, `/apply/`, `/contact-us/`, `/services/`, `/testimonials/`, and `/merchant/post-listing/`. The served HTML for each route contained exactly one chat script and exactly one accessibility script, with no legacy widget marker or merge conflict marker. The deployment-tree-only merchant listing page was included in this check.
 
 The following production assets returned HTTP 200:
 
@@ -61,7 +69,7 @@ The SMTP configurations already read `SMTP_PASSWORD` from the process environmen
 
 ## Deployment and rollback
 
-Publish the widget correction from the integration branch into the production deployment branch only after reviewing the final diff. The rollback point is the previous deployment commit. If a page renders without either shared widget after publication, revert the widget commit and inspect the host's HTML-cache/deploy status before retrying.
+The widget correction is already published from `main` into `adopt-deploy`. The rollback point is the previous deployment commit (`9d1a971`). If a page renders without either shared widget after publication, revert the widget commit and inspect the host's HTML-cache/deploy status before retrying.
 
 After publication, verify at minimum:
 
@@ -73,4 +81,4 @@ After publication, verify at minimum:
 
 ## Handoff
 
-The widget integration is complete and mechanically validated. Credential rotation and secret removal are a separate high-priority production-security operation requiring hosting-side secret provisioning before code publication. 
+The widget integration is complete, committed, pushed to `main`, published to `adopt-deploy`, and verified against live served HTML. Credential rotation and secret removal are a separate high-priority production-security operation requiring hosting-side secret provisioning before code publication.
