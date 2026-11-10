@@ -226,3 +226,8 @@ MANUS-05 was assigned the historical Rehoming Platform A1–C6 package, not the 
 This is therefore a major integrator dependency, not a MANUS-05 implementation omission. Integrators must merge or complete the WEB-04 authentication backend and coordinate the DESIGN-02 gateway UI, then replace the current `/signin/` “Coming Soon” destination and 404 signup routes with the authoritative signup/login route set. Until that happens, users cannot create an account through the public navigation and cannot reach authenticated rehoming chat/review flows through a normal signup journey.
 
 The widget-preserving listing-page change and this handoff update must be committed to `main`, after which `adopt-deploy` should be regenerated from the resulting `adopt/` tree. No signup implementation is fabricated in MANUS-05 because doing so would create a parallel authentication system outside the assigned contract.
+
+
+## Resolution verification — 2026-11-10
+
+The widget-preserving listing-page change is now present in `origin/main` at `c70b99c`, and the existing `origin/adopt-deploy` tree already contains the identical file. The computed `adopt/` deployment trees match exactly (`tree_match=yes`), so no additional deployment commit was necessary after the source alignment. The live listing route remains HTTP 200.
