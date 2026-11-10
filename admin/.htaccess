@@ -1,1 +1,12 @@
-Facebook
+# Internal configuration, library, and scheduled-job scripts are included by
+# other PHP handlers and must not be callable as public URLs.
+<FilesMatch "^(chat-config|chat-mail|verification-mail|verification-store|needs-extra-love-check)\.php$">
+    Require all denied
+</FilesMatch>
+
+<IfModule !mod_authz_core.c>
+    <FilesMatch "^(chat-config|chat-mail|verification-mail|verification-store|needs-extra-love-check)\.php$">
+        Order allow,deny
+        Deny from all
+    </FilesMatch>
+</IfModule>

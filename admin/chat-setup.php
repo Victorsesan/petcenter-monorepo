@@ -2,8 +2,8 @@
 /**
  * Live Chat Widget — One-Time Database Setup
  *
- * Visit this file's URL ONCE after filling in real MySQL credentials in
- * chat-config.php. It creates every table this feature needs using
+ * Run this file once after DB_HOST, DB_NAME, DB_USER, and DB_PASSWORD have
+ * been provisioned in the server environment. It creates every table this feature needs using
  * CREATE TABLE IF NOT EXISTS, so re-running it is safe and won't destroy
  * existing data.
  *
@@ -20,9 +20,9 @@ require_once __DIR__ . '/chat-config.php';
 // Schema setup is an administrative operation; never expose it as a public URL.
 chatRequireAdmin();
 
-if (DB_NAME === 'REPLACE_WITH_YOUR_DB_NAME' || DB_USER === 'REPLACE_WITH_YOUR_DB_USER') {
-    die("chat-config.php still has placeholder database credentials.\n" .
-        "Open chat-config.php, replace DB_HOST / DB_NAME / DB_USER / DB_PASSWORD with your real Hostinger MySQL details, then reload this page.\n");
+if (DB_NAME === '' || DB_USER === '' || DB_PASSWORD === '') {
+    die("Chat database environment variables are not configured.\n" .
+        "Provision DB_HOST / DB_NAME / DB_USER / DB_PASSWORD on the server, then reload this page.\n");
 }
 
 $pdo = chatDb();
