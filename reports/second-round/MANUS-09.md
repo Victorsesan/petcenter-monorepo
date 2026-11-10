@@ -108,7 +108,7 @@ The environment-path fix, adoption validation correction, and configuration-file
 
 ### Current repository state
 
-- `origin/main`: `9d61debf8279532cf8a41277da7bcee7a92231df`.
+- `origin/main`: `d6448feff08684b60edd8d3580eac28ff779f575` (the final post-sweep report merge).
 - `origin/adopt-deploy`: `3f7f03f4086942de0b609fd45c212e4c8597d32d`.
 - The working tree on `task/MANUS-09-env-audit` is clean.
 - The normalized `main/adopt` to flattened `adopt-deploy` comparison has **0 missing paths** and **0 deploy-only paths**, but **13 content mismatches** remain: seven public category pages plus `admin/.htaccess`, `admin/chat-config.php`, `admin/chat-migrate.php`, `admin/chat-session-token-setup.php`, `admin/chat-setup.php`, and `admin/verification-mail.php`.
