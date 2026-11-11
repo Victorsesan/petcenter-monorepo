@@ -57,8 +57,13 @@ $chatId    = trim($input['chatId'] ?? '');
 $petContext = $input['petContext'] ?? null; // { name, petId, thumbUrl, pageUrl } or null, Section 7b
 // AP4-TASK-3: exact supported language contract; never store arbitrary client text.
 $ap4Languages = ['en','es','fr','de','pt','it','zh-Hans','ja','ko','ar','hi','vi','tl','ru'];
-$preferredChatLanguage = trim((string)($input['preferred_chat_language'] ?? ''));
-if (!in_array($preferredChatLanguage, $ap4Languages, true)) $preferredChatLanguage = 'en';
+$rawPreferredChatLanguage = $input['preferred_chat_language'] ?? null;
+$hasPreferredChatLanguage = is_string($rawPreferredChatLanguage) && trim($rawPreferredChatLanguage) !== '';
+$preferredChatLanguage = $hasPreferredChatLanguage ? trim($rawPreferredChatLanguage) : 'en';
+if (!in_array($preferredChatLanguage, $ap4Languages, true)) {
+    $preferredChatLanguage = 'en';
+    $hasPreferredChatLanguage = false;
+}
 $initialTier = trim((string)($input['authTier'] ?? ''));
 $initialSecret = (string)($input['authSecret'] ?? '');
 $deviceToken = (string)($input['deviceToken'] ?? '');
@@ -107,7 +112,22 @@ if ($chatId !== '') {
     $stmt->execute([$chatId]);
     $thread = $stmt->fetch();
 
+    // TASK-WEB-02-ADMIN-BASELINE START — a chat ID is a lookup hint, never proof of possession.
+    // A mismatch falls through to the normal email-only recovery path, which
+    // can resume only a thread belonging to the submitted email address.
+    if ($thread && !hash_equals(
+        strtolower(trim((string)($thread['email'] ?? ''))),
+        strtolower($email)
+    )) {
+        $thread = false;
+    }
+    // TASK-WEB-02-ADMIN-BASELINE END
+
     if ($thread) {
+        if ($hasPreferredChatLanguage) {
+            $db->prepare('UPDATE chat_threads SET preferred_chat_language = ? WHERE id = ?')->execute([$preferredChatLanguage, $thread['id']]);
+            $thread['preferred_chat_language'] = $preferredChatLanguage;
+        }
         // v2.0 Scenario B reason-change detection: if the customer went back
         // through the pre-chat gate and picked a DIFFERENT reason than the
         // thread's original one, AND the thread is currently done, fire the
@@ -146,7 +166,8 @@ if ($chatId !== '') {
             'authTier'     => $authPayload['authTier'],
             /* TASK-1 START — sessionToken in the response payload */
             'sessionToken' => $sessionToken,
-            /* TASK-1 END */            'preferred_chat_language' => $preferredChatLanguage, // AP4-TASK-3
+            /* TASK-1 END */
+            'preferred_chat_language' => $thread['preferred_chat_language'] ?? 'en', // AP4-TASK-3
 
         ]);
     }
@@ -187,7 +208,12 @@ if ($existing) {
     $authPayload = chatStartAuthPayload($existing, $deviceToken);
     $sessionToken = $authPayload['sessionToken'];
     /* TASK-3 END */
-    $db->prepare('UPDATE chat_threads SET preferred_chat_language = ? WHERE id = ?')->execute([$preferredChatLanguage, $existing['id']]);
+    if ($hasPreferredChatLanguage) {
+        $db->prepare('UPDATE chat_threads SET preferred_chat_language = ? WHERE id = ?')->execute([$preferredChatLanguage, $existing['id']]);
+    }
+    $resolvedPreferredChatLanguage = $hasPreferredChatLanguage
+        ? $preferredChatLanguage
+        : ($existing['preferred_chat_language'] ?? 'en');
 
     chatRespond([
         'success'      => true,
@@ -201,6 +227,7 @@ if ($existing) {
         /* TASK-1 START — sessionToken in the response payload */
         'sessionToken' => $sessionToken,
         /* TASK-1 END */
+        'preferred_chat_language' => $resolvedPreferredChatLanguage,
     ]);
 }
 
@@ -293,4 +320,5 @@ chatRespond([
     /* TASK-1 START — sessionToken in the response payload */
     'sessionToken' => $sessionToken,
     /* TASK-1 END */
+    'preferred_chat_language' => $preferredChatLanguage,
 ]);

@@ -80,13 +80,15 @@ if (!isset($categoryByPrefix[$prefix])) {
 }
 $category = $categoryByPrefix[$prefix];
 
-$petsRoot = realpath(__DIR__ . '/../adoptions/pets');
-if ($petsRoot === false || !is_dir($petsRoot)) {
+$petsRootPath = __DIR__ . '/../adoptions/pets';
+$petsRoot = realpath($petsRootPath);
+if ($petsRoot === false || is_link($petsRootPath) || !is_dir($petsRoot)) {
     petDeleteRespond(['success' => false, 'message' => 'Pet storage is unavailable'], 500);
 }
 $rootPrefix = rtrim($petsRoot, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
-$categoryPath = realpath($petsRoot . DIRECTORY_SEPARATOR . $category);
-if ($categoryPath === false || strpos($categoryPath, $rootPrefix) !== 0 || !is_dir($categoryPath)) {
+$categoryCandidate = $petsRoot . DIRECTORY_SEPARATOR . $category;
+$categoryPath = realpath($categoryCandidate);
+if (is_link($categoryCandidate) || $categoryPath === false || $categoryPath !== $categoryCandidate || strpos($categoryPath, $rootPrefix) !== 0 || !is_dir($categoryPath)) {
     petDeleteRespond(['success' => false, 'message' => 'Pet not found'], 404);
 }
 $categoryPrefix = rtrim($categoryPath, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;

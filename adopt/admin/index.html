@@ -5784,7 +5784,8 @@ async function buildAdminTranscriptControl(msg, chatId) {
       let result;
       do {
         const token = getAdminToken();
-        const response = await fetch('chat-transcribe.php', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Admin-Token': token }, body: JSON.stringify({ chatId, messageId: msg.id, side: 'admin' }) });
+        const side = msg.from_type === 'admin' ? 'admin' : 'customer';
+        const response = await fetch('chat-transcribe.php', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Admin-Token': token }, body: JSON.stringify({ chatId, messageId: msg.id, side }) });
         result = await response.json();
         if (result.status === 'pending') await new Promise(resolve => setTimeout(resolve, 6000));
       } while (result.status === 'pending');
@@ -5811,6 +5812,38 @@ async function buildAdminTranscriptControl(msg, chatId) {
     finally { busy=false; toggle.disabled=false; }
   });
   wrap.appendChild(toggle); wrap.appendChild(output); return wrap;
+}
+/* TASK-admin234-1b END */
+
+/* TASK-admin234-1b START — native, on-device read-aloud for visible admin chat text. */
+function adminThreadLanguage(chatId) {
+  for (const group of Object.values(chatAdmin.threads || {})) {
+    const thread = (group || []).find(item => item.chat_id === chatId);
+    if (thread && thread.preferred_chat_language) return thread.preferred_chat_language;
+  }
+  return 'en';
+}
+
+function buildAdminSpeechButton(text, language) {
+  if (!('speechSynthesis' in window) || !window.SpeechSynthesisUtterance || !text) return null;
+  const button = document.createElement('button');
+  button.type = 'button'; button.className = 'cad-speech-btn'; button.textContent = 'Read aloud';
+  button.setAttribute('aria-label', 'Read message aloud');
+  button.style.cssText = 'display:block;margin-top:6px;border:0;background:transparent;color:inherit;text-decoration:underline;font:inherit;font-size:11px;cursor:pointer;';
+  let speaking = false;
+  button.addEventListener('click', event => {
+    event.stopPropagation();
+    if (speaking) {
+      window.speechSynthesis.cancel(); speaking = false; button.textContent = 'Read aloud'; return;
+    }
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    const aliases = { english:'en-US', spanish:'es-ES', french:'fr-FR', german:'de-DE', portuguese:'pt-BR', italian:'it-IT', chinese:'zh-CN', japanese:'ja-JP', korean:'ko-KR', arabic:'ar-SA', hindi:'hi-IN', vietnamese:'vi-VN', russian:'ru-RU', filipino:'fil-PH', tagalog:'fil-PH' };
+    if (language) utterance.lang = aliases[String(language).toLowerCase()] || language;
+    utterance.onend = utterance.onerror = () => { speaking = false; button.textContent = 'Read aloud'; };
+    speaking = true; button.textContent = 'Stop reading'; window.speechSynthesis.speak(utterance);
+  });
+  return button;
 }
 /* TASK-admin234-1b END */
 
@@ -5884,6 +5917,8 @@ function renderAdminMessage(msg) {
   } else if (msg.msg_type === 'text') {
     bodyTextEl.textContent = msg.body || '';
     bubble.appendChild(bodyTextEl);
+    const speech = buildAdminSpeechButton(msg.body || '', (isAdmin || isBot) ? 'en' : adminThreadLanguage(chatAdmin.activeThreadId));
+    if (speech) bubble.appendChild(speech);
   } else if (msg.msg_type === 'image' || msg.msg_type === 'video' || msg.msg_type === 'audio') {
     const p = msg.media_path ? '/admin/' + msg.media_path : '';
     if (msg.msg_type === 'image') {

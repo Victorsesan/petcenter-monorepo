@@ -48,10 +48,14 @@ if ($pet_id !== null) {
 
 $pets_base = __DIR__ . '/../adoptions/pets';
 $pets_real = realpath($pets_base);
-$category_folder = $pets_real !== false ? realpath($pets_real . DIRECTORY_SEPARATOR . $category) : false;
-if ($pets_real === false || $category_folder === false
-    || strpos($category_folder, rtrim($pets_real, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR) !== 0
-    || !is_dir($category_folder)) {
+$category_candidate = $pets_real !== false ? $pets_real . DIRECTORY_SEPARATOR . $category : '';
+$category_folder = $category_candidate !== '' ? realpath($category_candidate) : false;
+if ($pets_real === false || is_link($pets_base) || $category_candidate === '' || is_link($category_candidate)
+    || ($category_folder !== false && $category_folder !== $category_candidate)) {
+    http_response_code(404);
+    die(json_encode(['success' => false, 'message' => 'Pet category not found']));
+}
+if ($category_folder === false || !is_dir($category_folder)) {
     if ($pet_id) {
         http_response_code(404);
         die(json_encode(['success' => false, 'message' => 'Pet not found']));

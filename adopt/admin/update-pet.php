@@ -64,14 +64,16 @@ if (!isset($allowed_prefixes[$category])
     die(json_encode(['success' => false, 'error' => 'Invalid category or pet ID']));
 }
 $pet_id = strtoupper($pet_id_parts[1]) . '-' . substr($pet_id, strrpos($pet_id, '-') + 1);
-$pets_base = realpath(__DIR__ . '/../adoptions/pets');
+$pets_base_path = __DIR__ . '/../adoptions/pets';
+$pets_base = realpath($pets_base_path);
 $category_folder = $pets_base !== false ? realpath($pets_base . DIRECTORY_SEPARATOR . $category) : false;
 $category_prefix = $category_folder !== false ? rtrim($category_folder, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR : '';
 $pet_candidate = $category_folder !== false ? $category_folder . DIRECTORY_SEPARATOR . $pet_id : '';
 $pet_folder = $pet_candidate !== '' ? realpath($pet_candidate) : false;
 $pet_json = $pet_folder !== false ? $pet_folder . DIRECTORY_SEPARATOR . 'pet.json' : '';
-if ($pets_base === false || $category_folder === false
-    || strpos($category_folder, rtrim($pets_base, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR) !== 0
+$category_candidate = $pets_base !== false ? $pets_base . DIRECTORY_SEPARATOR . $category : '';
+if ($pets_base === false || is_link($pets_base_path) || $category_folder === false
+    || is_link($category_candidate) || $category_folder !== $category_candidate
     || $pet_folder === false || is_link($pet_candidate)
     || strpos($pet_folder, $category_prefix) !== 0 || !is_dir($pet_folder)) {
     http_response_code(404);

@@ -26,6 +26,7 @@ $categories = ['dogs', 'cats', 'birds', 'reptiles', 'small-mammals', 'livestocks
 // TASK-2 END
 $pets_base  = __DIR__ . '/../adoptions/pets';
 $apps_base  = __DIR__ . '/../adoptions/applications';
+$pets_root_path = $pets_base;
 $pets_root_real = realpath($pets_base);
 $apps_root_real = realpath($apps_base);
 
@@ -49,11 +50,12 @@ $category_prefixes = [
     'livestocks' => ['LVS'], 'aquariums' => ['AQU'],
 ];
 foreach ($categories as $cat) {
-    if ($pets_root_real === false) continue;
+    if ($pets_root_real === false || is_link($pets_root_path)) continue;
     $category_candidate = $pets_root_real . DIRECTORY_SEPARATOR . $cat;
     if (is_link($category_candidate)) continue;
     $category_real = realpath($category_candidate);
-    if ($category_real === false || strpos($category_real, rtrim($pets_root_real, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR) !== 0) continue;
+    if ($category_real === false || $category_real !== $category_candidate
+        || strpos($category_real, rtrim($pets_root_real, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR) !== 0) continue;
     $index = $category_real . DIRECTORY_SEPARATOR . 'index.json';
     $index_real = realpath($index);
     if (is_link($index) || $index_real === false

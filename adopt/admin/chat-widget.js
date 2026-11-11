@@ -1304,6 +1304,12 @@
     const passwordBtn = el('button', { type: 'button', class: 'pcw-protection-btn' }, 'Set password');
     const lockBtn = el('button', { type: 'button', class: 'pcw-protection-btn' }, 'Lock settings');
     const revokeBtn = el('button', { type: 'button', class: 'pcw-protection-btn danger' }, 'Revoke devices');
+    const devicesToggle = el('button', { type: 'button', class: 'pcw-protection-btn', 'aria-expanded': 'false' }, 'Manage remembered devices');
+    const devicesPanel = el('div', { class: 'pcw-remembered-devices', role: 'region', 'aria-label': 'Remembered devices' });
+    const devicesList = el('div', { class: 'pcw-remembered-device-list', 'aria-live': 'polite' });
+    devicesPanel.style.cssText = 'margin-top:8px;padding:8px 10px;border:1px solid rgba(255,255,255,.12);border-radius:8px;';
+    devicesPanel.hidden = true;
+    devicesPanel.appendChild(devicesList);
     pinBtn.addEventListener('click', () => openSecretForm('pin'));
     passwordBtn.addEventListener('click', () => openSecretForm('password'));
     lockBtn.addEventListener('click', async () => {
@@ -1325,6 +1331,56 @@
       } catch (e) { setMessage('Could not revoke devices. Try again.', false); }
       revokeBtn.disabled = false;
     });
+    devicesToggle.addEventListener('click', async () => {
+      const opening = devicesPanel.hidden;
+      devicesPanel.hidden = !opening;
+      devicesToggle.setAttribute('aria-expanded', String(opening));
+      if (!opening) return;
+      devicesList.textContent = 'Loading remembered devices…';
+      try {
+        const result = await apiPost('chat-auth-gate.php', { action:'listDevices', chatId:state.chatId, email:state.email });
+        if (!result.success) throw new Error(result.error || 'Could not load remembered devices.');
+        devicesList.replaceChildren();
+        const devices = Array.isArray(result.devices) ? result.devices : [];
+        if (!devices.length) {
+          devicesList.appendChild(el('p', { class: 'pcw-device-empty' }, 'No remembered devices.'));
+          return;
+        }
+        devices.forEach(device => {
+          const row = el('div', { class: 'pcw-device-item' });
+          const details = el('div', { class: 'pcw-device-item-details' });
+          details.appendChild(el('div', { class: 'pcw-device-item-label' }, device.label || 'Remembered device'));
+          let lastUsed = 'Unknown';
+          if (device.last_used_at) {
+            const date = new Date(String(device.last_used_at).replace(' ', 'T'));
+            if (!Number.isNaN(date.getTime())) lastUsed = date.toLocaleString();
+          }
+          details.appendChild(el('div', { class: 'pcw-device-item-meta' }, 'Last used: ' + lastUsed));
+          const forget = el('button', { type: 'button', class: 'pcw-device-item-forget' }, 'Forget');
+          row.style.cssText = 'display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.1);';
+          details.style.cssText = 'min-width:0;overflow-wrap:anywhere;';
+          forget.style.cssText = 'flex:0 0 auto;border:1px solid rgba(255,255,255,.25);border-radius:6px;padding:5px 9px;background:transparent;color:inherit;font:inherit;cursor:pointer;';
+          forget.addEventListener('click', async () => {
+            if (!window.confirm('Forget this remembered device?')) return;
+            forget.disabled = true;
+            try {
+              const response = await apiPost('chat-auth-gate.php', { action:'forgetDevice', chatId:state.chatId, email:state.email, deviceId:device.id });
+              if (!response.success) throw new Error(response.error || 'Could not forget this device.');
+              row.remove();
+              if (!devicesList.querySelector('.pcw-device-item')) devicesList.appendChild(el('p', { class: 'pcw-device-empty' }, 'No remembered devices.'));
+              setMessage('Remembered device forgotten.', true);
+            } catch (error) {
+              setMessage(error.message || 'Could not forget this device.', false);
+              forget.disabled = false;
+            }
+          });
+          row.append(details, forget);
+          devicesList.appendChild(row);
+        });
+      } catch (error) {
+        devicesList.textContent = error.message || 'Could not load remembered devices.';
+      }
+    });
     secretSubmit.addEventListener('click', async () => {
       secretSubmit.disabled = true;
       try {
@@ -1343,7 +1399,7 @@
       lockSubmit.disabled = false;
     });
     actions.appendChild(pinBtn); actions.appendChild(passwordBtn); actions.appendChild(lockBtn); actions.appendChild(revokeBtn);
-    panel.appendChild(summary); panel.appendChild(actions); panel.appendChild(secretForm); panel.appendChild(lockForm); panel.appendChild(message);
+    panel.appendChild(summary); panel.appendChild(actions); panel.appendChild(devicesToggle); panel.appendChild(devicesPanel); panel.appendChild(secretForm); panel.appendChild(lockForm); panel.appendChild(message);
     return panel;
   }
   /* TASK-3/4/5 END */
@@ -1836,6 +1892,7 @@
       try {
         const json = await apiPost('chat-start.php', payload);
         if (json.success) {
+          state.preferredChatLanguage = json.preferred_chat_language || selectedChatLanguage;
           // TASK-9 START
           // TASK-9c: true here — this is the fresh pre-chat submission
           // path, the one moment the entrance animation should play.
@@ -1883,6 +1940,7 @@
     const storedEmail = localStorage.getItem('pc_chat_email') || '';
     apiPost('chat-start.php', { fullName: storedName || 'Customer', email: storedEmail, reason: 'general', chatId: storedChatId, deviceToken: deviceToken() }).then(json => {
       if (!json.success) { renderLauncher(); return; }
+      state.preferredChatLanguage = json.preferred_chat_language || 'en';
       if (json.authRequired) renderAuthGate(json.chatId, json.fullName, json.email, json.status, json.authTier);
       else { state.authTier = json.authTier || 'none'; state.sessionToken = json.sessionToken; openLiveThread(json.chatId, json.fullName, json.email, json.status, false, false, json.sessionToken); }
     }).catch(() => renderLauncher());
@@ -2118,6 +2176,98 @@
   }
   // TASK-8 END (8a — bot response pacing)
 
+  // TASK-admin234-1b START — native, on-device speech for text already visible in chat.
+  function buildCustomerSpeechButton(text, language) {
+    if (!('speechSynthesis' in window) || !window.SpeechSynthesisUtterance || !text) return null;
+    const button = el('button', { type: 'button', class: 'pcw-speech-btn', 'aria-label': 'Read message aloud' }, 'Read aloud');
+    button.style.cssText = 'display:block;margin-top:6px;border:0;background:transparent;color:inherit;text-decoration:underline;font:inherit;font-size:11px;cursor:pointer;';
+    let speaking = false;
+    button.addEventListener('click', (event) => {
+      event.stopPropagation();
+      if (speaking) {
+        window.speechSynthesis.cancel();
+        speaking = false;
+        button.textContent = 'Read aloud';
+        return;
+      }
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      const aliases = { english:'en-US', spanish:'es-ES', french:'fr-FR', german:'de-DE', portuguese:'pt-BR', italian:'it-IT', chinese:'zh-CN', japanese:'ja-JP', korean:'ko-KR', arabic:'ar-SA', hindi:'hi-IN', vietnamese:'vi-VN', russian:'ru-RU', filipino:'fil-PH', tagalog:'fil-PH' };
+      if (language) utterance.lang = aliases[String(language).toLowerCase()] || language;
+      utterance.onend = utterance.onerror = () => { speaking = false; button.textContent = 'Read aloud'; };
+      speaking = true;
+      button.textContent = 'Stop reading';
+      window.speechSynthesis.speak(utterance);
+    });
+    return button;
+  }
+  // TASK-admin234-1b END
+
+  // TASK-admin234-1a START — customer requests cached admin-voice transcript through session-token API.
+  async function buildCustomerTranscriptControl(msg) {
+    const wrap = el('div', { class: 'pcw-transcript-control' });
+    const toggle = el('button', { type: 'button', 'aria-expanded': 'false' }, 'View transcription');
+    toggle.style.cssText = 'margin-top:6px;border:0;background:transparent;color:inherit;text-decoration:underline;font:inherit;font-size:11px;cursor:pointer;';
+    const output = el('div', { class: 'pcw-transcript-output', role: 'status', 'aria-live': 'polite' });
+    output.hidden = true;
+    output.style.cssText = 'margin-top:6px;padding:8px;border-radius:8px;background:rgba(255,255,255,.75);color:#2c2416;font-size:12px;white-space:pre-wrap;overflow-wrap:anywhere;user-select:text;';
+    let loaded = false, busy = false;
+    toggle.addEventListener('click', async (event) => {
+      event.stopPropagation();
+      if (loaded) {
+        output.hidden = !output.hidden;
+        toggle.setAttribute('aria-expanded', String(!output.hidden));
+        toggle.textContent = output.hidden ? 'View transcription' : 'Hide transcription';
+        return;
+      }
+      if (busy) return;
+      busy = true; toggle.disabled = true; toggle.textContent = 'Loading transcription…';
+      try {
+        let result;
+        let attempts = 0;
+        do {
+          result = await apiPost('chat-transcribe.php', { chatId: state.chatId, messageId: msg.id, side: 'customer' });
+          if (result.status === 'pending') {
+            if (++attempts >= 15) throw new Error('Transcription is taking longer than expected. Please try again.');
+            await new Promise(resolve => setTimeout(resolve, 6000));
+          }
+        } while (result.status === 'pending');
+        if (!result.success || !result.transcript) throw new Error(result.error || 'Transcription unavailable.');
+        output.replaceChildren();
+        const transcript = el('div', {}, result.transcript);
+        output.appendChild(transcript);
+        const language = result.preferred_chat_language || state.preferredChatLanguage || 'en';
+        output.appendChild(el('div', { class: 'pcw-transcript-language' }, 'Customer preferred language: ' + language));
+        if (result.confidence !== null && result.confidence < 0.5) {
+          output.appendChild(el('div', { class: 'pcw-transcript-warning' }, 'This transcription may be inaccurate. Check the audio before relying on it.'));
+        }
+        const actions = el('div', { class: 'pcw-transcript-actions' });
+        actions.style.cssText = 'display:flex;gap:8px;margin-top:8px;';
+        const copy = el('button', { type: 'button' }, 'Copy transcript');
+        copy.addEventListener('click', async (copyEvent) => {
+          copyEvent.stopPropagation();
+          try { await navigator.clipboard.writeText(result.transcript); copy.textContent = 'Copied'; }
+          catch (error) { copy.textContent = 'Select and copy the text above'; }
+        });
+        actions.appendChild(copy);
+        const speech = buildCustomerSpeechButton(result.transcript, result.language || 'en');
+        if (speech) actions.appendChild(speech);
+        output.appendChild(actions);
+        output.hidden = false; loaded = true;
+        toggle.setAttribute('aria-expanded', 'true');
+        toggle.textContent = 'Hide transcription';
+      } catch (error) {
+        output.textContent = error.message || 'Transcription unavailable.';
+        output.hidden = false;
+        toggle.setAttribute('aria-expanded', 'true');
+        toggle.textContent = 'Try transcription again';
+      } finally { busy = false; toggle.disabled = false; }
+    });
+    wrap.append(toggle, output);
+    return wrap;
+  }
+  // TASK-admin234-1a END
+
   function renderMessage(msg) {
     // Defensive normalization: if from_type is somehow not one of the four
     // known values (e.g. 'bot' was rejected by a database that hasn't had
@@ -2159,6 +2309,8 @@
     if (msg.msg_type === 'text') {
       bodyTextEl.textContent = msg.body;
       bubble.appendChild(bodyTextEl);
+      const speech = buildCustomerSpeechButton(msg.body || '', isUser ? state.preferredChatLanguage : 'en');
+      if (speech) bubble.appendChild(speech);
     } else if (msg.msg_type === 'image') {
       const p = msg.media_path ? '/admin/' + msg.media_path : '';
       const img = el('img', { src: p, style: 'max-width:220px;border-radius:8px;display:block;cursor:pointer;' });
@@ -2170,6 +2322,7 @@
       bubble.appendChild(vid);
     } else if (msg.msg_type === 'audio') {
       bubble.appendChild(buildAudioBar('/admin/' + msg.media_path));
+      if (!isUser) buildCustomerTranscriptControl(msg).then(control => bubble.appendChild(control));
     }
     col.appendChild(bubble);
 
