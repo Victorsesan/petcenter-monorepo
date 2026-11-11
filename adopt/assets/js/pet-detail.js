@@ -31,7 +31,7 @@ function sharePet() {
   const category = PC.param('category');
 
   const catLabels = { dogs:'Dogs', cats:'Cats', birds:'Birds', reptiles:'Reptiles', 'small-mammals':'Small Mammals' };
-  const catPages = { dogs:'/dogs.html', cats:'/cats.html', birds:'/birds.html', reptiles:'/reptiles.html', 'small-mammals':'/small-mammals.html' };
+  const catPages = { dogs:'/pets/dogs/', cats:'/pets/cats/', birds:'/pets/birds/', reptiles:'/pets/reptiles/', 'small-mammals':'/pets/small-mammals/' };
 
   if (!petId || !category) {
     showError();
@@ -86,7 +86,7 @@ function sharePet() {
     } else {
       statusEl.innerHTML = '<span class="pc-badge pc-badge--available">Available</span>';
       const applyBtn = document.getElementById('applyBtn');
-      applyBtn.href = `/adoption-application.html?pet_id=${encodeURIComponent(p.pet_id)}&category=${encodeURIComponent(p.category)}`;
+      applyBtn.href = `/apply/?pet_id=${encodeURIComponent(p.pet_id)}&category=${encodeURIComponent(p.category)}`;
     }
 
     const mainImg = p.single_image_url || '/assets/images/pet-placeholder.svg';

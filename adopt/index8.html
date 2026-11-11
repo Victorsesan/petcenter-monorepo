@@ -1331,7 +1331,7 @@ p { color: var(--muted); }
     <li class="nav-donate"><a href="https://donate.petcenterco.com" target="_blank" rel="noopener">Donate</a></li>
     <li><a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact</a></li>
     <!-- TASK-1 START -->
-    <!-- Path changed from /rehome/ to /signin/ per CEO's request to retire the "rehome" URL sitewide (propagated for sitewide consistency during merge) -->
+    <!-- Path changed from /signin/ to /signin/ per CEO's request to retire the "rehome" URL sitewide (propagated for sitewide consistency during merge) -->
     <li class="nav-signup"><a href="/signin/">Sign Up</a></li>
     <!-- TASK-1 END -->
   </ul>
@@ -1353,7 +1353,7 @@ p { color: var(--muted); }
     <a href="/testimonials/">Testimonials</a>
     <a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact</a>
     <!-- TASK-1 START -->
-    <!-- Path changed from /rehome/ to /signin/ per CEO's request to retire the "rehome" URL sitewide (propagated for sitewide consistency during merge) -->
+    <!-- Path changed from /signin/ to /signin/ per CEO's request to retire the "rehome" URL sitewide (propagated for sitewide consistency during merge) -->
     <a href="/signin/">Sign Up</a>
     <!-- TASK-1 END -->
     <a href="https://donate.petcenterco.com" class="mobile-donate" target="_blank" rel="noopener">Donate</a>
@@ -1380,7 +1380,7 @@ p { color: var(--muted); }
         View All Available Pets
       </a>
       <!-- TASK-1 START -->
-      <!-- TASK 1b: "List Out A Pet" renamed to "Signin" per Dev Manager Task 1 assignment — restyled to match the site's existing .nav-login Signin button look (gold border/text, subtle gold hover fill) instead of the generic hero secondary style; link target updated from /rehome/ to /signin/ per CEO's request to retire the "rehome" URL sitewide; position unchanged -->
+      <!-- TASK 1b: "List Out A Pet" renamed to "Signin" per Dev Manager Task 1 assignment — restyled to match the site's existing .nav-login Signin button look (gold border/text, subtle gold hover fill) instead of the generic hero secondary style; link target updated from /signin/ to /signin/ per CEO's request to retire the "rehome" URL sitewide; position unchanged -->
       <a href="/signin/" class="pc-hero__btn-secondary pc-btn--signin">Signin</a>
       <!-- TASK-1 END -->
     </div>
@@ -1818,7 +1818,7 @@ p { color: var(--muted); }
         <ul>
           <li><a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact Us</a></li>
           <!-- TASK-1 START -->
-          <!-- Path changed from /rehome/ to /signin/ per CEO's request to retire the "rehome" URL sitewide (propagated for sitewide consistency during merge) -->
+          <!-- Path changed from /signin/ to /signin/ per CEO's request to retire the "rehome" URL sitewide (propagated for sitewide consistency during merge) -->
           <li><a href="/signin/">Sign Up</a></li>
           <!-- TASK-1 END -->
           <li><a href="https://docs.petcenterco.com/returns-refunds/" target="_blank" rel="noopener">Returns &amp; Refunds</a></li>
@@ -2053,8 +2053,8 @@ function closeStatusPopup() {
       var fee = Number(p.adoption_fee || 0).toLocaleString('en-US');
       var url = '/pets/detail/?pet_id=' + encodeURIComponent(p.pet_id || '') + '&category=' + encodeURIComponent(p.category || '');
       // Adopted badge — "ADOPTED" strip style (TASK-5: matches the badge
-      // markup/class used sitewide in birds.html/cats.html/dogs.html/
-      // reptiles.html/small-mammals.html). Reuses the pet.json fetch this
+      // markup/class used sitewide in birds.html/pets/cats//pets/dogs//
+      // reptiles.html/pets/small-mammals/). Reuses the pet.json fetch this
       // card already does above — no extra request added.
       var adoptedBadge = p.status === 'Adopted'
         ? '<div class="pc-pet-card__adopted-badge">ADOPTED</div>'
@@ -2377,7 +2377,9 @@ function closeStatusPopup() {
 })();
 // TASK-3 END
 </script>
-<script src="/admin/chat-widget.js"></script>
-<script src="/assets/js/accessibility-widget.js" defer></script>
+
+  <!-- Shared customer chat and accessibility widgets; keep these sitewide for consistent placement. -->
+  <script src="/admin/chat-widget.js"></script>
+  <script src="/assets/js/accessibility-widget.js" defer></script>
 </body>
 </html>

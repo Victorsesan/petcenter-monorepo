@@ -764,7 +764,6 @@
 </head>
 <body>
 <!-- BUGFIX-MANUS-09-3-START: use the site-root widget path so nested pages do not resolve it relatively. -->
-<script src="/admin/chat-widget.js"></script>
 <!-- BUGFIX-MANUS-09-3-END -->
 <!-- Header -->
 <header class="pc-header">
@@ -773,8 +772,8 @@
   </a>
   <ul class="pc-header__nav">
     <li><a href="../index.html">Home</a></li>
-    <li><a href="../dogs.html">Our Pets</a></li>
-    <li><a href="../blog-home.html">Blog</a></li>
+    <li><a href="/pets/dogs/">Our Pets</a></li>
+    <li><a href="/blog/">Blog</a></li>
     <li><a href="index.html" style="color:#d7bd88;">Testimonials</a></li>
     <li class="nav-donate"><a href="https://donate.petcenterco.com" target="_blank" rel="noopener">Donate</a></li>
     <li><a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact</a></li>
@@ -785,12 +784,12 @@
 </header>
 <nav class="pc-mobile-menu" id="pcMobMenu">
   <a href="../index.html">Home</a>
-  <a href="../dogs.html">Dogs</a>
-  <a href="../cats.html">Cats</a>
-  <a href="../birds.html">Birds</a>
-  <a href="../reptiles.html">Reptiles</a>
-  <a href="../small-mammals.html">Small Mammals</a>
-  <a href="../blog-home.html">Blog</a>
+  <a href="/pets/dogs/">Dogs</a>
+  <a href="/pets/cats/">Cats</a>
+  <a href="/pets/birds/">Birds</a>
+  <a href="/pets/reptiles/">Reptiles</a>
+  <a href="/pets/small-mammals/">Small Mammals</a>
+  <a href="/blog/">Blog</a>
   <a href="index.html">Testimonials</a>
   <a href="https://docs.petcenterco.com/contact-us" target="_blank">Contact</a>
 </nav>
@@ -1052,19 +1051,19 @@
       <div>
         <h5 style="font-family:'Sora',sans-serif;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#d7bd88;margin-bottom:14px;">Our Pets</h5>
         <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;padding:0;margin:0;">
-          <li><a href="../dogs.html" style="color:rgba(255,255,255,.72);font-size:13.5px;text-decoration:none;">Dogs</a></li>
-          <li><a href="../cats.html" style="color:rgba(255,255,255,.72);font-size:13.5px;text-decoration:none;">Cats</a></li>
-          <li><a href="../birds.html" style="color:rgba(255,255,255,.72);font-size:13.5px;text-decoration:none;">Birds</a></li>
-          <li><a href="../reptiles.html" style="color:rgba(255,255,255,.72);font-size:13.5px;text-decoration:none;">Reptiles</a></li>
-          <li><a href="../small-mammals.html" style="color:rgba(255,255,255,.72);font-size:13.5px;text-decoration:none;">Small Mammals</a></li>
+          <li><a href="/pets/dogs/" style="color:rgba(255,255,255,.72);font-size:13.5px;text-decoration:none;">Dogs</a></li>
+          <li><a href="/pets/cats/" style="color:rgba(255,255,255,.72);font-size:13.5px;text-decoration:none;">Cats</a></li>
+          <li><a href="/pets/birds/" style="color:rgba(255,255,255,.72);font-size:13.5px;text-decoration:none;">Birds</a></li>
+          <li><a href="/pets/reptiles/" style="color:rgba(255,255,255,.72);font-size:13.5px;text-decoration:none;">Reptiles</a></li>
+          <li><a href="/pets/small-mammals/" style="color:rgba(255,255,255,.72);font-size:13.5px;text-decoration:none;">Small Mammals</a></li>
         </ul>
       </div>
       <div>
         <h5 style="font-family:'Sora',sans-serif;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#d7bd88;margin-bottom:14px;">Quick Links</h5>
         <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;padding:0;margin:0;">
-          <li><a href="../adoption-application.html" style="color:rgba(255,255,255,.72);font-size:13.5px;text-decoration:none;">Apply to Adopt</a></li>
+          <li><a href="/apply/" style="color:rgba(255,255,255,.72);font-size:13.5px;text-decoration:none;">Apply to Adopt</a></li>
           <li><a href="../index.html" style="color:rgba(255,255,255,.72);font-size:13.5px;text-decoration:none;">Home</a></li>
-          <li><a href="../rehome/" style="color:rgba(255,255,255,.72);font-size:13.5px;text-decoration:none;">Sign Up</a></li>
+          <li><a href="/signin/" style="color:rgba(255,255,255,.72);font-size:13.5px;text-decoration:none;">Sign Up</a></li>
           <li><a href="https://donate.petcenterco.com" target="_blank" style="color:rgba(255,255,255,.72);font-size:13.5px;text-decoration:none;">Donate</a></li>
           <li><a href="https://docs.petcenterco.com/contact-us" target="_blank" style="color:rgba(255,255,255,.72);font-size:13.5px;text-decoration:none;">Contact Us</a></li>
         </ul>
@@ -2357,5 +2356,9 @@ function showMsg(type, text) {
   setTimeout(function(){ el.className = 'pc-form-msg'; }, 6000);
 }
 </script>
+
+  <!-- Shared customer chat and accessibility widgets; keep these sitewide for consistent placement. -->
+  <script src="/admin/chat-widget.js"></script>
+  <script src="/assets/js/accessibility-widget.js" defer></script>
 </body>
 </html>

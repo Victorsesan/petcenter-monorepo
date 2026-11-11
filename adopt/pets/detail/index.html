@@ -15,13 +15,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/plyr/3.8.4/plyr.min.css">
   <style>
-
 /* TASK-MANUS-06 START: G1 support controls reuse the detail-page component vocabulary. */
 .pc-support-merchant__row { display:flex; flex-wrap:wrap; gap:10px; margin-top:4px; }
 .pc-support-merchant__row .pc-btn { flex:1 1 auto; justify-content:center; }
 .pc-support-merchant__note { font-size:12px; color:var(--muted); margin-top:10px; line-height:1.5; }
 /* TASK-MANUS-06 END */
-/* TASK-web12-3 START: logical CSS properties for RTL */
 /* ════════════════════════════════════════════════════════════════════════════
    PET CENTER ADOPTION WEBSITE — Design System v1.0
    Colors: Navy #10214b | Gold #d7bd88 | Orange #ED7624
@@ -87,9 +85,9 @@ h4 { font-size: 1.2rem; font-weight: 600; }
 p { color: var(--muted); }
 
 /* ─── Layout Utilities ───────────────────────────────────────────────────────── */
-.pc-container { max-width: 1280px; margin-block: 0; margin-inline: auto; padding-block: 0; padding-inline: 24px; }
-.pc-section { padding-block: 72px; padding-inline: 0; }
-.pc-section--sm { padding-block: 40px; padding-inline: 0; }
+.pc-container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+.pc-section { padding: 72px 0; }
+.pc-section--sm { padding: 40px 0; }
 .pc-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
 .pc-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
 .pc-grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
@@ -103,7 +101,7 @@ p { color: var(--muted); }
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding-block: 12px; padding-inline: 28px;
+  padding: 12px 28px;
   border-radius: var(--radius-sm);
   font-family: 'Sora', sans-serif;
   font-size: 14px;
@@ -144,8 +142,8 @@ p { color: var(--muted); }
   box-shadow: inset 0 0 0 2px var(--gold);
 }
 .pc-btn--ghost:hover { background: var(--orange-light); color: var(--orange); }
-.pc-btn--sm { padding-block: 8px; padding-inline: 18px; font-size: 13px; min-height: 36px; }
-.pc-btn--lg { padding-block: 16px; padding-inline: 40px; font-size: 16px; }
+.pc-btn--sm { padding: 8px 18px; font-size: 13px; min-height: 36px; }
+.pc-btn--lg { padding: 16px 40px; font-size: 16px; }
 .pc-btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
 
 /* ─── Cards ────────────────────────────────────────────────────────────────────── */
@@ -158,7 +156,7 @@ p { color: var(--muted); }
 }
 .pc-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
 .pc-card__body { padding: 20px; }
-.pc-card__footer { padding-block: 16px; padding-inline: 20px; background: var(--bg); }
+.pc-card__footer { padding: 16px 20px; background: var(--bg); }
 
 /* ─── Pet Cards ─────────────────────────────────────────────────────────────────── */
 .pc-pet-card {
@@ -181,13 +179,13 @@ p { color: var(--muted); }
    element (only .pc-rec-card, in the "You Might Also Like" section, which
    already carries the correct adopted-badge strip style). The old
    .pc-pet-card__adopted-badge rule that lived here (rounded pill,
-   inset-inline-start:12px) was leftover/unused and has been removed rather than fixed,
+   left:12px) was leftover/unused and has been removed rather than fixed,
    to avoid a second badge style existing in the codebase with nothing
    ever rendering it.
    For this page's *own* pet, the adopted state is instead shown via the
    .pc-hero-adopted-badge on the main gallery image (see below) and the
    .pc-pet-info-panel.adopted / #adoptedMsg full-page treatment. */
-.pc-pet-card__body { padding-block: 18px; padding-inline: 20px; flex: 1; display: flex; flex-direction: column; gap: 6px; }
+.pc-pet-card__body { padding: 18px 20px; flex: 1; display: flex; flex-direction: column; gap: 6px; }
 .pc-pet-card__name { font-family: 'Cormorant Garamond', serif; font-size: 1.25rem; font-weight: 700; color: var(--navy); }
 .pc-pet-card__breed { font-size: 13px; color: var(--muted); font-weight: 500; }
 .pc-pet-card__meta { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
@@ -196,7 +194,7 @@ p { color: var(--muted); }
   font-weight: 600;
   color: var(--chocolate);
   background: var(--warm-gray);
-  padding-block: 3px; padding-inline: 10px;
+  padding: 3px 10px;
   border-radius: 20px;
   letter-spacing: 0.02em;
 }
@@ -227,7 +225,7 @@ p { color: var(--muted); }
 .pc-filter-group { display: flex; flex-direction: column; gap: 6px; min-width: 160px; flex: 1; }
 .pc-filter-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
 .pc-filter-select {
-  padding-block: 10px; padding-inline: 14px;
+  padding: 10px 14px;
   border-radius: var(--radius-sm);
   border: none;
   background: var(--bg);
@@ -241,7 +239,7 @@ p { color: var(--muted); }
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%237a6d5f' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 12px center;
-  padding-inline-end: 36px;
+  padding-right: 36px;
   outline: none;
   transition: box-shadow var(--transition);
 }
@@ -252,10 +250,10 @@ p { color: var(--muted); }
 .pc-empty-state {
   grid-column: 1 / -1;
   text-align: center;
-  padding-block: 64px; padding-inline: 24px;
+  padding: 64px 24px;
   color: var(--muted);
 }
-.pc-empty-state__icon { width: 64px; height: 64px; margin-block: 0 16px; margin-inline: auto; opacity: 0.3; }
+.pc-empty-state__icon { width: 64px; height: 64px; margin: 0 auto 16px; opacity: 0.3; }
 .pc-empty-state h3 { font-size: 1.4rem; color: var(--navy); margin-bottom: 8px; }
 .pc-loading-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
 .pc-skeleton {
@@ -301,13 +299,13 @@ p { color: var(--muted); }
 
 /* ─── Table ────────────────────────────────────────────────────────────────────── */
 .pc-table { width: 100%; border-collapse: collapse; }
-.pc-table th { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); padding-block: 12px; padding-inline: 16px; background: var(--bg); text-align: start; }
+.pc-table th { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); padding: 12px 16px; background: var(--bg); text-align: left; }
 .pc-table td { padding: 16px; border-bottom: 1px solid var(--bg); vertical-align: middle; font-size: 14px; }
 .pc-table tr:last-child td { border-bottom: none; }
 .pc-table tr:hover td { background: var(--orange-light); }
 .pc-badge {
   display: inline-block;
-  padding-block: 3px; padding-inline: 10px;
+  padding: 3px 10px;
   border-radius: 20px;
   font-size: 11px;
   font-weight: 700;
@@ -339,7 +337,7 @@ p { color: var(--muted); }
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  padding-block: 4px; padding-inline: 11px;
+  padding: 4px 11px;
   border-radius: 20px;
   font-size: 12px;
   font-weight: 600;
@@ -353,7 +351,7 @@ p { color: var(--muted); }
 .pc-merchant-chip--tier-new-merchant { background: var(--bg); color: var(--muted); }
 /* Reduced inline size: smaller than the profile page's full-size chips so the
    listing page stays uncluttered (see B4 spec). */
-.pc-merchant-chip--inline { font-size: 11px; padding-block: 2px; padding-inline: 9px; }
+.pc-merchant-chip--inline { font-size: 11px; padding: 2px 9px; }
 
 /* Posted-by row: name + chips are wider than the narrow side-by-side layout
    allows (the label was wrapping "Posted / by" at 280px). Reuses this file's
@@ -366,7 +364,7 @@ p { color: var(--muted); }
   align-items: flex-start;
 }
 #petPostedByRow.pc-has-merchant-chips .pc-info-row__val {
-  text-align: start;
+  text-align: left;
   margin-top: 6px;
   display: flex;
   flex-wrap: wrap;
@@ -385,7 +383,7 @@ p { color: var(--muted); }
   box-shadow: var(--shadow-sm);
 }
 .pet-form-card__number { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 700; color: var(--navy); margin-bottom: 20px; }
-.pet-form-card__delete { position: absolute; top: 16px; inset-inline-end: 16px; background: var(--error-bg); color: var(--error); border: none; border-radius: 6px; padding-block: 6px; padding-inline: 12px; font-size: 12px; font-weight: 600; cursor: pointer; transition: background var(--transition); }
+.pet-form-card__delete { position: absolute; top: 16px; right: 16px; background: var(--error-bg); color: var(--error); border: none; border-radius: 6px; padding: 6px 12px; font-size: 12px; font-weight: 600; cursor: pointer; transition: background var(--transition); }
 .pet-form-card__delete:hover { background: #fca5a5; }
 
 /* ─── File Upload ────────────────────────────────────────────────────────────── */
@@ -401,19 +399,19 @@ p { color: var(--muted); }
 }
 .pc-file-drop.dragover { box-shadow: inset 0 0 0 3px var(--gold); background: #fffbf5; }
 .pc-file-drop input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
-.pc-file-drop__icon { width: 36px; height: 36px; margin-block: 0 10px; margin-inline: auto; color: var(--muted); }
+.pc-file-drop__icon { width: 36px; height: 36px; margin: 0 auto 10px; color: var(--muted); }
 .pc-file-drop__text { font-size: 14px; color: var(--muted); }
 .pc-file-drop__text strong { color: var(--orange); }
 .pc-file-preview { display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 8px; margin-top: 12px; }
 .pc-file-preview__item { position: relative; aspect-ratio: 1; border-radius: 6px; overflow: hidden; box-shadow: var(--shadow-sm); }
 .pc-file-preview__item img { width: 100%; height: 100%; object-fit: cover; }
-.pc-file-preview__remove { position: absolute; top: 4px; inset-inline-end: 4px; background: rgba(0,0,0,0.6); color: #fff; border: none; width: 20px; height: 20px; border-radius: 4px; cursor: pointer; font-size: 10px; display: flex; align-items: center; justify-content: center; }
+.pc-file-preview__remove { position: absolute; top: 4px; right: 4px; background: rgba(0,0,0,0.6); color: #fff; border: none; width: 20px; height: 20px; border-radius: 4px; cursor: pointer; font-size: 10px; display: flex; align-items: center; justify-content: center; }
 
 /* ─── Pet Detail Page ────────────────────────────────────────────────────────── */
 .pc-pet-detail-breadcrumb {
   background: #1a3070;
   color: #fff;
-  padding-block: 16px; padding-inline: 0;
+  padding: 16px 0;
   font-size: 13px;
   font-weight: 500;
   letter-spacing: 0.05em;
@@ -429,7 +427,7 @@ p { color: var(--muted); }
   grid-template-columns: 1fr 420px;
   gap: 48px;
   align-items: start;
-  padding-block: 52px; padding-inline: 0;
+  padding: 52px 0;
   min-width: 0;
 }
 .pc-pet-detail-hero > * { min-width: 0; }
@@ -473,7 +471,7 @@ p { color: var(--muted); }
 .pc-hero-adopted-badge {
   position: absolute;
   top: 16px;
-  inset-inline-start: 0;
+  left: 0;
   background: var(--navy, #10214b);
   color: #fff;
   font-family: 'Sora', sans-serif;
@@ -481,8 +479,8 @@ p { color: var(--muted); }
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  padding-block: 8px; padding-inline: 18px;
-  border-start-start-radius: 0; border-start-end-radius: 4px; border-end-end-radius: 4px; border-end-start-radius: 0;
+  padding: 8px 18px;
+  border-radius: 0 4px 4px 0;
   box-shadow: 0 2px 8px rgba(0,0,0,0.25);
   z-index: 2;
   pointer-events: none;
@@ -539,7 +537,7 @@ p { color: var(--muted); }
   overflow: hidden;
   border-radius: var(--radius-md);
   background: #000;
-  margin-block: 0 12px; margin-inline: auto;
+  margin: 0 auto 12px;
   box-shadow: var(--shadow-md);
   transition: box-shadow 0.3s ease;
 }
@@ -593,7 +591,7 @@ p { color: var(--muted); }
    Instagram itself presents a Reel in a fullscreen view */
 #videoPlayerModal .plyr--is-portrait {
   max-width: 420px;
-  margin-block: 0; margin-inline: auto;
+  margin: 0 auto;
   aspect-ratio: 9/16;
   height: auto;
 }
@@ -650,7 +648,7 @@ p { color: var(--muted); }
   background: linear-gradient(135deg, var(--orange-light) 0%, #fff 100%);
   border: 1px solid rgba(237,118,36,0.18);
   border-radius: 999px;
-  padding-block: 10px 10px; padding-inline: 12px 18px;
+  padding: 10px 18px 10px 12px;
   margin-bottom: 24px;
   width: fit-content;
   box-shadow: var(--shadow-sm);
@@ -715,7 +713,7 @@ p { color: var(--muted); }
   display: flex;
   align-items: center;
   gap: 16px;
-  padding-block: 14px; padding-inline: 16px;
+  padding: 14px 16px;
   margin-bottom: 8px;
   background: var(--bg);
   border-radius: var(--radius-md);
@@ -763,7 +761,7 @@ p { color: var(--muted); }
   font-weight: 600;
   line-height: 1;
   color: var(--muted);
-  margin-inline-start: 1px;
+  margin-left: 1px;
 }
 
 .pc-match-ring__caption {
@@ -783,7 +781,7 @@ p { color: var(--muted); }
 .pc-pet-info-item {
   background: var(--bg);
   border-radius: var(--radius-sm);
-  padding-block: 16px; padding-inline: 14px;
+  padding: 16px 14px;
 }
 
 .pc-pet-info-item__label {
@@ -857,7 +855,7 @@ p { color: var(--muted); }
 .pc-lightbox-close {
   position: absolute;
   top: -40px;
-  inset-inline-end: 0;
+  right: 0;
   width: 40px;
   height: 40px;
   background: none;
@@ -900,11 +898,11 @@ p { color: var(--muted); }
 }
 
 .pc-lightbox-prev {
-  inset-inline-start: 10px;
+  left: 10px;
 }
 
 .pc-lightbox-next {
-  inset-inline-end: 10px;
+  right: 10px;
 }
 
 .pc-lightbox-thumbs {
@@ -1031,9 +1029,9 @@ p { color: var(--muted); }
   position: relative;
   margin-bottom: 28px;
   border-radius: 12px;
-  padding-block: 18px 30px; padding-inline: 20px;
+  padding: 18px 20px 30px;
   background: linear-gradient(135deg, var(--gold) 0%, #e9dcc0 100%);
-  border-inline-start: 5px solid var(--gold-dark);
+  border-left: 5px solid var(--gold-dark);
   box-shadow: 0 6px 20px rgba(184,153,104,0.28);
   min-height: 62px;
   box-sizing: border-box;
@@ -1045,7 +1043,7 @@ p { color: var(--muted); }
 .pc-tips-banner__quote {
   position: absolute;
   bottom: -6px;
-  inset-inline-end: 10px;
+  right: 10px;
   width: 54px;
   height: 54px;
   color: #fff;
@@ -1056,14 +1054,14 @@ p { color: var(--muted); }
 .pc-tips-banner__counter {
   position: absolute;
   top: 12px;
-  inset-inline-end: 14px;
+  right: 14px;
   font-family: 'Sora', sans-serif;
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.04em;
   color: #fff;
   background: rgba(16,33,75,0.28);
-  padding-block: 3px; padding-inline: 8px;
+  padding: 3px 8px;
   border-radius: 999px;
   pointer-events: none;
 }
@@ -1086,8 +1084,8 @@ p { color: var(--muted); }
   z-index: 2;
 }
 .pc-tips-banner__nav:hover { background: rgba(16,33,75,0.28); }
-.pc-tips-banner__nav--prev { inset-inline-start: 8px; }
-.pc-tips-banner__nav--next { inset-inline-end: 8px; }
+.pc-tips-banner__nav--prev { left: 8px; }
+.pc-tips-banner__nav--next { right: 8px; }
 
 .pc-tips-banner__text-wrap {
   position: relative;
@@ -1096,7 +1094,7 @@ p { color: var(--muted); }
      rather than growing the box, so short tips never look lost in an
      oversized card. */
   height: 66px;
-  margin-block: 0; margin-inline: 30px;
+  margin: 0 30px;
 }
 .pc-tip-item {
   font-family: 'Sora', sans-serif;
@@ -1107,8 +1105,8 @@ p { color: var(--muted); }
   opacity: 0;
   position: absolute;
   top: 0;
-  inset-inline-start: 0;
-  inset-inline-end: 0;
+  left: 0;
+  right: 0;
   height: 100%;
   overflow-y: auto;
   scrollbar-width: none; /* Firefox */
@@ -1128,7 +1126,7 @@ p { color: var(--muted); }
 
 .pc-tips-banner__dots {
   position: absolute;
-  inset-inline-start: 20px;
+  left: 20px;
   bottom: 12px;
   display: flex;
   gap: 5px;
@@ -1153,7 +1151,7 @@ p { color: var(--muted); }
   background: #fffce6;
   border: 1.5px solid #f0c300;
   border-radius: var(--radius-sm);
-  padding-block: 14px; padding-inline: 16px;
+  padding: 14px 16px;
   margin-top: 14px;
   box-sizing: border-box;
 }
@@ -1223,7 +1221,7 @@ p { color: var(--muted); }
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-block: 6px; padding-inline: 0;
+  padding: 6px 0;
   font-family: 'Sora', sans-serif;
   font-size: 13px;
 }
@@ -1238,7 +1236,7 @@ p { color: var(--muted); }
 .pc-info-row__val {
   font-weight: 600;
   color: var(--navy);
-  text-align: end;
+  text-align: right;
 }
 
 /* Rows with long values (Specify Starter Kits, Personality): label sits
@@ -1254,7 +1252,7 @@ p { color: var(--muted); }
 }
 #petKitSpecifyRow #petKitSpecify,
 #petPersonalityRow #petPersonality {
-  text-align: start;
+  text-align: left;
   margin-top: 6px;
 }
 
@@ -1287,24 +1285,24 @@ p { color: var(--muted); }
   font-family: monospace;
   color: var(--navy);
   font-size: 13px;
-  margin-inline-start: 4px;
+  margin-left: 4px;
 }
 
 /* ─── Fixed Bottom Bar ───────────────────────────────────────────────────────── */
 .pc-bottom-bar {
   position: fixed;
-  bottom: 0; inset-inline-start: 0; inset-inline-end: 0;
+  bottom: 0; left: 0; right: 0;
   z-index: 2000;
   background: #fff;
   box-shadow: 0 -4px 24px rgba(16,33,75,0.12);
   display: flex;
   align-items: center;
-  padding-block: 12px; padding-inline: 24px;
+  padding: 12px 24px;
   gap: 12px;
 }
 .pc-bottom-bar__adopt { flex: 1; max-width: 320px; }
 .pc-bottom-bar__adopt .pc-btn { width: 100%; justify-content: center; }
-.pc-bottom-bar__icons { display: flex; align-items: center; gap: 8px; margin-inline-start: auto; }
+.pc-bottom-bar__icons { display: flex; align-items: center; gap: 8px; margin-left: auto; }
 .pc-bottom-bar__icon-btn {
   display: flex;
   align-items: center;
@@ -1323,14 +1321,13 @@ p { color: var(--muted); }
 .pc-bottom-bar__icon-btn:hover { border-color: var(--orange); color: var(--orange); }
 body { padding-bottom: 84px; }
 @media (max-width: 640px) {
-  .pc-bottom-bar { padding-block: 10px; padding-inline: 16px; gap: 10px; }
+  .pc-bottom-bar { padding: 10px 16px; gap: 10px; }
   .pc-bottom-bar__adopt { flex: 1; max-width: none; }
 }
 
 /* ─── Dock chat widget launcher into the bottom bar (in place of old #messageBtn) ───
    chat-widget.js normally renders its launcher as position:fixed, bottom-right of
-   the viewport. Here it's re-parented (see script near <script src="/assets/js/accessibility-widget.js" defer></script>
-</body>) into
+   the viewport. Here it's re-parented (see script near </body>) into
    .pc-bottom-bar__icons, so these rules take it out of fixed positioning and let
    it flow as a normal flex item sized to match the other bottom-bar icon buttons —
    it never floats free or extends outside the page. */
@@ -1341,14 +1338,14 @@ body { padding-bottom: 84px; }
   flex-shrink: 0;
 }
 .pc-bottom-bar__icons .pcw-launcher-btn:hover { transform: none; box-shadow: 0 4px 14px rgba(16,33,75,0.20); }
-.pc-bottom-bar__icons .pcw-launcher-btn .pcw-badge { top: -3px; inset-inline-end: -3px; }
-.pc-bottom-bar__icons .pcw-launcher-btn .pcw-active-dot { bottom: 0; inset-inline-end: 0; }
+.pc-bottom-bar__icons .pcw-launcher-btn .pcw-badge { top: -3px; right: -3px; }
+.pc-bottom-bar__icons .pcw-launcher-btn .pcw-active-dot { bottom: 0; right: 0; }
 
 /* Panel opens anchored above the bottom bar, near the docked launcher, instead of
    the widget's default bottom-right screen corner. */
-.pcw-panel { bottom: 100px !important; inset-inline-end: 24px !important; }
+.pcw-panel { bottom: 100px !important; right: 24px !important; }
 @media (max-width: 640px) {
-  .pcw-panel { inset-inline-end: 16px !important; }
+  .pcw-panel { right: 16px !important; }
 }
 
 /* ─── Apply Button Paw Burst (v2 experiment) ────────────────────────────────
@@ -1397,8 +1394,8 @@ body { padding-bottom: 84px; }
 .pc-sticky-mini {
   position: fixed;
   top: 68px;
-  inset-inline-start: 0;
-  inset-inline-end: 0;
+  left: 0;
+  right: 0;
   z-index: 999;
   background: #fff;
   box-shadow: 0 4px 20px rgba(16,33,75,0.12);
@@ -1416,8 +1413,8 @@ body { padding-bottom: 84px; }
 
 .pc-sticky-mini__inner {
   max-width: 1200px;
-  margin-block: 0; margin-inline: auto;
-  padding-block: 10px; padding-inline: 24px;
+  margin: 0 auto;
+  padding: 10px 24px;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -1465,7 +1462,7 @@ body { padding-bottom: 84px; }
   font-family: 'Sora', sans-serif;
   font-weight: 700;
   font-size: 13px;
-  padding-block: 9px; padding-inline: 18px;
+  padding: 9px 18px;
   border-radius: 999px;
   text-decoration: none;
   white-space: nowrap;
@@ -1478,8 +1475,8 @@ body { padding-bottom: 84px; }
 }
 
 @media (max-width: 640px) {
-  .pc-sticky-mini__inner { padding-block: 8px; padding-inline: 16px; gap: 8px; }
-  .pc-sticky-mini__btn { padding-block: 8px; padding-inline: 14px; font-size: 12px; }
+  .pc-sticky-mini__inner { padding: 8px 16px; gap: 8px; }
+  .pc-sticky-mini__btn { padding: 8px 14px; font-size: 12px; }
 }
 
 /* ─── Recommended pets section ───────────────────────────────────────────────── */
@@ -1507,13 +1504,13 @@ body { padding-bottom: 84px; }
 .pc-rec-card__img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
 .pc-rec-card:hover .pc-rec-card__img { transform: scale(1.05); }
 .pc-rec-card__adopted-badge {
-  position: absolute; top: 10px; inset-inline-start: 0;
+  position: absolute; top: 10px; left: 0;
   background: var(--navy); color: #fff;
   font-family: 'Sora', sans-serif; font-size: 10px; font-weight: 700;
   letter-spacing: 0.08em; text-transform: uppercase;
-  padding-block: 4px; padding-inline: 12px; border-start-start-radius: 0; border-start-end-radius: 4px; border-end-end-radius: 4px; border-end-start-radius: 0;
+  padding: 4px 12px; border-radius: 0 4px 4px 0;
 }
-.pc-rec-card__body { padding-block: 14px 16px; padding-inline: 16px; flex: 1; display: flex; flex-direction: column; }
+.pc-rec-card__body { padding: 14px 16px 16px; flex: 1; display: flex; flex-direction: column; }
 .pc-rec-card__name { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
 .pc-rec-card__details { display: flex; flex-direction: column; gap: 5px; margin-bottom: 10px; }
 .pc-rec-card__row { display: flex; align-items: center; gap: 7px; font-family: 'Sora', sans-serif; font-size: 12px; color: var(--muted); }
@@ -1540,7 +1537,7 @@ body { padding-bottom: 84px; }
 .pc-section-sub { color: var(--muted); max-width: 560px; }
 
 /* ─── Alert / Messages ──────────────────────────────────────────────────────── */
-.pc-alert { border-radius: var(--radius-sm); padding-block: 14px; padding-inline: 18px; font-size: 14px; font-weight: 500; display: none; }
+.pc-alert { border-radius: var(--radius-sm); padding: 14px 18px; font-size: 14px; font-weight: 500; display: none; }
 .pc-alert.show { display: block; animation: fadeInDown 0.3s ease; }
 .pc-alert--success { background: var(--success-bg); color: var(--success); }
 .pc-alert--error { background: var(--error-bg); color: var(--error); }
@@ -1551,7 +1548,7 @@ body { padding-bottom: 84px; }
 .pc-pet-prefill {
   background: linear-gradient(135deg, #fffbf5, #fff);
   border-radius: var(--radius-md);
-  padding-block: 20px; padding-inline: 24px;
+  padding: 20px 24px;
   margin-bottom: 24px;
   box-shadow: var(--shadow-sm);
   display: none;
@@ -1568,7 +1565,7 @@ body { padding-bottom: 84px; }
   font-family: 'Courier New', monospace;
   background: var(--navy);
   color: var(--gold);
-  padding-block: 14px; padding-inline: 24px;
+  padding: 14px 24px;
   border-radius: var(--radius-sm);
   font-size: 1.4rem;
   font-weight: 700;
@@ -1578,9 +1575,9 @@ body { padding-bottom: 84px; }
 }
 .pc-warning-box {
   background: #fff8e6;
-  border-inline-start: 4px solid #f59e0b;
-  border-start-start-radius: 0; border-start-end-radius: var(--radius-sm); border-end-end-radius: var(--radius-sm); border-end-start-radius: 0;
-  padding-block: 16px; padding-inline: 20px;
+  border-left: 4px solid #f59e0b;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  padding: 16px 20px;
   color: #92400e;
   font-size: 14px;
   font-weight: 500;
@@ -1599,28 +1596,28 @@ body { padding-bottom: 84px; }
   .pc-pet-grid { grid-template-columns: repeat(3, 1fr); }
   .pc-pet-detail-hero { grid-template-columns: 1fr; }
   .pc-pet-detail-gallery { position: static; }
-
-
+  
+  
 }
 @media (max-width: 768px) {
   .pc-pet-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
   .pc-grid-4, .pc-grid-3 { grid-template-columns: 1fr 1fr; }
-
-
-
-
+  
+  
+  
+  
   .pc-filters { flex-direction: column; }
-  .pc-status-box { padding-block: 28px; padding-inline: 20px; }
-  .pc-modal { padding-block: 28px; padding-inline: 20px; }
-  .pc-pet-info-panel { padding-block: 24px; padding-inline: 20px; }
-
+  .pc-status-box { padding: 28px 20px; }
+  .pc-modal { padding: 28px 20px; }
+  .pc-pet-info-panel { padding: 24px 20px; }
+  
 }
 @media (max-width: 480px) {
   .pc-pet-grid { grid-template-columns: 1fr; }
   .pc-grid-4, .pc-grid-3, .pc-grid-2 { grid-template-columns: 1fr; }
-  .pc-btn--lg { padding-block: 14px; padding-inline: 28px; }
+  .pc-btn--lg { padding: 14px 28px; }
   .pc-status-form { flex-direction: column; }
-  .pc-section { padding-block: 48px; padding-inline: 0; }
+  .pc-section { padding: 48px 0; }
   .pc-pet-prefill.show { flex-direction: column; text-align: center; }
 }
 
@@ -1664,14 +1661,14 @@ body { padding-bottom: 84px; }
   width: 100%;
   height: 100%;
   top: 0;
-  inset-inline-start: 0;
+  left: 0;
   z-index: -1;
 }
 .custom-select-trigger {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-block: 10px; padding-inline: 14px;
+  padding: 10px 14px;
   background: #fff;
   border: 1.5px solid rgba(16,33,75,.14);
   border-radius: 9px;
@@ -1706,8 +1703,8 @@ body { padding-bottom: 84px; }
   display: none;
   position: absolute;
   top: calc(100% + 4px);
-  inset-inline-start: 0;
-  inset-inline-end: 0;
+  left: 0;
+  right: 0;
   background: #fff;
   border: 1.5px solid rgba(215,189,136,.5);
   border-radius: 9px;
@@ -1717,11 +1714,11 @@ body { padding-bottom: 84px; }
   overflow-y: auto;
   list-style: none;
   margin: 0;
-  padding-block: 4px; padding-inline: 0;
+  padding: 4px 0;
 }
 .custom-select-options.open { display: block; }
 .custom-select-options li {
-  padding-block: 10px; padding-inline: 14px;
+  padding: 10px 14px;
   cursor: pointer;
   font-family: 'Sora', sans-serif;
   font-size: 13.5px;
@@ -1738,9 +1735,9 @@ body { padding-bottom: 84px; }
 /* ─── Global Header (pc-header) ─────────────────────────────────────────────── */
 .pc-header {
   position: fixed;
-  top: 0; inset-inline-start: 0; inset-inline-end: 0;
+  top: 0; left: 0; right: 0;
   z-index: 1000;
-  padding-block: 0; padding-inline: 24px;
+  padding: 0 24px;
   height: 68px;
   display: flex;
   align-items: center;
@@ -1770,7 +1767,7 @@ body { padding-bottom: 84px; }
 .pc-header__nav li { position: relative; }
 .pc-header__nav a {
   display: block;
-  padding-block: 8px; padding-inline: 11px;
+  padding: 8px 11px;
   font-family: 'Sora', sans-serif;
   font-size: 13px;
   font-weight: 500;
@@ -1781,7 +1778,7 @@ body { padding-bottom: 84px; }
   white-space: nowrap;
 }
 .pc-header__nav a:hover { color: #d7bd88; background: rgba(255,255,255,0.08); }
-.pc-header__nav .nav-donate a { background: #ED7624; color: #fff; font-weight: 600; padding-block: 8px; padding-inline: 16px; }
+.pc-header__nav .nav-donate a { background: #ED7624; color: #fff; font-weight: 600; padding: 8px 16px; }
 .pc-header__nav .nav-donate a:hover { background: #d4621a; color: #fff; }
 .pc-header__nav .nav-signup a,
 .pc-header__nav .nav-login a { border: 1px solid rgba(215,189,136,0.5); color: #d7bd88; }
@@ -1791,17 +1788,17 @@ body { padding-bottom: 84px; }
   display: none;
   position: absolute;
   top: calc(100% + 4px);
-  inset-inline-start: 0;
+  left: 0;
   background: #10214b;
   border-radius: 8px;
   list-style: none;
   min-width: 168px;
   box-shadow: 0 8px 32px rgba(0,0,0,0.22);
-  padding-block: 6px; padding-inline: 0;
+  padding: 6px 0;
   z-index: 100;
 }
 .pc-header__nav .has-drop:hover > ul { display: block; }
-.pc-header__nav .has-drop > ul a { padding-block: 9px; padding-inline: 18px; font-size: 13px; border-radius: 0; }
+.pc-header__nav .has-drop > ul a { padding: 9px 18px; font-size: 13px; border-radius: 0; }
 .pc-hamburger {
   display: none;
   flex-direction: column;
@@ -1814,30 +1811,30 @@ body { padding-bottom: 84px; }
   height: auto;
   justify-content: center;
 }
-.pc-hamburger span {
-  display: block;
-  width: 24px;
-  height: 2px;
-  background: #fff;
-  border-radius: 2px;
+.pc-hamburger span { 
+  display: block; 
+  width: 24px; 
+  height: 2px; 
+  background: #fff; 
+  border-radius: 2px; 
   transition: all 0.3s ease;
 }
-.pc-hamburger.active span:nth-child(1) {
-  transform: rotate(45deg) translate(8px, 8px);
+.pc-hamburger.active span:nth-child(1) { 
+  transform: rotate(45deg) translate(8px, 8px); 
 }
-.pc-hamburger.active span:nth-child(2) {
-  opacity: 0;
+.pc-hamburger.active span:nth-child(2) { 
+  opacity: 0; 
 }
-.pc-hamburger.active span:nth-child(3) {
-  transform: rotate(-45deg) translate(7px, -7px);
+.pc-hamburger.active span:nth-child(3) { 
+  transform: rotate(-45deg) translate(7px, -7px); 
 }
 .pc-mobile-menu {
   display: flex;
   flex-direction: column;
   position: absolute;
   top: 100%;
-  inset-inline-start: 0;
-  inset-inline-end: 0;
+  left: 0;
+  right: 0;
   background: rgba(16,33,75,0.98);
   z-index: 999;
   max-height: 0;
@@ -1847,18 +1844,18 @@ body { padding-bottom: 84px; }
   transition: all 0.3s ease;
   box-shadow: 0 8px 32px rgba(0,0,0,0.3);
 }
-.pc-mobile-menu.open {
+.pc-mobile-menu.open { 
   max-height: calc(100vh - 68px);
   overflow-y: auto;
   opacity: 1;
   pointer-events: auto;
-  padding-block: 16px calc(100vh - 68px - 56px); padding-inline: 0;
+  padding: 16px 0 calc(100vh - 68px - 56px);
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
 }
 .pc-mobile-menu a {
   display: block;
-  padding-block: 12px; padding-inline: 28px;
+  padding: 12px 28px;
   font-family: 'Sora', sans-serif;
   font-size: 15px;
   font-weight: 500;
@@ -1867,16 +1864,16 @@ body { padding-bottom: 84px; }
   border-bottom: 1px solid rgba(255,255,255,0.06);
   transition: all 0.2s ease;
 }
-.pc-mobile-menu a:hover {
-  color: #d7bd88;
-  background: rgba(255,255,255,0.05);
+.pc-mobile-menu a:hover { 
+  color: #d7bd88; 
+  background: rgba(255,255,255,0.05); 
 }
 .pc-mobile-menu .mobile-donate {
-  margin-block: 12px 0; margin-inline: 28px;
+  margin: 12px 28px 0;
   display: inline-block;
   background: #ED7624;
   color: #fff;
-  padding-block: 11px; padding-inline: 24px;
+  padding: 11px 24px;
   border-radius: 8px;
   font-weight: 600;
   border-bottom: none;
@@ -1888,8 +1885,8 @@ body { padding-bottom: 84px; }
 
 /* ─── Category Page Banner ──────────────────────────────────────────────────── */
 .pc-cat-banner {
-  background: #10214b url('/assets/images/pet-detail.png') center/cover no-repeat;
-  padding-block: 140px 90px; padding-inline: 0;
+  background: #10214b url('/assets/images/pet-placeholder.jpg') center/cover no-repeat;
+  padding: 140px 0 90px;
   position: relative;
   overflow: hidden;
 }
@@ -1900,13 +1897,13 @@ body { padding-bottom: 84px; }
   background: rgba(16,33,75,0.62);
   z-index: 0;
 }
-.pc-cat-banner__inner {
-  position: relative;
-  z-index: 1;
+.pc-cat-banner__inner { 
+  position: relative; 
+  z-index: 1; 
   text-align: center;
   max-width: 800px;
-  margin-block: 0; margin-inline: auto;
-  padding-block: 0; padding-inline: 24px;
+  margin: 0 auto;
+  padding: 0 24px;
 }
 .pc-cat-banner__eyebrow {
   display: inline-block;
@@ -1918,7 +1915,7 @@ body { padding-bottom: 84px; }
   color: #d7bd88;
   background: rgba(215,189,136,0.12);
   border: 1px solid rgba(215,189,136,0.3);
-  padding-block: 5px; padding-inline: 16px;
+  padding: 5px 16px;
   border-radius: 20px;
   margin-bottom: 20px;
 }
@@ -1935,36 +1932,36 @@ body { padding-bottom: 84px; }
   font-family: 'Sora', sans-serif;
   font-size: 16px;
   max-width: 520px;
-  margin-block: 0; margin-inline: auto;
+  margin: 0 auto;
 }
-.pc-cat-banner__crumb {
-  font-family: 'Sora', sans-serif;
-  font-size: 12px;
-  color: rgba(255,255,255,0.6);
-  margin-bottom: 14px;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+.pc-cat-banner__crumb { 
+  font-family: 'Sora', sans-serif; 
+  font-size: 12px; 
+  color: rgba(255,255,255,0.6); 
+  margin-bottom: 14px; 
+  letter-spacing: 0.06em; 
+  text-transform: uppercase; 
 }
-.pc-cat-banner__crumb a {
-  color: rgba(255,255,255,0.6);
-  text-decoration: none;
+.pc-cat-banner__crumb a { 
+  color: rgba(255,255,255,0.6); 
+  text-decoration: none; 
 }
-.pc-cat-banner__crumb a:hover {
-  color: #d7bd88;
+.pc-cat-banner__crumb a:hover { 
+  color: #d7bd88; 
 }
-.pc-cat-banner__crumb span {
-  color: rgba(255,255,255,0.35);
-  margin-block: 0; margin-inline: 8px;
+.pc-cat-banner__crumb span { 
+  color: rgba(255,255,255,0.35); 
+  margin: 0 8px; 
 }
 
 /* ─── Global Footer ─────────────────────────────────────────────────────────── */
 .pc-footer {
   background: #0b1834;
-  padding-block: 60px 28px; padding-inline: 24px;
+  padding: 60px 24px 28px;
   color: rgba(255,255,255,0.65);
   font-family: 'Sora', sans-serif;
 }
-.pc-footer__inner { max-width: 1200px; margin-block: 0; margin-inline: auto; }
+.pc-footer__inner { max-width: 1200px; margin: 0 auto; }
 .pc-footer__top {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr 1.5fr;
@@ -1994,7 +1991,7 @@ body { padding-bottom: 84px; }
 
 /* ── 1280px and below: constrain max container ─────────────── */
 @media (max-width: 1280px) {
-  .pc-container { padding-block: 0; padding-inline: 20px; }
+  .pc-container { padding: 0 20px; }
 }
 
 /* ── 1024px: tablet landscape ──────────────────────────────── */
@@ -2012,7 +2009,7 @@ body { padding-bottom: 84px; }
 
   /* Catalog */
   .pc-catalog-grid { grid-template-columns: repeat(2, 1fr); gap: 18px; }
-  .pc-banner { padding-block: 80px 40px; padding-inline: 20px; }
+  .pc-banner { padding: 80px 20px 40px; }
   .pc-banner h1 { font-size: clamp(1.8rem, 5vw, 2.8rem); }
   .pc-filter-bar { flex-wrap: wrap; gap: 10px; }
 
@@ -2021,7 +2018,7 @@ body { padding-bottom: 84px; }
     grid-template-columns: 1fr;
     gap: 32px;
   }
-
+  
   .pc-pet-detail-gallery {
     position: static;
   }
@@ -2047,18 +2044,18 @@ body { padding-bottom: 84px; }
 
   /* Admin table */
   .pc-admin-table { font-size: 13px; }
-  .pc-admin-table td, .pc-admin-table th { padding-block: 10px; padding-inline: 12px; }
+  .pc-admin-table td, .pc-admin-table th { padding: 10px 12px; }
 }
 
 /* ── 640px: large mobile ───────────────────────────────────── */
 @media (max-width: 640px) {
-  .pc-section { padding-block: 48px; padding-inline: 0; }
+  .pc-section { padding: 48px 0; }
   .pc-filter-bar .pc-select-wrap,
   .pc-filter-bar select { width: 100%; }
 
   /* Pet Detail Mobile */
   .pc-pet-detail-hero {
-    padding-block: 28px; padding-inline: 0;
+    padding: 28px 0;
   }
 
   .pc-pet-info-panel {
@@ -2104,7 +2101,7 @@ body { padding-bottom: 84px; }
   }
 
   /* Form steps */
-  .step-indicator__item { padding-block: 10px; padding-inline: 4px; font-size: 10px; }
+  .step-indicator__item { padding: 10px 4px; font-size: 10px; }
   .step-indicator__num { width: 24px; height: 24px; font-size: 11px; line-height: 24px; }
   .form-nav { flex-direction: column; }
   .form-nav .pc-btn { width: 100%; justify-content: center; }
@@ -2135,8 +2132,8 @@ body { padding-bottom: 84px; }
 /* ── 480px: small mobile ───────────────────────────────────── */
 @media (max-width: 480px) {
   .pc-grid-4 { grid-template-columns: 1fr; }
-  .pc-testi-card { padding-block: 22px; padding-inline: 18px; }
-  .pc-testi-reply { padding-inline-start: 0; }
+  .pc-testi-card { padding: 22px 18px; }
+  .pc-testi-reply { padding-left: 0; }
 
   /* Footer */
   .pc-footer__bottom { flex-direction: column; text-align: center; }
@@ -2178,7 +2175,7 @@ body { padding-bottom: 84px; }
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-block: 10px; padding-inline: 14px;
+  padding: 10px 14px;
   border: 1px solid #d7bd88;
   border-radius: 6px;
   background: #fff;
@@ -2201,10 +2198,10 @@ body { padding-bottom: 84px; }
   content: '';
   width: 8px;
   height: 8px;
-  border-inline-end: 2px solid #10214b;
+  border-right: 2px solid #10214b;
   border-bottom: 2px solid #10214b;
   transform: rotate(45deg) translateY(-2px);
-  margin-inline-start: 8px;
+  margin-left: 8px;
 }
 
 .custom-select-wrapper.open .custom-select-trigger {
@@ -2219,12 +2216,12 @@ body { padding-bottom: 84px; }
 .custom-select-options {
   position: absolute;
   top: 100%;
-  inset-inline-start: 0;
-  inset-inline-end: 0;
+  left: 0;
+  right: 0;
   display: none;
   list-style: none;
-  margin-block: 4px 0; margin-inline: 0 0;
-  padding-block: 8px; padding-inline: 0;
+  margin: 4px 0 0 0;
+  padding: 8px 0;
   border: 1px solid #d7bd88;
   border-radius: 6px;
   background: #fff;
@@ -2241,7 +2238,7 @@ body { padding-bottom: 84px; }
 }
 
 .custom-select-options li {
-  padding-block: 10px; padding-inline: 16px;
+  padding: 10px 16px;
   color: #10214b;
   cursor: pointer;
   transition: background 0.15s ease;
@@ -2269,7 +2266,7 @@ body { padding-bottom: 84px; }
 /* ─── Preload Overlay ───────────────────────────────────────────────────────────────────────── */
 /* ─── Preloader ─── */
 #petcenter-preloader {
-  position: fixed; top: 0; inset-inline-start: 0; width: 100%; height: 100%;
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
   background: #10214b; z-index: 9999;
   display: flex; flex-direction: column;
   justify-content: center; align-items: center;
@@ -2322,20 +2319,20 @@ body { padding-bottom: 84px; }
   animation-name is set separately below (direction-scoped) so the correct
   rightward/leftward-facing keyframe is used depending on walk-right/walk-left.
 */
-#petcenter-preloader.walk-right .paw:nth-child(1) { inset-inline-start: 0px;   top: 42px; animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 0.0s; }
-#petcenter-preloader.walk-right .paw:nth-child(2) { inset-inline-start: 32px;  top: 0px;  animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 0.7s; }
-#petcenter-preloader.walk-right .paw:nth-child(3) { inset-inline-start: 64px;  top: 42px; animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 1.4s; }
-#petcenter-preloader.walk-right .paw:nth-child(4) { inset-inline-start: 96px;  top: 0px;  animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 2.1s; }
-#petcenter-preloader.walk-right .paw:nth-child(5) { inset-inline-start: 128px; top: 42px; animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 2.8s; }
-#petcenter-preloader.walk-right .paw:nth-child(6) { inset-inline-start: 158px; top: 0px;  animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 3.5s; }
+#petcenter-preloader.walk-right .paw:nth-child(1) { left: 0px;   top: 42px; animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 0.0s; }
+#petcenter-preloader.walk-right .paw:nth-child(2) { left: 32px;  top: 0px;  animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 0.7s; }
+#petcenter-preloader.walk-right .paw:nth-child(3) { left: 64px;  top: 42px; animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 1.4s; }
+#petcenter-preloader.walk-right .paw:nth-child(4) { left: 96px;  top: 0px;  animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 2.1s; }
+#petcenter-preloader.walk-right .paw:nth-child(5) { left: 128px; top: 42px; animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 2.8s; }
+#petcenter-preloader.walk-right .paw:nth-child(6) { left: 158px; top: 0px;  animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 3.5s; }
 
 /* walk-left: identical two-lane shape, mirrored so it stamps right→left */
-#petcenter-preloader.walk-left .paw:nth-child(1) { inset-inline-start: 158px; top: 42px; animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 0.0s; }
-#petcenter-preloader.walk-left .paw:nth-child(2) { inset-inline-start: 128px; top: 0px;  animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 0.7s; }
-#petcenter-preloader.walk-left .paw:nth-child(3) { inset-inline-start: 96px;  top: 42px; animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 1.4s; }
-#petcenter-preloader.walk-left .paw:nth-child(4) { inset-inline-start: 64px;  top: 0px;  animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 2.1s; }
-#petcenter-preloader.walk-left .paw:nth-child(5) { inset-inline-start: 32px;  top: 42px; animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 2.8s; }
-#petcenter-preloader.walk-left .paw:nth-child(6) { inset-inline-start: 0px;   top: 0px;  animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 3.5s; }
+#petcenter-preloader.walk-left .paw:nth-child(1) { left: 158px; top: 42px; animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 0.0s; }
+#petcenter-preloader.walk-left .paw:nth-child(2) { left: 128px; top: 0px;  animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 0.7s; }
+#petcenter-preloader.walk-left .paw:nth-child(3) { left: 96px;  top: 42px; animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 1.4s; }
+#petcenter-preloader.walk-left .paw:nth-child(4) { left: 64px;  top: 0px;  animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 2.1s; }
+#petcenter-preloader.walk-left .paw:nth-child(5) { left: 32px;  top: 42px; animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 2.8s; }
+#petcenter-preloader.walk-left .paw:nth-child(6) { left: 0px;   top: 0px;  animation-duration: 5s; animation-timing-function: linear; animation-iteration-count: infinite; animation-delay: 3.5s; }
 
 /*
   Two stamp keyframes per direction (odd = left-foot tilt, even = right-foot tilt).
@@ -2385,23 +2382,7 @@ body { padding-bottom: 84px; }
   body { padding-top: 0 !important; }
 }
 </style>
-<!-- TASK-10 START -->
-<!-- TASK-9 START: cross-document View Transitions API, enabled sitewide.
-     Animates same-origin full-page navigations (e.g. the Settings Widget's
-     language switcher navigating between /, /es/, /pt/, /fr/, /ar/, /zh/)
-     in browsers that support the cross-document View Transitions API
-     (Chromium 126+). Browsers without support ignore this at-rule and
-     navigate normally with no error -- this is a progressive enhancement,
-     not a dependency. -->
-<style>
-@view-transition {
-  navigation: auto;
-}
-</style>
-<!-- TASK-9 END -->
   </head>
-<!-- TASK-10 END -->
-
 <body>
 
 <!-- PRELOADER -->
@@ -2533,7 +2514,7 @@ body { padding-bottom: 84px; }
   } else {
     window.addEventListener('load', hideLoader);
   }
-
+  
   // FALLBACK: Ensure preloader hides after 5 seconds even if page doesn't load
   setTimeout(function() {
     if (loader && loader.style.display !== 'none') {
@@ -2561,13 +2542,7 @@ body { padding-bottom: 84px; }
         <li><a href="/pets/small-mammals/">Small Mammals</a></li>
         <!-- TASK-2 START — Livestocks & Aquariums added to Our Pets dropdown -->
         <li><a href="/pets/livestocks/">Livestocks</a></li>
-        <li><a href="/pets/aquariums/">Aquariums</a>
-    <!-- TASK-8 START -->
-    <a href="/pets/quiz/">Find Your Match</a>
-    <!-- TASK-8 END --></li>
-        <!-- TASK-8 START -->
-        <li><a href="/pets/quiz/">Find Your Match</a></li>
-        <!-- TASK-8 END -->
+        <li><a href="/pets/aquariums/">Aquariums</a></li>
         <!-- TASK-2 END -->
       </ul>
     </li>
@@ -2575,7 +2550,7 @@ body { padding-bottom: 84px; }
     <li><a href="/testimonials/">Testimonials</a></li>
     <li class="nav-donate"><a href="https://donate.petcenterco.com" target="_blank" rel="noopener">Donate</a></li>
     <li><a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact</a></li>
-    <li class="nav-signup"><a href="/rehome/">Sign Up</a></li>
+    <li class="nav-signup"><a href="/signin/">Sign Up</a></li>
   </ul>
   <button class="pc-hamburger" id="pcHamburger" aria-label="Open menu" aria-expanded="false">
     <span></span><span></span><span></span>
@@ -2590,14 +2565,11 @@ body { padding-bottom: 84px; }
     <!-- TASK-2 START — Livestocks & Aquariums added to mobile menu -->
     <a href="/pets/livestocks/">Livestocks</a>
     <a href="/pets/aquariums/">Aquariums</a>
-    <!-- TASK-8 START -->
-    <a href="/pets/quiz/">Find Your Match</a>
-    <!-- TASK-8 END -->
     <!-- TASK-2 END -->
     <a href="/blog/">Blog</a>
     <a href="/testimonials/">Testimonials</a>
     <a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact</a>
-    <a href="/rehome/">Sign Up</a>
+    <a href="/signin/">Sign Up</a>
     <a href="https://donate.petcenterco.com" class="mobile-donate" target="_blank" rel="noopener">Donate</a>
   </nav>
 </header>
@@ -3054,8 +3026,8 @@ body { padding-bottom: 84px; }
 <!-- Not found -->
 <div id="petDetailError" style="display:none;" class="pc-section">
   <div class="pc-container text-center">
-    <div style="max-width:480px;margin-block: 0; margin-inline: auto;padding-block: 64px; padding-inline: 24px;">
-      <div style="width:80px;height:80px;border-radius:50%;background:#f0ece8;display:flex;align-items:center;justify-content:center;margin-block: 0 24px; margin-inline: auto;">
+    <div style="max-width:480px;margin:0 auto;padding:64px 24px;">
+      <div style="width:80px;height:80px;border-radius:50%;background:#f0ece8;display:flex;align-items:center;justify-content:center;margin:0 auto 24px;">
         <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#b0a398" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
       </div>
       <h2 style="color:#10214b;margin-bottom:12px;">Pet Not Found</h2>
@@ -3066,7 +3038,7 @@ body { padding-bottom: 84px; }
 </div>
 
 <!-- Share toast -->
-<div id="shareToast" style="display:none;position:fixed;bottom:28px;inset-inline-start:50%;transform:translateX(-50%);background:#10214b;color:#fff;padding-block: 12px; padding-inline: 24px;border-radius:8px;font-family:'Sora',sans-serif;font-size:13px;font-weight:500;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,0.2);">
+<div id="shareToast" style="display:none;position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:#10214b;color:#fff;padding:12px 24px;border-radius:8px;font-family:'Sora',sans-serif;font-size:13px;font-weight:500;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,0.2);">
   Link copied to clipboard!
 </div>
 
@@ -3116,13 +3088,7 @@ body { padding-bottom: 84px; }
           <li><a href="/pets/small-mammals/">Small Mammals</a></li>
           <!-- TASK-2 START — Livestocks & Aquariums added to footer Our Pets column -->
           <li><a href="/pets/livestocks/">Livestocks</a></li>
-          <li><a href="/pets/aquariums/">Aquariums</a>
-    <!-- TASK-8 START -->
-    <a href="/pets/quiz/">Find Your Match</a>
-    <!-- TASK-8 END --></li>
-        <!-- TASK-8 START -->
-        <li><a href="/pets/quiz/">Find Your Match</a></li>
-        <!-- TASK-8 END -->
+          <li><a href="/pets/aquariums/">Aquariums</a></li>
           <!-- TASK-2 END -->
         </ul>
       </div>
@@ -3143,7 +3109,7 @@ body { padding-bottom: 84px; }
         <h5>Support</h5>
         <ul>
           <li><a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact Us</a></li>
-          <li><a href="/rehome/">Sign Up</a></li>
+          <li><a href="/signin/">Sign Up</a></li>
           <li><a href="https://docs.petcenterco.com/returns-refunds/" target="_blank" rel="noopener">Returns & Refunds</a></li>
           <li><a href="https://docs.petcenterco.com/faq/" target="_blank" rel="noopener">FAQ</a></li>
         </ul>
@@ -3172,7 +3138,7 @@ body { padding-bottom: 84px; }
 (function() {
   var header = document.getElementById('pcHeader');
   if (!header) return;
-
+  
   function updateHeaderOnScroll() {
     if (window.scrollY > 0) {
       header.classList.add('scrolled');
@@ -3180,7 +3146,7 @@ body { padding-bottom: 84px; }
       header.classList.remove('scrolled');
     }
   }
-
+  
   window.addEventListener('scroll', updateHeaderOnScroll, { passive: true });
   updateHeaderOnScroll();
 })();
@@ -3189,7 +3155,7 @@ body { padding-bottom: 84px; }
 (function() {
   var hamburger = document.getElementById('pcHamburger');
   var mobileMenu = document.getElementById('pcMobileMenu');
-
+  
   if (!hamburger || !mobileMenu) return;
 
   function openMenu() {
@@ -3209,12 +3175,12 @@ body { padding-bottom: 84px; }
     e.stopPropagation();
     mobileMenu.classList.contains('open') ? closeMenu() : openMenu();
   });
-
+  
   var links = mobileMenu.querySelectorAll('a');
   links.forEach(function(link) {
     link.addEventListener('click', closeMenu);
   });
-
+  
   document.addEventListener('click', function(e) {
     if (!e.target.closest('header') && !e.target.closest('.pc-mobile-menu')) {
       closeMenu();
@@ -3227,15 +3193,15 @@ body { padding-bottom: 84px; }
   var urlParams = new URLSearchParams(window.location.search);
   var petId = urlParams.get('pet_id');
   var category = urlParams.get('category');
-
+  
   var currentImageIndex = 0;
   var allImages = [];
-
+  
   if(!petId || !category) {
     showError('Pet not found');
     return;
   }
-
+  
   fetch('/adoptions/pets/' + category + '/' + petId + '/pet.json')
     .then(function(r) {
       if (!r.ok) throw new Error('Pet not found');
@@ -3244,28 +3210,28 @@ body { padding-bottom: 84px; }
     .then(function(pet) {
       // Update page title
       document.title = (pet.name || 'Pet') + ' - Pet Center';
-
+      
       // Banner title and description
       var bannerTitle = document.getElementById('bannerTitle');
       if (bannerTitle) bannerTitle.textContent = pet.name || 'Pet';
-
+      
       var bannerDesc = document.getElementById('bannerDescription');
       if (bannerDesc) bannerDesc.textContent = 'Meet ' + (pet.name || 'this pet') + ' and learn more about their adoption.';
-
+      
       // Build images — single image first, then probe bulk images that actually exist
       allImages = [];
       if (pet.single_image_url) allImages.push(pet.single_image_url);
-
+      
       // Store video URL if available
       var petVideoUrl = pet.video_url || null;
-
+      
       function renderPet() {
         // Show content, hide skeleton loader
         var loading = document.getElementById('petDetailLoading');
         var content = document.getElementById('petDetailContent');
         if (loading) loading.style.display = 'none';
         if (content) content.style.display = 'block';
-
+        
         // Show video section if available
         var videoSection = document.getElementById('petVideoSection');
         if (videoSection) {
@@ -3302,7 +3268,7 @@ body { padding-bottom: 84px; }
             videoSection.style.display = 'none';
           }
         }
-
+        
         // Update main gallery image
         var mainImage = document.getElementById('galleryMain');
         if (mainImage && allImages.length > 0) {
@@ -3310,24 +3276,23 @@ body { padding-bottom: 84px; }
           mainImage.alt = pet.name || 'Pet';
           mainImage.addEventListener('click', function() { openLightbox(0); });
         }
-
+        
         // Build thumbnail gallery
         buildThumbnailGallery(allImages);
-
+        
         // Populate all pet info fields
         populatePetInfo(pet, category);
-
         // TASK-MANUS-06 START: render G1 controls from the fetched listing, never a local demo record.
         populateSupportMerchantSection(pet);
         // TASK-MANUS-06 END
-
+        
         // Setup adoption actions
         setupAdoptionActions(pet, category, petId);
-
+        
         // Handle adopted status
         if (pet.status === 'Adopted') showAdoptedStatus(category);
       }
-
+      
       // Probe bulk images with HEAD requests — only add ones that actually return 200
       if (pet.bulk_images_url) {
         var probes = [];
@@ -3356,7 +3321,7 @@ body { padding-bottom: 84px; }
     .catch(function(err) {
       showError('Error loading pet details: ' + err.message);
     });
-
+  
   // TASK-2 START — shared date formatter for Posted-on display
   function formatPostedDate(dateStr) {
     if (!dateStr) return null;
@@ -3667,7 +3632,7 @@ body { padding-bottom: 84px; }
     // Load recommended
     loadRecommended(category, petId, pet);
   }
-
+  
   function updateInfoItem(elementId, value) {
     var el = document.getElementById(elementId);
     if (el) el.textContent = value;
@@ -3978,37 +3943,37 @@ body { padding-bottom: 84px; }
       }
     });
   }
-
+  
   function updateMainImage(index) {
     if (index < 0 || index >= allImages.length) return;
-
+    
     var mainImg = document.getElementById('galleryMain');
     if (mainImg) {
       mainImg.src = allImages[index];
     }
-
+    
     currentImageIndex = index;
     setActiveThumb(index);
   }
-
+  
   function openLightbox(startIndex) {
     currentImageIndex = startIndex || 0;
     var overlay = document.getElementById('lightboxOverlay');
     var mainImg = document.getElementById('lightboxImage');
-
+    
     if (!overlay || !mainImg) return;
-
+    
     // Update main image
     mainImg.src = allImages[currentImageIndex];
-
+    
     // Build lightbox thumbnails
     buildLightboxThumbs();
-
+    
     // Show overlay
     overlay.classList.add('active');
     document.body.style.overflow = 'hidden';
   }
-
+  
   function closeLightbox() {
     var overlay = document.getElementById('lightboxOverlay');
     if (overlay) {
@@ -4016,13 +3981,13 @@ body { padding-bottom: 84px; }
       document.body.style.overflow = 'auto';
     }
   }
-
+  
   function buildLightboxThumbs() {
     var thumbsContainer = document.getElementById('lightboxThumbs');
     if (!thumbsContainer) return;
-
+    
     thumbsContainer.innerHTML = '';
-
+    
     allImages.forEach(function(img, index) {
       var thumb = document.createElement('div');
       thumb.className = 'pc-lightbox-thumb' + (index === currentImageIndex ? ' active' : '');
@@ -4033,16 +3998,16 @@ body { padding-bottom: 84px; }
       thumbsContainer.appendChild(thumb);
     });
   }
-
+  
   function goToImage(index) {
     if (index < 0 || index >= allImages.length) return;
-
+    
     currentImageIndex = index;
     var mainImg = document.getElementById('lightboxImage');
     if (mainImg) {
       mainImg.src = allImages[currentImageIndex];
     }
-
+    
     // Update active thumb
     var thumbs = document.querySelectorAll('.pc-lightbox-thumb');
     thumbs.forEach(function(t, i) {
@@ -4053,7 +4018,7 @@ body { padding-bottom: 84px; }
       }
     });
   }
-
+  
   function buildThumbnailGallery(images) {
     var thumbsContainer = document.getElementById('galleryThumbs');
     if (!thumbsContainer) return;
@@ -4102,7 +4067,7 @@ body { padding-bottom: 84px; }
   function openVideoPlayer(videoUrl) {
     var modal = document.createElement('div');
     modal.id = 'videoPlayerModal';
-    modal.style.cssText = 'position:fixed;top:0;inset-inline-start:0;width:100%;height:100%;background:rgba(0,0,0,0.95);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;';
+    modal.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.95);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;';
 
     var container = document.createElement('div');
     container.style.cssText = 'position:relative;width:100%;max-width:900px;max-height:90vh;overflow:hidden;border-radius:8px;';
@@ -4121,7 +4086,7 @@ body { padding-bottom: 84px; }
 
     var closeBtn = document.createElement('button');
     closeBtn.innerHTML = '×';
-    closeBtn.style.cssText = 'position:absolute;top:-40px;inset-inline-end:0;background:none;border:none;color:#fff;font-size:40px;cursor:pointer;padding:0;width:40px;height:40px;line-height:1;z-index:1;';
+    closeBtn.style.cssText = 'position:absolute;top:-40px;right:0;background:none;border:none;color:#fff;font-size:40px;cursor:pointer;padding:0;width:40px;height:40px;line-height:1;z-index:1;';
     closeBtn.onclick = function() { modal.remove(); };
 
     container.appendChild(video);
@@ -4158,7 +4123,7 @@ body { padding-bottom: 84px; }
   document.getElementById('lightboxOverlay')?.addEventListener('click', function(e) {
     if (e.target === this) closeLightbox();
   });
-
+  
   // Keyboard navigation for lightbox
   document.addEventListener('keydown', function(e) {
     if (document.getElementById('lightboxOverlay')?.classList.contains('active')) {
@@ -4167,7 +4132,7 @@ body { padding-bottom: 84px; }
       if (e.key === 'Escape') closeLightbox();
     }
   });
-
+  
   // Make functions globally accessible
   window.openLightbox = openLightbox;
   window.closeLightbox = closeLightbox;
@@ -4187,7 +4152,7 @@ function sharePet() {
     text: 'Check out this adorable pet available for adoption at Pet Center!',
     url: shareUrl
   };
-
+  
   if (navigator.share) {
     navigator.share(shareData).catch(function(err) {
       console.log('Share cancelled:', err);
@@ -4456,7 +4421,6 @@ function showShareToast(message) {
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/plyr/3.8.4/plyr.polyfilled.min.js"></script>
 <script src="/admin/chat-widget.js"></script>
-<script src="/assets/js/accessibility-widget.js" defer></script>
 <script>
 /* ─── Dock chat widget launcher into the bottom bar ───────────────────────────
    chat-widget.js builds its launcher button and appends it directly to
@@ -4488,547 +4452,8 @@ function showShareToast(message) {
   tryDock();
 })();
 </script>
-
 <script src="/assets/js/cookie-consent.js"></script>
-<!-- TASK-10 START -->
-<!-- TASK-9 START: Settings Widget -- gear-icon trigger + panel housing the
-     sitewide language switcher and the personal widget-background-opacity
-     slider. Defines the shared `preferences` object (localStorage key
-     "preferences", fields {lang, opacity}) that this page's own
-     lang-redirect.js / i18n-core.js (Task 1) already read `preferences.lang`
-     from, and that Admin-Project #4's `preferred_chat_language` field also
-     reads independently -- the exact field name/shape/values documented in
-     this task must not change without notifying that project first.
-     Z-INDEX NOTE: the site's real, documented highest z-index anywhere is
-     6001 (the filter/form bottom-sheet system), not the floating contact
-     button's 4000 -- this widget's trigger/panel/dropdown are placed at
-     6100/6200/6300 so they always sit above every existing floating
-     element, including both of those. -->
-<style>
-/* Renamed from --pc-widget-opacity (added in this task's first pass) to
-   --pc-widget-bg-opacity, and a second, distinct --pc-widget-opacity
-   variable added for the whole widget's own opacity -- per user follow-up,
-   "Widget Background Opacity" (panel's rgba background only, children
-   stay fully legible) and "Widget Opacity" (the entire trigger + panel,
-   via real CSS `opacity` on the container) are two separate controls. */
-:root { --pc-widget-bg-opacity: 0.90; --pc-widget-opacity: 1; }
-
-/* "Central position" = vertically centered on the viewport's right edge.
-   User follow-up moved this from the left edge (this task's original
-   build) to the right edge -- everything else about the placement logic
-   from that first pass still applies: vertically centered avoids the
-   hero's own CTA buttons (the collision found and fixed when this was
-   briefly bottom-center), and vertical centering keeps clear of the
-   bottom-right floating contact button (z-index 4000), re-confirmed by
-   Playwright screenshot below since moving to the same edge as that
-   button is exactly the kind of collision worth re-checking, not
-   assuming safe by reasoning alone. */
-.pc-settings-widget {
-  position: fixed;
-  top: 50%;
-  inset-inline-end: 16px;
-  transform: translateY(-50%);
-  z-index: 6100;
-  font-family: 'Sora', sans-serif;
-  /* Whole-widget opacity (trigger + panel together), separate from the
-     panel-only rgba background opacity below. Real CSS `opacity`, by
-     design, fades everything inside -- that's the intended effect of this
-     specific control, unlike the background one. */
-  opacity: var(--pc-widget-opacity);
-  transition: opacity 0.2s ease;
-}
-
-.pc-settings-trigger {
-  width: 52px; height: 52px; border-radius: 50%; border: none; cursor: pointer;
-  background: #10214b; color: #d7bd88;
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 4px 16px rgba(16,33,75,0.35);
-  transition: transform 0.3s cubic-bezier(.4,0,.2,1), background 0.3s cubic-bezier(.4,0,.2,1);
-}
-.pc-settings-trigger:hover { transform: rotate(35deg); background: #1a2f5c; }
-.pc-settings-trigger[aria-expanded="true"] { background: #ED7624; color: #fff; }
-
-.pc-settings-panel {
-  position: absolute;
-  top: 50%;
-  /* Opens to the LEFT of the trigger now that the trigger sits on the
-     right edge (was `inset-inline-start: calc(100% + 12px)` opening rightward off a
-     left-edge trigger). */
-  inset-inline-end: calc(100% + 12px);
-  transform: translateY(-50%);
-  width: 280px;
-  max-width: calc(100vw - 32px);
-  /* rgba() background driven by the Widget Background Opacity slider --
-     never container `opacity`, which would also fade the panel's
-     text/children (Task 9's explicit requirement: "rgba() backgrounds,
-     not container opacity"). The separate whole-widget opacity control
-     lives on .pc-settings-widget above. */
-  background: rgba(16, 33, 75, var(--pc-widget-bg-opacity));
-  color: #f2f2f2;
-  border-radius: 14px;
-  padding: 16px;
-  box-shadow: 0 8px 30px rgba(0,0,0,0.3);
-  z-index: 6200;
-}
-.pc-settings-panel[hidden] { display: none; }
-
-.pc-settings-panel__header {
-  display: flex; align-items: center; justify-content: space-between;
-  font-weight: 700; margin-bottom: 12px; font-size: 15px;
-}
-.pc-settings-panel__close {
-  background: none; border: none; color: inherit; font-size: 20px; line-height: 1;
-  cursor: pointer; padding-block: 2px; padding-inline: 6px;
-}
-
-.pc-settings-row { margin-bottom: 14px; }
-.pc-settings-row:last-child { margin-bottom: 0; }
-.pc-settings-label { display: block; font-size: 12.5px; margin-bottom: 6px; color: #d7bd88; }
-/* One-line description under a consequential setting, per Design System
-   Section 19's "Settings Widget Control Pattern -- Toggle + Description"
-   rule (pair every consequential control with a plain-language line
-   explaining its effect, since a user shouldn't have to guess). */
-.pc-settings-desc { font-size: 11.5px; color: #a39b91; margin-block: -2px 8px; margin-inline: 0; line-height: 1.4; }
-
-.pc-lang-dropdown { position: relative; }
-.pc-lang-dropdown__trigger {
-  width: 100%; display: flex; align-items: center; justify-content: space-between;
-  background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.16);
-  color: #f2f2f2; border-radius: 8px; padding-block: 8px; padding-inline: 12px; font-size: 13.5px; cursor: pointer;
-  font-family: 'Sora', sans-serif;
-}
-.pc-lang-dropdown__panel {
-  position: absolute; top: calc(100% + 6px); inset-inline-start: 0; inset-inline-end: 0;
-  background: #10214b; border: 1px solid rgba(255,255,255,0.14);
-  /* Sharp corner nearest the trigger (top-left here, since the trigger
-     sits above this downward-opening panel) -- the "message bubble" corner
-     rule from PETCENTER_DESIGN_SYSTEM_v1_0.md Section 24 (v1.25). */
-  border-start-start-radius: 0; border-start-end-radius: 8px; border-end-end-radius: 8px; border-end-start-radius: 8px;
-  list-style: none; margin: 0; padding: 4px; max-height: 200px; overflow-y: auto;
-  z-index: 6300;
-}
-.pc-lang-dropdown__panel[hidden] { display: none; }
-.pc-lang-dropdown__panel li { padding-block: 8px; padding-inline: 10px; font-size: 13.5px; border-radius: 6px; cursor: pointer; }
-.pc-lang-dropdown__panel li:hover,
-.pc-lang-dropdown__panel li[aria-selected="true"] { background: rgba(215,189,136,0.18); }
-
-.pc-opacity-slider { width: 100%; accent-color: #d7bd88; }
-.pc-opacity-value { font-size: 12px; color: #a39b91; float: inline-end; margin-top: 2px; }
-
-@media (max-width: 600px) {
-  /* Below 600px, opening the panel to the right of a left-edge trigger
-     would push a 280px-wide panel off the right edge of the viewport on
-     most phones. Anchor the panel to open downward from the trigger
-     instead, still clear of both the hero content and the bottom-right
-     contact button. Anchored via `inset-inline-end: 0` (not `inset-inline-start: 0`) since the
-     trigger itself now sits near the right edge -- `inset-inline-start: 0` would push
-     a near-full-width panel further right and off-screen. */
-  .pc-settings-panel {
-    top: calc(100% + 10px);
-    inset-inline-end: 0;
-    inset-inline-start: auto;
-    transform: none;
-    width: calc(100vw - 48px);
-  }
-}
-
-/* TASK-web12-3 END */
-</style>
-
-<div class="pc-settings-widget" id="pcSettingsWidget">
-  <button type="button" class="pc-settings-trigger" id="pcSettingsTrigger"
-          aria-haspopup="true" aria-expanded="false" aria-controls="pcSettingsPanel"
-          aria-label="Open site settings">
-    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
-         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      <circle cx="12" cy="12" r="3"></circle>
-      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-    </svg>
-  </button>
-
-  <div class="pc-settings-panel" id="pcSettingsPanel" role="dialog" aria-modal="false"
-       aria-label="Site settings" hidden="">
-    <div class="pc-settings-panel__header">
-      <span data-i18n="common.settingsWidget.1">Settings</span>
-      <button type="button" class="pc-settings-panel__close" id="pcSettingsClose"
-              aria-label="Close settings">&times;</button>
-    </div>
-
-    <div class="pc-settings-row">
-      <label class="pc-settings-label" id="pcLangLabel" data-i18n="common.settingsWidget.2">Language</label>
-      <div class="pc-lang-dropdown" id="pcLangDropdown">
-        <button type="button" class="pc-lang-dropdown__trigger" id="pcLangTrigger"
-                aria-haspopup="listbox" aria-expanded="false" aria-labelledby="pcLangLabel"
-                aria-controls="pcLangListbox">
-          <span id="pcLangCurrentLabel">English</span>
-          <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
-            <polyline points="6 9 12 15 18 9"></polyline>
-          </svg>
-        </button>
-        <ul class="pc-lang-dropdown__panel" id="pcLangListbox" role="listbox"
-            aria-labelledby="pcLangLabel" tabindex="-1" hidden="">
-          <li role="option" data-lang="en" aria-selected="true" tabindex="0">English</li>
-          <li role="option" data-lang="es" aria-selected="false" tabindex="0">Español</li>
-          <li role="option" data-lang="pt" aria-selected="false" tabindex="0">Português</li>
-          <li role="option" data-lang="fr" aria-selected="false" tabindex="0">Français</li>
-          <li role="option" data-lang="ar" aria-selected="false" tabindex="0">العربية</li>
-          <li role="option" data-lang="zh-Hans" aria-selected="false" tabindex="0">简体中文</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="pc-settings-row">
-      <label class="pc-settings-label" for="pcOpacitySlider" id="pcOpacityLabel" data-i18n="common.settingsWidget.3">Widget Background Opacity</label>
-      <input type="range" id="pcOpacitySlider" class="pc-opacity-slider"
-             min="20" max="100" step="5" value="90"
-             role="slider" aria-labelledby="pcOpacityLabel"
-             aria-valuemin="20" aria-valuemax="100" aria-valuenow="90" aria-valuetext="90%">
-      <span class="pc-opacity-value" id="pcOpacityValue" aria-hidden="true">90%</span>
-    </div>
-
-    <div class="pc-settings-row">
-      <label class="pc-settings-label" for="pcWidgetOpacitySlider" id="pcWidgetOpacityLabel" data-i18n="common.settingsWidget.4">Widget Opacity</label>
-      <input type="range" id="pcWidgetOpacitySlider" class="pc-opacity-slider"
-             min="20" max="100" step="5" value="100"
-             role="slider" aria-labelledby="pcWidgetOpacityLabel"
-             aria-valuemin="20" aria-valuemax="100" aria-valuenow="100" aria-valuetext="100%">
-      <span class="pc-opacity-value" id="pcWidgetOpacityValue" aria-hidden="true">100%</span>
-    </div>
-
-    <!-- TASK (Color Vision Accessibility) START: brief calls for this
-         control to sit "alongside the existing dark mode toggle" -- no dark
-         mode toggle exists anywhere in this codebase yet (Design System
-         Section 19 documents its intended look/behavior but confirms it
-         is not yet built; searched before assuming otherwise). Not adding
-         a placeholder/stub toggle for a feature that hasn't been
-         specified as buildable here -- flagging the gap in this task's
-         completion file instead, per "flag it rather than inventing." -->
-    <div class="pc-settings-row">
-      <label class="pc-settings-label" id="pcVisionLabel" data-i18n="common.settingsWidget.5">Color Vision</label>
-      <p class="pc-settings-desc" id="pcVisionDesc" data-i18n="common.settingsWidget.6">Adjusts status colors, alerts, and charts sitewide for your selected vision type.</p>
-      <div class="pc-lang-dropdown" id="pcVisionDropdown">
-        <button type="button" class="pc-lang-dropdown__trigger" id="pcVisionTrigger"
-                aria-haspopup="listbox" aria-expanded="false" aria-labelledby="pcVisionLabel"
-                aria-controls="pcVisionListbox">
-          <span id="pcVisionCurrentLabel">Normal Vision</span>
-          <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
-            <polyline points="6 9 12 15 18 9"></polyline>
-          </svg>
-        </button>
-        <ul class="pc-lang-dropdown__panel" id="pcVisionListbox" role="listbox"
-            aria-labelledby="pcVisionLabel" tabindex="-1" hidden="">
-          <li role="option" data-vision="normal" aria-selected="true" tabindex="0">Normal Vision</li>
-          <li role="option" data-vision="deuteranopia" aria-selected="false" tabindex="0">Deuteranopia</li>
-          <li role="option" data-vision="protanopia" aria-selected="false" tabindex="0">Protanopia</li>
-          <li role="option" data-vision="tritanopia" aria-selected="false" tabindex="0">Tritanopia</li>
-        </ul>
-      </div>
-    </div>
-    <!-- TASK (Color Vision Accessibility) END -->
-  </div>
-</div>
-
-<script>
-// TASK-9 START: Settings Widget logic + `preferences` schema owner.
-(function () {
-  'use strict';
-
-  var PREFS_KEY = 'preferences';
-  // Written by admin-dashboard.html's "Default Widget Background Opacity"
-  // and "Default Widget Opacity" controls (this task's admin-side
-  // deliverable). Read here only as a fallback default for a visitor with
-  // no personal preference saved yet -- a visitor's own saved choice in
-  // `preferences.opacity` / `preferences.widgetOpacity` always wins.
-  var ADMIN_DEFAULTS_KEY = 'pc_admin_settings_defaults';
-
-  // LANG_FOLDER_MAP mirrors Task 1's /en/-/zh/ folder scaffolding -- English
-  // is the un-prefixed root (never a redirect target), the rest are their
-  // own language-code folders. 'zh-Hans' (tagged, not bare 'zh') is the
-  // CEO-confirmed value for Chinese everywhere this schema is used.
-  var LANG_FOLDER_MAP = { en: '/', es: '/es/', pt: '/pt/', fr: '/fr/', ar: '/ar/', 'zh-Hans': '/zh/' };
-  var LANG_LABELS = { en: 'English', es: 'Español', pt: 'Português', fr: 'Français', ar: 'العربية', 'zh-Hans': '简体中文' };
-  var VISION_LABELS = { normal: 'Normal Vision', deuteranopia: 'Deuteranopia', protanopia: 'Protanopia', tritanopia: 'Tritanopia' };
-
-  function readAdminDefaultOpacity() {
-    try {
-      var raw = localStorage.getItem(ADMIN_DEFAULTS_KEY);
-      if (!raw) return 90;
-      var parsed = JSON.parse(raw);
-      var val = Number(parsed && parsed.opacity);
-      return (val >= 20 && val <= 100) ? val : 90;
-    } catch (e) { return 90; }
-  }
-
-  function readAdminDefaultWidgetOpacity() {
-    try {
-      var raw = localStorage.getItem(ADMIN_DEFAULTS_KEY);
-      if (!raw) return 100;
-      var parsed = JSON.parse(raw);
-      var val = Number(parsed && parsed.widgetOpacity);
-      return (val >= 20 && val <= 100) ? val : 100;
-    } catch (e) { return 100; }
-  }
-
-  function getPreferences() {
-    try {
-      var raw = localStorage.getItem(PREFS_KEY);
-      var parsed = raw ? JSON.parse(raw) : {};
-      return {
-        lang: (typeof parsed.lang === 'string' && parsed.lang) ? parsed.lang : 'en',
-        opacity: (typeof parsed.opacity === 'number') ? parsed.opacity : readAdminDefaultOpacity(),
-        widgetOpacity: (typeof parsed.widgetOpacity === 'number') ? parsed.widgetOpacity : readAdminDefaultWidgetOpacity(),
-        colorVision: (typeof parsed.colorVision === 'string' && VISION_LABELS[parsed.colorVision]) ? parsed.colorVision : 'normal'
-      };
-    } catch (e) {
-      return { lang: 'en', opacity: readAdminDefaultOpacity(), widgetOpacity: readAdminDefaultWidgetOpacity(), colorVision: 'normal' };
-    }
-  }
-
-  function setPreferences(partial) {
-    var current = getPreferences();
-    var next = { lang: current.lang, opacity: current.opacity, widgetOpacity: current.widgetOpacity, colorVision: current.colorVision };
-    for (var k in partial) { if (Object.prototype.hasOwnProperty.call(partial, k)) next[k] = partial[k]; }
-    try { localStorage.setItem(PREFS_KEY, JSON.stringify(next)); } catch (e) { /* storage unavailable -- fail silently, in-memory state still applies for this tab */ }
-    return next;
-  }
-
-  // Panel-only rgba() background opacity -- children stay fully legible
-  // regardless of this value.
-  function applyBackgroundOpacity(value) {
-    document.documentElement.style.setProperty('--pc-widget-bg-opacity', (value / 100).toFixed(2));
-    var sliderEl = document.getElementById('pcOpacitySlider');
-    var valueEl = document.getElementById('pcOpacityValue');
-    if (sliderEl) {
-      sliderEl.value = value;
-      sliderEl.setAttribute('aria-valuenow', value);
-      sliderEl.setAttribute('aria-valuetext', value + '%');
-    }
-    if (valueEl) valueEl.textContent = value + '%';
-  }
-
-  // Whole-widget opacity -- real CSS `opacity` on .pc-settings-widget,
-  // fades the trigger button and everything inside the panel together.
-  function applyWidgetOpacity(value) {
-    document.documentElement.style.setProperty('--pc-widget-opacity', (value / 100).toFixed(2));
-    var sliderEl = document.getElementById('pcWidgetOpacitySlider');
-    var valueEl = document.getElementById('pcWidgetOpacityValue');
-    if (sliderEl) {
-      sliderEl.value = value;
-      sliderEl.setAttribute('aria-valuenow', value);
-      sliderEl.setAttribute('aria-valuetext', value + '%');
-    }
-    if (valueEl) valueEl.textContent = value + '%';
-  }
-
-  function applyLangSelection(code) {
-    var currentLabelEl = document.getElementById('pcLangCurrentLabel');
-    if (currentLabelEl) currentLabelEl.textContent = LANG_LABELS[code] || 'English';
-    var options = document.querySelectorAll('#pcLangListbox li');
-    options.forEach(function (opt) {
-      opt.setAttribute('aria-selected', opt.getAttribute('data-lang') === code ? 'true' : 'false');
-    });
-  }
-
-  // Sets the `data-vision` attribute on <html>, which every
-  // [data-vision="..."] CSS override block above (and in admin-dashboard.html)
-  // keys off of. "normal" matches no override rule, so it's a no-op that
-  // simply leaves the default colors in place -- no separate "clear" branch
-  // needed.
-  function applyVisionSelection(vision) {
-    document.documentElement.setAttribute('data-vision', vision);
-    var currentLabelEl = document.getElementById('pcVisionCurrentLabel');
-    if (currentLabelEl) currentLabelEl.textContent = VISION_LABELS[vision] || 'Normal Vision';
-    var options = document.querySelectorAll('#pcVisionListbox li');
-    options.forEach(function (opt) {
-      opt.setAttribute('aria-selected', opt.getAttribute('data-vision') === vision ? 'true' : 'false');
-    });
-  }
-
-  function navigateToLang(code) {
-    var target = LANG_FOLDER_MAP[code] || '/';
-    // Cross-document View Transitions (enabled sitewide via the
-    // `@view-transition { navigation: auto; }` at-rule in <head>) animate
-    // this navigation automatically in supporting browsers -- a plain
-    // same-origin navigation is all that's needed to trigger it.
-    window.location.href = target;
-  }
-
-  // Apply stored/default preferences immediately (before DOMContentLoaded)
-  // so both CSS variables are correct before first paint -- avoids a flash
-  // of the defaults on a return visitor with different saved values. The
-  // `data-vision` attribute is likewise set here, before first paint, so
-  // there's no flash of un-adjusted colors either.
-  (function initFromStoredPreferencesEarly() {
-    var prefs = getPreferences();
-    document.documentElement.style.setProperty('--pc-widget-bg-opacity', (prefs.opacity / 100).toFixed(2));
-    document.documentElement.style.setProperty('--pc-widget-opacity', (prefs.widgetOpacity / 100).toFixed(2));
-    document.documentElement.setAttribute('data-vision', prefs.colorVision);
-  })();
-
-  document.addEventListener('DOMContentLoaded', function () {
-    var trigger = document.getElementById('pcSettingsTrigger');
-    var panel = document.getElementById('pcSettingsPanel');
-    var closeBtn = document.getElementById('pcSettingsClose');
-    var langTrigger = document.getElementById('pcLangTrigger');
-    var langListbox = document.getElementById('pcLangListbox');
-    var opacitySlider = document.getElementById('pcOpacitySlider');
-    var widgetOpacitySlider = document.getElementById('pcWidgetOpacitySlider');
-    var visionTrigger = document.getElementById('pcVisionTrigger');
-    var visionListbox = document.getElementById('pcVisionListbox');
-
-    if (!trigger || !panel) return;
-
-    var prefs = getPreferences();
-    applyBackgroundOpacity(prefs.opacity);
-    applyWidgetOpacity(prefs.widgetOpacity);
-    applyLangSelection(prefs.lang);
-    applyVisionSelection(prefs.colorVision);
-
-    function openPanel() {
-      panel.hidden = false;
-      trigger.setAttribute('aria-expanded', 'true');
-    }
-    function closeAllDropdowns() {
-      if (langListbox && !langListbox.hidden) {
-        langListbox.hidden = true;
-        langTrigger.setAttribute('aria-expanded', 'false');
-      }
-      if (visionListbox && !visionListbox.hidden) {
-        visionListbox.hidden = true;
-        visionTrigger.setAttribute('aria-expanded', 'false');
-      }
-    }
-    function closePanel() {
-      panel.hidden = true;
-      trigger.setAttribute('aria-expanded', 'false');
-      closeAllDropdowns();
-    }
-
-    trigger.addEventListener('click', function () {
-      panel.hidden ? openPanel() : closePanel();
-    });
-    if (closeBtn) closeBtn.addEventListener('click', closePanel);
-
-    document.addEventListener('click', function (e) {
-      if (!e.target.closest('#pcSettingsWidget')) closePanel();
-    });
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape') closePanel();
-    });
-
-    // Language dropdown: open/close + selection.
-    if (langTrigger && langListbox) {
-      langTrigger.addEventListener('click', function (e) {
-        e.stopPropagation();
-        var isOpen = !langListbox.hidden;
-        langListbox.hidden = isOpen;
-        langTrigger.setAttribute('aria-expanded', String(!isOpen));
-      });
-      langListbox.addEventListener('click', function (e) {
-        var opt = e.target.closest('li[role="option"]');
-        if (!opt) return;
-        var code = opt.getAttribute('data-lang');
-        setPreferences({ lang: code });
-        applyLangSelection(code);
-        closeAllDropdowns();
-        navigateToLang(code);
-      });
-      // Keyboard support: ArrowUp/ArrowDown move focus between options,
-      // Enter/Space activates the focused option.
-      langListbox.addEventListener('keydown', function (e) {
-        var opts = Array.prototype.slice.call(langListbox.querySelectorAll('li[role="option"]'));
-        var idx = opts.indexOf(document.activeElement);
-        if (e.key === 'ArrowDown') {
-          e.preventDefault();
-          idx = Math.min(opts.length - 1, idx + 1);
-          opts[idx].focus();
-        } else if (e.key === 'ArrowUp') {
-          e.preventDefault();
-          idx = Math.max(0, idx - 1);
-          opts[idx].focus();
-        } else if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          if (document.activeElement && document.activeElement.click) document.activeElement.click();
-        } else if (e.key === 'Escape') {
-          closeAllDropdowns();
-          langTrigger.focus();
-        }
-      });
-    }
-
-    // Color Vision dropdown: same open/close/selection/keyboard pattern as
-    // the language dropdown above -- unlike language, selecting an option
-    // here does NOT navigate anywhere, it just applies immediately.
-    if (visionTrigger && visionListbox) {
-      visionTrigger.addEventListener('click', function (e) {
-        e.stopPropagation();
-        var isOpen = !visionListbox.hidden;
-        visionListbox.hidden = isOpen;
-        visionTrigger.setAttribute('aria-expanded', String(!isOpen));
-      });
-      visionListbox.addEventListener('click', function (e) {
-        var opt = e.target.closest('li[role="option"]');
-        if (!opt) return;
-        var vision = opt.getAttribute('data-vision');
-        setPreferences({ colorVision: vision });
-        applyVisionSelection(vision);
-        closeAllDropdowns();
-      });
-      visionListbox.addEventListener('keydown', function (e) {
-        var opts = Array.prototype.slice.call(visionListbox.querySelectorAll('li[role="option"]'));
-        var idx = opts.indexOf(document.activeElement);
-        if (e.key === 'ArrowDown') {
-          e.preventDefault();
-          idx = Math.min(opts.length - 1, idx + 1);
-          opts[idx].focus();
-        } else if (e.key === 'ArrowUp') {
-          e.preventDefault();
-          idx = Math.max(0, idx - 1);
-          opts[idx].focus();
-        } else if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          if (document.activeElement && document.activeElement.click) document.activeElement.click();
-        } else if (e.key === 'Escape') {
-          closeAllDropdowns();
-          visionTrigger.focus();
-        }
-      });
-    }
-
-    // Both opacity sliders -- native <input type="range"> already provides
-    // full keyboard support (Arrow keys, Home/End, PageUp/PageDown); role
-    // and aria-value* attributes are set explicitly per this task's spec.
-    if (opacitySlider) {
-      opacitySlider.addEventListener('input', function () {
-        var value = Number(opacitySlider.value);
-        applyBackgroundOpacity(value);
-        setPreferences({ opacity: value });
-      });
-    }
-    if (widgetOpacitySlider) {
-      widgetOpacitySlider.addEventListener('input', function () {
-        var value = Number(widgetOpacitySlider.value);
-        applyWidgetOpacity(value);
-        setPreferences({ widgetOpacity: value });
-      });
-    }
-
-    // Native `storage` event -- fires in OTHER tabs/windows on this origin
-    // when `preferences` changes there, and vice versa. This is the
-    // cross-tab sync mechanism this task requires; no polling needed.
-    window.addEventListener('storage', function (e) {
-      if (e.key !== PREFS_KEY) return;
-      var updated = getPreferences();
-      applyBackgroundOpacity(updated.opacity);
-      applyWidgetOpacity(updated.widgetOpacity);
-      applyLangSelection(updated.lang);
-      applyVisionSelection(updated.colorVision);
-    });
-  });
-})();
-// TASK-9 END
-</script>
+  <!-- Shared accessibility widget; customer chat is loaded before the launcher docking script above. -->
+  <script src="/assets/js/accessibility-widget.js" defer></script>
 </body>
-<!-- TASK-10 END -->
-
 </html>
