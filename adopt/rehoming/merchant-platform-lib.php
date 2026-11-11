@@ -108,9 +108,11 @@ function rh_id(string $prefix): string { return $prefix . '-' . strtoupper(bin2h
 function rh_now(): string { return gmdate('c'); }
 function rh_clean_id(mixed $value): string { return preg_replace('/[^A-Za-z0-9_.:-]/', '', trim((string)$value)); }
 // TASK-MANUS-05 PORTABILITY — mbstring is optional on the existing PHP host;
-// UTF-8-aware helpers are used when present and safe byte fallbacks otherwise.
-function rh_text_length(string $value): int { return function_exists('mb_strlen') ? mb_strlen($value, 'UTF-8') : strlen($value); }
-function rh_text_slice(string $value, int $max): string { return function_exists('mb_substr') ? mb_substr($value, 0, $max, 'UTF-8') : substr($value, 0, $max); }
+// UTF-8-aware helpers prefer mbstring, then iconv/PCRE; invalid UTF-8 falls back to bytes.
+// TASK-WEB-05-EXTRA START — keep length limits and truncation character-safe without mbstring.
+function rh_text_length(string $value): int { if (function_exists('mb_strlen')) return mb_strlen($value, 'UTF-8'); $length = function_exists('iconv_strlen') ? @iconv_strlen($value, 'UTF-8') : false; if ($length !== false) return $length; $count = preg_match_all('/./us', $value, $matches); return $count === false ? strlen($value) : $count; }
+function rh_text_slice(string $value, int $max): string { if (function_exists('mb_substr')) return mb_substr($value, 0, $max, 'UTF-8'); $slice = function_exists('iconv_substr') ? @iconv_substr($value, 0, $max, 'UTF-8') : false; if ($slice !== false) return $slice; $characters = preg_split('//u', $value, -1, PREG_SPLIT_NO_EMPTY); return is_array($characters) ? implode('', array_slice($characters, 0, $max)) : substr($value, 0, $max); }
+// TASK-WEB-05-EXTRA END
 function rh_clean_text(mixed $value, int $max = RH_MAX_MESSAGE_LENGTH): string { return trim(rh_text_slice((string)$value, $max)); }
 
 function rh_find_thread(array $threads, string $threadId): ?array {
