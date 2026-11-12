@@ -2382,6 +2382,21 @@ body { padding-bottom: 84px; }
   body { padding-top: 0 !important; }
 }
 </style>
+<!-- BUGFIX-MANUS-08-4-START -->
+<!-- TASK-9 START: cross-document View Transitions API, enabled sitewide.
+     Animates same-origin full-page navigations (e.g. the Settings Widget's
+     language switcher navigating between /, /es/, /pt/, /fr/, /ar/, /zh/)
+     in browsers that support the cross-document View Transitions API
+     (Chromium 126+). Browsers without support ignore this at-rule and
+     navigate normally with no error -- this is a progressive enhancement,
+     not a dependency. -->
+<style>
+@view-transition {
+  navigation: auto;
+}
+</style>
+<!-- TASK-9 END -->
+<!-- BUGFIX-MANUS-08-4-END -->
   </head>
 <body>
 
