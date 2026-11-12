@@ -59,7 +59,10 @@ if($action==='temporaryLogin'){
   }
   $temp=(string)($input['temporaryPassword']??''); $stmt=$db->prepare('SELECT * FROM chat_password_resets WHERE LOWER(contact_email)=? AND used_at IS NULL AND expires_at>NOW() ORDER BY created_at DESC LIMIT 1'); $stmt->execute([$email]); $row=$stmt->fetch();
   if(!$row || !password_verify($temp,$row['temp_hash'])) chatRespond(['success'=>false,'error'=>'The temporary password is invalid or expired.'],401);
-  $db->prepare('UPDATE chat_password_resets SET used_at=NOW() WHERE id=?')->execute([$row['id']]);
+  /* Claim redemption atomically: two requests may both read the unused row,
+     but only the one that changes used_at while it is still NULL may proceed. */
+  $consume=$db->prepare('UPDATE chat_password_resets SET used_at=NOW() WHERE id=? AND used_at IS NULL AND expires_at>NOW()'); $consume->execute([$row['id']]);
+  if($consume->rowCount()!==1) chatRespond(['success'=>false,'error'=>'The temporary password is invalid or expired.'],401);
   chatAuthClearThrottle($row['principal_id']); $resetToken=bin2hex(random_bytes(32));
   $db->prepare('INSERT INTO chat_session_token(token_hash,principal_id,issued_at,expires_at) VALUES(?,?,NOW(),?)')->execute([hash('sha256',$resetToken),$row['principal_id'],date('Y-m-d H:i:s',time()+900)]);
   chatRespond(['success'=>true,'requiresPasswordChange'=>true,'chatId'=>$row['principal_id'],'sessionToken'=>$resetToken]);

@@ -250,6 +250,61 @@ PHP);
         self::assertStringContainsString('messageId: msg.id, side })', $source);
     }
 
+    public function testTemporaryPasswordCannotBeRedeemedAfterAtomicClaimIsLost(): void
+    {
+        $tempPassword = bin2hex(random_bytes(16));
+        $base = $this->tmp . '/reset-fixture';
+        mkdir($base . '/includes', 0775, true);
+        file_put_contents($base . '/chat-password-reset.php', file_get_contents(dirname(__DIR__) . '/adopt/admin/chat-password-reset.php'));
+        file_put_contents($base . '/chat-mail.php', "<?php\n");
+        file_put_contents($base . '/includes/chat-auth.php', <<<'PHP'
+<?php
+function chatAuthClearThrottle($principalId): void {}
+function verify_token($token, $principalId): bool { return false; }
+function chatAuthSetSecret($principalId, $tier, $secret): array { return ['success'=>true]; }
+PHP);
+        file_put_contents($base . '/chat-config.php', <<<'PHP'
+<?php
+class Web02ResetStatement {
+    private string $query;
+    public function __construct(string $query) { $this->query = $query; }
+    public function execute(array $params = []): bool {
+        if (strpos($this->query, 'INSERT INTO chat_session_token') !== false) $GLOBALS['web02_reset_token_inserts']++;
+        return true;
+    }
+    public function fetch() { return $GLOBALS['web02_reset_row']; }
+    public function rowCount(): int { return 0; }
+}
+class Web02ResetDatabase { public function prepare(string $query): Web02ResetStatement { return new Web02ResetStatement($query); } }
+function chatDb(): Web02ResetDatabase { static $db; return $db ?? ($db = new Web02ResetDatabase()); }
+function chatJsonInput(): array { return $_POST; }
+function chatCheckRateLimit(string $key, int $limit, int $window): bool { return true; }
+function chatValidEmail(string $email): bool { return filter_var($email, FILTER_VALIDATE_EMAIL) !== false; }
+function chatRespond(array $payload, int $status = 200): void { http_response_code($status); echo json_encode($payload); exit; }
+PHP);
+        $statusPath = $base . '/response-status';
+        $insertCountPath = $base . '/reset-token-inserts';
+        $runner = $base . '/request.php';
+        $row = ['id' => 1, 'principal_id' => 'PC-12345678', 'temp_hash' => password_hash($tempPassword, PASSWORD_DEFAULT)];
+        $content = '<?php '
+            . '$GLOBALS["web02_reset_row"] = ' . var_export($row, true) . '; '
+            . '$GLOBALS["web02_reset_token_inserts"] = 0; '
+            . '$_SERVER["REQUEST_METHOD"] = "POST"; '
+            . '$_POST = ' . var_export(['action'=>'temporaryLogin', 'email'=>'customer@example.test', 'temporaryPassword'=>$tempPassword], true) . '; '
+            . 'register_shutdown_function(static function () { file_put_contents(' . var_export($statusPath, true) . ', (string) http_response_code()); file_put_contents(' . var_export($insertCountPath, true) . ', (string) $GLOBALS["web02_reset_token_inserts"]); }); '
+            . 'require ' . var_export($base . '/chat-password-reset.php', true) . ';';
+        file_put_contents($runner, $content);
+        $output = [];
+        exec('php ' . escapeshellarg($runner) . ' 2>&1', $output, $exitCode);
+        $body = implode("\n", $output);
+        $json = json_decode($body, true);
+        self::assertSame(0, $exitCode, $body);
+        self::assertIsArray($json, $body);
+        self::assertFalse($json['success']);
+        self::assertSame(401, (int)file_get_contents($statusPath));
+        self::assertSame('0', file_get_contents($insertCountPath), 'A reset session token must not be inserted when the atomic claim affects no row.');
+    }
+
     /** Run one request against a copied handler and temporary fake token/data tree. */
     private function request(array $post, string $method = 'POST', string $handler = 'delete-pet.php'): array
     {
