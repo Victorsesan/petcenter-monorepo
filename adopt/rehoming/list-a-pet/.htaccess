@@ -1,0 +1,16 @@
+# TASK-WEB-04 START — Route listing entry through server-side merchant authorization.
+DirectoryIndex index.php
+RewriteEngine On
+RewriteRule ^index\.html$ /rehoming/list-a-pet/ [R=302,L,NC]
+<IfModule mod_authz_core.c>
+    <Files "index.html">
+        Require all denied
+    </Files>
+</IfModule>
+<IfModule !mod_authz_core.c>
+    <Files "index.html">
+        Order allow,deny
+        Deny from all
+    </Files>
+</IfModule>
+# TASK-WEB-04 END

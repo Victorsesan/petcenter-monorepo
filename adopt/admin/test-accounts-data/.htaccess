@@ -1,0 +1,9 @@
+# TASK-WEB-04 START — Test-account records contain password hashes and must never be served as static downloads.
+<IfModule mod_authz_core.c>
+    Require all denied
+</IfModule>
+<IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+</IfModule>
+# TASK-WEB-04 END

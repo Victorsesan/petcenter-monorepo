@@ -471,14 +471,13 @@ function accountLifecycleOnStatusChange($merchantId, $trigger, array $affectedLi
 // JSON out, token-gated, no raw PHP errors ever reach the client.
 // ---------------------------------------------------------------------
 if (basename($_SERVER['SCRIPT_FILENAME'] ?? '') === basename(__FILE__)) {
-    header('Content-Type: application/json');
-
+    /** TASK-WEB-04 START — The executable lifecycle route uses shared WEB-04 identity and CSRF checks. */
     // Session read for the generic entry-point check below — started
     // here rather than assumed already-active, since this file makes
     // no assumption about what else runs before it on a real request.
-    if (session_status() === PHP_SESSION_NONE) {
-        session_start();
-    }
+    require_once __DIR__ . '/merchant-platform-lib.php';
+    header('Content-Type: application/json; charset=utf-8');
+    if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') rh_json_response(['success'=>false,'error'=>'POST required'],405);
 
     $input = json_decode(file_get_contents('php://input'), true) ?: $_POST;
     $action = is_string($input['action'] ?? null) ? $input['action'] : '';
@@ -490,6 +489,8 @@ if (basename($_SERVER['SCRIPT_FILENAME'] ?? '') === basename(__FILE__)) {
     // relying on every downstream function to defend against it.
     $merchantId = is_string($input['merchant_id'] ?? null) ? $input['merchant_id'] : '';
 
+    // Historical E2 note below describes the prior generic session-flag
+    // approach. The active WEB-04 gate no longer trusts those flags.
     // Caller identity is read from a generic session flag rather than
     // this file naming or depending on any specific signup/login
     // mechanism — per the project's standing rule, no task describes
@@ -505,51 +506,42 @@ if (basename($_SERVER['SCRIPT_FILENAME'] ?? '') === basename(__FILE__)) {
     //     are admin-only actions
     // <!-- TASK-E2 START (generic session-flag entry point, per the
     // standing "never reference the account pages" rule) -->
-    if (empty($merchantId)) {
-        http_response_code(400);
-        echo json_encode(['success' => false, 'error' => 'merchant_id is required']);
-        exit;
-    }
-
-    $sessionMerchantId = $_SESSION['merchant_id'] ?? null;
-    $isAdminSession = !empty($_SESSION['is_admin']);
-
-    $isSelfDeleteCaller = ($action === 'self_delete') && $sessionMerchantId === $merchantId;
-    $isAdminCaller = in_array($action, ['admin_suspend', 'admin_restore'], true) && $isAdminSession;
-
-    if (!$isSelfDeleteCaller && !$isAdminCaller) {
-        http_response_code(403);
-        echo json_encode(['success' => false, 'error' => 'Not authorized to perform this action.']);
-        exit;
-    }
+    /** TASK-WEB-04 START — Identity and authorization come only from the account registry. */
+    $caller = rh_auth_account();
+    rh_require_csrf();
+    if ($merchantId === '') rh_json_response(['success'=>false,'error'=>'merchant_id is required'],400);
+    if (!in_array($action, ['self_delete','admin_suspend','admin_restore'], true)) rh_json_response(['success'=>false,'error'=>'Unknown action'],400);
+    if ($action === 'self_delete' && ($caller['account_type'] !== 'merchant' || !hash_equals($caller['account_id'], $merchantId))) rh_json_response(['success'=>false,'error'=>'Not authorized to perform this action'],403);
+    if (in_array($action, ['admin_suspend','admin_restore'], true) && $caller['account_type'] !== 'admin') rh_json_response(['success'=>false,'error'=>'Not authorized to perform this action'],403);
+    $merchant = web04_find_account_by_id($merchantId);
+    if (!$merchant || ($merchant['account_type'] ?? '') !== 'merchant') rh_json_response(['success'=>false,'error'=>'Merchant account not found'],404);
+    if (!empty($merchant['is_test_account'])) rh_json_response(['success'=>false,'error'=>'Test accounts are managed through the staging test-account panel'],409);
+    /** TASK-WEB-04 END */
     // <!-- TASK-E2 END -->
 
     try {
         switch ($action) {
             case 'self_delete':
                 $affected = accountLifecycleSetListingsUnavailable($merchantId, 'self_deletion');
-                echo json_encode(['success' => true, 'affected_listing_ids' => $affected]);
-                break;
-
+                if (!web04_account_status($merchantId, 'deleted')) rh_json_response(['success'=>false,'error'=>'Account status could not be updated'],409);
+                web04_revoke_account_tokens($merchantId);
+                rh_json_response(['success'=>true,'affected_listing_ids'=>$affected]);
             case 'admin_suspend':
                 $affected = accountLifecycleSetListingsUnavailable($merchantId, 'admin_suspension');
-                echo json_encode(['success' => true, 'affected_listing_ids' => $affected]);
-                break;
-
+                if (!web04_account_status($merchantId, 'suspended')) rh_json_response(['success'=>false,'error'=>'Account status could not be updated'],409);
+                web04_revoke_account_tokens($merchantId);
+                rh_json_response(['success'=>true,'affected_listing_ids'=>$affected]);
             case 'admin_restore':
+                if (($merchant['status'] ?? '') !== 'suspended') rh_json_response(['success'=>false,'error'=>'Only suspended merchant accounts can be restored'],409);
                 $restored = accountLifecycleRestoreListings($merchantId);
-                echo json_encode(['success' => true, 'restored_listing_ids' => $restored]);
-                break;
-
-            default:
-                http_response_code(400);
-                echo json_encode(['success' => false, 'error' => 'Unknown action: ' . $action]);
+                if (!web04_account_status($merchantId, 'active')) rh_json_response(['success'=>false,'error'=>'Account status could not be updated'],409);
+                rh_json_response(['success'=>true,'restored_listing_ids'=>$restored]);
         }
     } catch (Throwable $e) {
         // Never leak raw PHP errors to the client — same discipline as
         // the rest of the platform's PHP endpoints.
-        http_response_code(500);
-        echo json_encode(['success' => false, 'error' => 'Internal error processing account lifecycle event.']);
+        rh_json_response(['success'=>false,'error'=>'Internal error processing account lifecycle event.'],500);
     }
+    /** TASK-WEB-04 END */
 }
 // <!-- TASK-E2 END (new file — account management logic) -->
