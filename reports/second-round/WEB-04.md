@@ -124,8 +124,9 @@ Before any future production publication, create and verify **both** (a) a repos
 - **Branch:** `qa/rehoming-auth-backend`
 - **Synchronized starting base:** `a50c06109dd82a7bdadc8aa8b0e6d9bfdea8061b`
 - **Backend/security implementation:** `b8557b3edf61b4f2fb6b312483970c23f34cb60e`
-- **Gateway/route implementation (ending code commit):** `6e287c4fe4267a10febdf89eec2d75886a6a9c87`
-- The report is published on the same assigned branch; the final branch tip after this clarification is recorded in the delivery message and Git history.
+- **Gateway/route implementation:** `6e287c4fe4267a10febdf89eec2d75886a6a9c87`
+- **Corrective audit, gateway tests, and report update:** `f4a8bb51f1e7512ef68e337d85faa4258c3302c9` (pushed normally to the assigned branch on 2026-11-13).
+- This corrective commit is the current source/test commit; any later report-only update will be a descendant. The delivery message records the final remote branch tip.
 - **Publication:** The assigned GitHub branch was pushed normally (non-force). No push to `main` and no manual Hostinger deployment/upload/configuration/trigger action occurred. Deployment metadata remained inaccessible (HTTP 403); no tracked `.github/workflows` files were found.
 
 
@@ -196,7 +197,7 @@ Fresh credential-free `HEAD` requests produced these public results:
 - **200 but still unwrapped/stale static route response:** `/account/settings/`, `/merchant/`, `/rehoming/list-a-pet/`.
 - **405 on HEAD for method-restricted endpoints (not submitted or mutated):** `/rehoming/merchant-publish-listing.php`, `/rehoming/merchant-chat-send.php`, `/verify/verify-submit.php`.
 
-Fetched refs remain `origin/main=0786a3fab7bb60012b01549614dbfee5bdbeda4b`, `origin/adopt-deploy=3f7f03f4086942de0b609fd45c212e4c8597d32d`, and `origin/qa/rehoming-auth-backend=60c7bf094970d3afd40d9cb0a40cbad155b84701`. `main` contains no WEB-04 gateway; `adopt-deploy` is a flattened snapshot and currently contains the placeholder. The QA corrective changes and new tests described here are local worktree changes until their assigned-branch commit is created and pushed. The prior comparison records 14 WEB-04 source paths absent and 16 stale in the deploy tree relative to the QA implementation; see the exact path lists in the 2026-11-11 audit above. No `main`, `adopt-deploy`, Hostinger, or live data was modified by these checks.
+Fetched refs at the initial Nov 13 live recheck were `origin/main=0786a3fab7bb60012b01549614dbfee5bdbeda4b`, `origin/adopt-deploy=3f7f03f4086942de0b609fd45c212e4c8597d32d`, and `origin/qa/rehoming-auth-backend=60c7bf094970d3afd40d9cb0a40cbad155b84701`. `main` contains no WEB-04 gateway; `adopt-deploy` is a flattened snapshot and currently contains the placeholder. After completing the checks, corrective source/tests/report were committed as `f4a8bb51f1e7512ef68e337d85faa4258c3302c9` and pushed only to `qa/rehoming-auth-backend`; the QA remote now points at that commit. The prior comparison records 14 WEB-04 source paths absent and 16 stale in the deploy tree relative to the QA implementation; see the exact path lists in the 2026-11-11 audit above. No `main`, `adopt-deploy`, Hostinger, or live data was modified by these checks.
 
 ### Integration/release conclusion
 
