@@ -53,7 +53,10 @@ try {
         $data = web04_auth_request_data();
         $username = is_string($data['username'] ?? null) ? trim($data['username']) : '';
         $password = is_string($data['password'] ?? null) ? $data['password'] : '';
-        if (!web04_rate_limit('test-login', $username)) web04_json_response(['success' => false, 'message' => 'Too many attempts. Wait a few minutes and try again.'], 429);
+        if (!web04_rate_limit('test-login-ip', '', 20, 900)
+            || !web04_rate_limit('test-login-account', $username, 6, 900)) {
+            web04_json_response(['success' => false, 'message' => 'Too many attempts. Wait a few minutes and try again.'], 429);
+        }
         $account = web04_verify_test_login($username, $password);
         if (!$account) web04_json_response(['success' => false, 'message' => 'The test-account credentials were not accepted.'], 401);
         web04_finish_login($account);

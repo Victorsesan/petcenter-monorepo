@@ -26,8 +26,33 @@ function web04_session_secret(): string {
     return strlen($secret) >= 32 ? $secret : '';
 }
 
+function web04_external_private_dir(string $envName, string $label): string {
+    $configured = web04_env($envName);
+    if ($configured === '' || $configured[0] !== DIRECTORY_SEPARATOR || !is_dir($configured) || is_link(rtrim($configured, DIRECTORY_SEPARATOR))) {
+        throw new RuntimeException($label . ' directory must be explicitly configured as an existing absolute private path');
+    }
+    $real = realpath($configured);
+    $webRoot = realpath(dirname(__DIR__));
+    if ($real === false || $webRoot === false || $real === $webRoot
+        || str_starts_with($real, rtrim($webRoot, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR)) {
+        throw new RuntimeException($label . ' directory must resolve outside the web root');
+    }
+    $permissions = @fileperms($real);
+    if (!is_writable($real) || $permissions === false || ($permissions & 0077) !== 0) {
+        throw new RuntimeException($label . ' directory must be owner-only and writable');
+    }
+    return rtrim($real, DIRECTORY_SEPARATOR);
+}
+
 function web04_auth_ready(): bool {
-    return web04_session_secret() !== '' && web04_app_origin() !== null;
+    if (web04_session_secret() === '' || web04_app_origin() === null) return false;
+    try {
+        web04_auth_store_dir();
+        web04_runtime_store_dir();
+        return true;
+    } catch (Throwable $error) {
+        return false;
+    }
 }
 
 function web04_test_auth_enabled(): bool {
@@ -66,22 +91,11 @@ function web04_security_headers(): void {
 }
 
 function web04_auth_store_dir(): string {
-    $override = web04_env('REHOMING_AUTH_DATA_DIR');
-    $dir = $override !== '' ? $override : (__DIR__ . '/runtime');
-    if (is_link($dir)) throw new RuntimeException('Account data directory must not be a symlink');
-    if (!is_dir($dir) && !mkdir($dir, 0750, true) && !is_dir($dir)) {
-        throw new RuntimeException('Account data directory is unavailable');
-    }
-    @chmod($dir, 0750);
-    if ($override !== '') {
-        $root = realpath(dirname(__DIR__));
-        $real = realpath($dir);
-        if ($dir[0] !== DIRECTORY_SEPARATOR || $root === false || $real === false || $real === $root || str_starts_with($real, $root . DIRECTORY_SEPARATOR)) {
-            throw new RuntimeException('External account data directory must be absolute and outside the web root');
-        }
-    }
-    if (!is_writable($dir)) throw new RuntimeException('Account data directory is not writable');
-    return rtrim($dir, DIRECTORY_SEPARATOR);
+    return web04_external_private_dir('REHOMING_AUTH_DATA_DIR', 'Account data');
+}
+
+function web04_runtime_store_dir(): string {
+    return web04_external_private_dir('REHOMING_RUNTIME_DIR', 'Rehoming runtime data');
 }
 
 function web04_store_path(string $name): string {
@@ -114,7 +128,7 @@ function web04_store_update(string $name, callable $update): mixed {
     $lockPath = web04_auth_store_dir() . DIRECTORY_SEPARATOR . '.web04-' . $name . '.lock';
     $lock = fopen($lockPath, 'c');
     if ($lock === false) throw new RuntimeException('Unable to lock private account store');
-    @chmod($lockPath, 0640);
+    @chmod($lockPath, 0600);
     try {
         if (!flock($lock, LOCK_EX)) throw new RuntimeException('Unable to lock private account store');
         $data = is_file($path) ? web04_store_read($name) : web04_store_default($name);
@@ -125,11 +139,11 @@ function web04_store_update(string $name, callable $update): mixed {
         $previousMask = umask(0077);
         try { $written = file_put_contents($tmp, $json, LOCK_EX); }
         finally { umask($previousMask); }
-        if ($written === false || !@chmod($tmp, 0640) || !rename($tmp, $path)) {
+        if ($written === false || !@chmod($tmp, 0600) || !rename($tmp, $path)) {
             @unlink($tmp);
             throw new RuntimeException('Unable to persist private account store');
         }
-        @chmod($path, 0640);
+        @chmod($path, 0600);
         return $result;
     } finally {
         flock($lock, LOCK_UN);
@@ -191,18 +205,21 @@ function web04_find_test_account_by_username(string $username): ?array {
 function web04_external_test_accounts(): array {
     if (!web04_test_auth_enabled()) return [];
     $configured = web04_env('WEB04_TEST_ACCOUNTS_FILE');
-    $path = $configured !== '' ? $configured : (dirname(__DIR__) . '/admin/test-accounts-data/accounts.json');
-    if ($configured !== '') {
-        $root = realpath(dirname(__DIR__));
-        $parent = realpath(dirname($path));
-        if ($path[0] !== DIRECTORY_SEPARATOR || is_link($path) || $root === false || $parent === false
-            || $parent === $root || str_starts_with($parent, $root . DIRECTORY_SEPARATOR)) {
-            throw new RuntimeException('Configured test-account storage must be outside the public web root');
-        }
+    if ($configured === '' || $configured[0] !== DIRECTORY_SEPARATOR || is_link($configured)) {
+        throw new RuntimeException('Test-account storage must be explicitly configured outside the web root');
     }
+    $root = realpath(dirname(__DIR__));
+    $parent = realpath(dirname($configured));
+    if ($root === false || $parent === false || $parent === $root
+        || str_starts_with($parent, rtrim($root, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR)) {
+        throw new RuntimeException('Configured test-account storage must be outside the web root');
+    }
+    $path = $configured;
     if (!is_file($path)) return [];
     $size = @filesize($path);
-    if (is_link($path) || !is_readable($path) || $size === false || $size > 5242880) throw new RuntimeException('Test-account store is unavailable');
+    $permissions = @fileperms($path);
+    if (is_link($path) || !is_readable($path) || $size === false || $size > 5242880
+        || $permissions === false || ($permissions & 0077) !== 0) throw new RuntimeException('Test-account store is unavailable');
     $raw = file_get_contents($path);
     if ($raw === false) throw new RuntimeException('Test-account store is unavailable');
     $decoded = json_decode($raw, true);
@@ -410,13 +427,13 @@ function web04_account_status(string $accountId, string $status): bool {
 }
 
 function web04_revoke_account_tokens(string $accountId, ?string $pathOverride = null): void {
-    $runtimeDir = web04_env('REHOMING_RUNTIME_DIR');
-    $path = $pathOverride ?? ($runtimeDir !== '' ? rtrim($runtimeDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . 'tokens.json' : (__DIR__ . '/runtime/tokens.json'));
+    $path = $pathOverride ?? (web04_runtime_store_dir() . DIRECTORY_SEPARATOR . 'tokens.json');
+    if (is_link($path) || is_link($path . '.lock')) throw new RuntimeException('Session-token store path is unsafe');
     if (!is_file($path)) return;
     $lockPath = $path . '.lock';
     $lock = fopen($lockPath, 'c');
     if ($lock === false) throw new RuntimeException('Unable to lock session-token store');
-    @chmod($lockPath, 0640);
+    @chmod($lockPath, 0600);
     try {
         if (!flock($lock, LOCK_EX)) throw new RuntimeException('Unable to lock session-token store');
         $data = json_decode((string)file_get_contents($path), true);
@@ -428,11 +445,11 @@ function web04_revoke_account_tokens(string $accountId, ?string $pathOverride = 
         $previousMask = umask(0077);
         try { $written = $json === false ? false : file_put_contents($tmp, $json, LOCK_EX); }
         finally { umask($previousMask); }
-        if ($written === false || !@chmod($tmp, 0640) || !rename($tmp, $path)) {
+        if ($written === false || !@chmod($tmp, 0600) || !rename($tmp, $path)) {
             @unlink($tmp);
             throw new RuntimeException('Unable to revoke session tokens');
         }
-        @chmod($path, 0640);
+        @chmod($path, 0600);
     } finally {
         flock($lock, LOCK_UN);
         fclose($lock);
@@ -440,14 +457,19 @@ function web04_revoke_account_tokens(string $accountId, ?string $pathOverride = 
 }
 
 function web04_logout(): void {
-    $user = web04_current_user();
-    if ($user) web04_revoke_account_tokens($user['account_id']);
+    try { $user = web04_current_user(); }
+    catch (Throwable $error) { $user = null; }
     web04_session_start();
     $_SESSION = [];
     if (session_status() === PHP_SESSION_ACTIVE) {
-        session_regenerate_id(true);
+        if (!session_regenerate_id(true)) {
+            session_destroy();
+            throw new RuntimeException('Unable to rotate session during logout');
+        }
         $_SESSION['web04_csrf'] = bin2hex(random_bytes(32));
+        if (!session_write_close()) throw new RuntimeException('Unable to persist signed-out session');
     }
+    if ($user) web04_revoke_account_tokens($user['account_id']);
 }
 
 function web04_oauth_configured(): bool {
@@ -574,6 +596,7 @@ function web04_verify_google_id_token(string $jwt, string $nonce, string $client
         || !is_numeric($claims['exp'] ?? null) || (int)$claims['exp'] < $now - 30
         || !is_numeric($claims['iat'] ?? null) || (int)$claims['iat'] > $now + 30
         || (int)$claims['iat'] < $now - 7200
+        || (array_key_exists('nbf', $claims) && (!is_numeric($claims['nbf']) || (int)$claims['nbf'] > $now + 30))
         || !is_string($claims['sub'] ?? null) || $claims['sub'] === '' || strlen($claims['sub']) > 255
         || !is_string($claims['nonce'] ?? null) || !hash_equals($nonce, $claims['nonce'])
         || ($claims['email_verified'] ?? null) !== true
@@ -734,7 +757,9 @@ function web04_delete_profile(string $accountId): void {
 }
 
 function web04_account_has_listing_eligibility(array $account): bool {
-    return ($account['account_type'] ?? '') === 'merchant' && ($account['status'] ?? '') === 'active';
+    return ($account['account_type'] ?? '') === 'merchant'
+        && ($account['status'] ?? '') === 'active'
+        && ($account['verification_status'] ?? '') === 'verified';
 }
 
 /* TASK-WEB-04 END — Rehoming authentication and session core. */

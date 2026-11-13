@@ -60,26 +60,25 @@ if (!web04_csrf_valid(true)) {
 /** TASK-WEB-04 END */
 
 // ============================================
-// TEMP STORAGE — separate from contact-config.php's own UPLOAD_TEMP_DIR
-// (that one belongs to the contact-form feature; this flow gets its own,
-// scoped to verification only, and is fully cleaned up every request)
+// TEMP STORAGE — separate from contact-config.php's own UPLOAD_TEMP_DIR.
+// Temporary media and the small review queue live under a required external
+// directory, never beneath the served tree.
 // ============================================
-define('VERIFY_TEMP_DIR', __DIR__ . '/uploads/verification-temp/');
+try { $verifyStorageRoot = verifyPrivateStorageRoot(); }
+catch (Throwable $error) {
+    http_response_code(503);
+    echo json_encode(['success' => false, 'message' => 'Verification uploads are temporarily unavailable.']);
+    exit;
+}
+define('VERIFY_TEMP_DIR', $verifyStorageRoot . DIRECTORY_SEPARATOR . 'verification-temp' . DIRECTORY_SEPARATOR);
 try { verifyEnsurePrivateDirectory(VERIFY_TEMP_DIR); }
 catch (Throwable $error) {
     http_response_code(503);
     echo json_encode(['success' => false, 'message' => 'Verification uploads are temporarily unavailable.']);
     exit;
 }
-// Matches the site's established pattern for a staged-upload folder sitting
-// inside a public webroot (see ADMIN_DASHBOARD_PROJECT_SUMMARY.md's
-// chat-uploads-temp/ — "protected by an auto-written .htaccess containing
-// Deny from all, so even though this folder is inside the public /admin/
-// webroot, direct browser access to a staged file by guessing its filename
-// is blocked at the web server level"). Copied verbatim per Rule 7 rather
-// than inventing a different protection scheme. Doubly important here since
-// this folder briefly holds a liveness video + ID photos before deletion.
-// Private directory permissions and the modern/legacy server rule are checked before accepting media.
+// The directory is owner-only and outside the web root; its deny rule is
+// retained as defense in depth in case hosting maps it into a served path.
 
 /**
  * TASK-B1 (integration fix, B2 reconciliation — flagged as an interpretive
@@ -96,16 +95,14 @@ catch (Throwable $error) {
  * confirmed with the CEO/VDM; until then, treat this as the working
  * assumption both B1 and B2 are integrating against.
  */
-define('VERIFY_QUEUE_DIR', __DIR__ . '/uploads/verification-queue/');
+define('VERIFY_QUEUE_DIR', $verifyStorageRoot . DIRECTORY_SEPARATOR . 'verification-queue' . DIRECTORY_SEPARATOR);
 try { verifyEnsurePrivateDirectory(VERIFY_QUEUE_DIR); }
 catch (Throwable $error) {
     http_response_code(503);
     echo json_encode(['success' => false, 'message' => 'Verification uploads are temporarily unavailable.']);
     exit;
 }
-// Same .htaccess protection as VERIFY_TEMP_DIR above — this directory holds
-// a username/email/country per pending request, which is still PII a direct
-// browser request to a guessed filename should never be able to read.
+// This queue contains PII and remains restricted to the server owner.
 
 /**
  * Prepares owner-only verification storage and a deny-all web-server rule;
@@ -118,6 +115,25 @@ function verifyEnsurePrivateDirectory(string $dir): void {
     }
     if (!@chmod($dir, 0700)) throw new RuntimeException('Private verification storage permissions could not be set');
     verifyEnsureHtaccessDeny($dir);
+}
+
+function verifyPrivateStorageRoot(): string {
+    $configured = getenv('VERIFY_STORAGE_DIR') ?: ($_ENV['VERIFY_STORAGE_DIR'] ?? '');
+    if (!is_string($configured) || trim($configured) === '' || $configured[0] !== DIRECTORY_SEPARATOR
+        || !is_dir($configured) || is_link(rtrim($configured, DIRECTORY_SEPARATOR))) {
+        throw new RuntimeException('Verification storage must be explicitly configured as an external absolute directory');
+    }
+    $real = realpath($configured);
+    $webRoot = realpath(dirname(__DIR__));
+    if ($real === false || $webRoot === false || $real === $webRoot
+        || str_starts_with($real, rtrim($webRoot, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR)) {
+        throw new RuntimeException('Verification storage must resolve outside the web root');
+    }
+    $permissions = @fileperms($real);
+    if (!is_writable($real) || $permissions === false || ($permissions & 0077) !== 0) {
+        throw new RuntimeException('Verification storage must be owner-only and writable');
+    }
+    return rtrim($real, DIRECTORY_SEPARATOR);
 }
 
 function verifyEnsureHtaccessDeny(string $dir): void {
@@ -246,6 +262,14 @@ if (!move_uploaded_file($video['tmp_name'], $videoPath)
     echo json_encode(['success' => false, 'message' => 'Failed to process uploaded files.']);
     exit;
 }
+foreach ($tempPaths as $tempPath) {
+    if (!@chmod($tempPath, 0600)) {
+        verifyCleanupTempFiles($tempPaths);
+        http_response_code(503);
+        echo json_encode(['success' => false, 'message' => 'Verification uploads are temporarily unavailable.']);
+        exit;
+    }
+}
 
 // ============================================
 // BUILD EMAIL — styled consistently with contact-handler.php's admin email
@@ -344,7 +368,10 @@ $queueFile = VERIFY_QUEUE_DIR . "{$timestamp}_{$safeUsername}.json";
 // on every save, LOCK_EX protected"). One file per submission here means
 // concurrent writes to the SAME file are unlikely, but costs nothing to match.
 $queueJson = json_encode($queueRecord, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_SUBSTITUTE);
-if ($queueJson === false || file_put_contents($queueFile, $queueJson, LOCK_EX) === false) {
+$previousMask = umask(0077);
+try { $queueWritten = $queueJson === false ? false : file_put_contents($queueFile, $queueJson, LOCK_EX); }
+finally { umask($previousMask); }
+if ($queueWritten === false || !@chmod($queueFile, 0600)) {
     error_log('Verification review-queue record could not be written.');
 }
 

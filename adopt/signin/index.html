@@ -664,7 +664,10 @@
   setMode(params.get('mode') === 'signup' ? 'signup' : 'login', false);
 
   fetch('/rehoming/auth.php?action=status&return_to=' + encodeURIComponent(returnTo), { headers: { 'Accept': 'application/json' }, cache: 'no-store' })
-    .then(function (response) { return response.json().then(function (body) { return { response: response, body: body }; }); })
+    .then(function (response) { return response.json().then(function (body) {
+      if (!response.ok) throw new Error('Authentication status request failed.');
+      return { response: response, body: body };
+    }); })
     .then(function (result) {
       var data = result.body || {};
       var buttons = [document.getElementById('googleLoginButton'), document.getElementById('googleSignupButton')];

@@ -567,7 +567,7 @@ p { color: var(--muted); }
     <li><a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact</a></li>
     <!-- TASK-1 START -->
     <!-- Path changed from /rehome/ to /signin/ per CEO's request to retire the "rehome" URL sitewide (propagated for sitewide consistency during merge) -->
-    <li class="nav-signup"><a href="/signin/">Sign Up</a></li>
+    <li class="nav-signup"><a href="/signin/?mode=signup">Sign Up</a></li>
     <!-- TASK-1 END -->
   </ul>
   <button class="pc-hamburger" id="pcHamburger" aria-label="Open menu" aria-expanded="false">
@@ -589,7 +589,7 @@ p { color: var(--muted); }
     <a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact</a>
     <!-- TASK-1 START -->
     <!-- Path changed from /rehome/ to /signin/ per CEO's request to retire the "rehome" URL sitewide (propagated for sitewide consistency during merge) -->
-    <a href="/signin/">Sign Up</a>
+    <a href="/signin/?mode=signup">Sign Up</a>
     <!-- TASK-1 END -->
     <a href="https://donate.petcenterco.com" class="mobile-donate" target="_blank" rel="noopener">Donate</a>
   </nav>
@@ -606,12 +606,14 @@ p { color: var(--muted); }
 <main class="pc-settings-wrap">
 
   <!-- Adopter Profile form -->
-  <form class="b5-card" id="adopterProfileForm" novalidate>
+  <form class="b5-card" id="adopterProfileForm" aria-busy="true" novalidate>
     <h2>Adopter Profile</h2>
     <!-- TASK-WEB-04 START — Accurate private-profile disclosure; no automatic message sharing is implemented. -->
     <p class="b5-card__lede">
       This adopter profile is saved to your private account and is not public. It is not automatically attached to messages in the current Rehoming flow.
     </p>
+    <p id="profileLoading" role="status" aria-live="polite">Loading your private profile…</p>
+    <button type="button" id="retryProfileLoad" class="pc-btn pc-btn--orange" hidden>Retry loading profile</button>
     <!-- TASK-WEB-04 END -->
 
     <div class="pc-form-grid">
@@ -620,7 +622,7 @@ p { color: var(--muted); }
       <div class="field">
         <label id="householdTypeLabel">Household Type</label>
         <div class="dropdown" data-dropdown data-field-name="householdType">
-          <div class="dropdown-trigger" tabindex="0" role="button" aria-haspopup="listbox"
+          <div class="dropdown-trigger" tabindex="-1" role="button" aria-disabled="true" aria-haspopup="listbox"
                aria-expanded="false" aria-labelledby="householdTypeLabel">
             <span class="dropdown-trigger__value is-placeholder" data-trigger-value>Select one</span>
             <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -641,7 +643,7 @@ p { color: var(--muted); }
       <div class="field">
         <label id="experienceLevelLabel">Pet Experience Level</label>
         <div class="dropdown" data-dropdown data-field-name="experienceLevel">
-          <div class="dropdown-trigger" tabindex="0" role="button" aria-haspopup="listbox"
+          <div class="dropdown-trigger" tabindex="-1" role="button" aria-disabled="true" aria-haspopup="listbox"
                aria-expanded="false" aria-labelledby="experienceLevelLabel">
             <span class="dropdown-trigger__value is-placeholder" data-trigger-value>Select one</span>
             <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -662,7 +664,7 @@ p { color: var(--muted); }
       <div class="field">
         <label id="otherPetsLabel">Other Pets In Home</label>
         <div class="dropdown" data-dropdown data-field-name="otherPets">
-          <div class="dropdown-trigger" tabindex="0" role="button" aria-haspopup="listbox"
+          <div class="dropdown-trigger" tabindex="-1" role="button" aria-disabled="true" aria-haspopup="listbox"
                aria-expanded="false" aria-labelledby="otherPetsLabel">
             <span class="dropdown-trigger__value is-placeholder" data-trigger-value>Select one</span>
             <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -681,14 +683,14 @@ p { color: var(--muted); }
       <!-- Revealed only when "Other Pets In Home" = Yes -->
       <div class="field field--hidden" id="otherPetsSpeciesField">
         <label for="otherPetsSpecies">Which Species? <span class="opt">(optional detail)</span></label>
-        <input type="text" id="otherPetsSpecies" name="otherPetsSpecies" placeholder="e.g. one dog, two cats">
+        <input type="text" id="otherPetsSpecies" name="otherPetsSpecies" placeholder="e.g. one dog, two cats" disabled>
       </div>
 
       <!-- Kids in home — yes/no dropdown -->
       <div class="field">
         <label id="kidsInHomeLabel">Kids In Home</label>
         <div class="dropdown" data-dropdown data-field-name="kidsInHome">
-          <div class="dropdown-trigger" tabindex="0" role="button" aria-haspopup="listbox"
+          <div class="dropdown-trigger" tabindex="-1" role="button" aria-disabled="true" aria-haspopup="listbox"
                aria-expanded="false" aria-labelledby="kidsInHomeLabel">
             <span class="dropdown-trigger__value is-placeholder" data-trigger-value>Select one</span>
             <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -710,13 +712,13 @@ p { color: var(--muted); }
       <div class="field field--full">
         <label for="whyThisPet">Why This Pet? <span class="opt">(a sentence or two is plenty)</span></label>
         <textarea id="whyThisPet" name="whyThisPet" maxlength="400"
-                  placeholder="Add a short note about why you're interested..."></textarea>
+                  placeholder="Add a short note about why you're interested..." disabled></textarea>
         <span class="field__hint">This stays in your private profile and is not currently sent to merchants.</span>
       </div>
 
     </div>
 
-    <div class="b5-save-row"><button type="submit" class="pc-btn pc-btn--orange">Save Adopter Profile</button></div>
+    <div class="b5-save-row"><button type="submit" class="pc-btn pc-btn--orange" disabled>Save Adopter Profile</button></div>
     <div class="pc-save-toast" id="saveToast" role="status">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
         <path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -786,7 +788,7 @@ p { color: var(--muted); }
           <li><a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact Us</a></li>
           <!-- TASK-1 START -->
           <!-- Path changed from /rehome/ to /signin/ per CEO's request to retire the "rehome" URL sitewide (propagated for sitewide consistency during merge) -->
-          <li><a href="/signin/">Sign Up</a></li>
+          <li><a href="/signin/?mode=signup">Sign Up</a></li>
           <!-- TASK-1 END -->
           <li><a href="https://docs.petcenterco.com/returns-refunds/" target="_blank" rel="noopener">Returns & Refunds</a></li>
           <li><a href="https://docs.petcenterco.com/faq/" target="_blank" rel="noopener">FAQ</a></li>
@@ -891,6 +893,7 @@ p { color: var(--muted); }
     var valueEl = trigger.querySelector('[data-trigger-value]');
     var rows = Array.prototype.slice.call(dd.querySelectorAll('.dropdown-panel__row'));
     var fieldName = dd.getAttribute('data-field-name');
+    dd.setAttribute('aria-disabled', 'true');
     /* TASK-WEB-04 START — Keyboard-operable listbox behavior with explicit selected state. */
     panel.id = 'profile-' + fieldName + '-listbox';
     var triggerLabelledBy = trigger.getAttribute('aria-labelledby') || '';
@@ -960,8 +963,9 @@ p { color: var(--muted); }
       }
     }
 
-    trigger.addEventListener('click', function (e) { e.stopPropagation(); toggle(false); });
+    trigger.addEventListener('click', function (e) { e.stopPropagation(); if (trigger.getAttribute('aria-disabled') === 'true') return; toggle(false); });
     trigger.addEventListener('keydown', function (e) {
+      if (trigger.getAttribute('aria-disabled') === 'true') { e.preventDefault(); return; }
       if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(true); }
       else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
         e.preventDefault();
@@ -975,8 +979,9 @@ p { color: var(--muted); }
       else if (e.key === 'Tab') close();
     });
     rows.forEach(function (row) {
-      row.addEventListener('click', function (e) { e.stopPropagation(); selectRow(row); });
+      row.addEventListener('click', function (e) { e.stopPropagation(); if (dd.getAttribute('aria-disabled') === 'true') return; selectRow(row); });
       row.addEventListener('keydown', function (e) {
+        if (dd.getAttribute('aria-disabled') === 'true') { e.preventDefault(); return; }
         var index = rows.indexOf(row);
         if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
           e.preventDefault();
@@ -1023,38 +1028,84 @@ p { color: var(--muted); }
   var form = document.getElementById('adopterProfileForm');
   var saveToast = document.getElementById('saveToast');
   var profileError = document.getElementById('profileError');
+  var profileLoading = document.getElementById('profileLoading');
+  var retryProfileLoad = document.getElementById('retryProfileLoad');
+  var saveButton = form.querySelector('button[type="submit"]');
+  var profileLoaded = false;
+
+  function setProfileEditable(enabled) {
+    dropdowns.forEach(function (dd) {
+      var trigger = dd.querySelector('.dropdown-trigger');
+      dd.setAttribute('aria-disabled', enabled ? 'false' : 'true');
+      trigger.setAttribute('aria-disabled', enabled ? 'false' : 'true');
+      trigger.tabIndex = enabled ? 0 : -1;
+    });
+    document.getElementById('otherPetsSpecies').disabled = !enabled;
+    document.getElementById('whyThisPet').disabled = !enabled;
+    saveButton.disabled = !enabled;
+    form.setAttribute('aria-busy', enabled ? 'false' : 'true');
+  }
 
   function populateProfile(data) {
     dropdowns.forEach(function (dd) {
       var fieldName = dd.getAttribute('data-field-name');
-      if (data[fieldName]) {
-        var row = dd.querySelector('.dropdown-panel__row[data-value="' + data[fieldName] + '"]');
-        if (row) row.click();
+      var selectedValue = data[fieldName];
+      if (typeof selectedValue === 'string' && selectedValue !== '') {
+        var rows = Array.prototype.slice.call(dd.querySelectorAll('.dropdown-panel__row'));
+        var row = rows.find(function (option) { return option.getAttribute('data-value') === selectedValue; });
+        if (row) {
+          rows.forEach(function (option) {
+            var selected = option === row;
+            option.classList.toggle('selected', selected);
+            option.setAttribute('aria-selected', selected ? 'true' : 'false');
+          });
+          var valueEl = dd.querySelector('[data-trigger-value]');
+          valueEl.textContent = row.textContent;
+          valueEl.classList.remove('is-placeholder');
+          dd.setAttribute('data-value', selectedValue);
+          dd.dispatchEvent(new CustomEvent('pc-dropdown-change', {
+            bubbles: true, detail: { field: fieldName, value: selectedValue }
+          }));
+        }
       }
     });
-    if (data.otherPetsSpecies) document.getElementById('otherPetsSpecies').value = data.otherPetsSpecies;
-    if (data.whyThisPet) document.getElementById('whyThisPet').value = data.whyThisPet;
+    if (typeof data.otherPetsSpecies === 'string') document.getElementById('otherPetsSpecies').value = data.otherPetsSpecies;
+    if (typeof data.whyThisPet === 'string') document.getElementById('whyThisPet').value = data.whyThisPet;
   }
 
   async function loadProfile() {
+    profileLoading.hidden = false;
+    retryProfileLoad.hidden = true;
+    profileError.hidden = true;
+    profileError.textContent = '';
+    setProfileEditable(false);
     try {
       var response = await fetch('/rehoming/auth.php?action=profile', { headers: { 'Accept': 'application/json' }, cache: 'no-store' });
       var result = await response.json();
       if (!response.ok || !result.success) throw new Error(result.message || 'Unable to load your private profile.');
       populateProfile(result.profile || {});
+      profileLoaded = true;
+      setProfileEditable(true);
     } catch (error) {
+      profileLoaded = false;
+      setProfileEditable(false);
       profileError.textContent = error.message || 'Unable to load your private profile.';
       profileError.hidden = false;
+      retryProfileLoad.hidden = false;
+    } finally {
+      profileLoading.hidden = true;
     }
   }
 
+  retryProfileLoad.addEventListener('click', loadProfile);
+
   form.addEventListener('submit', async function (e) {
     e.preventDefault();
+    if (!profileLoaded) return;
     profileError.textContent = '';
     profileError.hidden = true;
     saveToast.classList.remove('show');
-    var saveButton = form.querySelector('button[type="submit"]');
-    saveButton.disabled = true;
+    setProfileEditable(false);
     var data = {};
     dropdowns.forEach(function (dd) { data[dd.getAttribute('data-field-name')] = dd.getAttribute('data-value') || ''; });
     // Species detail only applies when other pets = yes; clear it otherwise so stale text is never saved/shared
@@ -1070,7 +1121,7 @@ p { color: var(--muted); }
       profileError.textContent = error.message || 'Unable to save your profile.';
       profileError.hidden = false;
     } finally {
-      saveButton.disabled = false;
+      setProfileEditable(profileLoaded);
     }
   });
 

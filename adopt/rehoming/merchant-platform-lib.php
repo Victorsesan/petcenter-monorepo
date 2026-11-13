@@ -24,20 +24,7 @@ function rh_json_response(array $payload, int $status = 200): never {
 
 function rh_runtime_dir(): string {
     /** TASK-WEB-04 START — Allow private external runtime storage without changing the legacy default path. */
-    $override = getenv('REHOMING_RUNTIME_DIR') ?: ($_ENV['REHOMING_RUNTIME_DIR'] ?? '');
-    $dir = $override !== '' ? (string)$override : (__DIR__ . '/runtime');
-    if (is_link($dir)) throw new RuntimeException('Rehoming data directory must not be a symlink');
-    if (!is_dir($dir) && !mkdir($dir, 0750, true) && !is_dir($dir)) throw new RuntimeException('Rehoming data directory is unavailable');
-    @chmod($dir, 0750);
-    if ($override !== '') {
-        $root = realpath(dirname(__DIR__));
-        $real = realpath($dir);
-        if ($dir[0] !== DIRECTORY_SEPARATOR || $root === false || $real === false || $real === $root || str_starts_with($real, $root . DIRECTORY_SEPARATOR)) {
-            throw new RuntimeException('External Rehoming data directory must be absolute and outside the web root');
-        }
-    }
-    if (!is_writable($dir)) throw new RuntimeException('Rehoming data directory is not writable');
-    return rtrim($dir, DIRECTORY_SEPARATOR);
+    return web04_runtime_store_dir();
     /** TASK-WEB-04 END */
 }
 
@@ -60,11 +47,11 @@ function rh_write_store(string $name, array $value): void {
     $previousMask = umask(0077);
     try { $written = $json === false ? false : file_put_contents($tmp, $json, LOCK_EX); }
     finally { umask($previousMask); }
-    if ($written === false || !chmod($tmp, 0640) || !rename($tmp, $path)) {
+    if ($written === false || !chmod($tmp, 0600) || !rename($tmp, $path)) {
         @unlink($tmp);
         throw new RuntimeException('Unable to persist rehoming data');
     }
-    @chmod($path, 0640);
+    @chmod($path, 0600);
 }
 
 function rh_input(): array {
@@ -123,7 +110,7 @@ function rh_issue_token(array $account): string {
     $lockPath = $path . '.lock';
     $lock = fopen($lockPath, 'c');
     if ($lock === false) throw new RuntimeException('Unable to lock session-token store');
-    @chmod($lockPath, 0640);
+    @chmod($lockPath, 0600);
     try {
         if (!flock($lock, LOCK_EX)) throw new RuntimeException('Unable to lock session-token store');
         $tokens = rh_read_store('tokens');
