@@ -127,6 +127,7 @@ Before any future production publication, create and verify **both** (a) a repos
 - **Gateway/route implementation:** `6e287c4fe4267a10febdf89eec2d75886a6a9c87`
 - **Corrective audit, gateway tests, and report update:** `f4a8bb51f1e7512ef68e337d85faa4258c3302c9` (pushed normally to the assigned branch on 2026-11-13).
 - **WEB-05 Unicode-safe helper integration:** `cf467994f547df2b0a92698de284190b5264ef2d`; this is the current WEB-04 source/test tip before the report-only update.
+- **Non-production integration merge:** source merge `9bc2c12a0ad3bd577b431a8418b3a1199b6abe14`; report-sync merge `68a58b722d5717e0c974c46d34dfd71f00d0baec` on `integration/second-round-final-2026-11-06`. Both were pushed normally; neither is a deployment commit.
 - **Publication:** The assigned GitHub branch was pushed normally (non-force). No push to `main` and no manual Hostinger deployment/upload/configuration/trigger action occurred. Deployment metadata remained inaccessible (HTTP 403); no tracked `.github/workflows` files were found.
 
 
@@ -197,7 +198,7 @@ Fresh credential-free `HEAD` requests produced these public results:
 - **200 but still unwrapped/stale static route response:** `/account/settings/`, `/merchant/`, `/rehoming/list-a-pet/`.
 - **405 on HEAD for method-restricted endpoints (not submitted or mutated):** `/rehoming/merchant-publish-listing.php`, `/rehoming/merchant-chat-send.php`, `/verify/verify-submit.php`.
 
-At the initial Nov 13 live recheck, `origin/main=0786a3fab7bb60012b01549614dbfee5bdbeda4b`, `origin/adopt-deploy=3f7f03f4086942de0b609fd45c212e4c8597d32d`, and `origin/qa/rehoming-auth-backend=60c7bf094970d3afd40d9cb0a40cbad155b84701`. Current refs after integration are `origin/qa/rehoming-auth-backend=cf467994f547df2b0a92698de284190b5264ef2d` and `origin/integration/second-round-final-2026-11-06=9bc2c12a0ad3bd577b431a8418b3a1199b6abe14`; `origin/main` and `origin/adopt-deploy` remain at the values above. Current `main` still lacks WEB-04, and `adopt-deploy` remains the flattened placeholder snapshot. The earlier comparison records 14 WEB-04 source paths absent and 16 stale in the deploy tree relative to the QA implementation; see the exact path lists in the 2026-11-11 audit above. No `main`, `adopt-deploy`, Hostinger, or live data was modified.
+At the initial Nov 13 live recheck, `origin/main=0786a3fab7bb60012b01549614dbfee5bdbeda4b`, `origin/adopt-deploy=3f7f03f4086942de0b609fd45c212e4c8597d32d`, and `origin/qa/rehoming-auth-backend=60c7bf094970d3afd40d9cb0a40cbad155b84701`. The current WEB-04 source/test commit is `cf467994f547df2b0a92698de284190b5264ef2d`; its report-only commit records the integration source merge `9bc2c12a0ad3bd577b431a8418b3a1199b6abe14` and later integration report-sync merge `68a58b722d5717e0c974c46d34dfd71f00d0baec`. `origin/main` and `origin/adopt-deploy` remain at the values above. Current `main` still lacks WEB-04, and `adopt-deploy` remains the flattened placeholder snapshot. The earlier comparison records 14 WEB-04 source paths absent and 16 stale in the deploy tree relative to the QA implementation; see the exact path lists in the 2026-11-11 audit above. No `main`, `adopt-deploy`, Hostinger, or live data was modified.
 
 ### Integration/release conclusion
 
