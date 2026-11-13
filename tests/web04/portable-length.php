@@ -8,6 +8,7 @@ if (function_exists('mb_strlen') || function_exists('mb_substr')) {
 }
 require_once $repoRoot . '/adopt/rehoming/merchant-platform-lib.php';
 if (rh_text_length('short text') !== 10) throw new RuntimeException('ASCII length fallback failed');
-if (rh_text_length("é") !== strlen("é")) throw new RuntimeException('UTF-8 byte-length fallback failed');
+if (rh_text_length("é猫🐾") !== 3) throw new RuntimeException('UTF-8 character-length fallback failed');
 if (rh_text_slice('portable', 4) !== 'port') throw new RuntimeException('Text slicing fallback failed');
-echo "PASS: portable text helper works without mbstring\n";
+if (rh_text_slice("é猫🐾x", 3) !== "é猫🐾") throw new RuntimeException('UTF-8 character-slicing fallback failed');
+echo "PASS: portable text helper preserves UTF-8 characters without mbstring\n";
