@@ -476,3 +476,430 @@ body.pc-public-page :is(.pc-loading, [aria-busy="true"]) {
   }
 }
 /* DESIGN-01 END: shared public adoption design system */
+
+
+/* DESIGN-01-WEB-03-A11Y START: raise measured public text contrast and touch-target sizes. */
+:root {
+  --pc-text-muted-strong: #5c5047;
+  --pc-success-deep: #0b6338;
+  --pc-info-deep: #174f9e;
+}
+
+/* Editorial labels and links on light content surfaces use a readable action tone. */
+body.pc-public-page .pc-section .pc-eyebrow,
+body.pc-public-page :is(.pc-blog-tag, .pc-blog-card__readmore, .pc-event-card__cta, .pc-quiz-q, .text-orange) {
+  color: var(--pc-action-orange) !important;
+}
+body.pc-public-page :is(.pc-visit-box__item p a, .pc-section--alt a[href$="/dogs/"]) {
+  color: var(--pc-action-orange) !important;
+  text-decoration: underline;
+  text-underline-offset: 0.16em;
+}
+body.pc-public-page :is(.pc-blog-meta, .pc-blog-meta span, .pc-blog-card__footer, .pc-form-note) {
+  color: var(--pc-text-muted-strong) !important;
+}
+
+/* Keep supporting copy legible against the dark shared footer and pale form cards. */
+body.pc-public-page .pc-footer .pc-footer__brand > p,
+body.pc-public-page .pc-footer .pc-footer__bottom,
+body.pc-public-page .pc-footer .pc-footer__bottom :is(span, a) {
+  color: rgba(255, 255, 255, 0.88) !important;
+}
+body.pc-public-page :is(.pc-contact-section p, #pcFosterForm label, #pcPartnerForm label, #pcVolunteerForm label) {
+  color: var(--pc-text-muted-strong) !important;
+}
+body.pc-public-page :is(.pc-distinct-box p, .pc-honesty-box p) {
+  color: #354b40 !important;
+}
+body.pc-public-page :is(.pc-poweredby-text, #testiPageLabel, .pc-testi-card__date, .pc-testi-card__reply-role, .pc-testi-card__reply-date) {
+  color: var(--pc-text-muted-strong) !important;
+}
+
+/* Action surfaces use AA-safe orange; gold remains an accent, not small body text. */
+body.pc-public-page :is(#lookupBtn, #statusBtn) {
+  background: var(--pc-action-orange) !important;
+  color: #fff !important;
+}
+body.pc-public-page .pc-btn--signin {
+  color: var(--pc-brand-navy) !important;
+  border-color: var(--pc-brand-navy) !important;
+}
+body.pc-public-page .pc-event-card__cta,
+body.pc-public-form p a:not(.pc-btn):not([class*="btn"]) {
+  color: var(--pc-action-orange) !important;
+  text-decoration: underline;
+  text-underline-offset: 0.16em;
+}
+body.pc-public-page :is(#pcBizStatus, .pc-testi-card__avatar) {
+  color: #fff !important;
+  background-color: var(--pc-success-deep) !important;
+}
+body.pc-public-page :is(#pcgbCategory, #pcgbRatingCount, [onclick^="pcAction"], button[data-tab]) {
+  color: var(--pc-info-deep) !important;
+}
+body.pc-public-page .cat-card :is(h3, .cat-count, .cat-desc) {
+  color: var(--pc-brand-navy) !important;
+}
+body.pc-public-page .cat-card :is(.cat-count, .cat-desc) {
+  color: var(--pc-text-muted-strong) !important;
+}
+
+/* The home testimonial dots keep a small visual mark inside a WCAG 2.2 AA target. */
+body.pc-public-home .pc-testi-dots {
+  gap: 8px;
+}
+body.pc-public-home .pc-testi-dot,
+body.pc-public-home .pc-testi-dot.active {
+  position: relative;
+  display: inline-flex;
+  inline-size: 44px !important;
+  min-inline-size: 44px !important;
+  block-size: 44px !important;
+  min-block-size: 44px !important;
+  align-items: center;
+  justify-content: center;
+  padding: 0 !important;
+  border-radius: 50%;
+  background: transparent !important;
+}
+body.pc-public-home .pc-testi-dot::before {
+  inline-size: 10px;
+  block-size: 10px;
+  border-radius: 50%;
+  background: var(--pc-brand-gold-hover);
+  content: "";
+}
+body.pc-public-home .pc-testi-dot.active::before {
+  inline-size: 24px;
+  border-radius: 999px;
+  background: var(--pc-brand-navy);
+}
+
+/* DESIGN-01-WEB-03-A11Y END */
+
+
+/* DESIGN-01-SHELL START: reserve space for fixed shared navigation on newly wrapped standalone pages. */
+body.pc-public-page.pc-has-injected-shell {
+  padding-block-start: 68px !important;
+  scroll-padding-block-start: 80px;
+}
+body.pc-public-page .pc-ready-list li.pc-ready-list__heading {
+  display: block;
+  list-style: none;
+}
+body.pc-public-page .pc-ready-list li.pc-ready-list__heading h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 10px;
+  font-size: 1rem;
+}
+/* DESIGN-01-SHELL END */
+
+
+/* DESIGN-01-CHROME START: shared static shell layout for all public route families. */
+body.pc-public-page .pc-header {
+  position: fixed;
+  inset-block-start: 0;
+  inset-inline: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0;
+}
+body.pc-public-page :is(.pc-header__logo--desktop, .pc-header__logo--mobile) {
+  flex: 0 0 auto;
+}
+body.pc-public-page .pc-header__logo--desktop { display: block; }
+body.pc-public-page .pc-header__logo--mobile { display: none; }
+body.pc-public-page .pc-header__logo img {
+  display: block;
+  inline-size: auto;
+  block-size: 38px;
+  object-fit: contain;
+}
+body.pc-public-page .pc-header__nav {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+body.pc-public-page .pc-header__nav > li { position: relative; }
+body.pc-public-page .pc-header__nav a,
+body.pc-public-page .pc-mobile-menu a {
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+}
+body.pc-public-page .pc-header__nav .has-drop > ul {
+  position: absolute;
+  inset-block-start: 100%;
+  inset-inline-start: 0;
+  z-index: 1001;
+  display: none;
+  min-inline-size: 210px;
+  margin: 0;
+  padding: 8px;
+  list-style: none;
+  background: var(--pc-surface);
+}
+body.pc-public-page .pc-header__nav .has-drop:hover > ul,
+body.pc-public-page .pc-header__nav .has-drop:focus-within > ul { display: block; }
+body.pc-public-page .pc-header__nav .has-drop > ul a {
+  inline-size: 100%;
+  justify-content: flex-start;
+  color: var(--pc-brand-navy);
+}
+body.pc-public-page .pc-header__nav .has-drop > ul a:hover,
+body.pc-public-page .pc-header__nav .has-drop > ul a:focus-visible {
+  color: var(--pc-action-orange);
+  background: rgba(180, 75, 8, 0.08);
+}
+body.pc-public-page .pc-hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  padding: 10px;
+  border: 0;
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+}
+body.pc-public-page .pc-hamburger span {
+  display: block;
+  inline-size: 23px;
+  block-size: 2px;
+  border-radius: 999px;
+  background: currentColor;
+}
+body.pc-public-page .pc-mobile-menu {
+  position: fixed;
+  inset-block-start: 68px;
+  inset-inline: 0;
+  z-index: 999;
+  display: none;
+  flex-direction: column;
+  padding: 10px 16px 20px;
+  background: rgba(16, 33, 75, 0.99);
+  box-shadow: var(--pc-shadow-raised);
+}
+body.pc-public-page .pc-mobile-menu.open { display: flex; }
+body.pc-public-page .pc-mobile-menu a { padding: 12px 14px; }
+body.pc-public-page .pc-mobile-menu a:hover,
+body.pc-public-page .pc-mobile-menu a:focus-visible {
+  color: var(--pc-brand-gold);
+  background: rgba(255, 255, 255, 0.08);
+}
+body.pc-public-page .pc-footer {
+  margin-block-start: 56px;
+  padding-block: clamp(40px, 6vw, 64px) 28px;
+  background: #0b1834;
+  color: rgba(255, 255, 255, 0.88);
+}
+body.pc-public-page .pc-footer__inner {
+  inline-size: min(100%, var(--pc-content-width));
+  margin-inline: auto;
+  padding-inline: clamp(16px, 3vw, 28px);
+}
+body.pc-public-page .pc-footer__top {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1.2fr 1fr 1.3fr;
+  gap: clamp(18px, 3vw, 36px);
+}
+body.pc-public-page .pc-footer__brand img { inline-size: auto; block-size: 34px; margin-block-end: 14px; }
+body.pc-public-page .pc-footer__brand p { max-inline-size: 36ch; color: rgba(255, 255, 255, 0.88); }
+body.pc-public-page .pc-footer__col h5 { margin-block: 0 14px; color: var(--pc-brand-gold); }
+body.pc-public-page .pc-footer__col ul { margin: 0; padding: 0; list-style: none; }
+body.pc-public-page .pc-footer__col li { margin-block-end: 8px; }
+body.pc-public-page .pc-footer__col ul a,
+body.pc-public-page .pc-footer__links a { color: rgba(255, 255, 255, 0.88); text-decoration: underline; text-underline-offset: 3px; }
+body.pc-public-page .pc-footer__bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-block-start: 32px;
+  padding-block-start: 18px;
+  border-block-start: 1px solid rgba(255, 255, 255, 0.18);
+  color: rgba(255, 255, 255, 0.88);
+}
+body.pc-public-page .pc-footer__links { display: flex; flex-wrap: wrap; gap: 16px; }
+body.pc-public-page .pc-footer-mini,
+body.pc-public-page .pc-footer-mini a { color: rgba(255, 255, 255, 0.88); }
+
+/* Legacy category contact buttons otherwise overlap the independent chat launcher. */
+body.pc-public-category #messageBtn {
+  inset-block-end: max(92px, calc(env(safe-area-inset-bottom) + 92px)) !important;
+}
+body.pc-public-category #messageBtn:focus-visible { outline-color: var(--pc-brand-gold); }
+
+@media (max-width: 900px) {
+  body.pc-public-page .pc-header__nav { display: none !important; }
+  body.pc-public-page .pc-header__logo--desktop { display: none; }
+  body.pc-public-page .pc-header__logo--mobile { display: block; }
+  body.pc-public-page .pc-hamburger { display: flex; }
+  body.pc-public-page .pc-footer__top { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 560px) {
+  body.pc-public-page .pc-footer__top { grid-template-columns: minmax(0, 1fr); }
+  body.pc-public-page .pc-footer__bottom { align-items: flex-start; flex-direction: column; }
+}
+/* DESIGN-01-CHROME END */
+
+
+/* DESIGN-01-WEB-03 START: visual hierarchy for semantic readiness-group panels. */
+body.pc-public-page .pc-ready-panel { display: flex; flex-direction: column; gap: 10px; }
+body.pc-public-page .pc-ready-panel h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 4px;
+  font-size: 1rem;
+}
+body.pc-public-page .pc-ready-panel .pc-ready-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+/* DESIGN-01-WEB-03 END */
+
+
+/* DESIGN-01-WEB-03-A11Y START: targeted contrast corrections confirmed by the route-wide axe sweep. */
+body.pc-public-page :is(.pc-lf-card__contact, .pc-post-nav__label, .disabled .page-link) {
+  color: var(--pc-action-orange) !important;
+}
+body.pc-public-home :is([data-i18n^="index.featuredPets."], [data-i18n^="index.blogTrack."], [data-i18n^="index.statusChecker."]) {
+  color: var(--pc-action-orange) !important;
+}
+body.pc-public-home a:has(> span[data-i18n="index.a.1"]) {
+  color: #fff !important;
+  background: var(--pc-action-orange) !important;
+}
+body.pc-public-form #pageRoot > .title { color: var(--pc-action-orange) !important; }
+body.pc-public-form :is(.small.note, .note) { color: var(--pc-text-muted-strong) !important; }
+body.pc-public-form #previewBtn {
+  color: var(--pc-action-orange) !important;
+  border-color: var(--pc-action-orange) !important;
+}
+body.pc-public-form #submitBtn {
+  background: var(--pc-action-orange) !important;
+  color: #fff !important;
+}
+body.pc-public-page #pcRehomingForm label { color: var(--pc-form-plum) !important; }
+body.pc-public-page #pcRehomingForm label .pc-opt,
+body.pc-public-page :is(#pcFosterForm > p, #pcPartnerForm > p, #pcVolunteerForm > p, .pc-form-note) {
+  color: var(--pc-text-muted-strong) !important;
+}
+body.pc-public-page :is(label[for="fPhone"] span, label[for="vPhone"] span) {
+  color: var(--pc-text-muted-strong) !important;
+}
+body.pc-public-page .pc-header__notify-stub__panel {
+  position: absolute;
+  inset-block-start: calc(100% + 8px);
+  inset-inline-end: 18px;
+  z-index: 1002;
+  display: none;
+  inline-size: min(320px, calc(100vw - 32px));
+  padding: 16px;
+  border: 1px solid var(--pc-border);
+  border-radius: var(--pc-radius-panel);
+  background: #fff;
+  color: var(--pc-text);
+  box-shadow: var(--pc-shadow-raised);
+}
+body.pc-public-page .pc-header__notify-stub__panel h4 { margin: 0 0 6px; color: var(--pc-brand-navy); }
+body.pc-public-page .pc-header__notify-stub__panel p { margin: 0; color: var(--pc-text-muted-strong); }
+body.pc-public-page #pc-cookie-consent p { color: rgba(255, 255, 255, 0.92) !important; }
+body.pc-public-page #pcBizStatus { color: #fff !important; background-color: var(--pc-success-deep) !important; }
+body.pc-public-page [id^="helpfulCount-"] { color: var(--pc-text-muted-strong) !important; }
+body.pc-public-page .cat-card :is(h3, .cat-count, .cat-desc) { color: var(--pc-text-muted-strong) !important; }
+body.pc-public-page .cat-card h3 { color: var(--pc-brand-navy) !important; }
+body.pc-public-page .pc-poweredby-text { color: var(--pc-text-muted-strong) !important; }
+body.pc-public-category #messageBtn {
+  inset-block-end: max(96px, calc(env(safe-area-inset-bottom) + 96px)) !important;
+  z-index: 6201;
+}
+/* DESIGN-01-WEB-03-A11Y END */
+
+
+/* DESIGN-01-WEB-03-A11Y-2 START: dark-surface and component-specific contrast pairs. */
+body.pc-public-page .pc-partner-card__tag,
+body.pc-public-page .pc-svc-article__eyebrow {
+  color: var(--pc-action-orange) !important;
+}
+body.pc-public-home .pc-blog-card [data-i18n^="index.blogTrack."] {
+  color: #fff !important;
+}
+body.pc-public-home [data-i18n="index.span.1"] { color: var(--pc-action-orange) !important; }
+body.pc-public-page .active > .pm-q { color: var(--pc-action-orange) !important; }
+body.pc-public-page #pc-cookie-consent .pc-cc-accept {
+  background: var(--pc-action-orange) !important;
+  color: #fff !important;
+}
+/* DESIGN-01-WEB-03-A11Y-2 END */
+
+
+/* DESIGN-01-WEB-03-A11Y-3 START: final route-specific pairs from the settled local scan. */
+body.pc-public-home .pc-blog-card__body {
+  background: var(--pc-brand-navy-soft) !important;
+  color: #fff !important;
+}
+body.pc-public-home .pc-blog-card__body :is(.pc-blog-card__tag, .pc-blog-card__title, .pc-blog-card__date) {
+  color: #fff !important;
+}
+body.pc-public-home .pc-blog-card__body .pc-blog-card__read { color: var(--pc-brand-gold) !important; }
+body.pc-public-page .read-more { color: var(--pc-action-orange) !important; }
+body.pc-public-page .method-card__badge { color: var(--pc-action-orange) !important; }
+body.pc-public-page #calcBtn {
+  background: var(--pc-action-orange) !important;
+  color: #fff !important;
+}
+body.pc-public-page.pc-public-form #pcFosterForm > p,
+body.pc-public-page.pc-public-form #pcFosterForm .pc-form-note,
+body.pc-public-page.pc-public-form #pcFosterForm label[for="fPhone"] span,
+body.pc-public-page .pc-contact-section > div > p,
+body.pc-public-page .pc-contact-section > div[data-a11y-orig-fs] > p,
+body.pc-public-page .pc-poweredby-text {
+  color: var(--pc-text-muted-strong) !important;
+}
+/* DESIGN-01-WEB-03-A11Y-3 END */
+
+
+/* DESIGN-01-WEB-03-A11Y-4 START: preserve intended colors at readable opacity and darken small metadata. */
+body.pc-public-page :is(#pcFosterForm > p, #pcPartnerForm > p, #pcVolunteerForm > p, .pc-contact-section > p, .pc-contact-section > div > p, .pc-form-note, label[for="fPhone"] span, label[for="vPhone"] span, #pcRehomingForm .pc-opt, .pc-poweredby-text) {
+  opacity: 1 !important;
+}
+body.pc-public-page .pc-role-card__meta,
+body.pc-public-page .pc-partner-card__tag,
+body.pc-public-page .pc-svc-article__eyebrow,
+body.pc-public-page .pc-pet-card__fee,
+body.pc-public-page .cat-card [data-a11y-orig-fs="12"] {
+  color: var(--pc-action-orange) !important;
+  opacity: 1 !important;
+}
+body.pc-public-page .pc-tier-card__badge {
+  background: var(--pc-action-orange) !important;
+  color: #fff !important;
+}
+/* DESIGN-01-WEB-03-A11Y-4 END */
+
+
+/* DESIGN-01-WEB-03-A11Y-5 START: final breadcrumb and testimonial opacity corrections. */
+body.pc-public-page .pets-breadcrumb span { color: var(--pc-text-muted-strong) !important; }
+body.pc-public-testimonials .pc-testi-poweredby { opacity: 1 !important; }
+/* DESIGN-01-WEB-03-A11Y-5 END */
+
+
+/* DESIGN-01-WEB-03-REDUCED-MOTION START: override document-root smooth scrolling under reduce preference. */
+@media (prefers-reduced-motion: reduce) {
+  html,
+  body.pc-public-page {
+    scroll-behavior: auto !important;
+  }
+}
+/* DESIGN-01-WEB-03-REDUCED-MOTION END */

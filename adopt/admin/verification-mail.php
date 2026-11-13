@@ -37,7 +37,7 @@
 // Same relative-path require pattern chat-mail.php itself uses to reach
 // contact-config.php (this file lives alongside admin-dashboard.html's
 // backend, i.e. the same directory chat-mail.php already lives in).
-$verifMailConfigPath = __DIR__ . '/contact-config.php';
+$verifMailConfigPath = __DIR__ . '/../contact-us/contact-config.php';
 if (file_exists($verifMailConfigPath)) {
     require_once $verifMailConfigPath;
 } else {

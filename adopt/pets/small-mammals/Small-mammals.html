@@ -880,11 +880,8 @@ p { color: var(--muted); }
 
 
   </style>
-<!-- DESIGN-01 START: shared public design layer -->
-<link rel="stylesheet" href="/assets/css/public-redesign.css">
-<!-- DESIGN-01 END: shared public design layer -->
   </head>
-<body class="pc-public-page pc-public-category">
+<body>
 
 <header class="pc-header pc-header--solid" id="pcHeader">
   <a href="/" class="pc-header__logo pc-header__logo--desktop">
@@ -908,7 +905,7 @@ p { color: var(--muted); }
     <li><a href="/testimonials/">Testimonials</a></li>
     <li class="nav-donate"><a href="https://donate.petcenterco.com" target="_blank" rel="noopener">Donate</a></li>
     <li><a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact</a></li>
-    <li class="nav-signup"><a href="/rehome/">Sign Up</a></li>
+    <li class="nav-signup"><a href="/signin/">Sign Up</a></li>
   </ul>
   <button class="pc-hamburger" id="pcHamburger" aria-label="Open menu" aria-expanded="false">
     <span></span><span></span><span></span>
@@ -923,7 +920,7 @@ p { color: var(--muted); }
     <a href="/blog/">Blog</a>
     <a href="/testimonials/">Testimonials</a>
     <a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact</a>
-    <a href="/rehome/">Sign Up</a>
+    <a href="/signin/">Sign Up</a>
     <a href="https://donate.petcenterco.com" class="mobile-donate" target="_blank" rel="noopener">Donate</a>
   </nav>
 </header>
@@ -1006,7 +1003,7 @@ p { color: var(--muted); }
         <h2 style="margin:0;font-size:1.6rem;" id="categoryTitle">Loading…</h2>
         <p style="margin:4px 0 0;font-size:13px;"><span id="petCount">—</span> <span id="categoryCount"></span> available</p>
       </div>
-      <a href="/rehome/" class="pc-btn pc-btn--ghost">List Out A Pet</a>
+      <a href="/signin/" class="pc-btn pc-btn--ghost">List Out A Pet</a>
     </div>
 
     <div class="pc-pet-grid" id="petGrid">
@@ -1050,7 +1047,7 @@ p { color: var(--muted); }
         <h5>Support</h5>
         <ul>
           <li><a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact Us</a></li>
-          <li><a href="/rehome/">Sign Up</a></li>
+          <li><a href="/signin/">Sign Up</a></li>
           <li><a href="https://docs.petcenterco.com/returns-refunds/" target="_blank" rel="noopener">Returns & Refunds</a></li>
           <li><a href="https://docs.petcenterco.com/faq/" target="_blank" rel="noopener">FAQ</a></li>
         </ul>
@@ -1801,10 +1798,9 @@ document.addEventListener('DOMContentLoaded', function() {
   </div>
 </div>
 <!-- ═══ Filter Bottom Sheet — end ═══ -->
-<script src="/admin/chat-widget.js"></script>
-<script src="/assets/js/accessibility-widget.js" defer></script>
-<!-- DESIGN-01 START: shared public navigation enhancement -->
-<script src="/assets/js/public-chrome.js"></script>
-<!-- DESIGN-01 END: shared public navigation enhancement -->
+
+  <!-- Shared customer chat and accessibility widgets; keep these sitewide for consistent placement. -->
+  <script src="/admin/chat-widget.js"></script>
+  <script src="/assets/js/accessibility-widget.js" defer></script>
 </body>
 </html>

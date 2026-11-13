@@ -13,16 +13,21 @@
 error_reporting(E_ALL);
 
 // ============================================
-// DATABASE CONFIGURATION — REPLACE PLACEHOLDERS
+// DATABASE CONFIGURATION — server-side environment only
 // ============================================
-// Create the MySQL database in Hostinger first, then replace these four
-// values with the real credentials. Nothing in this feature will connect
-// until DB_NAME / DB_USER / DB_PASSWORD are real.
-define('DB_HOST', 'localhost');
-define('DB_NAME', 'u127878628_chat_widget_db');
-define('DB_USER', 'u127878628_chat_widget_us');
-define('DB_PASSWORD', 'Godisgood8z$');
-define('DB_CHARSET', 'utf8mb4');
+// Provision DB_HOST, DB_NAME, DB_USER, and DB_PASSWORD in the hosting
+// environment before enabling the chat database. Secrets must never be kept
+// in this tracked PHP file.
+function chatConfigEnv($name, $default = '') {
+    $value = getenv($name);
+    return $value === false ? $default : $value;
+}
+
+define('DB_HOST', chatConfigEnv('DB_HOST', 'localhost'));
+define('DB_NAME', chatConfigEnv('DB_NAME'));
+define('DB_USER', chatConfigEnv('DB_USER'));
+define('DB_PASSWORD', chatConfigEnv('DB_PASSWORD'));
+define('DB_CHARSET', chatConfigEnv('DB_CHARSET', 'utf8mb4'));
 
 
 // ============================================
@@ -32,6 +37,11 @@ function chatDb() {
     static $pdo = null;
     if ($pdo !== null) {
         return $pdo;
+    }
+    if (DB_NAME === '' || DB_USER === '' || DB_PASSWORD === '') {
+        error_log('Chat DB connection failed: required server-side database configuration is missing.');
+        http_response_code(500);
+        die(json_encode(['success' => false, 'error' => 'Chat database is not configured.']));
     }
     try {
         $dsn = 'mysql:host=' . DB_HOST . ';dbname=' . DB_NAME . ';charset=' . DB_CHARSET;

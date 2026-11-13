@@ -563,7 +563,7 @@ p { color: var(--muted); }
     <li class="nav-donate"><a href="https://donate.petcenterco.com" target="_blank" rel="noopener">Donate</a></li>
     <li><a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact</a></li>
     <!-- TASK-1 START -->
-    <!-- Path changed from /rehome/ to /signin/ per CEO's request to retire the "rehome" URL sitewide (propagated for sitewide consistency during merge) -->
+    <!-- Path changed from /signin/ to /signin/ per CEO's request to retire the "rehome" URL sitewide (propagated for sitewide consistency during merge) -->
     <li class="nav-signup"><a href="/signin/">Sign Up</a></li>
     <!-- TASK-1 END -->
   </ul>
@@ -585,7 +585,7 @@ p { color: var(--muted); }
     <a href="/testimonials/">Testimonials</a>
     <a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact</a>
     <!-- TASK-1 START -->
-    <!-- Path changed from /rehome/ to /signin/ per CEO's request to retire the "rehome" URL sitewide (propagated for sitewide consistency during merge) -->
+    <!-- Path changed from /signin/ to /signin/ per CEO's request to retire the "rehome" URL sitewide (propagated for sitewide consistency during merge) -->
     <a href="/signin/">Sign Up</a>
     <!-- TASK-1 END -->
     <a href="https://donate.petcenterco.com" class="mobile-donate" target="_blank" rel="noopener">Donate</a>
@@ -780,7 +780,7 @@ p { color: var(--muted); }
         <ul>
           <li><a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact Us</a></li>
           <!-- TASK-1 START -->
-          <!-- Path changed from /rehome/ to /signin/ per CEO's request to retire the "rehome" URL sitewide (propagated for sitewide consistency during merge) -->
+          <!-- Path changed from /signin/ to /signin/ per CEO's request to retire the "rehome" URL sitewide (propagated for sitewide consistency during merge) -->
           <li><a href="/signin/">Sign Up</a></li>
           <!-- TASK-1 END -->
           <li><a href="https://docs.petcenterco.com/returns-refunds/" target="_blank" rel="noopener">Returns & Refunds</a></li>
@@ -1049,7 +1049,9 @@ p { color: var(--muted); }
 // TASK-B5 END
 </script>
 <script src="/assets/js/cookie-consent.js"></script>
-<script src="/assets/js/accessibility-widget.js" defer></script>
-<script src="/admin/chat-widget.js"></script>
+
+  <!-- Shared customer chat and accessibility widgets; keep these sitewide for consistent placement. -->
+  <script src="/admin/chat-widget.js"></script>
+  <script src="/assets/js/accessibility-widget.js" defer></script>
 </body>
 </html>

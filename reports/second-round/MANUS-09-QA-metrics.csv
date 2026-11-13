@@ -1,0 +1,18 @@
+metric,passed,total,rate
+PHPUnit tests,8,8,1.0
+PHPUnit assertions,20,20,1.0
+Merchant PHP cases,14,14,1.0
+Merchant JS cases,17,17,1.0
+Admin/apply PHP lint,60,60,1.0
+
+http_status,count,label
+200,6,Successful public/endpoint responses
+400,1,Validation rejection
+401,5,Authentication rejection
+403,2,Protected-file denial
+405,6,Method rejection
+
+review_status,count
+Resolved,5
+Pending / integrator,3
+Environment limitation,1

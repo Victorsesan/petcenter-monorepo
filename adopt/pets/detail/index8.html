@@ -2520,7 +2520,7 @@ body { padding-bottom: 84px; }
     <li><a href="/testimonials/">Testimonials</a></li>
     <li class="nav-donate"><a href="https://donate.petcenterco.com" target="_blank" rel="noopener">Donate</a></li>
     <li><a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact</a></li>
-    <li class="nav-signup"><a href="/rehome/">Sign Up</a></li>
+    <li class="nav-signup"><a href="/signin/">Sign Up</a></li>
   </ul>
   <button class="pc-hamburger" id="pcHamburger" aria-label="Open menu" aria-expanded="false">
     <span></span><span></span><span></span>
@@ -2535,7 +2535,7 @@ body { padding-bottom: 84px; }
     <a href="/blog/">Blog</a>
     <a href="/testimonials/">Testimonials</a>
     <a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact</a>
-    <a href="/rehome/">Sign Up</a>
+    <a href="/signin/">Sign Up</a>
     <a href="https://donate.petcenterco.com" class="mobile-donate" target="_blank" rel="noopener">Donate</a>
   </nav>
 </header>
@@ -3050,7 +3050,7 @@ body { padding-bottom: 84px; }
         <h5>Support</h5>
         <ul>
           <li><a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact Us</a></li>
-          <li><a href="/rehome/">Sign Up</a></li>
+          <li><a href="/signin/">Sign Up</a></li>
           <li><a href="https://docs.petcenterco.com/returns-refunds/" target="_blank" rel="noopener">Returns & Refunds</a></li>
           <li><a href="https://docs.petcenterco.com/faq/" target="_blank" rel="noopener">FAQ</a></li>
         </ul>
@@ -4276,7 +4276,9 @@ function showShareToast(message) {
 })();
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/plyr/3.8.4/plyr.polyfilled.min.js"></script>
-<script src="/admin/chat-widget.js"></script>
-<script src="/assets/js/accessibility-widget.js" defer></script>
+
+  <!-- Shared customer chat and accessibility widgets; keep these sitewide for consistent placement. -->
+  <script src="/admin/chat-widget.js"></script>
+  <script src="/assets/js/accessibility-widget.js" defer></script>
 </body>
 </html>

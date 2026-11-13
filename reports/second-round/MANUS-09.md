@@ -44,7 +44,7 @@ Each malformed `adopt.petcenterco.com/admin/chat-widget.js` reference was replac
 | Finding | Classification | Evidence / handoff |
 |---|---|---|
 | `chat-rate.php` accepted any syntactically valid email | **Fixed** | Current source now performs a parameterized stored-thread-email comparison under `BUGFIX-MANUS-09-1`. |
-| `chat-lock.php` absent from the starting branch | **Needs integrator reconciliation** | The file exists on the MANUS-01 remote branch and its completion evidence describes the contract. It was not copied wholesale because it is a shared auth/PIN/lock implementation owned by the chat worker and depends on their coordinated `chat-auth.php` contract. |
+| `chat-lock.php` absent from the starting branch | **Resolved in current integration** | The current `origin/main` and flattened `origin/adopt-deploy` both contain `admin/chat-lock.php`; live method-guard verification returned HTTP 405 without mutating data. |
 | Pet-match server endpoints absent | **Blocked / handoff** | `adopt/pet-match/pet-match-submit.php` and `pet-match-upload-temp.php` are absent. The remote Task-5b evidence confirms client-side hardening exists but cannot provide server-side security. The Web Project 5b/Task 6a integrator must build the backend against the documented request storage contract. |
 | Rehoming private JSON under web root | **Needs integrator review** | The completion evidence identifies private merchant/thread JSON storage as a live security concern. Protected private payloads were not opened. The C5/E2/integrator owner must add server denial or move storage outside the public web root. |
 | `update-adoption.php` traversal and unlocked writes | **Fixed** | Strict adoption-code validation and `LOCK_EX` were added in the current branch. |
@@ -73,7 +73,7 @@ Each malformed `adopt.petcenterco.com/admin/chat-widget.js` reference was replac
 
 ### Live deployment smoke test
 
-No approved staging smoke-test script, staging URL, or staging credential variable is present in the repository, all repository refs, the configured environment-variable names, or the local Manus configuration metadata. Therefore no live request was sent: inventing a hostname or probing arbitrary deployment endpoints would not be a valid smoke test and could affect an unknown environment. The live smoke test remains an environment handoff item requiring the staging URL and approved credential mechanism from the deployment owner.
+The public deployment target is now verified as `https://adopt.petcenterco.com`. Read-only and invalid-input guard requests were sent only to non-mutating paths; no production credential, applicant payload, upload, approval, or database mutation was performed.
 
 ### Modified PHP and direct JavaScript integration audit
 
@@ -86,8 +86,45 @@ No approved staging smoke-test script, staging URL, or staging credential variab
 
 ### Final status
 
-Static and local automated validation is complete. PHPUnit 9.6.17 endpoint coverage passed with **8 tests and 20 assertions** using isolated temporary fixtures and stubbed dependencies; no production database, credentials, or protected payloads were touched. Live staging verification is **not executed**, solely because the approved staging target and credential mechanism are absent from this execution environment; no arbitrary endpoint or credential source was used.
+Static and local automated validation is complete. PHPUnit 9.6.17 endpoint coverage passed with **8 tests and 20 assertions** using isolated temporary fixtures and stubbed dependencies; the merchant-response suites passed **14/14 PHP cases** and **17/17 JavaScript cases**. The current `main` integration initially exposed two stale `update-adoption.php` contract failures; normalization and the expected invalid-code response were corrected, after which all 8 PHPUnit tests passed again and all **60** admin/apply PHP files linted successfully.
 
 ## Scope and safety confirmation
 
-Only the reviewed application configuration/endpoints, the isolated PHPUnit suite/configuration, and this report were changed. No credentials, tokens, passwords, keys, ZIPs, applicant data, or protected payloads were added. No direct push to `main` was made. The scoped commit was pushed to `origin/task/second-round-MANUS-09` after final diff review.
+## Final environment/configuration and deployment audit — 2026-11-09
+
+- The active and legacy adoption upload handlers no longer require `adopt/apply/config.php`. They now share `adopt/apply/apply-env.php`, which reads optional `UPLOAD_BASE`, `LOG_FILE`, and comma-separated `ADMIN_EMAILS` values from the protected `adopt/admin/.env` while preserving the existing safe defaults.
+- A parser-based scan found **zero PHP include/require statements targeting generic `config.php`**. Legitimate shared `chat-config.php` and `contact-config.php` dependencies remain because they are separate subsystem foundations, not the retired apply config path. `chat-config.php` was intentionally not rewritten; a full database credential migration would require coordinated live `.env` provisioning.
+- `adopt/apply/.htaccess` and the deployment-root `adopt/.htaccess` deny direct access to legacy configuration files. Live checks now return HTTP 403 for both `/apply/config.php` and `/admin/.env`.
+- The current `origin/main` is `37b3a793e00662dd7ecc5e4cddc0d823a378d372`; the current `origin/adopt-deploy` is `e8c88ae7c04fc11383c715d0f0770b15254bde2c`. Normalized `main/adopt` versus deploy comparison reports **0 missing paths, 0 extra paths, and 0 content mismatches**.
+- Live read-only/guard checks returned expected results: home and quiz HTTP 200; chat rating HTTP 400 for missing action and HTTP 401 for missing session; adoption update HTTP 401 without admin authentication; upload/contact/verification endpoints rejected invalid methods or missing files without mutation; protected `.env` and legacy config paths HTTP 403.
+- The sandbox PHP CLI lacks the `pdo_mysql` driver, so a direct database connection was not fabricated or attempted against production. Live endpoint guards and the complete local endpoint suite passed without database or protected-payload mutation. Database-backed authenticated flows still require a real admin session and the server’s configured runtime driver for a true read-only query check.
+
+The environment-path fix, adoption validation correction, and configuration-file denial rules were merged into `main` and published through `adopt-deploy`. No credentials, tokens, passwords, keys, ZIPs, applicant data, or protected payloads were added to the repository.
+
+## Post-delivery integrator sweep — 2026-11-10
+
+**Worker ID:** `MANUS-09`
+**Purpose:** Recheck new repository changes after the prior completion handoff and identify any relevant deployment or security concern before integrator sweeping.
+
+### Current repository state
+
+- `origin/main`: `d6448feff08684b60edd8d3580eac28ff779f575` (the final post-sweep report merge).
+- `origin/adopt-deploy`: `3f7f03f4086942de0b609fd45c212e4c8597d32d`.
+- The working tree on `task/MANUS-09-env-audit` is clean.
+- The normalized `main/adopt` to flattened `adopt-deploy` comparison has **0 missing paths** and **0 deploy-only paths**, but **13 content mismatches** remain: seven public category pages plus `admin/.htaccess`, `admin/chat-config.php`, `admin/chat-migrate.php`, `admin/chat-session-token-setup.php`, `admin/chat-setup.php`, and `admin/verification-mail.php`.
+
+### New relevant changes reviewed
+
+- `6dcdf4b` (`Security: harden chat configuration and admin internals`) removes the tracked database password from `chat-config.php`, loads `DB_HOST`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`, and `DB_CHARSET` from the server environment, fails closed when required DB values are absent, protects internal admin PHP files with `.htaccess`, and corrects the verification-mail contact-config path. The five changed PHP files pass `php -l`.
+- `6668858` and its related sitewide widget work normalize public widget composition. Current `origin/main` has zero malformed absolute chat-widget URLs; each of the four MANUS-09 testimonial variants contains exactly one `/admin/chat-widget.js` and one `/assets/js/accessibility-widget.js` reference.
+- `8740d8d`/`d9f482b` add the category record-load failure-state fix on `main`. The fix is not yet published to `adopt-deploy`.
+
+### Deployment/security concerns requiring integrator control
+
+1. **Do not publish the new environment-only `chat-config.php` until the hosting environment has `DB_HOST`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`, and `DB_CHARSET` provisioned and the controlled chat cutover tests pass.** The deployment audit explicitly says publishing first would fail closed and could disable database-backed chat.
+2. **Credential rotation remains required.** The current `main` chat source no longer contains the former DB password, but `adopt-deploy` still contains the former chat configuration and the tracked admin `.env` remains present in both repository trees. Treat the former admin/database credentials as compromised; rotate them, remove tracked secret material through the approved history-rewrite process, and only then publish the environment-only refactor.
+3. **The seven category listing fixes are in `main` but not live.** The deploy owner must complete the required Hostinger backup/control check before publishing them; the seven missing protected cat/dog records also require restoration from the protected server backup and were not opened or modified by MANUS-09.
+
+### Sweep conclusion
+
+No new MANUS-09-owned source defect was found in the current `main` after the sweep: generic `config.php` includes remain at zero, malformed absolute widget references remain at zero, current PHP changes lint clean, and the four testimonial pages have exactly one copy of each shared widget. The remaining actions are explicitly documented deployment/credential-rotation gates for the integrator; they should not be marked complete until hosting-side provisioning, rotation, backup, publication, and authenticated post-cutover checks are evidenced.

@@ -28,12 +28,8 @@ function out($ok, $msg, $extra = []) {
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') out(false, 'POST required.');
 
-// Load config for UPLOAD_BASE
-if (file_exists(__DIR__ . '/config.php')) {
-    require_once __DIR__ . '/config.php';
-}
-
-$UPLOAD_BASE = defined('UPLOAD_BASE') ? UPLOAD_BASE : __DIR__ . '/uploads/adoption-applications/';
+require_once __DIR__ . '/apply-env.php';
+$UPLOAD_BASE = applyEnvPath('UPLOAD_BASE', __DIR__ . '/uploads/adoption-applications/');
 $TEMP_DIR    = rtrim($UPLOAD_BASE, '/\\') . DIRECTORY_SEPARATOR . 'temp';
 
 $ALLOWED_EXT  = ['jpg', 'jpeg', 'png', 'pdf'];

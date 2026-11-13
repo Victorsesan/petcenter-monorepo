@@ -172,3 +172,115 @@ The repository-wide reconciliation found that origin/main preserved the A1/C1 ev
 ### Integration contract
 
 The existing account owner must populate `$_SESSION['pc_account']` with `account_id` and `account_type` (`merchant`, `visitor`, or `admin`) and configure `PETCENTER_REHOMING_TOKEN_SECRET` with at least 32 random characters. This is an integration contract, not a new login system. The new API records live under `adopt/rehoming/runtime/` and are denied as static downloads.
+
+
+## Final integrator re-audit — 2026-11-10
+
+**Account/worker ID:** `MANUS-05`
+
+This section records the work completed after the 2026-11-05 implementation pass so integrators can identify it during a repository-wide sweep.
+
+### Completed by MANUS-05
+
+- Reconciled the deployment tree and added the previously missing live files `adopt/admin/chat-session-token-setup.php` and `adopt/admin/chat-setup.php` to `origin/adopt-deploy` in deployment commit `5b003c6`.
+- Added `tools/rehoming-live-smoke.sh`, a repeatable live test covering route availability, HTTP method guards, unauthenticated guards, secret-loaded detection, and optional authenticated visitor chat/review flows.
+- Added `docs/REHOMING-LIVE-OPERATIONS.md`, documenting Hostinger secret setup, safe secret verification, dedicated test-account execution, rollback guidance, and the exact smoke-test commands.
+- The local production-shaped authenticated fixture passed **16 checks, 0 failures, 2 intentional skips**, including thread creation/token issuance, message send, poll, thread listing, authenticated review reads, review eligibility, and test-account review submission.
+- The live smoke test passed all route and guard checks but correctly reported the remaining runtime configuration issue: HTTP 503 `Rehoming token secret is not configured`. No secret was committed or exposed.
+
+### Current repository and deployment audit
+
+At the 2026-11-10 audit, `origin/main` was `a5f73c8` and `origin/adopt-deploy` was `558252d`. The MANUS-05 worker branch `origin/task/second-round-MANUS-05` was `c177938` and is an ancestor of `main`; the MANUS-05 implementation is therefore merged into current `main`.
+
+The current `main` and `adopt-deploy` trees are **not fully identical**. The exact sole difference is `merchant/post-listing/index.html` in the flattened deployment tree. The deploy version contains the appended sitewide customer-chat and accessibility widget scripts, while the current `main` version does not. There are no other file additions, deletions, or modifications between the two deployment trees. This is an integrator release concern requiring an explicit decision: either merge the widget change back into `main` and republish, or republish current `main` after confirming that the widgets are intentionally excluded.
+
+The latest main commits also include MANUS-09 environment/security hardening, MANUS-06 runtime integration, chat maintenance endpoint protection, credential-rotation documentation, and MANUS-02 handoff documentation. These are outside MANUS-05 ownership; integrators should retain them when resolving the one-file deployment drift.
+
+### Remaining MANUS-05 operational dependency
+
+`PETCENTER_REHOMING_TOKEN_SECRET` is still not visible to the live PHP runtime. Hostinger authentication was blocked by Cloudflare verification in the available browser, so the variable was not set from this session. The source, runbook, and automated test are complete; authenticated live chat/review testing remains pending until the secret is configured and a dedicated logged-in test-account session is available.
+
+### Handoff references
+
+- Smoke test: `tools/rehoming-live-smoke.sh`
+- Hostinger/runbook: `docs/REHOMING-LIVE-OPERATIONS.md`
+- Worker branch: `task/second-round-MANUS-05`
+- Original worker implementation head: `c177938`
+- Documentation/tooling commit: `702b584`
+- Deployment reconciliation commit: `5b003c6`
+- This final integrator handoff is authored under account ID `MANUS-05`.
+
+
+## Listing-page and signup gateway audit — 2026-11-10
+
+**Account/worker ID:** `MANUS-05`
+
+The exact comparison of `origin/main:adopt/merchant/post-listing/index.html` and `origin/adopt-deploy:merchant/post-listing/index.html` found identical listing markup and behavior. The only difference was that the deployment copy already contained the sitewide `admin/chat-widget.js` and `assets/js/accessibility-widget.js` scripts, while `main` did not. Those scripts have now been carried into `main` so the source and deployment versions have one authoritative content set; the page is ready to be republished to `adopt-deploy`.
+
+Live route checks confirmed `/rehoming/`, `/rehoming/list-a-pet/`, `/merchant/post-listing/`, and `/merchant/` return HTTP 200. The reason the platform is not discoverable through the visible “Sign Up” navigation is separate: `/signin/` is currently a “Coming Soon — List Your Pet” notification page, while `/signup/`, `/register/`, `/account/signup/`, and `/account/register/` return HTTP 404. The rehoming hub exists, but the current global navigation does not expose it as the signup/authentication entry point.
+
+### MAJOR INTEGRATOR ISSUE — signup/authentication gateway is outside MANUS-05 ownership
+
+MANUS-05 was assigned the historical Rehoming Platform A1–C6 package, not the account-registration gateway. The repository explicitly states that registration/login pages are outside the A1–C6 task scope. The current operational assignment names `WEB-04` (`qa/rehoming-auth-backend`) as owner of the rehoming authentication gateway, login/signup routes, sessions, OAuth structure, route protection, authorization, legal routes, and security tests. The redesign brief separately assigns `DESIGN-02` (`redesign/admin-rehoming`) the authentication-gateway interface and rehoming visual redesign.
+
+This is therefore a major integrator dependency, not a MANUS-05 implementation omission. Integrators must merge or complete the WEB-04 authentication backend and coordinate the DESIGN-02 gateway UI, then replace the current `/signin/` “Coming Soon” destination and 404 signup routes with the authoritative signup/login route set. Until that happens, users cannot create an account through the public navigation and cannot reach authenticated rehoming chat/review flows through a normal signup journey.
+
+The widget-preserving listing-page change and this handoff update must be committed to `main`, after which `adopt-deploy` should be regenerated from the resulting `adopt/` tree. No signup implementation is fabricated in MANUS-05 because doing so would create a parallel authentication system outside the assigned contract.
+
+
+## Resolution verification — 2026-11-10
+
+The widget-preserving listing-page change is now present in `origin/main` at `c70b99c`, and the existing `origin/adopt-deploy` tree already contains the identical file. The computed `adopt/` deployment trees match exactly (`tree_match=yes`), so no additional deployment commit was necessary after the source alignment. The live listing route remains HTTP 200.
+
+## Live navigation and header audit — 2026-11-10
+
+**Account/worker ID:** `MANUS-05`
+
+Added `tools/live-navigation-audit.py`, a read-only same-origin crawler that tests HTML link targets, repeated header links, HTTP status, redirects, page titles, and non-HTML navigation targets. The first live run crawled 42 pages and tested 42 same-origin targets. It found 8 unique HTTP 404 routes, appearing as 17 broken header-link occurrences: `/dogs.html`, `/cats.html`, `/birds.html`, `/reptiles.html`, `/small-mammals.html`, `/blog-home.html`, `/adoption-application.html`, and `/rehome/`.
+
+These were stale legacy targets. The tracked site files now use the current clean routes: `/pets/dogs/`, `/pets/cats/`, `/pets/birds/`, `/pets/reptiles/`, `/pets/small-mammals/`, `/blog/`, `/apply/`, and `/signin/` respectively. The `/signin/` mapping follows the existing repository-wide decision to retire `/rehome/`; it does not claim that the signup backend is complete. The replacement covered 33 tracked HTML/JS/PHP files, including repeated headers, footer links, category detail variants, and the pet-detail JavaScript route map.
+
+The signup gateway remains a separate major issue: `/signin/` is still a “Coming Soon” page and `/signup/` remains HTTP 404. That issue is owned by WEB-04 and DESIGN-02, not MANUS-05, and remains explicitly flagged for integrators.
+
+### Final live verification
+
+After deployment propagation, the rerun crawled 35 live HTML pages and tested 35 same-origin targets. The final result was **0 broken links, 0 broken header links, 0 redirects, 0 untitled pages, and 0 non-HTML navigation targets**. The earlier single `/pets/cats/` failure was transient deployment propagation; direct probes and the final crawler both returned HTTP 200 for `/pets/cats/` and all category routes.
+
+## Category asset and image verification — 2026-11-10
+
+Added `tools/live-category-assets-audit.py` and ran it against the seven live category pages: dogs, cats, birds, reptiles, small mammals, aquariums, and livestocks. The checker inspected asset-bearing `img`, `script`, `link`, `source`, `poster`, `srcset`, and CSS `url(...)` references, excluding ordinary navigation anchors.
+
+Final result: all 7 category pages returned HTTP 200; 8 unique linked assets were tested; 7 were same-origin and 1 was external; **0 asset failures** and **0 image/resource 404s** were found. The initial pass reported `https://docs.petcenterco.com/faq/` as a 403 because the first extractor treated every anchor as an asset; that false positive was removed by restricting the final checker to actual asset-bearing elements.
+
+## Full navigation and authentication verification — 2026-11-10
+
+**Account/worker ID:** `MANUS-05`
+
+### MANUS-05 claim reconciliation against current `main`
+
+Verified against `origin/main` at `4d41831`. Every application/tool file named in the later MANUS-05 follow-up sections is present on current `main`, including the A1 posting page/publisher, A2 maintenance job, A4 auth prompt, C5/C6 chat/review stack, live navigation audit, category asset audit, smoke test, and operations runbook. The MANUS-05 worker branch is an ancestor of current `main` (`git merge-base --is-ancestor origin/task/second-round-MANUS-05 origin/main` passed). The initial report statements that described the work as report-only or A4/C5/C6 blocked are historical entries superseded by the later implementation sections; they should not be read as the current source state.
+
+### Repository-wide navigation verification
+
+- The existing live same-origin crawler completed a reachable-site pass of 35 pages with **0 broken links, 0 broken header links, 0 redirects, 0 untitled pages, and 0 non-HTML navigation targets**.
+- A broader current-main source audit scanned 55 public HTML files and **1,971 local internal `href`, `src`, and `action` references**. It found **0 missing local targets**. Cloudflare email-obfuscation paths, vendor/archived files, anchors, external URLs, and non-route assets were excluded from the local route calculation.
+- A 56-route live expansion was started from every tracked public HTML route. It could not produce valid HTTP route results because the live host began failing TLS handshakes during the run; these are recorded as transport failures, not application 404s.
+
+### Live transport incident
+
+At the time of the expanded audit, both resolved IPv4 edges (`195.35.60.218` and `212.1.212.28`) accepted TCP but returned `OpenSSL: WRONG_VERSION_NUMBER` for HTTPS. Plain HTTP returned a 302 redirect to a T-Mobile warning page. Consequently, the expanded 56-route live check is **inconclusive pending HTTPS recovery**; it must be rerun from a network with working HTTPS before release. The earlier clean 35-page live crawl remains valid for the time it was run and is not being silently extrapolated to the currently unavailable transport.
+
+### Authentication and signup verification
+
+The current `main`/live authentication entry remains incomplete:
+
+- `/signin/` returned HTTP 200 but served the notification-only “List a Pet / Coming Soon” page, with no login or account-creation form.
+- `/signup/`, `/register/`, and `/login/` returned HTTP 404.
+- `/account/` returned HTTP 403; `/account/settings/` returned HTTP 200 and is an account-settings shell, not a public signup gateway.
+- `/verify/` returned HTTP 200, while `POST`-only `/verify/verify-submit.php` correctly returned HTTP 405 to an unauthenticated GET probe.
+- The rehoming chat/review endpoints returned their expected method/auth guards (`405` for wrong-method probes and `401` for unauthenticated protected reads). These results confirm endpoint presence, not successful authenticated production operation.
+- The earlier live smoke result still applies: `PETCENTER_REHOMING_TOKEN_SECRET` was not visible to the live PHP runtime, so authenticated chat/review execution remains unverified.
+
+The assigned WEB-04 branch (`origin/qa/rehoming-auth-backend`, current head `60c7bf0`) contains the implemented gateway and auth core, including `/signin/?mode=signup`, Google OAuth routes, `auth.php`, session/CSRF handling, legal routes, and protected wrappers. Its report records isolated code/loopback/browser verification and explicitly leaves provider credentials, Hostinger configuration, Apache enforcement, and integration/release approval open. Those WEB-04 files are **not present in current `origin/main`**: `adopt/rehoming/auth.php`, `web04-auth-core.php`, both Google OAuth files, the protected route wrappers, and the privacy/terms PHP routes are absent from main. The WEB-04 branch therefore remains a required coordinator merge/integration dependency; current main cannot be claimed to have a working signup or login flow.
+
+No signup or authentication code was duplicated in MANUS-05, because WEB-04 owns that gateway and its branch must be merged and deployment-configured as the authoritative implementation. After coordinator integration, rerun the full 56-route HTTPS audit plus authenticated tests for visitor signup/login/logout, CSRF rejection, safe return paths, Google OAuth configuration/callback failure modes, protected visitor/merchant routes, and the rehoming chat/review flows.

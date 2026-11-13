@@ -595,6 +595,32 @@
   .pcw-msg-row.user .pcw-msg-bubble { background: #10214b; color: #fff; border-end-end-radius: 4px; }
   .pcw-msg-row.admin .pcw-msg-bubble, .pcw-msg-row.bot .pcw-msg-bubble { background: #f4f1ea; color: #2c2416; border-end-start-radius: 4px; }
   .pcw-msg-row.system .pcw-msg-bubble { background: #fff8f2; color: #7a6d5f; font-style: italic; border: 1px dashed rgba(237,118,36,0.25); }
+  /* BUGFIX-1 START — MANUS-02 Task 1a regression: integrated customer widget lost transcript UI. */
+  /* TASK-admin234-1a START — readable customer-side transcription panel and controls. */
+  .pcw-transcript-control { margin-top: 8px; }
+  .pcw-transcript-button {
+    border: 1px solid rgba(16,33,75,0.18); background: #fff; color: #10214b; border-radius: 8px;
+    padding: 6px 10px; font: inherit; font-size: 11.5px; line-height: 1.35; cursor: pointer;
+  }
+  .pcw-transcript-button:hover { background: #f4f1ea; border-color: rgba(16,33,75,0.35); }
+  .pcw-transcript-button:focus-visible { outline: 2px solid #ED7624; outline-offset: 2px; }
+  .pcw-transcript-button:disabled { opacity: 0.65; cursor: wait; }
+  .pcw-transcript-output {
+    margin-top: 7px; padding: 9px 10px; border: 1px solid rgba(16,33,75,0.12); border-radius: 8px;
+    background: #fff; color: #2c2416; font-size: 12px; line-height: 1.5; overflow-wrap: anywhere;
+  }
+  .pcw-transcript-text { white-space: pre-wrap; }
+  .pcw-transcript-warning {
+    margin-top: 6px; padding: 5px 7px; border-radius: 6px; background: #fff2e5;
+    color: #744000; font-size: 11px;
+  }
+  .pcw-transcript-language { margin-top: 6px; color: #62503b; font-size: 11px; }
+  .pcw-transcript-actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  /* TASK-admin234-1a END */
+  /* TASK-admin234-1b START — keep the native read-aloud action distinct and touch-friendly. */
+  .pcw-transcript-actions .pcw-transcript-button { min-height: 32px; }
+  /* TASK-admin234-1b END */
+  /* BUGFIX-1 END */
   .pcw-msg-meta-row {
     display: flex; align-items: center; gap: 6px; margin-top: 3px;
     font-size: 10px; color: #a89c8a; position: relative;
@@ -2118,6 +2144,59 @@
   }
   // TASK-8 END (8a — bot response pacing)
 
+  /* BUGFIX-1 START — MANUS-02 Task 1a regression: restore the missing customer transcript control. */
+  /* TASK-admin234-1a START — customer-side voice transcript controls. */
+  function buildCustomerTranscriptControl(msg) {
+    const wrap = el('div', { class: 'pcw-transcript-control' });
+    const toggle = el('button', { type: 'button', class: 'pcw-transcript-button' }, 'View transcription');
+    const output = el('div', { class: 'pcw-transcript-output', hidden: 'hidden' });
+    let loaded = false, busy = false;
+    const speak = (text, lang) => {
+      if (!('speechSynthesis' in window) || !window.SpeechSynthesisUtterance) return;
+      window.speechSynthesis.cancel();
+      const aliases = { english:'en-US', spanish:'es-ES', french:'fr-FR', german:'de-DE', portuguese:'pt-BR', italian:'it-IT', chinese:'zh-CN', japanese:'ja-JP', korean:'ko-KR', arabic:'ar-SA', hindi:'hi-IN', vietnamese:'vi-VN', russian:'ru-RU', filipino:'fil-PH', tagalog:'fil-PH' };
+      const utterance = new SpeechSynthesisUtterance(text);
+      if (lang) utterance.lang = aliases[String(lang).toLowerCase()] || lang;
+      window.speechSynthesis.speak(utterance);
+    };
+    const loadTranscript = async () => {
+      if (busy) return;
+      busy = true; toggle.disabled = true; toggle.textContent = 'Loading transcription…';
+      try {
+        let result;
+        do {
+          result = await apiPost('chat-transcribe.php', { chatId: state.chatId, messageId: msg.id, side: 'customer' });
+          if (result.status === 'pending') await new Promise(resolve => setTimeout(resolve, 6000));
+        } while (result.status === 'pending');
+        if (!result.success || !result.transcript) throw new Error(result.error || 'Transcription unavailable.');
+        output.innerHTML = '';
+        const text = el('div', { class: 'pcw-transcript-text' }, result.transcript);
+        output.appendChild(text);
+        if (result.confidence !== null && result.confidence < 0.5) output.appendChild(el('div', { class: 'pcw-transcript-warning' }, 'This transcription may be inaccurate. Please check the audio.'));
+        output.appendChild(el('div', { class: 'pcw-transcript-language' }, 'Preferred language: ' + (result.preferred_chat_language || 'en')));
+        const actions = el('div', { class: 'pcw-transcript-actions' });
+        const copy = el('button', { type: 'button', class: 'pcw-transcript-button' }, 'Copy transcript');
+        copy.addEventListener('click', async () => { try { await navigator.clipboard.writeText(result.transcript); copy.textContent = 'Copied'; } catch (e) { copy.textContent = 'Select and copy the text above'; } });
+        actions.appendChild(copy);
+        /* TASK-admin234-1b START — native browser speech; no cloud TTS key or translation. */
+        const read = el('button', { type: 'button', class: 'pcw-transcript-button' }, 'Read aloud');
+        read.addEventListener('click', () => speak(result.transcript, result.language || result.preferred_chat_language || 'en'));
+        actions.appendChild(read);
+        /* TASK-admin234-1b END */
+        output.appendChild(actions); loaded = true; output.hidden = false;
+      } catch (error) { output.textContent = error.message || 'Transcription unavailable.'; output.hidden = false; }
+      finally { busy = false; toggle.disabled = false; toggle.textContent = loaded ? 'Hide transcription' : 'Try transcription again'; }
+    };
+    toggle.addEventListener('click', () => {
+      if (loaded && !output.hidden) { output.hidden = true; toggle.textContent = 'View transcription'; }
+      else if (loaded) { output.hidden = false; toggle.textContent = 'Hide transcription'; }
+      else loadTranscript();
+    });
+    wrap.appendChild(toggle); wrap.appendChild(output); return wrap;
+  }
+  /* TASK-admin234-1a END */
+  /* BUGFIX-1 END */
+
   function renderMessage(msg) {
     // Defensive normalization: if from_type is somehow not one of the four
     // known values (e.g. 'bot' was rejected by a database that hasn't had
@@ -2172,6 +2251,11 @@
       bubble.appendChild(buildAudioBar('/admin/' + msg.media_path));
     }
     col.appendChild(bubble);
+    // BUGFIX-1 START — MANUS-02 Task 1a regression: expose transcription for admin-sent audio.
+    // TASK-admin234-1a START — customer can request an admin-sent voice transcript.
+    if (msg.msg_type === 'audio' && msg.from_type === 'admin') col.appendChild(buildCustomerTranscriptControl(msg));
+    // TASK-admin234-1a END
+    // BUGFIX-1 END
 
     // ── Meta row: timestamp + persistent "Edited" tag (clickable to reveal
     //    the original pre-edit text). This row fades out and is replaced by

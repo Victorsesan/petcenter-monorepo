@@ -347,7 +347,7 @@
     <li><a href="/testimonials/">Testimonials</a></li>
     <li class="nav-donate"><a href="https://donate.petcenterco.com" target="_blank" rel="noopener">Donate</a></li>
     <li><a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact</a></li>
-    <!-- Path changed from /rehome/ to /signin/ per CEO's request to retire the "rehome" URL sitewide -->
+    <!-- Path changed from /signin/ to /signin/ per CEO's request to retire the "rehome" URL sitewide -->
     <li class="nav-signup"><a href="/signin/">Sign Up</a></li>
   </ul>
   <button class="pc-hamburger" id="pcHamburger" aria-label="Open menu" aria-expanded="false">
@@ -482,7 +482,7 @@
         <h5>Support</h5>
         <ul>
           <li><a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact Us</a></li>
-          <!-- Path changed from /rehome/ to /signin/ per CEO's request to retire the "rehome" URL sitewide -->
+          <!-- Path changed from /signin/ to /signin/ per CEO's request to retire the "rehome" URL sitewide -->
           <li><a href="/signin/">Sign Up</a></li>
           <li><a href="https://docs.petcenterco.com/returns-refunds/" target="_blank" rel="noopener">Returns &amp; Refunds</a></li>
           <li><a href="https://docs.petcenterco.com/faq/" target="_blank" rel="noopener">FAQ</a></li>
@@ -573,7 +573,9 @@ document.getElementById('notifyEmail').addEventListener('keydown', function(e) {
   });
 })();
 </script>
-<script src="/admin/chat-widget.js"></script>
-<script src="/assets/js/accessibility-widget.js" defer></script>
+
+  <!-- Shared customer chat and accessibility widgets; keep these sitewide for consistent placement. -->
+  <script src="/admin/chat-widget.js"></script>
+  <script src="/assets/js/accessibility-widget.js" defer></script>
 </body>
 </html>
