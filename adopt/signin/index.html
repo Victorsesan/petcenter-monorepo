@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="List your pet for adoption on Pet Center — coming soon.">
-  <title>List a Pet — Pet Center</title>
+  <meta name="description" content="Sign in or create a Pet Center Rehoming account.">
+  <title>Sign In or Create Account — Pet Center</title>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/assets/css/preload.css">
   <link rel="stylesheet" href="/assets/css/styles.css">
@@ -313,6 +313,53 @@
       font-weight: 500;
       margin-bottom: 28px;
     }
+    /* TASK-WEB-04 START — Accessible, responsive account gateway controls. */
+    .web04-auth-card { max-width: 620px; text-align: start; }
+    .web04-auth-card .rehome-logo { margin-inline: auto; }
+.web04-auth-card > .rehome-eyebrow,
+.web04-auth-card > h1,
+.web04-auth-card > .web04-auth-intro { display: block; text-align: center; margin-inline: auto; }
+.web04-auth-card > .rehome-eyebrow { color: #A34A0E; }
+.web04-auth-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 0 0 22px; }
+.web04-auth-tab { min-height: 44px; padding: 10px 14px; border: 1px solid #d0c3ba; border-radius: 8px; background: #fff; color: #10214b; font: 600 14px 'Sora', sans-serif; cursor: pointer; }
+.web04-auth-tab[aria-selected="true"] { border-color: #10214b; background: #10214b; color: #fff; }
+    .web04-auth-tab:focus-visible,
+.web04-google-button:focus-visible,
+.web04-test-login button:focus-visible,
+.web04-session-panel a:focus-visible,
+.web04-session-panel button:focus-visible { outline: 3px solid #A34A0E; outline-offset: 3px; }
+.web04-auth-panel { text-align: center; }
+.web04-auth-panel p { margin: 0 0 16px; }
+.web04-google-button { width: 100%; min-height: 50px; border: 0; border-radius: 9px; background: #A34A0E; color: #fff; font: 600 15px 'Sora', sans-serif; cursor: pointer; }
+.web04-google-button:hover:not(:disabled) { background: #8C3B0E; }
+.web04-google-button:disabled { opacity: .58; cursor: not-allowed; }
+.web04-auth-status { min-height: 26px; margin: 12px 0 0 !important; font-size: 13px; }
+.web04-auth-message { margin: 14px 0 !important; padding: 11px 14px; border-radius: 8px; background: #fdecea; color: #9d2f24; font-size: 13px; }
+.web04-auth-message[data-kind="success"] { background: #e6f7ef; color: #0d7c4a; }
+.web04-legal-note { margin: 18px 0 0 !important; font-size: 12px !important; line-height: 1.6 !important; text-align: center; }
+.web04-legal-note a { color: #A34A0E; font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }
+.web04-auth-card .rehome-back a:hover { color: #A34A0E; }
+    .web04-test-auth { margin-top: 24px; padding: 18px; border: 1px solid #d7bd88; border-radius: 10px; background: #fffaf3; }
+    .web04-test-auth h2 { margin: 0 0 5px; font-size: 1.35rem; }
+    .web04-test-auth p { font-size: 12px; margin-bottom: 12px; }
+    .web04-test-login { display: grid; gap: 10px; }
+    .web04-test-login label { font: 600 13px 'Sora', sans-serif; color: #10214b; }
+    .web04-test-login input { width: 100%; min-height: 44px; margin-top: 4px; padding: 10px 12px; border: 1px solid #c8beb5; border-radius: 7px; font: 14px 'Sora', sans-serif; }
+.web04-test-login input:focus-visible { outline: 3px solid #A34A0E; outline-offset: 2px; }
+.web04-test-login button,
+.web04-session-panel button { min-height: 44px; border: 0; border-radius: 8px; background: #10214b; color: #fff; font: 600 14px 'Sora', sans-serif; cursor: pointer; }
+    .web04-test-tag { display: inline-block; margin-bottom: 8px; padding: 4px 8px; border-radius: 999px; background: #fff0df; color: #7d3c0b; font-size: 11px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+    .web04-session-panel { text-align: center; }
+    .web04-session-panel p { overflow-wrap: anywhere; }
+    .web04-session-panel a { display: inline-block; margin: 8px 0 14px; color: #10214b; font-weight: 600; text-decoration: underline; }
+    .web04-session-panel button { width: 100%; }
+    @media (max-width: 560px) {
+      .web04-auth-card { padding-block: 34px; padding-inline: 20px; }
+      .web04-auth-tabs { gap: 6px; }
+      .web04-auth-tab { padding-inline: 8px; font-size: 13px; }
+    }
+    @media (prefers-reduced-motion: reduce) { .web04-auth-card *, .web04-auth-card *::before, .web04-auth-card *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+    /* TASK-WEB-04 END */
     @media (max-width: 560px) {
       .rehome-card { padding-block: 40px; padding-inline: 24px; }
       .rehome-features { grid-template-columns: 1fr; }
@@ -347,8 +394,8 @@
     <li><a href="/testimonials/">Testimonials</a></li>
     <li class="nav-donate"><a href="https://donate.petcenterco.com" target="_blank" rel="noopener">Donate</a></li>
     <li><a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact</a></li>
-    <!-- Path changed from /signin/ to /signin/ per CEO's request to retire the "rehome" URL sitewide -->
-    <li class="nav-signup"><a href="/signin/">Sign Up</a></li>
+    <!-- Path changed from /rehome/ to /signin/ per CEO's request to retire the "rehome" URL sitewide -->
+    <li class="nav-signup"><a href="/signin/?mode=signup">Sign Up</a></li>
   </ul>
   <button class="pc-hamburger" id="pcHamburger" aria-label="Open menu" aria-expanded="false">
     <span></span><span></span><span></span>
@@ -363,7 +410,7 @@
     <a href="/blog/">Blog</a>
     <a href="/testimonials/">Testimonials</a>
     <a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact</a>
-    <a href="/signin/">Sign Up</a>
+    <a href="/signin/?mode=signup">Sign Up</a>
     <a href="https://donate.petcenterco.com" class="mobile-donate" target="_blank" rel="noopener">Donate</a>
   </nav>
 </header>
@@ -382,70 +429,58 @@
   </div>
 </div>
 
-<div class="rehome-page">
-  <div class="rehome-card">
+<!-- TASK-WEB-04 START — Accessible visitor/merchant/admin authentication gateway. -->
+<main class="rehome-page">
+  <section class="rehome-card web04-auth-card" dir="auto" aria-labelledby="authTitle">
     <img src="/assets/images/logo-petcenter.png" alt="Pet Center" class="rehome-logo">
-    <div class="rehome-eyebrow">Coming Soon</div>
-    <h1>List Your Pet for Adoption</h1>
-    <p>We're building a self-service portal so you can list pets directly on Pet Center. Be the first to know when it launches.</p>
+    <div class="rehome-eyebrow">Secure Account Access</div>
+    <h1 id="authTitle">Sign in to Pet Center</h1>
+    <p class="web04-auth-intro" id="authIntro">Use your Google account to access Rehoming. New visitor accounts are created after Google verifies the email.</p>
 
-    <div class="rehome-notify-form" id="notifyForm">
-      <!-- BUGFIX-MANUS-03-1 START: email and telephone controls stay LTR under document RTL. -->
-<input type="email" id="notifyEmail" placeholder="Enter your email address" autocomplete="email" dir="ltr">
-<!-- BUGFIX-MANUS-03-1 END -->
-
-      <button onclick="submitNotify()">Notify Me</button>
-    </div>
-    <div class="notify-success" id="notifySuccess">
-      &#10003; You're on the list! We'll email you when the pet listing portal is ready.
+    <div class="web04-auth-tabs" role="tablist" aria-label="Account access">
+      <button class="web04-auth-tab" type="button" id="loginTab" role="tab" aria-controls="loginPanel" aria-selected="true" tabindex="0">Sign in</button>
+      <button class="web04-auth-tab" type="button" id="signupTab" role="tab" aria-controls="signupPanel" aria-selected="false" tabindex="-1">Create account</button>
     </div>
 
-    <div class="rehome-features">
-      <div class="rehome-feature">
-        <div class="rehome-feature__icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        </div>
-        <div>
-          <div class="rehome-feature__title">Safe &amp; Verified</div>
-          <div class="rehome-feature__desc">All listings reviewed by our team before going live.</div>
-        </div>
-      </div>
-      <div class="rehome-feature">
-        <div class="rehome-feature__icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-        </div>
-        <div>
-          <div class="rehome-feature__title">Fast Matching</div>
-          <div class="rehome-feature__desc">Connect with adopters quickly through our platform.</div>
-        </div>
-      </div>
-      <div class="rehome-feature">
-        <div class="rehome-feature__icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-        </div>
-        <div>
-          <div class="rehome-feature__title">Loving Homes</div>
-          <div class="rehome-feature__desc">We screen adopters so your pet goes to the right family.</div>
-        </div>
-      </div>
-      <div class="rehome-feature">
-        <div class="rehome-feature__icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-        </div>
-        <div>
-          <div class="rehome-feature__title">No Listing Fee</div>
-          <div class="rehome-feature__desc">Listing your pet on Pet Center is completely free.</div>
-        </div>
-      </div>
+    <div id="loginPanel" class="web04-auth-panel" role="tabpanel" aria-labelledby="loginTab">
+      <p>Continue with the Google account associated with your Pet Center access.</p>
+      <button class="web04-google-button" type="button" id="googleLoginButton" disabled>Continue with Google</button>
+    </div>
+    <div id="signupPanel" class="web04-auth-panel" role="tabpanel" aria-labelledby="signupTab" hidden>
+      <p>First-time visitors receive the <strong>visitor</strong> role. Merchant and admin access is assigned by Pet Center on the server, never by a form or URL.</p>
+      <button class="web04-google-button" type="button" id="googleSignupButton" disabled>Create account with Google</button>
     </div>
 
-    <p class="rehome-back">
-      In a hurry? <a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact us directly</a> and we'll help you list your pet manually.
-    </p>
-    <br>
-    <p class="rehome-back"><a href="/">&larr; Back to Pet Center</a></p>
-  </div>
-</div>
+    <p class="web04-auth-status" id="googleAuthStatus" role="status" aria-live="polite">Checking sign-in availability…</p>
+    <p class="web04-auth-message" id="authMessage" role="alert" hidden></p>
+
+    <section class="web04-test-auth" id="testAuthSection" aria-labelledby="testAuthTitle" hidden>
+      <span class="web04-test-tag">Staging only</span>
+      <h2 id="testAuthTitle">Test-account sign-in</h2>
+      <p>Use only the temporary credentials issued for this staging environment. Test accounts are never accepted as production Google identities.</p>
+      <form class="web04-test-login" id="testLoginForm" autocomplete="on">
+        <label for="testUsername">Test username
+          <input id="testUsername" name="username" type="text" autocomplete="username" maxlength="120" required>
+        </label>
+        <label for="testPassword">Test password
+          <input id="testPassword" name="password" type="password" autocomplete="current-password" maxlength="1024" required>
+        </label>
+        <button type="submit" id="testLoginButton">Sign in to staging</button>
+      </form>
+    </section>
+
+    <section class="web04-session-panel" id="sessionPanel" aria-labelledby="signedInHeading" hidden>
+      <h2 id="signedInHeading">You’re signed in</h2>
+      <p id="signedInUser"></p>
+      <a id="continueLink" href="/rehoming/">Continue to Rehoming</a>
+      <button id="logoutButton" type="button">Sign out</button>
+    </section>
+
+    <p class="web04-legal-note">Before signing in, review the <a href="/privacy-policy/">Privacy Policy and account-data notice</a> and the <a href="/terms-of-service/">Terms of Service</a>.</p>
+    <p class="rehome-back" style="margin-top:22px"><a href="/">&larr; Back to Pet Center</a></p>
+  </section>
+</main>
+<!-- TASK-WEB-04 END — Authentication gateway. -->
 
 <!-- Footer copied verbatim from cats.html (canonical blueprint, Warning & Instructions rule 13) -->
 <footer class="pc-footer">
@@ -482,8 +517,8 @@
         <h5>Support</h5>
         <ul>
           <li><a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact Us</a></li>
-          <!-- Path changed from /signin/ to /signin/ per CEO's request to retire the "rehome" URL sitewide -->
-          <li><a href="/signin/">Sign Up</a></li>
+          <!-- Path changed from /rehome/ to /signin/ per CEO's request to retire the "rehome" URL sitewide -->
+          <li><a href="/signin/?mode=signup">Sign Up</a></li>
           <li><a href="https://docs.petcenterco.com/returns-refunds/" target="_blank" rel="noopener">Returns &amp; Refunds</a></li>
           <li><a href="https://docs.petcenterco.com/faq/" target="_blank" rel="noopener">FAQ</a></li>
         </ul>
@@ -498,28 +533,163 @@
     <div class="pc-footer__bottom">
       <span class="pc-footer__copy">&copy; 2026 Pet Center. All rights reserved.</span>
       <div class="pc-footer__links">
-        <a href="https://docs.petcenterco.com/privacy-policy/" target="_blank" rel="noopener">Privacy Policy</a>
-        <a href="https://docs.petcenterco.com/terms-of-service/" target="_blank" rel="noopener">Terms of Service</a>
+        <a href="/privacy-policy/">Privacy Policy</a>
+        <a href="/terms-of-service/">Terms of Service</a>
       </div>
     </div>
   </div>
 </footer>
 
 <script src="/assets/js/preload.js"></script>
+<script src="/assets/js/web04-csrf.js" defer></script>
 <script>
-function submitNotify() {
-  var email = document.getElementById('notifyEmail').value.trim();
-  if (!email || !email.includes('@')) {
-    document.getElementById('notifyEmail').style.outline = '2px solid #c0392b';
-    return;
+// TASK-WEB-04 START — Server-configured Google sign-in and explicit test-only staging login.
+(function () {
+  var loginTab = document.getElementById('loginTab');
+  var signupTab = document.getElementById('signupTab');
+  var loginPanel = document.getElementById('loginPanel');
+  var signupPanel = document.getElementById('signupPanel');
+  var status = document.getElementById('googleAuthStatus');
+  var message = document.getElementById('authMessage');
+  var testSection = document.getElementById('testAuthSection');
+  var sessionPanel = document.getElementById('sessionPanel');
+  var params = new URLSearchParams(window.location.search);
+  var returnTo = params.get('return_to') || '/rehoming/';
+
+  function setMode(mode, focus) {
+    var signup = mode === 'signup';
+    loginTab.setAttribute('aria-selected', String(!signup));
+    signupTab.setAttribute('aria-selected', String(signup));
+    loginTab.tabIndex = signup ? -1 : 0;
+    signupTab.tabIndex = signup ? 0 : -1;
+    loginPanel.hidden = signup;
+    signupPanel.hidden = !signup;
+    (signup ? signupPanel : loginPanel).setAttribute('aria-labelledby', signup ? 'signupTab' : 'loginTab');
+    if (focus) (signup ? signupTab : loginTab).focus();
+    document.getElementById('authTitle').textContent = signup ? 'Create your Pet Center account' : 'Sign in to Pet Center';
   }
-  document.getElementById('notifyEmail').style.outline = '';
-  document.getElementById('notifyForm').style.display = 'none';
-  document.getElementById('notifySuccess').style.display = 'block';
-}
-document.getElementById('notifyEmail').addEventListener('keydown', function(e) {
-  if (e.key === 'Enter') submitNotify();
-});
+
+  function showMessage(text, kind) {
+    message.textContent = text;
+    message.dataset.kind = kind || 'error';
+    message.hidden = !text;
+  }
+
+  function oauthErrorText(code) {
+    var safe = {
+      not_configured: 'Google sign-in is not configured for this environment. No sign-in was attempted.',
+      invalid_state: 'The sign-in request expired or could not be verified. Start again.',
+      invalid_callback: 'Google returned an incomplete sign-in response. Start again.',
+      exchange_failed: 'Google sign-in could not be completed. Try again later.',
+      verification_failed: 'Google identity verification failed. No account was signed in.',
+      cancelled: 'Google sign-in was cancelled.',
+      provider_error: 'Google sign-in could not be completed. Try again later.',
+      account_unavailable: 'This account is unavailable. Contact Pet Center support.',
+      session_error: 'A secure session could not be created. Try again.'
+    };
+    return safe[code] || '';
+  }
+
+  function setBusy(button, busy, text) {
+    button.disabled = busy;
+    button.setAttribute('aria-busy', String(busy));
+    if (busy) button.dataset.previousLabel = button.textContent;
+    button.textContent = busy ? text : (button.dataset.previousLabel || button.textContent);
+  }
+
+  function startGoogle(button) {
+    if (button.disabled) return;
+    setBusy(button, true, 'Connecting to Google…');
+    var query = new URLSearchParams({ return_to: returnTo });
+    window.location.assign('/rehoming/google-oauth.php?' + query.toString());
+  }
+
+  loginTab.addEventListener('click', function () { setMode('login', false); });
+  signupTab.addEventListener('click', function () { setMode('signup', false); });
+  [loginTab, signupTab].forEach(function (tab) {
+    tab.addEventListener('keydown', function (event) {
+      if (event.key === 'ArrowRight' || event.key === 'ArrowLeft' || event.key === 'Home' || event.key === 'End') {
+        event.preventDefault();
+        var next = (event.key === 'ArrowRight' || event.key === 'End') ? 'signup' : 'login';
+        setMode(next, true);
+      }
+    });
+  });
+  document.getElementById('googleLoginButton').addEventListener('click', function () { startGoogle(this); });
+  document.getElementById('googleSignupButton').addEventListener('click', function () { startGoogle(this); });
+
+  document.getElementById('testLoginForm').addEventListener('submit', async function (event) {
+    event.preventDefault();
+    showMessage('', 'error');
+    var button = document.getElementById('testLoginButton');
+    setBusy(button, true, 'Signing in…');
+    try {
+      var response = await fetch('/rehoming/auth.php?action=test-login', {
+        method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ username: document.getElementById('testUsername').value, password: document.getElementById('testPassword').value, return_to: returnTo })
+      });
+      var body = await response.json();
+      if (!response.ok || !body.success) throw new Error(body.message || 'Test-account sign-in failed.');
+      showMessage(body.message, 'success');
+      window.location.assign(body.next);
+    } catch (error) {
+      showMessage(error.message || 'Test-account sign-in failed.', 'error');
+      setBusy(button, false);
+    }
+  });
+
+  document.getElementById('logoutButton').addEventListener('click', async function () {
+    var button = this;
+    setBusy(button, true, 'Signing out…');
+    try {
+      var response = await fetch('/rehoming/auth.php?action=logout', { method: 'POST', headers: { 'Accept': 'application/json' } });
+      var body = await response.json();
+      if (!response.ok || !body.success) throw new Error(body.message || 'Sign-out failed.');
+      if (window.PetCenterCSRF) window.PetCenterCSRF.clear();
+      sessionPanel.hidden = true;
+      document.querySelector('.web04-auth-tabs').hidden = false;
+      loginPanel.hidden = false;
+      status.textContent = 'You have been signed out.';
+      button.disabled = false;
+      button.removeAttribute('aria-busy');
+      button.textContent = 'Sign out';
+    } catch (error) {
+      showMessage(error.message || 'Sign-out failed.', 'error');
+      setBusy(button, false);
+    }
+  });
+
+  var providerMessage = oauthErrorText(params.get('oauth_error'));
+  if (providerMessage) showMessage(providerMessage, 'error');
+  setMode(params.get('mode') === 'signup' ? 'signup' : 'login', false);
+
+  fetch('/rehoming/auth.php?action=status&return_to=' + encodeURIComponent(returnTo), { headers: { 'Accept': 'application/json' }, cache: 'no-store' })
+    .then(function (response) { return response.json().then(function (body) {
+      if (!response.ok) throw new Error('Authentication status request failed.');
+      return { response: response, body: body };
+    }); })
+    .then(function (result) {
+      var data = result.body || {};
+      var buttons = [document.getElementById('googleLoginButton'), document.getElementById('googleSignupButton')];
+      buttons.forEach(function (button) { button.disabled = !data.google_configured; });
+      status.textContent = data.google_configured ? 'Google sign-in is ready for this environment.' : 'Google sign-in is not configured for this environment.';
+      testSection.hidden = data.test_auth_enabled !== true || data.auth_configured !== true;
+      if (data.auth_configured !== true) status.textContent = 'Sign-in is not configured for this environment. Contact the site administrator.';
+      if (data.authenticated && data.user) {
+        sessionPanel.hidden = false;
+        document.querySelector('.web04-auth-tabs').hidden = true;
+        loginPanel.hidden = true;
+        signupPanel.hidden = true;
+        document.getElementById('signedInUser').textContent = (data.user.display_name || data.user.email) + ' — ' + data.user.account_type;
+        document.getElementById('continueLink').href = typeof data.next === 'string' ? data.next : (data.user.account_type === 'merchant' ? '/merchant/' : '/rehoming/');
+      }
+    })
+    .catch(function () {
+      status.textContent = 'Sign-in availability could not be checked. No sign-in will be attempted until the service responds.';
+      showMessage('The authentication service is temporarily unavailable.', 'error');
+    });
+})();
+// TASK-WEB-04 END
 
 // Header scroll effect — copied verbatim from cats.html (canonical blueprint)
 (function() {
