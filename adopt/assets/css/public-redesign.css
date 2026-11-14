@@ -1,27 +1,29 @@
 /* DESIGN-01 START: shared public adoption design system
    Token and component layer. Page-specific CSS remains in place below this shared layer. */
 :root {
+  /* TASK-DESIGN-01 START: reference-led PetCenter navy/gold rebrand tokens. */
   --pc-brand-navy: #10214b;
   --pc-brand-navy-soft: #1a2f5c;
-  --pc-brand-orange: #ed7624;
-  --pc-brand-orange-hover: #d4621a;
-  --pc-action-orange: #b44b08;
-  --pc-action-orange-hover: #923900;
+  --pc-brand-orange: #6f5528;
+  --pc-brand-orange-hover: #54401f;
+  --pc-action-orange: #6f5528;
+  --pc-action-orange-hover: #54401f;
   --pc-brand-gold: #d7bd88;
   --pc-brand-gold-hover: #b89968;
-  --pc-neutral-warm: #d0c3ba;
-  --pc-neutral-cream: #ebe7e1;
-  --pc-page-bg: #f9f7f4;
+  --pc-focus-gold-ink: #6f5528;
+  --pc-neutral-warm: #d8d1c6;
+  --pc-neutral-cream: #f2eee7;
+  --pc-page-bg: #faf8f3;
   --pc-surface: #ffffff;
-  --pc-text: #2c2416;
-  --pc-muted: #7a6d5f;
-  --pc-border: rgba(16, 33, 75, 0.14);
+  --pc-text: #1b2944;
+  --pc-muted: #536074;
+  --pc-border: rgba(16, 33, 75, 0.13);
   --pc-success: #10b981;
   --pc-error: #ef4444;
   --pc-warning: #f59e0b;
   --pc-info: #3b82f6;
-  --pc-form-milk: #fff3e6;
-  --pc-form-plum: #381932;
+  --pc-form-milk: #faf8f3;
+  --pc-form-plum: #10214b;
   --pc-font-display: "Cormorant Garamond", Bitter, Georgia, serif;
   --pc-font-body: Sora, "DM Sans", Arial, sans-serif;
   --pc-font-numeric: Bitter, Georgia, serif;
@@ -33,11 +35,12 @@
   --pc-space-6: 32px;
   --pc-space-7: 48px;
   --pc-space-8: 64px;
-  --pc-radius-sm: 8px;
-  --pc-radius-card: 12px;
-  --pc-radius-panel: 18px;
-  --pc-shadow-soft: 0 8px 28px rgba(16, 33, 75, 0.08);
-  --pc-shadow-raised: 0 16px 40px rgba(16, 33, 75, 0.14);
+  --pc-radius-sm: 4px;
+  --pc-radius-card: 6px;
+  --pc-radius-panel: 8px;
+  --pc-shadow-soft: 0 6px 22px rgba(16, 33, 75, 0.06);
+  --pc-shadow-raised: 0 14px 32px rgba(16, 33, 75, 0.11);
+  /* TASK-DESIGN-01 END */
   --pc-content-width: 1200px;
   --pc-form-width: 820px;
   --pc-motion-fast: 160ms;
@@ -46,6 +49,14 @@
 
 /* DESIGN-01 — shared public page base and typography fallbacks. */
 body.pc-public-page {
+  --navy: #10214b;
+  --gold: #d7bd88;
+  --orange: #6f5528;
+  background-color: var(--pc-page-bg);
+  --navy: #10214b;
+  --gold: #d7bd88;
+  --orange: #6f5528;
+  background-color: var(--pc-page-bg);
   color: var(--pc-text);
   font-family: var(--pc-font-body);
   line-height: 1.65;
@@ -53,6 +64,7 @@ body.pc-public-page {
   text-rendering: optimizeLegibility;
 }
 body.pc-public-page :is(h1, h2, h3, h4) {
+  color: var(--pc-brand-navy);
   font-family: var(--pc-font-display);
   line-height: 1.15;
   text-wrap: balance;
@@ -70,7 +82,7 @@ body.pc-public-page :is(.pc-number, [data-pc-number], .pc-pet-card__fee, .pc-biz
 
 /* DESIGN-01 — reliable keyboard focus and predictable interaction states. */
 body.pc-public-page :is(a, button, input, select, textarea, [tabindex]):focus-visible {
-  outline: 3px solid var(--pc-brand-gold-hover);
+  outline: 3px solid var(--pc-focus-gold-ink);
   outline-offset: 3px;
 }
 body.pc-public-page :is(button, .pc-btn, .pc-hero__btn-primary, .pc-pet-card__btn, .pc-submit-btn) {
@@ -119,14 +131,14 @@ body.pc-public-page .pc-header__nav a:focus-visible {
 }
 body.pc-public-page .pc-header__nav .nav-donate a,
 body.pc-public-page .pc-mobile-menu .mobile-donate {
-  background: var(--pc-action-orange);
-  color: #fff;
+  background: var(--pc-brand-gold);
+  color: var(--pc-brand-navy);
   font-weight: 700;
 }
 body.pc-public-page .pc-header__nav .nav-donate a:hover,
 body.pc-public-page .pc-mobile-menu .mobile-donate:hover {
-  background: var(--pc-action-orange-hover);
-  color: #fff;
+  background: var(--pc-brand-gold-hover);
+  color: var(--pc-brand-navy);
 }
 body.pc-public-page .pc-header__nav .has-drop > ul {
   border: 1px solid rgba(215, 189, 136, 0.28);
@@ -195,7 +207,7 @@ body.pc-public-page .pc-footer__links a:hover {
 /* DESIGN-01 — restrained home hero using existing tracked PetCenter artwork. */
 body.pc-public-home .pc-hero {
   min-block-size: min(760px, 96svh);
-  background-image: linear-gradient(118deg, rgba(16, 33, 75, 0.88), rgba(16, 33, 75, 0.5)), url("/assets/images/hero-banner.jpg");
+  background-image: linear-gradient(180deg, rgba(16, 33, 75, 0.24) 0%, rgba(16, 33, 75, 0.54) 46%, rgba(16, 33, 75, 0.95) 100%), url("/assets/images/hero-banner.jpg");
   background-position: center;
   background-size: cover;
 }
@@ -214,10 +226,10 @@ body.pc-public-page .pc-btn--orange,
 body.pc-public-page .pc-pet-card__btn,
 body.pc-public-form #adoptionForm button[type="submit"],
 body.pc-public-status .status-checkout-btn {
-  background: var(--pc-action-orange);
-  color: #fff;
-  border: 1px solid transparent;
-  border-radius: 10px;
+  background: var(--pc-brand-gold);
+  color: var(--pc-brand-navy);
+  border: 1px solid var(--pc-brand-gold);
+  border-radius: 4px;
   font-weight: 700;
 }
 body.pc-public-home .pc-hero__btn-primary:hover,
@@ -225,14 +237,14 @@ body.pc-public-page .pc-btn--orange:hover,
 body.pc-public-page .pc-pet-card__btn:hover,
 body.pc-public-form #adoptionForm button[type="submit"]:hover,
 body.pc-public-status .status-checkout-btn:hover {
-  background: var(--pc-action-orange-hover);
-  color: #fff;
+  background: var(--pc-brand-gold-hover);
+  color: var(--pc-brand-navy);
 }
 
 /* DESIGN-01 — category discovery and reusable pet cards. */
 body.pc-public-category .pc-cat-banner {
-  min-block-size: 300px;
-  padding-block: 120px 52px;
+  min-block-size: clamp(340px, 42vw, 500px);
+  padding-block: 136px 68px;
   background-color: var(--pc-brand-navy);
 }
 body.pc-public-category .pc-cat-banner__inner {
@@ -523,6 +535,14 @@ body.pc-public-page :is(#lookupBtn, #statusBtn) {
 body.pc-public-page .pc-btn--signin {
   color: var(--pc-brand-navy) !important;
   border-color: var(--pc-brand-navy) !important;
+}
+body.pc-public-home .pc-hero__btn-secondary.pc-btn--signin {
+  color: var(--pc-brand-gold) !important;
+  border-color: var(--pc-brand-gold) !important;
+  background: transparent !important;
+}
+body.pc-public-content .pets-hero h1 {
+  color: #fff !important;
 }
 body.pc-public-page .pc-event-card__cta,
 body.pc-public-form p a:not(.pc-btn):not([class*="btn"]) {
@@ -903,3 +923,185 @@ body.pc-public-testimonials .pc-testi-poweredby { opacity: 1 !important; }
   }
 }
 /* DESIGN-01-WEB-03-REDUCED-MOTION END */
+
+
+/* TASK-DESIGN-01 START: original PetCenter adaptation of the supplied editorial reference. */
+body.pc-public-page .pc-section {
+  padding-block: clamp(52px, 7vw, 92px);
+}
+body.pc-public-page .pc-section--alt {
+  background-color: var(--pc-neutral-cream);
+}
+body.pc-public-page .pc-section :is(h2, h3) {
+  color: var(--pc-brand-navy);
+}
+body.pc-public-page .pc-section .pc-eyebrow {
+  color: var(--pc-action-orange);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+body.pc-public-page .pc-section__intro,
+body.pc-public-page .pc-section > .pc-container > p:first-of-type {
+  max-inline-size: 66ch;
+  margin-inline: auto;
+  color: var(--pc-muted);
+}
+body.pc-public-home .pc-hero {
+  display: grid;
+  place-items: center;
+  text-align: center;
+}
+body.pc-public-home .pc-hero h1 {
+  color: #fff;
+}
+body.pc-public-home .pc-hero__btn-primary {
+  background: transparent;
+  color: #fff;
+  border: 1.5px solid var(--pc-brand-gold);
+  border-radius: 3px;
+  box-shadow: none;
+  letter-spacing: 0.045em;
+}
+body.pc-public-home .pc-hero__btn-primary:hover {
+  background: var(--pc-brand-gold);
+  color: var(--pc-brand-navy);
+}
+body.pc-public-home .pc-hero__btn-secondary {
+  background: transparent;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  border-radius: 3px;
+}
+body.pc-public-home .pc-hero__btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+body.pc-public-home .pc-hero__btn-secondary.pc-btn--signin:hover {
+  background: rgba(215, 189, 136, 0.12) !important;
+  color: var(--pc-brand-gold) !important;
+}
+body.pc-public-page .pc-card {
+  border: 1px solid var(--pc-border);
+  border-radius: var(--pc-radius-card);
+  box-shadow: var(--pc-shadow-soft);
+}
+body.pc-public-page .pc-svc-banner {
+  background-image: linear-gradient(115deg, rgba(16, 33, 75, 0.88), rgba(16, 33, 75, 0.5)), url("/assets/images/whatsnew-foster.jpg");
+  background-position: center 42%;
+  background-size: cover;
+}
+body.pc-public-page .pc-svc-banner h1 :is(em, strong, .gold) {
+  color: var(--pc-brand-gold);
+}
+body.pc-public-page .pc-svc-banner__eyebrow {
+  color: var(--pc-brand-gold);
+}
+body.pc-public-page .pc-svc-nav {
+  background: rgba(250, 248, 243, 0.97);
+  border-block-end-color: var(--pc-border);
+  box-shadow: 0 2px 10px rgba(16, 33, 75, 0.05);
+}
+body.pc-public-page .pc-svc-nav a {
+  border-radius: 3px;
+  box-shadow: none;
+  color: var(--pc-brand-navy);
+}
+body.pc-public-page .pc-svc-nav a:hover,
+body.pc-public-page .pc-svc-nav a:focus-visible {
+  background: rgba(215, 189, 136, 0.24);
+  color: var(--pc-brand-navy);
+}
+body.pc-public-page :is(.pc-article-card, .pc-role-card, .pc-partner-card, .pc-event-card) {
+  border: 1px solid var(--pc-border);
+  border-radius: var(--pc-radius-card);
+  box-shadow: var(--pc-shadow-soft);
+}
+body.pc-public-page .pc-footer {
+  margin-block-start: 0;
+}
+@media (max-width: 640px) {
+  body.pc-public-page .pc-section {
+    padding-block: 48px;
+  }
+  body.pc-public-page .pc-svc-banner {
+    min-block-size: 340px;
+    padding-block: 110px 48px;
+    background-position: 62% center;
+  }
+  body.pc-public-home .pc-hero {
+    min-block-size: min(700px, 92svh);
+  }
+}
+/* TASK-DESIGN-01 END */
+
+
+/* TASK-DESIGN-01 CTA START: gold-on-navy actions and the quiet outlined home action. */
+:root {
+  --pc-text-muted-strong: #536074;
+}
+body.pc-public-home .pc-hero__eyebrow {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--pc-brand-gold);
+  font-size: 0.75rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+body.pc-public-home .pc-hero__btns {
+  align-items: center;
+  justify-content: center;
+}
+body.pc-public-page :is(#lookupBtn, #statusBtn, #calcBtn, #submitBtn, .pc-submit-btn, .pc-sheet-apply, #pc-cookie-consent .pc-cc-accept) {
+  background: var(--pc-brand-gold) !important;
+  color: var(--pc-brand-navy) !important;
+  border-color: var(--pc-brand-gold) !important;
+  border-radius: 4px;
+}
+body.pc-public-home a:has(> span[data-i18n="index.a.1"]) {
+  background: var(--pc-brand-gold) !important;
+  color: var(--pc-brand-navy) !important;
+  border: 1px solid var(--pc-brand-gold) !important;
+}
+body.pc-public-home a:has(> span[data-i18n="index.a.1"]):hover {
+  background: var(--pc-brand-gold-hover) !important;
+  color: var(--pc-brand-navy) !important;
+}
+body.pc-public-page :is(.pc-filter-btn, .pc-search-btn):focus-visible,
+body.pc-public-category #messageBtn:focus-visible {
+  outline-color: var(--pc-focus-gold-ink);
+}
+/* TASK-DESIGN-01 CTA END */
+
+
+/* TASK-DESIGN-01 A11Y START: settle final contrast for warm panels and dark home cards. */
+body.pc-public-page .pc-section--alt :is(.pc-faq-item > p, .pc-intake-step__body > p, .pc-container > p) {
+  color: var(--pc-text-muted-strong) !important;
+}
+body.pc-public-home [data-i18n^="index.h4."] {
+  color: #fff !important;
+}
+/* TASK-DESIGN-01 A11Y END */
+
+body.pc-public-page .pc-section--alt .pc-container--narrow > p {
+  color: var(--pc-text-muted-strong) !important;
+}
+
+
+/* TASK-DESIGN-01 HERO/A11Y START: preserve readable white type on dark brand banners. */
+body.pc-public-page :is(.pc-svc-banner, .pc-page-banner, .dash-hero, .pc-cat-banner, .pc-quiz-banner, .pc-blog-hero, .pc-article-hero, .pc-testi-hero) :is(h1, h2, h3, h4) {
+  color: #fff !important;
+}
+body.pc-public-home .pc-whatsnew .pc-wn-slide__title {
+  color: #fff !important;
+}
+body.pc-public-home .pc-whatsnew .pc-wn-slide__subtitle {
+  color: var(--pc-brand-gold) !important;
+}
+body.pc-public-page #testiGrid > div[style*="color:#9ca3af"] {
+  color: var(--pc-text-muted-strong) !important;
+}
+/* TASK-DESIGN-01 HERO/A11Y END */

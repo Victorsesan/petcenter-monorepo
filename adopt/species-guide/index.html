@@ -209,8 +209,12 @@ p { color: var(--muted); }
 @media (max-width: 900px) { .pc-footer__top { grid-template-columns: 1fr 1fr; gap: 28px; } }
 @media (max-width: 560px) { .pc-footer__top { grid-template-columns: 1fr; gap: 24px; } }
 </style>
+<!-- TASK-DESIGN-01 START: shared public visual system and keyboard enhancement; route behavior remains page-owned. -->
+<link rel="stylesheet" href="/assets/css/public-redesign.css">
+<script src="/assets/js/public-chrome.js" defer></script>
+<!-- TASK-DESIGN-01 END -->
 </head>
-<body>
+<body class="pc-public-page pc-public-content">
 
 <header class="pc-header pc-header--solid" id="pcHeader">
   <a href="/" class="pc-header__logo pc-header__logo--desktop"><img src="/assets/images/logo-petcenter.png" alt="Pet Center"></a>
@@ -308,11 +312,12 @@ p { color: var(--muted); }
 
 <!-- ═══ Full comparison table ═══ -->
 <section class="pc-section pc-section--alt">
-  <div class="pc-container">
-    <span class="pc-eyebrow">See It All At Once</span>
-    <h2>Compare Every Species</h2>
-    <p style="max-width:600px;margin-bottom:24px;">The same four factors, side by side, for every category we place.</p>
-    <div class="pc-compare-wrap">
+    <div class="pc-container">
+      <span class="pc-eyebrow">See It All At Once</span>
+      <h2>Compare Every Species</h2>
+      <p style="max-width:600px;margin-bottom:24px;">The same four factors, side by side, for every category we place.</p>
+    <!-- DESIGN-01-WEB-03 START: allow keyboard users to scroll the comparison table. -->
+    <div class="pc-compare-wrap" role="region" aria-label="Species care comparison table" tabindex="0">
       <table class="pc-compare">
         <thead>
           <tr><th>Species</th><th>Daily Time</th><th>Typical Lifespan</th><th>Space Needed</th><th>Monthly Cost*</th></tr>
@@ -328,6 +333,7 @@ p { color: var(--muted); }
         </tbody>
       </table>
     </div>
+    <!-- DESIGN-01-WEB-03 END -->
     <p style="font-size:12px;margin-top:10px;">*Rough estimates for food, supplies, and routine vet or husbandry care — varies by breed, size, and individual animal.</p>
   </div>
 </section>
@@ -551,8 +557,10 @@ var SPECIES_DATA = {
         meterHtml('Experience Needed', d.meters.experience) +
       '</div>' +
       '<div class="pc-ready-grid">' +
-        '<ul class="pc-ready-list pc-ready-list--good"><h3><i class="fa-solid fa-circle-check"></i> Good Signs You\'re Ready</h3>' + listHtml(d.good) + '</ul>' +
-        '<ul class="pc-ready-list pc-ready-list--watch"><h3><i class="fa-solid fa-triangle-exclamation"></i> Worth a Second Thought</h3>' + listHtml(d.watch) + '</ul>' +
+        /* DESIGN-01-WEB-03 START: keep each group heading outside its semantic list. */
+        '<section class="pc-ready-panel pc-ready-list--good"><h3><i class="fa-solid fa-circle-check"></i> Good Signs You\'re Ready</h3><ul class="pc-ready-list">' + listHtml(d.good) + '</ul></section>' +
+        '<section class="pc-ready-panel pc-ready-list--watch"><h3><i class="fa-solid fa-triangle-exclamation"></i> Worth a Second Thought</h3><ul class="pc-ready-list">' + listHtml(d.watch) + '</ul></section>' +
+        /* DESIGN-01-WEB-03 END */
       '</div>' +
       '<div class="pc-ready-footer">' +
         '<p>Still feel like a fit? Browse adoptable ' + d.name.toLowerCase() + ' available right now.</p>' +

@@ -829,8 +829,12 @@ p { color: var(--muted); }
 }
 
   </style>
-  </head>
-<body>
+  <!-- TASK-DESIGN-01 START: shared public visual system and keyboard enhancement; route behavior remains page-owned. -->
+<link rel="stylesheet" href="/assets/css/public-redesign.css">
+<script src="/assets/js/public-chrome.js" defer></script>
+<!-- TASK-DESIGN-01 END -->
+</head>
+<body class="pc-public-page pc-public-category">
 
 <header class="pc-header pc-header--solid" id="pcHeader">
   <a href="/" class="pc-header__logo pc-header__logo--desktop">
@@ -1517,9 +1521,11 @@ p { color: var(--muted); }
   </div>
 </div>
 
-<button class="pc-float-msg-btn" id="messageBtn" title="Contact Us">
+<!-- DESIGN-01-WEB-03 START: explicit contact-control name; position is separated from chat. -->
+<button class="pc-float-msg-btn" id="messageBtn" title="Contact Us" aria-label="Open Pet Center contact form">
   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
 </button>
+<!-- DESIGN-01-WEB-03 END -->
 
 <script>
 (function() {
