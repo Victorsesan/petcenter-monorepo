@@ -1491,11 +1491,15 @@ p { color: var(--muted); }
     }
   });
 
-  // ─── Minimum display time of 4 seconds ───
-  var MIN_DISPLAY_MS = 5000;
+  // Keep the transition visible briefly without blocking the page for several seconds.
+  // The timeout fallback prevents a slow or failed asset from trapping visitors here.
+  var MIN_DISPLAY_MS = 800;
   var startTime = Date.now();
+  var hideRequested = false;
 
   function hideLoader() {
+    if (hideRequested) return;
+    hideRequested = true;
     var elapsed = Date.now() - startTime;
     var remaining = Math.max(MIN_DISPLAY_MS - elapsed, 0);
     setTimeout(function() {
@@ -1504,10 +1508,11 @@ p { color: var(--muted); }
     }, remaining);
   }
 
-  if (document.readyState === 'complete') {
-    hideLoader();
-  } else {
-    window.addEventListener('load', hideLoader);
+  if (document.readyState === 'complete') hideLoader();
+  else {
+    window.addEventListener('DOMContentLoaded', hideLoader, { once: true });
+    window.addEventListener('load', hideLoader, { once: true });
+    window.setTimeout(hideLoader, 2500);
   }
 })();
 </script>

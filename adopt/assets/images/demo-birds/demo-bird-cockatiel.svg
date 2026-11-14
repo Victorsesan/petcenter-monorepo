@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480" role="img" aria-labelledby="title desc">
+  <title id="title">Temporary demo Cockatiel illustration</title>
+  <desc id="desc">A locally generated placeholder illustration used for PetCenter preview testing.</desc>
+  <rect width="640" height="480" fill="#fff8ed"/>
+  <circle cx="505" cy="95" r="55" fill="#f9df9b" opacity=".7"/>
+  <path d="M0 390 Q140 325 290 380 T640 350 V480 H0Z" fill="#dcebd6"/>
+  <path d="M205 290 C190 205 265 130 370 160 C458 185 473 292 386 338 C316 375 224 354 205 290Z" fill="#a8a9ad" stroke="#27364b" stroke-width="8"/>
+  <path d="M355 185 C407 145 468 165 489 210 C453 206 424 228 400 258Z" fill="#f7d154" stroke="#27364b" stroke-width="8"/>
+  <path d="M219 280 C165 252 120 268 90 302 C151 304 201 327 244 335Z" fill="#f7d154" stroke="#27364b" stroke-width="8"/>
+  <circle cx="403" cy="214" r="12" fill="#172238"/>
+  <path d="M482 239 l68 18 -69 22Z" fill="#e88a32" stroke="#27364b" stroke-width="7"/>
+  <path d="M300 342 v62 M360 342 v62" stroke="#27364b" stroke-width="9" stroke-linecap="round"/>
+  <path d="M270 406 h55 M330 406 h55" stroke="#e88a32" stroke-width="9" stroke-linecap="round"/>
+  <text x="32" y="54" font-family="Arial,sans-serif" font-size="22" font-weight="700" fill="#10214b">PetCenter demo fixture</text>
+  <text x="32" y="84" font-family="Arial,sans-serif" font-size="18" fill="#6c5d50">Cockatiel illustration — preview only</text>
+</svg>
