@@ -40,6 +40,10 @@ if ($code === '' || !is_scalar($status) || !preg_match('/^AD-\d{5}-\d{4}$/', $co
 }
 
 $status = (string)$status;
+if (!preg_match('/^AD-\d{5}-\d{4}$/', $code)) {
+    http_response_code(400);
+    die(json_encode(['success' => false, 'message' => 'invalid application code']));
+}
 
 if (!in_array($status, ['APPROVED', 'REJECTED'], true)) {
     http_response_code(400);
@@ -79,7 +83,7 @@ if (!is_array($application)) {
    prefix_map (inverted), covering every category consistently instead of
    a subset that happened to survive a 3-character truncation. */
 function getPetCategory($pet_id) {
-    $map = ['DOG' => 'dogs', 'CAT' => 'cats', 'BIRD' => 'birds', 'REP' => 'reptiles', 'SM' => 'small-mammals', 'LVS' => 'livestocks', 'AQU' => 'aquariums'];
+    $map = ['DOG' => 'dogs', 'CAT' => 'cats', 'BIRD' => 'birds', 'REP' => 'reptiles', 'REPTILE' => 'reptiles', 'SM' => 'small-mammals', 'MAM' => 'small-mammals', 'LVS' => 'livestocks', 'AQU' => 'aquariums'];
     $dashPos = strpos($pet_id, '-');
     $prefix = strtoupper($dashPos !== false ? substr($pet_id, 0, $dashPos) : substr($pet_id, 0, 3));
     return $map[$prefix] ?? null;

@@ -31,6 +31,9 @@ error_reporting(E_ALL);
 header('Content-Type: text/plain; charset=utf-8');
 
 require_once __DIR__ . '/chat-config.php';
+// TASK-WEB-02-ADMIN-BASELINE START — setup routes must not be anonymously callable.
+chatRequireAdmin();
+// TASK-WEB-02-ADMIN-BASELINE END
 
 // Schema setup is an administrative operation; never expose it as a public URL.
 chatRequireAdmin();

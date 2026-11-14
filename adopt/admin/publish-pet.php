@@ -34,9 +34,21 @@ $published_pets = [];
 $temp_dir = __DIR__ . '/../adoptions/temp_admin';
 $pets_base = __DIR__ . '/../adoptions/pets';
 
-function generatePetId($prefix, $category) {
+// TASK-WEB-02-ADMIN-BASELINE START — use only a real, non-symlink category directly under pets/.
+function canonicalPetCategoryFolder($category) {
     global $pets_base;
-    $category_folder = $pets_base . "/{$category}";
+    if (is_link($pets_base) || !is_dir($pets_base)) return false;
+    $pets_root = realpath($pets_base);
+    if ($pets_root === false) return false;
+    $candidate = $pets_root . DIRECTORY_SEPARATOR . $category;
+    if (is_link($candidate)) return false;
+    if (!is_dir($candidate) && !@mkdir($candidate, 0755)) return false;
+    $real_category = realpath($candidate);
+    return $real_category !== false && $real_category === $candidate ? $real_category : false;
+}
+// TASK-WEB-02-ADMIN-BASELINE END
+
+function generatePetId($prefix, $category_folder) {
     $existing = [];
     if (is_dir($category_folder)) {
         foreach (scandir($category_folder) as $entry) {
@@ -50,24 +62,32 @@ function generatePetId($prefix, $category) {
     do {
         $id = $prefix . '-' . str_pad($count, 5, '0', STR_PAD_LEFT);
         $count++;
-    } while (is_dir($category_folder . '/' . $id));
+    } while (file_exists($category_folder . '/' . $id) || is_link($category_folder . '/' . $id));
     return $id;
 }
 
-function updateCategoryIndex($category) {
-    global $pets_base;
-    $category_folder = $pets_base . "/{$category}";
+function updateCategoryIndex($category_folder) {
     $pet_ids = [];
-    if (!is_dir($category_folder)) return;
+    if (is_link($category_folder) || !is_dir($category_folder) || realpath($category_folder) !== $category_folder) return;
+    $category_prefix = rtrim($category_folder, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
     foreach (scandir($category_folder) as $folder) {
-        if ($folder === '.' || $folder === '..' || $folder === 'index.json') continue;
-        $pet_file = $category_folder . '/' . $folder . '/pet.json';
-        if (file_exists($pet_file)) {
-            $pet_data = json_decode(file_get_contents($pet_file), true);
-            $pet_ids[] = $pet_data['pet_id'];
-        }
+        if ($folder === '.' || $folder === '..' || $folder === 'index.json'
+            || !preg_match('/^[A-Z]+-\d{5}$/i', $folder)) continue;
+        $pet_candidate = $category_folder . DIRECTORY_SEPARATOR . $folder;
+        if (is_link($pet_candidate)) continue;
+        $pet_real = realpath($pet_candidate);
+        if ($pet_real === false || strpos($pet_real, $category_prefix) !== 0 || !is_dir($pet_real)) continue;
+        $pet_file = $pet_real . DIRECTORY_SEPARATOR . 'pet.json';
+        if (is_link($pet_file)) continue;
+        $pet_file_real = realpath($pet_file);
+        if ($pet_file_real === false || strpos($pet_file_real, $category_prefix) !== 0 || !is_file($pet_file_real)) continue;
+        $pet_data = json_decode(file_get_contents($pet_file_real), true);
+        if (is_array($pet_data) && is_string($pet_data['pet_id'] ?? null)
+            && preg_match('/^[A-Z]+-\d{5}$/i', $pet_data['pet_id'])) $pet_ids[] = $pet_data['pet_id'];
     }
-    file_put_contents($category_folder . '/index.json', json_encode(['pets' => $pet_ids], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+    $index_path = $category_folder . DIRECTORY_SEPARATOR . 'index.json';
+    if (is_link($index_path)) return;
+    file_put_contents($index_path, json_encode(['pets' => $pet_ids], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES), LOCK_EX);
 }
 
 // TASK-2 START — Livestocks & Aquariums category prefixes added for new-category support
@@ -86,18 +106,76 @@ $prefix_map = ['dogs' => 'DOG', 'cats' => 'CAT', 'birds' => 'BIRD', 'reptiles' =
 /* BUGFIX-4 END */
 // TASK-2 END
 
+// TASK-WEB-02-ADMIN-BASELINE START — validate filesystem path selectors and opaque upload tokens before side effects.
+foreach ($pets as $candidate) {
+    if (!is_array($candidate)) {
+        http_response_code(400);
+        die(json_encode(['success' => false, 'message' => 'Invalid pet data']));
+    }
+    $candidateCategory = $candidate['category'] ?? null;
+    if ($candidateCategory !== null && $candidateCategory !== ''
+        && (!is_string($candidateCategory) || !array_key_exists($candidateCategory, $prefix_map))) {
+        http_response_code(400);
+        die(json_encode(['success' => false, 'message' => 'Invalid pet category']));
+    }
+    foreach (['single_token', 'video_token'] as $tokenField) {
+        if (isset($candidate[$tokenField]) && $candidate[$tokenField] !== ''
+            && (!is_string($candidate[$tokenField]) || !preg_match('/^[a-f0-9]{32}$/i', $candidate[$tokenField]))) {
+            http_response_code(400);
+            die(json_encode(['success' => false, 'message' => 'Invalid upload token']));
+        }
+    }
+    if (isset($candidate['bulk_tokens'])) {
+        if (!is_array($candidate['bulk_tokens'])) {
+            http_response_code(400);
+            die(json_encode(['success' => false, 'message' => 'Invalid bulk upload tokens']));
+        }
+        foreach ($candidate['bulk_tokens'] as $bulkToken) {
+            if (!is_string($bulkToken) || !preg_match('/^[a-f0-9]{32}$/i', $bulkToken)) {
+                http_response_code(400);
+                die(json_encode(['success' => false, 'message' => 'Invalid upload token']));
+            }
+        }
+    }
+}
+$category_paths = [];
+foreach ($pets as $candidate) {
+    $candidateCategory = $candidate['category'] ?? null;
+    if (!is_string($candidateCategory) || $candidateCategory === '') continue;
+    $folder = canonicalPetCategoryFolder($candidateCategory);
+    if ($folder === false) {
+        http_response_code(400);
+        die(json_encode(['success' => false, 'message' => 'Pet category storage is invalid']));
+    }
+    $category_paths[$candidateCategory] = $folder;
+}
+// TASK-WEB-02-ADMIN-BASELINE END
+
 foreach ($pets as $pet_input) {
     $category = $pet_input['category'] ?? null;
     $name = $pet_input['name'] ?? null;
     $breed = $pet_input['breed'] ?? null;
     
     if (!$category || !$name || !$breed) continue;
+
+    $category_folder = $category_paths[$category] ?? false;
+    if ($category_folder === false || canonicalPetCategoryFolder($category) !== $category_folder) {
+        http_response_code(400);
+        die(json_encode(['success' => false, 'message' => 'Pet category storage is invalid']));
+    }
     
     $id_prefix = $prefix_map[$category] ?? strtoupper(substr($category, 0, 3));
-    $pet_id = generatePetId($id_prefix, $category);
+    $pet_id = generatePetId($id_prefix, $category_folder);
     
-    $pet_folder = $pets_base . "/{$category}/{$pet_id}";
-    if (!is_dir($pet_folder)) mkdir($pet_folder, 0755, true);
+    $pet_folder = $category_folder . DIRECTORY_SEPARATOR . $pet_id;
+    if (file_exists($pet_folder) || is_link($pet_folder) || !@mkdir($pet_folder, 0755)) {
+        http_response_code(500);
+        die(json_encode(['success' => false, 'message' => 'Pet storage could not be created']));
+    }
+    if (realpath($pet_folder) !== $pet_folder) {
+        http_response_code(500);
+        die(json_encode(['success' => false, 'message' => 'Pet storage path is invalid']));
+    }
     
     $bulk_folder = $pet_folder . '/bulk_images';
     if (!is_dir($bulk_folder)) mkdir($bulk_folder, 0755, true);
@@ -186,7 +264,7 @@ foreach ($pets as $pet_input) {
     ];
     
     file_put_contents($pet_folder . '/pet.json', json_encode($pet_data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
-    updateCategoryIndex($category);
+    updateCategoryIndex($category_folder);
     
     $published_pets[] = ['pet_id' => $pet_id, 'name' => $name];
 }

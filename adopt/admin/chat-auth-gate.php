@@ -14,6 +14,24 @@ $db = chatDb();
 $stmt = $db->prepare('SELECT chat_id, full_name, email, status FROM chat_threads WHERE chat_id = ? AND LOWER(email) = ? LIMIT 1');
 $stmt->execute([$chatId,$email]); $thread = $stmt->fetch();
 if (!$thread) chatRespond(['success'=>false,'error'=>'We could not verify those chat details.'],404);
+// TASK-WEB-02-ADMIN-BASELINE START — per-device management is scoped to the authenticated chat principal.
+if ($action === 'listDevices' || $action === 'forgetDevice') {
+    chatRequireSessionToken($chatId, trim((string)($input['sessionToken'] ?? '')));
+    if ($action === 'listDevices') {
+        $stmt = $db->prepare('SELECT id, label, last_used_at, created_at FROM chat_remember_device WHERE principal_id = ? ORDER BY last_used_at DESC, id DESC');
+        $stmt->execute([$chatId]);
+        $devices = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        chatRespond(['success' => true, 'devices' => $devices]);
+    }
+    $deviceId = filter_var($input['deviceId'] ?? null, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
+    if ($deviceId === false || $deviceId === null) chatRespond(['success' => false, 'error' => 'A valid remembered-device ID is required.'], 400);
+    $stmt = $db->prepare('DELETE FROM chat_remember_device WHERE id = ? AND principal_id = ?');
+    $stmt->execute([$deviceId, $chatId]);
+    if ($stmt->rowCount() !== 1) chatRespond(['success' => false, 'error' => 'Remembered device not found.'], 404);
+    log_audit($chatId, 'chat-auth-gate.php', 'device_forgotten');
+    chatRespond(['success' => true]);
+}
+// TASK-WEB-02-ADMIN-BASELINE END
 $auth = chatAuthEnsure($chatId);
 if ($action === 'status') {
     $trusted = chatAuthTrustedDevice($chatId, $input['deviceToken'] ?? '');

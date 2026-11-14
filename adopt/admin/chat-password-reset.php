@@ -13,6 +13,12 @@ if (($action === 'request' || $action === 'temporaryLogin') && !chatValidEmail($
 }
 $db=chatDb(); $message='If a protected chat matches that email, a temporary password has been sent.';
 if($action==='request'){
+  $requestStartedAt = microtime(true);
+  $minimumResponseMs = 1500;
+  $padResetResponse = static function () use ($requestStartedAt, $minimumResponseMs): void {
+    $remaining = (int)(($minimumResponseMs / 1000 - (microtime(true) - $requestStartedAt)) * 1000000);
+    if ($remaining > 0) usleep($remaining);
+  };
   /* TASK-6 SECURITY START — throttle both source and target. A throttled
      request deliberately returns the same generic success message so it does
      not become an account-existence oracle. */
@@ -20,17 +26,27 @@ if($action==='request'){
   $resetEmailKey = hash('sha256', $email);
   $requestAllowed = chatCheckRateLimit('pw_reset_ip:' . $resetIp, 5, 900)
       && chatCheckRateLimit('pw_reset_email:' . $resetEmailKey, 3, 900);
-  usleep(750000);
-  if (!$requestAllowed) chatRespond(['success'=>true,'message'=>$message]);
+  if (!$requestAllowed) {
+    $padResetResponse();
+    chatRespond(['success'=>true,'message'=>$message]);
+  }
   $stmt=$db->prepare("SELECT t.chat_id,t.email,a.auth_tier FROM chat_threads t JOIN chat_auth a ON a.principal_id=t.chat_id WHERE LOWER(t.email)=? AND a.auth_tier='password' ORDER BY t.created_at DESC LIMIT 1"); $stmt->execute([$email]); $row=$stmt->fetch();
   if($row){
     $temp=bin2hex(random_bytes(8)); $hash=password_hash($temp,defined('PASSWORD_ARGON2ID')?PASSWORD_ARGON2ID:PASSWORD_DEFAULT);
     $db->prepare('UPDATE chat_password_resets SET used_at=NOW() WHERE principal_id=? AND used_at IS NULL')->execute([$row['chat_id']]);
     $db->prepare('INSERT INTO chat_password_resets(principal_id,contact_email,temp_hash,expires_at) VALUES(?,?,?,?)')->execute([$row['chat_id'],$email,$hash,date('Y-m-d H:i:s',time()+1800)]);
     $html='<p>Use this temporary password to recover your Pet Center chat:</p><p style="font-size:22px;font-family:monospace;font-weight:700;letter-spacing:.12em">'.htmlspecialchars($temp,ENT_QUOTES,'UTF-8').'</p><p>This temporary password expires in 30 minutes and can be used once. You will be required to choose a new password immediately.</p>';
-    chatMailSendAndLog($email,'PetCenter chat password reset',$html,'chat password reset');
   }
-  chatRespond(['success'=>true,'message'=>$message]);
+  $response = ['success'=>true,'message'=>$message];
+  $padResetResponse();
+  if (function_exists('fastcgi_finish_request')) {
+    echo json_encode($response);
+    fastcgi_finish_request();
+    if ($row) chatMailSendAndLog($email,'PetCenter chat password reset',$html,'chat password reset');
+    exit;
+  }
+  if ($row) chatMailSendAndLog($email,'PetCenter chat password reset',$html,'chat password reset');
+  chatRespond($response);
 }
 if($action==='temporaryLogin'){
   /* TASK-6 SECURITY START — bound online guessing of the temporary secret by
@@ -43,7 +59,10 @@ if($action==='temporaryLogin'){
   }
   $temp=(string)($input['temporaryPassword']??''); $stmt=$db->prepare('SELECT * FROM chat_password_resets WHERE LOWER(contact_email)=? AND used_at IS NULL AND expires_at>NOW() ORDER BY created_at DESC LIMIT 1'); $stmt->execute([$email]); $row=$stmt->fetch();
   if(!$row || !password_verify($temp,$row['temp_hash'])) chatRespond(['success'=>false,'error'=>'The temporary password is invalid or expired.'],401);
-  $db->prepare('UPDATE chat_password_resets SET used_at=NOW() WHERE id=?')->execute([$row['id']]);
+  /* Claim redemption atomically: two requests may both read the unused row,
+     but only the one that changes used_at while it is still NULL may proceed. */
+  $consume=$db->prepare('UPDATE chat_password_resets SET used_at=NOW() WHERE id=? AND used_at IS NULL AND expires_at>NOW()'); $consume->execute([$row['id']]);
+  if($consume->rowCount()!==1) chatRespond(['success'=>false,'error'=>'The temporary password is invalid or expired.'],401);
   chatAuthClearThrottle($row['principal_id']); $resetToken=bin2hex(random_bytes(32));
   $db->prepare('INSERT INTO chat_session_token(token_hash,principal_id,issued_at,expires_at) VALUES(?,?,NOW(),?)')->execute([hash('sha256',$resetToken),$row['principal_id'],date('Y-m-d H:i:s',time()+900)]);
   chatRespond(['success'=>true,'requiresPasswordChange'=>true,'chatId'=>$row['principal_id'],'sessionToken'=>$resetToken]);

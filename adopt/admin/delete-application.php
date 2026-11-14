@@ -36,14 +36,25 @@ if (!$appsBaseDir) {
 $appsPrefix = rtrim($appsBaseDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
 
 function rrmdir($dir) {
-    if (!is_dir($dir)) return false;
-    $items = scandir($dir);
-    foreach ($items as $item) {
-        if ($item === '.' || $item === '..') continue;
-        $path = $dir . '/' . $item;
-        is_dir($path) ? rrmdir($path) : @unlink($path);
+    // TASK-WEB-02-ADMIN-BASELINE START — remove links as links; never recurse through their targets.
+    if (is_link($dir) || !is_dir($dir)) return false;
+    try {
+        $items = new FilesystemIterator($dir, FilesystemIterator::SKIP_DOTS);
+        foreach ($items as $item) {
+            $path = $item->getPathname();
+            if ($item->isLink() || $item->isFile()) {
+                if (!@unlink($path)) return false;
+            } elseif ($item->isDir()) {
+                if (!rrmdir($path)) return false;
+            } else {
+                return false;
+            }
+        }
+    } catch (UnexpectedValueException $exception) {
+        return false;
     }
     return @rmdir($dir);
+    // TASK-WEB-02-ADMIN-BASELINE END
 }
 
 $deleted = [];
@@ -51,13 +62,13 @@ $failed = [];
 
 foreach ($ids as $id) {
     if (!is_scalar($id)) { $failed[] = $id; continue; }
-    $safeId = preg_replace('/[^A-Za-z0-9\-]/', '', trim($id));
-    if ($safeId === '') { $failed[] = $id; continue; }
+    $safeId = trim((string)$id);
+    if (!preg_match('/^[A-Za-z0-9][A-Za-z0-9_-]{0,63}$/', $safeId)) { $failed[] = $id; continue; }
 
     $targetDir = $appsBaseDir . '/' . $safeId;
     $realTarget = realpath($targetDir);
 
-    if (!$realTarget || strpos($realTarget, $appsPrefix) !== 0) {
+    if (is_link($targetDir) || !$realTarget || strpos($realTarget, $appsPrefix) !== 0) {
         $failed[] = $id;
         continue;
     }

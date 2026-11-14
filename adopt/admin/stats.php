@@ -26,6 +26,9 @@ $categories = ['dogs', 'cats', 'birds', 'reptiles', 'small-mammals', 'livestocks
 // TASK-2 END
 $pets_base  = __DIR__ . '/../adoptions/pets';
 $apps_base  = __DIR__ . '/../adoptions/applications';
+$pets_root_path = $pets_base;
+$pets_root_real = realpath($pets_base);
+$apps_root_real = realpath($apps_base);
 
 $total_available = 0;
 $total_adopted   = 0;
@@ -40,19 +43,41 @@ $total_adopted   = 0;
 // on every load. Fix: use index.json only for the list of pet IDs,
 // then read each pet's own pet.json (same source get-pets.php already
 // reads from) to get its real, current status.
+// TASK-WEB-02-ADMIN-BASELINE START — constrain indexed IDs and filesystem reads to their canonical roots.
+$category_prefixes = [
+    'dogs' => ['DOG'], 'cats' => ['CAT'], 'birds' => ['BIRD'],
+    'reptiles' => ['REP', 'REPTILE'], 'small-mammals' => ['SM', 'MAM'],
+    'livestocks' => ['LVS'], 'aquariums' => ['AQU'],
+];
 foreach ($categories as $cat) {
-    $index = $pets_base . '/' . $cat . '/index.json';
-    if (!file_exists($index)) continue;
-    $data = json_decode(file_get_contents($index), true);
+    if ($pets_root_real === false || is_link($pets_root_path)) continue;
+    $category_candidate = $pets_root_real . DIRECTORY_SEPARATOR . $cat;
+    if (is_link($category_candidate)) continue;
+    $category_real = realpath($category_candidate);
+    if ($category_real === false || $category_real !== $category_candidate
+        || strpos($category_real, rtrim($pets_root_real, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR) !== 0) continue;
+    $index = $category_real . DIRECTORY_SEPARATOR . 'index.json';
+    $index_real = realpath($index);
+    if (is_link($index) || $index_real === false
+        || strpos($index_real, rtrim($category_real, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR) !== 0) continue;
+    $data = json_decode(file_get_contents($index_real), true);
+    if (!is_array($data)) continue;
     $petIds = $data['pets'] ?? [];
+    if (!is_array($petIds)) continue;
     foreach ($petIds as $petId) {
-        // $petId is a plain ID string (e.g. "DOG-00001") — sanitize before
-        // building a filesystem path with it.
-        $petId = preg_replace('/[^A-Za-z0-9\-]/', '', (string) $petId);
-        if ($petId === '') continue;
-        $petFile = $pets_base . '/' . $cat . '/' . $petId . '/pet.json';
-        if (!file_exists($petFile)) continue;
-        $pet = json_decode(file_get_contents($petFile), true);
+        if (!is_string($petId) || !preg_match('/^([A-Z]+)-\d{5}$/i', $petId, $idParts)
+            || !in_array(strtoupper($idParts[1]), $category_prefixes[$cat], true)) continue;
+        $pet_candidate = $category_real . DIRECTORY_SEPARATOR . $petId;
+        if (is_link($pet_candidate)) continue;
+        $pet_real = realpath($pet_candidate);
+        $category_prefix = rtrim($category_real, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        if ($pet_real === false || strpos($pet_real, $category_prefix) !== 0) continue;
+        $petFile = $pet_real . DIRECTORY_SEPARATOR . 'pet.json';
+        if (is_link($petFile)) continue;
+        $petFileReal = realpath($petFile);
+        if ($petFileReal === false || strpos($petFileReal, $category_prefix) !== 0 || !is_file($petFileReal)) continue;
+        $pet = json_decode(file_get_contents($petFileReal), true);
+        if (!is_array($pet)) continue;
         $status = $pet['status'] ?? '';
         if ($status === 'Available') $total_available++;
         if ($status === 'Adopted')   $total_adopted++;
@@ -65,12 +90,20 @@ $approved_count = 0;
 $rejected_count = 0;
 $adopted_month  = 0;
 
-if (is_dir($apps_base)) {
-    foreach (scandir($apps_base) as $dir) {
-        if ($dir === '.' || $dir === '..') continue;
-        $app_file = $apps_base . '/' . $dir . '/application.json';
-        if (!file_exists($app_file)) continue;
-        $app = json_decode(file_get_contents($app_file), true);
+if ($apps_root_real !== false) {
+    $apps_prefix = rtrim($apps_root_real, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+    foreach (scandir($apps_root_real) as $dir) {
+        if ($dir === '.' || $dir === '..' || !preg_match('/^[A-Za-z0-9][A-Za-z0-9_-]{0,63}$/', $dir)) continue;
+        $app_candidate = $apps_root_real . DIRECTORY_SEPARATOR . $dir;
+        if (is_link($app_candidate)) continue;
+        $app_real = realpath($app_candidate);
+        if ($app_real === false || strpos($app_real, $apps_prefix) !== 0) continue;
+        $app_file = $app_real . DIRECTORY_SEPARATOR . 'application.json';
+        if (is_link($app_file)) continue;
+        $app_file_real = realpath($app_file);
+        if ($app_file_real === false || strpos($app_file_real, $apps_prefix) !== 0 || !is_file($app_file_real)) continue;
+        $app = json_decode(file_get_contents($app_file_real), true);
+        if (!is_array($app)) continue;
         $status = $app['status'] ?? 'PENDING';
         if ($status === 'PENDING')   $pending_count++;
         if ($status === 'APPROVED')  $approved_count++;

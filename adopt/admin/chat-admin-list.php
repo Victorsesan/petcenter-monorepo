@@ -124,7 +124,7 @@ function chatDeriveAuthBadge(array $auditRowsDesc) {
         return 'locked';
     }
 
-    if ($mostRecent && $mostRecent['result'] === 'tier_verified') {
+    if ($mostRecent && in_array($mostRecent['result'], ['tier_verified', 'pin_verified', 'password_verified', 'device_verified'], true)) {
         return 'verified_session';
     }
 

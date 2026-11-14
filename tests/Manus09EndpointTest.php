@@ -66,7 +66,7 @@ final class Manus09EndpointTest extends TestCase
     {
         $r = $this->runAdoption(['token' => 'test-admin-token', 'code' => '../outside', 'status' => 'APPROVED']);
         $this->assertSame(400, $r['status']);
-        $this->assertSame('Invalid adoption code', $r['json']['message']);
+        $this->assertSame('invalid application code', $r['json']['message']);
     }
 
     public function testUpdateAdoptionRequiresAdminToken(): void
@@ -120,14 +120,16 @@ PHP);
     private function runChat(array $post): array
     {
         $runner = $this->tmp . '/chat/run.php';
-        file_put_contents($runner, '<?php $_REQUEST=["action"=>"submit"]; $_SERVER["REQUEST_METHOD"]="POST"; $_POST=' . var_export($post, true) . '; require __DIR__ . "/admin/chat-rate.php";');
+        $statusPath = $this->tmp . '/chat/http-status';
+        file_put_contents($runner, '<?php register_shutdown_function(static function () { file_put_contents(' . var_export($statusPath, true) . ', (string)http_response_code()); }); $_REQUEST=["action"=>"submit"]; $_SERVER["REQUEST_METHOD"]="POST"; $_POST=' . var_export($post, true) . '; require __DIR__ . "/admin/chat-rate.php";');
         return $this->runPhp($runner);
     }
 
     private function runAdoption(array $post): array
     {
         $runner = $this->tmp . '/adopt/run.php';
-        file_put_contents($runner, '<?php $_POST=' . var_export($post, true) . '; require __DIR__ . "/admin/update-adoption.php";');
+        $statusPath = $this->tmp . '/adopt/http-status';
+        file_put_contents($runner, '<?php register_shutdown_function(static function () { file_put_contents(' . var_export($statusPath, true) . ', (string)http_response_code()); }); $_POST=' . var_export($post, true) . '; require __DIR__ . "/admin/update-adoption.php";');
         return $this->runPhp($runner);
     }
 
@@ -138,7 +140,10 @@ PHP);
         exec($cmd, $out, $exitCode);
         $body = implode("\n", $out);
         $json = json_decode($body, true);
-        return ['status' => $this->httpStatusFromJson($json), 'json' => $json, 'exit' => $exitCode, 'body' => $body];
+        $statusPath = dirname($script) . '/http-status';
+        $reportedStatus = is_file($statusPath) ? (int)file_get_contents($statusPath) : 0;
+        $status = $reportedStatus >= 100 && $reportedStatus <= 599 ? $reportedStatus : $this->httpStatusFromJson($json);
+        return ['status' => $status, 'json' => $json, 'exit' => $exitCode, 'body' => $body];
     }
 
     private function httpStatusFromJson(?array $json): int
@@ -146,7 +151,7 @@ PHP);
         if (!$json) return 599;
         if (($json['error'] ?? '') === 'Session required' || ($json['message'] ?? '') === 'Unauthorized') return 401;
         if (($json['error'] ?? '') === 'Email does not match this chat') return 403;
-        if (($json['error'] ?? '') === 'Rating must be 1–5' || ($json['message'] ?? '') === 'Invalid adoption code' || str_starts_with((string)($json['message'] ?? ''), 'status must be')) return 400;
+        if (($json['error'] ?? '') === 'Rating must be 1–5' || ($json['message'] ?? '') === 'invalid application code' || str_starts_with((string)($json['message'] ?? ''), 'status must be')) return 400;
         return 200;
     }
 

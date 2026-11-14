@@ -1123,8 +1123,10 @@ p { color: var(--muted); }
   margin-top: 8px;
 }
 .video-upload-status.uploading { color: #0d7c4a; }
+.video-upload-status.done { color: #0d7c4a; }
 .video-upload-status.paused { color: #ED7624; }
 .video-upload-status.error { color: #c0392b; }
+.pet-upload-dropzone:focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; }
 
 /* TASK-4 START — Multi-worker protocol (Directive 12): admin-dashboard.html
    is shared with other assigned tasks (category-dropdown work, live-chat
@@ -1773,10 +1775,10 @@ p { color: var(--muted); }
     </div>
     <form id="loginForm" onsubmit="handleLogin(event)">
       <div class="pc-form-group">
-        <label class="pc-form-label">Admin Token</label>
+        <label class="pc-form-label" for="adminTokenInput">Admin Token</label>
         <input class="pc-form-input" type="password" id="adminTokenInput" placeholder="Enter admin token" required>
       </div>
-      <div id="loginError" class="pc-alert pc-alert--error" style="display:none;margin-bottom:16px;"></div>
+      <div id="loginError" class="pc-alert pc-alert--error" role="alert" aria-live="assertive" style="display:none;margin-bottom:16px;"></div>
       <button type="submit" class="pc-btn pc-btn--primary" style="width:100%;justify-content:center;">Access Dashboard</button>
     </form>
   </div>
@@ -2421,7 +2423,7 @@ p { color: var(--muted); }
           </div>
           <div style="flex:1;min-width:220px;">
             <div class="pc-form-group" style="margin-bottom:12px;">
-              <label class="pc-form-label">Bot name</label>
+              <label class="pc-form-label" for="chatBotName">Bot name</label>
               <input type="text" id="chatBotName" class="pc-form-input" maxlength="100" placeholder="e.g. Pet Center Bot">
             </div>
             <div style="display:flex;align-items:center;gap:10px;">
@@ -2435,14 +2437,14 @@ p { color: var(--muted); }
         <p style="color:#888;font-size:13px;margin-bottom:16px;">Sent once, the moment a customer picks a reason and starts a brand-new chat. One message per reason, plus a fallback used only if a reason has no message set below.</p>
         <div id="chatBotWelcomeFields" style="display:flex;flex-direction:column;gap:14px;margin-bottom:14px;"></div>
         <div class="pc-form-group" style="margin-bottom:28px;">
-          <label class="pc-form-label">Fallback (used if a reason above is left blank)</label>
+          <label class="pc-form-label" for="chatBotWelcomeFallback">Fallback (used if a reason above is left blank)</label>
           <textarea id="chatBotWelcomeFallback" class="pc-form-input" rows="2" maxlength="1000" placeholder="e.g. Hi {name}, thanks for reaching out! We'll be with you shortly."></textarea>
         </div>
 
         <h3 style="font-family:'Cormorant Garamond',serif;color:#10214b;margin-bottom:6px;">After the customer's first message</h3>
         <p style="color:#888;font-size:13px;margin-bottom:16px;">Sent once, right after the customer sends their very first message in a brand-new chat (after they've had a chance to explain their issue). One single message for every reason — not per-reason, since this just acknowledges that they've been heard.</p>
         <div class="pc-form-group" style="margin-bottom:28px;">
-          <label class="pc-form-label">Message</label>
+          <label class="pc-form-label" for="chatBotFirstMessageAck">Message</label>
           <textarea id="chatBotFirstMessageAck" class="pc-form-input" rows="2" maxlength="1000" placeholder="e.g. Thanks {name}, we've got your message — someone from our team will be with you shortly to help with this."></textarea>
         </div>
 
@@ -2450,14 +2452,14 @@ p { color: var(--muted); }
         <p style="color:#888;font-size:13px;margin-bottom:16px;">The messages below only fire if the customer goes back to the start screen and picks a <em>different</em> reason than the one their closed chat originally had — based on that thread's original reason, not whatever they're asking now. If they just keep typing into the same reopened chat without picking a new reason, none of these fire.</p>
         <div id="chatBotReopenFields" style="display:flex;flex-direction:column;gap:14px;margin-bottom:14px;"></div>
         <div class="pc-form-group" style="margin-bottom:28px;">
-          <label class="pc-form-label">Fallback (used if a reason above is left blank)</label>
+          <label class="pc-form-label" for="chatBotReopenFallback">Fallback (used if a reason above is left blank)</label>
           <textarea id="chatBotReopenFallback" class="pc-form-input" rows="2" maxlength="1000" placeholder="e.g. Welcome back, {name}! Let us know how we can help this time."></textarea>
         </div>
 
         <h3 style="font-family:'Cormorant Garamond',serif;color:#10214b;margin-bottom:6px;">Scenario B — customer's first message</h3>
         <p style="color:#888;font-size:13px;margin-bottom:16px;">Sent once, right after the customer's message that reopened their closed chat — fires every time a chat is reopened this way, regardless of whether they picked a new reason above. This is a separate message from Scenario A's version above; they can't share the same text.</p>
         <div class="pc-form-group" style="margin-bottom:28px;">
-          <label class="pc-form-label">Message</label>
+          <label class="pc-form-label" for="chatBotReopenFirstMessageAck">Message</label>
           <textarea id="chatBotReopenFirstMessageAck" class="pc-form-input" rows="2" maxlength="1000" placeholder="e.g. Thanks for the update, {name} — we're on it and will get back to you shortly."></textarea>
         </div>
 
@@ -4114,7 +4116,7 @@ function startVideoUpload(item, key) {
     (result) => {
       item.uploading = false;
       item.token = result.videoToken;
-      setVideoStatus(key, 'uploading', 'Upload complete');
+      setVideoStatus(key, 'done', 'Upload complete');
       hideVideoProgress(key);
       renderVideoField(key);
     },
@@ -4144,6 +4146,8 @@ function hideVideoProgress(key) {
 function setVideoStatus(key, statusClass, message) {
   const statusEl = document.getElementById(`${key}_status`) || document.getElementById('editVideoStatus');
   if (!statusEl) return;
+  statusEl.setAttribute('role', 'status');
+  statusEl.setAttribute('aria-live', 'polite');
   statusEl.textContent = message;
   statusEl.className = 'video-upload-status' + (statusClass ? ' ' + statusClass : '');
 }
@@ -4675,6 +4679,33 @@ function addPetForm() {
       <div id="bulk_${key}_list" style="margin-top:8px;"></div>
     </div>
   `;
+  // TASK-WEB-02-ADMIN-BASELINE START — bind generated controls and make drop zones keyboard operable.
+  form.querySelectorAll('[data-field]').forEach(control => {
+    const fieldName = control.getAttribute('data-field');
+    const controlId = `${key}_${fieldName}`;
+    control.id = controlId;
+    const label = control.closest('.pc-form-group')?.querySelector('label');
+    if (label) label.htmlFor = controlId;
+  });
+  [
+    [`video_${key}`, `Upload a video for pet ${petFormCount}. Optional.`],
+    [`single_${key}`, `Upload the required primary image for pet ${petFormCount}.`],
+    [`bulk_${key}`, `Upload additional carousel images for pet ${petFormCount}.`],
+  ].forEach(([elementId, accessibleName]) => {
+    const dropzone = form.querySelector('#' + elementId);
+    if (!dropzone) return;
+    dropzone.setAttribute('role', 'button');
+    dropzone.setAttribute('aria-label', accessibleName);
+    dropzone.tabIndex = 0;
+    dropzone.classList.add('pet-upload-dropzone');
+    dropzone.addEventListener('keydown', event => {
+      if ((event.key === 'Enter' || event.key === ' ') && !event.repeat) {
+        event.preventDefault();
+        dropzone.click();
+      }
+    });
+  });
+  // TASK-WEB-02-ADMIN-BASELINE END
   container.appendChild(form);
   initUploadField(`single_${key}`, document.getElementById(`single_${key}`), document.getElementById(`single_${key}_list`), true);
   initUploadField(`bulk_${key}`, document.getElementById(`bulk_${key}`), document.getElementById(`bulk_${key}_list`), false);
@@ -4802,35 +4833,73 @@ async function loadPetsForCategory(bustCache) {
     list.innerHTML = '';
     if (!data || !Array.isArray(data) || data.length === 0) { list.innerHTML = '<p style="color:#888;">No pets found in this category</p>'; return; }
 
+    // TASK-WEB-02-ADMIN-BASELINE START — render pet-controlled values as text, never executable markup.
     data.forEach(pet => {
       const card = document.createElement('div');
       card.style.cssText = 'padding:16px;background:#f9f7f2;border-radius:8px;border-inline-start:4px solid #d7bd88;display:flex;gap:16px;align-items:flex-start;margin-bottom:12px;';
 
-      const imageHTML = pet.single_image_url ?
-        `<img src="${pet.single_image_url}" style="width:80px;height:80px;object-fit:cover;border-radius:6px;">` :
-        '<div style="width:80px;height:80px;background:#ddd;border-radius:6px;display:flex;align-items:center;justify-content:center;color:#999;font-size:12px;">No image</div>';
+      const petName = String(pet.name || 'Unnamed Pet');
+      const petBreed = String(pet.breed || 'Unknown Breed');
+      const petAge = String(pet.age_years || '?');
+      const petSize = String(pet.size || '?');
+      const petFee = String(pet.adoption_fee || 0);
+      const petId = String(pet.pet_id || '');
+      const imageWrap = document.createElement('div');
+      let safeImageUrl = '';
+      if (typeof pet.single_image_url === 'string' && pet.single_image_url) {
+        try {
+          const candidate = new URL(pet.single_image_url, window.location.origin);
+          if (candidate.origin === window.location.origin && candidate.pathname.startsWith('/adoptions/pets/')) {
+            safeImageUrl = candidate.href;
+          }
+        } catch (e) {
+          safeImageUrl = '';
+        }
+      }
+      if (safeImageUrl) {
+        const image = document.createElement('img');
+        image.src = safeImageUrl;
+        image.alt = 'Photo of ' + petName;
+        image.loading = 'lazy';
+        image.style.cssText = 'width:80px;height:80px;object-fit:cover;border-radius:6px;';
+        imageWrap.appendChild(image);
+      } else {
+        const placeholder = document.createElement('div');
+        placeholder.textContent = 'No image';
+        placeholder.style.cssText = 'width:80px;height:80px;background:#ddd;border-radius:6px;display:flex;align-items:center;justify-content:center;color:#999;font-size:12px;';
+        imageWrap.appendChild(placeholder);
+      }
 
-      const petName = pet.name || 'Unnamed Pet';
-      const petBreed = pet.breed || 'Unknown Breed';
-      const petAge = pet.age_years || '?';
-      const petSize = pet.size || '?';
-      const petFee = pet.adoption_fee || 0;
-      const petId = pet.pet_id || '';
+      const details = document.createElement('div');
+      details.style.flex = '1';
+      const name = document.createElement('div');
+      name.textContent = petName;
+      name.style.cssText = 'font-weight:600;color:#10214b;margin-bottom:4px;font-size:16px;';
+      const summary = document.createElement('div');
+      summary.textContent = petBreed + ' • Age ' + petAge + ' • ' + petSize;
+      summary.style.cssText = 'font-size:13px;color:#8b7d6b;margin-bottom:8px;';
+      const fee = document.createElement('div');
+      fee.textContent = '$' + petFee;
+      fee.style.cssText = 'font-weight:600;color:#ED7624;font-size:14px;';
+      details.append(name, summary, fee);
 
-      card.innerHTML = `
-        <div>${imageHTML}</div>
-        <div style="flex:1;">
-          <div style="font-weight:600;color:#10214b;margin-bottom:4px;font-size:16px;">${petName}</div>
-          <div style="font-size:13px;color:#8b7d6b;margin-bottom:8px;">${petBreed} • Age ${petAge} • ${petSize}</div>
-          <div style="font-weight:600;color:#ED7624;font-size:14px;">$${petFee}</div>
-        </div>
-        <div style="display:flex;gap:8px;flex-direction:column;white-space:nowrap;">
-          <button onclick="openEditPetModal('${petId}', '${category}')" class="pc-btn pc-btn--sm">Edit</button>
-          <button onclick="deletePet('${petId}')" class="pc-btn pc-btn--ghost pc-btn--sm">Delete</button>
-        </div>
-      `;
+      const actions = document.createElement('div');
+      actions.style.cssText = 'display:flex;gap:8px;flex-direction:column;white-space:nowrap;';
+      const editButton = document.createElement('button');
+      editButton.type = 'button';
+      editButton.textContent = 'Edit';
+      editButton.className = 'pc-btn pc-btn--sm';
+      editButton.addEventListener('click', () => openEditPetModal(petId, category));
+      const deleteButton = document.createElement('button');
+      deleteButton.type = 'button';
+      deleteButton.textContent = 'Delete';
+      deleteButton.className = 'pc-btn pc-btn--ghost pc-btn--sm';
+      deleteButton.addEventListener('click', () => deletePet(petId));
+      actions.append(editButton, deleteButton);
+      card.append(imageWrap, details, actions);
       list.appendChild(card);
     });
+    // TASK-WEB-02-ADMIN-BASELINE END
   } catch (e) {
     PC.toast('Error loading pets: ' + e.message, 'error');
   }
@@ -5715,7 +5784,8 @@ async function buildAdminTranscriptControl(msg, chatId) {
       let result;
       do {
         const token = getAdminToken();
-        const response = await fetch('chat-transcribe.php', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Admin-Token': token }, body: JSON.stringify({ chatId, messageId: msg.id, side: 'admin' }) });
+        const side = msg.from_type === 'admin' ? 'admin' : 'customer';
+        const response = await fetch('chat-transcribe.php', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Admin-Token': token }, body: JSON.stringify({ chatId, messageId: msg.id, side }) });
         result = await response.json();
         if (result.status === 'pending') await new Promise(resolve => setTimeout(resolve, 6000));
       } while (result.status === 'pending');
@@ -5742,6 +5812,38 @@ async function buildAdminTranscriptControl(msg, chatId) {
     finally { busy=false; toggle.disabled=false; }
   });
   wrap.appendChild(toggle); wrap.appendChild(output); return wrap;
+}
+/* TASK-admin234-1b END */
+
+/* TASK-admin234-1b START — native, on-device read-aloud for visible admin chat text. */
+function adminThreadLanguage(chatId) {
+  for (const group of Object.values(chatAdmin.threads || {})) {
+    const thread = (group || []).find(item => item.chat_id === chatId);
+    if (thread && thread.preferred_chat_language) return thread.preferred_chat_language;
+  }
+  return 'en';
+}
+
+function buildAdminSpeechButton(text, language) {
+  if (!('speechSynthesis' in window) || !window.SpeechSynthesisUtterance || !text) return null;
+  const button = document.createElement('button');
+  button.type = 'button'; button.className = 'cad-speech-btn'; button.textContent = 'Read aloud';
+  button.setAttribute('aria-label', 'Read message aloud');
+  button.style.cssText = 'display:block;margin-top:6px;border:0;background:transparent;color:inherit;text-decoration:underline;font:inherit;font-size:11px;cursor:pointer;';
+  let speaking = false;
+  button.addEventListener('click', event => {
+    event.stopPropagation();
+    if (speaking) {
+      window.speechSynthesis.cancel(); speaking = false; button.textContent = 'Read aloud'; return;
+    }
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    const aliases = { english:'en-US', spanish:'es-ES', french:'fr-FR', german:'de-DE', portuguese:'pt-BR', italian:'it-IT', chinese:'zh-CN', japanese:'ja-JP', korean:'ko-KR', arabic:'ar-SA', hindi:'hi-IN', vietnamese:'vi-VN', russian:'ru-RU', filipino:'fil-PH', tagalog:'fil-PH' };
+    if (language) utterance.lang = aliases[String(language).toLowerCase()] || language;
+    utterance.onend = utterance.onerror = () => { speaking = false; button.textContent = 'Read aloud'; };
+    speaking = true; button.textContent = 'Stop reading'; window.speechSynthesis.speak(utterance);
+  });
+  return button;
 }
 /* TASK-admin234-1b END */
 
@@ -5815,6 +5917,8 @@ function renderAdminMessage(msg) {
   } else if (msg.msg_type === 'text') {
     bodyTextEl.textContent = msg.body || '';
     bubble.appendChild(bodyTextEl);
+    const speech = buildAdminSpeechButton(msg.body || '', (isAdmin || isBot) ? 'en' : adminThreadLanguage(chatAdmin.activeThreadId));
+    if (speech) bubble.appendChild(speech);
   } else if (msg.msg_type === 'image' || msg.msg_type === 'video' || msg.msg_type === 'audio') {
     const p = msg.media_path ? '/admin/' + msg.media_path : '';
     if (msg.msg_type === 'image') {
@@ -6894,6 +6998,7 @@ function buildBotReasonFields(containerId, idPrefix, valueMap) {
     label.textContent = r.label;
     const textarea = document.createElement('textarea');
     textarea.id = idPrefix + '_' + r.value;
+    label.htmlFor = textarea.id;
     textarea.className = 'pc-form-input';
     textarea.rows = 2;
     textarea.maxLength = 1000;
