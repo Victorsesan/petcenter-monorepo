@@ -13,12 +13,14 @@ header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
 const RATE_LIMIT_MAX = 10;
 const RATE_LIMIT_WINDOW = 600;
 
+// TASK-status-3 START: Keep endpoint responses valid JSON even when stored text contains malformed UTF-8.
 function jsonResponse(array $payload, int $status = 200): never
 {
     http_response_code($status);
-    echo json_encode($payload, JSON_UNESCAPED_SLASHES);
+    echo json_encode($payload, JSON_UNESCAPED_SLASHES | JSON_INVALID_UTF8_SUBSTITUTE);
     exit;
 }
+// TASK-status-3 END
 
 function requestData(): array
 {
@@ -39,12 +41,13 @@ function clientIp(): string
         : 'unknown';
 }
 
-function rateLimitAllows(string $ip): bool
+// TASK-status-3 START: Fail closed when rate-limit state cannot be read or persisted so storage faults never bypass lookup throttling.
+function rateLimitAllows(string $ip): ?bool
 {
     $dir = __DIR__ . '/rate-limit-data';
     if (!is_dir($dir) && !@mkdir($dir, 0750, true) && !is_dir($dir)) {
         error_log('Adoption status rate-limit directory could not be created.');
-        return true;
+        return null;
     }
 
     $key = hash('sha256', $ip);
@@ -52,15 +55,21 @@ function rateLimitAllows(string $ip): bool
     $handle = @fopen($path, 'c+');
     if (!$handle) {
         error_log('Adoption status rate-limit file could not be opened.');
-        return true;
+        return null;
     }
 
     if (!flock($handle, LOCK_EX)) {
         fclose($handle);
-        return true;
+        return null;
     }
 
     $contents = stream_get_contents($handle);
+    if ($contents === false) {
+        flock($handle, LOCK_UN);
+        fclose($handle);
+        error_log('Adoption status rate-limit file could not be read.');
+        return null;
+    }
     $timestamps = json_decode($contents ?: '[]', true);
     if (!is_array($timestamps)) {
         $timestamps = [];
@@ -68,17 +77,24 @@ function rateLimitAllows(string $ip): bool
     $cutoff = time() - RATE_LIMIT_WINDOW;
     $timestamps = array_values(array_filter($timestamps, static fn($value): bool => is_int($value) && $value >= $cutoff));
     $allowed = count($timestamps) < RATE_LIMIT_MAX;
+    $writeFailed = false;
     if ($allowed) {
         $timestamps[] = time();
-        ftruncate($handle, 0);
-        rewind($handle);
-        fwrite($handle, json_encode($timestamps));
-        fflush($handle);
+        $encoded = json_encode($timestamps);
+        if ($encoded === false
+            || !ftruncate($handle, 0)
+            || !rewind($handle)
+            || fwrite($handle, $encoded) !== strlen($encoded)
+            || !fflush($handle)) {
+            $writeFailed = true;
+            error_log('Adoption status rate-limit state could not be stored.');
+        }
     }
     flock($handle, LOCK_UN);
     fclose($handle);
-    return $allowed;
+    return $writeFailed ? null : $allowed;
 }
+// TASK-status-3 END
 
 function normalizedLastName(string $name): string
 {
@@ -116,13 +132,21 @@ function publicApplicationFields(array $application): array
     return $result;
 }
 
+// TASK-status-3 START: Preserve the POST-only lookup contract and refuse requests if per-IP throttling cannot be enforced.
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header('Allow: POST');
     jsonResponse(['success' => false, 'message' => 'Method not allowed.'], 405);
 }
 
-if (!rateLimitAllows(clientIp())) {
+$rateLimit = rateLimitAllows(clientIp());
+if ($rateLimit === null) {
+    jsonResponse(['success' => false, 'message' => 'Status service temporarily unavailable.'], 503);
+}
+
+if (!$rateLimit) {
     jsonResponse(['success' => false, 'message' => 'Too many lookups. Please wait a moment and try again.'], 429);
 }
+// TASK-status-3 END
 
 $data = requestData();
 $rawCode = $data['code'] ?? null;
@@ -155,10 +179,13 @@ if ($appFolder === false || strpos($appFolder, $basePrefix) !== 0) {
     $notFound();
 }
 
-$appFile = $appFolder . DIRECTORY_SEPARATOR . 'application.json';
-if (!is_file($appFile) || !is_readable($appFile)) {
+// TASK-status-3 START: Resolve and bound the record file itself, not just its parent, so a file symlink cannot escape the applications tree.
+$expectedAppFile = $appFolder . DIRECTORY_SEPARATOR . 'application.json';
+$appFile = realpath($expectedAppFile);
+if ($appFile === false || $appFile !== $expectedAppFile || strpos($appFile, $basePrefix) !== 0 || !is_file($appFile) || !is_readable($appFile)) {
     $notFound();
 }
+// TASK-status-3 END
 
 $application = json_decode((string)file_get_contents($appFile), true);
 if (!is_array($application) || applicationLastName((string)($application['applicant_name'] ?? '')) !== normalizedLastName($lastName)) {
