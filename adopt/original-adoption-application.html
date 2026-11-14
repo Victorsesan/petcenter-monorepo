@@ -92,8 +92,79 @@ textarea{min-height:84px;resize:vertical}
   .section { width: 100%; max-width: 100%; }
 }
 </style>
+<!-- TASK-DESIGN-01 START: shared public visual system and keyboard enhancement; route behavior remains page-owned. -->
+<link rel="stylesheet" href="/assets/css/public-redesign.css">
+<script src="/assets/js/public-chrome.js" defer></script>
+<!-- TASK-DESIGN-01 END -->
 </head>
-<body>
+<body class="pc-public-page pc-public-form pc-has-injected-shell">
+<!-- DESIGN-01-SHELL HEADER START: canonical public navigation; existing page routes are unchanged. -->
+<header class="pc-header pc-header--solid" id="pcHeader">
+  <a href="/" class="pc-header__logo pc-header__logo--desktop">
+    <img src="/assets/images/logo-petcenter.png" alt="Pet Center">
+  </a>
+  <a href="/" class="pc-header__logo pc-header__logo--mobile">
+    <img src="/assets/images/logo-petcenter-icon.png" alt="Pet Center">
+  </a>
+  <ul class="pc-header__nav">
+    <li><a href="/">Home</a></li>
+    <li class="has-drop"><a href="#">Our Pets</a>
+      <ul>
+        <li><a href="/pets/dogs/">Dogs</a></li>
+        <li><a href="/pets/cats/">Cats</a></li>
+        <li><a href="/pets/birds/">Birds</a></li>
+        <li><a href="/pets/reptiles/">Reptiles</a></li>
+        <li><a href="/pets/small-mammals/">Small Mammals</a></li>
+        <!-- TASK-2 START — Livestocks & Aquariums added to Our Pets dropdown -->
+        <li><a href="/pets/livestocks/">Livestocks</a></li>
+        <li><a href="/pets/aquariums/">Aquariums</a></li>
+        <!-- TASK-2 END -->
+        <!-- TASK-8 START -->
+        <li><a href="/pets/quiz/">Find Your Match</a></li>
+        <!-- TASK-8 END -->
+      </ul>
+    </li>
+    <li><a href="/blog/">Blog</a></li>
+    <li><a href="/testimonials/">Testimonials</a></li>
+    <li class="nav-donate"><a href="https://donate.petcenterco.com" target="_blank" rel="noopener">Donate</a></li>
+    <li><a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact</a></li>
+    <!-- TASK-1 START -->
+    <!-- Path changed from /rehome/ to /signin/ per CEO's request to retire the "rehome" URL sitewide (propagated for sitewide consistency during merge) -->
+    <li class="nav-signup"><a href="/signin/">Sign Up</a></li>
+    <!-- TASK-1 END -->
+    <li style="display:none;" id="pcNotifyStubLi"><button class="pc-header__notify-stub" id="pcNotifyStub" type="button" aria-label="Pet match notifications" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><span class="pc-header__notify-stub__dot" id="pcNotifyStubDot"></span></button></li>
+  </ul>
+  <button class="pc-hamburger" id="pcHamburger" data-pc-managed-menu="true" aria-label="Open menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+  <nav class="pc-mobile-menu" id="pcMobileMenu" aria-label="Mobile navigation">
+    <a href="/">Home</a>
+    <a href="/pets/dogs/">Dogs</a>
+    <a href="/pets/cats/">Cats</a>
+    <a href="/pets/birds/">Birds</a>
+    <a href="/pets/reptiles/">Reptiles</a>
+    <a href="/pets/small-mammals/">Small Mammals</a>
+    <!-- TASK-2 START — Livestocks & Aquariums added to mobile menu -->
+    <a href="/pets/livestocks/">Livestocks</a>
+    <a href="/pets/aquariums/">Aquariums</a>
+    <!-- TASK-2 END -->
+    <!-- TASK-8 START -->
+    <a href="/pets/quiz/">Find Your Match</a>
+    <!-- TASK-8 END -->
+    <a href="/blog/">Blog</a>
+    <a href="/testimonials/">Testimonials</a>
+    <a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact</a>
+    <!-- TASK-1 START -->
+    <!-- Path changed from /rehome/ to /signin/ per CEO's request to retire the "rehome" URL sitewide (propagated for sitewide consistency during merge) -->
+    <a href="/signin/">Sign Up</a>
+    <!-- TASK-1 END -->
+    <button type="button" id="pcNotifyStubMobile" style="display:none;width:100%;text-align:left;background:none;border:0;cursor:pointer;padding:12px 28px;font:500 15px Sora,sans-serif;color:rgba(255,255,255,.9);">Pet Match Updates <span id="pcNotifyStubMobileDot" style="display:none;float:right;width:9px;height:9px;border-radius:50%;background:#ED7624;"></span></button>
+    <a href="https://donate.petcenterco.com" class="mobile-donate" target="_blank" rel="noopener">Donate</a>
+  </nav>
+  <div class="pc-header__notify-stub__panel" id="pcNotifyStubPanel"><h4>Pet Match Updates</h4><p id="pcNotifyStubBody">Checking for updates on your Pet Match Request...</p></div>
+</header>
+<!-- DESIGN-01-SHELL HEADER END -->
+
 <div class="page" id="pageRoot">
 
   <div class="header">
@@ -106,7 +177,8 @@ textarea{min-height:84px;resize:vertical}
       <div>1700 Pet Street, New York, NY</div>
       <div>Phone: +1 (555) 555-5555</div>
       <div>Email: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c6b5b3b6b6a9b4b286b6a3b2a5a3a8b2a3b4a5a9e8a5a9ab">[email&#160;protected]</a></div>
-      <div class="idline">ID #: <input id="staffId" name="staff_id" style="min-width:120px;padding:6px;border:1px solid #eee;border-radius:6px"></div>
+      <div class="idline">ID #: <!-- DESIGN-01-A11Y START: accessible names for existing public form controls; submission names, values, and order are unchanged. -->
+<input id="staffId" name="staff_id" style="min-width:120px;padding:6px;border:1px solid #eee;border-radius:6px" aria-label="Staff ID"></div>
     </div>
   </div>
 
@@ -124,41 +196,41 @@ textarea{min-height:84px;resize:vertical}
           <div class="row">
             <div class="col" style="flex:1.6">
               <label class="label">Name</label>
-              <input class="input" name="name" id="name" required>
+              <input class="input" name="name" id="name" required aria-label="Applicant name">
             </div>
             <div style="min-width:220px">
               <label class="label">(optional) Reference Date</label>
-              <input class="input" type="date" id="top_date" name="top_date">
+              <input class="input" type="date" id="top_date" name="top_date" aria-label="Reference date">
             </div>
           </div>
 
           <div class="row" style="margin-top:10px">
-            <div class="col"><label class="label">Address</label><input class="input" name="address" id="address" required></div>
-            <div style="min-width:120px"><label class="label">Apt / Unit #</label><input class="input" name="apt"></div>
+            <div class="col"><label class="label">Address</label><input class="input" name="address" id="address" required aria-label="Address"></div>
+            <div style="min-width:120px"><label class="label">Apt / Unit #</label><input class="input" name="apt" aria-label="Apartment or unit number"></div>
           </div>
 
           <div class="row" style="margin-top:10px">
-            <div class="col"><label class="label">City</label><input class="input" name="city" required></div>
-            <div style="min-width:120px"><label class="label">State</label><input class="input" name="state" required></div>
-            <div style="min-width:120px"><label class="label">Zip</label><input class="input" name="zip" required></div>
+            <div class="col"><label class="label">City</label><input class="input" name="city" required aria-label="City"></div>
+            <div style="min-width:120px"><label class="label">State</label><input class="input" name="state" required aria-label="State"></div>
+            <div style="min-width:120px"><label class="label">Zip</label><input class="input" name="zip" required aria-label="ZIP code"></div>
           </div>
 
           <div class="row" style="margin-top:10px">
-            <div class="col"><label class="label">Phone number</label><input class="input" id="phone" name="phone" required></div>
+            <div class="col"><label class="label">Phone number</label><input class="input" id="phone" name="phone" required aria-label="Phone number"></div>
             <div class="col"><label class="label">Email</label><!-- BUGFIX-MANUS-03-1 START: email and telephone controls stay LTR under document RTL. -->
-<input class="input" id="user_email" name="user_email" type="email" required dir="ltr">
+<input class="input" id="user_email" name="user_email" type="email" required dir="ltr" aria-label="Email address">
 <!-- BUGFIX-MANUS-03-1 END -->
 </div>
           </div>
 
           <div style="margin-top:10px">
             <label class="label">Additional information (anything we should know)</label>
-            <textarea class="input" name="additional_info" id="additional_info" placeholder="Explain household details, preferences, or anything not captured above..." required></textarea>
+            <textarea class="input" name="additional_info" id="additional_info" placeholder="Explain household details, preferences, or anything not captured above..." required aria-label="Additional information"></textarea>
           </div>
 
           <div style="margin-top:10px" class="row">
-            <div class="col"><label class="label">ID / Driver's license #</label><input class="input" name="id_number" required></div>
-            <div class="col"><label class="label">Spouse / Partner name</label><input class="input" name="spouse"></div>
+            <div class="col"><label class="label">ID / Driver's license #</label><input class="input" name="id_number" required aria-label="ID or driver’s license number"></div>
+            <div class="col"><label class="label">Spouse / Partner name</label><input class="input" name="spouse" aria-label="Spouse or partner name"></div>
           </div>
 
           <div style="margin-top:8px">
@@ -177,28 +249,28 @@ textarea{min-height:84px;resize:vertical}
         <section class="section">
           <h3>LIVING ARRANGEMENT</h3>
           <div class="row">
-            <div class="col"><label class="label">Do you: Rent / Own / Live at parents</label><input class="input" name="residence_type" required></div>
+            <div class="col"><label class="label">Do you: Rent / Own / Live at parents</label><input class="input" name="residence_type" required aria-label="Do you rent, own, or live with parents?"></div>
             <div class="col"><label class="label">If renting - landlord allows pets?</label><div><label><input type="radio" name="landlord_allows" value="yes" required> Yes</label> <label><input type="radio" name="landlord_allows" value="no"> No</label></div></div>
           </div>
 
           <div class="row" style="margin-top:10px">
-            <div class="col"><label class="label">Landlord name & phone</label><input class="input" name="landlord_contact" required></div>
-            <div class="col"><label class="label">Type of home</label><input class="input" name="home_type" required></div>
+            <div class="col"><label class="label">Landlord name & phone</label><input class="input" name="landlord_contact" required aria-label="Landlord name and phone"></div>
+            <div class="col"><label class="label">Type of home</label><input class="input" name="home_type" required aria-label="Type of home"></div>
           </div>
 
           <div style="margin-top:10px">
             <label class="label">Length of time at current address</label>
-            <input class="input" name="time_at_address" required>
+            <input class="input" name="time_at_address" required aria-label="Length of time at current address">
           </div>
 
           <div style="margin-top:10px">
             <label class="label">Who lives with you? (list Name — Age)</label>
-            <textarea class="input" name="household_list" required placeholder="One per line: Name — Age"></textarea>
+            <textarea class="input" name="household_list" required placeholder="One per line: Name — Age" aria-label="Names and ages of household members"></textarea>
           </div>
 
           <div style="margin-top:10px">
             <label class="label">If you owned animals in the past 10 years and no longer have them, what happened?</label>
-            <input class="input" name="past_animals" required>
+            <input class="input" name="past_animals" required aria-label="What happened to animals you owned in the past ten years?">
           </div>
         </section>
 
@@ -212,12 +284,12 @@ textarea{min-height:84px;resize:vertical}
 
           <div class="row" style="margin-top:8px">
             <div class="col"><label class="label">Do you have a veterinarian?</label><div><label><input type="radio" name="have_vet" value="yes" required> Yes</label> <label><input type="radio" name="have_vet" value="no"> No</label></div></div>
-            <div class="col"><label class="label">Veterinarian's name</label><input class="input" name="vet_name"></div>
+            <div class="col"><label class="label">Veterinarian's name</label><input class="input" name="vet_name" aria-label="Veterinarian name"></div>
           </div>
 
           <div class="row" style="margin-top:8px">
-            <div class="col"><label class="label">Veterinarian Address</label><input class="input" name="vet_address"></div>
-            <div class="col"><label class="label">Veterinarian Phone</label><input class="input" name="vet_phone"></div>
+            <div class="col"><label class="label">Veterinarian Address</label><input class="input" name="vet_address" aria-label="Veterinarian address"></div>
+            <div class="col"><label class="label">Veterinarian Phone</label><input class="input" name="vet_phone" aria-label="Veterinarian phone"></div>
           </div>
 
           <div style="margin-top:10px">
@@ -229,9 +301,9 @@ textarea{min-height:84px;resize:vertical}
             <label class="label">Current pets (Name / Breed / Age / Spayed?)</label>
             <table class="pets-table"><thead><tr><th>Pet Name</th><th>Breed/Species</th><th>Age</th><th>Spayed/Neutered</th></tr></thead>
               <tbody>
-                <tr><td><input class="input" name="pet1_name"></td><td><input class="input" name="pet1_breed"></td><td><input class="input" name="pet1_age"></td><td><input class="input" name="pet1_spay"></td></tr>
-                <tr><td><input class="input" name="pet2_name"></td><td><input class="input" name="pet2_breed"></td><td><input class="input" name="pet2_age"></td><td><input class="input" name="pet2_spay"></td></tr>
-                <tr><td><input class="input" name="pet3_name"></td><td><input class="input" name="pet3_breed"></td><td><input class="input" name="pet3_age"></td><td><input class="input" name="pet3_spay"></td></tr>
+                <tr><td><input class="input" name="pet1_name" aria-label="Current pet 1 name"></td><td><input class="input" name="pet1_breed" aria-label="Current pet 1 breed or species"></td><td><input class="input" name="pet1_age" aria-label="Current pet 1 age"></td><td><input class="input" name="pet1_spay" aria-label="Current pet 1 spayed or neutered status"></td></tr>
+                <tr><td><input class="input" name="pet2_name" aria-label="Current pet 2 name"></td><td><input class="input" name="pet2_breed" aria-label="Current pet 2 breed or species"></td><td><input class="input" name="pet2_age" aria-label="Current pet 2 age"></td><td><input class="input" name="pet2_spay" aria-label="Current pet 2 spayed or neutered status"></td></tr>
+                <tr><td><input class="input" name="pet3_name" aria-label="Current pet 3 name"></td><td><input class="input" name="pet3_breed" aria-label="Current pet 3 breed or species"></td><td><input class="input" name="pet3_age" aria-label="Current pet 3 age"></td><td><input class="input" name="pet3_spay" aria-label="Current pet 3 spayed or neutered status"></td></tr>
               </tbody>
             </table>
           </div>
@@ -242,7 +314,7 @@ textarea{min-height:84px;resize:vertical}
           <h3>PET CARE</h3>
           <div style="margin-top:8px">
             <label class="label">Where do you keep your pet when not at home?</label>
-            <input class="input" name="where_keep" required>
+            <input class="input" name="where_keep" required aria-label="Where will you keep your pet when you are away?">
           </div>
 
           <div style="margin-top:8px">
@@ -266,12 +338,12 @@ textarea{min-height:84px;resize:vertical}
 
           <div style="margin-top:8px">
             <label class="label">How will you introduce your new pet to existing pets?</label>
-            <input class="input" name="introduce_existing" required>
+            <input class="input" name="introduce_existing" required aria-label="How will you introduce your new pet to existing pets?">
           </div>
 
           <div style="margin-top:8px">
             <label class="label">How will you handle undesirable behaviour?</label>
-            <input class="input" name="handle_undesirable" required>
+            <input class="input" name="handle_undesirable" required aria-label="How will you handle undesirable behaviour?">
           </div>
         </section>
 
@@ -279,8 +351,8 @@ textarea{min-height:84px;resize:vertical}
         <section class="section">
           <h3>ADOPTION INFORMATION</h3>
           <div class="row">
-            <div class="col"><label class="label">I want to adopt a (Cat/Dog/Other)</label><input class="input" name="want_adopt" required></div>
-            <div class="col"><label class="label">Sex preference</label><input class="input" name="sex_pref"></div>
+            <div class="col"><label class="label">I want to adopt a (Cat/Dog/Other)</label><input class="input" name="want_adopt" required aria-label="Species you want to adopt"></div>
+            <div class="col"><label class="label">Sex preference</label><input class="input" name="sex_pref" aria-label="Sex preference"></div>
           </div>
 
           <div style="margin-top:8px">
@@ -297,7 +369,7 @@ textarea{min-height:84px;resize:vertical}
             </div>
           </div>
 
-          <div style="margin-top:8px"><label class="label">Primary caregiver</label><input class="input" name="primary_caregiver" required></div>
+          <div style="margin-top:8px"><label class="label">Primary caregiver</label><input class="input" name="primary_caregiver" required aria-label="Primary caregiver"></div>
         </section>
 
         <!-- I UNDERSTAND & AGREE -->
@@ -373,7 +445,7 @@ textarea{min-height:84px;resize:vertical}
         <section class="section" id="dateSection">
           <h3>DATE SUBMITTING</h3>
           <div class="row">
-            <div class="col"><label class="label">Submission date *</label><input id="submission_date" name="submission_date" type="date" required></div>
+            <div class="col"><label class="label">Submission date *</label><input id="submission_date" name="submission_date" type="date" required aria-label="Submission date"></div>
           </div>
         </section>
 
@@ -401,10 +473,11 @@ textarea{min-height:84px;resize:vertical}
     <div class="right-col" id="staffCol">
       <div class="staff-box">
         <h3 style="margin-top:0">MANAGEMENT APPROVAL</h3>
-        <div style="margin-top:6px"><label class="label">Approved by:</label><input class="input" name="staff_approved_by"></div>
-        <div style="margin-top:8px"><label class="label">Comments:</label><textarea class="input" name="staff_comments"></textarea></div>
-        <div style="margin-top:8px"><label class="label">Denied by:</label><input class="input" name="staff_denied_by"></div>
-        <div style="margin-top:8px"><label class="label">Reason:</label><textarea class="input" name="staff_reason"></textarea></div>
+        <div style="margin-top:6px"><label class="label">Approved by:</label><input class="input" name="staff_approved_by" aria-label="Approved by"></div>
+        <div style="margin-top:8px"><label class="label">Comments:</label><textarea class="input" name="staff_comments" aria-label="Management approval comments"></textarea></div>
+        <div style="margin-top:8px"><label class="label">Denied by:</label><input class="input" name="staff_denied_by" aria-label="Denied by"></div>
+        <div style="margin-top:8px"><label class="label">Reason:</label><textarea class="input" name="staff_reason" aria-label="Denial reason"></textarea>
+<!-- DESIGN-01-A11Y END --></div>
       </div>
 
       <div style="height:18px"></div>
@@ -842,5 +915,71 @@ function dataURLtoBlob(dataUrl) {
   <!-- Shared customer chat and accessibility widgets; keep these sitewide for consistent placement. -->
   <script src="/admin/chat-widget.js"></script>
   <script src="/assets/js/accessibility-widget.js" defer></script>
+
+
+<!-- DESIGN-01-SHELL FOOTER START: canonical public footer. -->
+<footer class="pc-footer">
+  <div class="pc-footer__inner">
+    <div class="pc-footer__top">
+      <div class="pc-footer__brand">
+        <img src="/assets/images/logo-petcenter.png" alt="Pet Center">
+        <p>Every pet deserves a loving home. Browse our available pets and start your adoption journey today.</p>
+      </div>
+      <div class="pc-footer__col">
+        <h5>Our Pets</h5>
+        <ul>
+          <li><a href="/pets/dogs/">Dogs</a></li>
+          <li><a href="/pets/cats/">Cats</a></li>
+          <li><a href="/pets/birds/">Birds</a></li>
+          <li><a href="/pets/reptiles/">Reptiles</a></li>
+          <li><a href="/pets/small-mammals/">Small Mammals</a></li>
+          <!-- TASK-2 START — Livestocks & Aquariums added to footer Our Pets column -->
+          <li><a href="/pets/livestocks/">Livestocks</a></li>
+          <li><a href="/pets/aquariums/">Aquariums</a></li>
+          <!-- TASK-2 END -->
+        </ul>
+      </div>
+      <div class="pc-footer__col">
+        <h5>Information</h5>
+        <ul>
+          <li><a href="/">About Us</a></li>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/testimonials/">Testimonials</a></li>
+          <li><a href="https://donate.petcenterco.com" target="_blank" rel="noopener">Donate</a></li>
+          <li><a href="https://docs.petcenterco.com/health-guarantee/" target="_blank" rel="noopener">Health Guarantee</a></li>
+          <li><a href="https://docs.petcenterco.com/shipping-cancellation/" target="_blank" rel="noopener">Shipping & Cancellation</a></li>
+          <li><a href="https://docs.petcenterco.com/shipping-insurance-claims/" target="_blank" rel="noopener">Shipping Insurance</a></li>
+          <li><a href="https://docs.petcenterco.com/data-retention-security/" target="_blank" rel="noopener">Data & Security</a></li>
+        </ul>
+      </div>
+      <div class="pc-footer__col">
+        <h5>Support</h5>
+        <ul>
+          <li><a href="https://docs.petcenterco.com/contact-us" target="_blank" rel="noopener">Contact Us</a></li>
+          <!-- TASK-1 START -->
+          <!-- Path changed from /rehome/ to /signin/ per CEO's request to retire the "rehome" URL sitewide (propagated for sitewide consistency during merge) -->
+          <li><a href="/signin/">Sign Up</a></li>
+          <!-- TASK-1 END -->
+          <li><a href="https://docs.petcenterco.com/returns-refunds/" target="_blank" rel="noopener">Returns & Refunds</a></li>
+          <li><a href="https://docs.petcenterco.com/faq/" target="_blank" rel="noopener">FAQ</a></li>
+        </ul>
+      </div>
+      <div class="pc-footer__col">
+        <h5>Visit Us</h5>
+        <p style="color:rgba(255,255,255,.7);font-size:13px;line-height:1.8;margin-bottom:0;">235-269 N Beverly Dr<br>Beverly Hills, CA</p>
+        <p style="color:rgba(255,255,255,.6);font-size:12px;line-height:1.6;margin-top:4px;">Golden Triangle Shopping Center, Section #257</p>
+        <p style="color:rgba(255,255,255,.7);font-size:13px;line-height:1.8;margin-top:10px;"><strong style="color:#d7bd88;">Hours:</strong><br>Mon – Fri: 7am – 9pm<br>Sat – Sun: 10am – 6pm</p>
+      </div>
+    </div>
+    <div class="pc-footer__bottom">
+      <span class="pc-footer__copy">&copy; 2026 Pet Center. All rights reserved.</span>
+      <div class="pc-footer__links">
+        <a href="https://docs.petcenterco.com/privacy-policy/" target="_blank" rel="noopener">Privacy Policy</a>
+        <a href="https://docs.petcenterco.com/terms-of-service/" target="_blank" rel="noopener">Terms of Service</a>
+      </div>
+    </div>
+  </div>
+</footer>
+<!-- DESIGN-01-SHELL FOOTER END -->
 </body>
 </html>

@@ -231,8 +231,12 @@ p { color: var(--muted); }
 @media (max-width: 900px) { .pc-footer__top { grid-template-columns: 1fr 1fr; gap: 28px; } }
 @media (max-width: 560px) { .pc-footer__top { grid-template-columns: 1fr; gap: 24px; } }
 </style>
+<!-- TASK-DESIGN-01 START: shared public visual system and keyboard enhancement; route behavior remains page-owned. -->
+<link rel="stylesheet" href="/assets/css/public-redesign.css">
+<script src="/assets/js/public-chrome.js" defer></script>
+<!-- TASK-DESIGN-01 END -->
 </head>
-<body>
+<body class="pc-public-page pc-public-content">
 
 <!-- ═══ Header (verbatim from cats.html, Section 2.6) — this page is footer/CTA-reached
      per Task 1's Navigation Integration Plan, so no header/mobile-menu changes here ═══ -->

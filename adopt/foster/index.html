@@ -192,8 +192,12 @@ p { color: var(--muted); }
 @media (max-width: 900px) { .pc-footer__top { grid-template-columns: 1fr 1fr; gap: 28px; } }
 @media (max-width: 560px) { .pc-footer__top { grid-template-columns: 1fr; gap: 24px; } }
 </style>
+<!-- TASK-DESIGN-01 START: shared public visual system and keyboard enhancement; route behavior remains page-owned. -->
+<link rel="stylesheet" href="/assets/css/public-redesign.css">
+<script src="/assets/js/public-chrome.js" defer></script>
+<!-- TASK-DESIGN-01 END -->
 </head>
-<body>
+<body class="pc-public-page pc-public-form">
 
 <header class="pc-header pc-header--solid" id="pcHeader">
   <a href="/" class="pc-header__logo pc-header__logo--desktop"><img src="/assets/images/logo-petcenter.png" alt="Pet Center"></a>

@@ -270,8 +270,12 @@ footer.pc-footer{background:var(--navy); color:#fff; margin-top:70px;}
 .sr-only{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0);}
 @media (prefers-reduced-motion: reduce){ *{animation-duration:.001s !important; transition-duration:.001s !important;} }
 </style>
+<!-- TASK-DESIGN-01 START: shared public visual system and keyboard enhancement; route behavior remains page-owned. -->
+<link rel="stylesheet" href="/assets/css/public-redesign.css">
+<script src="/assets/js/public-chrome.js" defer></script>
+<!-- TASK-DESIGN-01 END -->
 </head>
-<body>
+<body class="pc-public-page pc-public-content">
 
 <!-- =================== HEADER (canonical — copy verbatim) =================== -->
 <header class="pc-header pc-header--solid" id="pcHeader">
@@ -431,14 +435,16 @@ footer.pc-footer{background:var(--navy); color:#fff; margin-top:70px;}
         <div class="toggle-row__text">Include specialist live-animal carriers</div>
         <div class="toggle-row__sub">USDA/IATA-compliant pet relocation services, not just standard parcel carriers</div>
       </div>
-      <label class="switch"><input type="checkbox" id="toggleLive" checked><span class="track"></span></label>
+      <!-- DESIGN-01-WEB-03 START: associate the switch with its visible name. -->
+      <label class="switch"><input type="checkbox" id="toggleLive" checked aria-label="Include specialist live-animal carriers"><span class="track"></span></label>
     </div>
     <div class="toggle-row">
       <div>
         <div class="toggle-row__text">Show standard parcel carriers too</div>
         <div class="toggle-row__sub">USPS, UPS and FedEx ground options, where they're actually able to carry this shipment</div>
       </div>
-      <label class="switch"><input type="checkbox" id="toggleParcel" checked><span class="track"></span></label>
+      <label class="switch"><input type="checkbox" id="toggleParcel" checked aria-label="Show standard parcel carriers too"><span class="track"></span></label>
+      <!-- DESIGN-01-WEB-03 END -->
     </div>
 
     <button class="calc-btn" id="calcBtn" type="button">
