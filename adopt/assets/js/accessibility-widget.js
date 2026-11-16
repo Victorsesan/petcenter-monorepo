@@ -175,8 +175,8 @@
       var parsed = raw ? JSON.parse(raw) : {};
       var o = Number(parsed.opacity), w = Number(parsed.widgetOpacity);
       return {
-        opacity: (o >= 20 && o <= 100) ? o : DEFAULTS.opacity,
-        widgetOpacity: (w >= 20 && w <= 100) ? w : DEFAULTS.widgetOpacity
+         <= 100) ? o : DEFAULTS.opacity,
+         <= 100) ? w : DEFAULTS.widgetOpacity
       };
     } catch (e) { return { opacity: DEFAULTS.opacity, widgetOpacity: DEFAULTS.widgetOpacity }; }
   }
@@ -448,9 +448,9 @@
       + '        <div class="pc-a11y-row"><label class="pc-a11y-label">Widget Position</label>'
       + '          <div class="pc-a11y-choice-row"><button type="button" class="pc-a11y-choice" id="pcPositionLeft">Left</button><button type="button" class="pc-a11y-choice" id="pcPositionRight">Right</button></div></div>'
       + '        <div class="pc-a11y-row"><label class="pc-a11y-label" for="pcIconOpacitySlider">Widget Icon Opacity</label>'
-      + '          <input type="range" id="pcIconOpacitySlider" class="pc-a11y-slider" min="20" max="100" step="5" value="100" role="slider" aria-valuemin="20" aria-valuemax="100" aria-valuenow="100" aria-valuetext="100%"><span class="pc-a11y-slider-value" id="pcIconOpacityValue">100%</span></div>'
+      + '          <input type="range" id="pcIconOpacitySlider" class="pc-a11y-slider"  aria-valuemax="100" aria-valuenow="100" aria-valuetext="100%"><span class="pc-a11y-slider-value" id="pcIconOpacityValue">100%</span></div>'
       + '        <div class="pc-a11y-row"><label class="pc-a11y-label" for="pcBgOpacitySlider">Widget Background Opacity</label>'
-      + '          <input type="range" id="pcBgOpacitySlider" class="pc-a11y-slider" min="20" max="100" step="5" value="90" role="slider" aria-valuemin="20" aria-valuemax="100" aria-valuenow="90" aria-valuetext="90%"><span class="pc-a11y-slider-value" id="pcBgOpacityValue">90%</span></div>'
+      + '          <input type="range" id="pcBgOpacitySlider" class="pc-a11y-slider"  aria-valuemax="100" aria-valuenow="90" aria-valuetext="90%"><span class="pc-a11y-slider-value" id="pcBgOpacityValue">90%</span></div>'
       + '        <button type="button" class="pc-a11y-reset-btn" id="pcResetAll">Reset All Accessibility Settings</button>'
       + '      </div></div></div>'
 
